@@ -1,9 +1,9 @@
-# File: GCAM_region_names.csv,
-# Title: GCAM 32-region names,
-# Units: NA,
-# Description: Maps GCAM region IDs to region names,
-# Column types: ic,
-# ----------,
+# File: GCAM_region_names.csv
+# Title: GCAM 32-region names
+# Units: NA
+# Description: Maps GCAM region IDs to region names
+# Column types: ic
+# ----------
 GCAM_region_ID,region
 1,USA
 2,Africa_Eastern
@@ -42,7 +42,7 @@ GCAM_region_ID,region
 35,Malta
 36,Poland
 37,Romania
-38,Romania
+38,Iceland
 39,Slovakia
 40,Slovenia
 41,Spain
@@ -67,9 +67,7 @@ GCAM_region_ID,region
 60,Bosnia and Herzegovina
 61,Croatia
 62,Macedonia
-63,Montenegro
-64,Serbia
-65,Turkey
+63,Serbia and Montenegro
+64,Turkey
+65,Norway
 66,Switzerland
-67,Iceland
-68,Norway

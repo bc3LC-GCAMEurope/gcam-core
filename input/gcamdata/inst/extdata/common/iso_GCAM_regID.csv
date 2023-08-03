@@ -112,61 +112,6 @@ cyp,Cyprus,Western Europe,13
 cze,Czech Republic,Eastern Europe,14
 est,Estonia,Former Soviet Union,15
 hun,Hungary,Eastern Europe,16
-ltu,Lithuania,Former Soviet Union,33
-lva,Latvia,Former Soviet Union,34
-mlt,Malta,Western Europe,35
-pol,Poland,Eastern Europe,36
-rom,Romania,Eastern Europe,37
-rou,Romania,Eastern Europe,38
-svk,Slovakia,Eastern Europe,39
-svn,Slovenia,Eastern Europe,40
-and,Andorra,Western Europe,41
-aut,Austria,Western Europe,42
-bel,Belgium,Western Europe,43
-chi,Channel Islands,Western Europe,46
-deu,Germany,Western Europe,44
-dnk,Denmark,Western Europe,45
-esp,Spain,Western Europe,41
-fin,Finland,Western Europe,47
-flk,Falkland Islands (Malvinas),Latin America,46
-fra,France,Western Europe,48
-fro,Faroe Islands,Western Europe,45
-gbr,United Kingdom,Western Europe,46
-ggy,Guernsey,Western Europe,46
-gib,Gibraltar,Western Europe,46
-grc,Greece,Western Europe,49
-grl,Greenland,Western Europe,45
-imn,Isle of Man,Western Europe,46
-irl,Ireland,Western Europe,50
-ita,Italy,Western Europe,51
-jey,Jersey,Western Europe,46
-lux,Luxembourg,Western Europe,52
-mco,Monaco,Western Europe,48
-nld,Netherlands,Western Europe,53
-prt,Portugal,Western Europe,54
-shn,Saint Helena,Africa,48
-smr,San Marino,Western Europe,51
-spm,Saint Pierre and Miquelon,Canada,48
-swe,Sweden,Western Europe,55
-tca,Turks and Caicos,Latin America,46
-vat,Vatican,Western Europe,51
-vgb,"Virgin Islands, British",Latin America,46
-wlf,Wallis and Futuna,Australia_NZ,46
-blr,Belarus,Former Soviet Union,56
-mda,"Moldova, Republic of",Former Soviet Union,57
-ukr,Ukraine,Former Soviet Union,58
-alb,Albania,Eastern Europe,59
-bih,Bosnia and Herzegovina,Eastern Europe,60
-hrv,Croatia,Eastern Europe,61
-mkd,"Macedonia, the former Yugoslav Republic of",Eastern Europe,62
-mne,Montenegro,Eastern Europe,63
-srb,Serbia,Eastern Europe,64
-tur,Turkey,Western Europe,65
-che,Switzerland,Western Europe,66
-isl,Iceland,Western Europe,67
-lie,Liechtenstein,Western Europe,66
-nor,Norway,Western Europe,68
-sjm,Svalbard and Jan Mayen Islands,Western Europe,68
 ind,India,India,17
 idn,Indonesia,Southeast Asia,18
 jpn,Japan,Japan,19
@@ -246,3 +191,59 @@ wsm,Samoa,Southeast Asia,29
 twn,Taiwan,Southeast Asia,30
 arg,Argentina,Latin America,31
 col,Colombia,Latin America,32
+ltu,Lithuania,Former Soviet Union,33
+lva,Latvia,Former Soviet Union,34
+mlt,Malta,Western Europe,35
+pol,Poland,Eastern Europe,36
+rom,Romania,Eastern Europe,37
+rou,Romania,Eastern Europe,37
+svk,Slovakia,Eastern Europe,39
+svn,Slovenia,Eastern Europe,40
+and,Andorra,Western Europe,41
+esp,Spain,Western Europe,41
+aut,Austria,Western Europe,42
+bel,Belgium,Western Europe,43
+deu,Germany,Western Europe,44
+dnk,Denmark,Western Europe,45
+fro,Faroe Islands,Western Europe,45
+grl,Greenland,Western Europe,45
+chi,Channel Islands,Western Europe,46
+flk,Falkland Islands (Malvinas),Latin America,46
+gbr,United Kingdom,Western Europe,46
+ggy,Guernsey,Western Europe,46
+gib,Gibraltar,Western Europe,46
+imn,Isle of Man,Western Europe,46
+jey,Jersey,Western Europe,46
+tca,Turks and Caicos,Latin America,46
+vgb,"Virgin Islands, British",Latin America,46
+wlf,Wallis and Futuna,Australia_NZ,46
+fin,Finland,Western Europe,47
+fra,France,Western Europe,48
+mco,Monaco,Western Europe,48
+shn,Saint Helena,Africa,48
+spm,Saint Pierre and Miquelon,Canada,48
+grc,Greece,Western Europe,49
+irl,Ireland,Western Europe,50
+ita,Italy,Western Europe,51
+smr,San Marino,Western Europe,51
+vat,Vatican,Western Europe,51
+lux,Luxembourg,Western Europe,52
+nld,Netherlands,Western Europe,53
+prt,Portugal,Western Europe,54
+swe,Sweden,Western Europe,55
+blr,Belarus,Former Soviet Union,56
+mda,"Moldova, Republic of",Former Soviet Union,57
+ukr,Ukraine,Former Soviet Union,58
+alb,Albania,Eastern Europe,59
+bih,Bosnia and Herzegovina,Eastern Europe,60
+hrv,Croatia,Eastern Europe,61
+mkd,"Macedonia, the former Yugoslav Republic of",Eastern Europe,62
+mne,Montenegro,Eastern Europe,63
+srb,Serbia,Eastern Europe,63
+scg,Serbia and Montenegro,Eastern Europe,63
+tur,Turkey,Western Europe,64
+nor,Norway,Western Europe,65
+sjm,Svalbard and Jan Mayen Islands,Western Europe,65
+che,Switzerland,Western Europe,66
+lie,Liechtenstein,Western Europe,66
+isl,Iceland,Western Europe,38

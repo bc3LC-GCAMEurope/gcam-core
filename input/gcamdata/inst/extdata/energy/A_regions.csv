@@ -42,7 +42,7 @@ GCAM_region_ID,region,tradbio_region,ethanol,biodiesel,biomassOil_tech,elect_td_
 35,Malta,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
 36,Poland,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
 37,Romania,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-38,Romania,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
+38,Iceland,0,corn ethanol,biodiesel,OilCrop,0.0001,0,C
 39,Slovakia,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
 40,Slovenia,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
 41,Spain,0,corn ethanol,biodiesel,OilCrop,0.0001,0,C
@@ -67,9 +67,7 @@ GCAM_region_ID,region,tradbio_region,ethanol,biodiesel,biomassOil_tech,elect_td_
 60,Bosnia and Herzegovina,0,corn ethanol,biodiesel,OilCrop,0.0002,1,C
 61,Croatia,0,corn ethanol,biodiesel,OilCrop,0.0002,1,C
 62,Macedonia,0,corn ethanol,biodiesel,OilCrop,0.0002,1,C
-63,Montenegro,0,corn ethanol,biodiesel,OilCrop,0.0002,1,C
-64,Serbia,0,corn ethanol,biodiesel,OilCrop,0.0002,1,C
-65,Turkey,0,corn ethanol,biodiesel,OilCrop,0.0002,1,C
+63,Serbia and Montenegro,0,corn ethanol,biodiesel,OilCrop,0.0002,1,C
+64,Turkey,0,corn ethanol,biodiesel,OilCrop,0.0002,1,C
+65,Norway,0,corn ethanol,biodiesel,OilCrop,0.0001,0,C
 66,Switzerland,0,corn ethanol,biodiesel,OilCrop,0.0001,0,C
-67,Iceland,0,corn ethanol,biodiesel,OilCrop,0.0001,0,C
-68,Norway,0,corn ethanol,biodiesel,OilCrop,0.0001,0,C
