@@ -1,9 +1,9 @@
-# File: GCAM_region_names.csv
-# Title: GCAM 32-region names
-# Units: NA
-# Description: Maps GCAM region IDs to region names
-# Column types: ic 
-# ----------
+# File: GCAM_region_names.csv,
+# Title: GCAM 32-region names,
+# Units: NA,
+# Description: Maps GCAM region IDs to region names,
+# Column types: ic,
+# ----------,
 GCAM_region_ID,region
 1,USA
 2,Africa_Eastern
@@ -16,11 +16,11 @@ GCAM_region_ID,region
 9,Central America and Caribbean
 10,Central Asia
 11,China
-12,EU-12
-13,EU-15
-14,Europe_Eastern
-15,Europe_Non_EU
-16,European Free Trade Association
+12,Bulgaria
+13,Cyprus
+14,Czech Republic
+15,Estonia
+16,Hungary
 17,India
 18,Indonesia
 19,Japan
@@ -37,3 +37,39 @@ GCAM_region_ID,region
 30,Taiwan
 31,Argentina
 32,Colombia
+33,Lithuania
+34,Latvia
+35,Malta
+36,Poland
+37,Romania
+38,Romania
+39,Slovakia
+40,Slovenia
+41,Spain
+42,Austria
+43,Belgium
+44,Germany
+45,Denmark
+46,UK
+47,Finland
+48,France
+49,Greece
+50,Ireland
+51,Italy
+52,Luxembourg
+53,Netherlands
+54,Portugal
+55,Sweden
+56,Belarus
+57,Moldova
+58,Ukraine
+59,Albania
+60,Bosnia and Herzegovina
+61,Croatia
+62,Macedonia
+63,Montenegro
+64,Serbia
+65,Turkey
+66,Switzerland
+67,Iceland
+68,Norway

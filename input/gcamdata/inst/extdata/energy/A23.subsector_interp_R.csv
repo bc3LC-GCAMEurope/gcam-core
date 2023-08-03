@@ -18,11 +18,6 @@ Canada,electricity,refined liquids,share-weight,final-calibration-year,2100,,fix
 Central America and Caribbean,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
 Central Asia,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
 China,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
-EU-12,electricity,refined liquids,share-weight,final-calibration-year,2100,0.309,linear
-EU-15,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
-Europe_Eastern,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
-Europe_Non_EU,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
-European Free Trade Association,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
 India,electricity,refined liquids,share-weight,final-calibration-year,2100,0.2,linear
 Indonesia,electricity,refined liquids,share-weight,final-calibration-year,2100,0.2,linear
 Japan,electricity,refined liquids,share-weight,final-calibration-year,2100,1,linear
@@ -42,7 +37,56 @@ Colombia,electricity,refined liquids,share-weight,final-calibration-year,2100,1,
 USA,electricity,coal,share-weight,final-calibration-year,initial-future-year,,linear
 USA,electricity,coal,share-weight,initial-future-year,2035,,linear
 USA,electricity,coal,share-weight,2035,2300,1,s-curve
-European Free Trade Association,electricity,gas,share-weight,final-calibration-year,2200,1,s-curve
-European Free Trade Association,electricity,nuclear,share-weight,final-calibration-year,initial-future-year,,linear
-European Free Trade Association,electricity,nuclear,share-weight,initial-future-year,2050,,linear
-European Free Trade Association,electricity,nuclear,share-weight,2050,2200,1,s-curve
+Switzerland,Switzerland,gas,share-weight,final-calibration-year,2200,1,s-curve
+Switzerland,Switzerland,nuclear,share-weight,final-calibration-year,initial-future-year,,linear
+Switzerland,Switzerland,nuclear,share-weight,initial-future-year,2050,,linear
+Switzerland,Switzerland,nuclear,share-weight,2050,2200,1,s-curve
+Iceland,Switzerland,gas,share-weight,final-calibration-year,2200,1,s-curve
+Iceland,Switzerland,nuclear,share-weight,final-calibration-year,initial-future-year,,linear
+Iceland,Switzerland,nuclear,share-weight,initial-future-year,2050,,linear
+Iceland,Switzerland,nuclear,share-weight,2050,2200,1,s-curve
+Norway,Switzerland,gas,share-weight,final-calibration-year,2200,1,s-curve
+Norway,Switzerland,nuclear,share-weight,final-calibration-year,initial-future-year,,linear
+Norway,Switzerland,nuclear,share-weight,initial-future-year,2050,,linear
+Norway,Switzerland,nuclear,share-weight,2050,2200,1,s-curve
+Switzerland,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+Iceland,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+Norway,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+Bulgaria,electricity,refined liquids,share-weight,final-calibration-year,2100,0.309,linear
+Cyprus,electricity,refined liquids,share-weight,final-calibration-year,2100,0.309,linear
+Czech Republic,electricity,refined liquids,share-weight,final-calibration-year,2100,0.309,linear
+Estonia,electricity,refined liquids,share-weight,final-calibration-year,2100,0.309,linear
+Hungary,electricity,refined liquids,share-weight,final-calibration-year,2100,0.309,linear
+Lithuania,electricity,refined liquids,share-weight,final-calibration-year,2100,0.309,linear
+Latvia,electricity,refined liquids,share-weight,final-calibration-year,2100,0.309,linear
+Malta,electricity,refined liquids,share-weight,final-calibration-year,2100,0.309,linear
+Poland,electricity,refined liquids,share-weight,final-calibration-year,2100,0.309,linear
+Romania,electricity,refined liquids,share-weight,final-calibration-year,2100,0.309,linear
+Romania,electricity,refined liquids,share-weight,final-calibration-year,2100,0.309,linear
+Slovakia,electricity,refined liquids,share-weight,final-calibration-year,2100,0.309,linear
+Slovenia,electricity,refined liquids,share-weight,final-calibration-year,2100,0.309,linear
+Spain,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+Austria,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+Belgium,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+Germany,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+Denmark,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+UK,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+Finland,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+France,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+Greece,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+Ireland,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+Italy,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+Luxembourg,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+Netherlands,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+Portugal,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+Sweden,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+Belarus,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+Moldova,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+Ukraine,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+Albania,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+Bosnia and Herzegovina,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+Croatia,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+Macedonia,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+Montenegro,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+Serbia,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
+Turkey,electricity,refined liquids,share-weight,final-calibration-year,2100,,fixed
