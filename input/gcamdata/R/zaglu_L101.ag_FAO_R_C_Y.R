@@ -79,7 +79,9 @@ module_aglu_L101.ag_FAO_R_C_Y <- function(command, ...) {
       group_by(GCAM_region_ID, GCAM_commodity, GCAM_subsector) %>%
       mutate(HA_share_GLU = harvested.area / sum(harvested.area),                                               # Compute the shares of country/crop/GLU within country/crop
              prod_share_GLU = production / sum(production)) %>%
-      ungroup() ->
+      ungroup() %>%
+      #replace NaNs in Malta and Iceland (no production nor harvested area)
+      replace_na(list(HA_share_GLU = 1, prod_share_GLU = 1)) ->
       LDS_ctry_crop_SHARES
 
     gcam.REGION_NUMBER <- iso_GCAM_regID %>% distinct(GCAM_region_ID) %>% nrow
@@ -97,7 +99,9 @@ module_aglu_L101.ag_FAO_R_C_Y <- function(command, ...) {
       group_by(GCAM_region_ID) %>%
       mutate(default_share_GLU = harvested.area / sum(harvested.area)) %>%
       ungroup() %>%
-      select(GCAM_region_ID, GLU, default_share_GLU) ->
+      select(GCAM_region_ID, GLU, default_share_GLU) %>%
+      #replace NaNs in Malta and Iceland (no production nor harvested area)
+      replace_na(list(default_share_GLU  = 1)) ->
       LDS_ctry_SHARES
 
     # only take the columns required for later steps in the LDS_ctry_crop_SHARES data table
