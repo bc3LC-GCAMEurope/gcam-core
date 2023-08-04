@@ -8,13 +8,11 @@
 region,supplysector,subsector,stub.technology,Non.CO2,pcGDP_start_NSPS,NSPS_start_year,NSPS_em_coeff,pcGDP_start_retrofit,retrofit_start_year,retrofit_time,retrofit_vintage,retrofit_em_coeff,Notes and sources
 Africa_Eastern,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
 Africa_Northern,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
+Argentina,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
 Australia_NZ,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
 Brazil,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
 Canada,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
 Central America and Caribbean,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
-EU-15,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
-Europe_Eastern,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
-Europe_Non_EU,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
 India,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
 Japan,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
 Middle East,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
@@ -25,4 +23,27 @@ South Asia,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bri
 South Korea,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
 Southeast Asia,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
 Taiwan,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
-Argentina,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
+Spain,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
+Austria,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
+Belgium,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
+Germany,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
+Denmark,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
+UK,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
+Finland,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
+France,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
+Greece,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
+Ireland,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
+Italy,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
+Luxembourg,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
+Netherlands,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
+Portugal,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
+Sweden,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
+Belarus,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
+Moldova,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
+Ukraine,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
+Albania,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
+Bosnia and Herzegovina,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
+Croatia,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
+Macedonia,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
+Serbia and Montenegro,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
+Turkey,trn_freight,Domestic Ship,Liquids,SO2,NA,2020,0.13,NA,NA,NA,NA,-1,Bring domestic shipping down to GCAM 2050 assumed international value where is larger than this today
