@@ -16,11 +16,6 @@ Canada,N.Amer
 Central America and Caribbean,LA
 Central Asia,RUS
 China,PAC
-EU-12,EUR
-EU-15,EUR
-Europe_Eastern,RUS
-Europe_Non_EU,EUR
-European Free Trade Association,EUR
 India,PAC
 Indonesia,PAC
 Japan,PAC
@@ -37,3 +32,42 @@ Southeast Asia,PAC
 Taiwan,PAC
 Argentina,LA
 Colombia,LA
+Bulgaria,EUR
+Cyprus,EUR
+Czech Republic,EUR
+Estonia,EUR
+Hungary,EUR
+Lithuania,EUR
+Latvia,EUR
+Malta,EUR
+Poland,EUR
+Romania,EUR
+Iceland,EUR
+Slovakia,EUR
+Slovenia,EUR
+Spain,EUR
+Austria,EUR
+Belgium,EUR
+Germany,EUR
+Denmark,EUR
+UK,EUR
+Finland,EUR
+France,EUR
+Greece,EUR
+Ireland,EUR
+Italy,EUR
+Luxembourg,EUR
+Netherlands,EUR
+Portugal,EUR
+Sweden,EUR
+Belarus,RUS
+Moldova,RUS
+Ukraine,RUS
+Albania,EUR
+Bosnia and Herzegovina,EUR
+Croatia,EUR
+Macedonia,EUR
+Serbia and Montenegro,EUR
+Turkey,EUR
+Norway,EUR
+Switzerland,EUR

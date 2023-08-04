@@ -5,46 +5,106 @@
 # Column types: cc
 # ----------
 region,pipeline.market
-USA,N.Amer
-Canada,N.Amer
-Mexico,N.Amer
-Brazil,LA
-Central America and Caribbean,LA
-South America_Northern,LA
-South America_Southern,LA
-Argentina,LA
-Colombia,LA
-EU-12,EUR
-EU-15,EUR
-Europe_Eastern,EUR
-Europe_Non_EU,EUR
-European Free Trade Association,EUR
 Africa_Eastern,Afr_MidE
 Africa_Northern,Afr_MidE
 Africa_Southern,Afr_MidE
 Africa_Western,Afr_MidE
+Argentina,LA
+Australia_NZ,PAC
+Brazil,LA
+Canada,N.Amer
+Central America and Caribbean,LA
 Central Asia,Afr_MidE
-EU-12,Afr_MidE
-EU-15,Afr_MidE
-Europe_Non_EU,Afr_MidE
-Middle East,Afr_MidE
-South Africa,Afr_MidE
 Central Asia,RUS
 China,RUS
-EU-12,RUS
-EU-15,RUS
-Europe_Eastern,RUS
-Europe_Non_EU,RUS
-European Free Trade Association,RUS
-Middle East,RUS
-Russia,RUS
 China,PAC
-Southeast Asia,PAC
+Colombia,LA
 India,PAC
-Pakistan,PAC
-South Asia,PAC
-South Korea,PAC
-Australia_NZ,PAC
 Indonesia,PAC
 Japan,PAC
+Mexico,N.Amer
+Middle East,Afr_MidE
+Middle East,RUS
+Pakistan,PAC
+Russia,RUS
+South Africa,Afr_MidE
+South America_Northern,LA
+South America_Southern,LA
+South Asia,PAC
+South Korea,PAC
+Southeast Asia,PAC
 Taiwan,PAC
+USA,N.Amer
+Bulgaria,EUR
+Bulgaria,RUS
+Cyprus,EUR
+Czech Republic,EUR
+Czech Republic,RUS
+Estonia,EUR
+Estonia,RUS
+Hungary,EUR
+Hungary,RUS
+Lithuania,EUR
+Latvia,EUR
+Lithuania,RUS
+Latvia,RUS
+Malta,EUR
+Poland,RUS
+Poland,EUR
+Romania,EUR
+Romania,RUS
+Iceland,EUR
+Slovakia,EUR
+Slovakia,RUS
+Slovenia,EUR
+Slovenia,RUS
+Spain,Afr_MidE
+Spain,EUR
+Austria,EUR
+Austria,RUS
+Belgium,EUR
+Belgium,RUS
+Germany,EUR
+Germany,RUS
+Denmark,EUR
+Denmark,RUS
+UK,EUR
+Finland,RUS
+Finland,EUR
+France,EUR
+Greece,EUR
+Greece,RUS
+Ireland,EUR
+Italy,EUR
+Italy,RUS
+Italy,Afr_MidE
+Luxembourg,EUR
+Netherlands,EUR
+Luxembourg,RUS
+Netherlands,RUS
+Portugal,EUR
+Sweden,EUR
+Sweden,RUS
+Belarus,EUR
+Moldova,EUR
+Ukraine,EUR
+Belarus,RUS
+Moldova,RUS
+Ukraine,RUS
+Albania,EUR
+Bosnia and Herzegovina,EUR
+Croatia,EUR
+Macedonia,EUR
+Albania,RUS
+Bosnia and Herzegovina,RUS
+Croatia,RUS
+Macedonia,RUS
+Serbia and Montenegro,EUR
+Serbia and Montenegro,RUS
+Turkey,EUR
+Turkey,RUS
+Turkey,Afr_MidE
+Norway,EUR
+Norway,RUS
+Switzerland,EUR
+Switzerland,RUS
