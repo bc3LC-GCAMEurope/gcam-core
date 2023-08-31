@@ -57,7 +57,9 @@ module_energy_L120.offshore_wind <- function(command, ...) {
     L113.globaltech_OMfixed_ATB <- get_data(all_data, "L113.globaltech_OMfixed_ATB")
     A20.wind_class_CFs <- get_data(all_data, "energy/A20.wind_class_CFs")
     A20.offshore_wind_depth_cap_cost <- get_data(all_data, "energy/A20.offshore_wind_depth_cap_cost")
-    NREL_wind_ctry <- get_data(all_data, "energy/mappings/NREL_wind_ctry")
+    NREL_wind_ctry <- get_data(all_data, "energy/mappings/NREL_wind_ctry") %>%
+      # Map yugoslavia to montenegro
+      mutate(iso = gsub("yug", "mne", iso))
     NREL_offshore_energy  <- get_data(all_data, "energy/NREL_offshore_energy")
     NREL_wind_energy_distance_range <- get_data(all_data, "energy/NREL_wind_energy_distance_range")
     offshore_wind_grid_cost <- get_data(all_data, "energy/offshore_wind_grid_cost")
@@ -133,6 +135,7 @@ module_energy_L120.offshore_wind <- function(command, ...) {
 
     L120.offshore_wind_matrix %>%
       group_by(GCAM_region_ID) %>%
+      filter(dplyr::n() > 1) %>% # if there is only one entry (slovenia), we can't calculate curves
       arrange(GCAM_region_ID, price) %>%
       mutate(base.price = min(price),
              Pvar = price - base.price,
@@ -311,11 +314,8 @@ module_energy_L120.offshore_wind <- function(command, ...) {
              grid.cost = fcr * cost / (CONV_YEAR_HOURS * CF* CONV_KWH_GJ) * gdp_deflator(1975, 2013)) -> L120.grid.cost
 
     # Set grid connection cost for all regions
-    GCAM_region_names %>%
-      select(region) %>%
-      left_join_error_no_match(L120.grid.cost %>%
-                                 select(region, grid.cost),
-                               by = "region") -> L120.GridCost_offshore_wind
+    L120.grid.cost %>%
+      select(region, grid.cost) -> L120.GridCost_offshore_wind
 
     L120.offshore_wind_curve %>%
       distinct(GCAM_region_ID, CFmax) %>%
