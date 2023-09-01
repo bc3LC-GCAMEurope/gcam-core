@@ -134,9 +134,13 @@ module_aglu_L151.ag_MIRCA_ctry_C_GLU_irr <- function(command, ...) {
     ag_HA_ha_ctry_crop %>%
       left_join(select(Yieldratio_ctry_crop, iso, GLU, GTAP_crop, yieldratio), by = c("iso", "GLU", "GTAP_crop")) %>%          # Map in the yield ratio
       mutate(irrshareHA = irrHA / (irrHA + rfdHA),                                                                                # Compute the share of irrigated harvest area
-             irrshareProd = (irrshareHA * yieldratio) / ((irrshareHA * yieldratio) + (1 - irrshareHA))) %>%                       # Compute the share of irrigated production
+             irrshareProd = (irrshareHA * yieldratio) / ((irrshareHA * yieldratio) + (1 - irrshareHA))) %>%
+      # iceland and malta have no production, shares should be 0
+      tidyr::replace_na(list(irrshareHA = 0, irrshareProd = 0)) %>%
+      # Compute the share of irrigated production
       right_join(L100.LDS_ag_prod_t, by = c("iso", "GLU", "GTAP_crop")) %>%                                                       # Map in the total production
-      mutate(irrProd=value * irrshareProd, rfdProd=value * (1 - irrshareProd)) ->                                                     # Compute irrigated and rainfed production
+      mutate(irrProd=value * irrshareProd,
+             rfdProd=value * (1 - irrshareProd)) ->                                                     # Compute irrigated and rainfed production
       ag_Prod_t_ctry_crop
 
     # Split irrigated and rainfed production into separate dataframes

@@ -371,19 +371,33 @@ module_aglu_L165.ag_water_R_C_Y_GLU_irr <- function(command, ...) {
     # Original lines 272-290
     # Irrigation Efficiency: Compile country-level data to GCAM regions, weighted by total irrigated harvested area
     # NOTE: Using application and management efficiencies to define whole-system efficiencies (not conveyance)
-    Rohwer_2007_IrrigationEff <- mutate(Rohwer_2007_IrrigationEff, field.eff = application.eff * management.eff)
+    # GCAM-Europe: Fill in some missing countries that are now regions
+    Rohwer_2007_IrrigationEff_missing_EU <- Rohwer_2007_IrrigationEff %>%
+      filter(country %in% c("Latvia", "United Kingdom", "Norway", "Italy")) %>%
+      mutate(iso = case_when(
+        iso == "lva" ~ "est", # assign estonia with latvia
+        iso == "gbr" ~ "irl", # assign ireland with uk
+        iso == "nor" ~ "isl", # assign iceland with norway
+        iso == "ita" ~ "mlt" # assign estonia with latvia
+      ))
+    Rohwer_2007_IrrigationEff <- bind_rows(Rohwer_2007_IrrigationEff,
+                                           Rohwer_2007_IrrigationEff_missing_EU) %>%
+      mutate(field.eff = application.eff * management.eff,
+             # Moldova iso differernt than in iso_GCAM_regID
+             iso = gsub("mld", "mda", iso))
+
 
     L151.ag_irrHA_ha_ctry_crop %>%
       group_by(iso) %>%
       summarise(irrHA = sum(irrHA)) %>%
       left_join(select(Rohwer_2007_IrrigationEff, iso, field.eff, conveyance.eff), by = "iso") %>%
-      filter(irrHA > 0) %>%
       na.omit %>%
       left_join_error_no_match(select(iso_GCAM_regID, iso, GCAM_region_ID), by = "iso") %>%
       # weighted (irrHA) mean by iso
       group_by(GCAM_region_ID) %>%
-      summarise(field.eff = weighted.mean(field.eff, irrHA),
-                conveyance.eff = weighted.mean(conveyance.eff, irrHA)) ->
+      summarise(field.eff = if_else(sum(irrHA) == 0, mean(field.eff), weighted.mean(field.eff, irrHA)),
+                conveyance.eff = if_else(sum(irrHA) == 0, mean(conveyance.eff), weighted.mean(conveyance.eff, irrHA))) %>%
+      ungroup ->
       L165.ag_IrrEff_R
 
     # Final step: Computing water withdrawals volumes by region for energy-for-water estimation
