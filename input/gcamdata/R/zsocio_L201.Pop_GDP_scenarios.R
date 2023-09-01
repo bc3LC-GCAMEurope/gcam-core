@@ -19,6 +19,7 @@ module_socio_L201.Pop_GDP_scenarios <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/GCAM_region_names",
              FILE = "socioeconomics/gcam_macro_TFP_open",
+             FILE = "common/GCAM32_to_EU",
              "L101.Pop_thous_R_Yh",
              "L101.Pop_thous_Scen_R_Yfut",
              "L102.gdp_mil90usd_Scen_R_Y",
@@ -57,9 +58,13 @@ module_socio_L201.Pop_GDP_scenarios <- function(command, ...) {
     L102.PPP_MER_R <- get_data(all_data, "L102.PPP_MER_R", strip_attributes = TRUE)
     L101.Pop_thous_GCAM3_R_Y <- get_data(all_data, "L101.Pop_thous_GCAM3_R_Y", strip_attributes = TRUE)
     L102.gdp_mil90usd_GCAM3_R_Y <- get_data(all_data, "L102.gdp_mil90usd_GCAM3_R_Y", strip_attributes = TRUE)
+    GCAM32_to_EU  <- get_data(all_data, "common/GCAM32_to_EU")
 
     gcam_macro_TFP_open %>%
-      select(scenario, region, year, productivity) ->
+      left_join(distinct(GCAM32_to_EU, GCAM32_region,  GCAMEU_region),
+                by = c("region" = "GCAM32_region")) %>%
+      select(-region) %>%
+      select(scenario, region = GCAMEU_region, year, productivity) ->
       gcam_macro_TFP_open
 
     # ===================================================

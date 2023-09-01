@@ -27,6 +27,7 @@ module_aglu_L100.GTAP_downscale_ctry <- function(command, ...) {
       "L100.LDS_ag_prod_t",
       FILE = "socioeconomics/GTAP/GCAM_GTAP_region_mapping",
       FILE = "socioeconomics/GTAP/GTAP_sector_aggregation_mapping",
+      FILE = "common/GCAM32_to_EU",
       OPTIONAL_FILE = "socioeconomics/GTAP/GTAPv10_basedata_VKB_SAVE_VDEP",
       OPTIONAL_FILE = "socioeconomics/GTAP/GTAPv10_baseview_SF01_VFA")
 
@@ -122,8 +123,41 @@ module_aglu_L100.GTAP_downscale_ctry <- function(command, ...) {
         L100.GTAP_capital_stock <- extract_prebuilt_data("L100.GTAP_capital_stock")
     }
 
+    # Adjust region mapping for GCAM-EU
+    # based on: https://www.gtap.agecon.purdue.edu/databases/regions.aspx?version=10
+    # this is only used for share, so ok that it's not perfect
+    GCAM_GTAP_region_mapping_rename <- GCAM_GTAP_region_mapping %>%
+      mutate(GCAM_region = case_when(
+        GTAPv10_region == "xef" ~ "Iceland",    # rest of EFTA is liechtenstein + iceland, mapping to iceland
+        GTAPv10_region == "xee" ~ "Moldova",    # rest of Eastern Europe is just moldova
+        GTAPv10_region == "rou" ~ "Romania",    # Romania iso is wrong
+        TRUE ~ GCAM_region
+      ))
 
+    # rest of Europe includes Bosnia and Herzegovina, Montenegro, North Macedonia, Serbia
+    # so repeat for each of these new European regions
+    GCAM_GTAP_region_mapping_RestOfEurope <- GCAM_GTAP_region_mapping %>%
+      filter( GTAPv10_region == "xer") %>%
+      select(-GCAM_region ) %>%
+      repeat_add_columns(tibble(GCAM_region  = c("Bosnia and Herzegovina",
+                                                 "Macedonia",
+                                                 "Serbia and Montenegro")))
 
+    # Now overwrite regions with their GCAMEU regions
+    GCAM_GTAP_region_mapping_EU <- bind_rows(GCAM_GTAP_region_mapping_rename,
+                                             GCAM_GTAP_region_mapping_RestOfEurope) %>%
+      filter( !(GTAPv10_region == "xer" & GCAM_region == "Europe_Non_EU")) %>%
+      left_join(GCAM32_to_EU, c("GTAPv10_region" = "iso")) %>%
+      # any remaining NAs should be for rest of world (not in europe)
+      mutate(GCAM_region  = if_else(is.na(GCAMEU_region), GCAM_region, GCAMEU_region)) %>%
+      select(GTAPv10_region, GCAM_region)
+
+    # Change region names in L100.GTAP_capital_stock
+    L100.GTAP_capital_stock <-  L100.GTAP_capital_stock %>%
+      select(-region_GCAM) %>%
+      # Expect slight increase in number of rows because xer is now mapped to three regions
+      left_join(GCAM_GTAP_region_mapping_EU, by = c("region_GTAP" = "GTAPv10_region")) %>%
+      rename(region_GCAM = GCAM_region)
 
     # Create the iso - GTAP_region mapping file ----
     # GTAP6 includes 87 regions, most of which are single countries, and 18 are aggregated regions of multiple countries.
