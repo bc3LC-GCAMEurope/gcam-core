@@ -77,12 +77,19 @@ module_energy_L101.en_bal_IEA <- function(command, ...) {
         # Rename biomass_tradbio to biomas fuel to tradbio_region 0 (USA)
         mutate(fuel = if_else(fuel == "biomass_tradbio" & tradbio_region == 0, "biomass", fuel)) %>%
         select(-tradbio_region) %>%
-        # In some countries, "gas works gas" is produced from coal. This is calibrated, assigned to the coal gasification
-        # technology of gas processing.
-        # Where the sector is gas works and the fuel is coal, re-name the sector to gas processing
-        mutate(sector = if_else(sector == "net_gas works" & fuel == "coal", "in_gas processing", sector)) %>%
-        # Where the sector is gas works and the fuel is not coal, this is assigned to industry/energy transformation
-        mutate(sector = if_else(sector == "net_gas works" & fuel != "coal", "net_industry_energy transformation", sector)) ->
+        mutate(
+          # Adjustments for GCAM-Europe
+          # Without this, adjustments for coal gasification in zenergy_L1011.en_bal_adj.R
+          # lead to negative gas consumption in TPES
+          # Not worried about this being perfect because it only affects early historical years
+          sector = if_else(iso %in% c("fin", "grc", "tur") & sector == "net_gas works" & fuel == "coal",
+                           "net_industry_energy transformation", sector),
+          # In some countries, "gas works gas" is produced from coal. This is calibrated, assigned to the coal gasification
+          # technology of gas processing.
+          # Where the sector is gas works and the fuel is coal, re-name the sector to gas processing
+          sector = if_else(sector == "net_gas works" & fuel == "coal", "in_gas processing", sector),
+          # Where the sector is gas works and the fuel is not coal, this is assigned to industry/energy transformation
+          sector = if_else(sector == "net_gas works" & fuel != "coal", "net_industry_energy transformation", sector)) ->
         L101.IEA_en_bal_ctry_hist
 
       # Reset some sector-fuel combinations, as specified in IEA_sector_fuel_modifications
