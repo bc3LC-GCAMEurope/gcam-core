@@ -4,579 +4,1191 @@
 # Column types: cnn
 # ----------
 region,year,inc_elas
-USA,2015,-1.2
 Africa_Eastern,2015,0.124
-Africa_Northern,2015,0.383
-Africa_Southern,2015,0.15
-Africa_Western,2015,0.157
-Australia_NZ,2015,-0.1
-Brazil,2015,0.333
-Canada,2015,-1.2
-Central America and Caribbean,2015,0.549
-Central Asia,2015,0.545
-China,2015,1.35
-EU-12,2015,0.253
-EU-15,2015,-0.1
-Europe_Eastern,2015,0.343
-Europe_Non_EU,2015,0.362
-European Free Trade Association,2015,-0.1
-India,2015,1.35
-Indonesia,2015,0.408
-Japan,2015,-0.1
-Mexico,2015,0.369
-Middle East,2015,3
-Pakistan,2015,0.137
-Russia,2015,0.1
-South Africa,2015,0.445
-South America_Northern,2015,0.31
-South America_Southern,2015,0.455
-South Asia,2015,0.133
-South Korea,2015,0.008
-Southeast Asia,2015,0.445
-Taiwan,2015,0.088
-Argentina,2015,0.287
-Colombia,2015,0.461
-USA,2020,-0.1
 Africa_Eastern,2020,0.129
-Africa_Northern,2020,0.485
-Africa_Southern,2020,0.17
-Africa_Western,2020,0.179
-Australia_NZ,2020,-0.1
-Brazil,2020,0.315
-Canada,2020,-0.1
-Central America and Caribbean,2020,0.532
-Central Asia,2020,0.512
-China,2020,0.415
-EU-12,2020,0.187
-EU-15,2020,-0.1
-Europe_Eastern,2020,0.434
-Europe_Non_EU,2020,0.318
-European Free Trade Association,2020,-0.1
-India,2020,0.241
-Indonesia,2020,0.546
-Japan,2020,-0.1
-Mexico,2020,0.332
-Middle East,2020,0.351
-Pakistan,2020,0.143
-Russia,2020,0.307
-South Africa,2020,0.428
-South America_Northern,2020,0.385
-South America_Southern,2020,0.424
-South Asia,2020,0.142
-South Korea,2020,-0.051
-Southeast Asia,2020,0.544
-Taiwan,2020,0.032
-Argentina,2020,0.302
-Colombia,2020,0.432
-USA,2025,-0.1
 Africa_Eastern,2025,0.136
-Africa_Northern,2025,0.533
-Africa_Southern,2025,0.197
-Africa_Western,2025,0.221
-Australia_NZ,2025,-0.1
-Brazil,2025,0.261
-Canada,2025,-0.1
-Central America and Caribbean,2025,0.506
-Central Asia,2025,0.463
-China,2025,0.321
-EU-12,2025,0.14
-EU-15,2025,-0.1
-Europe_Eastern,2025,0.545
-Europe_Non_EU,2025,0.261
-European Free Trade Association,2025,-0.1
-India,2025,0.313
-Indonesia,2025,0.499
-Japan,2025,-0.1
-Mexico,2025,0.288
-Middle East,2025,0.309
-Pakistan,2025,0.152
-Russia,2025,0.234
-South Africa,2025,0.381
-South America_Northern,2025,0.348
-South America_Southern,2025,0.375
-South Asia,2025,0.16
-South Korea,2025,-0.084
-Southeast Asia,2025,0.512
-Taiwan,2025,-0.007
-Argentina,2025,0.242
-Colombia,2025,0.402
-USA,2030,-0.1
 Africa_Eastern,2030,0.144
-Africa_Northern,2030,0.5
-Africa_Southern,2030,0.225
-Africa_Western,2030,0.272
-Australia_NZ,2030,-0.1
-Brazil,2030,0.211
-Canada,2030,-0.1
-Central America and Caribbean,2030,0.478
-Central Asia,2030,0.414
-China,2030,0.233
-EU-12,2030,0.092
-EU-15,2030,-0.1
-Europe_Eastern,2030,0.514
-Europe_Non_EU,2030,0.204
-European Free Trade Association,2030,-0.1
-India,2030,0.437
-Indonesia,2030,0.448
-Japan,2030,-0.1
-Mexico,2030,0.24
-Middle East,2030,0.264
-Pakistan,2030,0.18
-Russia,2030,0.174
-South Africa,2030,0.332
-South America_Northern,2030,0.309
-South America_Southern,2030,0.324
-South Asia,2030,0.196
-South Korea,2030,-0.1
-Southeast Asia,2030,0.478
-Taiwan,2030,-0.039
-Argentina,2030,0.188
-Colombia,2030,0.365
-USA,2035,-0.1
 Africa_Eastern,2035,0.16
-Africa_Northern,2035,0.465
-Africa_Southern,2035,0.257
-Africa_Western,2035,0.354
-Australia_NZ,2035,-0.1
-Brazil,2035,0.178
-Canada,2035,-0.1
-Central America and Caribbean,2035,0.446
-Central Asia,2035,0.365
-China,2035,0.172
-EU-12,2035,0.044
-EU-15,2035,-0.1
-Europe_Eastern,2035,0.481
-Europe_Non_EU,2035,0.167
-European Free Trade Association,2035,-0.1
-India,2035,0.545
-Indonesia,2035,0.392
-Japan,2035,-0.1
-Mexico,2035,0.193
-Middle East,2035,0.219
-Pakistan,2035,0.216
-Russia,2035,0.129
-South Africa,2035,0.282
-South America_Northern,2035,0.265
-South America_Southern,2035,0.272
-South Asia,2035,0.235
-South Korea,2035,-0.1
-Southeast Asia,2035,0.442
-Taiwan,2035,-0.06
-Argentina,2035,0.15
-Colombia,2035,0.323
-USA,2040,-0.1
 Africa_Eastern,2040,0.197
-Africa_Northern,2040,0.426
-Africa_Southern,2040,0.299
-Africa_Western,2040,0.479
-Australia_NZ,2040,-0.1
-Brazil,2040,0.147
-Canada,2040,-0.1
-Central America and Caribbean,2040,0.41
-Central Asia,2040,0.318
-China,2040,0.125
-EU-12,2040,0.01
-EU-15,2040,-0.1
-Europe_Eastern,2040,0.447
-Europe_Non_EU,2040,0.13
-European Free Trade Association,2040,-0.1
-India,2040,0.515
-Indonesia,2040,0.331
-Japan,2040,-0.1
-Mexico,2040,0.16
-Middle East,2040,0.185
-Pakistan,2040,0.261
-Russia,2040,0.088
-South Africa,2040,0.23
-South America_Northern,2040,0.218
-South America_Southern,2040,0.214
-South Asia,2040,0.28
-South Korea,2040,-0.1
-Southeast Asia,2040,0.402
-Taiwan,2040,-0.073
-Argentina,2040,0.113
-Colombia,2040,0.275
-USA,2045,-0.1
 Africa_Eastern,2045,0.246
-Africa_Northern,2045,0.385
-Africa_Southern,2045,0.392
-Africa_Western,2045,0.533
-Australia_NZ,2045,-0.1
-Brazil,2045,0.115
-Canada,2045,-0.1
-Central America and Caribbean,2045,0.368
-Central Asia,2045,0.273
-China,2045,0.079
-EU-12,2045,-0.022
-EU-15,2045,-0.1
-Europe_Eastern,2045,0.413
-Europe_Non_EU,2045,0.091
-European Free Trade Association,2045,-0.1
-India,2045,0.482
-Indonesia,2045,0.264
-Japan,2045,-0.1
-Mexico,2045,0.122
-Middle East,2045,0.158
-Pakistan,2045,0.325
-Russia,2045,0.055
-South Africa,2045,0.185
-South America_Northern,2045,0.178
-South America_Southern,2045,0.17
-South Asia,2045,0.354
-South Korea,2045,-0.1
-Southeast Asia,2045,0.358
-Taiwan,2045,-0.084
-Argentina,2045,0.075
-Colombia,2045,0.222
-USA,2050,-0.1
 Africa_Eastern,2050,0.31
-Africa_Northern,2050,0.339
-Africa_Southern,2050,0.515
-Africa_Western,2050,0.496
-Australia_NZ,2050,-0.1
-Brazil,2050,0.081
-Canada,2050,-0.1
-Central America and Caribbean,2050,0.32
-Central Asia,2050,0.232
-China,2050,0.041
-EU-12,2050,-0.052
-EU-15,2050,-0.1
-Europe_Eastern,2050,0.378
-Europe_Non_EU,2050,0.05
-European Free Trade Association,2050,-0.1
-India,2050,0.446
-Indonesia,2050,0.196
-Japan,2050,-0.1
-Mexico,2050,0.08
-Middle East,2050,0.132
-Pakistan,2050,0.431
-Russia,2050,0.035
-South Africa,2050,0.152
-South America_Northern,2050,0.143
-South America_Southern,2050,0.128
-South Asia,2050,0.455
-South Korea,2050,-0.1
-Southeast Asia,2050,0.309
-Taiwan,2050,-0.091
-Argentina,2050,0.04
-Colombia,2050,0.177
-USA,2055,-0.1
 Africa_Eastern,2055,0.436
-Africa_Northern,2055,0.289
-Africa_Southern,2055,0.526
-Africa_Western,2055,0.449
-Australia_NZ,2055,-0.1
-Brazil,2055,0.046
-Canada,2055,-0.1
-Central America and Caribbean,2055,0.265
-Central Asia,2055,0.195
-China,2055,0.014
-EU-12,2055,-0.068
-EU-15,2055,-0.1
-Europe_Eastern,2055,0.341
-Europe_Non_EU,2055,0.021
-European Free Trade Association,2055,-0.1
-India,2055,0.407
-Indonesia,2055,0.15
-Japan,2055,-0.1
-Mexico,2055,0.039
-Middle East,2055,0.104
-Pakistan,2055,0.549
-Russia,2055,0.016
-South Africa,2055,0.117
-South America_Northern,2055,0.103
-South America_Southern,2055,0.083
-South Asia,2055,0.545
-South Korea,2055,-0.1
-Southeast Asia,2055,0.255
-Taiwan,2055,-0.094
-Argentina,2055,0.012
-Colombia,2055,0.138
-USA,2060,-0.1
 Africa_Eastern,2060,0.542
-Africa_Northern,2060,0.233
-Africa_Southern,2060,0.488
-Africa_Western,2060,0.391
-Australia_NZ,2060,-0.1
-Brazil,2060,0.019
-Canada,2060,-0.1
-Central America and Caribbean,2060,0.204
-Central Asia,2060,0.167
-China,2060,-0.013
-EU-12,2060,-0.087
-EU-15,2060,-0.1
-Europe_Eastern,2060,0.298
-Europe_Non_EU,2060,-0.01
-European Free Trade Association,2060,-0.1
-India,2060,0.364
-Indonesia,2060,0.101
-Japan,2060,-0.1
-Mexico,2060,0.004
-Middle East,2060,0.072
-Pakistan,2060,0.519
-Russia,2060,-0.009
-South Africa,2060,0.08
-South America_Northern,2060,0.06
-South America_Southern,2060,0.039
-South Asia,2060,0.517
-South Korea,2060,-0.1
-Southeast Asia,2060,0.198
-Taiwan,2060,-0.098
-Argentina,2060,-0.017
-Colombia,2060,0.095
-USA,2065,-0.1
 Africa_Eastern,2065,0.504
-Africa_Northern,2065,0.183
-Africa_Southern,2065,0.442
-Africa_Western,2065,0.323
-Australia_NZ,2065,-0.1
-Brazil,2065,-0.009
-Canada,2065,-0.1
-Central America and Caribbean,2065,0.161
-Central Asia,2065,0.135
-China,2065,-0.04
-EU-12,2065,-0.1
-EU-15,2065,-0.1
-Europe_Eastern,2065,0.25
-Europe_Non_EU,2065,-0.044
-European Free Trade Association,2065,-0.1
-India,2065,0.316
-Indonesia,2065,0.049
-Japan,2065,-0.1
-Mexico,2065,-0.034
-Middle East,2065,0.041
-Pakistan,2065,0.484
-Russia,2065,-0.037
-South Africa,2065,0.043
-South America_Northern,2065,0.026
-South America_Southern,2065,0.003
-South Asia,2065,0.485
-South Korea,2065,-0.1
-Southeast Asia,2065,0.159
-Taiwan,2065,-0.1
-Argentina,2065,-0.048
-Colombia,2065,0.048
-USA,2070,-0.1
 Africa_Eastern,2070,0.459
-Africa_Northern,2070,0.143
-Africa_Southern,2070,0.386
-Africa_Western,2070,0.243
-Australia_NZ,2070,-0.1
-Brazil,2070,-0.04
-Canada,2070,-0.1
-Central America and Caribbean,2070,0.115
-Central Asia,2070,0.101
-China,2070,-0.059
-EU-12,2070,-0.1
-EU-15,2070,-0.1
-Europe_Eastern,2070,0.2
-Europe_Non_EU,2070,-0.065
-European Free Trade Association,2070,-0.1
-India,2070,0.265
-Indonesia,2070,0.013
-Japan,2070,-0.1
-Mexico,2070,-0.062
-Middle East,2070,0.015
-Pakistan,2070,0.443
-Russia,2070,-0.057
-South Africa,2070,0.015
-South America_Northern,2070,-0.006
-South America_Southern,2070,-0.036
-South Asia,2070,0.448
-South Korea,2070,-0.1
-Southeast Asia,2070,0.117
-Taiwan,2070,-0.1
-Argentina,2070,-0.065
-Colombia,2070,0.013
-USA,2075,-0.1
 Africa_Eastern,2075,0.406
-Africa_Northern,2075,0.102
-Africa_Southern,2075,0.322
-Africa_Western,2075,0.17
-Australia_NZ,2075,-0.1
-Brazil,2075,-0.062
-Canada,2075,-0.1
-Central America and Caribbean,2075,0.064
-Central Asia,2075,0.067
-China,2075,-0.073
-EU-12,2075,-0.1
-EU-15,2075,-0.1
-Europe_Eastern,2075,0.17
-Europe_Non_EU,2075,-0.083
-European Free Trade Association,2075,-0.1
-India,2075,0.211
-Indonesia,2075,-0.026
-Japan,2075,-0.1
-Mexico,2075,-0.084
-Middle East,2075,-0.013
-Pakistan,2075,0.397
-Russia,2075,-0.07
-South Africa,2075,-0.015
-South America_Northern,2075,-0.041
-South America_Southern,2075,-0.063
-South Asia,2075,0.406
-South Korea,2075,-0.1
-Southeast Asia,2075,0.071
-Taiwan,2075,-0.1
-Argentina,2075,-0.082
-Colombia,2075,-0.025
-USA,2080,-0.1
 Africa_Eastern,2080,0.343
-Africa_Northern,2080,0.059
-Africa_Southern,2080,0.246
-Africa_Western,2080,0.107
-Australia_NZ,2080,-0.1
-Brazil,2080,-0.08
-Canada,2080,-0.1
-Central America and Caribbean,2080,0.021
-Central Asia,2080,0.037
-China,2080,-0.087
-EU-12,2080,-0.1
-EU-15,2080,-0.1
-Europe_Eastern,2080,0.14
-Europe_Non_EU,2080,-0.1
-European Free Trade Association,2080,-0.1
-India,2080,0.172
-Indonesia,2080,-0.058
-Japan,2080,-0.1
-Mexico,2080,-0.1
-Middle East,2080,-0.043
-Pakistan,2080,0.346
-Russia,2080,-0.083
-South Africa,2080,-0.046
-South America_Northern,2080,-0.064
-South America_Southern,2080,-0.086
-South Asia,2080,0.358
-South Korea,2080,-0.1
-Southeast Asia,2080,0.032
-Taiwan,2080,-0.1
-Argentina,2080,-0.099
-Colombia,2080,-0.058
-USA,2085,-0.1
 Africa_Eastern,2085,0.272
-Africa_Northern,2085,0.025
-Africa_Southern,2085,0.176
-Africa_Western,2085,0.04
-Australia_NZ,2085,-0.1
-Brazil,2085,-0.099
-Canada,2085,-0.1
-Central America and Caribbean,2085,-0.02
-Central Asia,2085,0.012
-China,2085,-0.1
-EU-12,2085,-0.1
-EU-15,2085,-0.1
-Europe_Eastern,2085,0.108
-Europe_Non_EU,2085,-0.1
-European Free Trade Association,2085,-0.1
-India,2085,0.135
-Indonesia,2085,-0.08
-Japan,2085,-0.1
-Mexico,2085,-0.1
-Middle East,2085,-0.063
-Pakistan,2085,0.291
-Russia,2085,-0.096
-South Africa,2085,-0.064
-South America_Northern,2085,-0.085
-South America_Southern,2085,-0.1
-South Asia,2085,0.305
-South Korea,2085,-0.1
-Southeast Asia,2085,-0.003
-Taiwan,2085,-0.1
-Argentina,2085,-0.1
-Colombia,2085,-0.08
-USA,2090,-0.1
 Africa_Eastern,2090,0.194
-Africa_Northern,2090,-0.007
-Africa_Southern,2090,0.117
-Africa_Western,2090,-0.014
-Australia_NZ,2090,-0.1
-Brazil,2090,-0.1
-Canada,2090,-0.1
-Central America and Caribbean,2090,-0.058
-Central Asia,2090,-0.015
-China,2090,-0.1
-EU-12,2090,-0.1
-EU-15,2090,-0.1
-Europe_Eastern,2090,0.075
-Europe_Non_EU,2090,-0.1
-European Free Trade Association,2090,-0.1
-India,2090,0.096
-Indonesia,2090,-0.1
-Japan,2090,-0.1
-Mexico,2090,-0.1
-Middle East,2090,-0.081
-Pakistan,2090,0.23
-Russia,2090,-0.1
-South Africa,2090,-0.081
-South America_Northern,2090,-0.1
-South America_Southern,2090,-0.1
-South Asia,2090,0.244
-South Korea,2090,-0.1
-Southeast Asia,2090,-0.04
-Taiwan,2090,-0.1
-Argentina,2090,-0.1
-Colombia,2090,-0.1
-USA,2095,-0.1
 Africa_Eastern,2095,0.139
-Africa_Northern,2095,-0.04
-Africa_Southern,2095,0.051
-Africa_Western,2095,-0.061
-Australia_NZ,2095,-0.1
-Brazil,2095,-0.1
-Canada,2095,-0.1
-Central America and Caribbean,2095,-0.082
-Central Asia,2095,-0.044
-China,2095,-0.1
-EU-12,2095,-0.1
-EU-15,2095,-0.1
-Europe_Eastern,2095,0.043
-Europe_Non_EU,2095,-0.1
-European Free Trade Association,2095,-0.1
-India,2095,0.054
-Indonesia,2095,-0.1
-Japan,2095,-0.1
-Mexico,2095,-0.1
-Middle East,2095,-0.1
-Pakistan,2095,0.178
-Russia,2095,-0.1
-South Africa,2095,-0.099
-South America_Northern,2095,-0.1
-South America_Southern,2095,-0.1
-South Asia,2095,0.186
-South Korea,2095,-0.1
-Southeast Asia,2095,-0.065
-Taiwan,2095,-0.1
-Argentina,2095,-0.1
-Colombia,2095,-0.1
-USA,2100,-0.1
 Africa_Eastern,2100,0.077
+Africa_Northern,2015,0.383
+Africa_Northern,2020,0.485
+Africa_Northern,2025,0.533
+Africa_Northern,2030,0.5
+Africa_Northern,2035,0.465
+Africa_Northern,2040,0.426
+Africa_Northern,2045,0.385
+Africa_Northern,2050,0.339
+Africa_Northern,2055,0.289
+Africa_Northern,2060,0.233
+Africa_Northern,2065,0.183
+Africa_Northern,2070,0.143
+Africa_Northern,2075,0.102
+Africa_Northern,2080,0.059
+Africa_Northern,2085,0.025
+Africa_Northern,2090,-0.007
+Africa_Northern,2095,-0.04
 Africa_Northern,2100,-0.063
+Africa_Southern,2015,0.15
+Africa_Southern,2020,0.17
+Africa_Southern,2025,0.197
+Africa_Southern,2030,0.225
+Africa_Southern,2035,0.257
+Africa_Southern,2040,0.299
+Africa_Southern,2045,0.392
+Africa_Southern,2050,0.515
+Africa_Southern,2055,0.526
+Africa_Southern,2060,0.488
+Africa_Southern,2065,0.442
+Africa_Southern,2070,0.386
+Africa_Southern,2075,0.322
+Africa_Southern,2080,0.246
+Africa_Southern,2085,0.176
+Africa_Southern,2090,0.117
+Africa_Southern,2095,0.051
 Africa_Southern,2100,0.001
+Africa_Western,2015,0.157
+Africa_Western,2020,0.179
+Africa_Western,2025,0.221
+Africa_Western,2030,0.272
+Africa_Western,2035,0.354
+Africa_Western,2040,0.479
+Africa_Western,2045,0.533
+Africa_Western,2050,0.496
+Africa_Western,2055,0.449
+Africa_Western,2060,0.391
+Africa_Western,2065,0.323
+Africa_Western,2070,0.243
+Africa_Western,2075,0.17
+Africa_Western,2080,0.107
+Africa_Western,2085,0.04
+Africa_Western,2090,-0.014
+Africa_Western,2095,-0.061
 Africa_Western,2100,-0.093
-Australia_NZ,2100,-0.1
-Brazil,2100,-0.1
-Canada,2100,-0.1
-Central America and Caribbean,2100,-0.1
-Central Asia,2100,-0.062
-China,2100,-0.1
-EU-12,2100,-0.1
-EU-15,2100,-0.1
-Europe_Eastern,2100,0.019
-Europe_Non_EU,2100,-0.1
-European Free Trade Association,2100,-0.1
-India,2100,0.023
-Indonesia,2100,-0.1
-Japan,2100,-0.1
-Mexico,2100,-0.1
-Middle East,2100,-0.1
-Pakistan,2100,0.135
-Russia,2100,-0.1
-South Africa,2100,-0.1
-South America_Northern,2100,-0.1
-South America_Southern,2100,-0.1
-South Asia,2100,0.141
-South Korea,2100,-0.1
-Southeast Asia,2100,-0.085
-Taiwan,2100,-0.1
+Argentina,2015,0.287
+Argentina,2020,0.302
+Argentina,2025,0.242
+Argentina,2030,0.188
+Argentina,2035,0.15
+Argentina,2040,0.113
+Argentina,2045,0.075
+Argentina,2050,0.04
+Argentina,2055,0.012
+Argentina,2060,-0.017
+Argentina,2065,-0.048
+Argentina,2070,-0.065
+Argentina,2075,-0.082
+Argentina,2080,-0.099
+Argentina,2085,-0.1
+Argentina,2090,-0.1
+Argentina,2095,-0.1
 Argentina,2100,-0.1
+Australia_NZ,2015,-0.1
+Australia_NZ,2020,-0.1
+Australia_NZ,2025,-0.1
+Australia_NZ,2030,-0.1
+Australia_NZ,2035,-0.1
+Australia_NZ,2040,-0.1
+Australia_NZ,2045,-0.1
+Australia_NZ,2050,-0.1
+Australia_NZ,2055,-0.1
+Australia_NZ,2060,-0.1
+Australia_NZ,2065,-0.1
+Australia_NZ,2070,-0.1
+Australia_NZ,2075,-0.1
+Australia_NZ,2080,-0.1
+Australia_NZ,2085,-0.1
+Australia_NZ,2090,-0.1
+Australia_NZ,2095,-0.1
+Australia_NZ,2100,-0.1
+Brazil,2015,0.333
+Brazil,2020,0.315
+Brazil,2025,0.261
+Brazil,2030,0.211
+Brazil,2035,0.178
+Brazil,2040,0.147
+Brazil,2045,0.115
+Brazil,2050,0.081
+Brazil,2055,0.046
+Brazil,2060,0.019
+Brazil,2065,-0.009
+Brazil,2070,-0.04
+Brazil,2075,-0.062
+Brazil,2080,-0.08
+Brazil,2085,-0.099
+Brazil,2090,-0.1
+Brazil,2095,-0.1
+Brazil,2100,-0.1
+Canada,2015,-1.2
+Canada,2020,-0.1
+Canada,2025,-0.1
+Canada,2030,-0.1
+Canada,2035,-0.1
+Canada,2040,-0.1
+Canada,2045,-0.1
+Canada,2050,-0.1
+Canada,2055,-0.1
+Canada,2060,-0.1
+Canada,2065,-0.1
+Canada,2070,-0.1
+Canada,2075,-0.1
+Canada,2080,-0.1
+Canada,2085,-0.1
+Canada,2090,-0.1
+Canada,2095,-0.1
+Canada,2100,-0.1
+Central America and Caribbean,2015,0.549
+Central America and Caribbean,2020,0.532
+Central America and Caribbean,2025,0.506
+Central America and Caribbean,2030,0.478
+Central America and Caribbean,2035,0.446
+Central America and Caribbean,2040,0.41
+Central America and Caribbean,2045,0.368
+Central America and Caribbean,2050,0.32
+Central America and Caribbean,2055,0.265
+Central America and Caribbean,2060,0.204
+Central America and Caribbean,2065,0.161
+Central America and Caribbean,2070,0.115
+Central America and Caribbean,2075,0.064
+Central America and Caribbean,2080,0.021
+Central America and Caribbean,2085,-0.02
+Central America and Caribbean,2090,-0.058
+Central America and Caribbean,2095,-0.082
+Central America and Caribbean,2100,-0.1
+Central Asia,2015,0.545
+Central Asia,2020,0.512
+Central Asia,2025,0.463
+Central Asia,2030,0.414
+Central Asia,2035,0.365
+Central Asia,2040,0.318
+Central Asia,2045,0.273
+Central Asia,2050,0.232
+Central Asia,2055,0.195
+Central Asia,2060,0.167
+Central Asia,2065,0.135
+Central Asia,2070,0.101
+Central Asia,2075,0.067
+Central Asia,2080,0.037
+Central Asia,2085,0.012
+Central Asia,2090,-0.015
+Central Asia,2095,-0.044
+Central Asia,2100,-0.062
+China,2015,1.35
+China,2020,0.415
+China,2025,0.321
+China,2030,0.233
+China,2035,0.172
+China,2040,0.125
+China,2045,0.079
+China,2050,0.041
+China,2055,0.014
+China,2060,-0.013
+China,2065,-0.04
+China,2070,-0.059
+China,2075,-0.073
+China,2080,-0.087
+China,2085,-0.1
+China,2090,-0.1
+China,2095,-0.1
+China,2100,-0.1
+Colombia,2015,0.461
+Colombia,2020,0.432
+Colombia,2025,0.402
+Colombia,2030,0.365
+Colombia,2035,0.323
+Colombia,2040,0.275
+Colombia,2045,0.222
+Colombia,2050,0.177
+Colombia,2055,0.138
+Colombia,2060,0.095
+Colombia,2065,0.048
+Colombia,2070,0.013
+Colombia,2075,-0.025
+Colombia,2080,-0.058
+Colombia,2085,-0.08
+Colombia,2090,-0.1
+Colombia,2095,-0.1
 Colombia,2100,-0.1
+Bulgaria,2015,0.253
+Bulgaria,2020,0.187
+Bulgaria,2025,0.14
+Bulgaria,2030,0.092
+Bulgaria,2035,0.044
+Bulgaria,2040,0.01
+Bulgaria,2045,-0.022
+Bulgaria,2050,-0.052
+Bulgaria,2055,-0.068
+Bulgaria,2060,-0.087
+Bulgaria,2065,-0.1
+Bulgaria,2070,-0.1
+Bulgaria,2075,-0.1
+Bulgaria,2080,-0.1
+Bulgaria,2085,-0.1
+Bulgaria,2090,-0.1
+Bulgaria,2095,-0.1
+Bulgaria,2100,-0.1
+Belarus,2015,0.343
+Belarus,2020,0.434
+Belarus,2025,0.545
+Belarus,2030,0.514
+Belarus,2035,0.481
+Belarus,2040,0.447
+Belarus,2045,0.413
+Belarus,2050,0.378
+Belarus,2055,0.341
+Belarus,2060,0.298
+Belarus,2065,0.25
+Belarus,2070,0.2
+Belarus,2075,0.17
+Belarus,2080,0.14
+Belarus,2085,0.108
+Belarus,2090,0.075
+Belarus,2095,0.043
+Belarus,2100,0.019
+Albania,2015,0.362
+Albania,2020,0.318
+Albania,2025,0.261
+Albania,2030,0.204
+Albania,2035,0.167
+Albania,2040,0.13
+Albania,2045,0.091
+Albania,2050,0.05
+Albania,2055,0.021
+Albania,2060,-0.01
+Albania,2065,-0.044
+Albania,2070,-0.065
+Albania,2075,-0.083
+Albania,2080,-0.1
+Albania,2085,-0.1
+Albania,2090,-0.1
+Albania,2095,-0.1
+Albania,2100,-0.1
+Iceland,2015,-0.1
+Iceland,2020,-0.1
+Iceland,2025,-0.1
+Iceland,2030,-0.1
+Iceland,2035,-0.1
+Iceland,2040,-0.1
+Iceland,2045,-0.1
+Iceland,2050,-0.1
+Iceland,2055,-0.1
+Iceland,2060,-0.1
+Iceland,2065,-0.1
+Iceland,2070,-0.1
+Iceland,2075,-0.1
+Iceland,2080,-0.1
+Iceland,2085,-0.1
+Iceland,2090,-0.1
+Iceland,2095,-0.1
+Iceland,2100,-0.1
+India,2015,1.35
+India,2020,0.241
+India,2025,0.313
+India,2030,0.437
+India,2035,0.545
+India,2040,0.515
+India,2045,0.482
+India,2050,0.446
+India,2055,0.407
+India,2060,0.364
+India,2065,0.316
+India,2070,0.265
+India,2075,0.211
+India,2080,0.172
+India,2085,0.135
+India,2090,0.096
+India,2095,0.054
+India,2100,0.023
+Indonesia,2015,0.408
+Indonesia,2020,0.546
+Indonesia,2025,0.499
+Indonesia,2030,0.448
+Indonesia,2035,0.392
+Indonesia,2040,0.331
+Indonesia,2045,0.264
+Indonesia,2050,0.196
+Indonesia,2055,0.15
+Indonesia,2060,0.101
+Indonesia,2065,0.049
+Indonesia,2070,0.013
+Indonesia,2075,-0.026
+Indonesia,2080,-0.058
+Indonesia,2085,-0.08
+Indonesia,2090,-0.1
+Indonesia,2095,-0.1
+Indonesia,2100,-0.1
+Japan,2015,-0.1
+Japan,2020,-0.1
+Japan,2025,-0.1
+Japan,2030,-0.1
+Japan,2035,-0.1
+Japan,2040,-0.1
+Japan,2045,-0.1
+Japan,2050,-0.1
+Japan,2055,-0.1
+Japan,2060,-0.1
+Japan,2065,-0.1
+Japan,2070,-0.1
+Japan,2075,-0.1
+Japan,2080,-0.1
+Japan,2085,-0.1
+Japan,2090,-0.1
+Japan,2095,-0.1
+Japan,2100,-0.1
+Mexico,2015,0.369
+Mexico,2020,0.332
+Mexico,2025,0.288
+Mexico,2030,0.24
+Mexico,2035,0.193
+Mexico,2040,0.16
+Mexico,2045,0.122
+Mexico,2050,0.08
+Mexico,2055,0.039
+Mexico,2060,0.004
+Mexico,2065,-0.034
+Mexico,2070,-0.062
+Mexico,2075,-0.084
+Mexico,2080,-0.1
+Mexico,2085,-0.1
+Mexico,2090,-0.1
+Mexico,2095,-0.1
+Mexico,2100,-0.1
+Middle East,2015,3
+Middle East,2020,0.351
+Middle East,2025,0.309
+Middle East,2030,0.264
+Middle East,2035,0.219
+Middle East,2040,0.185
+Middle East,2045,0.158
+Middle East,2050,0.132
+Middle East,2055,0.104
+Middle East,2060,0.072
+Middle East,2065,0.041
+Middle East,2070,0.015
+Middle East,2075,-0.013
+Middle East,2080,-0.043
+Middle East,2085,-0.063
+Middle East,2090,-0.081
+Middle East,2095,-0.1
+Middle East,2100,-0.1
+Pakistan,2015,0.137
+Pakistan,2020,0.143
+Pakistan,2025,0.152
+Pakistan,2030,0.18
+Pakistan,2035,0.216
+Pakistan,2040,0.261
+Pakistan,2045,0.325
+Pakistan,2050,0.431
+Pakistan,2055,0.549
+Pakistan,2060,0.519
+Pakistan,2065,0.484
+Pakistan,2070,0.443
+Pakistan,2075,0.397
+Pakistan,2080,0.346
+Pakistan,2085,0.291
+Pakistan,2090,0.23
+Pakistan,2095,0.178
+Pakistan,2100,0.135
+Russia,2015,0.1
+Russia,2020,0.307
+Russia,2025,0.234
+Russia,2030,0.174
+Russia,2035,0.129
+Russia,2040,0.088
+Russia,2045,0.055
+Russia,2050,0.035
+Russia,2055,0.016
+Russia,2060,-0.009
+Russia,2065,-0.037
+Russia,2070,-0.057
+Russia,2075,-0.07
+Russia,2080,-0.083
+Russia,2085,-0.096
+Russia,2090,-0.1
+Russia,2095,-0.1
+Russia,2100,-0.1
+South Africa,2015,0.445
+South Africa,2020,0.428
+South Africa,2025,0.381
+South Africa,2030,0.332
+South Africa,2035,0.282
+South Africa,2040,0.23
+South Africa,2045,0.185
+South Africa,2050,0.152
+South Africa,2055,0.117
+South Africa,2060,0.08
+South Africa,2065,0.043
+South Africa,2070,0.015
+South Africa,2075,-0.015
+South Africa,2080,-0.046
+South Africa,2085,-0.064
+South Africa,2090,-0.081
+South Africa,2095,-0.099
+South Africa,2100,-0.1
+South America_Northern,2015,0.31
+South America_Northern,2020,0.385
+South America_Northern,2025,0.348
+South America_Northern,2030,0.309
+South America_Northern,2035,0.265
+South America_Northern,2040,0.218
+South America_Northern,2045,0.178
+South America_Northern,2050,0.143
+South America_Northern,2055,0.103
+South America_Northern,2060,0.06
+South America_Northern,2065,0.026
+South America_Northern,2070,-0.006
+South America_Northern,2075,-0.041
+South America_Northern,2080,-0.064
+South America_Northern,2085,-0.085
+South America_Northern,2090,-0.1
+South America_Northern,2095,-0.1
+South America_Northern,2100,-0.1
+South America_Southern,2015,0.455
+South America_Southern,2020,0.424
+South America_Southern,2025,0.375
+South America_Southern,2030,0.324
+South America_Southern,2035,0.272
+South America_Southern,2040,0.214
+South America_Southern,2045,0.17
+South America_Southern,2050,0.128
+South America_Southern,2055,0.083
+South America_Southern,2060,0.039
+South America_Southern,2065,0.003
+South America_Southern,2070,-0.036
+South America_Southern,2075,-0.063
+South America_Southern,2080,-0.086
+South America_Southern,2085,-0.1
+South America_Southern,2090,-0.1
+South America_Southern,2095,-0.1
+South America_Southern,2100,-0.1
+South Asia,2015,0.133
+South Asia,2020,0.142
+South Asia,2025,0.16
+South Asia,2030,0.196
+South Asia,2035,0.235
+South Asia,2040,0.28
+South Asia,2045,0.354
+South Asia,2050,0.455
+South Asia,2055,0.545
+South Asia,2060,0.517
+South Asia,2065,0.485
+South Asia,2070,0.448
+South Asia,2075,0.406
+South Asia,2080,0.358
+South Asia,2085,0.305
+South Asia,2090,0.244
+South Asia,2095,0.186
+South Asia,2100,0.141
+South Korea,2015,0.008
+South Korea,2020,-0.051
+South Korea,2025,-0.084
+South Korea,2030,-0.1
+South Korea,2035,-0.1
+South Korea,2040,-0.1
+South Korea,2045,-0.1
+South Korea,2050,-0.1
+South Korea,2055,-0.1
+South Korea,2060,-0.1
+South Korea,2065,-0.1
+South Korea,2070,-0.1
+South Korea,2075,-0.1
+South Korea,2080,-0.1
+South Korea,2085,-0.1
+South Korea,2090,-0.1
+South Korea,2095,-0.1
+South Korea,2100,-0.1
+Southeast Asia,2015,0.445
+Southeast Asia,2020,0.544
+Southeast Asia,2025,0.512
+Southeast Asia,2030,0.478
+Southeast Asia,2035,0.442
+Southeast Asia,2040,0.402
+Southeast Asia,2045,0.358
+Southeast Asia,2050,0.309
+Southeast Asia,2055,0.255
+Southeast Asia,2060,0.198
+Southeast Asia,2065,0.159
+Southeast Asia,2070,0.117
+Southeast Asia,2075,0.071
+Southeast Asia,2080,0.032
+Southeast Asia,2085,-0.003
+Southeast Asia,2090,-0.04
+Southeast Asia,2095,-0.065
+Southeast Asia,2100,-0.085
+Taiwan,2015,0.088
+Taiwan,2020,0.032
+Taiwan,2025,-0.007
+Taiwan,2030,-0.039
+Taiwan,2035,-0.06
+Taiwan,2040,-0.073
+Taiwan,2045,-0.084
+Taiwan,2050,-0.091
+Taiwan,2055,-0.094
+Taiwan,2060,-0.098
+Taiwan,2065,-0.1
+Taiwan,2070,-0.1
+Taiwan,2075,-0.1
+Taiwan,2080,-0.1
+Taiwan,2085,-0.1
+Taiwan,2090,-0.1
+Taiwan,2095,-0.1
+Taiwan,2100,-0.1
+USA,2015,-1.2
+USA,2020,-0.1
+USA,2025,-0.1
+USA,2030,-0.1
+USA,2035,-0.1
+USA,2040,-0.1
+USA,2045,-0.1
+USA,2050,-0.1
+USA,2055,-0.1
+USA,2060,-0.1
+USA,2065,-0.1
+USA,2070,-0.1
+USA,2075,-0.1
+USA,2080,-0.1
+USA,2085,-0.1
+USA,2090,-0.1
+USA,2095,-0.1
+USA,2100,-0.1
+Cyprus,2015,0.253
+Cyprus,2020,0.187
+Cyprus,2025,0.14
+Cyprus,2030,0.092
+Cyprus,2035,0.044
+Cyprus,2040,0.01
+Cyprus,2045,-0.022
+Cyprus,2050,-0.052
+Cyprus,2055,-0.068
+Cyprus,2060,-0.087
+Cyprus,2065,-0.1
+Cyprus,2070,-0.1
+Cyprus,2075,-0.1
+Cyprus,2080,-0.1
+Cyprus,2085,-0.1
+Cyprus,2090,-0.1
+Cyprus,2095,-0.1
+Cyprus,2100,-0.1
+Czech Republic,2015,0.253
+Czech Republic,2020,0.187
+Czech Republic,2025,0.14
+Czech Republic,2030,0.092
+Czech Republic,2035,0.044
+Czech Republic,2040,0.01
+Czech Republic,2045,-0.022
+Czech Republic,2050,-0.052
+Czech Republic,2055,-0.068
+Czech Republic,2060,-0.087
+Czech Republic,2065,-0.1
+Czech Republic,2070,-0.1
+Czech Republic,2075,-0.1
+Czech Republic,2080,-0.1
+Czech Republic,2085,-0.1
+Czech Republic,2090,-0.1
+Czech Republic,2095,-0.1
+Czech Republic,2100,-0.1
+Estonia,2015,0.253
+Estonia,2020,0.187
+Estonia,2025,0.14
+Estonia,2030,0.092
+Estonia,2035,0.044
+Estonia,2040,0.01
+Estonia,2045,-0.022
+Estonia,2050,-0.052
+Estonia,2055,-0.068
+Estonia,2060,-0.087
+Estonia,2065,-0.1
+Estonia,2070,-0.1
+Estonia,2075,-0.1
+Estonia,2080,-0.1
+Estonia,2085,-0.1
+Estonia,2090,-0.1
+Estonia,2095,-0.1
+Estonia,2100,-0.1
+Hungary,2015,0.253
+Hungary,2020,0.187
+Hungary,2025,0.14
+Hungary,2030,0.092
+Hungary,2035,0.044
+Hungary,2040,0.01
+Hungary,2045,-0.022
+Hungary,2050,-0.052
+Hungary,2055,-0.068
+Hungary,2060,-0.087
+Hungary,2065,-0.1
+Hungary,2070,-0.1
+Hungary,2075,-0.1
+Hungary,2080,-0.1
+Hungary,2085,-0.1
+Hungary,2090,-0.1
+Hungary,2095,-0.1
+Hungary,2100,-0.1
+Lithuania,2015,0.253
+Lithuania,2020,0.187
+Lithuania,2025,0.14
+Lithuania,2030,0.092
+Lithuania,2035,0.044
+Lithuania,2040,0.01
+Lithuania,2045,-0.022
+Lithuania,2050,-0.052
+Lithuania,2055,-0.068
+Lithuania,2060,-0.087
+Lithuania,2065,-0.1
+Lithuania,2070,-0.1
+Lithuania,2075,-0.1
+Lithuania,2080,-0.1
+Lithuania,2085,-0.1
+Lithuania,2090,-0.1
+Lithuania,2095,-0.1
+Lithuania,2100,-0.1
+Latvia,2015,0.253
+Latvia,2020,0.187
+Latvia,2025,0.14
+Latvia,2030,0.092
+Latvia,2035,0.044
+Latvia,2040,0.01
+Latvia,2045,-0.022
+Latvia,2050,-0.052
+Latvia,2055,-0.068
+Latvia,2060,-0.087
+Latvia,2065,-0.1
+Latvia,2070,-0.1
+Latvia,2075,-0.1
+Latvia,2080,-0.1
+Latvia,2085,-0.1
+Latvia,2090,-0.1
+Latvia,2095,-0.1
+Latvia,2100,-0.1
+Malta,2015,0.253
+Malta,2020,0.187
+Malta,2025,0.14
+Malta,2030,0.092
+Malta,2035,0.044
+Malta,2040,0.01
+Malta,2045,-0.022
+Malta,2050,-0.052
+Malta,2055,-0.068
+Malta,2060,-0.087
+Malta,2065,-0.1
+Malta,2070,-0.1
+Malta,2075,-0.1
+Malta,2080,-0.1
+Malta,2085,-0.1
+Malta,2090,-0.1
+Malta,2095,-0.1
+Malta,2100,-0.1
+Poland,2015,0.253
+Poland,2020,0.187
+Poland,2025,0.14
+Poland,2030,0.092
+Poland,2035,0.044
+Poland,2040,0.01
+Poland,2045,-0.022
+Poland,2050,-0.052
+Poland,2055,-0.068
+Poland,2060,-0.087
+Poland,2065,-0.1
+Poland,2070,-0.1
+Poland,2075,-0.1
+Poland,2080,-0.1
+Poland,2085,-0.1
+Poland,2090,-0.1
+Poland,2095,-0.1
+Poland,2100,-0.1
+Romania,2015,0.253
+Romania,2020,0.187
+Romania,2025,0.14
+Romania,2030,0.092
+Romania,2035,0.044
+Romania,2040,0.01
+Romania,2045,-0.022
+Romania,2050,-0.052
+Romania,2055,-0.068
+Romania,2060,-0.087
+Romania,2065,-0.1
+Romania,2070,-0.1
+Romania,2075,-0.1
+Romania,2080,-0.1
+Romania,2085,-0.1
+Romania,2090,-0.1
+Romania,2095,-0.1
+Romania,2100,-0.1
+Slovakia,2015,0.253
+Slovakia,2020,0.187
+Slovakia,2025,0.14
+Slovakia,2030,0.092
+Slovakia,2035,0.044
+Slovakia,2040,0.01
+Slovakia,2045,-0.022
+Slovakia,2050,-0.052
+Slovakia,2055,-0.068
+Slovakia,2060,-0.087
+Slovakia,2065,-0.1
+Slovakia,2070,-0.1
+Slovakia,2075,-0.1
+Slovakia,2080,-0.1
+Slovakia,2085,-0.1
+Slovakia,2090,-0.1
+Slovakia,2095,-0.1
+Slovakia,2100,-0.1
+Slovenia,2015,0.253
+Slovenia,2020,0.187
+Slovenia,2025,0.14
+Slovenia,2030,0.092
+Slovenia,2035,0.044
+Slovenia,2040,0.01
+Slovenia,2045,-0.022
+Slovenia,2050,-0.052
+Slovenia,2055,-0.068
+Slovenia,2060,-0.087
+Slovenia,2065,-0.1
+Slovenia,2070,-0.1
+Slovenia,2075,-0.1
+Slovenia,2080,-0.1
+Slovenia,2085,-0.1
+Slovenia,2090,-0.1
+Slovenia,2095,-0.1
+Slovenia,2100,-0.1
+Spain,2015,0.253
+Spain,2020,0.187
+Spain,2025,0.14
+Spain,2030,0.092
+Spain,2035,0.044
+Spain,2040,0.01
+Spain,2045,-0.022
+Spain,2050,-0.052
+Spain,2055,-0.068
+Spain,2060,-0.087
+Spain,2065,-0.1
+Spain,2070,-0.1
+Spain,2075,-0.1
+Spain,2080,-0.1
+Spain,2085,-0.1
+Spain,2090,-0.1
+Spain,2095,-0.1
+Spain,2100,-0.1
+Austria,2015,0.253
+Austria,2020,0.187
+Austria,2025,0.14
+Austria,2030,0.092
+Austria,2035,0.044
+Austria,2040,0.01
+Austria,2045,-0.022
+Austria,2050,-0.052
+Austria,2055,-0.068
+Austria,2060,-0.087
+Austria,2065,-0.1
+Austria,2070,-0.1
+Austria,2075,-0.1
+Austria,2080,-0.1
+Austria,2085,-0.1
+Austria,2090,-0.1
+Austria,2095,-0.1
+Austria,2100,-0.1
+Belgium,2015,0.253
+Belgium,2020,0.187
+Belgium,2025,0.14
+Belgium,2030,0.092
+Belgium,2035,0.044
+Belgium,2040,0.01
+Belgium,2045,-0.022
+Belgium,2050,-0.052
+Belgium,2055,-0.068
+Belgium,2060,-0.087
+Belgium,2065,-0.1
+Belgium,2070,-0.1
+Belgium,2075,-0.1
+Belgium,2080,-0.1
+Belgium,2085,-0.1
+Belgium,2090,-0.1
+Belgium,2095,-0.1
+Belgium,2100,-0.1
+Germany,2015,0.253
+Germany,2020,0.187
+Germany,2025,0.14
+Germany,2030,0.092
+Germany,2035,0.044
+Germany,2040,0.01
+Germany,2045,-0.022
+Germany,2050,-0.052
+Germany,2055,-0.068
+Germany,2060,-0.087
+Germany,2065,-0.1
+Germany,2070,-0.1
+Germany,2075,-0.1
+Germany,2080,-0.1
+Germany,2085,-0.1
+Germany,2090,-0.1
+Germany,2095,-0.1
+Germany,2100,-0.1
+Denmark,2015,0.253
+Denmark,2020,0.187
+Denmark,2025,0.14
+Denmark,2030,0.092
+Denmark,2035,0.044
+Denmark,2040,0.01
+Denmark,2045,-0.022
+Denmark,2050,-0.052
+Denmark,2055,-0.068
+Denmark,2060,-0.087
+Denmark,2065,-0.1
+Denmark,2070,-0.1
+Denmark,2075,-0.1
+Denmark,2080,-0.1
+Denmark,2085,-0.1
+Denmark,2090,-0.1
+Denmark,2095,-0.1
+Denmark,2100,-0.1
+UK,2015,0.253
+UK,2020,0.187
+UK,2025,0.14
+UK,2030,0.092
+UK,2035,0.044
+UK,2040,0.01
+UK,2045,-0.022
+UK,2050,-0.052
+UK,2055,-0.068
+UK,2060,-0.087
+UK,2065,-0.1
+UK,2070,-0.1
+UK,2075,-0.1
+UK,2080,-0.1
+UK,2085,-0.1
+UK,2090,-0.1
+UK,2095,-0.1
+UK,2100,-0.1
+Finland,2015,0.253
+Finland,2020,0.187
+Finland,2025,0.14
+Finland,2030,0.092
+Finland,2035,0.044
+Finland,2040,0.01
+Finland,2045,-0.022
+Finland,2050,-0.052
+Finland,2055,-0.068
+Finland,2060,-0.087
+Finland,2065,-0.1
+Finland,2070,-0.1
+Finland,2075,-0.1
+Finland,2080,-0.1
+Finland,2085,-0.1
+Finland,2090,-0.1
+Finland,2095,-0.1
+Finland,2100,-0.1
+France,2015,0.253
+France,2020,0.187
+France,2025,0.14
+France,2030,0.092
+France,2035,0.044
+France,2040,0.01
+France,2045,-0.022
+France,2050,-0.052
+France,2055,-0.068
+France,2060,-0.087
+France,2065,-0.1
+France,2070,-0.1
+France,2075,-0.1
+France,2080,-0.1
+France,2085,-0.1
+France,2090,-0.1
+France,2095,-0.1
+France,2100,-0.1
+Greece,2015,0.253
+Greece,2020,0.187
+Greece,2025,0.14
+Greece,2030,0.092
+Greece,2035,0.044
+Greece,2040,0.01
+Greece,2045,-0.022
+Greece,2050,-0.052
+Greece,2055,-0.068
+Greece,2060,-0.087
+Greece,2065,-0.1
+Greece,2070,-0.1
+Greece,2075,-0.1
+Greece,2080,-0.1
+Greece,2085,-0.1
+Greece,2090,-0.1
+Greece,2095,-0.1
+Greece,2100,-0.1
+Ireland,2015,0.253
+Ireland,2020,0.187
+Ireland,2025,0.14
+Ireland,2030,0.092
+Ireland,2035,0.044
+Ireland,2040,0.01
+Ireland,2045,-0.022
+Ireland,2050,-0.052
+Ireland,2055,-0.068
+Ireland,2060,-0.087
+Ireland,2065,-0.1
+Ireland,2070,-0.1
+Ireland,2075,-0.1
+Ireland,2080,-0.1
+Ireland,2085,-0.1
+Ireland,2090,-0.1
+Ireland,2095,-0.1
+Ireland,2100,-0.1
+Italy,2015,0.253
+Italy,2020,0.187
+Italy,2025,0.14
+Italy,2030,0.092
+Italy,2035,0.044
+Italy,2040,0.01
+Italy,2045,-0.022
+Italy,2050,-0.052
+Italy,2055,-0.068
+Italy,2060,-0.087
+Italy,2065,-0.1
+Italy,2070,-0.1
+Italy,2075,-0.1
+Italy,2080,-0.1
+Italy,2085,-0.1
+Italy,2090,-0.1
+Italy,2095,-0.1
+Italy,2100,-0.1
+Luxembourg,2015,0.253
+Luxembourg,2020,0.187
+Luxembourg,2025,0.14
+Luxembourg,2030,0.092
+Luxembourg,2035,0.044
+Luxembourg,2040,0.01
+Luxembourg,2045,-0.022
+Luxembourg,2050,-0.052
+Luxembourg,2055,-0.068
+Luxembourg,2060,-0.087
+Luxembourg,2065,-0.1
+Luxembourg,2070,-0.1
+Luxembourg,2075,-0.1
+Luxembourg,2080,-0.1
+Luxembourg,2085,-0.1
+Luxembourg,2090,-0.1
+Luxembourg,2095,-0.1
+Luxembourg,2100,-0.1
+Netherlands,2015,0.253
+Netherlands,2020,0.187
+Netherlands,2025,0.14
+Netherlands,2030,0.092
+Netherlands,2035,0.044
+Netherlands,2040,0.01
+Netherlands,2045,-0.022
+Netherlands,2050,-0.052
+Netherlands,2055,-0.068
+Netherlands,2060,-0.087
+Netherlands,2065,-0.1
+Netherlands,2070,-0.1
+Netherlands,2075,-0.1
+Netherlands,2080,-0.1
+Netherlands,2085,-0.1
+Netherlands,2090,-0.1
+Netherlands,2095,-0.1
+Netherlands,2100,-0.1
+Portugal,2015,0.253
+Portugal,2020,0.187
+Portugal,2025,0.14
+Portugal,2030,0.092
+Portugal,2035,0.044
+Portugal,2040,0.01
+Portugal,2045,-0.022
+Portugal,2050,-0.052
+Portugal,2055,-0.068
+Portugal,2060,-0.087
+Portugal,2065,-0.1
+Portugal,2070,-0.1
+Portugal,2075,-0.1
+Portugal,2080,-0.1
+Portugal,2085,-0.1
+Portugal,2090,-0.1
+Portugal,2095,-0.1
+Portugal,2100,-0.1
+Sweden,2015,0.253
+Sweden,2020,0.187
+Sweden,2025,0.14
+Sweden,2030,0.092
+Sweden,2035,0.044
+Sweden,2040,0.01
+Sweden,2045,-0.022
+Sweden,2050,-0.052
+Sweden,2055,-0.068
+Sweden,2060,-0.087
+Sweden,2065,-0.1
+Sweden,2070,-0.1
+Sweden,2075,-0.1
+Sweden,2080,-0.1
+Sweden,2085,-0.1
+Sweden,2090,-0.1
+Sweden,2095,-0.1
+Sweden,2100,-0.1
+Moldova,2015,0.343
+Moldova,2020,0.434
+Moldova,2025,0.545
+Moldova,2030,0.514
+Moldova,2035,0.481
+Moldova,2040,0.447
+Moldova,2045,0.413
+Moldova,2050,0.378
+Moldova,2055,0.341
+Moldova,2060,0.298
+Moldova,2065,0.25
+Moldova,2070,0.2
+Moldova,2075,0.17
+Moldova,2080,0.14
+Moldova,2085,0.108
+Moldova,2090,0.075
+Moldova,2095,0.043
+Moldova,2100,0.019
+Ukraine,2015,0.343
+Ukraine,2020,0.434
+Ukraine,2025,0.545
+Ukraine,2030,0.514
+Ukraine,2035,0.481
+Ukraine,2040,0.447
+Ukraine,2045,0.413
+Ukraine,2050,0.378
+Ukraine,2055,0.341
+Ukraine,2060,0.298
+Ukraine,2065,0.25
+Ukraine,2070,0.2
+Ukraine,2075,0.17
+Ukraine,2080,0.14
+Ukraine,2085,0.108
+Ukraine,2090,0.075
+Ukraine,2095,0.043
+Ukraine,2100,0.019
+Norway,2015,-0.1
+Norway,2020,-0.1
+Norway,2025,-0.1
+Norway,2030,-0.1
+Norway,2035,-0.1
+Norway,2040,-0.1
+Norway,2045,-0.1
+Norway,2050,-0.1
+Norway,2055,-0.1
+Norway,2060,-0.1
+Norway,2065,-0.1
+Norway,2070,-0.1
+Norway,2075,-0.1
+Norway,2080,-0.1
+Norway,2085,-0.1
+Norway,2090,-0.1
+Norway,2095,-0.1
+Norway,2100,-0.1
+Switzerland,2015,-0.1
+Switzerland,2020,-0.1
+Switzerland,2025,-0.1
+Switzerland,2030,-0.1
+Switzerland,2035,-0.1
+Switzerland,2040,-0.1
+Switzerland,2045,-0.1
+Switzerland,2050,-0.1
+Switzerland,2055,-0.1
+Switzerland,2060,-0.1
+Switzerland,2065,-0.1
+Switzerland,2070,-0.1
+Switzerland,2075,-0.1
+Switzerland,2080,-0.1
+Switzerland,2085,-0.1
+Switzerland,2090,-0.1
+Switzerland,2095,-0.1
+Switzerland,2100,-0.1
+Bosnia and Herzegovina,2015,0.362
+Bosnia and Herzegovina,2020,0.318
+Bosnia and Herzegovina,2025,0.261
+Bosnia and Herzegovina,2030,0.204
+Bosnia and Herzegovina,2035,0.167
+Bosnia and Herzegovina,2040,0.13
+Bosnia and Herzegovina,2045,0.091
+Bosnia and Herzegovina,2050,0.05
+Bosnia and Herzegovina,2055,0.021
+Bosnia and Herzegovina,2060,-0.01
+Bosnia and Herzegovina,2065,-0.044
+Bosnia and Herzegovina,2070,-0.065
+Bosnia and Herzegovina,2075,-0.083
+Bosnia and Herzegovina,2080,-0.1
+Bosnia and Herzegovina,2085,-0.1
+Bosnia and Herzegovina,2090,-0.1
+Bosnia and Herzegovina,2095,-0.1
+Bosnia and Herzegovina,2100,-0.1
+Croatia,2015,0.362
+Croatia,2020,0.318
+Croatia,2025,0.261
+Croatia,2030,0.204
+Croatia,2035,0.167
+Croatia,2040,0.13
+Croatia,2045,0.091
+Croatia,2050,0.05
+Croatia,2055,0.021
+Croatia,2060,-0.01
+Croatia,2065,-0.044
+Croatia,2070,-0.065
+Croatia,2075,-0.083
+Croatia,2080,-0.1
+Croatia,2085,-0.1
+Croatia,2090,-0.1
+Croatia,2095,-0.1
+Croatia,2100,-0.1
+Macedonia,2015,0.362
+Macedonia,2020,0.318
+Macedonia,2025,0.261
+Macedonia,2030,0.204
+Macedonia,2035,0.167
+Macedonia,2040,0.13
+Macedonia,2045,0.091
+Macedonia,2050,0.05
+Macedonia,2055,0.021
+Macedonia,2060,-0.01
+Macedonia,2065,-0.044
+Macedonia,2070,-0.065
+Macedonia,2075,-0.083
+Macedonia,2080,-0.1
+Macedonia,2085,-0.1
+Macedonia,2090,-0.1
+Macedonia,2095,-0.1
+Macedonia,2100,-0.1
+Serbia and Montenegro,2015,0.362
+Serbia and Montenegro,2020,0.318
+Serbia and Montenegro,2025,0.261
+Serbia and Montenegro,2030,0.204
+Serbia and Montenegro,2035,0.167
+Serbia and Montenegro,2040,0.13
+Serbia and Montenegro,2045,0.091
+Serbia and Montenegro,2050,0.05
+Serbia and Montenegro,2055,0.021
+Serbia and Montenegro,2060,-0.01
+Serbia and Montenegro,2065,-0.044
+Serbia and Montenegro,2070,-0.065
+Serbia and Montenegro,2075,-0.083
+Serbia and Montenegro,2080,-0.1
+Serbia and Montenegro,2085,-0.1
+Serbia and Montenegro,2090,-0.1
+Serbia and Montenegro,2095,-0.1
+Serbia and Montenegro,2100,-0.1
+Turkey,2015,0.362
+Turkey,2020,0.318
+Turkey,2025,0.261
+Turkey,2030,0.204
+Turkey,2035,0.167
+Turkey,2040,0.13
+Turkey,2045,0.091
+Turkey,2050,0.05
+Turkey,2055,0.021
+Turkey,2060,-0.01
+Turkey,2065,-0.044
+Turkey,2070,-0.065
+Turkey,2075,-0.083
+Turkey,2080,-0.1
+Turkey,2085,-0.1
+Turkey,2090,-0.1
+Turkey,2095,-0.1
+Turkey,2100,-0.1
