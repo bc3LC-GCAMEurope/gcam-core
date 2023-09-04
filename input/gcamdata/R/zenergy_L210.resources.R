@@ -228,10 +228,28 @@ module_energy_L210.resources <- function(command, ...) {
       summarize(value = sum(value)) %>%
       ungroup() ->
       ReserveTotal_EJ_R_F
-    L111.RsrcCurves_EJ_R_Ffos %>%
+
+
+    L111.RsrcCurves_EJ_R_Ffos_pre <- L111.RsrcCurves_EJ_R_Ffos %>%
       group_by(GCAM_region_ID, resource,subresource) %>%
       summarize(available = sum(available)) %>%
-      ungroup() %>%
+      ungroup()
+
+    regions <- as.data.frame(GCAM_region_names$GCAM_region_ID)
+    colnames(regions) <- "GCAM_region_ID"
+    rsrc_regions <- as.data.frame(unique(L111.RsrcCurves_EJ_R_Ffos_pre$GCAM_region_ID))
+    colnames(rsrc_regions) <- "GCAM_region_ID"
+
+    no_rsrc_regions <- unique(anti_join(regions, rsrc_regions, by = "GCAM_region_ID"))
+
+    L111.RsrcCurves_EJ_R_Ffos_noRsrc <- tibble(
+      no_rsrc_regions) %>%
+      repeat_add_columns(tibble(subresource = unique(L111.RsrcCurves_EJ_R_Ffos_pre$subresource))) %>%
+      mutate(resource = if_else(subresource == "unconventional oil", "crude oil", subresource),
+             available = 0)
+
+    L111.RsrcCurves_EJ_R_Ffos_pre %>%
+      bind_rows(L111.RsrcCurves_EJ_R_Ffos_noRsrc) %>%
       left_join_error_no_match(ReserveTotal_EJ_R_F %>% rename(subresource = technology), ., by=c("GCAM_region_ID", "fuel" = "resource","subresource")) %>%
       filter(value > available) %>%
       mutate(available = value - available) %>%
