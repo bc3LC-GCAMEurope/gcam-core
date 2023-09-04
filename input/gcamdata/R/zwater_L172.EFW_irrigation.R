@@ -116,8 +116,9 @@ module_water_L172.EFW_irrigation <- function(command, ...) {
     # below the exogenous threshold of available energy that is allowed to be re-assigned to irrigation pumping
     L172.in_EJ_R_irr_F_Yh <- left_join_error_no_match(L172.in_EJ_R_irr_F_Yh, L172.in_EJavail_ag,
                                                       by = c("GCAM_region_ID", "fuel", "year")) %>%
-      mutate(scaler = if_else(energy_EJ / avail_energy_EJ > efw.MAX_AGCOMM_ENERGY_IRR,
-                              efw.MAX_AGCOMM_ENERGY_IRR / (energy_EJ / avail_energy_EJ), 1),
+      mutate(scaler = if_else(avail_energy_EJ == 0, 0,
+                              if_else(energy_EJ / avail_energy_EJ > efw.MAX_AGCOMM_ENERGY_IRR,
+                              efw.MAX_AGCOMM_ENERGY_IRR / (energy_EJ / avail_energy_EJ), 1)),
              coefficient = coefficient * scaler,
              energy_EJ = energy_EJ * scaler)
 
