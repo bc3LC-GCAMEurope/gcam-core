@@ -24,7 +24,8 @@ module_energy_L1092.iron_steel_GrossTrade <- function(command, ...){
              FILE = "energy/mappings/comtrade_countrycode_ISO",
              FILE = "energy/Rt_iron_steel_bilateral_trade",
              FILE = "common/GCAM_region_names",
-             FILE = "common/iso_GCAM_regID"))
+             FILE = "common/iso_GCAM_regID",
+             "L201.GDP_Scen"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("LB1092.Tradebalance_iron_steel_Mt_R_Y"))
   } else if(command == driver.MAKE) {
@@ -47,7 +48,7 @@ module_energy_L1092.iron_steel_GrossTrade <- function(command, ...){
     comtrade_countrycode_ISO <- get_data(all_data, "energy/mappings/comtrade_countrycode_ISO",strip_attributes = TRUE)
     Rt_iron_steel_bilateral_trade_data <- get_data(all_data, "energy/Rt_iron_steel_bilateral_trade",strip_attributes = TRUE) %>%
       filter(Year %in% c("2000",MODEL_BASE_YEARS))
-
+    L201.GDP_Scen <- get_data(all_data, "L201.GDP_Scen")
 
     # Bind iron and steel production, consumption, and trade data
     # Convert data from wide to long format, and adjust units
@@ -56,6 +57,47 @@ module_energy_L1092.iron_steel_GrossTrade <- function(command, ...){
       mutate(year=as.integer(year),
              value=value/1000, #Unit: to Mt
              value=replace_na(value,0)) #replace missing data with zero
+
+    # Adjustment for Luxembourg and Belgium - WSA data combines them for consumption but not for production
+    # Using 2015 split from this source to divide production: https://worldsteel.org/wp-content/uploads/Steel-Statistical-Yearbook-2019-concise-version.pdf
+    # Dividing consumption and imports based on 2015 GDP and then dividing exports
+    Belg_prod_share_2015 <- 0.77
+    Belg_GDP_share_2015 <- L201.GDP_Scen %>%
+      filter(scenario == paste0("g", socioeconomics.BASE_GDP_SCENARIO),
+             year == MODEL_FINAL_BASE_YEAR,
+             region %in% c("Belgium", "Luxembourg")) %>%
+      mutate(share = GDP/sum(GDP)) %>%
+      filter(region == "Belgium") %>% pull(share)
+
+    WSA_steel_BelgLux_1970_2018 <- WSA_steel_all_1970_2018 %>%
+      filter(Country == "Belgium-Luxembourg") %>%
+      select(-Country) %>%
+      repeat_add_columns(tibble(Country = c("Belgium", "Luxembourg"))) %>%
+      mutate(share = case_when(
+        Metric == "Crude Steel Production" & Country == "Belgium" ~ Belg_prod_share_2015,
+        Metric == "Crude Steel Production" & Country == "Luxembourg" ~ 1 - Belg_prod_share_2015,
+        Metric == "Apparent Steel Consumption (Crude Eq.)" & Country == "Belgium" ~ Belg_GDP_share_2015,
+        Metric == "Apparent Steel Consumption (Crude Eq.)" & Country == "Luxembourg" ~ 1 - Belg_GDP_share_2015,
+        Metric == "Imports" & Country == "Belgium" ~ Belg_GDP_share_2015,
+        Metric == "Imports" & Country == "Luxembourg" ~ 1- Belg_GDP_share_2015,
+        TRUE ~ 1
+      )) %>%
+      group_by(year, Country) %>%
+      # For exports, assign luxembourg production-consumption+imports, remainder to belgium
+      mutate(value = value * share,
+             value = if_else(Metric == "Exports" & Country == "Luxembourg",
+                             value[Metric == "Crude Steel Production"] - value[Metric == "Apparent Steel Consumption (Crude Eq.)"] + value[Metric == "Imports"],
+                             value)) %>%
+      group_by(year) %>%
+      mutate(value = if_else(Metric == "Exports" & Country == "Belgium",
+                             value - value[Metric == "Exports" & Country == "Luxembourg"],
+                             value)) %>%
+      ungroup %>%
+      select(-share)
+
+    WSA_steel_all_1970_2018 <- WSA_steel_all_1970_2018 %>%
+      filter(Country != "Belgium-Luxembourg") %>%
+      bind_rows(WSA_steel_BelgLux_1970_2018)
 
     #Function to prepare trade data for further processing
     WSA_trade_data <- function(WSA_metric,value_name) {

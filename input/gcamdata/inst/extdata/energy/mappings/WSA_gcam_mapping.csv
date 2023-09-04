@@ -45,48 +45,48 @@ Uzbekistan,Central Asia
 China,China
 Hong Kong,China
 Colombia,Colombia
-Bulgaria,EU-12
-Cyprus,EU-12
-Czechia,EU-12
-Estonia,EU-12
-Hungary,EU-12
-Latvia,EU-12
-Lithuania,EU-12
-Malta,EU-12
-Poland,EU-12
-Romania,EU-12
-Slovakia,EU-12
-Slovenia,EU-12
-Austria,EU-15
-Belgium,EU-15
-Belgium-Luxembourg,EU-15
-Denmark,EU-15
-Finland,EU-15
-France,EU-15
-Germany,EU-15
-Greece,EU-15
-Ireland,EU-15
-Italy,EU-15
-Luxembourg,EU-15
-Netherlands,EU-15
-Portugal,EU-15
-Spain,EU-15
-Sweden,EU-15
-United Kingdom,EU-15
-Belarus,Europe_Eastern
-Moldova,Europe_Eastern
-Ukraine,Europe_Eastern
-Turkey,Europe_Non_EU
-Albania,Europe_Non_EU
-Bosnia-Herzegovina,Europe_Non_EU
-Croatia,Europe_Non_EU
-Macedonia,Europe_Non_EU
-Montenegro,Europe_Non_EU
-Serbia,Europe_Non_EU
-Serbia-Montenegro,Europe_Non_EU
-Iceland,European Free Trade Association
-Norway,European Free Trade Association
-Switzerland,European Free Trade Association
+Bulgaria,Bulgaria
+Cyprus,Cyprus
+Czechia,Czech Republic
+Estonia,Estonia
+Hungary,Hungary
+Latvia,Latvia
+Lithuania,Lithuania
+Malta,Malta
+Poland,Poland
+Romania,Romania
+Slovakia,Slovakia
+Slovenia,Slovenia
+Austria,Austria
+Belgium,Belgium
+Belgium-Luxembourg,Belgium
+Denmark,Denmark
+Finland,Finland
+France,France
+Germany,Germany
+Greece,Greece
+Ireland,Ireland
+Italy,Italy
+Luxembourg,Luxembourg
+Netherlands,Netherlands
+Portugal,Portugal
+Spain,Spain
+Sweden,Sweden
+United Kingdom,UK
+Belarus,Belarus
+Moldova,Moldova
+Ukraine,Ukraine
+Turkey,Turkey
+Albania,Albania
+Bosnia-Herzegovina,Bosnia and Herzegovina
+Croatia,Croatia
+Macedonia,Macedonia
+Montenegro,Serbia and Montenegro
+Serbia,Serbia and Montenegro
+Serbia-Montenegro,Serbia and Montenegro
+Iceland,Iceland
+Norway,Norway
+Switzerland,Switzerland
 India,India
 Indonesia,Indonesia
 Japan,Japan
@@ -130,8 +130,8 @@ Mauritania,Africa_Western
 Uganda,Africa_Eastern
 Mongolia,Central Asia
 Ivory Coast,Africa_Western
-Slovak Republic,EU-12
-Czech Republic,EU-12
+Slovak Republic,Slovakia
+Czech Republic,Czech Republic
 Dem. Rep. of the Congo,Africa_Western
 D.P.R. Korea,Southeast Asia
 Other Middle East,Middle East
