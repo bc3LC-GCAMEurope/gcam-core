@@ -117,7 +117,20 @@ module_water_L171.desalination <- function(command, ...) {
     # between multi-stage flash distillation (MSF) and multiple effect distillation (MED)).
     L171.AusNWC_desal_techs <- group_by(AusNWC_desal_techs, AusNWC_reg, technology) %>%
       summarise(share = sum(share)) %>%
-      ungroup()
+      ungroup() %>%
+      # Malta only has reverse osmosis plants, while Cyprus has 95% (https://www.deswater.com/DWT_articles/vol_211_papers/211_2021_15.pdf)
+      # this matters because Malta/Cyprus's energy consumption is small enough that using the less efficient distillation plants
+      # throws off the energy balance
+      bind_rows(tibble(AusNWC_reg = "Malta",
+                       technology = c("distillation", "reverse osmosis"),
+                       share = c(0, 1)),
+                tibble(AusNWC_reg = "Cyprus",
+                       technology = c("distillation", "reverse osmosis"),
+                       share = c(0.05, .95)))
+
+    aquastat_ctry <- aquastat_ctry %>%
+      mutate(AusNWC_reg = if_else(iso == "mlt", "Malta", AusNWC_reg),
+             AusNWC_reg = if_else(iso == "cyp", "Cyprus", AusNWC_reg))
 
     L171.out_km3_ctry_desal_tech_Yh <- repeat_add_columns(L171.out_km3_ctry_desal_Yh,
                                                               unique(L171.AusNWC_desal_techs["technology"] ) ) %>%
@@ -158,7 +171,7 @@ module_water_L171.desalination <- function(command, ...) {
       summarise(energy_EJ = sum(energy_EJ)) %>%
       ungroup() %>%
       left_join_error_no_match(L171.desal_fuel_shares_denom, by = c("GCAM_region_ID", "technology", "year")) %>%
-      mutate(share = energy_EJ / energy_EJ_total) %>%
+      mutate(share = if_else(energy_EJ_total == 0, 0, energy_EJ / energy_EJ_total)) %>%
       select(GCAM_region_ID, fuel, technology, year, share)
 
     # Check to see if this generated any missing values. If so, there will be problems downstream, when we try to deduct
