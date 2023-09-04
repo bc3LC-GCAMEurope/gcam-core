@@ -125,8 +125,11 @@ module_energy_L126.distribution <- function(command, ...) {
       select(GCAM_region_ID, sector, fuel, year, value = value_electd_out) ->
       L126.out_EJ_R_electd_F_Yh
     Electricity_distribution_all %>%
-      select(GCAM_region_ID, sector, fuel, year, value = value_electd_IO) ->
-      L126.IO_R_electd_F_Yh
+      select(GCAM_region_ID, sector, fuel, year, value = value_electd_IO) %>%
+      # Correct Nan in Srb&Mne in 1975 by extrapolating the next available coef (1990)
+      group_by(GCAM_region_ID, sector, fuel) %>%
+      mutate(value = if_else(!is.nan(value), value, approx_fun(year, value, 2))) %>%
+      ungroup()  -> L126.IO_R_electd_F_Yh
 
     # GAS PIPELINE
     # Preparing to be joined later - summing by GCAM region ID and year
