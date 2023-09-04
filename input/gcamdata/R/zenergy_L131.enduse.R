@@ -73,7 +73,8 @@ module_energy_L131.enduse <- function(command, ...) {
       bind_rows(Unoil_elect) %>%
       bind_rows(L121.in_EJ_R_EFW_elec_Yh) %>%
       group_by(GCAM_region_ID, fuel, year) %>%
-      summarise(value = sum(value)) ->
+      summarise(value = sum(value)) %>%
+      ungroup ->
       Unoil_Refin_EFW_elect
 
     # Subtract this from total delivered electricity (output of t&d sector). This is the amount that is available for scaling to end uses.
@@ -94,7 +95,7 @@ module_energy_L131.enduse <- function(command, ...) {
     # Calculate the scalers required to balance electricity within each region
     Enduse_elect %>%
       left_join_error_no_match(Enduse_elect_unscaled, by = c("GCAM_region_ID", "fuel", "year")) %>%
-      mutate(value = value.x / value.y) %>%
+      mutate(value = if_else(value.y == 0, 0,  value.x / value.y)) %>%
       ungroup() %>%
       select(GCAM_region_ID, year, value) ->
       Enduse_elect_scaler
