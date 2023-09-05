@@ -65,14 +65,21 @@ module_aglu_L120.LC_GIS_R_LTgis_Yh_GLU <- function(command, ...) {
       spread(variable,value) %>%
       select(LT_SAGE,`mature age`,soil_c_houghton=soil_c,veg_c_houghton=veg_c)
 
-    # Perform computations
+    # Make adjustments for Malta
+    L100.Land_type_area_ha <- L100.Land_type_area_ha %>%
+      # Unknown cropland being written to dense shrubland, which is most common land for italy in same GLU
+      mutate(land_code = if_else(iso == "mlt" & land_code %in% seq(10, 17), as.integer(1112), land_code))
 
+    # Perform computations
     land.type <-
       L100.Land_type_area_ha %>%
       ## Add data for GCAM region ID and GLU
       left_join_error_no_match(distinct(iso_GCAM_regID, iso, .keep_all = TRUE), by = "iso") %>%
       ## Add vectors for land type (SAGE, HYDE, and WDPA)
       left_join_error_no_match(LDS_land_types, by = c("land_code" = "Category")) %>%
+      # To have any urban land in Malta, we need to copy the Hyde classifications to the SAGE classes
+      mutate(LT_SAGE = if_else(iso == "mlt", LT_HYDE, LT_SAGE),
+             LT_SAGE = gsub("UrbanLand", "Urbanland", LT_SAGE)) %>%
       left_join(SAGE_LT, by = "LT_SAGE") %>%  # includes NAs
       rename(LT_SAGE_5 = Land_Type) %>%
       ## Drop all rows with missing values (inland bodies of water)
@@ -306,14 +313,17 @@ module_aglu_L120.LC_GIS_R_LTgis_Yh_GLU <- function(command, ...) {
       left_join(L120.LC_bm2_R_LT_Yh_GLU %>%
                   spread(Land_Type, value, fill = 0) %>%
                   left_join(L123.LC_bm2_R_MgdFor_Yh_GLU_beforeadjust %>% select(-Land_Type),
-			by = c("GCAM_region_ID", "GLU", "year")) %>%
+                            by = c("GCAM_region_ID", "GLU", "year")) %>%
                   mutate(nonForScaler =
                            if_else((Forest - MgdFor) < 0 & Forest > 0,
-                                   1 + (Forest - MgdFor)/(Grassland + Shrubland + Pasture), 1),
-                         ForScaler = if_else((Forest - MgdFor) < 0 & Forest > 0,  MgdFor/Forest ,1)) %>%
+			                   1 + (Forest - MgdFor)/(Grassland + Shrubland + Pasture), 1),
+			                   ForScaler = if_else((Forest - MgdFor) < 0 & Forest > 0,  MgdFor/Forest ,1)) %>%
                   select(GCAM_region_ID, GLU, year, nonForScaler, ForScaler),
                 by = c("GCAM_region_ID", "GLU", "year") ) %>%
-      mutate(value = if_else(Land_Type %in% c("Grassland", "Shrubland" , "Pasture"),
+      # Set all EU regions (old and new) to 1
+      mutate(nonForScaler = if_else(GCAM_region_ID %in% c(seq(12, 16), seq(33, max(iso_GCAM_regID$GCAM_region_ID))), 1, nonForScaler),
+             ForScaler = if_else(GCAM_region_ID %in% c(seq(12, 16), seq(33, max(iso_GCAM_regID$GCAM_region_ID))), 1, ForScaler),
+             value = if_else(Land_Type %in% c("Grassland", "Shrubland" , "Pasture"),
                              value * nonForScaler,
                              if_else(Land_Type == "Forest", value * ForScaler, value) )) %>%
       select(-nonForScaler, -ForScaler) ->
