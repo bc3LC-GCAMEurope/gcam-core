@@ -107,7 +107,7 @@ module_emissions_L114.bcoc_en_R_S_T_Y <- function(command, ...) {
     # Join the scaled emissions totals from the RCP inventory back into the table of unscaled emissions to compute scalers
     BCOC_emissions_scaler <- BCOC_unscaled_emissions_RCP %>%
       left_join_error_no_match(BCOC_emissions_RCP, by = c("GCAM_region_ID", "Non.CO2", "RCP_agg_sector")) %>%
-      mutate(scaler = scaled_emissions / unscaled_emissions) %>%
+      mutate(scaler = if_else(unscaled_emissions == 0, 0, scaled_emissions / unscaled_emissions)) %>%
       select(GCAM_region_ID, Non.CO2, RCP_agg_sector, scaler)
 
     # Multiply these scalers by the unscaled emissions by GCAM region, sector, and technology to compute scaled emissions
