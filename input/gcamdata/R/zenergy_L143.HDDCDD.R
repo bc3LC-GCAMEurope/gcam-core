@@ -94,6 +94,13 @@ module_energy_L143.HDDCDD <- function(command, ...) {
       mutate(country = if_else(country == "Cote d'Ivoire", "Cote dIvoire", country)) %>%
       left_join_error_no_match(GIS_ctry, by = 'country')
 
+    # Give Malta the same HDDCDD as Greece
+    L143.HDDCDD_scen_ctry_Y_Malta <- L143.HDDCDD_scen_ctry_Y %>%
+      filter(country == "Greece") %>%
+      mutate(country = "Malta", iso = "mlt")
+
+    L143.HDDCDD_scen_ctry_Y <- bind_rows(L143.HDDCDD_scen_ctry_Y, L143.HDDCDD_scen_ctry_Y_Malta)
+
     # Serbia and Montenegro are currently combined. Copy to separated countries, assigning the same HDD and CDD to each
     if("scg" %in% L143.HDDCDD_scen_ctry_Y$iso) {
       # Create Serbia tibble
