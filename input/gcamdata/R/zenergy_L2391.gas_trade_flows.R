@@ -110,11 +110,14 @@ module_energy_L2391.gas_trade_flows <- function(command, ...) {
       mutate(share = approx_fun(year, share, rule = 2)) %>%
       ungroup() %>%
       select(-GrossImp_EJ) %>%
-      filter(year %in% MODEL_BASE_YEARS) -> L2391.NG_import_shares
+      filter(year %in% MODEL_BASE_YEARS) %>%
+      complete(nesting(GCAM_Commodity, GCAM_Commodity_traded, year), region = unique(GCAM_region_names$region)) %>%
+      replace_na(list(share = 0)) -> L2391.NG_import_shares
+
 
     # Partition calibrated imports by region between pipeline & LNG
     # Join calibrated gross NG trade and shares, calculate calibrated value by trade vehicle
-    L2391.NG_import_shares%>%
+    L2391.NG_import_shares %>%
       left_join_error_no_match(L239.Production_reg_imp %>%
                                  select(region, year, calOutputValue) ,
                                by = c("region", "year")) %>%
@@ -180,6 +183,7 @@ module_energy_L2391.gas_trade_flows <- function(command, ...) {
       select(-GrossExp_EJ) %>%
       filter(year %in% MODEL_BASE_YEARS)
 
+
     L2391.NG_export_shares_withData <- L2391.NG_export_shares %>%
       filter(complete.cases(.))
 
@@ -188,7 +192,10 @@ module_energy_L2391.gas_trade_flows <- function(command, ...) {
       # In regions with no data (e.g., Belarus), assume all traded gas is pipeline
       mutate(share = if_else(GCAM_Commodity_traded == "gas pipeline", 1, 0))
 
-    L2391.NG_export_shares <- bind_rows(L2391.NG_export_shares_withData, L2391.NG_export_shares_adj)
+    L2391.NG_export_shares <- bind_rows(L2391.NG_export_shares_withData, L2391.NG_export_shares_adj) %>%
+      complete(nesting(GCAM_Commodity, GCAM_Commodity_traded, year), region = unique(GCAM_region_names$region)) %>%
+      replace_na(list(share = 0))
+
 
     # Format traded data - exporting region is actually embedded in technology name
     L239.Production_tra %>%
@@ -205,7 +212,7 @@ module_energy_L2391.gas_trade_flows <- function(command, ...) {
     # Join in import data and scale export data so import and export totals match at relevant scales
     # (global for LNG, inter-regional network for pipeline)
     # LNG
-    L2391.NG_export_unadjusted %>%
+    L2391.NG_export_calOutput_LNG <- L2391.NG_export_unadjusted %>%
       filter(GCAM_Commodity_traded == "LNG") %>%
       left_join_error_no_match(L2391.NG_import_calOutput_LNG_global,
                                by = c("GCAM_Commodity", "GCAM_Commodity_traded", "year")) %>%
@@ -219,8 +226,8 @@ module_energy_L2391.gas_trade_flows <- function(command, ...) {
       group_by(year, GCAM_Commodity, GCAM_Commodity_traded) %>%
       mutate(global_LNG_imp = sum(calOutputValue)) %>%
       ungroup() %>%
-      select(region, GCAM_Commodity, GCAM_Commodity_traded, year, calOutputValue) ->
-      L2391.NG_export_calOutput_LNG
+      select(region, GCAM_Commodity, GCAM_Commodity_traded, year, calOutputValue)
+
 
     # Pipeline
     L2391.NG_export_unadjusted %>%
