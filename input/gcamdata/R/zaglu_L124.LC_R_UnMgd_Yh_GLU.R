@@ -32,7 +32,8 @@ module_aglu_L124.LC_R_UnMgd_Yh_GLU <- function(command, ...) {
     return(c("L120.LC_bm2_R_LT_Yh_GLU",
               "L122.LC_bm2_R_ExtraCropLand_Yh_GLU",
               "L123.LC_bm2_R_MgdPast_Yh_GLU",
-              "L123.LC_bm2_R_MgdFor_Yh_GLU"))
+              "L123.LC_bm2_R_MgdFor_Yh_GLU",
+             FILE ="common/GCAM32_to_EU"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L124.LC_bm2_R_Shrub_Yh_GLU_adj",
              "L124.LC_bm2_R_Grass_Yh_GLU_adj",
@@ -47,7 +48,7 @@ module_aglu_L124.LC_R_UnMgd_Yh_GLU <- function(command, ...) {
     L122.LC_bm2_R_ExtraCropLand_Yh_GLU <- get_data(all_data, "L122.LC_bm2_R_ExtraCropLand_Yh_GLU")
     L123.LC_bm2_R_MgdPast_Yh_GLU <- get_data(all_data, "L123.LC_bm2_R_MgdPast_Yh_GLU")
     L123.LC_bm2_R_MgdFor_Yh_GLU <- get_data(all_data, "L123.LC_bm2_R_MgdFor_Yh_GLU")
-
+    GCAM32_to_EU <- get_data(all_data, "common/GCAM32_to_EU")
     # silence package check notes
     GCAM_region_ID <- value <- year <- GLU <-  Land_Type <- TotPasture <-
       MgdPasture <- TotForest <- MgdForest <- TotUnmgdLand <- ExtraCropland <- adjustmentRatio <-
@@ -112,6 +113,12 @@ module_aglu_L124.LC_R_UnMgd_Yh_GLU <- function(command, ...) {
     # Calculate the adjustment ratio for this deduction.
     # adjustment ratio = (Total Unmgd Land - Extra Cropland) / Total Unmgd Land
     # First, calculate the total amount of unmanaged land:
+
+    # We are going to do some adjustment for Luxembourg, but want to make sure it is the only
+    # country in the region (in case region definitions change)
+    Luxembourg_ID <- filter(GCAM32_to_EU, country_name == "Luxembourg")$GCAM_region_ID
+    stopifnot(nrow(filter(GCAM32_to_EU, GCAM_region_ID == Luxembourg_ID)) == 1)
+
     L124.LC_bm2_R_LTunmgd_Yh_GLU %>%
       group_by(GCAM_region_ID, GLU, year) %>%
       summarise(value = sum(value)) %>%
@@ -122,7 +129,9 @@ module_aglu_L124.LC_R_UnMgd_Yh_GLU <- function(command, ...) {
       # to get adjusted total unmanaged land, keeping NAs for later processing:
       left_join(select(L122.LC_bm2_R_ExtraCropLand_Yh_GLU, -Land_Type), by = c("GCAM_region_ID", "GLU", "year")) %>%
       rename(ExtraCropland = value) %>%
-      mutate(adjustmentRatio = (TotUnmgdLand - ExtraCropland) / TotUnmgdLand) %>%
+      # Set extracropland to 0 in luxembourg - it has odd peak in 70s/80s/90s then goes to zero in 2000s
+      mutate(ExtraCropland = if_else(GCAM_region_ID == Luxembourg_ID, 0, ExtraCropland),
+             adjustmentRatio = (TotUnmgdLand - ExtraCropland) / TotUnmgdLand) %>%
       replace_na(list(adjustmentRatio = 1)) %>%
       select(-TotUnmgdLand, -ExtraCropland, -Land_Type) ->
       L124.LC_UnMgdAdj_R_Yh_GLU
@@ -132,14 +141,12 @@ module_aglu_L124.LC_R_UnMgd_Yh_GLU <- function(command, ...) {
       stop("Increase in cropland exceeds available unmanaged land")
     }
 
-
     # Apply the adjusment ratio to the different land types
     L124.LC_bm2_R_LTunmgd_Yh_GLU %>%
       left_join_error_no_match(L124.LC_UnMgdAdj_R_Yh_GLU, by = c("GCAM_region_ID", "GLU", "year")) %>%
       mutate(value = value * adjustmentRatio) %>%
       select(-adjustmentRatio) ->
       L124.LC_bm2_R_LTunmgd_Yh_GLU_adj
-
 
     # Produce outputs
     L124.LC_bm2_R_LTunmgd_Yh_GLU_adj %>%

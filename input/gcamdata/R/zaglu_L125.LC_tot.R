@@ -30,7 +30,8 @@ module_aglu_L125.LC_tot <- function(command, ...) {
              "L124.LC_bm2_R_Shrub_Yh_GLU_adj",
              "L124.LC_bm2_R_Grass_Yh_GLU_adj",
              "L124.LC_bm2_R_UnMgdPast_Yh_GLU_adj",
-             "L124.LC_bm2_R_UnMgdFor_Yh_GLU_adj"))
+             "L124.LC_bm2_R_UnMgdFor_Yh_GLU_adj",
+             FILE ="common/GCAM32_to_EU"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L125.LC_bm2_R",
              "L125.LC_bm2_R_GLU",
@@ -53,7 +54,7 @@ module_aglu_L125.LC_tot <- function(command, ...) {
     L124.LC_bm2_R_Grass_Yh_GLU_adj <- get_data(all_data, "L124.LC_bm2_R_Grass_Yh_GLU_adj")
     L124.LC_bm2_R_UnMgdPast_Yh_GLU_adj <- get_data(all_data, "L124.LC_bm2_R_UnMgdPast_Yh_GLU_adj")
     L124.LC_bm2_R_UnMgdFor_Yh_GLU_adj <- get_data(all_data, "L124.LC_bm2_R_UnMgdFor_Yh_GLU_adj")
-
+    GCAM32_to_EU <- get_data(all_data, "common/GCAM32_to_EU")
 
     # -----------------------------------------------------------------------------
     # Perform computations
@@ -77,11 +78,17 @@ module_aglu_L125.LC_tot <- function(command, ...) {
       summarise(value = sum(value)) ->                      # Adding up total land area by region, year, and GLU
       L125.LC_bm2_R_Yh_GLU
 
+    # Removing Luxembourg and Malta from this check, but want to make sure they are the only
+    # countries in the region (in case region definitions change)
+    Luxembourg_Malta_ID <- filter(GCAM32_to_EU, country_name %in% c("Luxembourg", "Malta"))$GCAM_region_ID
+    stopifnot(nrow(filter(GCAM32_to_EU, GCAM_region_ID %in% Luxembourg_Malta_ID)) == 2)
+
     # It's necessary to make sure the Land Cover changing rates are within certain tolerances
     # We don't do this under timeshift because the tolerance check fails...and it's not clear if that means anything or not
     if(!UNDER_TIMESHIFT) {
       L125.LC_bm2_R_Yh_GLU %>%
-        filter(year %in% aglu.AGLU_HISTORICAL_YEARS) %>%
+        filter(year %in% aglu.AGLU_HISTORICAL_YEARS,
+               !GCAM_region_ID %in% Luxembourg_Malta_ID) %>%
         arrange(GCAM_region_ID, GLU, year) %>%
         mutate(change_rate = value / lag(value),
                change = value - lag(value)) ->          # calculate the rate of change
