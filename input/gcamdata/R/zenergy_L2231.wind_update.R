@@ -75,7 +75,7 @@ module_energy_L2231.wind_update <- function(command, ...) {
       left_join_error_no_match(NREL_wind_ctry, by = "IAM_country") %>%
       # Adjust Yugolsavia (to SRB)
       mutate(IAM_country = if_else(IAM_country == "Yugoslavia, Federal Republic of", "Serbia", IAM_country),
-             iso = if_else(iso == "yug", "srb", iso))
+             iso = if_else(iso == "yug", "srb", iso)) %>%
       left_join_error_no_match(iso_GCAM_regID %>% select(iso, GCAM_region_ID), by = "iso") %>%
       left_join_error_no_match(GCAM_region_names, by = c("GCAM_region_ID")) %>%
       select(-c(IAM_country, iso, GCAM_region_ID)) %>%
@@ -137,21 +137,24 @@ module_energy_L2231.wind_update <- function(command, ...) {
     # mid.price = ((P2-P1)*maxSubResource + 2*Q2*P1 - 2*Q1*P2)/(2*(Q2-Q1))
     # This assumes that the curve is largely linear between the two points above.
 
+    # Create a new MidPoint for Austria
+    energy.WIND_CURVE_MIDPOINT_adj <- 0.57
+
     # Calculating P1 and Q1
-    L2231.onshore_wind_curve %>%
+    L2231.mid.price_1 <- L2231.onshore_wind_curve %>%
       mutate(percent.supply = supply / maxSubResource) %>%
       group_by(region) %>%
-      filter(percent.supply <= energy.WIND_CURVE_MIDPOINT) %>%
+      filter(percent.supply <= energy.WIND_CURVE_MIDPOINT_adj) %>%
       # filter for highest price point below 50% of total resource
       filter(Pvar == max(Pvar)) %>%
       ungroup() %>%
-      select(region, P1 = Pvar, Q1 = supply, maxSubResource) -> L2231.mid.price_1
+      select(region, P1 = Pvar, Q1 = supply, maxSubResource)
 
     # Calculating P2 and Q2
     L2231.onshore_wind_curve %>%
       mutate(percent.supply = supply / maxSubResource) %>%
       group_by(region) %>%
-      filter(percent.supply >= energy.WIND_CURVE_MIDPOINT) %>%
+      filter(percent.supply >= energy.WIND_CURVE_MIDPOINT_adj) %>%
       # filter for lowest price point above 50% of total resource
       filter(Pvar == min(Pvar)) %>%
       ungroup() %>%
@@ -250,9 +253,12 @@ module_energy_L2231.wind_update <- function(command, ...) {
     # based on resources which are less likely to be developed.
 
     # First, get share of potential by each distance bin for each GCAM region
-    NREL_onshore_energy %>%
+    L2231.onshore_wind_potential_share <- NREL_onshore_energy %>%
       select(IAM_country, distance, total) %>%
       left_join_error_no_match(NREL_wind_ctry, by = "IAM_country") %>%
+      # Adjust Yugolsavia (to SRB)
+      mutate(IAM_country = if_else(IAM_country == "Yugoslavia, Federal Republic of", "Serbia", IAM_country),
+             iso = if_else(iso == "yug", "srb", iso)) %>%
       left_join_error_no_match(iso_GCAM_regID %>% select(iso, GCAM_region_ID), by = "iso") %>%
       left_join_error_no_match(GCAM_region_names, by = c("GCAM_region_ID")) %>%
       select(-c(IAM_country, iso, GCAM_region_ID)) %>%
@@ -261,7 +267,7 @@ module_energy_L2231.wind_update <- function(command, ...) {
       ungroup() %>%
       group_by(region) %>%
       mutate(share = total / sum(total)) %>%
-      ungroup() -> L2231.onshore_wind_potential_share
+      ungroup()
 
     # Then, generate bins for each cost point using representative distances
     NREL_wind_energy_distance_range %>%
@@ -282,12 +288,21 @@ module_energy_L2231.wind_update <- function(command, ...) {
 
     # Now to convert 2010 $/kW cost to 1975 $/GJ cost
     L2231.onshore_wind_cost_per_kW %>%
-      left_join_error_no_match(L2231.StubTechCapFactor_onshore_wind %>%
+      left_join(L2231.StubTechCapFactor_onshore_wind %>%
                                  select(region, capacity.factor) %>%
                                  unique(),
                                by = c("region")) %>%
       mutate(fcr = L2231.onshore_wind_fcr,
              grid.cost = fcr * cost / (CONV_YEAR_HOURS * capacity.factor * CONV_KWH_GJ) * gdp_deflator(1975, 2010)) -> L2231.grid.cost
+
+    # Adjust Malta (same grid costs as Greece)
+    L2231.grid.cost_mlt <- L2231.grid.cost %>%
+      filter(region == "Greece") %>%
+      mutate(region = "Malta")
+
+    L2231.grid.cost <- L2231.grid.cost %>%
+      filter(complete.cases(.)) %>%
+      bind_rows(L2231.grid.cost_mlt)
 
     # Set grid connection cost for all regions
     GCAM_region_names %>%
