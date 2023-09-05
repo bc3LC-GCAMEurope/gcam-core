@@ -73,10 +73,13 @@ module_energy_L2231.wind_update <- function(command, ...) {
     L2231.onshore_wind_potential_EJ <- NREL_onshore_energy %>%
       select(-total) %>%
       left_join_error_no_match(NREL_wind_ctry, by = "IAM_country") %>%
+      # Adjust Yugolsavia (to SRB)
+      mutate(IAM_country = if_else(IAM_country == "Yugoslavia, Federal Republic of", "Serbia", IAM_country),
+             iso = if_else(iso == "yug", "srb", iso))
       left_join_error_no_match(iso_GCAM_regID %>% select(iso, GCAM_region_ID), by = "iso") %>%
       left_join_error_no_match(GCAM_region_names, by = c("GCAM_region_ID")) %>%
       select(-c(IAM_country, iso, GCAM_region_ID)) %>%
-      gather(wind_class, resource.potential.EJ, -region, -distance) %>%
+      tidyr::gather(wind_class, resource.potential.EJ, -region, -distance) %>%
       mutate(resource.potential.EJ = resource.potential.EJ * 1000 * CONV_TWH_EJ ) %>%
       group_by(region, wind_class) %>%
       summarise(resource.potential.EJ = sum(resource.potential.EJ)) %>%
