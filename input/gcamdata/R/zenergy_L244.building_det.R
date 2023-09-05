@@ -232,7 +232,7 @@ module_energy_L244.building_det <- function(command, ...) {
     # Floorspace demand satiation
     # L244.Satiation_flsp: Satiation levels assumed for floorspace
     L244.Satiation_flsp_class <- A44.satiation_flsp %>%
-      gather(sector, value, resid, comm) %>%
+      gather(sector, value, comm) %>%
       # Converting from square meters per capita to million square meters per capita
       mutate(satiation.level = value * CONV_THOUS_BIL) %>%
       select(-value)
@@ -282,7 +282,7 @@ module_energy_L244.building_det <- function(command, ...) {
 
     # L244.Satiation_flsp_SSPs: Satiation levels assumed for floorspace in the SSPs
     L244.Satiation_flsp_class_SSPs <- A44.satiation_flsp_SSPs %>%
-      gather(sector, value, resid, comm) %>%
+      gather(sector, value, comm) %>%
       mutate(satiation.level = value * CONV_THOUS_BIL)
 
     L244.Satiation_flsp_SSPs <- write_to_all_regions(A44.gcam_consumer, c("region", "gcam.consumer", "nodeInput", "building.node.input"), # replace with LEVEL2_DATA_NAMES[["BldNodes]]
