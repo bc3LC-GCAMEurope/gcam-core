@@ -162,7 +162,7 @@ module_energy_L2391.gas_trade_flows <- function(command, ...) {
     # STEP 3:  Export shares
     # Start with share between pipeline and LNG
     # Combine pipeline & LNG exports, calculate shares
-    L1011.ff_GrossTrade_EJ_R_Y_LNG %>%
+    L2391.NG_export_shares <- L1011.ff_GrossTrade_EJ_R_Y_LNG %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       bind_rows(L1011.ff_GrossTrade_EJ_R_Y_NG_pipe) %>%
       group_by(region, year, GCAM_Commodity, GCAM_Commodity_traded) %>%
@@ -178,7 +178,17 @@ module_energy_L2391.gas_trade_flows <- function(command, ...) {
       mutate(share = approx_fun(year, share, rule = 2)) %>%
       ungroup() %>%
       select(-GrossExp_EJ) %>%
-      filter(year %in% MODEL_BASE_YEARS) -> L2391.NG_export_shares
+      filter(year %in% MODEL_BASE_YEARS)
+
+    L2391.NG_export_shares_withData <- L2391.NG_export_shares %>%
+      filter(complete.cases(.))
+
+    L2391.NG_export_shares_adj <- L2391.NG_export_shares %>%
+      filter(is.na(share) == T) %>%
+      # In regions with no data (e.g., Belarus), assume all traded gas is pipeline
+      mutate(share = if_else(GCAM_Commodity_traded == "gas pipeline", 1, 0))
+
+    L2391.NG_export_shares <- bind_rows(L2391.NG_export_shares_withData, L2391.NG_export_shares_adj)
 
     # Format traded data - exporting region is actually embedded in technology name
     L239.Production_tra %>%
