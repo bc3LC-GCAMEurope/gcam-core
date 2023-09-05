@@ -117,7 +117,7 @@ module_energy_L1321.cement <- function(command, ...) {
       select(-country_name, -region_GCAM3) %>%
       group_by(GCAM_region_ID) %>%
       summarise(cement_prod_Mt = sum(cement_prod_Mt), process_emissions_MtC = sum(process_emissions_MtC)) %>%
-      mutate(prod_emiss_ratio = cement_prod_Mt / process_emissions_MtC) %>%
+      mutate(prod_emiss_ratio = if_else(process_emissions_MtC == 0, 0, cement_prod_Mt / process_emissions_MtC)) %>%
       ungroup() ->
       L1321.Cement_Worrell_R
 
@@ -159,7 +159,7 @@ module_energy_L1321.cement <- function(command, ...) {
     # Calculate input-output coefficients
     L1321.in_Cement_Mt_R_limestone_Yh %>%
       left_join_error_no_match(L1321.out_Mt_R_cement_Yh, by = c("GCAM_region_ID", "sector", "year")) %>%
-      mutate(value = in.value / value) %>%
+      mutate(value = if_else(value == 0, 0, in.value / value)) %>%
       select(-in.value) ->
       L1321.IO_Cement_R_limestone_Yh
 
@@ -205,7 +205,7 @@ module_energy_L1321.cement <- function(command, ...) {
       summarise(out.value = sum(value)) %>%
       ungroup() %>%
       left_join_error_no_match(L1321.in_EJ_R_elec_Yh, by = c("GCAM_region_ID", "year")) %>%
-      mutate(value = in.value / out.value) %>%
+      mutate(value = if_else(out.value == 0, 0, in.value / out.value)) %>%
       # NOTE: below replicates the old data system by interpolating IO value to all historical years, but this step can be skipped with current inputs (no new values generated)
       complete(nesting(GCAM_region_ID), year = c(year, HISTORICAL_YEARS)) %>%
       arrange(GCAM_region_ID, year) %>%
@@ -268,7 +268,8 @@ module_energy_L1321.cement <- function(command, ...) {
       group_by(GCAM_region_ID, year) %>%
       summarise_all(sum) %>%
       ungroup() %>%
-      mutate(heat_GJkg = heat_EJ / prod_Mt, elec_GJkg = elec_EJ / prod_Mt) ->
+      mutate(heat_GJkg = if_else(prod_Mt == 0, 0, heat_EJ / prod_Mt),
+             elec_GJkg = if_else(prod_Mt == 0, 0, elec_EJ / prod_Mt)) ->
       L1321.Cement_ALL_R_Yh
 
     # Separate regional electricity and heat coefficients, first removing all unneeded columns
