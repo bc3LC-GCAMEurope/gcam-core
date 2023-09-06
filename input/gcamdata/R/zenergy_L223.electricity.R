@@ -1005,7 +1005,8 @@ module_energy_L223.electricity <- function(command, ...) {
 
     # Adding capacity factors to the main electricity table
     L223.StubTechCapFactor_elec %>%
-      filter(stub.technology == "wind") %>%
+      filter(stub.technology == "wind",
+             region %in% L120.RegCapFactor_offshore_wind$region) %>%
       mutate(stub.technology = "wind_offshore") %>%
       # No error_no_match because some EU regions don't have offshore
       left_join(L120.RegCapFactor_offshore_wind ,
