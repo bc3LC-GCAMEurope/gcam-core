@@ -5,202 +5,69 @@
 # Column types: cc
 # ----------
 region,Country
-Ethiopia,NonOECD
-Kenya,NonOECD
-Sudan,NonOECD
-Uganda,NonOECD
-Djibouti,NonOECD
-Madagascar,NonOECD
-Mauritius,NonOECD
-Algeria,NonOECD
-Egypt,NonOECD
-Libya,NonOECD
-Morocco,NonOECD
-Tunisia,NonOECD
-Angola,NonOECD
-Tanzania,NonOECD
-Zambia,NonOECD
-Zimbabwe,NonOECD
-Mozambique,NonOECD
-Mauritania,NonOECD
-Ivory Coast,NonOECD
-Dem. Rep. of the Congo,NonOECD
-Togo,NonOECD
-Benin,NonOECD
-Congo,NonOECD
-Equatorial Guinea,NonOECD
-Gabon,NonOECD
-Guinea,NonOECD
-Cameroon,NonOECD
-Ghana,NonOECD
-Nigeria,NonOECD
-Senegal,NonOECD
-Argentina,NonOECD
-Australia,OECD
-New Zealand,OECD
+USA,United States
+Africa_Eastern,NonOECD
+Africa_Northern,NonOECD
+Africa_Southern,NonOECD
+Africa_Western,NonOECD
+Australia_NZ,OECD
 Brazil,Brazil
 Canada,OECD
-Other North America,NonOECD
-Costa Rica,NonOECD
-Cuba,NonOECD
-Dominican Republic,NonOECD
-El Salvador,NonOECD
-Guatemala,NonOECD
-Honduras,NonOECD
-Jamaica,NonOECD
-Nicaragua,NonOECD
-Panama,NonOECD
-Trinidad and Tobago,NonOECD
-Turkmenistan,NonOECD
-Armenia,NonOECD
-Azerbaijan,NonOECD
-Georgia,NonOECD
-Kazakhstan,NonOECD
-Kyrgyzstan,NonOECD
-Tajikistan,NonOECD
-Uzbekistan,NonOECD
-Mongolia,NonOECD
-"Hong Kong, China",China
+Central America and Caribbean,NonOECD
+Central Asia,NonOECD
 China,China
-Hong Kong,China
-"Taiwan, China",Taiwan
-Colombia,OECD
-Bulgaria,Germany
-Cyprus,Germany
-Czech Republic,Germany
-Estonia,Germany
-Hungary,Germany
-Lithuania,Germany
-Latvia,Germany
-Malta,Germany
-Poland,Germany
-Romania,Germany
-Romania,Germany
-Slovakia,Germany
-Slovenia,Germany
-Andorra,Germany
-Spain,Germany
-Austria,Germany
-Belgium,Germany
-Germany,Germany
-Denmark,Germany
-Faroe Islands,Germany
-Greenland,Germany
-Channel Islands,Germany
-Falkland Islands (Malvinas),Germany
-United Kingdom,Germany
-Guernsey,Germany
-Gibraltar,Germany
-Isle of Man,Germany
-Jersey,Germany
-Turks and Caicos,Germany
-"Virgin Islands, British",Germany
-Wallis and Futuna,Germany
-Finland,Germany
-France,Germany
-Monaco,Germany
-Saint Helena,Germany
-Saint Pierre and Miquelon,Germany
-Greece,Germany
-Ireland,Germany
-Italy,Germany
-San Marino,Germany
-Vatican,Germany
-Luxembourg,Germany
-Netherlands,Germany
-Portugal,Germany
-Sweden,Germany
-Belarus,Ukraine
-"Moldova, Republic of",Ukraine
-Ukraine,Ukraine
-Albania,Turkey
-Bosnia and Herzegovina,Turkey
-Croatia,Turkey
-"Macedonia, the former Yugoslav Republic of",Turkey
-Montenegro,Turkey
-Serbia,Turkey
-Serbia and Montenegro,Turkey
-Turkey,Turkey
-Norway,OECD
-Svalbard and Jan Mayen Islands,OECD
-Switzerland,OECD
-Liechtenstein,OECD
-Iceland,OECD
+Bulgaria,NonOECD
+Cyprus,NonOECD
+Czech Republic,OECD
+Estonia,OECD
+Hungary,OECD
 India,India
 Indonesia,NonOECD
 Japan,Japan
 Mexico,Mexico
-United Arab Emirates,NonOECD
-Bahrain,NonOECD
-"Iran, Islamic Republic of",NonOECD
-Iraq,NonOECD
-Israel,NonOECD
-Jordan,NonOECD
-Kuwait,NonOECD
-Lebanon,NonOECD
-Oman,NonOECD
-"Palestinian Territory, Occupied",NonOECD
-Qatar,NonOECD
-Saudi Arabia,NonOECD
-Syrian Arab Republic,NonOECD
-Yemen,NonOECD
+Middle East,NonOECD
 Pakistan,NonOECD
 Russia,Russia
 South Africa,NonOECD
-French Guiana,NonOECD
-Guyana,NonOECD
-Suriname,NonOECD
-Venezuela,NonOECD
-Bolivia,NonOECD
-Chile,NonOECD
-Ecuador,NonOECD
-Peru,NonOECD
-Paraguay,NonOECD
-Uruguay,NonOECD
-Afghanistan,NonOECD
-Bangladesh,NonOECD
-Bhutan,NonOECD
-Sri Lanka,NonOECD
-Maldives,NonOECD
-Nepal,NonOECD
+South America_Northern,NonOECD
+South America_Southern,NonOECD
+South Asia,NonOECD
 South Korea,South Korea
-American Samoa,NonOECD
-Brunei Darussalam,NonOECD
-Cocos (Keeling) Islands,NonOECD
-Cook Islands,NonOECD
-Christmas Island,NonOECD
-Fiji,NonOECD
-"Micronesia, Federated States of",NonOECD
-Guam,NonOECD
-Cambodia,NonOECD
-Kiribati,NonOECD
-Lao Peoples Democratic Republic,NonOECD
-Marshall Islands,NonOECD
-Myanmar,NonOECD
-Northern Mariana Islands,NonOECD
-Malaysia,NonOECD
-Mayotte,NonOECD
-New Caledonia,NonOECD
-Norfolk Island,NonOECD
-Niue,NonOECD
-Nauru,NonOECD
-Pacific Islands Trust Territory,NonOECD
-Pitcairn Islands,NonOECD
-Philippines,NonOECD
-Palau,NonOECD
-Papua New Guinea,NonOECD
-"Korea, Democratic Peoples Republic of",NonOECD
-French Polynesia,NonOECD
-Singapore,NonOECD
-Solomon Islands,NonOECD
-Seychelles,NonOECD
-Thailand,NonOECD
-Tokelau,NonOECD
-Timor Leste,NonOECD
-Tonga,NonOECD
-Tuvalu,NonOECD
-Viet Nam,NonOECD
-Vanuatu,NonOECD
-Samoa,NonOECD
+Southeast Asia,NonOECD
 Taiwan,China
-USA,United States
+Argentina,NonOECD
+Colombia,OECD
+Lithuania,OECD
+Latvia,OECD
+Malta,NonOECD
+Poland,OECD
+Romania,NonOECD
+Iceland,OECD
+Slovakia,OECD
+Slovenia,OECD
+Spain,OECD
+Austria,OECD
+Belgium,OECD
+Germany,Germany
+Denmark,OECD
+UK,OECD
+Finland,OECD
+France,OECD
+Greece,OECD
+Ireland,OECD
+Italy,Italy
+Luxembourg,OECD
+Netherlands,OECD
+Portugal,OECD
+Sweden,OECD
+Belarus,NonOECD
+Moldova,NonOECD
+Ukraine,Ukraine
+Albania,NonOECD
+Bosnia and Herzegovina,NonOECD
+Croatia,NonOECD
+Macedonia,NonOECD
+Serbia and Montenegro,NonOECD
+Turkey,Turkey
+Norway,OECD
+Switzerland,OECD
