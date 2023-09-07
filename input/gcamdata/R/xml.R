@@ -513,3 +513,60 @@ XML_NODE_EQUIV <- list(
   "input" = c("minicam-energy-input", "input-accounting",
               "minicam-non-energy-input", "tracking-non-energy-input")
 )
+
+#' Filter xml to specified regions only
+#'
+#' @param xml XML object
+#' @param newnm Name for new xml
+#' @param regions Vector of region names
+#' @return Filtered xml
+#' @export
+xml_region_filter <- function(xml, newnm, regions){
+  # ensure that xml is xml object
+  assert_that(FLAG_XML %in% attributes(xml)$flag)
+  assert_that(all(c("xml_file", "mi_header", "data_tables") %in% names(xml)))
+  assert_that(is.character(regions))
+
+  for (i in seq_along(xml$data_tables)){
+    data <- xml$data_tables[[i]]$data
+    if("region" %in% names(data)){
+      xml$data_tables[[i]]$data <- filter(data, region %in% regions)
+    }
+  }
+  xml$xml_file <- newnm
+  return(xml)
+}
+
+#' Filter xml to specified regions only
+#'
+#' @param xml XML object
+#' @param num_splits Integer number of xmls to split into
+#' @param GCAM_region_names Dataframe with names of regions and their ID
+#' @return Filtered xml
+#' @export
+xml_split_by_region <- function(xml, num_splits, GCAM_region_names){
+  # ensure that xml is xml object
+  assert_that(FLAG_XML %in% attributes(xml)$flag)
+  assert_that(all(c("xml_file", "mi_header", "data_tables") %in% names(xml)))
+  assert_that(is.numeric(num_splits))
+  assert_that(all(c("GCAM_region_ID", "region") %in% names(GCAM_region_names)))
+
+
+  xml_list <- list()
+
+  n <- max(GCAM_region_names$GCAM_region_ID)
+  # split regions into roughly even groups
+  int_split <- function(n, p) c(0,cumsum(n %/% p + (sequence(p) - 1 < n %% p)))
+  breaks <- int_split(n, num_splits)
+
+  for (i in seq_len(num_splits)){
+    # region numbers
+    region_IDs <- seq(breaks[i]+1, breaks[i+1])
+    # region names
+    regions_to_filter <- filter(GCAM_region_names, GCAM_region_ID %in% region_IDs)$region
+    xml_list[[i]] <- xml_region_filter(xml,
+                                      newnm = paste0(sub(".xml", "", xml$xml_file), "_", i, ".xml"),
+                                      regions = regions_to_filter)
+  }
+  return(xml_list)
+}
