@@ -24,7 +24,8 @@ module_emissions_L152.MACC <- function(command, ...) {
              FILE = "emissions/EPA_MACC_mapping",
              FILE = "emissions/EPA_MACC_control_mapping",
              FILE = "emissions/EPA_MAC_missing_region",
-             FILE = "emissions/EPA_country_map"))
+             FILE = "emissions/EPA_country_map",
+             FILE = "common/GCAM32_to_EU"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L152.MAC_pct_R_S_Proc_EPA"))
   } else if(command == driver.MAKE) {
@@ -47,6 +48,15 @@ module_emissions_L152.MACC <- function(command, ...) {
     EPA_MACC_control_mapping <- get_data(all_data, "emissions/EPA_MACC_control_mapping")
     EPA_MAC_missing_region <- get_data(all_data, "emissions/EPA_MAC_missing_region")
     EPA_country_map <- get_data(all_data, "emissions/EPA_country_map")
+    GCAM32_to_EU <- get_data(all_data, "common/GCAM32_to_EU") %>% select(iso, GCAM_region_ID)
+
+    # Change to GCAM-EU regions
+    EPA_country_map <- EPA_country_map %>%
+      filter(iso != "global") %>%   # global iso not used
+      mutate(iso = sub("srb \\(kosovo\\)", "srb", iso), # remap kosovo to serbia
+             iso = sub("sxm", "lca", iso)) %>%  # remap Sint Maarten to Saint Lucia (Caribbean)
+      left_join_error_no_match(GCAM32_to_EU, by = c("iso")) %>%
+      select(EPA_country, iso, GCAM_region_ID = GCAM_region_ID.y)
 
     # updated agriculture data
     # EPA provides a seperate baseline agriculture data for MAC calculation
