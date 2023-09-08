@@ -396,7 +396,7 @@ module_energy_L232.other_industry <- function(command, ...) {
                                by = c("region", "year")) %>%
       rename(calOutputValue = calOutputValue.x,
              output_tot = calOutputValue.y) %>%
-      mutate(coefficient = calOutputValue / output_tot) %>%
+      mutate(coefficient = if_else(output_tot == 0, 0, calOutputValue / output_tot)) %>%
       rename(minicam.energy.input = supplysector) %>%
       mutate(supplysector = L232.industry_names[["supplysector"]],
              subsector = L232.industry_names[["subsector"]],

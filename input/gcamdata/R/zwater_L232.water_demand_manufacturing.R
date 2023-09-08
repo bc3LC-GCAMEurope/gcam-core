@@ -58,7 +58,7 @@ module_water_L232.water_demand_manufacturing <- function(command, ...) {
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       left_join_error_no_match(L232.StubTechProd_industry, by = c("region", "year")) %>%
       rename(energy_EJ = calOutputValue) %>%
-      mutate(coefficient = round(water_km3 / energy_EJ, digits = energy.DIGITS_COEFFICIENT)) ->
+      mutate(coefficient =if_else(energy_EJ == 0, 0, round(water_km3 / energy_EJ, digits = energy.DIGITS_COEFFICIENT))) ->
       L232.water_km3_R_ind_Yh
 
     # Read in water coefs for all years

@@ -252,10 +252,9 @@ module_aglu_L120.LC_GIS_R_LTgis_Yh_GLU <- function(command, ...) {
 
     # Note that we set the default maturity age for Urban Land to 1 based on Houghton values.
 
-    L120.LC_soil_veg_carbon_GLU_all_cat %>%
-      select(-soil_c,-veg_c,-`mature age`,-Land_Type) %>%
-      distinct() %>%
-      mutate(Land_Type = paste0("UrbanLand"),soil_c = aglu.DEFAULT_SOIL_CARBON_URBANLAND, veg_c = aglu.DEFAULT_VEG_CARBON_URBANLAND, `mature age`= 1)->L120.LC_soil_veg_carbon_GLU_urban
+    land.type %>% distinct(GCAM_region_ID, GLU) %>%
+      mutate(Land_Type = paste0("UrbanLand"),soil_c = aglu.DEFAULT_SOIL_CARBON_URBANLAND,
+             veg_c = aglu.DEFAULT_VEG_CARBON_URBANLAND, `mature age`= 1)->L120.LC_soil_veg_carbon_GLU_urban
 
     L120.LC_soil_veg_carbon_GLU <- bind_rows(L120.LC_soil_veg_carbon_GLU_all_cat,
                                              L120.LC_soil_veg_carbon_GLU_pasture,

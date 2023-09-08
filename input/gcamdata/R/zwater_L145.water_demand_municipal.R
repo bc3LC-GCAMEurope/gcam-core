@@ -136,7 +136,7 @@ module_water_L145.water_demand_municipal <- function(command, ...) {
     L145.municipal_water_ctry_ALL_Yh_km3 <- L145.municipal_water_eff_ctry_Yh %>%
       left_join(L145.municipal_water_ctry_W_Yh_km3, by = c("iso", "year")) %>%
       rename(withdrawals = value) %>%
-      drop_na(withdrawals) %>%
+      tidyr::replace_na(list(withdrawals = 0)) %>%
       mutate(consumption = efficiency * withdrawals)
 
     L145.municipal_water_R_ALL_Yh_km3 <-
@@ -146,7 +146,7 @@ module_water_L145.water_demand_municipal <- function(command, ...) {
       summarise(withdrawals = sum(withdrawals),
                 consumption = sum(consumption)) %>%
       ungroup() %>%
-      mutate(efficiency = consumption / withdrawals)
+      mutate(efficiency = if_else(withdrawals == 0, 0, consumption / withdrawals))
 
     #Compile data to be written out in the final format, selecting the appropriate columns
     L145.municipal_water_ctry_W_Yh_km3 <- select(L145.municipal_water_ctry_ALL_Yh_km3, iso, year, withdrawals)
