@@ -84,7 +84,7 @@ module_energy_L126.distribution <- function(command, ...) {
       ungroup() %>%
       left_join_error_no_match(Electricity_total, by = c("GCAM_region_ID", "year")) %>% # Joining previous table (electricity sector generation, which includes industrial CHP electricity generation)
       mutate(value_electricity_ownuse_out = value_electricity_ownuse_in - value_electricity_ownuse, # Creating values for table, L126.out_EJ_R_elecownuse_F_Yh (i.e., output), by subtracting electricity generation by elecricity ownuse
-             value_electricity_ownuse_IO = value_electricity_ownuse_in / value_electricity_ownuse_out) -> # Creating values for table, L126.IO_R_elecownuse_F_Yh,  by dividing input by output
+             value_electricity_ownuse_IO = if_else(value_electricity_ownuse_out == 0, 0, value_electricity_ownuse_in / value_electricity_ownuse_out)) -> # Creating values for table, L126.IO_R_elecownuse_F_Yh,  by dividing input by output
       Electricity_ownuse_all
 
     # Table Electricity_ownuse_all is separated to create the final tables

@@ -196,7 +196,7 @@ module_energy_L122.gasproc_refining <- function(command, ...) {
     # Calculate region- and fuel-specific coefficients of crude oil refining
     L122.in_EJ_R_oilrefining_F_Yh %>%
       left_join(select(L122.out_EJ_R_oilrefining_Yh, -fuel), by = c("GCAM_region_ID", "sector", "year")) %>%
-      mutate(value = value.x / value.y) %>%
+      mutate(value = if_else(value.y == 0, 0, value.x / value.y)) %>%
       select(-value.x, -value.y) -> L122.IO_R_oilrefining_F_Yh
 
     # Combine all calibrated refinery input and output tables
