@@ -147,6 +147,11 @@ module_energy_L210.resources <- function(command, ...) {
     L120.TechChange_offshore_wind <- get_data(all_data, "L120.TechChange_offshore_wind", strip_attributes = TRUE )
     L102.pcgdp_thous90USD_Scen_R_Y <- get_data(all_data, "L102.pcgdp_thous90USD_Scen_R_Y")
 
+    no_offshore_wind_regions <- GCAM_region_names %>%
+      anti_join(L120.RsrcCurves_EJ_R_offshore_wind, by = "GCAM_region_ID") %>%
+      pull(region)
+
+
     # Check for calibrated resource prices for final historical model year.
     # Otherwise, price behavior is undefinded, and so stop process.
     # There should be calibrated prices for all historical model years for
@@ -280,7 +285,9 @@ module_energy_L210.resources <- function(command, ...) {
       # Repeat and add region to resource assumptions table
       repeat_add_columns(select(GCAM_region_names, region)) %>%
       # Remove traditional biomass from regions where it is not currently used
-      filter(!(region %in% A_regions$region[A_regions$tradbio_region == 0] & resource == "traditional biomass")) %>%
+      # and offshore wind from where it isn't possible
+      filter(!(region %in% A_regions$region[A_regions$tradbio_region == 0] & resource == "traditional biomass"),
+             !(region %in% no_offshore_wind_regions & resource == "offshore wind resource")) %>%
       # Reset regional markets to the names of the specific regions
       mutate(market = if_else(market == "regional", region, market))
 
@@ -351,6 +358,7 @@ module_energy_L210.resources <- function(command, ...) {
     # L210.SmthRenewRsrcTechChange_offshore_wind: technological change for offshore wind
     L210.SmthRenewRsrcTechChange_offshore_wind <- write_to_all_regions(L120.TechChange_offshore_wind, c("region", "year","tech.change"), GCAM_region_names)
     L210.SmthRenewRsrcTechChange_offshore_wind %>%
+      filter(!(region %in% no_offshore_wind_regions)) %>%
       mutate(renewresource = "offshore wind resource", smooth.renewable.subresource = "offshore wind resource") %>%
       select(region,renewresource, smooth.renewable.subresource, year.fillout = year, techChange = tech.change) -> L210.SmthRenewRsrcTechChange_offshore_wind
 
@@ -626,7 +634,8 @@ module_energy_L210.resources <- function(command, ...) {
       mutate(prod_value = if_else(is.na(prod_value), 0, prod_value),
              technology = subresource,
              share.weight = if_else(year > MODEL_FINAL_BASE_YEAR | prod_value > 0, 1, 0)) %>%
-      filter(year %in% MODEL_YEARS) %>%
+      filter(year %in% MODEL_YEARS,
+             !(region %in% no_offshore_wind_regions & resource == "offshore wind resource")) %>%
       select(LEVEL2_DATA_NAMES[["ResTechShrwt"]]) ->
       L210.ResTechShrwt
     # We need to remove regions + Subresources which should not exist
