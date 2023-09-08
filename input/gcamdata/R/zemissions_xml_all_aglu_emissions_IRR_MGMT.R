@@ -25,10 +25,13 @@ module_emissions_all_aglu_emissions_IRR_MGMT_xml <- function(command, ...) {
       "L2112.nonghg_max_reduction",
       "L2112.nonghg_steepness",
       "L252.AgMAC",
-      "L252.AgMAC_tc_average")
+      "L252.AgMAC_tc_average",
+      FILE = "common/GCAM_region_names")
 
   MODULE_OUTPUTS <-
-    c(XML = "all_aglu_emissions_IRR_MGMT.xml",
+    c(XML = "all_aglu_emissions_IRR_MGMT_1.xml",
+      XML = "all_aglu_emissions_IRR_MGMT_2.xml",
+      XML = "all_aglu_emissions_IRR_MGMT_3.xml",
       XML = "all_aglu_emissions_IRR_MGMT_MAC.xml")
 
   if(command == driver.DECLARE_INPUTS) {
@@ -67,6 +70,9 @@ module_emissions_all_aglu_emissions_IRR_MGMT_xml <- function(command, ...) {
                      "L2112.nonghg_max_reduction",
                      "L2112.nonghg_steepness") ->
         all_aglu_emissions_IRR_MGMT.xml
+
+    xml_split <- xml_split_by_region(all_aglu_emissions_IRR_MGMT.xml, 3, GCAM_region_names)
+    for (i in seq_along(xml_split)){ assign(xml_split[[i]]$xml_file, xml_split[[i]]) }
 
     create_xml("all_aglu_emissions_IRR_MGMT_MAC.xml") %>%
       add_xml_data(L252.AgMAC, "AgMAC") %>%
