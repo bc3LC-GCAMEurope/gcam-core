@@ -103,13 +103,16 @@ module_energy_L1323.iron_steel <- function(command, ...) {
 
       #add a minimal steel production value (0.5% of the total) to technologies in the base-year where they are calibrated to zero
       All_steel %>%
-        mutate(BLASTFUR=ifelse(BLASTFUR==0 & year == MODEL_FINAL_BASE_YEAR,(BLASTFUR+`EAF with scrap`+`EAF with DRI`)*0.005,BLASTFUR),
-               `EAF with scrap`=ifelse(`EAF with scrap`==0 & year == MODEL_FINAL_BASE_YEAR,(BLASTFUR+`EAF with scrap`+`EAF with DRI`)*0.005,`EAF with scrap`),
-               `EAF with DRI`=ifelse(`EAF with DRI`==0 & year == MODEL_FINAL_BASE_YEAR,(BLASTFUR+`EAF with scrap`+`EAF with DRI`)*0.005,`EAF with DRI`),
+        mutate(BLASTFUR = if_else(BLASTFUR==0 & year == MODEL_FINAL_BASE_YEAR,
+                                  (BLASTFUR+`EAF with scrap`+`EAF with DRI`)*0.005,BLASTFUR),
+               `EAF with scrap` = if_else(`EAF with scrap`== 0 & year == MODEL_FINAL_BASE_YEAR,
+                                        (BLASTFUR+`EAF with scrap`+`EAF with DRI`)*0.005,`EAF with scrap`),
+               `EAF with DRI` = if_else(`EAF with DRI`==0 & year == MODEL_FINAL_BASE_YEAR,
+                                        (BLASTFUR+`EAF with scrap`+`EAF with DRI`)*0.005,`EAF with DRI`),
                #calculate the percentage of BLASTFUR, EAF with scrap, and EAF with DRI across regions and years
-               BLASTFUR_pct=BLASTFUR/(BLASTFUR+`EAF with scrap`+`EAF with DRI`),
-               EAF_scrap_pct=`EAF with scrap`/(BLASTFUR+`EAF with scrap`+`EAF with DRI`),
-               EAF_DRI_pct=`EAF with DRI`/(BLASTFUR+`EAF with scrap`+`EAF with DRI`)) %>%
+               BLASTFUR_pct = if_else(BLASTFUR == 0, 0, BLASTFUR/(BLASTFUR+`EAF with scrap`+`EAF with DRI`)),
+               EAF_scrap_pct = if_else(`EAF with scrap` == 0, 0, `EAF with scrap`/(BLASTFUR+`EAF with scrap`+`EAF with DRI`)),
+               EAF_DRI_pct = if_else(`EAF with DRI` == 0, 0, `EAF with DRI`/(BLASTFUR+`EAF with scrap`+`EAF with DRI`))) %>%
         #join the WSA total steel production data from LB1092.Tradebalance_iron_steel_Mt_R_Y
         left_join(GCAM_region_names,by="GCAM_region_ID") %>%
         left_join(LB1092.Tradebalance_iron_steel_Mt_R_Y %>%
@@ -126,7 +129,8 @@ module_energy_L1323.iron_steel <- function(command, ...) {
         gather(subsector,value,-year,-GCAM_region_ID) %>%
         #convert unit from kt to mt
         mutate(value = value * CONV_KT_MT) %>%
-        select(GCAM_region_ID, year,subsector, value) -> L1323.out_Mt_R_iron_steel_Yh
+        select(GCAM_region_ID, year,subsector, value) %>%
+        filter(year %in% HISTORICAL_YEARS) -> L1323.out_Mt_R_iron_steel_Yh
 
    # L2323.SubsectorInterp_iron_steel: Subsector shareweight interpolation of iron and steel sector
       A323.subsector_interp %>%
