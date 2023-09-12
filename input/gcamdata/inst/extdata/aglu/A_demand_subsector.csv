@@ -3,7 +3,7 @@
 # Unit: NA
 # Description: Generic information for subsectors of agricultural production
 # Source: GCAM assumptions
-# Column types: ccciciccccc 
+# Column types: cccnciccccc 
 # ----------
 supplysector,subsector0,subsector,logit.exponent,year.fillout,share.weight,apply.to,from.year,to.year,interpolation.function,logit.type
 FoodDemand_Staples,Corn,Corn,0.25,start-year,1,share-weight,final-calibration-year,end-year,fixed,
