@@ -75,8 +75,7 @@ module_emissions_L102.nonco2_ceds_R_S_Y <- function(command, ...) {
 
         # for CO2, keep only fugitive emissions
         CEDS_CO2 <- CEDS_CO2_all %>%
-          filter(grepl("Fugitive",sector)) %>%
-          mutate(fuel = "process")
+          filter(grepl("Fugitive",sector))
 
         #gather years
         CEDS_CH4 <- CEDS_CH4 %>%
