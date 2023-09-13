@@ -60,6 +60,31 @@ module_aglu_L100.FAO_SUA_connection <- function(command, ...) {
     COMM_CROP <- FAO_ag_items_PRODSTAT %>% filter(!is.na(GCAM_commodity)) %>% distinct(GCAM_commodity) %>% pull
     COMM_MEAT <- FAO_an_items_PRODSTAT %>% filter(!is.na(GCAM_commodity)) %>% distinct(GCAM_commodity) %>% pull
 
+    # Fix strange bug in luxembourg foddergrass production
+    # Appears to be 10-50x too high until 1999
+    # First going to divide forage Products by 40, then rescale pre-2000 to 2015
+    FAO_AgArea_Kha_All_lux <- FAO_AgArea_Kha_All %>%
+      mutate(value = if_else(iso == "lux" & item == "forage Products" & year < 2000,
+                             value / 40, value)) %>%
+      filter(iso == "lux") %>%
+      group_by(year) %>%
+      mutate(year_sum = sum(value)) %>%
+      ungroup %>%
+      mutate(scaler = year_sum[year == MODEL_FINAL_BASE_YEAR] / year_sum,
+             value = if_else(year < 2000, value * scaler, value)) %>%
+      select(-scaler)
+
+    FAO_AgArea_Kha_All <- FAO_AgArea_Kha_All %>%
+      filter(iso != "lux") %>%
+      bind_rows(FAO_AgArea_Kha_All_lux)
+    # Production isn't as important, since it just means yields will be wrong in historical years
+    # IS THIS TRUE?
+    # so only adjusting forage products
+    FAO_AgProd_Kt_All <- FAO_AgProd_Kt_All %>%
+      mutate(value = if_else(iso == "lux" & item == "forage Products" & year < 2000,
+                             value / 40, value))
+
+
 
     # 1. Supply-utilization accounting balance ----
     # Change unit and year for later uses
