@@ -34,6 +34,7 @@ module_aglu_L100.0_LDS_preprocessing <- function(command, ...) {
 
   if(command == driver.DECLARE_INPUTS) {
     x <- paste0(dirname, namelist)
+    x <- c(x, "common/GCAM32_to_EU")
     names(x) <- rep("FILE", length(x))
     return(x)
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -53,7 +54,36 @@ module_aglu_L100.0_LDS_preprocessing <- function(command, ...) {
       LDSfiles[[nm]] <- get_data(all_data, paste0(dirname, nm))
     }
 
-    # Go through all data frames and...
+    GCAM32_to_EU  <- get_data(all_data, "common/GCAM32_to_EU")
+
+    # Avoid really small european land allocations
+    europe_isos <- GCAM32_to_EU %>%
+      filter(GCAM32_region %in% c("EU-12", "EU-15", "Europe_Eastern",
+                                  "Europe_Non_EU", "European Free Trade Association")) %>%
+      pull(iso)
+
+    # Get percent of iso and percent of GLU for each land allocation
+    code_iso_size <- LDSfiles$Land_type_area_ha %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
+      group_by(iso, glu_code) %>%
+      summarise(value = sum(value)) %>%
+      group_by(glu_code) %>%
+      mutate(pct_glu = 100 * value / sum(value),
+             iso_max = iso[value == max(value)]) %>%
+      group_by(iso) %>%
+      mutate(pct_iso = 100 * value / sum(value)) %>%
+      ungroup
+
+    # Remap very small land allocations that are small percent of iso and GLU
+    # to largest iso in the GLU
+    L100.europe_GLU_remap <- code_iso_size %>%
+      filter(value < 100000,
+             pct_glu < 2,
+             pct_iso < 2,
+             iso %in% europe_isos) %>%
+      mutate(GLU = paste(aglu.GLU, sprintf("%03d", glu_code), sep = aglu.GLU_NAME_DELIMITER)) %>%
+      select(iso, GLU, iso_max)
+
     for(nm in namelist) {
 
       # Regularize data frame names
@@ -108,6 +138,46 @@ module_aglu_L100.0_LDS_preprocessing <- function(command, ...) {
             add_comments("Since 2015 BY update, data available for Taiwan as an agricultural region.") ->
             LDSfiles[[nm]]
         }
+      }
+    }
+
+    # adjust carbon values by weighted average of land area in 2015
+    LDSfiles[["Ref_veg_carbon_Mg_per_ha"]] <- LDSfiles[["Ref_veg_carbon_Mg_per_ha"]] %>%
+      left_join( LDSfiles[["Land_type_area_ha"]] %>% filter(year == MODEL_FINAL_BASE_YEAR) %>% select(-year),
+                                by = c("iso", "GLU", "land_code")) %>%
+      left_join(L100.europe_GLU_remap, by = c("iso", "GLU")) %>%
+      tidyr::replace_na(list(value = 0)) %>%
+      mutate(iso = dplyr::coalesce(iso_max, iso)) %>%
+      select(-iso_max) %>%
+      group_by(iso, GLU, land_code, c_type) %>%
+      # for all C columns, take weighted average
+      summarise(across(weighted_average:q3_value, ~weighted.mean(x = ., w = value))) %>%
+      ungroup
+
+    # remap european isos for small GLUs
+    for (nm in namelist){
+      # but skip for Mueller_yield_levels, which never gets used,
+      # and Ref_veg_carbon_Mg_per_ha, which was already adjusted
+      if(nm %in% c("Ref_veg_carbon_Mg_per_ha", "Mueller_yield_levels")){
+        next
+      } else if("GTAP_region" %in% names(LDSfiles[[nm]])){
+        LDSfiles[[nm]] <- LDSfiles[[nm]] %>%
+          left_join(L100.europe_GLU_remap, by = c("GTAP_region" = "iso", "GLU")) %>%
+          mutate(iso_max = dplyr::coalesce(iso_max, GTAP_region),
+                 GTAP_region = iso_max) %>%
+          select(-iso_max) %>%
+          dplyr::group_by_at(vars(-value)) %>%
+          summarise(value = sum(value)) %>%
+          ungroup()
+      } else {
+        LDSfiles[[nm]]  <- LDSfiles[[nm]] %>%
+          left_join(L100.europe_GLU_remap, by = c("iso", "GLU")) %>%
+          mutate(iso_max = dplyr::coalesce(iso_max, iso),
+                 iso = iso_max) %>%
+          select(-iso_max) %>%
+          dplyr::group_by_at(vars(-value)) %>%
+          summarise(value = sum(value)) %>%
+          ungroup()
       }
     }
 
@@ -236,7 +306,6 @@ module_aglu_L100.0_LDS_preprocessing <- function(command, ...) {
       L100.LDS_ag_prod_t
     L100.LDS_ag_HA_ha %>% filter(!(iso == "pol" & GTAP_crop == "FrgProdNES" & GLU %in% c("GLU049", "GLU021"))) ->
       L100.LDS_ag_HA_ha
-
 
     # And we're done
     return_data(L100.Land_type_area_ha,
