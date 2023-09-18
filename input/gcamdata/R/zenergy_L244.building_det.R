@@ -941,13 +941,19 @@ module_energy_L244.building_det <- function(command, ...) {
 
 
     if(exists("L244.SubsectorShrwt_bld")) {
-      L244.SubsectorShrwt_bld %>%
-        add_title("Subsector shareweights for building sector") %>%
-        add_units("Unitless") %>%
-        add_comments("A44.subsector_shrwt written to all regions") %>%
-        add_legacy_name("L244.SubsectorShrwt_bld") %>%
-        add_precursors("energy/A44.subsector_shrwt", "common/GCAM_region_names", "L144.end_use_eff")  ->
-        L244.SubsectorShrwt_bld
+      if (!is.null(L244.SubsectorShrwt_bld)) {
+        L244.SubsectorShrwt_bld %>%
+          add_title("Subsector shareweights for building sector") %>%
+          add_units("Unitless") %>%
+          add_comments("A44.subsector_shrwt written to all regions") %>%
+          add_legacy_name("L244.SubsectorShrwt_bld") %>%
+          add_precursors("energy/A44.subsector_shrwt", "common/GCAM_region_names", "L144.end_use_eff")  ->
+          L244.SubsectorShrwt_bld
+      } else {
+        missing_data() %>%
+          add_legacy_name("L244.SubsectorShrwt_bld") ->
+          L244.SubsectorShrwt_bld
+      }
     } else {
       missing_data() %>%
         add_legacy_name("L244.SubsectorShrwt_bld") ->
@@ -983,13 +989,19 @@ module_energy_L244.building_det <- function(command, ...) {
     }
 
     if(exists("L244.SubsectorInterpTo_bld")) {
-      L244.SubsectorInterpTo_bld %>%
-        add_title("Subsector shareweight interpolation for building sector") %>%
-        add_units("NA") %>%
-        add_comments("A44.subsector_interp written to all regions") %>%
-        add_legacy_name("L244.SubsectorInterpTo_bld") %>%
-        add_precursors("energy/A44.subsector_interp", "common/GCAM_region_names", "L144.end_use_eff")  ->
-        L244.SubsectorInterpTo_bld
+      if (!is.null(L244.SubsectorInterpTo_bld)) {
+        L244.SubsectorInterpTo_bld %>%
+          add_title("Subsector shareweight interpolation for building sector") %>%
+          add_units("NA") %>%
+          add_comments("A44.subsector_interp written to all regions") %>%
+          add_legacy_name("L244.SubsectorInterpTo_bld") %>%
+          add_precursors("energy/A44.subsector_interp", "common/GCAM_region_names", "L144.end_use_eff")  ->
+          L244.SubsectorInterpTo_bld
+      } else {
+        missing_data() %>%
+          add_legacy_name("L244.SubsectorInterpTo_bld") ->
+          L244.SubsectorInterpTo_bld
+      }
     } else {
       missing_data() %>%
         add_legacy_name("L244.SubsectorInterpTo_bld") ->

@@ -148,8 +148,8 @@ module_energy_L131.enduse <- function(command, ...) {
     # Calculate the scalers required to balance district heat production and consumption within each region
     Enduse_heat %>%
       left_join_error_no_match(Enduse_heat_unscaled, by = c("GCAM_region_ID", "year")) %>%
-      mutate(value = value.x / value.y) %>%
-      replace_na(list(value = 0)) %>%
+      # If value.y is zero, there is no consumption of heat, so scaler should be zero
+      mutate(value = if_else(value.y == 0, 0, value.x / value.y)) %>%
       select(-value.x, -value.y) ->
       Enduse_heat_scaler
 
