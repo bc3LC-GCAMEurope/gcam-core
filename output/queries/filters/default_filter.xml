@@ -8,5 +8,5 @@
     <stx:template match="above-gross-positive-luc" />
     <stx:template match="above-land-use-change-emission" />
     <stx:template match="below-land-use-change-emission" />
-    <stx:template match="above-ground-carbon-stock" />
+    <!--stx:template match="above-ground-carbon-stock" /-->
 </stx:transform>
