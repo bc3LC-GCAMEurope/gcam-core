@@ -128,6 +128,18 @@ module_energy_L100.IEA_downscale_ctry <- function(command, ...) {
                                  by = c("COUNTRY" = "IEA_ctry")) ->
         L100.IEAsingle
 
+      # Filter out srb and summarising here because otherwise having two countries mapped to srb (Serbia and Kosovo) lead to data loss
+      L100.IEAsingle_srb <- L100.IEAsingle %>%
+        filter(iso == "srb") %>%
+        group_by(FLOW, PRODUCT, iso) %>%
+        summarise_if(is.numeric, sum) %>%
+        ungroup %>%
+        mutate(COUNTRY = "Serbia")
+
+      L100.IEAsingle <- L100.IEAsingle %>%
+        filter(iso != "srb") %>%
+        bind_rows(L100.IEAsingle_srb)
+
       # Subset countries that are being downscaled in certain years using historical
       # energy data in a specified year. Former Soviet Union and Yugoslavia: use specified
       # flows for each product. The IEA dataset has many inter-sectoral inconsistencies between
