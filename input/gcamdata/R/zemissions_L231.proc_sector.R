@@ -260,7 +260,7 @@ module_emissions_L231.proc_sector <- function(command, ...) {
       ungroup() %>%
       filter(year %in% MODEL_BASE_YEARS) %>%
       left_join_error_no_match(sum.calvalue, by = c("GCAM_region_ID", "year")) %>%
-      mutate(coefficient = ind_proc_input / ind_output,
+      mutate(coefficient = if_else(ind_output == 0, 0, ind_proc_input / ind_output),
              supplysector = "other industry",
              subsector = "other industry",
              technology = "other industry",
