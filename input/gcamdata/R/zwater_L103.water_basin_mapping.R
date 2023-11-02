@@ -80,6 +80,33 @@ module_water_L103.water_basin_mapping <- function(command, ...) {
       select(-demand, -demand_total) ->
       L103.water_mapping_R_B_W_Ws_share
 
+    # Add in Malta (copying cyprus) and Luxembourg (copying belgium)
+    copy_regions <- iso_GCAM_mapping %>%
+      filter(country_name %in% c("Cyprus", "Belgium"))
+    replace_regions <- iso_GCAM_mapping %>%
+      filter(country_name %in% c("Malta", "Luxembourg"))
+
+    replace_GLU <- L103.water_mapping_R_GLU_B_W_Ws_share %>%
+      filter(GCAM_region_ID %in% replace_regions$GCAM_region_ID) %>%
+      distinct(GCAM_region_ID, GLU)
+
+
+    insert_values <- L103.water_mapping_R_B_W_Ws_share %>%
+      filter(GCAM_region_ID %in% copy_regions$GCAM_region_ID,
+             # hard-coding since belgium has two GLUs and we just want to keep the shared
+             # one with Luxembourg
+             GCAM_basin_ID  %in% c(32, 75)) %>%
+      mutate(GCAM_region_ID = if_else(GCAM_region_ID == copy_regions$GCAM_region_ID[copy_regions$iso == "cyp"],
+                              replace_regions$GCAM_region_ID[replace_regions$iso == "mlt"],
+                              replace_regions$GCAM_region_ID[replace_regions$iso == "lux"])) %>%
+      left_join(replace_GLU, by = "GCAM_region_ID") %>%
+      select(GCAM_region_ID, GCAM_basin_ID = GLU, water_type, water_sector, share)
+
+    L103.water_mapping_R_B_W_Ws_share <- bind_rows(
+      L103.water_mapping_R_B_W_Ws_share,
+      insert_values
+    )
+
     # ===================================================
 
     # Produce outputs
