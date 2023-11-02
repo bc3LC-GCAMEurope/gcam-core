@@ -340,8 +340,14 @@ module_energy_L223.electricity <- function(command, ...) {
 
     # Identify stub technologies of electricity generation for all regions to generate L223.StubTech_elec
     # Note: assuming that technology list in the shareweight table includes the full set (any others would default to a 0 shareweight)
+    # Offshore Wind regions to keep
+    offshore_wind_regions <- L120.RegCapFactor_offshore_wind %>%
+      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID")
+
     A23.globaltech_shrwt %>%
       write_to_all_regions(c(LEVEL2_DATA_NAMES[["Tech"]]), GCAM_region_names) %>%
+      filter(!(technology == "wind_offshore" &
+                 !region %in% offshore_wind_regions$region)) %>%
       rename(stub.technology = technology) ->
       L223.StubTech_elec
 

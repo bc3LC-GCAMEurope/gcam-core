@@ -237,9 +237,17 @@ module_energy_L2231.wind_update <- function(command, ...) {
                                  distinct(region, CFmax),
                                by = c("region")) %>%
       # Adjust Austria
-      mutate(CFmax = if_else(region == "Austria", capacity.factor, CFmax)) %>%
-      mutate(capacity.factor= round(CFmax, energy.DIGITS_CAPACITY_FACTOR)) %>%
+      mutate(CFmax = if_else(region == "Austria", capacity.factor, CFmax),
+             capacity.factor = round(CFmax, energy.DIGITS_CAPACITY_FACTOR)) %>%
       select(region, supplysector, subsector, stub.technology, year, capacity.factor)
+
+    # giving Malta same capacity factor of Cyrpus
+    L2231.StubTechCapFactor_onshore_wind <- L2231.StubTechCapFactor_onshore_wind %>%
+      filter(region == "Cyprus") %>%
+      mutate(region = "Malta") %>%
+      bind_rows(L2231.StubTechCapFactor_onshore_wind %>%
+                  filter(region != "Malta"))
+
 
     # Grid connection costs are read in as fixed non-energy cost adders (in $/GJ). This is calculated using three things:
     # 1. the average onshore wind $/kW-km data

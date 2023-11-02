@@ -588,6 +588,9 @@ module_water_L2233.electricity_water <- function(command, ...) {
       rename(supplysector = to.supplysector,
              subsector = to.subsector,
              stub.technology = to.technology) %>%
+      # no more offshore wind for land-locked countries
+      filter(!(stub.technology == "wind_offshore" &
+                 !region %in% filter(L223.StubTech_elec, stub.technology == "wind_offshore")$region)) %>%
       select(LEVEL2_DATA_NAMES[["StubTech"]]) ->
       L2233.StubTech_elec_cool  # --OUTPUT--
 
