@@ -166,6 +166,12 @@ module_energy_L111.rsrc_fos_Prod <- function(command, ...) {
         select(iso, resource, share) ->
         L111.Prod_share_ctry_F_Yh
 
+      L111.Prod_share_ctry_F_Yh <- iso_GCAM_regID %>%
+        select(iso) %>%
+        repeat_add_columns(distinct(L111.Prod_share_ctry_F_Yh, resource)) %>%
+        left_join(L111.Prod_share_ctry_F_Yh, by = c("iso", "resource")) %>%
+        replace_na(list(share = 0))
+
       # Downscale available resources by GCAM 3.0 region to countries (104-116)
       tidyr::crossing(iso = L111.Prod_share_ctry_F_Yh$iso,
                       subresource = A11.fos_curves$subresource) %>%
