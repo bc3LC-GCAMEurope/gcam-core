@@ -14,9 +14,9 @@ module_aglu_protected_land_input_3_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c("L2231.LN1_Logit_prot",
               "L2231.LN3_HistUnmgdAllocation_noprot",
-              "L2231.LN3_UnmgdAllocation_noprot",
+              "L2231.LN3_UnmgdAllocation_noprot_adj",
               "L2231.LN1_HistUnmgdAllocation_prot",
-              "L2231.LN1_UnmgdAllocation_prot",
+              "L2231.LN1_UnmgdAllocation_prot_adj",
               "L2231.LN1_UnmgdCarbon_prot"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c(XML = "protected_land_input_3.xml"))
@@ -27,9 +27,9 @@ module_aglu_protected_land_input_3_xml <- function(command, ...) {
     # Load required inputs
       L2231.LN1_Logit_prot <- get_data(all_data, "L2231.LN1_Logit_prot")
       L2231.LN3_HistUnmgdAllocation_noprot <- get_data(all_data, "L2231.LN3_HistUnmgdAllocation_noprot")
-      L2231.LN3_UnmgdAllocation_noprot <- get_data(all_data, "L2231.LN3_UnmgdAllocation_noprot")
+      L2231.LN3_UnmgdAllocation_noprot_adj <- get_data(all_data, "L2231.LN3_UnmgdAllocation_noprot_adj")
       L2231.LN1_HistUnmgdAllocation_prot <- get_data(all_data, "L2231.LN1_HistUnmgdAllocation_prot")
-      L2231.LN1_UnmgdAllocation_prot <- get_data(all_data, "L2231.LN1_UnmgdAllocation_prot")
+      L2231.LN1_UnmgdAllocation_prot_adj <- get_data(all_data, "L2231.LN1_UnmgdAllocation_prot_adj")
       L2231.LN1_UnmgdCarbon_prot <- get_data(all_data, "L2231.LN1_UnmgdCarbon_prot")
 
     # ===================================================
@@ -38,16 +38,16 @@ module_aglu_protected_land_input_3_xml <- function(command, ...) {
     create_xml("protected_land_input_3.xml") %>%
       add_logit_tables_xml(L2231.LN1_Logit_prot, "LN1_ValueLogit", "LN1_Logit") %>%
       add_xml_data(L2231.LN3_HistUnmgdAllocation_noprot, "LN3_HistUnmgdAllocation") %>%
-      add_xml_data(L2231.LN3_UnmgdAllocation_noprot, "LN3_UnmgdAllocation") %>%
+      add_xml_data(L2231.LN3_UnmgdAllocation_noprot_adj, "LN3_UnmgdAllocation") %>%
       add_xml_data(L2231.LN1_HistUnmgdAllocation_prot, "LN1_HistUnmgdAllocation") %>%
-      add_xml_data(L2231.LN1_UnmgdAllocation_prot, "LN1_UnmgdAllocation") %>%
+      add_xml_data(L2231.LN1_UnmgdAllocation_prot_adj, "LN1_UnmgdAllocation") %>%
       add_xml_data(L2231.LN1_UnmgdCarbon_prot, "LN1_UnmgdCarbon") %>%
       add_rename_landnode_xml() %>%
       add_precursors("L2231.LN1_Logit_prot",
                      "L2231.LN3_HistUnmgdAllocation_noprot",
-                     "L2231.LN3_UnmgdAllocation_noprot",
+                     "L2231.LN3_UnmgdAllocation_noprot_adj",
                      "L2231.LN1_HistUnmgdAllocation_prot",
-                     "L2231.LN1_UnmgdAllocation_prot",
+                     "L2231.LN1_UnmgdAllocation_prot_adj",
                      "L2231.LN1_UnmgdCarbon_prot") ->
       protected_land_input_3.xml
 

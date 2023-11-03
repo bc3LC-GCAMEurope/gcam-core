@@ -14,7 +14,7 @@ module_aglu_land_input_2_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c("L222.LN2_Logit",
               "L222.LN2_HistUnmgdAllocation",
-              "L222.LN2_UnmgdAllocation",
+              "L222.LN2_UnmgdAllocation_adj",
               "L222.LN2_HistMgdAllocation",
               "L222.LN2_MgdAllocation",
               "L222.LN2_UnmgdCarbon",
@@ -28,7 +28,7 @@ module_aglu_land_input_2_xml <- function(command, ...) {
     # Load required inputs
     L222.LN2_Logit <- get_data(all_data, "L222.LN2_Logit")
     L222.LN2_HistUnmgdAllocation <- get_data(all_data, "L222.LN2_HistUnmgdAllocation")
-    L222.LN2_UnmgdAllocation <- get_data(all_data, "L222.LN2_UnmgdAllocation")
+    L222.LN2_UnmgdAllocation_adj <- get_data(all_data, "L222.LN2_UnmgdAllocation_adj")
     L222.LN2_HistMgdAllocation <- get_data(all_data, "L222.LN2_HistMgdAllocation")
     L222.LN2_MgdAllocation <- get_data(all_data, "L222.LN2_MgdAllocation")
     L222.LN2_UnmgdCarbon <- get_data(all_data, "L222.LN2_UnmgdCarbon")
@@ -40,13 +40,13 @@ module_aglu_land_input_2_xml <- function(command, ...) {
     create_xml("land_input_2.xml") %>%
       add_logit_tables_xml(L222.LN2_Logit, "LN2_Logit") %>%
       add_xml_data(L222.LN2_HistUnmgdAllocation, "LN2_HistUnmgdAllocation") %>%
-      add_xml_data(L222.LN2_UnmgdAllocation, "LN2_UnmgdAllocation") %>%
+      add_xml_data(L222.LN2_UnmgdAllocation_adj, "LN2_UnmgdAllocation") %>%
       add_xml_data(L222.LN2_HistMgdAllocation, "LN2_HistMgdAllocation") %>%
       add_xml_data(L222.LN2_MgdAllocation, "LN2_MgdAllocation") %>%
       add_xml_data(L222.LN2_UnmgdCarbon, "LN2_UnmgdCarbon") %>%
       add_xml_data(L222.LN2_MgdCarbon, "LN2_MgdCarbon") %>%
       add_rename_landnode_xml() %>%
-      add_precursors("L222.LN2_Logit", "L222.LN2_HistUnmgdAllocation", "L222.LN2_UnmgdAllocation", "L222.LN2_HistMgdAllocation", "L222.LN2_MgdAllocation", "L222.LN2_UnmgdCarbon", "L222.LN2_MgdCarbon") ->
+      add_precursors("L222.LN2_Logit", "L222.LN2_HistUnmgdAllocation", "L222.LN2_UnmgdAllocation_adj", "L222.LN2_HistMgdAllocation", "L222.LN2_MgdAllocation", "L222.LN2_UnmgdCarbon", "L222.LN2_MgdCarbon") ->
       land_input_2.xml
 
     return_data(land_input_2.xml)

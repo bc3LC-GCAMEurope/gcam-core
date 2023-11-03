@@ -14,7 +14,7 @@ module_aglu_land_input_3_IRR_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c("L2231.LN3_Logit",
               "L2231.LN3_HistUnmgdAllocation",
-              "L2231.LN3_UnmgdAllocation",
+              "L2231.LN3_UnmgdAllocation_adj",
               "L2231.LN3_NoEmissCarbon",
               "L2231.LN3_NodeCarbon",
               "L2231.LN3_HistMgdAllocation_noncrop",
@@ -30,7 +30,7 @@ module_aglu_land_input_3_IRR_xml <- function(command, ...) {
     # Load required inputs
     L2231.LN3_Logit <- get_data(all_data, "L2231.LN3_Logit")
     L2231.LN3_HistUnmgdAllocation <- get_data(all_data, "L2231.LN3_HistUnmgdAllocation")
-    L2231.LN3_UnmgdAllocation <- get_data(all_data, "L2231.LN3_UnmgdAllocation")
+    L2231.LN3_UnmgdAllocation_adj <- get_data(all_data, "L2231.LN3_UnmgdAllocation_adj")
     L2231.LN3_NoEmissCarbon <- get_data(all_data, "L2231.LN3_NoEmissCarbon")
     L2231.LN3_NodeCarbon <- get_data(all_data, "L2231.LN3_NodeCarbon")
     L2231.LN3_HistMgdAllocation_noncrop <- get_data(all_data, "L2231.LN3_HistMgdAllocation_noncrop")
@@ -44,7 +44,7 @@ module_aglu_land_input_3_IRR_xml <- function(command, ...) {
     create_xml("land_input_3_IRR.xml") %>%
       add_logit_tables_xml(L2231.LN3_Logit, "LN3_Logit") %>%
       add_xml_data(L2231.LN3_HistUnmgdAllocation, "LN3_HistUnmgdAllocation") %>%
-      add_xml_data(L2231.LN3_UnmgdAllocation, "LN3_UnmgdAllocation") %>%
+      add_xml_data(L2231.LN3_UnmgdAllocation_adj, "LN3_UnmgdAllocation") %>%
       add_node_equiv_xml("LandLeaf") %>%
       add_node_equiv_xml("carbon-calc") %>%
       add_xml_data(L2231.LN3_NoEmissCarbon, "LN3_NoEmissCarbon") %>%
@@ -56,7 +56,7 @@ module_aglu_land_input_3_IRR_xml <- function(command, ...) {
       add_rename_landnode_xml() %>%
       add_precursors("L2231.LN3_Logit",
                      "L2231.LN3_HistUnmgdAllocation",
-                     "L2231.LN3_UnmgdAllocation",
+                     "L2231.LN3_UnmgdAllocation_adj",
                      "L2231.LN3_NoEmissCarbon",
                      "L2231.LN3_NodeCarbon",
                      "L2231.LN3_HistMgdAllocation_noncrop",
