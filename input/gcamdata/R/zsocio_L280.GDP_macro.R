@@ -198,7 +198,7 @@ module_socio_L280.GDP_macro <- function(command, ...) {
       mutate(labor.force.share = labor.force/pop) %>%
       select(-labor.force) -> laborForceShareSSP2
 
-    #Future labor force share for Taiwan (30) missing.
+    #Future labor force share for Taiwan (25) missing.
     #Use final historical year labor force share and pop for all future periods.
     #Todo: final alternative wage pop data.
     taiwan.region.name = gcam.region.id %>% filter(GCAM_region_ID == socioeconomics.TAIWAN_REGION_ID) %>% pull(region)
