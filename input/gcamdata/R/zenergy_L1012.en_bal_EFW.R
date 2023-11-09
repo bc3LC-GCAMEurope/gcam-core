@@ -83,15 +83,18 @@ module_energy_L1012.en_bal_EFW <- function(command, ...) {
                                                    by = c("GCAM_region_ID", "sector", "fuel", "year")) %>%
       rename(initial_energy_EJ = value)
 
+    Malta_Cyprus_IDs <- iso_GCAM_regID %>% filter(country_name %in% c("Malta", "Cyprus")) %>% pull(GCAM_region_ID)
+
+
     # Stop if the desal-related deduction exceeds an exogenous fraction of available energy
     stopifnot(with(filter(L1012.en_bal_EJ_R_Si_Fi_Yh_desal,
                           initial_energy_EJ > 0,
-                          !GCAM_region_ID %in% c(13, 35)), # Make exception for Malta and Cyprus
+                          !GCAM_region_ID %in% Malta_Cyprus_IDs), # Make exception for Malta and Cyprus
                    deduction_EJ / initial_energy_EJ) < efw.MAX_COMMIND_ENERGY_DESAL)
     # Still ensure that Malta and Cyprus don't exceed 31% of energy for desalination
     stopifnot(with(filter(L1012.en_bal_EJ_R_Si_Fi_Yh_desal,
                           initial_energy_EJ > 0,
-                          GCAM_region_ID %in% c(13, 35)),
+                          GCAM_region_ID %in% Malta_Cyprus_IDs),
                    deduction_EJ / initial_energy_EJ) < 0.31)
 
     # Replace the corresponding values in the energy balance tables
