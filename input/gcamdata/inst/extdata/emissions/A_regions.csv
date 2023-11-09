@@ -17,58 +17,58 @@ GCAM_region_ID,region,MAC_region,bio_N2O_coef,SO2_name,GAINS_region
 9,Central America and Caribbean,Central and South America,0.008163204,SO2_3,Rest Central America
 10,Central Asia,Eurasia,0.0095297,SO2_2,Asia-Stan
 11,China,China,0.009519354,SO2_2,China+
-12,Bulgaria,Europe,0.010212662,SO2_1,Western Europe
-13,Cyprus,Europe,0.010212662,SO2_1,Western Europe
-14,Czech Republic,Europe,0.010212662,SO2_1,Western Europe
-15,Estonia,Europe,0.010212662,SO2_1,Western Europe
-16,Hungary,Europe,0.010212662,SO2_1,Western Europe
-17,India,India,0.005656341,SO2_2,India
-18,Indonesia,Indonesia,0.0095297,SO2_2,Indonesia+
-19,Japan,Asia,0.006583467,SO2_2,Japan
-20,Mexico,Mexico,0.008163204,SO2_3,Mexico
-21,Middle East,Middle East,0.015843792,SO2_3,Middle East
-22,Pakistan,Asia,0.0095297,SO2_2,Rest South Asia
-23,Russia,Russia,0.004930186,SO2_4,Russia+
-24,South Africa,Africa,0.009445905,SO2_3,South Africa
-25,South America_Northern,Central and South America,0.008163204,SO2_3,Rest South America
-26,South America_Southern,Central and South America,0.008163204,SO2_3,Rest South America
-27,South Asia,Asia,0.0095297,SO2_2,Rest South Asia
-28,South Korea,Asia,0.007774893,SO2_2,Korea
-29,Southeast Asia,Asia,0.0095297,SO2_2,Southeastern Asia
-30,Taiwan,China,0.0095297,SO2_2,China+
-31,Argentina,Central and South America,0.008163204,SO2_3,Rest South America
-32,Colombia,Central and South America,0.008163204,SO2_3,Rest South America
-33,Lithuania,Europe,0.010212662,SO2_1,Western Europe
-34,Latvia,Europe,0.010212662,SO2_1,Western Europe
-35,Malta,Europe,0.010212662,SO2_1,Western Europe
-36,Poland,Europe,0.010212662,SO2_1,Western Europe
-37,Romania,Europe,0.010212662,SO2_1,Western Europe
-38,Iceland,Europe,0.010212662,SO2_1,Western Europe
-39,Slovakia,Europe,0.010212662,SO2_1,Western Europe
-40,Slovenia,Europe,0.010212662,SO2_1,Western Europe
-41,Spain,Europe,0.010212662,SO2_1,Western Europe
-42,Austria,Europe,0.010212662,SO2_1,Western Europe
-43,Belgium,Europe,0.010212662,SO2_1,Western Europe
-44,Germany,Europe,0.010212662,SO2_1,Western Europe
-45,Denmark,Europe,0.010212662,SO2_1,Western Europe
-46,UK,Europe,0.010212662,SO2_1,Western Europe
-47,Finland,Europe,0.010212662,SO2_1,Western Europe
-48,France,Europe,0.010212662,SO2_1,Western Europe
-49,Greece,Europe,0.010212662,SO2_1,Western Europe
-50,Ireland,Europe,0.010212662,SO2_1,Western Europe
-51,Italy,Europe,0.010212662,SO2_1,Western Europe
-52,Luxembourg,Europe,0.010212662,SO2_1,Western Europe
-53,Netherlands,Europe,0.010212662,SO2_1,Western Europe
-54,Portugal,Europe,0.010212662,SO2_1,Western Europe
-55,Sweden,Europe,0.010212662,SO2_1,Western Europe
+12,India,India,0.005656341,SO2_2,India
+13,Indonesia,Indonesia,0.0095297,SO2_2,Indonesia+
+14,Japan,Asia,0.006583467,SO2_2,Japan
+15,Mexico,Mexico,0.008163204,SO2_3,Mexico
+16,Middle East,Middle East,0.015843792,SO2_3,Middle East
+17,Pakistan,Asia,0.0095297,SO2_2,Rest South Asia
+18,Russia,Russia,0.004930186,SO2_4,Russia+
+19,South Africa,Africa,0.009445905,SO2_3,South Africa
+20,South America_Northern,Central and South America,0.008163204,SO2_3,Rest South America
+21,South America_Southern,Central and South America,0.008163204,SO2_3,Rest South America
+22,South Asia,Asia,0.0095297,SO2_2,Rest South Asia
+23,South Korea,Asia,0.007774893,SO2_2,Korea
+24,Southeast Asia,Asia,0.0095297,SO2_2,Southeastern Asia
+25,Taiwan,China,0.0095297,SO2_2,China+
+26,Argentina,Central and South America,0.008163204,SO2_3,Rest South America
+27,Colombia,Central and South America,0.008163204,SO2_3,Rest South America
+28,Austria,Europe,0.010212662,SO2_1,Western Europe
+29,Belgium,Europe,0.010212662,SO2_1,Western Europe
+30,Bulgaria,Europe,0.010212662,SO2_1,Western Europe
+31,Croatia,Turkey,0.006412916,SO2_1,Central Europe
+32,Cyprus,Europe,0.010212662,SO2_1,Western Europe
+33,Czech Republic,Europe,0.010212662,SO2_1,Western Europe
+34,Denmark,Europe,0.010212662,SO2_1,Western Europe
+35,Estonia,Europe,0.010212662,SO2_1,Western Europe
+36,Finland,Europe,0.010212662,SO2_1,Western Europe
+37,France,Europe,0.010212662,SO2_1,Western Europe
+38,Germany,Europe,0.010212662,SO2_1,Western Europe
+39,Greece,Europe,0.010212662,SO2_1,Western Europe
+40,Hungary,Europe,0.010212662,SO2_1,Western Europe
+41,Ireland,Europe,0.010212662,SO2_1,Western Europe
+42,Italy,Europe,0.010212662,SO2_1,Western Europe
+43,Latvia,Europe,0.010212662,SO2_1,Western Europe
+44,Lithuania,Europe,0.010212662,SO2_1,Western Europe
+45,Luxembourg,Europe,0.010212662,SO2_1,Western Europe
+46,Malta,Europe,0.010212662,SO2_1,Western Europe
+47,Netherlands,Europe,0.010212662,SO2_1,Western Europe
+48,Poland,Europe,0.010212662,SO2_1,Western Europe
+49,Portugal,Europe,0.010212662,SO2_1,Western Europe
+50,Romania,Europe,0.010212662,SO2_1,Western Europe
+51,Slovakia,Europe,0.010212662,SO2_1,Western Europe
+52,Slovenia,Europe,0.010212662,SO2_1,Western Europe
+53,Spain,Europe,0.010212662,SO2_1,Western Europe
+54,Sweden,Europe,0.010212662,SO2_1,Western Europe
+55,Albania,Turkey,0.006412916,SO2_1,Central Europe
 56,Belarus,Eurasia,0.006412916,SO2_1,Ukraine+
-57,Moldova,Eurasia,0.006412916,SO2_1,Ukraine+
-58,Ukraine,Eurasia,0.006412916,SO2_1,Ukraine+
-59,Albania,Turkey,0.006412916,SO2_1,Central Europe
-60,Bosnia and Herzegovina,Turkey,0.006412916,SO2_1,Central Europe
-61,Croatia,Turkey,0.006412916,SO2_1,Central Europe
-62,Macedonia,Turkey,0.006412916,SO2_1,Central Europe
-63,Serbia and Montenegro,Turkey,0.006412916,SO2_1,Central Europe
+57,Bosnia and Herzegovina,Turkey,0.006412916,SO2_1,Central Europe
+58,Iceland,Europe,0.010212662,SO2_1,Western Europe
+59,Macedonia,Turkey,0.006412916,SO2_1,Central Europe
+60,Moldova,Eurasia,0.006412916,SO2_1,Ukraine+
+61,Norway,Europe,0.010212662,SO2_1,Western Europe
+62,Serbia and Montenegro,Turkey,0.006412916,SO2_1,Central Europe
+63,Switzerland,Europe,0.010212662,SO2_1,Western Europe
 64,Turkey,Turkey,0.006412916,SO2_1,Central Europe
-65,Norway,Europe,0.010212662,SO2_1,Western Europe
-66,Switzerland,Europe,0.010212662,SO2_1,Western Europe
+65,UK,Europe,0.010212662,SO2_1,Western Europe
+66,Ukraine,Eurasia,0.006412916,SO2_1,Ukraine+
