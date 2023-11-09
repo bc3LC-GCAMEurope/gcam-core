@@ -320,9 +320,8 @@ module_aglu_L120.LC_GIS_R_LTgis_Yh_GLU <- function(command, ...) {
                   select(GCAM_region_ID, GLU, year, nonForScaler, ForScaler),
                 by = c("GCAM_region_ID", "GLU", "year") ) %>%
       # Set all EU regions (old and new) to 1
-      mutate(nonForScaler = if_else(GCAM_region_ID %in% c(seq(12, 16), seq(33, max(iso_GCAM_regID$GCAM_region_ID))), 1, nonForScaler),
-             ForScaler = if_else(GCAM_region_ID %in% c(seq(12, 16), seq(33, max(iso_GCAM_regID$GCAM_region_ID))), 1, ForScaler),
-             value = if_else(Land_Type %in% c("Grassland", "Shrubland" , "Pasture"),
+      tidyr::replace_na(list(nonForScaler = 1, ForScaler = 1)) %>%
+      mutate(value = if_else(Land_Type %in% c("Grassland", "Shrubland" , "Pasture"),
                              value * nonForScaler,
                              if_else(Land_Type == "Forest", value * ForScaler, value) )) %>%
       select(-nonForScaler, -ForScaler) ->
