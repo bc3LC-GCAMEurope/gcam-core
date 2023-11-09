@@ -234,7 +234,9 @@ module_water_L171.desalination <- function(command, ...) {
              GCAM_basin_ID = GCAM_ID_1) %>%
       left_join_error_no_match(select(iso_GCAM_regID, iso, GCAM_region_ID), by = "iso") %>%
       select(GCAM_region_ID, GCAM_basin_ID) %>%
-      distinct()
+      distinct() %>%
+      # fix to add in Malta
+      bind_rows(tibble(GCAM_region_ID = 35, GCAM_basin_ID = 63))
 
     L171.share_R_desal_basin <- iso_basin %>%
       left_join_error_no_match(select(iso_GCAM_regID, iso, GCAM_region_ID), by = "iso") %>%

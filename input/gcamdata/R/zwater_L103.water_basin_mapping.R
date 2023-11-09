@@ -98,7 +98,8 @@ module_water_L103.water_basin_mapping <- function(command, ...) {
              GCAM_basin_ID  %in% c(32, 75)) %>%
       mutate(GCAM_region_ID = if_else(GCAM_region_ID == copy_regions$GCAM_region_ID[copy_regions$iso == "cyp"],
                               replace_regions$GCAM_region_ID[replace_regions$iso == "mlt"],
-                              replace_regions$GCAM_region_ID[replace_regions$iso == "lux"])) %>%
+                              replace_regions$GCAM_region_ID[replace_regions$iso == "lux"]),
+             share = 1) %>%
       left_join(replace_GLU, by = "GCAM_region_ID") %>%
       select(GCAM_region_ID, GCAM_basin_ID = GLU, water_type, water_sector, share)
 
