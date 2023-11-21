@@ -105,6 +105,11 @@ module_aglu_L142.ag_Fert_IO_R_C_Y_GLU <- function(command, ...) {
     # First, downscale fertilizer demands by country and crop to GLU
     # NOTE: Allocate fertilizer consumption to GLUs on the basis of production, not harvested area
     # Calculate agriculture prodcution total by country and crop
+    L100.LDS_ag_prod_t <- L100.LDS_ag_prod_t %>%
+      mutate(iso = if_else(iso == "scg", "srb", iso))
+    L141.ag_Fert_Cons_MtN_ctry_crop <- L141.ag_Fert_Cons_MtN_ctry_crop %>%
+      mutate(iso = if_else(iso == "scg", "srb", iso))
+
     L100.LDS_ag_prod_t %>%
       group_by(iso, GTAP_crop) %>%
       summarise(total = sum(value)) %>%

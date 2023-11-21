@@ -52,37 +52,11 @@ module_aglu_L100.0_LDS_preprocessing <- function(command, ...) {
     LDSfiles <- list()
     for(nm in namelist) {
       LDSfiles[[nm]] <- get_data(all_data, paste0(dirname, nm))
+      # replace serbia and montenegro iso
+
     }
 
     GCAM32_to_EU  <- get_data(all_data, "common/GCAM32_to_EU")
-
-    # Avoid really small european land allocations
-    europe_isos <- GCAM32_to_EU %>%
-      filter(GCAM32_region %in% c("EU-12", "EU-15", "Europe_Eastern",
-                                  "Europe_Non_EU", "European Free Trade Association")) %>%
-      pull(iso)
-
-    # Get percent of iso and percent of GLU for each land allocation
-    code_iso_size <- LDSfiles$Land_type_area_ha %>%
-      filter(year == MODEL_FINAL_BASE_YEAR) %>%
-      group_by(iso, glu_code) %>%
-      summarise(value = sum(value)) %>%
-      group_by(glu_code) %>%
-      mutate(pct_glu = 100 * value / sum(value),
-             iso_max = iso[value == max(value)]) %>%
-      group_by(iso) %>%
-      mutate(pct_iso = 100 * value / sum(value)) %>%
-      ungroup
-
-    # Remap very small land allocations that are small percent of iso and GLU
-    # to largest iso in the GLU
-    L100.europe_GLU_remap <- code_iso_size %>%
-      filter(value < 100000,
-             pct_glu < 2,
-             pct_iso < 2,
-             iso %in% europe_isos) %>%
-      mutate(GLU = paste(aglu.GLU, sprintf("%03d", glu_code), sep = aglu.GLU_NAME_DELIMITER)) %>%
-      select(iso, GLU, iso_max)
 
     for(nm in namelist) {
 
@@ -96,6 +70,12 @@ module_aglu_L100.0_LDS_preprocessing <- function(command, ...) {
         sub("mirca_crop", "MIRCA_crop", .) %>%
         sub("use_sector", "GTAP_use", .) ->
         names(LDSfiles[[nm]])
+
+      if ("iso" %in% names(LDSfiles[[nm]])){
+        LDSfiles[[nm]] <- mutate(LDSfiles[[nm]], iso = gsub("scg", "srb", iso))
+      }
+
+      # Replace
 
       # Replace numerical GLU code with a concatenation of "GLU" and the
       # three-digit code (padded with zeroes as necessary)
@@ -140,6 +120,33 @@ module_aglu_L100.0_LDS_preprocessing <- function(command, ...) {
         }
       }
     }
+
+    # Avoid really small european land allocations
+    europe_isos <- GCAM32_to_EU %>%
+      filter(GCAM32_region %in% c("EU-12", "EU-15", "Europe_Eastern",
+                                  "Europe_Non_EU", "European Free Trade Association")) %>%
+      pull(iso)
+
+    # Get percent of iso and percent of GLU for each land allocation
+    code_iso_size <- LDSfiles$Land_type_area_ha %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
+      group_by(iso, GLU) %>%
+      summarise(value = sum(value)) %>%
+      group_by(GLU) %>%
+      mutate(pct_glu = 100 * value / sum(value),
+             iso_max = iso[value == max(value)]) %>%
+      group_by(iso) %>%
+      mutate(pct_iso = 100 * value / sum(value)) %>%
+      ungroup
+
+    # Remap very small land allocations that are small percent of iso and GLU
+    # to largest iso in the GLU
+    L100.europe_GLU_remap <- code_iso_size %>%
+      filter(value < 100000,
+             pct_glu < 2,
+             pct_iso < 2,
+             iso %in% europe_isos) %>%
+      select(iso, GLU, iso_max)
 
     # adjust carbon values by weighted average of land area in 2015
     LDSfiles[["Ref_veg_carbon_Mg_per_ha"]] <- LDSfiles[["Ref_veg_carbon_Mg_per_ha"]] %>%

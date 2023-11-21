@@ -384,7 +384,8 @@ module_aglu_L165.ag_water_R_C_Y_GLU_irr <- function(command, ...) {
                                            Rohwer_2007_IrrigationEff_missing_EU) %>%
       mutate(field.eff = application.eff * management.eff,
              # Moldova iso differernt than in iso_GCAM_regID
-             iso = gsub("mld", "mda", iso))
+             iso = gsub("mld", "mda", iso),
+             iso = gsub("scg", "srb", iso))
 
 
     L151.ag_irrHA_ha_ctry_crop %>%
