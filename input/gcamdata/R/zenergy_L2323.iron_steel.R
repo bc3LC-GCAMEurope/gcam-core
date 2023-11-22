@@ -371,6 +371,10 @@ module_energy_L2323.iron_steel <- function(command, ...) {
 
     L1323.out_Mt_R_iron_steel_Yh %>%
       filter(year %in% MODEL_BASE_YEARS) %>%
+      # Ensure 0s are explicitly written
+      complete(nesting(GCAM_region_ID, subsector),
+               year = MODEL_BASE_YEARS) %>%
+      tidyr::replace_na(list(value = 0)) %>%
       mutate(calOutputValue = round(value, energy.DIGITS_CALOUTPUT), sector = "iron and steel") %>%
       left_join(calibrated_techs_export %>% select(sector,supplysector, subsector,technology), by = c("sector","subsector")) %>%
       left_join(GCAM_region_names, by = "GCAM_region_ID") %>%
