@@ -23,6 +23,7 @@ module_aglu_L142.ag_Fert_IO_R_C_Y_GLU <- function(command, ...) {
   MODULE_INPUTS <-
     c(FILE = "common/iso_GCAM_regID",
       FILE = "aglu/FAO/FAO_ag_items_PRODSTAT",
+      "L100.FAO_ag_Prod_t",
       "L100.LDS_ag_prod_t",
       "L100.FAO_Fert_Cons_tN",
       "L100.FAO_Fert_Prod_tN",
@@ -73,6 +74,7 @@ module_aglu_L142.ag_Fert_IO_R_C_Y_GLU <- function(command, ...) {
       select(-adj) ->
       L142.ag_Fert_Prod_MtN_ctry_Y
 
+    ICELAND_ID <- iso_GCAM_regID %>% filter(iso == "isl") %>% pull(GCAM_region_ID)
     # Aggregate N fertilizer adjusted production and consumption to GCAM region level to calculate net exports
     L142.ag_Fert_Prod_MtN_ctry_Y %>%
       rename(prod = value) %>%
@@ -83,7 +85,9 @@ module_aglu_L142.ag_Fert_IO_R_C_Y_GLU <- function(command, ...) {
       group_by(GCAM_region_ID, year) %>%
       summarise(prod = sum(prod), cons = sum(cons)) %>%                  # Aggregate to region total
       ungroup() %>%                                                      # Ungroup before complete
-      mutate(cons = cons * CONV_T_MT,                                    # Convert unit of consumption from tons to million tons of Nitrogen
+      # Make exception for Iceland because crop production is too low, leads to excessive IO
+      mutate(cons = if_else(GCAM_region_ID == ICELAND_ID, cons / 30, cons),
+             cons = cons * CONV_T_MT,                                    # Convert unit of consumption from tons to million tons of Nitrogen
              value = prod - cons,                                        # Calculate net exports as production minus consumption
              GCAM_commodity = aglu.FERT_NAME) %>%                        # Add GCAM commodity category for N fertilizer
       select(-prod) %>%                                                  # Only regional consumption and net exports are needed
@@ -105,8 +109,23 @@ module_aglu_L142.ag_Fert_IO_R_C_Y_GLU <- function(command, ...) {
     # First, downscale fertilizer demands by country and crop to GLU
     # NOTE: Allocate fertilizer consumption to GLUs on the basis of production, not harvested area
     # Calculate agriculture prodcution total by country and crop
+
+    # Adjust serbia and montenegro iso and
+    # add in production for iceland and malta, which are 0 in LDS but nonzero in FAO
+    # they only have one GLU, so production does not need to be spread between GLUs
+    L100.FAO_isl_mlt_adjust <- L100.FAO_ag_Prod_t %>%
+      filter(iso %in% c("isl", "mlt"), value > 0, year == aglu.GTAP_HISTORICAL_YEAR) %>%
+      left_join(select(FAO_ag_items_PRODSTAT, item, item_code, GTAP_crop), by = c("item", "item_code")) %>%
+      # Dropping some leeks and misc veg production in Malta
+      na.omit() %>%
+      select(iso, GTAP_crop, value_FAO = value)
+
     L100.LDS_ag_prod_t <- L100.LDS_ag_prod_t %>%
-      mutate(iso = if_else(iso == "scg", "srb", iso))
+      mutate(iso = if_else(iso == "scg", "srb", iso)) %>%
+      left_join(L100.FAO_isl_mlt_adjust, by = c("iso", "GTAP_crop")) %>%
+      mutate(value = if_else(!is.na(value_FAO), value_FAO, value)) %>%
+      select(-value_FAO)
+
     L141.ag_Fert_Cons_MtN_ctry_crop <- L141.ag_Fert_Cons_MtN_ctry_crop %>%
       mutate(iso = if_else(iso == "scg", "srb", iso))
 

@@ -137,7 +137,7 @@ module_aglu_L141.ag_Fert_IFA_ctry_crop <- function(command, ...) {
       # Because the FAO item "Grasses nes for forage;Sil" is assigned to two GTAP crops ("GrsNESFrgSlg" and "MxGrss_Lgm"),
       # the "item" column will get longer. This is OK.
       left_join(FAO_ag_items_PRODSTAT[c("item_code", "GTAP_crop")], by = "item_code") %>%
-      select(iso, GTAP_crop, scaler) ->
+      select(iso, GTAP_crop, scaler, FAO) ->
       # store in an FAO_LDS table:
       L141.FAO_LDS
 
@@ -150,8 +150,10 @@ module_aglu_L141.ag_Fert_IFA_ctry_crop <- function(command, ...) {
       left_join(L141.FAO_LDS, by = c("iso", "GTAP_crop")) %>%
       drop_na() %>%     # get rid of the green broad beans and kapok fibres that are in LDS but not FAO
       # use the nation-crop scaler to scale down each iso-GLU-GTAP harvested area
-      mutate(value = value * scaler) %>%
-      select(-scaler) ->
+      # Correct for when LDS has zero harvested area, but FAO does (Iceland and Malta)
+      mutate(value = value * scaler,
+             value = if_else(value == 0 & scaler > 0, FAO, value)) %>%
+      select(-scaler, -FAO) ->
       # store in an LDS harvested area table
       L141.LDS_ag_HA_ha
 
