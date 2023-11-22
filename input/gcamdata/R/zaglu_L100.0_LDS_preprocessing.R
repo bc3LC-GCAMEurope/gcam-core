@@ -314,6 +314,17 @@ module_aglu_L100.0_LDS_preprocessing <- function(command, ...) {
     L100.LDS_ag_HA_ha %>% filter(!(iso == "pol" & GTAP_crop == "FrgProdNES" & GLU %in% c("GLU049", "GLU021"))) ->
       L100.LDS_ag_HA_ha
 
+    #7. Change Malta unmanaged to pasture ----
+    L100.Land_type_area_ha <- L100.Land_type_area_ha %>%
+      mutate(land_code = if_else(iso == "mlt" & land_code == 1, as.integer(20), land_code))
+
+    L100.Ref_veg_carbon_Mg_per_ha_malta <-
+      L100.Ref_veg_carbon_Mg_per_ha %>%
+      filter(iso == "ita", GLU == "GLU063", land_code == 101) %>%
+      mutate(iso = "mlt", land_code = 20)
+
+    L100.Ref_veg_carbon_Mg_per_ha <- bind_rows(L100.Ref_veg_carbon_Mg_per_ha,
+                                               L100.Ref_veg_carbon_Mg_per_ha_malta)
     # And we're done
     return_data(L100.Land_type_area_ha,
                 L100.LDS_ag_HA_ha,
