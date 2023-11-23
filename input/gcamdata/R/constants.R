@@ -673,10 +673,6 @@ socioeconomics.FINAL_DEMAND_SECTORS <- c("other industrial energy use",
                                          "trn_pass_road_LDV",
                                          "trn_pass_road_LDV_4W")
 
-# for filling missing socioeconomic data
-socioeconomics.TAIWAN_REGION_ID <- 25
-
-
 # Water constants ======================================================================
 
 water.ALL_WATER_TYPES                     <- c("water consumption",
