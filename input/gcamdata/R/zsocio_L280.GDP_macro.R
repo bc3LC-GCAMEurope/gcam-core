@@ -198,15 +198,18 @@ module_socio_L280.GDP_macro <- function(command, ...) {
       mutate(labor.force.share = labor.force/pop) %>%
       select(-labor.force) -> laborForceShareSSP2
 
-    #Future labor force share for Taiwan (30) missing.
+    #Future labor force share for Taiwan missing.
     #Use final historical year labor force share and pop for all future periods.
     #Todo: final alternative wage pop data.
-    taiwan.region.name = gcam.region.id %>% filter(GCAM_region_ID == socioeconomics.TAIWAN_REGION_ID) %>% pull(region)
+    Taiwan_ID <- filter(GCAM32_to_EU, country_name == "Taiwan")$GCAM_region_ID
+    stopifnot(nrow(filter(GCAM32_to_EU, GCAM_region_ID == Taiwan_ID)) == 1)
+
+    taiwan.region.name = gcam.region.id %>% filter(GCAM_region_ID == Taiwan_ID) %>% pull(region)
     national.accounts.BaseYrs %>% filter( region == taiwan.region.name & year %in% MODEL_BASE_YEARS ) %>%
       select( GCAM_region_ID, year, labor.force.share, pop=pop.pwt ) -> labor.force.share.Taiwan.BYS
     national.accounts.BaseYrs %>% filter( region == taiwan.region.name & year == MODEL_FINAL_BASE_YEAR ) %>%
       select( GCAM_region_ID, labor.force.share, pop=pop.pwt ) -> labor.force.share.Taiwan.FBY
-    tibble(year = as.integer(MODEL_FUTURE_YEARS), GCAM_region_ID = socioeconomics.TAIWAN_REGION_ID) %>%
+    tibble(year = as.integer(MODEL_FUTURE_YEARS), GCAM_region_ID = Taiwan_ID) %>%
       left_join_error_no_match(labor.force.share.Taiwan.FBY, by=c("GCAM_region_ID")) -> laborForceShare.Taiwan.future
 
     laborForceShareSSP2 %>% bind_rows(labor.force.share.Taiwan.BYS) %>%

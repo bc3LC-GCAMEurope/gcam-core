@@ -263,6 +263,11 @@ module_aglu_L122.LC_R_Cropland_Yh_GLU <- function(command, ...) {
     aglu.MAX_HA_TO_CROPLAND_Annual_SpecialAdjust = 3.5
     aglu.MIN_HA_TO_CROPLAND_Annual = 1
 
+    Taiwan_ID <- filter(GCAM32_to_EU, country_name == "Taiwan")$GCAM_region_ID
+    stopifnot(nrow(filter(GCAM32_to_EU, GCAM_region_ID == Taiwan_ID)) == 1)
+    Africa_Northern_ID <- unique(filter(GCAM32_to_EU, GCAMEU_region == "Africa_Northern")$GCAM_region_ID)
+    stopifnot(length(Africa_Northern_ID) == 1)
+
     L122.ag_HA_bm2_R_Y_GLU %>%
       # join the available cropland by region-glu-year
       left_join_error_no_match(L122.LC_bm2_R_AvailableCropLand_Y_GLU %>%
@@ -270,7 +275,7 @@ module_aglu_L122.LC_R_Cropland_Yh_GLU <- function(command, ...) {
                                by = c("GCAM_region_ID", "GLU", "year")) %>%
       mutate(Cropland_min = Annual / aglu.MAX_HA_TO_CROPLAND_Annual + Perennial,
              Cropland_min = if_else(
-                (GCAM_region_ID == 3 & GLU == "GLU087") | (GCAM_region_ID == 30 & GLU == "GLU078"),
+                (GCAM_region_ID == Africa_Northern_ID & GLU == "GLU087") | (GCAM_region_ID == Taiwan_ID & GLU == "GLU078"),
                 Annual / aglu.MAX_HA_TO_CROPLAND_Annual_SpecialAdjust + Perennial, Cropland_min))  %>%
       # Update cropland
       mutate(Cropland = pmax(Cropland_min, Cropland),
