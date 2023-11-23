@@ -129,13 +129,32 @@ module_aglu_L120.LC_GIS_R_LTgis_Yh_GLU <- function(command, ...) {
       select(iso,GCAM_region_ID, GLU, Land_Type, soil_c, vegc_ag, vegc_bg, land_code)  %>%
       distinct() -> L120.LC_soil_veg_carbon_GLU_agg
 
+    # Adjust Mlt
+    L120.LC_soil_veg_carbon_GLU_agg_mlt <- L120.LC_soil_veg_carbon_GLU_agg %>%
+      filter(iso == "ita", GLU == "GLU050", Land_Type == "Grassland", land_code == 901) %>%
+      mutate(iso = "mlt", GLU = "GLU063", GCAM_region_ID = 35)
+
+    L120.LC_soil_veg_carbon_GLU_agg <- bind_rows(
+      L120.LC_soil_veg_carbon_GLU_agg,
+      L120.LC_soil_veg_carbon_GLU_agg_mlt
+    )
+
     L100.Land_type_area_ha %>%
       ## Add data for GCAM region ID and GLU
       left_join_error_no_match(distinct(iso_GCAM_regID, iso, .keep_all = TRUE), by = "iso") %>%
       ## Add vectors for land type (SAGE, HYDE, and WDPA)
       left_join_error_no_match(LDS_land_types, by = c("land_code" = "Category")) %>%
       filter(LT_HYDE== "Unmanaged") %>%
-      left_join(SAGE_LT, by = "LT_SAGE") %>%
+      left_join(SAGE_LT, by = "LT_SAGE") -> L100.Land_type_area_ha
+
+    L100.Land_type_area_ha_mlt <- L100.Land_type_area_ha %>%
+      filter(iso == "mlt") %>%
+      mutate(land_code = 901,
+             LT_SAGE = "Savanna",
+             Status = "UnsuitableUnprotected")
+
+    L100.Land_type_area_ha <- L100.Land_type_area_ha %>%
+      bind_rows(L100.Land_type_area_ha_mlt) %>%
       ## Drop all rows with missing values (inland bodies of water)
       na.omit() %>%
       # moirai only outputs carbon values from unmanaged land. Therefore, we remove pastures, urbanland and cropland from the below. We continue to calculate the carbon values for these land types using the Houghton structure.
