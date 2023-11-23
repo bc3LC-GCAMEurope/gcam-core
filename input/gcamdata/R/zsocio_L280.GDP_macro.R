@@ -18,6 +18,7 @@
 module_socio_L280.GDP_macro <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/GCAM_region_names",
+             FILE = "common/GCAM32_to_EU",
              FILE = "socioeconomics/A81.factor_productivity",
              "L101.Pop_thous_R_Yh",
              "L102.gdp_mil90usd_Scen_R_Y",
@@ -48,6 +49,7 @@ module_socio_L280.GDP_macro <- function(command, ...) {
     gdp.calibrated.data <- get_data(all_data, "L102.gdp_mil90usd_Scen_R_Y", strip_attributes = TRUE)
     pop.hist.data <- get_data(all_data, "L101.Pop_thous_R_Yh", strip_attributes = TRUE)
     gcam.region.id <- get_data(all_data, "common/GCAM_region_names", strip_attributes = TRUE)
+    GCAM32_to_EU <- get_data(all_data, "common/GCAM32_to_EU", strip_attributes = TRUE)
     # -----------------------------------------------------------------------------
 
     #Calculate fractional wage rates to determine employment weighted

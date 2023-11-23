@@ -21,6 +21,7 @@
 module_aglu_L120.LC_GIS_R_LTgis_Yh_GLU <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/iso_GCAM_regID",
+             FILE = "common/GCAM32_to_EU",
              FILE = "aglu/LDS/LDS_land_types",
              FILE = "aglu/SAGE_LT",
              FILE = "aglu/Various_CarbonData_LTsage",
@@ -53,6 +54,7 @@ module_aglu_L120.LC_GIS_R_LTgis_Yh_GLU <- function(command, ...) {
     get_data(all_data, "common/iso_GCAM_regID") %>%
       select(iso, GCAM_region_ID) ->
       iso_GCAM_regID
+    GCAM32_to_EU <- get_data(all_data, "common/GCAM32_to_EU")
     LDS_land_types <- get_data(all_data, "aglu/LDS/LDS_land_types")
     SAGE_LT <- get_data(all_data, "aglu/SAGE_LT")
     L123.LC_bm2_R_MgdFor_Yh_GLU_beforeadjust <- get_data(all_data, "aglu/LDS/L123.LC_bm2_R_MgdFor_Yh_GLU_beforeadjust")
@@ -130,9 +132,12 @@ module_aglu_L120.LC_GIS_R_LTgis_Yh_GLU <- function(command, ...) {
       distinct() -> L120.LC_soil_veg_carbon_GLU_agg
 
     # Adjust Mlt
+    Malta_ID <- filter(GCAM32_to_EU, country_name == "Malta")$GCAM_region_ID
+    stopifnot(nrow(filter(GCAM32_to_EU, GCAM_region_ID == Malta_ID)) == 1)
+
     L120.LC_soil_veg_carbon_GLU_agg_mlt <- L120.LC_soil_veg_carbon_GLU_agg %>%
       filter(iso == "ita", GLU == "GLU050", Land_Type == "Grassland", land_code == 901) %>%
-      mutate(iso = "mlt", GLU = "GLU063", GCAM_region_ID = 35)
+      mutate(iso = "mlt", GLU = "GLU063", GCAM_region_ID = Malta_ID)
 
     L120.LC_soil_veg_carbon_GLU_agg <- bind_rows(
       L120.LC_soil_veg_carbon_GLU_agg,
