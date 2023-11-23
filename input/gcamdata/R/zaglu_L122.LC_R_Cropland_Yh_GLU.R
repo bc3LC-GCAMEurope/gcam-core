@@ -32,6 +32,7 @@ module_aglu_L122.LC_R_Cropland_Yh_GLU <- function(command, ...) {
 
   MODULE_INPUTS <-
     c(FILE = "common/iso_GCAM_regID",
+      FILE = "common/GCAM32_to_EU",
       "L100.FAO_fallowland_kha",
       "L100.FAO_CL_kha",
       "L100.FAO_harv_CL_kha",
