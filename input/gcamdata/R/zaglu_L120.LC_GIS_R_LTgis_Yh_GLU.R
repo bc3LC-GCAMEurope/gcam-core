@@ -145,15 +145,16 @@ module_aglu_L120.LC_GIS_R_LTgis_Yh_GLU <- function(command, ...) {
       ## Add vectors for land type (SAGE, HYDE, and WDPA)
       left_join_error_no_match(LDS_land_types, by = c("land_code" = "Category")) %>%
       filter(LT_HYDE== "Unmanaged") %>%
-      left_join(SAGE_LT, by = "LT_SAGE") -> L100.Land_type_area_ha
+      left_join(SAGE_LT, by = "LT_SAGE") -> L100.Land_type_area_ha_adj
 
-    L100.Land_type_area_ha_mlt <- L100.Land_type_area_ha %>%
+    L100.Land_type_area_ha_mlt <- L100.Land_type_area_ha_adj %>%
       filter(iso == "mlt") %>%
       mutate(land_code = 901,
              LT_SAGE = "Savanna",
-             Status = "UnsuitableUnprotected")
+             Status = "UnsuitableUnprotected",
+             Land_Type = "Grassland")
 
-    L100.Land_type_area_ha <- L100.Land_type_area_ha %>%
+    L100.Land_type_area_ha_adj <- L100.Land_type_area_ha_adj %>%
       bind_rows(L100.Land_type_area_ha_mlt) %>%
       ## Drop all rows with missing values (inland bodies of water)
       na.omit() %>%
