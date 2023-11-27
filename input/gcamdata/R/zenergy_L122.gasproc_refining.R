@@ -125,11 +125,24 @@ module_energy_L122.gasproc_refining <- function(command, ...) {
     L122.globaltech_coef %>%
       filter(sector == "gtl"| sector == "ctl") -> L122.gtlctl_coef
 
+    ESTONIA_ID <- GCAM_region_names %>% filter(region == "Estonia") %>% pull(GCAM_region_ID)
+
     L122.out_EJ_R_gtlctl_Yh %>%
       rename(valueInput = value) %>%
       left_join(L122.gtlctl_coef, by = c("sector", "fuel", "year")) %>%
-      mutate(value = valueInput * value) %>%
+      # Make exception for Estonia, reducing the coal-to-liquid IO coef by 1/3 for historical periods
+      # Needed because otherwise there is not enough coal left for industrial energy use
+      # IOs for Estonia added to L122.IO_R_oilrefining_F_Yh
+      mutate(value = if_else(GCAM_region_ID == ESTONIA_ID & sector == "ctl", value * 2 / 3, value),
+             value = valueInput * value) %>%
       select(GCAM_region_ID, sector, fuel, year, value) -> L122.in_EJ_R_gtlctl_F_Yh
+
+    L122.gtlctl_coef_ESTONIA <- L122.gtlctl_coef %>%
+      filter(sector == "ctl") %>%
+      mutate(value = value * 2 / 3,
+             GCAM_region_ID = ESTONIA_ID,
+             sector = "coal refining") %>%
+      select(GCAM_region_ID, sector, fuel, year, value)
 
     # CRUDE OIL REFINING
     # Copied from original text:
@@ -197,7 +210,9 @@ module_energy_L122.gasproc_refining <- function(command, ...) {
     L122.in_EJ_R_oilrefining_F_Yh %>%
       left_join(select(L122.out_EJ_R_oilrefining_Yh, -fuel), by = c("GCAM_region_ID", "sector", "year")) %>%
       mutate(value = if_else(value.y == 0, 0, value.x / value.y)) %>%
-      select(-value.x, -value.y) -> L122.IO_R_oilrefining_F_Yh
+      select(-value.x, -value.y) %>%
+      # Estonia coal-to-liquids coef adjust
+      bind_rows(L122.gtlctl_coef_ESTONIA) -> L122.IO_R_oilrefining_F_Yh
 
     # Combine all calibrated refinery input and output tables
     # Note - the biofuel tables have some extra columns that are used in subsequent steps but don't apply for these outputs
