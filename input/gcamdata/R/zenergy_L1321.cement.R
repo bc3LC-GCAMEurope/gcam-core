@@ -331,11 +331,13 @@ module_energy_L1321.cement <- function(command, ...) {
     ## Manually adjust coal use in South Korea, so there is enough left for iron and steel sector (do not delete until detailed industry is restructured)
     ## Upper bound is IEA coal consumption in non-metallic minerals
 
+    SOUTH_KOREA_ID <- iso_GCAM_regID %>% filter(iso == "kor") %>% pull(GCAM_region_ID)
+
     L1321.in_EJ_R_cement_F_Y %>%
       left_join(L1012.en_bal_EJ_R_Si_Fi_Yh %>% filter(sector == "cement") %>% select(-sector),
                 by = c("GCAM_region_ID", "year", "fuel")) %>%
-      mutate(value = if_else(fuel == "coal" & GCAM_region_ID == 28 & value.x > value.y, value.y, value.x),
-             neg = if_else(fuel == "coal" & GCAM_region_ID == 28 & value.x > value.y, value.y - value.x, 0)) ->
+      mutate(value = if_else(fuel == "coal" & GCAM_region_ID == SOUTH_KOREA_ID & value.x > value.y, value.y, value.x),
+             neg = if_else(fuel == "coal" & GCAM_region_ID == SOUTH_KOREA_ID & value.x > value.y, value.y - value.x, 0)) ->
       L1321.in_EJ_R_cement_F_Y_adj
 
     # extra coal use will be moved to biomass
