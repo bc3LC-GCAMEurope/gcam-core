@@ -94,6 +94,25 @@ module_energy_L116.geo <- function(command, ...) {
       mutate(available = share * available) ->
       L116.geothermal_ctry
 
+    # Need to adjust EU potentials because consumption exceeds previously calculated potential in Italy
+    L116.goethermal_ctry_europe_adjust <- L116.geothermal_ctry %>%
+      # left_join(geo_potential_EU, by = c("iso", "region_GCAM3")) %>%
+      filter(region_GCAM3 == "Western Europe") %>%
+      # Adjust shares for Greenland, Finland, Norways which should all be much lower
+      mutate(share = case_when(
+                iso == "grl" ~ share / 100,
+                iso %in% c("nor", "fin")~ share / 100,
+                TRUE ~ share
+             )) %>%
+      # Now readjust all allocations
+      group_by(grade) %>%
+      mutate(available = sum(available) * share / sum(share)) %>%
+      ungroup
+
+    L116.geothermal_ctry <- L116.geothermal_ctry %>%
+      anti_join(L116.goethermal_ctry_europe_adjust, by = c("iso", "region_GCAM3", "GCAM_region_ID", "grade", "resource", "subresource")) %>%
+      bind_rows(L116.goethermal_ctry_europe_adjust)
+
     # Aggregate country-level hydrothermal geothermal resource supply curves by GCAM region
     L116.geothermal_ctry %>%
       dplyr::group_by(GCAM_region_ID, resource, subresource, grade, extractioncost) %>%
