@@ -149,7 +149,8 @@ module_aglu_L110.For_FAO_R_Y <- function(command, ...) {
         by = c("GCAM_region_ID", "GCAM_commodity", "year")) %>%
       replace_na(list(GrossExp = 0)) %>%
       filter(GCAM_commodity %in% aglu.TRADED_FORESTS) %>%
-      mutate(GrossImp_Mt = if_else(GrossExp - NetExp_bm3 > 0, GrossExp - NetExp_bm3, 0),
+      mutate(GrossExp = if_else(GrossExp > Prod_bm3, Prod_bm3, GrossExp),
+             GrossImp_Mt = if_else(GrossExp - NetExp_bm3 > 0, GrossExp - NetExp_bm3, 0),
              GrossExp_Mt = if_else(GrossExp - NetExp_bm3 > 0, GrossExp, NetExp_bm3)) %>%
       select(-GrossExp) ->
       L110.For_ALL_bm3_R_Y

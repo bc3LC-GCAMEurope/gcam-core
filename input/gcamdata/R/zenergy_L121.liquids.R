@@ -229,6 +229,20 @@ module_energy_L121.liquids <- function(command, ...) {
                SecOutRatio = Weighted_SecOutRatio / Weight) %>%
         select(GCAM_region_ID, GCAM_commodity, IOcoef, SecOutRatio)
 
+      # Add in Albania and Iceland and reduce dramatically to avoid negative soybean/oilcrop in feed
+      ALBANIA_ICELAND_ID <- iso_GCAM_regID %>% filter(country_name %in% c("Iceland", "Albania")) %>% pull(GCAM_region_ID)
+
+      L121.BiomassOilRatios_kgGJ_R_C_adj <- A_OilSeed_SecOut %>%
+        left_join_error_no_match(IIASA_biofuel_tech_mapping, by = "Crop") %>%
+        filter(Crop != "Sunflower") %>%
+        # Dramatically decrease secoutratio
+        mutate(SecOutRatio = SecOutRatio / 20) %>%
+        repeat_add_columns(tibble(GCAM_region_ID = ALBANIA_ICELAND_ID)) %>%
+        select(names(L121.BiomassOilRatios_kgGJ_R_C))
+
+      L121.BiomassOilRatios_kgGJ_R_C <- bind_rows(L121.BiomassOilRatios_kgGJ_R_C_adj,
+                                                  L121.BiomassOilRatios_kgGJ_R_C)
+
       # ===================================================
       # Produce outputs
       L121.in_EJ_R_unoil_F_Yh %>%

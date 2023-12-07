@@ -135,6 +135,8 @@ module_energy_L1011.ff_GrossTrade <- function(command, ...) {
                                by = c("GCAM_Commodity" = "PrimaryFuelCO2Coef.name")) %>%
       left_join_error_no_match(fuel_carbon_content, by = "GCAM_Commodity") %>%
       mutate(value = value * Ccontent / (PrimaryFuelCO2Coef) * CONV_GJ_EJ,
+             # Malta has no coal consumption, so need to zero out imports
+             value = if_else(GCAM_Commodity == "coal" & (iso.reporter == "mlt" | iso.partner == "mlt"), 0, value),
              Unit = "EJ") %>%
       select(-PrimaryFuelCO2Coef, -Ccontent) ->
       L1011.comtrade_ff_BiTrade_y_ctry_item_FULL

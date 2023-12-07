@@ -141,7 +141,7 @@ module_energy_L1092.iron_steel_GrossTrade <- function(command, ...){
       filter(GCAM_region!="NA")%>%
       #if production is equal to zero in the model base-year add a minimum calibration value of 0.01 Mt
       #This minimum calibration value is 5 times less than the smallest producer of steel in 2015
-      mutate(production=ifelse(production==0 & year == MODEL_FINAL_BASE_YEAR,0.01,production),
+      mutate(#production=ifelse(production==0 & year == MODEL_FINAL_BASE_YEAR,0.01,production),
              #estimate the imports and exports scaling factor to match the reported WSA steel consumption data
              #calculate scaling factor (x) so that consumption = production - x*exports + x*imports
              scaling_factor=(consumption-production)/(imports-exports),
