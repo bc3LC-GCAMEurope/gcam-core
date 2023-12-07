@@ -517,7 +517,10 @@ if(command == driver.DECLARE_INPUTS) {
            share.weight.year = year,
            subs.share.weight = if_else(calOutputValue > 0, 1, 0),
            tech.share.weight = subs.share.weight) %>%
-    select(LEVEL2_DATA_NAMES[["Production"]], "subsector0")
+    select(LEVEL2_DATA_NAMES[["Production"]], "subsector0") %>%
+    group_by(region, supplysector, subsector, year) %>%
+    mutate(subs.share.weight = if_else(any(subs.share.weight) == 1, 1, 0)) %>%
+    ungroup
 
   L2392.Production_reg_imp_NG <- bind_rows(L2392.Production_reg_imp_LNG,
                                            L2392.Production_reg_imp_pipeline)

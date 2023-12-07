@@ -65,6 +65,8 @@ module_energy_L121.liquids <- function(command, ...) {
       gather_years(value_col = "gas_coef") %>%
       repeat_add_columns(tibble(region = c(iso_GCAM_regID$GCAM_region_ID)))
 
+    SECOUT_REDUCE_ISOS_THIRD <- c("aut", "bgr", "fin", "irl", "mlt", "svk", "swe")
+    SECOUT_REDUCE_ISOS_10 <- c("lux",  "svn")
     # L100.IEA_en_bal_ctry_hist might be null (meaning the data system is running
     # without the proprietary IEA data files). If this is the case, we substitute
     # pre-built output datasets and exit.
@@ -212,7 +214,10 @@ module_energy_L121.liquids <- function(command, ...) {
         left_join(A_OilSeed_SecOut, by = "Crop") %>%
         filter(!is.na(SecOutRatio),
                Production_ML > 0) %>%
-        mutate(Weighted_SecOutRatio = Production_ML * SecOutRatio,
+        # Divide secout by 3 for regions where exceeds feed use, 10 for Lux and Slovenia
+        mutate(SecOutRatio = if_else(iso %in% SECOUT_REDUCE_ISOS_THIRD, SecOutRatio / 3, SecOutRatio),
+               SecOutRatio = if_else(iso %in% SECOUT_REDUCE_ISOS_10, SecOutRatio / 10, SecOutRatio),
+               Weighted_SecOutRatio = Production_ML * SecOutRatio,
                Weighted_IOcoef = Production_ML * IOcoef) %>%
         left_join_error_no_match(select(iso_GCAM_regID, GCAM_region_ID, iso), by = "iso") %>%
         group_by(GCAM_region_ID, GCAM_commodity) %>%

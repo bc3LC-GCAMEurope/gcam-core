@@ -306,11 +306,14 @@ module_energy_L122.gasproc_refining <- function(command, ...) {
       L121.feed_output_ratio
 
     # 02/2020 modification (gpk) - replace with region-specific secondary output ratios for selected regions/commodities
+    # Reduce for Albania and Iceland
+    ALBANIA_ICELAND_ID <- A_regions %>% filter(region %in% c("Iceland", "Albania")) %>% pull(GCAM_region_ID)
     L122.in_EJ_R_1stgenbio_F_Yh %>%
       inner_join(L121.feed_output_ratio, by = c("passthrough.sector", "GCAM_commodity", "year")) %>%
       left_join(select(L121.BiomassOilRatios_kgGJ_R_C, GCAM_region_ID, GCAM_commodity, rev_output.ratio = SecOutRatio),
                 by = c("GCAM_region_ID", "GCAM_commodity")) %>%
-      mutate(value = if_else(is.na(rev_output.ratio), value * output.ratio, value * rev_output.ratio)) %>%
+      mutate(output.ratio = if_else(GCAM_region_ID %in% ALBANIA_ICELAND_ID, output.ratio / 20, output.ratio),
+             value = if_else(is.na(rev_output.ratio), value * output.ratio, value * rev_output.ratio)) %>%
       select(GCAM_region_ID, GCAM_commodity, fractional.secondary.output, year, value) ->
       L122.FeedOut_Mt_R_C_Yh
 

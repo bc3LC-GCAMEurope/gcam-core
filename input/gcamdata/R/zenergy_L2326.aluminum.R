@@ -339,7 +339,7 @@ module_energy_L2326.aluminum <- function(command, ...) {
       filter(fuel != 'electricity') %>%
       mutate(value = replace_na(value,0)) %>%
       left_join(GCAM_region_names,by = c("GCAM_region_ID")) %>%
-      mutate(calibrated.value = round(value, energy.DIGITS_CALOUTPUT)) %>%
+      mutate(calibrated.value = round(value, energy.DIGITS_CALOUTPUT + 2)) %>%
       left_join(calibrated_techs_export, by = c("fuel", "sector")) %>%
       mutate(stub.technology = technology,
       technology = NULL)   ->

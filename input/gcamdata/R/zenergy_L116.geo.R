@@ -99,9 +99,11 @@ module_energy_L116.geo <- function(command, ...) {
       # left_join(geo_potential_EU, by = c("iso", "region_GCAM3")) %>%
       filter(region_GCAM3 == "Western Europe") %>%
       # Adjust shares for Greenland, Finland, Norways which should all be much lower
+      # Increase share for Iceland
       mutate(share = case_when(
                 iso == "grl" ~ share / 100,
                 iso %in% c("nor", "fin")~ share / 100,
+                iso == "isl" ~ share * 3,
                 TRUE ~ share
              )) %>%
       # Now readjust all allocations
