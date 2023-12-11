@@ -422,12 +422,16 @@ if(command == driver.DECLARE_INPUTS) {
 
   # Base technology-level table for several tables to be written out")
   # process domestic natural gas and LNG which are mapped to all regions
+  No_IMPORT_REGIONS <- c("Cyprus", "Iceland", "Malta")
+
   A_ff_RegionalTechnology_R_Y_domestic_LNG <- A_ff_RegionalTechnology_NG %>%
     filter(subsector %in% c("domestic natural gas", "imported LNG")) %>%
     repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
     repeat_add_columns(GCAM_region_names["region"]) %>%
     mutate(market.name = if_else(market.name == "regional", region, market.name)) %>%
-    set_years()
+    set_years() %>%
+    # set from.year to 2020 for island regions that have no gas imports in calibration
+    mutate(from.year = if_else(region %in% No_IMPORT_REGIONS & subsector == "imported LNG", min(MODEL_FUTURE_YEARS), from.year))
 
   # process pipeline gas; each region is mapped to a specific set of pipelines only
   # determined by the mapping in GCAM_region_pipeline_bloc_import
