@@ -68,6 +68,6 @@ GCAM_region_ID,region,tradbio_region,ethanol,biodiesel,biomassOil_tech,elect_td_
 61,Norway,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
 62,Serbia and Montenegro,0,corn ethanol,biodiesel,OilCrop,0.0002,1,C
 63,Switzerland,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-64,Turkey,0,corn ethanol,biodiesel,OilCrop,0.0002,1,C
+64,Turkey,0,corn ethanol,biodiesel,OilCrop,0.0002,0,C
 65,UK,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
 66,Ukraine,0,corn ethanol,biodiesel,OilCrop,0.0002,1,D
