@@ -219,6 +219,9 @@ module_aglu_L203.ag_an_demand_input <- function(command, ...) {
              subs.share.weight = if_else(calOutputValue > 0, 1, 0),
              tech.share.weight = if_else(calOutputValue > 0, 1, 0)) %>%
       select(c(LEVEL2_DATA_NAMES[["StubTechProd"]]), subsector0, subs0.share.weight) %>%
+      group_by(region, supplysector, subsector, year) %>%
+      mutate(subs.share.weight = if_else(any(subs.share.weight) == 1, 1, 0)) %>%
+      ungroup %>%
       filter(!region %in% aglu.NO_AGLU_REGIONS) %>%           # Remove any regions for which agriculture and land use are not modeled
       filter(year %in% MODEL_BASE_YEARS) ->                         # Also subset the calibration tables to only the model base years
       L203.StubTechProd_food
