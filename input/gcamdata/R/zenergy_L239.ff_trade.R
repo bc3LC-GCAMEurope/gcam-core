@@ -27,6 +27,7 @@ module_energy_L239.ff_trade <- function(command, ...) {
       FILE = "energy/A_ff_TradedSubsector",
       FILE = "energy/A_ff_TradedTechnology",
       "L202.CarbonCoef",
+      "L210.RsrcCurves_fos",
       "L2011.ff_GrossTrade_EJ_R_C_Y",
       "L2011.ff_ALL_EJ_R_C_Y")
 
@@ -69,6 +70,20 @@ module_energy_L239.ff_trade <- function(command, ...) {
       assign(nm, get_data(all_data, d, strip_attributes = T),
              envir = parent.env(environment()))  })
 
+    # No reason to have regions with no resources as potential exporters/domestic use
+    zero_resource_R_f <- L210.RsrcCurves_fos %>%
+      group_by(region, resource) %>%
+      filter(all(available == 0)) %>%
+      ungroup %>%
+      distinct(region, resource)
+
+    zero_resource_R_f_domestic <- zero_resource_R_f %>%
+      mutate(subsector = paste("domestic", resource))
+
+    zero_resource_R_f_traded <- zero_resource_R_f %>%
+      mutate(resource = gsub("crude oil", "oil", resource),
+             subsector = paste(region, "traded", resource)) %>%
+      select(-region)
 
     # Keywords of global technologies
     A_ff_RegionalTechnology %>%
@@ -77,7 +92,8 @@ module_energy_L239.ff_trade <- function(command, ...) {
       select(supplysector, subsector, technology, primary.consumption, year) %>%
       filter(year %in% MODEL_YEARS) %>%
       repeat_add_columns(GCAM_region_names) %>%
-      select(-GCAM_region_ID)-> L239.PrimaryConsKeyword_en
+      select(-GCAM_region_ID) %>%
+      anti_join(zero_resource_R_f_domestic, by = c("subsector", "region")) -> L239.PrimaryConsKeyword_en
 
     # Fuel carbon coefficients for new sectors
     # Traded sectors first.  These are only set up in the USA.
@@ -119,7 +135,8 @@ module_energy_L239.ff_trade <- function(command, ...) {
     L239.SubsectorAll_tra <- write_to_all_regions(A_ff_TradedSubsector,
                                                   c(LEVEL2_DATA_NAMES[["SubsectorAllTo"]], "logit.type"),
                                                   GCAM_region_names,
-                                                  has_traded = TRUE)
+                                                  has_traded = TRUE) %>%
+      anti_join(zero_resource_R_f_traded, by = "subsector")
 
     # Base technology-level table for several tables to be written out")
     A_ff_TradedTechnology_R_Y <- repeat_add_columns(A_ff_TradedTechnology,
@@ -128,7 +145,8 @@ module_energy_L239.ff_trade <- function(command, ...) {
       mutate(subsector = paste(region, subsector, sep = " "),
              technology = subsector,
              market.name = region,
-             region = gcam.USA_REGION)
+             region = gcam.USA_REGION)  %>%
+      anti_join(zero_resource_R_f_traded, by = "subsector")
 
     # L239.TechShrwt_tra: Share-weights of traded technologies
     L239.TechShrwt_tra <- select(A_ff_TradedTechnology_R_Y, LEVEL2_DATA_NAMES[["TechShrwt"]])
@@ -145,7 +163,8 @@ module_energy_L239.ff_trade <- function(command, ...) {
     L239.GrossExports_EJ_R_C_Y <- left_join_error_no_match(L2011.ff_GrossTrade_EJ_R_C_Y,
                                                            GCAM_region_names,
                                                            by = "GCAM_region_ID") %>%
-      select(region, GCAM_Commodity, year, GrossExp_EJ)
+      select(region, GCAM_Commodity, year, GrossExp_EJ) %>%
+      anti_join(zero_resource_R_f, by = c("region", "GCAM_Commodity" = "resource"))
 
     L239.Production_tra <- filter(A_ff_TradedTechnology_R_Y, year %in% MODEL_BASE_YEARS) %>%
       left_join_error_no_match(L239.GrossExports_EJ_R_C_Y,
@@ -166,13 +185,15 @@ module_energy_L239.ff_trade <- function(command, ...) {
     # L239.SubsectorAll_reg: generic subsector info for regional ff commodities (competing domestic prod vs intl imports)
     L239.SubsectorAll_reg <- write_to_all_regions(A_ff_RegionalSubsector,
                                                   c(LEVEL2_DATA_NAMES[["SubsectorAllTo"]], "logit.type"),
-                                                  GCAM_region_names)
+                                                  GCAM_region_names) %>%
+      anti_join(zero_resource_R_f_domestic, by = c("region", "subsector"))
 
     # Base technology-level table for several tables to be written out")
     A_ff_RegionalTechnology_R_Y <- repeat_add_columns(A_ff_RegionalTechnology,
                                                      tibble(year = MODEL_YEARS)) %>%
       repeat_add_columns(GCAM_region_names["region"]) %>%
-      mutate(market.name = if_else(market.name == "regional", region, market.name))
+      mutate(market.name = if_else(market.name == "regional", region, market.name)) %>%
+      anti_join(zero_resource_R_f_domestic, by = c("region", "subsector"))
 
     # L239.TechShrwt_tra: Share-weights of traded technologies
     L239.TechShrwt_reg <- select(A_ff_RegionalTechnology_R_Y, LEVEL2_DATA_NAMES[["TechShrwt"]])

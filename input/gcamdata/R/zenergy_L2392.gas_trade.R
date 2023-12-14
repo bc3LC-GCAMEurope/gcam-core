@@ -106,6 +106,13 @@ if(command == driver.DECLARE_INPUTS) {
   L2392.Delete_Supplysector_reg_NG <- L239.Supplysector_reg %>%
     filter(supplysector == "regional natural gas")
 
+  # remove regions with no resources
+  no_domestic_R <- GCAM_region_names %>%
+    anti_join(L239.Production_reg_dom %>% filter(subsector == "domestic natural gas")) %>%
+    mutate(subsector = "domestic natural gas")
+
+  no_traded_LNG_R <- no_domestic_R %>%
+    mutate(subsector = paste(region, "traded LNG"))
 
   # Keywords of global technologies for NG (which has nesting subsectors)
   # process domestic natural gas and LNG which are mapped to all regions
@@ -115,7 +122,8 @@ if(command == driver.DECLARE_INPUTS) {
     select(supplysector, subsector0, subsector, technology, primary.consumption, year) %>%
     filter(year %in% MODEL_YEARS) %>%
     repeat_add_columns(GCAM_region_names) %>%
-    select(-GCAM_region_ID)-> L2392.PrimaryConsKeyword_en_domestic_LNG
+    select(-GCAM_region_ID) %>%
+    anti_join(no_domestic_R, by = c("subsector", "region")) -> L2392.PrimaryConsKeyword_en_domestic_LNG
 
 
   # process pipeline gas; each region is mapped to a specific set of pipelines only
@@ -168,7 +176,8 @@ if(command == driver.DECLARE_INPUTS) {
     filter(stringr::str_detect(subsector, "traded LNG")) %>%
     write_to_all_regions(c(LEVEL2_DATA_NAMES[["SubsectorAllTo"]], "logit.type"),
                                                 GCAM_region_names,
-                                                has_traded = TRUE)
+                                                has_traded = TRUE) %>%
+    anti_join(no_traded_LNG_R, by = c("subsector"))
 
   # process pipeline gas; each region is mapped to a specific pipeline only
   L2392.SubsectorAll_tra_pipeline <- A_ff_TradedSubsector_NG %>%
@@ -177,6 +186,7 @@ if(command == driver.DECLARE_INPUTS) {
                          GCAM_region_names,
                          has_traded = TRUE) %>%
     mutate(subsector_region = stringr::str_extract(subsector, "^.*(?= traded)")) %>%
+    anti_join(no_domestic_R, by = c("subsector_region" = "region")) %>%
     left_join_error_no_match(GCAM_region_pipeline_bloc_export, by = c("subsector_region" = "origin.region")) %>%
     # keep only the rows for which the technology matches the region-specific pipeline
     filter(stringr::str_detect(subsector, pipeline.market)) %>%
@@ -220,13 +230,14 @@ if(command == driver.DECLARE_INPUTS) {
     mutate(subsector = paste(region, subsector, sep = " "),
            technology = subsector,
            market.name = region,
-           region = gcam.USA_REGION)
+           region = gcam.USA_REGION) %>%
+    anti_join(no_traded_LNG_R, by = "subsector")
 
   # process pipeline gas, each region is mapped to a specific pipeline only
   A_ff_TradedTechnology_R_Y_pipeline <- repeat_add_columns(A_ff_TradedTechnology_NG,
                                                         tibble(year = MODEL_YEARS)) %>%
       filter(stringr::str_detect(supplysector, "pipeline gas")) %>%
-      repeat_add_columns(GCAM_region_names) %>%
+      repeat_add_columns(GCAM_region_names %>% anti_join(no_domestic_R, by = "region")) %>%
       left_join_error_no_match(GCAM_region_pipeline_bloc_export, by = c("region" = "origin.region")) %>%
       # keep only the rows for which the technology matches the region-specific pipeline
       # this will include statistical differences (imports) which match the region-specific pipeline
@@ -413,12 +424,14 @@ if(command == driver.DECLARE_INPUTS) {
   # L2392.SubsectorAll_reg_NG: generic subsector info for regional natural gas  commodities (competing domestic vs imported)
   L2392.NestingSubsectorAll_reg_NG <- write_to_all_regions(A_ff_RegionalNestingSubsector_NG,
                                                     c(LEVEL2_DATA_NAMES[["SubsectorAllTo"]], "logit.type"),
-                                                    GCAM_region_names)
+                                                    GCAM_region_names) %>%
+    anti_join(no_domestic_R, by = c("region", "subsector"))
 
   # L2392.SubsectorAll_reg_NG: generic subsector info for regional natural gas  commodities (competing imported LNG vs. pipeline)
   L2392.SubsectorAll_reg_NG <- write_to_all_regions(A_ff_RegionalSubsector_NG,
                                                 c(LEVEL2_DATA_NAMES[["SubsectorAllTo"]],"subsector0", "logit.type"),
-                                                GCAM_region_names)
+                                                GCAM_region_names) %>%
+    anti_join(no_domestic_R, by = c("region", "subsector"))
 
   # Base technology-level table for several tables to be written out")
   # process domestic natural gas and LNG which are mapped to all regions
@@ -428,6 +441,7 @@ if(command == driver.DECLARE_INPUTS) {
     filter(subsector %in% c("domestic natural gas", "imported LNG")) %>%
     repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
     repeat_add_columns(GCAM_region_names["region"]) %>%
+    anti_join(no_domestic_R, by = c("region", "subsector")) %>%
     mutate(market.name = if_else(market.name == "regional", region, market.name)) %>%
     set_years() %>%
     # set from.year to 2020 for island regions that have no gas imports in calibration
@@ -523,7 +537,7 @@ if(command == driver.DECLARE_INPUTS) {
            tech.share.weight = subs.share.weight) %>%
     select(LEVEL2_DATA_NAMES[["Production"]], "subsector0") %>%
     group_by(region, supplysector, subsector, year) %>%
-    mutate(subs.share.weight = if_else(any(subs.share.weight) == 1, 1, 0)) %>%
+    mutate(subs.share.weight = if_else(any(subs.share.weight == 1), 1, 0)) %>%
     ungroup
 
   L2392.Production_reg_imp_NG <- bind_rows(L2392.Production_reg_imp_LNG,

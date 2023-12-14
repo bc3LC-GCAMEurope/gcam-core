@@ -206,6 +206,8 @@ module_energy_L2391.gas_trade_flows <- function(command, ...) {
     # Partition calibrated exports by region between pipeline & LNG
     # Join calibrated gross NG trade and shares, calculate calibrated value by trade vehicle
     L2391.NG_export_shares %>%
+      # remove regions with no resources
+      semi_join(L2391.Production_tra, by = c("region", "year")) %>%
       left_join_error_no_match(L2391.Production_tra, by = c("region", "year")) %>%
       mutate(calOutputValue = share * calOutputValue) -> L2391.NG_export_unadjusted
 
@@ -269,9 +271,10 @@ module_energy_L2391.gas_trade_flows <- function(command, ...) {
       replace_na(list(calExport_pipe = 0,
                       calExport_LNG = 0,
                       calImport_LNG = 0)) %>%
-      left_join_error_no_match(L2391.Production_tra %>%
+      left_join(L2391.Production_tra %>%
                                  select(region, year, reg_NG_exports = calOutputValue),
                                by = c("region", "year")) %>%
+      replace_na(list(reg_NG_exports = 0)) %>%
       left_join_error_no_match(L239.Production_reg_imp %>%
                                  select(region, year, reg_NG_imports = calOutputValue),
                                by = c("region", "year")) -> L2391.LNG_pipe
