@@ -63,7 +63,7 @@ TO_EHG_APCHP,Autoproducer CHP ,
 TO_EHG_APH,Autoproducer heat only,
 TO_EHG_EDHP,Electrically driven heat pumps,out_industry_energy transformation
 TO_EHG_EB,Electric boilers,out_industry_energy transformation
-TO_EHG_PH,Pumped hydro,out_industry_ownuse
+TO_EHG_PH,Pumped hydro,out_electricity generation
 TO_EHG_OTH,Other sources,
 TO_RPI_RO,Refinery output,out_industry_oil refining
 TO_RPI_BKFLOW,Backflows,

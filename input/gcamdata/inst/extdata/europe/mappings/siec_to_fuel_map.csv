@@ -1,7 +1,7 @@
-# File: siec_to_product_map.csv
+# File: siec_to_fuel_map.csv
 # Title: Mapping from products in Eurostat energy balances to fuels
 # Units: NA
-# Source: Eurostat (Complete energy balance downloaded December 2023 from https://ec.europa.eu/eurostat/data/database; definitions at https://ec.europa.eu/eurostat/documents/38154/4956218/ENERGY-BALANCE-GUIDE.pdf/de76d0d2-8b17-b47c-f6f5-415bd09b7750?t=1632139948586)
+# Source: Eurostat (https://dd.eionet.europa.eu/vocabulary/eurostat/siec/view)
 # Column types: ccc
 # ----------
 siec,product,fuel
