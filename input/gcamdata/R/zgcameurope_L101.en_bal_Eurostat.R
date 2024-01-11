@@ -18,10 +18,10 @@
 module_europe_L101.en_bal_Eurostat <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/iso_GCAM_regID",
-             FILE = "europe/nrg_bal_c",
-             FILE = "europe/mappings/geo_to_iso_map",
-             FILE = "europe/mappings/nrgbal_to_sector_map",
-             FILE = "europe/mappings/siec_to_fuel_map",
+             FILE = "gcam-europe/nrg_bal_c",
+             FILE = "gcam-europe/mappings/geo_to_iso_map",
+             FILE = "gcam-europe/mappings/nrgbal_to_sector_map",
+             FILE = "gcam-europe/mappings/siec_to_fuel_map",
              FILE = "energy/mappings/IEA_sector_fuel_modifications",
              FILE = "energy/mappings/enduse_fuel_aggregation"))
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -34,10 +34,10 @@ module_europe_L101.en_bal_Eurostat <- function(command, ...) {
 
     # Load required inputs ----------------
     iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID")
-    nrg_bal_c <- get_data(all_data, "europe/nrg_bal_c")
-    geo_to_iso_map <- get_data(all_data, "europe/mappings/geo_to_iso_map")
-    nrgbal_to_sector_map <- get_data(all_data, "europe/mappings/nrgbal_to_sector_map")
-    siec_to_fuel_map <- get_data(all_data, "europe/mappings/siec_to_fuel_map")
+    nrg_bal_c <- get_data(all_data, "gcam-europe/nrg_bal_c")
+    geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map")
+    nrgbal_to_sector_map <- get_data(all_data, "gcam-europe/mappings/nrgbal_to_sector_map")
+    siec_to_fuel_map <- get_data(all_data, "gcam-europe/mappings/siec_to_fuel_map")
     IEA_sector_fuel_modifications <- get_data(all_data, "energy/mappings/IEA_sector_fuel_modifications")
     enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
 
@@ -124,7 +124,7 @@ module_europe_L101.en_bal_Eurostat <- function(command, ...) {
 
     ### Produce Outputs ------------
     L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
-      add_title("Eurostat energy balances by GCAM region / intermediate sector / intermediate fuel / historical year") ->
+      add_title("Eurostat energy balances by GCAM region / intermediate sector / intermediate fuel / historical year") %>%
       add_units("EJ") %>%
       add_precursors("common/iso_GCAM_regID", "europe/nrg_bal_c", "europe/mappings/geo_to_iso_map",
                      "europe/mappings/nrgbal_to_sector_map", "europe/mappings/siec_to_fuel_map",
@@ -132,7 +132,7 @@ module_europe_L101.en_bal_Eurostat <- function(command, ...) {
       L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat
 
     L101.in_EJ_ctry_trn_Fi_Yh_Eurostat %>%
-      add_title("Eurostat transportation sector energy consumption by country / IEA mode / fuel / historical year") ->
+      add_title("Eurostat transportation sector energy consumption by country / IEA mode / fuel / historical year") %>%
       add_units("EJ") %>%
       add_comments("Consumption of energy by the transport sector by fuel and historical year. Aggregated by fuel and country") %>%
       add_precursors("common/iso_GCAM_regID", "europe/nrg_bal_c", "europe/mappings/geo_to_iso_map",
@@ -141,7 +141,7 @@ module_europe_L101.en_bal_Eurostat <- function(command, ...) {
       L101.in_EJ_ctry_trn_Fi_Yh_Eurostat
 
     L101.in_EJ_ctry_bld_Fi_Yh_Eurostat %>%
-      add_title("Eurostat building energy consumption by country / IEA sector / fuel / historical year") ->
+      add_title("Eurostat building energy consumption by country / IEA sector / fuel / historical year") %>%
       add_units("EJ") %>%
       add_comments("Consumption of energy by the building sector by fuel and historical year. Aggregated by fuel and country") %>%
       same_precursors_as(L101.in_EJ_ctry_trn_Fi_Yh_Eurostat) ->
