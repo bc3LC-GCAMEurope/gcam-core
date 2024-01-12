@@ -8,8 +8,13 @@
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
-#' the generated outputs: \code{L252.SectorLogitTables[[ curr_table ]]$data}, \code{L252.Supplysector_trn}, \code{L252.FinalEnergyKeyword_trn}, \code{L252.SubsectorLogitTables[[ curr_table ]]$data}, \code{L252.SubsectorLogit_trn}, \code{L252.SubsectorShrwt_trn}, \code{L252.SubsectorShrwtFllt_trn}, \code{L252.SubsectorInterp_trn}, \code{L252.SubsectorInterpTo_trn}, \code{L252.StubTech_trn}, \code{L252.GlobalTechShrwt_trn}, \code{L252.GlobalTechEff_trn}, \code{L252.GlobalTechCost_trn}, \code{L252.StubTechCalInput_trn}, \code{L252.PerCapitaBased_trn}, \code{L252.PriceElasticity_trn}, \code{L252.BaseService_trn}. The corresponding file in the
-#' original data system was \code{L252.transportation.R} (energy level2).
+#' the generated outputs: \code{L252.SectorLogitTables[[ curr_table ]]$data}, \code{L252.Supplysector_trn},
+#' \code{L252.FinalEnergyKeyword_trn}, \code{L252.SubsectorLogitTables[[ curr_table ]]$data},
+#' \code{L252.SubsectorLogit_trn}, \code{L252.SubsectorShrwt_trn}, \code{L252.SubsectorShrwtFllt_trn},
+#' \code{L252.SubsectorInterp_trn}, \code{L252.SubsectorInterpTo_trn}, \code{L252.StubTech_trn},
+#' \code{L252.GlobalTechShrwt_trn}, \code{L252.GlobalTechEff_trn}, \code{L252.GlobalTechCost_trn},
+#' \code{L252.StubTechCalInput_trn}, \code{L252.PerCapitaBased_trn}, \code{L252.PriceElasticity_trn},
+#' \code{L252.BaseService_trn}. The corresponding file in the original data system was \code{L252.transportation.R} (energy level2).
 #' @details Calculate shareweights, cost, price elasticity, calibrated, and other data for the transportation sector
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr filter if_else group_by left_join mutate select summarise

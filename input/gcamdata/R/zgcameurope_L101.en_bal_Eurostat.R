@@ -1,6 +1,6 @@
 # Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
 
-#' module_europe_L101.en_bal_Eurostat
+#' module_gcameurope_L101.en_bal_Eurostat
 #'
 #' Rename Eurostat products and flows to intermediate fuels and sectors used for constructing GCAM's fuel and sector calibration.
 #'
@@ -15,9 +15,10 @@
 #' @importFrom dplyr bind_rows distinct filter if_else group_by left_join matches mutate select summarise summarise_all
 #' @importFrom tidyr replace_na
 #' @author RLH December 2023
-module_europe_L101.en_bal_Eurostat <- function(command, ...) {
+module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/iso_GCAM_regID",
+             FILE = "common/GCAM32_to_EU",
              FILE = "gcam-europe/nrg_bal_c",
              FILE = "gcam-europe/mappings/geo_to_iso_map",
              FILE = "gcam-europe/mappings/nrgbal_to_sector_map",
@@ -34,12 +35,17 @@ module_europe_L101.en_bal_Eurostat <- function(command, ...) {
 
     # Load required inputs ----------------
     iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID")
+    GCAM32_to_EU <- get_data(all_data, "common/GCAM32_to_EU")
     nrg_bal_c <- get_data(all_data, "gcam-europe/nrg_bal_c")
     geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map")
     nrgbal_to_sector_map <- get_data(all_data, "gcam-europe/mappings/nrgbal_to_sector_map")
     siec_to_fuel_map <- get_data(all_data, "gcam-europe/mappings/siec_to_fuel_map")
     IEA_sector_fuel_modifications <- get_data(all_data, "energy/mappings/IEA_sector_fuel_modifications")
     enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
+
+    # EUR regions
+    GCAM_EUR_regions <- GCAM32_to_EU %>%
+      filter(GCAMEU_region != GCAM32_region)
 
     # Energy Balance Calculations ----------------
     # Add mappings to energy balance
@@ -99,7 +105,9 @@ module_europe_L101.en_bal_Eurostat <- function(command, ...) {
       ungroup
 
     # Append TPES onto the end of the energy balances
+    # Remove non-EUR regional countries whose data is available in Eurostat (e.g. Georgia)
     L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat <- L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
+      filter(iso %in% GCAM_EUR_regions$iso) %>%
       bind_rows(L101.in_EJ_iso_TPES_Fi_Yh) # FINAL OUTPUT TABLE
 
     # Building & Transport Downscale -----------
@@ -114,7 +122,7 @@ module_europe_L101.en_bal_Eurostat <- function(command, ...) {
       ungroup
 
     # b: buildings
-    L101.in_EJ_ctry_bld_Fi_Yh_Eurostat <-  L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
+    L101.in_EJ_ctry_bld_Fi_Yh_Eurostat <- L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
       filter(grepl("bld", sector)) %>%
       left_join_error_no_match(select(enduse_fuel_aggregation, fuel, bld), by = "fuel") %>%
       select(-fuel) %>%
