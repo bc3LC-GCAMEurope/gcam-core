@@ -16,31 +16,31 @@ module_gcameurope_transportation_UCD_CORE_xml <- function(command, ...) {
 
 
   if(command == driver.DECLARE_INPUTS) {
-    return(c("L254.Supplysector_trn_Eurostat",
-             "L254.FinalEnergyKeyword_trn_Eurostat",
-             "L254.tranSubsectorLogit_Eurostat",
-             "L254.tranSubsectorShrwtFllt_Eurostat",
-             "L254.tranSubsectorInterp_Eurostat",
-             "L254.tranSubsectorSpeed_Eurostat",
-             "L254.tranSubsectorSpeed_passthru_Eurostat",
-             "L254.tranSubsectorSpeed_noVOTT_Eurostat",
-             "L254.tranSubsectorSpeed_nonmotor_Eurostat",
-             "L254.tranSubsectorVOTT_Eurostat",
-             "L254.tranSubsectorFuelPref_Eurostat",
-             "L254.StubTranTech_Eurostat",
-             "L254.StubTech_passthru_Eurostat",
-             "L254.StubTech_nonmotor_Eurostat",
-             "L254.StubTranTechCalInput_Eurostat",
-             "L254.StubTranTechLoadFactor_Eurostat",
-             "L254.StubTranTechCost_Eurostat",
-             "L254.StubTechTrackCapital_Eurostat",
-             "L254.StubTranTechCoef_Eurostat",
-             "L254.StubTechCalInput_passthru_Eurostat",
-             "L254.StubTechProd_nonmotor_Eurostat",
-             "L254.PerCapitaBased_trn_Eurostat",
-             "L254.PriceElasticity_trn_Eurostat",
-             "L254.IncomeElasticity_trn_Eurostat",
-             "L254.BaseService_trn_Eurostat"))
+    return(c("L254.Supplysector_trn_EUR",
+             "L254.FinalEnergyKeyword_trn_EUR",
+             "L254.tranSubsectorLogit_EUR",
+             "L254.tranSubsectorShrwtFllt_EUR",
+             "L254.tranSubsectorInterp_EUR",
+             "L254.tranSubsectorSpeed_EUR",
+             "L254.tranSubsectorSpeed_passthru_EUR",
+             "L254.tranSubsectorSpeed_noVOTT_EUR",
+             "L254.tranSubsectorSpeed_nonmotor_EUR",
+             "L254.tranSubsectorVOTT_EUR",
+             "L254.tranSubsectorFuelPref_EUR",
+             "L254.StubTranTech_EUR",
+             "L254.StubTech_passthru_EUR",
+             "L254.StubTech_nonmotor_EUR",
+             "L254.StubTranTechCalInput_EUR",
+             "L254.StubTranTechLoadFactor_EUR",
+             "L254.StubTranTechCost_EUR",
+             "L254.StubTechTrackCapital_EUR",
+             "L254.StubTranTechCoef_EUR",
+             "L254.StubTechCalInput_passthru_EUR",
+             "L254.StubTechProd_nonmotor_EUR",
+             "L254.PerCapitaBased_trn_EUR",
+             "L254.PriceElasticity_trn_EUR",
+             "L254.IncomeElasticity_trn_EUR",
+             "L254.BaseService_trn_EUR"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     xml_files<- c("transportation_UCD_CORE_EUR.xml","transportation_UCD_SSP1_EUR.xml","transportation_UCD_SSP3_EUR.xml","transportation_UCD_SSP5_EUR.xml")
     names(xml_files) <- rep("XML", length(xml_files))
@@ -53,36 +53,36 @@ module_gcameurope_transportation_UCD_CORE_xml <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    L254.tranSubsectorSpeed <- get_data(all_data, "L254.tranSubsectorSpeed_Eurostat")
-    L254.StubTranTech <- get_data(all_data, "L254.StubTranTech_Eurostat")
-    L254.StubTranTechLoadFactor <- get_data(all_data, "L254.StubTranTechLoadFactor_Eurostat")
-    L254.StubTranTechCost <- get_data(all_data, "L254.StubTranTechCost_Eurostat")
-    L254.StubTechTrackCapital <- get_data(all_data, "L254.StubTechTrackCapital_Eurostat")
+    L254.tranSubsectorSpeed <- get_data(all_data, "L254.tranSubsectorSpeed_EUR")
+    L254.StubTranTech <- get_data(all_data, "L254.StubTranTech_EUR")
+    L254.StubTranTechLoadFactor <- get_data(all_data, "L254.StubTranTechLoadFactor_EUR")
+    L254.StubTranTechCost <- get_data(all_data, "L254.StubTranTechCost_EUR")
+    L254.StubTechTrackCapital <- get_data(all_data, "L254.StubTechTrackCapital_EUR")
 
-    L254.Supplysector_trn <- get_data(all_data, "L254.Supplysector_trn_Eurostat")
-    L254.FinalEnergyKeyword_trn <- get_data(all_data, "L254.FinalEnergyKeyword_trn_Eurostat")
-    L254.tranSubsectorLogit <- get_data(all_data, "L254.tranSubsectorLogit_Eurostat")
-    L254.tranSubsectorShrwtFllt <- get_data(all_data, "L254.tranSubsectorShrwtFllt_Eurostat")
-    L254.tranSubsectorInterp <- get_data(all_data, "L254.tranSubsectorInterp_Eurostat")
+    L254.Supplysector_trn <- get_data(all_data, "L254.Supplysector_trn_EUR")
+    L254.FinalEnergyKeyword_trn <- get_data(all_data, "L254.FinalEnergyKeyword_trn_EUR")
+    L254.tranSubsectorLogit <- get_data(all_data, "L254.tranSubsectorLogit_EUR")
+    L254.tranSubsectorShrwtFllt <- get_data(all_data, "L254.tranSubsectorShrwtFllt_EUR")
+    L254.tranSubsectorInterp <- get_data(all_data, "L254.tranSubsectorInterp_EUR")
 
-    L254.tranSubsectorSpeed_passthru <- get_data(all_data, "L254.tranSubsectorSpeed_passthru_Eurostat")
-    L254.tranSubsectorSpeed_noVOTT <- get_data(all_data, "L254.tranSubsectorSpeed_noVOTT_Eurostat")
-    L254.tranSubsectorSpeed_nonmotor <- get_data(all_data, "L254.tranSubsectorSpeed_nonmotor_Eurostat")
-    L254.tranSubsectorVOTT <- get_data(all_data, "L254.tranSubsectorVOTT_Eurostat")
-    L254.tranSubsectorFuelPref <- get_data(all_data, "L254.tranSubsectorFuelPref_Eurostat")
+    L254.tranSubsectorSpeed_passthru <- get_data(all_data, "L254.tranSubsectorSpeed_passthru_EUR")
+    L254.tranSubsectorSpeed_noVOTT <- get_data(all_data, "L254.tranSubsectorSpeed_noVOTT_EUR")
+    L254.tranSubsectorSpeed_nonmotor <- get_data(all_data, "L254.tranSubsectorSpeed_nonmotor_EUR")
+    L254.tranSubsectorVOTT <- get_data(all_data, "L254.tranSubsectorVOTT_EUR")
+    L254.tranSubsectorFuelPref <- get_data(all_data, "L254.tranSubsectorFuelPref_EUR")
 
-    L254.StubTech_passthru <- get_data(all_data, "L254.StubTech_passthru_Eurostat")
-    L254.StubTech_nonmotor <- get_data(all_data, "L254.StubTech_nonmotor_Eurostat")
-    L254.StubTranTechCalInput <- get_data(all_data, "L254.StubTranTechCalInput_Eurostat")
+    L254.StubTech_passthru <- get_data(all_data, "L254.StubTech_passthru_EUR")
+    L254.StubTech_nonmotor <- get_data(all_data, "L254.StubTech_nonmotor_EUR")
+    L254.StubTranTechCalInput <- get_data(all_data, "L254.StubTranTechCalInput_EUR")
 
 
-    L254.StubTranTechCoef <- get_data(all_data, "L254.StubTranTechCoef_Eurostat")
-    L254.StubTechCalInput_passthru <- get_data(all_data, "L254.StubTechCalInput_passthru_Eurostat")
-    L254.StubTechProd_nonmotor <- get_data(all_data, "L254.StubTechProd_nonmotor_Eurostat")
-    L254.PerCapitaBased_trn <- get_data(all_data, "L254.PerCapitaBased_trn_Eurostat")
-    L254.PriceElasticity_trn <- get_data(all_data, "L254.PriceElasticity_trn_Eurostat")
-    L254.IncomeElasticity_trn <- get_data(all_data, "L254.IncomeElasticity_trn_Eurostat")
-    L254.BaseService_trn <- get_data(all_data, "L254.BaseService_trn_Eurostat")
+    L254.StubTranTechCoef <- get_data(all_data, "L254.StubTranTechCoef_EUR")
+    L254.StubTechCalInput_passthru <- get_data(all_data, "L254.StubTechCalInput_passthru_EUR")
+    L254.StubTechProd_nonmotor <- get_data(all_data, "L254.StubTechProd_nonmotor_EUR")
+    L254.PerCapitaBased_trn <- get_data(all_data, "L254.PerCapitaBased_trn_EUR")
+    L254.PriceElasticity_trn <- get_data(all_data, "L254.PriceElasticity_trn_EUR")
+    L254.IncomeElasticity_trn <- get_data(all_data, "L254.IncomeElasticity_trn_EUR")
+    L254.BaseService_trn <- get_data(all_data, "L254.BaseService_trn_EUR")
 
 
     # ===================================================

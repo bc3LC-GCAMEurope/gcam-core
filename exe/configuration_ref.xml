@@ -7,7 +7,7 @@
 		<Value name="GHGInputFileName">../input/magicc/inputs/input_gases.emk</Value>
 		<Value write-output="1" append-scenario-name="0" name="xmldb-location">../output/database_basexdb</Value>
 		<Value write-output="1" append-scenario-name="0" name="restart">./restart/restart</Value>
-		<Value write-output="1" append-scenario-name="1" name="xmlDebugFileName">debug.xml</Value>
+		<Value write-output="0" append-scenario-name="1" name="xmlDebugFileName">debug.xml</Value>
 		<Value write-output="1" append-scenario-name="0" name="climatFileName">gas.emk</Value>
 		<Value write-output="1" append-scenario-name="1" name="costCurvesOutputFileName">cost_curves.xml</Value>
 		<Value write-output="1" append-scenario-name="0" name="batchCSVOutputFile">batch-csv-out.csv</Value>
@@ -43,6 +43,7 @@
 		<Value name = "fertilizer_energy">../input/gcamdata/xml/en_Fert.xml</Value>
 		<Value name = "hddcdd">../input/gcamdata/xml/HDDCDD_constdd_no_GCM.xml</Value>
 		<Value name = "building">../input/gcamdata/xml/building_det.xml</Value>
+		<Value name = "transportation">../input/gcamdata/xml/transportation_UCD_CORE_EUR.xml</Value>
 		<Value name = "transportation">../input/gcamdata/xml/transportation_UCD_CORE.xml</Value>
 		<Value name = "carbon_content">../input/gcamdata/xml/Ccoef.xml</Value>
 		<Value name = "carbon_storage">../input/gcamdata/xml/Cstorage.xml</Value>
@@ -52,7 +53,9 @@
 		<Value name = "ag_base">../input/gcamdata/xml/ag_For_Past_bio_base_IRR_MGMT.xml</Value>
 		<Value name = "ag_cost">../input/gcamdata/xml/ag_cost_IRR_MGMT.xml</Value>
 		<Value name = "ag_prodchange">../input/gcamdata/xml/ag_prodchange_ref_IRR_MGMT.xml</Value>
-		<Value name = "residue_bio">../input/gcamdata/xml/resbio_input_IRR_MGMT.xml</Value>
+		<Value name = "residue_bio">../input/gcamdata/xml/resbio_input_IRR_MGMT_1.xml</Value>
+		<Value name = "residue_bio">../input/gcamdata/xml/resbio_input_IRR_MGMT_2.xml</Value>
+		<Value name = "residue_bio">../input/gcamdata/xml/resbio_input_IRR_MGMT_3.xml</Value>
 		<Value name = "animal">../input/gcamdata/xml/an_input.xml</Value>
 		<Value name = "fertilizer">../input/gcamdata/xml/ag_Fert_IRR_MGMT.xml</Value>
 		<Value name = "land1">../input/gcamdata/xml/land_input_1.xml</Value>
@@ -138,7 +141,7 @@
 		<Value name="climateOutputInterval">5</Value>
 		<Value name="parallel-grain-size">50</Value>
 		<Value name="stop-period">-1</Value>
-		<Value name="stop-year">-1</Value>
+		<Value name="stop-year">2050</Value>
 		<Value name="restart-period">-1</Value>
 		<Value name="restart-year">-1</Value>
 		<Value name="max-parallelism">-1</Value>
