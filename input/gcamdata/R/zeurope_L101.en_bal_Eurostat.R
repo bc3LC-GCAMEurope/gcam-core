@@ -78,41 +78,6 @@ module_europe_L101.en_bal_Eurostat <- function(command, ...) {
       gather_years() %>%
       tidyr::replace_na(list(value = 0))
 
-    ####
-    ####
-    ## LEAVING CODE TO REASSIGN GAS OUTPUT AS COMMENT, BUT FOR NOW NOT USING
-    # This is complicated because the output is labelled gas, so we need to move
-    # both the input and the resulting gas output, but if there are multiple inputs, an appropriate amount of
-    # gas output should be transferred
-    # Assigning proportional amount of input to output
-    # L101.liquid_to_gas_replace <- L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
-    #   filter(grepl("in_gas works|out_gas works", sector)) %>%
-    #   group_by(iso, year) %>%
-    #   filter(any(value[sector == "in_gas works" &
-    #                  (fuel == "refined liquids" | fuel == "refined biofuels_FT")] > 0)) %>%
-    #   ungroup %>%
-    #   tidyr::pivot_wider(names_from = sector, values_from = value) %>%
-    #   rename(input = `in_gas works`, output = `out_gas works`) %>%
-    #   filter(!(input == 0 & output == 0 & fuel != "gas")) %>%
-    #   group_by(iso, year) %>%
-    #   # Count non-zero inputs
-    #   mutate(input_count = length(fuel[input > 0]),
-    #          # Only 1 input: move output from gas to refined liquids
-    #          output_adj = if_else(input_count == 1 & fuel != "gas", output + output[fuel == "gas"], output),
-    #          output_adj = if_else(input_count == 1 & fuel == "gas" & input == 0, 0, output_adj),
-    #          # More than 1 input: get proportion of input, multiply by gas output, subtract from gas output
-    #          output_adj = if_else(input_count > 1 & fuel %in% c("refined liquids", "refined biofuels_FT"),
-    #                               output_adj[fuel == "gas"] * input / sum(input), output_adj),
-    #          output_adj =  if_else(input_count > 1 & fuel == "gas",
-    #                                output_adj - output_adj[fuel == "refined liquids"],
-    #                                output_adj)) %>%
-    #   ungroup %>%
-    #   select(-input_count) %>%
-    #   rename(`in_gas works` = input, `out_gas works` = output_adj) %>%
-    #   tidyr::pivot_longer(cols = c(`in_gas works`, `out_gas works`), names_to = "sector")
-    ####
-    ####
-
     # 1b. TPES Calculation ----------------
     # Want to add up all available energy in each iso/fuel
     # Equal to energy consumed by energy transformation plus final energy
@@ -135,33 +100,11 @@ module_europe_L101.en_bal_Eurostat <- function(command, ...) {
       select(iso, sector, fuel, year, value = net)
 
     # Because we have input and output, we don't need to adjust for sectors that change fuel names
-    # For example in GCAM-core, gas works has net consumption of coal, but then any output will be listed as gas
-    # so that gasified coal as final energy is counted as gas
+    # For example in GCAM-core, gas works has net consumption of coal, but then some gasified coal as final energy is counted as gas
     # Here we have the input of coal and the output of gas, so that in the net calculation, we get the correct amount
     # of coal input and then a negative gas output that offsets as gasified coal in the end use
     # Since there is no trade of finished coal or gas products, any consumption in the energy transformation sector
     # needs to be offset in the end use (would not be true if this occured in any refining sectors)
-
-    # # When input is coal/liquid/biogas and output is gas, we get incorrect TPES totals for each fuel
-    # # For biogas, only the input is important for the TPES calculation so that we calculate correct amount of biogas production
-    # # For coal and refined liquids,
-    # # Two cases:
-    # # 1. Only one input, simply change output in gas to other fuel
-    # # 2. Multiple inputs, apply default gas conversion rates (A22) to calculate output for each fuel
-    # L101.gas_works_adjust_Eurostat <- L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat_NETCALC %>%
-    #   filter(sector == "gas works") %>%
-    #   group_by(iso, sector, year) %>%
-    #   filter(any(input > 0 & output == 0) | any(input == 0 & output > 0) ) %>%
-    #   # Count non-zero inputs
-    #   mutate(input_count = length(fuel[input > 0])) %>%
-    #   ungroup %>%
-    #   # Turkey has output of blended gas in 2013 with no input, setting to zero (assuming no losses)
-    #   mutate(output = if_else(input_count == 0, 0, output)) %>%
-    #   # Case 1: move output from gas to other fuel
-    #   group_by(iso, sector, year) %>%
-    #   mutate(output = if_else(input_count == 1 & input > 0, output + output[fuel == "gas"], output),
-    #          output = if_else(input_count == 1 & fuel == "gas" & input == 0, 0, output)) %>%
-    #   ungroup
 
     # Calculate the total primary energy supply (TPES) in each region and fuel as the sum of all flows that are inputs
     # This guarantees that our TPES will be consistent with the tracked forms of consumption
