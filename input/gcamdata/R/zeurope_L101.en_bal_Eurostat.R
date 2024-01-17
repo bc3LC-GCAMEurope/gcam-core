@@ -22,7 +22,7 @@ module_europe_L101.en_bal_Eurostat <- function(command, ...) {
              FILE = "europe/mappings/geo_to_iso_map",
              FILE = "europe/mappings/nrgbal_to_sector_map",
              FILE = "europe/mappings/siec_to_fuel_map",
-             FILE = "energy/mappings/IEA_sector_fuel_modifications",
+             FILE = "europe/mappings/Eurostat_sector_fuel_modifications",
              FILE = "energy/mappings/enduse_fuel_aggregation"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat",
@@ -38,10 +38,10 @@ module_europe_L101.en_bal_Eurostat <- function(command, ...) {
     geo_to_iso_map <- get_data(all_data, "europe/mappings/geo_to_iso_map")
     nrgbal_to_sector_map <- get_data(all_data, "europe/mappings/nrgbal_to_sector_map")
     siec_to_fuel_map <- get_data(all_data, "europe/mappings/siec_to_fuel_map")
-    IEA_sector_fuel_modifications <- get_data(all_data, "energy/mappings/IEA_sector_fuel_modifications")
+    Eurostat_sector_fuel_modifications <- get_data(all_data, "europe/mappings/Eurostat_sector_fuel_modifications")
     enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
 
-    # Energy Balance Calculations ----------------
+    # 1a. Energy Balance Mapping ----------------
     # Add mappings to energy balance
     L101.Eurostat_en_bal_ctry_hist <- nrg_bal_c %>%
       filter(geo != "EU27_2020") %>%
@@ -51,58 +51,135 @@ module_europe_L101.en_bal_Eurostat <- function(command, ...) {
       left_join(siec_to_fuel_map, by = "siec") %>%
       # Only want to remove NAs in sector/fuel
       filter(!is.na(sector), !is.na(fuel)) %>%
-      # Reset some sector-fuel combinations, as specified in IEA_sector_fuel_modifications
-      left_join(IEA_sector_fuel_modifications %>% filter(!sector_initial %in% c("in_industry_ctl", "in_industry_gtl"))
-                %>%  select(-conversion), by = c("sector" = "sector_initial", "fuel" = "fuel_initial")) %>%
+      # Reset some sector-fuel combinations, as specified in Eurostat_sector_fuel_modifications
+      left_join(Eurostat_sector_fuel_modifications, by = c("sector" = "sector_initial", "fuel" = "fuel_initial")) %>%
       mutate(sector = if_else(is.na(sector.y), sector, sector.y),
-             fuel = if_else(is.na(fuel.y), fuel, fuel.y), .keep = "unused")
+             fuel = if_else(is.na(fuel.y), fuel, fuel.y),
+             calculate_net = if_else(is.na(calculate_net.y), calculate_net.x, calculate_net.y),
+             .keep = "unused")
 
     # Drop some sector-fuel combinations that are not relevant
     # Electricity-generation-only fuels (e.g., wind, solar, hydro, geothermal) consumed by sectors other than electricity generation
     # REVISIT FOR GCAM-EUROPE - THIS REMOVES BUILDING SOLAR THERMAL and GEOTHERMAL HEATING (TURKEY & ICELAND)
     # Primary biomass and district heat consumed by the transportation sector
     L101.Eurostat_en_bal_ctry_hist_clean <- L101.Eurostat_en_bal_ctry_hist %>%
-      mutate(sector = if_else(grepl("elec_", fuel) & !grepl("electricity generation",sector), NA_character_, sector),
-             sector = if_else(fuel == "biomass" & grepl("trn_", sector), NA_character_, sector),
-             sector = if_else(fuel == "heat" & grepl("trn_", sector), NA_character_, sector))
+      filter(!(grepl("elec_", fuel) & !grepl("electricity generation",sector)),
+             !(fuel == "biomass" & grepl("trn_", sector)),
+             !(fuel == "heat" & grepl("trn_", sector)))
 
     # Aggregate by relevant categories (in EJ)
     L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat <- L101.Eurostat_en_bal_ctry_hist_clean %>%
-      select(iso, sector, fuel, matches(YEAR_PATTERN)) %>%
-      group_by(iso, sector, fuel) %>%
+      # left_join_error_no_match(distinct(nrgbal_to_sector_map, sector, calculate_net) %>% filter(!is.na(sector)), by = "sector")
+      select(iso, sector, fuel, calculate_net, matches(YEAR_PATTERN)) %>%
+      group_by(iso, sector, fuel, calculate_net) %>%
       summarise_all(list(~ sum(., na.rm = T) / 1e6)) %>%
       ungroup %>%
       # at this point dataset is much smaller; go to long form
-      gather_years()
+      gather_years() %>%
+      tidyr::replace_na(list(value = 0))
 
-    # Calculate net consumption of energy transformation sectors
-    L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat_NET <-  L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
-      filter(grepl("^in|^out", sector)) %>%
+    ####
+    ####
+    ## LEAVING CODE TO REASSIGN GAS OUTPUT AS COMMENT, BUT FOR NOW NOT USING
+    # This is complicated because the output is labelled gas, so we need to move
+    # both the input and the resulting gas output, but if there are multiple inputs, an appropriate amount of
+    # gas output should be transferred
+    # Assigning proportional amount of input to output
+    # L101.liquid_to_gas_replace <- L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
+    #   filter(grepl("in_gas works|out_gas works", sector)) %>%
+    #   group_by(iso, year) %>%
+    #   filter(any(value[sector == "in_gas works" &
+    #                  (fuel == "refined liquids" | fuel == "refined biofuels_FT")] > 0)) %>%
+    #   ungroup %>%
+    #   tidyr::pivot_wider(names_from = sector, values_from = value) %>%
+    #   rename(input = `in_gas works`, output = `out_gas works`) %>%
+    #   filter(!(input == 0 & output == 0 & fuel != "gas")) %>%
+    #   group_by(iso, year) %>%
+    #   # Count non-zero inputs
+    #   mutate(input_count = length(fuel[input > 0]),
+    #          # Only 1 input: move output from gas to refined liquids
+    #          output_adj = if_else(input_count == 1 & fuel != "gas", output + output[fuel == "gas"], output),
+    #          output_adj = if_else(input_count == 1 & fuel == "gas" & input == 0, 0, output_adj),
+    #          # More than 1 input: get proportion of input, multiply by gas output, subtract from gas output
+    #          output_adj = if_else(input_count > 1 & fuel %in% c("refined liquids", "refined biofuels_FT"),
+    #                               output_adj[fuel == "gas"] * input / sum(input), output_adj),
+    #          output_adj =  if_else(input_count > 1 & fuel == "gas",
+    #                                output_adj - output_adj[fuel == "refined liquids"],
+    #                                output_adj)) %>%
+    #   ungroup %>%
+    #   select(-input_count) %>%
+    #   rename(`in_gas works` = input, `out_gas works` = output_adj) %>%
+    #   tidyr::pivot_longer(cols = c(`in_gas works`, `out_gas works`), names_to = "sector")
+    ####
+    ####
+
+    # 1b. TPES Calculation ----------------
+    # Want to add up all available energy in each iso/fuel
+    # Equal to energy consumed by energy transformation plus final energy
+    # Some energy transformation consumption goes to energy that is traded, but still counted here
+
+    # Calculate transformation losses of liquid/gas energy transformation sectors plus
+    # consumption of fuels for electricity/heat/final energy consumption
+    # For coal, only relevant transformation is 1)industry_energy_iron and steel 2) gas works 3) industry_ctl 4)industry_energy transformation
+    # For natural gas, only relevant transformation is 1)gas works 2) industry_gtl
+    # For refined liquids, only relevant transformation is 1)industry_oil refining
+    L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat_NETCALC <-  L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
+      filter(calculate_net == 1) %>%
       tidyr::separate(sector, into = c("flow", "sector"), sep = "_", extra = "merge") %>%
       tidyr::pivot_wider(names_from = flow, values_from = value) %>%
-      # remove NA sectors in input - should only be resources or heat outputs
-      filter(!sector %in% c("chp_elec", "electricity_heat", "resources")) %>%
+      rename(input = `in`, output = out) %>%
       # NAs in output are just end-use sectors, replace with 0
-      tidyr::replace_na(list(out = 0))
+      tidyr::replace_na(list(output = 0)) %>%
+      mutate(net = input - output) %>%
+      filter(net != 0) %>%
+      select(iso, sector, fuel, year, value = net)
 
-    # Confirm there are no NAs in input left
-    stopifnot(nrow(filter(L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat_NET, is.na(`in`))) == 0)
+    # Because we have input and output, we don't need to adjust for sectors that change fuel names
+    # For example in GCAM-core, gas works has net consumption of coal, but then any output will be listed as gas
+    # so that gasified coal as final energy is counted as gas
+    # Here we have the input of coal and the output of gas, so that in the net calculation, we get the correct amount
+    # of coal input and then a negative gas output that offsets as gasified coal in the end use
+    # Since there is no trade of finished coal or gas products, any consumption in the energy transformation sector
+    # needs to be offset in the end use (would not be true if this occured in any refining sectors)
+
+    # # When input is coal/liquid/biogas and output is gas, we get incorrect TPES totals for each fuel
+    # # For biogas, only the input is important for the TPES calculation so that we calculate correct amount of biogas production
+    # # For coal and refined liquids,
+    # # Two cases:
+    # # 1. Only one input, simply change output in gas to other fuel
+    # # 2. Multiple inputs, apply default gas conversion rates (A22) to calculate output for each fuel
+    # L101.gas_works_adjust_Eurostat <- L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat_NETCALC %>%
+    #   filter(sector == "gas works") %>%
+    #   group_by(iso, sector, year) %>%
+    #   filter(any(input > 0 & output == 0) | any(input == 0 & output > 0) ) %>%
+    #   # Count non-zero inputs
+    #   mutate(input_count = length(fuel[input > 0])) %>%
+    #   ungroup %>%
+    #   # Turkey has output of blended gas in 2013 with no input, setting to zero (assuming no losses)
+    #   mutate(output = if_else(input_count == 0, 0, output)) %>%
+    #   # Case 1: move output from gas to other fuel
+    #   group_by(iso, sector, year) %>%
+    #   mutate(output = if_else(input_count == 1 & input > 0, output + output[fuel == "gas"], output),
+    #          output = if_else(input_count == 1 & fuel == "gas" & input == 0, 0, output)) %>%
+    #   ungroup
 
     # Calculate the total primary energy supply (TPES) in each region and fuel as the sum of all flows that are inputs
     # This guarantees that our TPES will be consistent with the tracked forms of consumption
     # (i.e. no statistical differences, stock changes, transfers)
-    L101.in_EJ_iso_TPES_Fi_Yh <- L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat_NET %>%
-      mutate(net = `in` - out) %>%
-      mutate(sector = "TPES")%>%
-      group_by(iso, sector, fuel, year) %>%
-      summarise(value = sum(net)) %>%
-      ungroup
+    L101.in_EJ_iso_TPES_Fi_Yh_Eurostat <- L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
+      filter(grepl("^in_|^net_", sector), calculate_net == 0) %>%
+      bind_rows(L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat_NETCALC) %>%
+      group_by(iso, fuel, year) %>%
+      summarise(value = sum(value)) %>%
+      ungroup %>%
+      mutate(sector = "TPES")
 
     # Append TPES onto the end of the energy balances
     L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat <- L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
-      bind_rows(L101.in_EJ_iso_TPES_Fi_Yh) # FINAL OUTPUT TABLE
+      select(-calculate_net) %>%
+      bind_rows(L101.in_EJ_iso_TPES_Fi_Yh_Eurostat) # FINAL OUTPUT TABLE
 
-    # Building & Transport Downscale -----------
+    # 2. Building & Transport Downscale -----------
     # For downscaling of buildings and transportation energy, aggregate by fuel and country
     # a: transport
     L101.in_EJ_ctry_trn_Fi_Yh_Eurostat <-  L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
@@ -122,26 +199,26 @@ module_europe_L101.en_bal_Eurostat <- function(command, ...) {
       summarise(value = sum(value, na.rm = T)) %>%
       ungroup
 
-    ### Produce Outputs ------------
+    # 3. Produce Outputs ------------
     L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
-      add_title("Eurostat energy balances by GCAM region / intermediate sector / intermediate fuel / historical year") ->
+      add_title("Eurostat energy balances by GCAM region / intermediate sector / intermediate fuel / historical year") %>%
       add_units("EJ") %>%
       add_precursors("common/iso_GCAM_regID", "europe/nrg_bal_c", "europe/mappings/geo_to_iso_map",
                      "europe/mappings/nrgbal_to_sector_map", "europe/mappings/siec_to_fuel_map",
-                     "energy/mappings/IEA_sector_fuel_modifications") ->
+                     "europe/mappings/Eurostat_sector_fuel_modifications") ->
       L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat
 
     L101.in_EJ_ctry_trn_Fi_Yh_Eurostat %>%
-      add_title("Eurostat transportation sector energy consumption by country / IEA mode / fuel / historical year") ->
+      add_title("Eurostat transportation sector energy consumption by country / IEA mode / fuel / historical year") %>%
       add_units("EJ") %>%
       add_comments("Consumption of energy by the transport sector by fuel and historical year. Aggregated by fuel and country") %>%
       add_precursors("common/iso_GCAM_regID", "europe/nrg_bal_c", "europe/mappings/geo_to_iso_map",
                      "europe/mappings/nrgbal_to_sector_map", "europe/mappings/siec_to_fuel_map",
-                     "energy/mappings/IEA_sector_fuel_modifications", "energy/mappings/enduse_fuel_aggregation")  ->
+                     "europe/mappings/Eurostat_sector_fuel_modifications", "energy/mappings/enduse_fuel_aggregation")  ->
       L101.in_EJ_ctry_trn_Fi_Yh_Eurostat
 
     L101.in_EJ_ctry_bld_Fi_Yh_Eurostat %>%
-      add_title("Eurostat building energy consumption by country / IEA sector / fuel / historical year") ->
+      add_title("Eurostat building energy consumption by country / IEA sector / fuel / historical year") %>%
       add_units("EJ") %>%
       add_comments("Consumption of energy by the building sector by fuel and historical year. Aggregated by fuel and country") %>%
       same_precursors_as(L101.in_EJ_ctry_trn_Fi_Yh_Eurostat) ->
