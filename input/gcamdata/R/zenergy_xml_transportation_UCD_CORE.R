@@ -16,7 +16,7 @@ module_energy_transportation_UCD_CORE_xml <- function(command, ...) {
 
 
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "common/GCAM32_to_EU",
+    return(c("GCAM_EUR_regions",
              "L254.Supplysector_trn",
              "L254.FinalEnergyKeyword_trn",
              "L254.tranSubsectorLogit",
@@ -61,11 +61,8 @@ module_energy_transportation_UCD_CORE_xml <- function(command, ...) {
 
     all_data <- list(...)[[1]]
 
-    # GCAM EUR regions with Eurostat data (not Switzerland)
-    GCAM_EUR_regions <- get_data(all_data, "common/GCAM32_to_EU") %>%
-      filter(GCAMEU_region != GCAM32_region) %>%
-      # remove Switzerland. It appears in transport CORE. The other regions appear in transport EUR version
-      filter(GCAMEU_region != "Switzerland") %>%
+    # GCAM EUR regions with Eurostat data
+    GCAM_EUR_regions <- get_data(all_data, "GCAM_EUR_regions") %>%
       pull(GCAMEU_region) %>%
       unique()
 
@@ -244,7 +241,8 @@ module_energy_transportation_UCD_CORE_xml <- function(command, ...) {
         add_xml_data(L254.PriceElasticity_trn_SSP, "PriceElasticity") %>%
         add_xml_data(L254.IncomeElasticity_trn_SSP, "IncomeElasticity") %>%
         add_xml_data(L254.BaseService_trn_SSP, "BaseService") %>%
-        add_precursors("L254.Supplysector_trn",
+        add_precursors("GCAM_EUR_regions",
+                       "L254.Supplysector_trn",
                        "L254.FinalEnergyKeyword_trn",
                        "L254.tranSubsectorLogit",
                        "L254.tranSubsectorShrwtFllt",
