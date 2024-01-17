@@ -16,7 +16,8 @@ module_energy_transportation_UCD_CORE_xml <- function(command, ...) {
 
 
   if(command == driver.DECLARE_INPUTS) {
-    return(c("L254.Supplysector_trn",
+    return(c("GCAM_EUR_regions",
+             "L254.Supplysector_trn",
              "L254.FinalEnergyKeyword_trn",
              "L254.tranSubsectorLogit",
              "L254.tranSubsectorShrwtFllt",
@@ -59,6 +60,11 @@ module_energy_transportation_UCD_CORE_xml <- function(command, ...) {
     sce <- year <- . <- NULL
 
     all_data <- list(...)[[1]]
+
+    # GCAM EUR regions with Eurostat data
+    GCAM_EUR_regions <- get_data(all_data, "GCAM_EUR_regions") %>%
+      pull(GCAMEU_region) %>%
+      unique()
 
     # Load required inputs
     L254.tranSubsectorSpeed <- get_data(all_data, "L254.tranSubsectorSpeed")
@@ -211,7 +217,8 @@ module_energy_transportation_UCD_CORE_xml <- function(command, ...) {
         add_xml_data(L254.PriceElasticity_trn_SSP, "PriceElasticity") %>%
         add_xml_data(L254.IncomeElasticity_trn_SSP, "IncomeElasticity") %>%
         add_xml_data(L254.BaseService_trn_SSP, "BaseService") %>%
-        add_precursors("L254.Supplysector_trn",
+        add_precursors("GCAM_EUR_regions",
+                       "L254.Supplysector_trn",
                        "L254.FinalEnergyKeyword_trn",
                        "L254.tranSubsectorLogit",
                        "L254.tranSubsectorShrwtFllt",
