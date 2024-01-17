@@ -43,7 +43,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
 
     # Load required inputs ----------------
     iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID")
-    GCAM32_to_EU <- get_data(all_data, "common/GCAM32_to_EU")
+    GCAM32_to_EU <- get_data(all_data, "common/GCAM32_to_EU", strip_attributes = TRUE)
     nrg_bal_c <- get_data(all_data, "gcam-europe/nrg_bal_c")
     geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map")
     nrgbal_to_sector_map <- get_data(all_data, "gcam-europe/mappings/nrgbal_to_sector_map")
@@ -133,7 +133,12 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       bind_rows(L101.en_bal_EJ_ctry_Si_Fi_Yh_full %>%
                   filter(iso %in% GCAM_EUR_regions$iso) %>%
                   select(-"GCAM_region_ID") %>%
-                  filter(year < max(L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat$year))
+                  filter(year < max(L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat$year)) %>%
+                  # Setting to zero net fuel production from energy transformation sectors modeled under the industrial sector
+                  # These processes (e.g., coke ovens) are modeled in GCAM as final energy consumption, not energy transformation/production
+                  # Setting to zero net production of fuels classified as coal at gas works (gas coke)
+                  mutate(value = if_else(value < 0 & grepl("industry", sector), 0, value),
+                         value = if_else(value < 0 & sector == "in_gas processing", 0, value))
                 ) # FINAL OUTPUT TABLE - temporally complete EUR data
 
     # Building & Transport Downscale -----------
@@ -173,8 +178,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       ungroup # FINAL OUTPUT TABLE - temporally complete EUR data
 
     ### Produce Outputs ------------
-    attr(GCAM_EUR_regions, "title") <- NULL
-    GCAM_EUR_regions %>% as_tibble() %>%
+    GCAM_EUR_regions %>%
       add_title("ISO to GCAM region mapping for EUR regions with Eurostat data") %>%
       add_units("") %>%
       add_precursors("common/iso_GCAM_regID", "common/GCAM32_to_EU", "europe/nrg_bal_c",
