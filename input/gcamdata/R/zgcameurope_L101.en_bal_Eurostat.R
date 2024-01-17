@@ -15,7 +15,7 @@
 #' @importFrom dplyr bind_rows distinct filter if_else group_by left_join matches mutate select summarise summarise_all
 #' @importFrom tidyr replace_na
 #' @author RLH December 2023
-module_europe_L101.en_bal_Eurostat <- function(command, ...) {
+module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/iso_GCAM_regID",
              FILE = "europe/nrg_bal_c",
@@ -120,7 +120,12 @@ module_europe_L101.en_bal_Eurostat <- function(command, ...) {
     # Append TPES onto the end of the energy balances
     L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat <- L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
       select(-calculate_net) %>%
-      bind_rows(L101.in_EJ_iso_TPES_Fi_Yh_Eurostat) # FINAL OUTPUT TABLE
+      bind_rows(L101.in_EJ_iso_TPES_Fi_Yh_Eurostat) %>%
+      left_join_error_no_match(iso_GCAM_regID, by = "iso") %>%
+      filter(iso != "geo") %>%
+      group_by(GCAM_region_ID, sector, fuel, year) %>%
+      summarise(value = sum(value)) %>%
+      ungroup # FINAL OUTPUT TABLE
 
     # 2. Building & Transport Downscale -----------
     # For downscaling of buildings and transportation energy, aggregate by fuel and country
