@@ -53,7 +53,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
              FILE = "energy/A54.globaltranTech_shrwt",
              FILE = "energy/A54.globaltranTech_interp",
              FILE = "energy/A54.globaltranTech_retire",
-             "GCAM_EUR_regions",
+             "L101.GCAM_EUR_regions",
              "L154.in_EJ_R_trn_m_sz_tech_F_Yh_EUR",
              "L154.cost_usdvkm_R_trn_m_sz_tech_F_Y_EUR",
              "L154.capcoef_usdvkm_R_trn_m_sz_tech_F_Y_EUR",
@@ -171,7 +171,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
     # ===================================================
 
     # GCAM EUR regions with Eurostat data
-    GCAM_region_ID_EUR <- get_data(all_data, "GCAM_EUR_regions") %>%
+    GCAM_region_ID_EUR <- get_data(all_data, "L101.GCAM_EUR_regions") %>%
       select(all_of(c('GCAM_region_ID','region' = 'GCAMEU_region'))) %>%
       unique()
 
@@ -635,7 +635,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       add_units("Unitless") %>%
       add_comments("Supply sector information was written for all GCAM regions and subset for the combinations of region and supplysector that are available in the stub technology table") %>%
       add_legacy_name("L254.Supplysector_trn") %>%
-      add_precursors("common/GCAM_region_names", "GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y",
+      add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y",
                      "energy/A54.sector", "energy/A54.globaltech_nonmotor", "energy/A54.globaltech_passthru", "energy/A54.globaltech_passthru_revised") ->
       L254.Supplysector_trn_EUR
 
@@ -644,7 +644,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       add_units("NA") %>%
       add_comments("Final energy names were matched to supply sector information") %>%
       add_legacy_name("L254.FinalEnergyKeyword_trn") %>%
-      add_precursors("common/GCAM_region_names", "GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y",
+      add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y",
                      "energy/A54.sector", "energy/A54.globaltech_nonmotor") ->
       L254.FinalEnergyKeyword_trn_EUR
 
@@ -653,7 +653,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       add_units("Unitless") %>%
       add_comments("Transportation default subsector logit exponents were written for all regions") %>%
       add_legacy_name("L254.tranSubsectorLogit") %>%
-      add_precursors("common/GCAM_region_names", "GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y",
+      add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y",
                      "energy/A54.tranSubsector_logit", "energy/A54.tranSubsector_logit_revised", "energy/A54.globaltech_nonmotor") ->
       L254.tranSubsectorLogit_EUR
 
@@ -664,7 +664,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
         add_comments("Subsector shareweights of transportation sector were written for all regions and subset for existing combinations of region, supplysector, and tranSubsector") %>%
         add_comments("Only rows with an entry for year were selected") %>%
         add_legacy_name("L254.tranSubsectorShrwt") %>%
-        add_precursors("common/GCAM_region_names", "GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y",
+        add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y",
                        "energy/A54.tranSubsector_shrwt", "energy/A54.tranSubsector_shrwt_revised", "energy/A54.globaltech_nonmotor") ->
         L254.tranSubsectorShrwt_EUR
     } else {
@@ -681,7 +681,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
         add_comments("Subsector shareweights of transportation sector were written for all regions and subset for existing combinations of region, supplysector, and tranSubsector") %>%
         add_comments("Only rows with an entry for year.fillout were selected") %>%
         add_legacy_name("L254.tranSubsectorShrwtFllt") %>%
-        add_precursors("common/GCAM_region_names", "GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y",
+        add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y",
                        "energy/A54.tranSubsector_shrwt", "energy/A54.globaltech_nonmotor") ->
         L254.tranSubsectorShrwtFllt_EUR
     } else {
@@ -697,7 +697,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
         add_comments("Subsector shareweight interpoloation data of transportation sector were written for all regions and subset for existing combinations of region, supplysector, and tranSubsector") %>%
         add_comments("Only rows without an entry for to.value were selected") %>%
         add_legacy_name("L254.tranSubsectorInterp") %>%
-        add_precursors("common/GCAM_region_names", "GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y",
+        add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y",
                        "energy/A54.tranSubsector_interp", "energy/A54.tranSubsector_interp_revised", "energy/A54.globaltech_nonmotor") ->
         L254.tranSubsectorInterp_EUR
     } else {
@@ -713,7 +713,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
         add_comments("Subsector shareweight interpoloation data of transportation sector were written for all regions and subset for existing combinations of region, supplysector, and tranSubsector") %>%
         add_comments("Only rows with an entry for to.value were selected") %>%
         add_legacy_name("L254.tranSubsectorInterpTo") %>%
-        add_precursors("common/GCAM_region_names", "GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y",
+        add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y",
                        "energy/A54.tranSubsector_interp", "energy/A54.globaltech_nonmotor") ->
         L254.tranSubsectorInterpTo_EUR
     } else {
@@ -727,7 +727,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       add_units("km / hr") %>%
       add_comments("Speed information was written for all regions and mapped from UCD technology to GCAM technology") %>%
       add_legacy_name("L254.tranSubsectorSpeed") %>%
-      add_precursors("common/GCAM_region_names", "GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.speed_kmhr_R_trn_m_sz_tech_F_Y") ->
+      add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.speed_kmhr_R_trn_m_sz_tech_F_Y") ->
       L254.tranSubsectorSpeed_EUR
 
     L254.tranSubsectorSpeed_passthru %>%
@@ -736,7 +736,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       add_comments("Transportation default subsector value of time in transit (VOTT) multipliers were written for all regions and model years") %>%
       add_comments("Speeds were matched in by region, supplysector, and year") %>%
       add_legacy_name("L254.tranSubsectorSpeed_passthru") %>%
-      add_precursors("common/GCAM_region_names", "GCAM_EUR_regions", "energy/A54.tranSubsector_VOTT", "energy/A54.tranSubsector_VOTT_revised",
+      add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/A54.tranSubsector_VOTT", "energy/A54.tranSubsector_VOTT_revised",
                      "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.speed_kmhr_R_trn_m_sz_tech_F_Y") ->
       L254.tranSubsectorSpeed_passthru_EUR
 
@@ -745,7 +745,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       add_units("km / hr") %>%
       add_comments("Sector data was subsetted for only those whose speeds have not already been specified") %>%
       add_legacy_name("L254.tranSubsectorSpeed_noVOTT") %>%
-      add_precursors("common/GCAM_region_names", "GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y",
+      add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y",
                      "energy/A54.globaltech_passthru", "energy/A54.globaltech_passthru_revised") ->
       L254.tranSubsectorSpeed_noVOTT_EUR
 
@@ -763,7 +763,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       add_comments("Data was written for all regions") %>%
       add_comments("Year.fillout was populated with minimum model year") %>%
       add_legacy_name("L254.tranSubsectorVOTT") %>%
-      add_precursors("common/GCAM_region_names", "GCAM_EUR_regions", "energy/A54.tranSubsector_VOTT", "energy/A54.tranSubsector_VOTT_revised",
+      add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/A54.tranSubsector_VOTT", "energy/A54.tranSubsector_VOTT_revised",
                      "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y",
                      "energy/A54.globaltech_passthru", "energy/A54.globaltech_passthru_revised", "energy/A54.globaltech_nonmotor") ->
       L254.tranSubsectorVOTT_EUR
@@ -774,7 +774,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       add_comments("Data was written for all regions") %>%
       add_comments("Year.fillout was populated with minimum model year") %>%
       add_legacy_name("L254.tranSubsectorFuelPref") %>%
-      add_precursors("common/GCAM_region_names", "GCAM_EUR_regions",
+      add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions",
                      "energy/A54.tranSubsector_VOTT", "energy/A54.tranSubsector_VOTT_revised", "energy/A54.tranSubsector_VOTT_ssp1", "energy/A54.tranSubsector_VOTT_ssp1_revised",
                      "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y",
                      "energy/A54.globaltech_passthru", "energy/A54.globaltech_passthru_revised", "energy/A54.globaltech_nonmotor") ->
@@ -785,7 +785,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       add_units("NA") %>%
       add_comments("Data was written for all regions and mapped from UCD technology to GCAM technology") %>%
       add_legacy_name("L254.StubTranTech") %>%
-      add_precursors("common/GCAM_region_names", "GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y") ->
+      add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y") ->
       L254.StubTranTech_EUR
 
     L254.StubTech_passthru %>%
@@ -793,7 +793,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       add_units("NA") %>%
       add_comments("Data was written for all regions and subsetted for only the ones whose input actually exists in the given region or ones whose input is in the list of pass-through technologies") %>%
       add_legacy_name("L254.StubTech_passthru") %>%
-      add_precursors("common/GCAM_region_names", "GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y",
+      add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y",
                      "energy/A54.globaltech_passthru", "energy/A54.globaltech_passthru_revised") ->
       L254.StubTech_passthru_EUR
 
@@ -802,7 +802,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       add_units("NA") %>%
       add_comments("Data was written for all regions") %>%
       add_legacy_name("L254.StubTech_nonmotor") %>%
-      add_precursors("common/GCAM_region_names", "GCAM_EUR_regions", "energy/A54.globaltech_nonmotor") ->
+      add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/A54.globaltech_nonmotor") ->
       L254.StubTech_nonmotor_EUR
 
     L254.StubTranTechCalInput %>%
@@ -810,7 +810,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       add_units("Unitless") %>%
       add_comments("Share weights were calculate by aggregating energy consumption to the region, supplysector, tranSubsector, year level") %>%
       add_legacy_name("L254.StubTranTechCalInput") %>%
-      add_precursors("common/GCAM_region_names", "GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.in_EJ_R_trn_m_sz_tech_F_Yh") ->
+      add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.in_EJ_R_trn_m_sz_tech_F_Yh") ->
       L254.StubTranTechCalInput_EUR
 
     L254.StubTranTechLoadFactor %>%
@@ -818,7 +818,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       add_units("person/vehicle and tonnes/vehicle") %>%
       add_comments("Data was subsetted to model years and mapped from UCD technology to GCAM technology") %>%
       add_legacy_name("L254.StubTranTechLoadFactor") %>%
-      add_precursors("common/GCAM_region_names", "GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.loadfactor_R_trn_m_sz_tech_F_Y") ->
+      add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.loadfactor_R_trn_m_sz_tech_F_Y") ->
       L254.StubTranTechLoadFactor_EUR
 
     L254.StubTranTechCost %>%
@@ -827,14 +827,14 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       add_comments("Non-fuel cost was adjusted to 1990") %>%
       add_comments("Transportation cost table was mapped from UCD technology to GCAM technology") %>%
       add_legacy_name("L254.StubTranTechCost") %>%
-      add_precursors("common/GCAM_region_names", "GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.cost_usdvkm_R_trn_m_sz_tech_F_Y") ->
+      add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.cost_usdvkm_R_trn_m_sz_tech_F_Y") ->
       L254.StubTranTechCost_EUR
 
     L254.StubTechTrackCapital %>%
       add_title("Convert non-energy inputs to track the annual capital investments.") %>%
       add_units(("Coefficients")) %>%
       add_comments("Track capital investments for purposes of macro economic calculations") %>%
-      add_precursors("common/GCAM_region_names", "GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.capcoef_usdvkm_R_trn_m_sz_tech_F_Y") ->
+      add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.capcoef_usdvkm_R_trn_m_sz_tech_F_Y") ->
       L254.StubTechTrackCapital_EUR
 
     L254.StubTranTechCoef %>%
@@ -843,7 +843,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       add_comments("MJ was converted to BTU") %>%
       add_comments("Vehicle energy intensity information was mapped from UCD technology to GCAM technology") %>%
       add_legacy_name("L254.StubTranTechCoef") %>%
-      add_precursors("common/GCAM_region_names", "GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y") ->
+      add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y") ->
       L254.StubTranTechCoef_EUR
 
     L254.StubTechCalInput_passthru %>%
@@ -852,7 +852,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       add_comments("Pass-through transportationtechnologies were written to all regions") %>%
       add_comments("Share weights were calculated from calibrated output values") %>%
       add_legacy_name("L254.StubTechCalInput_passthru") %>%
-      add_precursors("common/GCAM_region_names", "GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions",
+      add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions",
                      "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y", "energy/A54.globaltech_passthru", "energy/A54.globaltech_passthru_revised") ->
       L254.StubTechCalInput_passthru_EUR
 
@@ -861,7 +861,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       add_units("Million pass-km") %>%
       add_comments("Supply sector and stub.technology information was added to non-motorized service output information") %>%
       add_legacy_name("L254.StubTechProd_nonmotor") %>%
-      add_precursors("common/GCAM_region_names", "GCAM_EUR_regions", "energy/A54.sector", "L154.out_mpkm_R_trn_nonmotor_Yh") ->
+      add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/A54.sector", "L154.out_mpkm_R_trn_nonmotor_Yh") ->
       L254.StubTechProd_nonmotor_EUR
 
     L254.PerCapitaBased_trn %>%
@@ -869,7 +869,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       add_units("NA") %>%
       add_comments("Per-capita based flag information written for all GCAM regions") %>%
       add_legacy_name("L254.PerCapitaBased_trn") %>%
-      add_precursors("common/GCAM_region_names", "GCAM_EUR_regions", "energy/A54.demand", "energy/A54.demand_ssp1") ->
+      add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/A54.demand", "energy/A54.demand_ssp1") ->
       L254.PerCapitaBased_trn_EUR
 
     L254.PriceElasticity_trn %>%
@@ -877,7 +877,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       add_units("Unitless") %>%
       add_comments("Price elasticity information written for all GCAM regions and model future years") %>%
       add_legacy_name("L254.PriceElasticity_trn") %>%
-      add_precursors("common/GCAM_region_names", "GCAM_EUR_regions", "energy/A54.demand") ->
+      add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/A54.demand") ->
       L254.PriceElasticity_trn_EUR
 
     L254.IncomeElasticity_trn %>%
@@ -885,7 +885,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       add_units("Unitless") %>%
       add_comments("Income elasticity information written for all GCAM regions and model future years") %>%
       add_legacy_name("L254.IncomeElasticity_trn") %>%
-      add_precursors("common/GCAM_region_names", "GCAM_EUR_regions", "energy/A54.demand") ->
+      add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/A54.demand") ->
       L254.IncomeElasticity_trn_EUR
 
     L254.BaseService_trn %>%
@@ -893,7 +893,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       add_units("units") %>%
       add_comments("comments describing how data generated") %>%
       add_legacy_name("L254.BaseService_trn") %>%
-      add_precursors("common/GCAM_region_names", "GCAM_EUR_regions", "energy/A54.sector", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions",
+      add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/A54.sector", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions",
                      "L154.out_mpkm_R_trn_nonmotor_Yh", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y",
                      "L154.loadfactor_R_trn_m_sz_tech_F_Y", "L154.in_EJ_R_trn_m_sz_tech_F_Yh") ->
       L254.BaseService_trn_EUR

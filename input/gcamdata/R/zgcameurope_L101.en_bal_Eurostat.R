@@ -9,7 +9,7 @@
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat}, \code{L101.in_EJ_ctry_trn_Fi_Yh_Eurostat}, \code{L101.in_EJ_ctry_bld_Fi_Yh_Eurostat}.
-#' \code{L101.en_bal_EJ_iso_Si_Fi_Yh_EUR}, \code{L101.in_EJ_ctry_trn_Fi_Yh_EUR}, \code{L101.in_EJ_ctry_bld_Fi_Yh_EUR}.
+#' \code{L101.en_bal_EJ_iso_Si_Fi_Yh_EUR}, \code{L101.in_EJ_ctry_trn_Fi_Yh_EUR}, \code{L101.in_EJ_ctry_bld_Fi_Yh_EUR}, \code{L101.GCAM_EUR_regions}..
 #' @details Assign Eurostat product and flow data to nomenclature used in GCAM (fuel and sector, respectively), summarizing
 #' by (generally) iso and/or region, sector, fuel, and year.
 #' @importFrom assertthat assert_that
@@ -29,7 +29,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
              # to consider the years 1971-1989 (not available in Eurostat)
              "L101.en_bal_EJ_ctry_Si_Fi_Yh_full"))
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("GCAM_EUR_regions",
+    return(c("L101.GCAM_EUR_regions",
              "L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat",
              "L101.in_EJ_ctry_trn_Fi_Yh_Eurostat",
              "L101.in_EJ_ctry_bld_Fi_Yh_Eurostat",
@@ -55,7 +55,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
 
 
     # EUR regions
-    GCAM_EUR_regions <- GCAM32_to_EU %>%
+    L101.GCAM_EUR_regions <- GCAM32_to_EU %>%
       filter(GCAMEU_region != GCAM32_region) %>%
       # remove Georgia: although it has data availabe in Eurostat, it belongs to the Former Soviet Union,Central Asia region
       filter(iso != 'geo')
@@ -116,22 +116,22 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       group_by(iso, sector, fuel, year) %>%
       summarise(value = sum(net)) %>%
       ungroup %>%
-      filter(iso %in% GCAM_EUR_regions$iso)
+      filter(iso %in% L101.GCAM_EUR_regions$iso)
 
     # Append TPES onto the end of the energy balances
     # Remove non-EUR regional countries whose data is available in Eurostat (e.g. Georgia)
     L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat <- L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
-      filter(iso %in% GCAM_EUR_regions$iso) %>%
+      filter(iso %in% L101.GCAM_EUR_regions$iso) %>%
       bind_rows(L101.in_EJ_iso_TPES_Fi_Yh) # FINAL OUTPUT TABLE - only Eurostat data
 
-    # Update the GCAM_EUR_regions mapping by removing iso codes whose data is not
+    # Update the L101.GCAM_EUR_regions mapping by removing iso codes whose data is not
     # availabe in Eurostat (e.g Switzerland)
-    GCAM_EUR_regions <- GCAM_EUR_regions %>%
+    L101.GCAM_EUR_regions <- L101.GCAM_EUR_regions %>%
       filter(iso %in% L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat$iso)
 
     L101.en_bal_EJ_iso_Si_Fi_Yh_EUR <- L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
       bind_rows(L101.en_bal_EJ_ctry_Si_Fi_Yh_full %>%
-                  filter(iso %in% GCAM_EUR_regions$iso) %>%
+                  filter(iso %in% L101.GCAM_EUR_regions$iso) %>%
                   select(-"GCAM_region_ID") %>%
                   filter(year < max(L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat$year)) %>%
                   # Setting to zero net fuel production from energy transformation sectors modeled under the industrial sector
@@ -178,13 +178,13 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       ungroup # FINAL OUTPUT TABLE - temporally complete EUR data
 
     ### Produce Outputs ------------
-    GCAM_EUR_regions %>%
+    L101.GCAM_EUR_regions %>%
       add_title("ISO to GCAM region mapping for EUR regions with Eurostat data") %>%
       add_units("") %>%
       add_precursors("common/iso_GCAM_regID", "common/GCAM32_to_EU", "europe/nrg_bal_c",
                      "europe/mappings/geo_to_iso_map", "europe/mappings/nrgbal_to_sector_map",
                      "europe/mappings/siec_to_fuel_map","energy/mappings/IEA_sector_fuel_modifications") ->
-      GCAM_EUR_regions
+      L101.GCAM_EUR_regions
 
     L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
       add_title("Eurostat energy balances by GCAM region / intermediate sector / intermediate fuel / historical year") %>%
@@ -234,7 +234,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       same_precursors_as(L101.in_EJ_ctry_trn_Fi_Yh_Eurostat) ->
       L101.in_EJ_ctry_bld_Fi_Yh_EUR
 
-    return_data(GCAM_EUR_regions,
+    return_data(L101.GCAM_EUR_regions,
                 L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat,
                 L101.in_EJ_ctry_trn_Fi_Yh_Eurostat,
                 L101.in_EJ_ctry_bld_Fi_Yh_Eurostat,
