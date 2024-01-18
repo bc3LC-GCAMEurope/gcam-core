@@ -9,6 +9,7 @@
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat}, \code{L101.in_EJ_ctry_trn_Fi_Yh_Eurostat}, \code{L101.in_EJ_ctry_bld_Fi_Yh_Eurostat}.
+#' \code{L101.en_bal_EJ_iso_Si_Fi_Yh_EUR}, \code{L101.in_EJ_ctry_trn_Fi_Yh_EUR}, \code{L101.in_EJ_ctry_bld_Fi_Yh_EUR}, \code{L101.GCAM_EUR_regions}..
 #' @details Assign Eurostat product and flow data to nomenclature used in GCAM (fuel and sector, respectively), summarizing
 #' by (generally) iso and/or region, sector, fuel, and year.
 #' @importFrom assertthat assert_that
@@ -23,11 +24,16 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
              FILE = "gcam-europe/mappings/nrgbal_to_sector_map",
              FILE = "gcam-europe/mappings/siec_to_fuel_map",
              FILE = "gcam-europe/mappings/Eurostat_sector_fuel_modifications",
-             FILE = "energy/mappings/enduse_fuel_aggregation"))
+             FILE = "energy/mappings/enduse_fuel_aggregation",
+             "L1011.en_bal_EJ_R_Si_Fi_Yh"))
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat",
+    return(c("L101.GCAM_EUR_regions",
+             "L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat",
              "L101.in_EJ_ctry_trn_Fi_Yh_Eurostat",
-             "L101.in_EJ_ctry_bld_Fi_Yh_Eurostat"))
+             "L101.in_EJ_ctry_bld_Fi_Yh_Eurostat",
+             "L101.en_bal_EJ_iso_Si_Fi_Yh_EUR",
+             "L101.in_EJ_ctry_trn_Fi_Yh_EUR",
+             "L101.in_EJ_ctry_bld_Fi_Yh_EUR"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -41,10 +47,21 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
     Eurostat_sector_fuel_modifications <- get_data(all_data, "gcam-europe/mappings/Eurostat_sector_fuel_modifications")
     enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
 
+    L1011.en_bal_EJ_R_Si_Fi_Yh <- get_data(all_data, "L1011.en_bal_EJ_R_Si_Fi_Yh")
+
+
+    # EUR regions
+    L101.GCAM_EUR_regions <- GCAM32_to_EU %>%
+      filter(GCAMEU_region != GCAM32_region) %>%
+      # remove Georgia: although it has data availabe in Eurostat, it belongs to the Former Soviet Union,Central Asia region
+      filter(iso != 'geo')
+
+    # Energy Balance Calculations ----------------
     # 1a. Energy Balance Mapping ----------------
     # Add mappings to energy balance
     L101.Eurostat_en_bal_ctry_hist <- nrg_bal_c %>%
-      filter(geo != "EU27_2020") %>%
+      # Remove GEorgia
+      filter(geo != "EU27_2020", geo != 'GE') %>%
       left_join_error_no_match(geo_to_iso_map, by = "geo") %>%
       # Ok to have NAs
       left_join(nrgbal_to_sector_map, by = "nrg_bal") %>%
@@ -115,17 +132,34 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       group_by(iso, fuel, year) %>%
       summarise(value = sum(value)) %>%
       ungroup %>%
+      filter(iso %in% L101.GCAM_EUR_regions$iso) %>%
       mutate(sector = "TPES")
 
     # Append TPES onto the end of the energy balances
     L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat <- L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
       select(-calculate_net) %>%
       bind_rows(L101.in_EJ_iso_TPES_Fi_Yh_Eurostat) %>%
-      left_join_error_no_match(iso_GCAM_regID, by = "iso") %>%
-      filter(iso != "geo") %>%
+      left_join_error_no_match(L101.GCAM_EUR_regions, by = "iso") %>%
       group_by(GCAM_region_ID, sector, fuel, year) %>%
       summarise(value = sum(value)) %>%
-      ungroup # FINAL OUTPUT TABLE
+      ungroup # FINAL OUTPUT TABLE - only Eurostat data
+
+    # Update the L101.GCAM_EUR_regions mapping by removing iso codes whose data is not
+    # available in Eurostat (e.g Switzerland)
+    L101.GCAM_EUR_regions <- L101.GCAM_EUR_regions %>%
+      filter(GCAM_region_ID %in% L101.GCAM_EUR_regions$GCAM_region_ID)
+
+    L101.en_bal_EJ_iso_Si_Fi_Yh_EUR <- L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
+      bind_rows(L1011.en_bal_EJ_R_Si_Fi_Yh %>%
+                  filter(GCAM_region_ID %in% L101.GCAM_EUR_regions$GCAM_region_ID) %>%
+                  select(-"GCAM_region_ID") %>%
+                  filter(year < min(L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat$year)) %>%
+                  # Setting to zero net fuel production from energy transformation sectors modeled under the industrial sector
+                  # These processes (e.g., coke ovens) are modeled in GCAM as final energy consumption, not energy transformation/production
+                  # Setting to zero net production of fuels classified as coal at gas works (gas coke)
+                  mutate(value = if_else(value < 0 & grepl("industry", sector), 0, value),
+                         value = if_else(value < 0 & sector == "in_gas processing", 0, value))
+                ) # FINAL OUTPUT TABLE - temporally complete EUR data
 
     # 2. Building & Transport Downscale -----------
     # For downscaling of buildings and transportation energy, aggregate by fuel and country
@@ -145,9 +179,25 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       select(-fuel) %>%
       group_by(GCAM_region_ID, sector, fuel = bld, year) %>%
       summarise(value = sum(value, na.rm = T)) %>%
-      ungroup
+      ungroup # FINAL OUTPUT TABLE - only Eurostat data
+
+    L101.in_EJ_ctry_bld_Fi_Yh_EUR <- L101.en_bal_EJ_iso_Si_Fi_Yh_EUR %>%
+      filter(grepl("bld", sector)) %>%
+      left_join_error_no_match(select(enduse_fuel_aggregation, fuel, bld), by = "fuel") %>%
+      select(-fuel) %>%
+      group_by(GCAM_region_ID, sector, fuel = bld, year) %>%
+      summarise(value = sum(value, na.rm = T)) %>%
+      ungroup # FINAL OUTPUT TABLE - temporally complete EUR data
 
     # 3. Produce Outputs ------------
+    L101.GCAM_EUR_regions %>%
+      add_title("ISO to GCAM region mapping for EUR regions with Eurostat data") %>%
+      add_units("") %>%
+      add_precursors("common/iso_GCAM_regID", "common/GCAM32_to_EU", "europe/nrg_bal_c",
+                     "europe/mappings/geo_to_iso_map", "europe/mappings/nrgbal_to_sector_map",
+                     "europe/mappings/siec_to_fuel_map","energy/mappings/IEA_sector_fuel_modifications") ->
+      L101.GCAM_EUR_regions
+
     L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
       add_title("Eurostat energy balances by GCAM region / intermediate sector / intermediate fuel / historical year") %>%
       add_units("EJ") %>%
@@ -172,9 +222,37 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       same_precursors_as(L101.in_EJ_ctry_trn_Fi_Yh_Eurostat) ->
       L101.in_EJ_ctry_bld_Fi_Yh_Eurostat
 
-    return_data(L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat,
+    L101.en_bal_EJ_iso_Si_Fi_Yh_EUR %>%
+      add_title("Eurostat (1990 - 2021) & IEA (1971 - 1989) energy balances by GCAM region / intermediate sector / intermediate fuel / historical year") %>%
+      add_units("EJ") %>%
+      add_precursors("common/iso_GCAM_regID", "common/GCAM32_to_EU", "europe/nrg_bal_c", "europe/mappings/geo_to_iso_map",
+                     "europe/mappings/nrgbal_to_sector_map", "europe/mappings/siec_to_fuel_map",
+                     "energy/mappings/IEA_sector_fuel_modifications", "L1011.en_bal_EJ_R_Si_Fi_Yh") ->
+      L101.en_bal_EJ_iso_Si_Fi_Yh_EUR
+
+    L101.in_EJ_ctry_trn_Fi_Yh_EUR %>%
+      add_title("Eurostat (1990 - 2021) & IEA (1971 - 1989) transportation sector energy consumption by country / IEA mode / fuel / historical year") %>%
+      add_units("EJ") %>%
+      add_comments("Consumption of energy by the transport sector by fuel and historical year. Aggregated by fuel and country") %>%
+      add_precursors("common/iso_GCAM_regID", "common/GCAM32_to_EU", "europe/nrg_bal_c", "europe/mappings/geo_to_iso_map",
+                     "europe/mappings/nrgbal_to_sector_map", "europe/mappings/siec_to_fuel_map",
+                     "energy/mappings/IEA_sector_fuel_modifications", "energy/mappings/enduse_fuel_aggregation")  ->
+      L101.in_EJ_ctry_trn_Fi_Yh_EUR
+
+    L101.in_EJ_ctry_bld_Fi_Yh_EUR %>%
+      add_title("Eurostat (1990 - 2021) & IEA (1971 - 1989) building energy consumption by country / IEA sector / fuel / historical year") %>%
+      add_units("EJ") %>%
+      add_comments("Consumption of energy by the building sector by fuel and historical year. Aggregated by fuel and country") %>%
+      same_precursors_as(L101.in_EJ_ctry_trn_Fi_Yh_Eurostat) ->
+      L101.in_EJ_ctry_bld_Fi_Yh_EUR
+
+    return_data(L101.GCAM_EUR_regions,
+                L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat,
                 L101.in_EJ_ctry_trn_Fi_Yh_Eurostat,
-                L101.in_EJ_ctry_bld_Fi_Yh_Eurostat)
+                L101.in_EJ_ctry_bld_Fi_Yh_Eurostat,
+                L101.en_bal_EJ_iso_Si_Fi_Yh_EUR,
+                L101.in_EJ_ctry_trn_Fi_Yh_EUR,
+                L101.in_EJ_ctry_bld_Fi_Yh_EUR)
   } else {
     stop("Unknown command")
   }
