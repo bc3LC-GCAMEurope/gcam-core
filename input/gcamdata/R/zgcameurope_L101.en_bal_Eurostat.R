@@ -18,11 +18,11 @@
 module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/iso_GCAM_regID",
-             FILE = "europe/nrg_bal_c",
-             FILE = "europe/mappings/geo_to_iso_map",
-             FILE = "europe/mappings/nrgbal_to_sector_map",
-             FILE = "europe/mappings/siec_to_fuel_map",
-             FILE = "europe/mappings/Eurostat_sector_fuel_modifications",
+             FILE = "gcam-europe/nrg_bal_c",
+             FILE = "gcam-europe/mappings/geo_to_iso_map",
+             FILE = "gcam-europe/mappings/nrgbal_to_sector_map",
+             FILE = "gcam-europe/mappings/siec_to_fuel_map",
+             FILE = "gcam-europe/mappings/Eurostat_sector_fuel_modifications",
              FILE = "energy/mappings/enduse_fuel_aggregation"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat",
@@ -34,11 +34,11 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
 
     # Load required inputs ----------------
     iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID")
-    nrg_bal_c <- get_data(all_data, "europe/nrg_bal_c")
-    geo_to_iso_map <- get_data(all_data, "europe/mappings/geo_to_iso_map")
-    nrgbal_to_sector_map <- get_data(all_data, "europe/mappings/nrgbal_to_sector_map")
-    siec_to_fuel_map <- get_data(all_data, "europe/mappings/siec_to_fuel_map")
-    Eurostat_sector_fuel_modifications <- get_data(all_data, "europe/mappings/Eurostat_sector_fuel_modifications")
+    nrg_bal_c <- get_data(all_data, "gcam-europe/nrg_bal_c")
+    geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map")
+    nrgbal_to_sector_map <- get_data(all_data, "gcam-europe/mappings/nrgbal_to_sector_map")
+    siec_to_fuel_map <- get_data(all_data, "gcam-europe/mappings/siec_to_fuel_map")
+    Eurostat_sector_fuel_modifications <- get_data(all_data, "gcam-europe/mappings/Eurostat_sector_fuel_modifications")
     enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
 
     # 1a. Energy Balance Mapping ----------------
@@ -134,7 +134,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       filter(grepl("trn", sector)) %>%
       left_join_error_no_match(select(enduse_fuel_aggregation, fuel, trn), by = "fuel") %>%
       select(-fuel) %>%
-      group_by(iso, sector, fuel = trn, year) %>%
+      group_by(GCAM_region_ID, sector, fuel = trn, year) %>%
       summarise(value = sum(value, na.rm = T)) %>%
       ungroup
 
@@ -143,7 +143,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       filter(grepl("bld", sector)) %>%
       left_join_error_no_match(select(enduse_fuel_aggregation, fuel, bld), by = "fuel") %>%
       select(-fuel) %>%
-      group_by(iso, sector, fuel = bld, year) %>%
+      group_by(GCAM_region_ID, sector, fuel = bld, year) %>%
       summarise(value = sum(value, na.rm = T)) %>%
       ungroup
 

@@ -16,7 +16,7 @@ module_energy_transportation_UCD_CORE_xml <- function(command, ...) {
 
 
   if(command == driver.DECLARE_INPUTS) {
-    return(c("GCAM_EUR_regions",
+    return(c(#"GCAM_EUR_regions",
              "L254.Supplysector_trn",
              "L254.FinalEnergyKeyword_trn",
              "L254.tranSubsectorLogit",
