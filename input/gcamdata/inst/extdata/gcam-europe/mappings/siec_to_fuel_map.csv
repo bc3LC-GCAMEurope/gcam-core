@@ -71,7 +71,7 @@ RA410,Solar thermal,elec_solar CSP
 RA420,Solar photovoltaic,elec_solar PV
 RA500,"Tide, wave, ocean",elec_hydro
 RA600,Ambient heat (heat pumps),
-S2000,Oil Shale and Oil Sands,refined liquids
+S2000,Oil Shale and Oil Sands,coal
 TOTAL,Total energy,
 W6100,Industrial waste (non-renewable),biomass
 W6100_6220,Non-renewable waste,
