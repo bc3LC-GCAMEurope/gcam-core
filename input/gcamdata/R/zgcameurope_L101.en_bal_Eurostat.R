@@ -95,7 +95,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       gather_years()
 
     # Calculate net consumption of energy transformation sectors
-    L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat_NET <-  L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
+    L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat_NET <- L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
       filter(grepl("^in|^out", sector)) %>%
       tidyr::separate(sector, into = c("flow", "sector"), sep = "_", extra = "merge") %>%
       tidyr::pivot_wider(names_from = flow, values_from = value) %>%
@@ -133,7 +133,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       bind_rows(L101.en_bal_EJ_ctry_Si_Fi_Yh_full %>%
                   filter(iso %in% L101.GCAM_EUR_regions$iso) %>%
                   select(-"GCAM_region_ID") %>%
-                  filter(year < max(L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat$year)) %>%
+                  filter(year < min(L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat$year)) %>%
                   # Setting to zero net fuel production from energy transformation sectors modeled under the industrial sector
                   # These processes (e.g., coke ovens) are modeled in GCAM as final energy consumption, not energy transformation/production
                   # Setting to zero net production of fuels classified as coal at gas works (gas coke)
