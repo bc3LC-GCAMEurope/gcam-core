@@ -19,31 +19,35 @@
 module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/iso_GCAM_regID",
-             FILE = "europe/nrg_bal_c",
-             FILE = "europe/mappings/geo_to_iso_map",
-             FILE = "europe/mappings/nrgbal_to_sector_map",
-             FILE = "europe/mappings/siec_to_fuel_map",
-             FILE = "europe/mappings/Eurostat_sector_fuel_modifications",
-             FILE = "energy/mappings/enduse_fuel_aggregation"))
+             FILE = "gcam-europe/nrg_bal_c",
+             FILE = "gcam-europe/mappings/geo_to_iso_map",
+             FILE = "gcam-europe/mappings/nrgbal_to_sector_map",
+             FILE = "gcam-europe/mappings/siec_to_fuel_map",
+             FILE = "gcam-europe/mappings/Eurostat_sector_fuel_modifications",
+             FILE = "energy/mappings/enduse_fuel_aggregation",
+             "L1011.en_bal_EJ_R_Si_Fi_Yh"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L101.GCAM_EUR_regions",
              "L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat",
              "L101.in_EJ_ctry_trn_Fi_Yh_Eurostat",
-             "L101.in_EJ_ctry_bld_Fi_Yh_Eurostat"))
+             "L101.in_EJ_ctry_bld_Fi_Yh_Eurostat",
+             "L101.en_bal_EJ_iso_Si_Fi_Yh_EUR",
+             "L101.in_EJ_ctry_trn_Fi_Yh_EUR",
+             "L101.in_EJ_ctry_bld_Fi_Yh_EUR"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
 
     # Load required inputs ----------------
     iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID")
-    nrg_bal_c <- get_data(all_data, "europe/nrg_bal_c")
-    geo_to_iso_map <- get_data(all_data, "europe/mappings/geo_to_iso_map")
-    nrgbal_to_sector_map <- get_data(all_data, "europe/mappings/nrgbal_to_sector_map")
-    siec_to_fuel_map <- get_data(all_data, "europe/mappings/siec_to_fuel_map")
-    Eurostat_sector_fuel_modifications <- get_data(all_data, "europe/mappings/Eurostat_sector_fuel_modifications")
+    nrg_bal_c <- get_data(all_data, "gcam-europe/nrg_bal_c")
+    geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map")
+    nrgbal_to_sector_map <- get_data(all_data, "gcam-europe/mappings/nrgbal_to_sector_map")
+    siec_to_fuel_map <- get_data(all_data, "gcam-europe/mappings/siec_to_fuel_map")
+    Eurostat_sector_fuel_modifications <- get_data(all_data, "gcam-europe/mappings/Eurostat_sector_fuel_modifications")
     enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
 
-    L101.en_bal_EJ_ctry_Si_Fi_Yh_full <- get_data(all_data, "L101.en_bal_EJ_ctry_Si_Fi_Yh_full")
+    L1011.en_bal_EJ_R_Si_Fi_Yh <- get_data(all_data, "L1011.en_bal_EJ_R_Si_Fi_Yh")
 
 
     # EUR regions
@@ -56,7 +60,8 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
     # 1a. Energy Balance Mapping ----------------
     # Add mappings to energy balance
     L101.Eurostat_en_bal_ctry_hist <- nrg_bal_c %>%
-      filter(geo != "EU27_2020") %>%
+      # Remove GEorgia
+      filter(geo != "EU27_2020", geo != 'GE') %>%
       left_join_error_no_match(geo_to_iso_map, by = "geo") %>%
       # Ok to have NAs
       left_join(nrgbal_to_sector_map, by = "nrg_bal") %>%
@@ -127,7 +132,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       group_by(iso, fuel, year) %>%
       summarise(value = sum(value)) %>%
       ungroup %>%
-      filter(iso %in% L101.GCAM_EUR_regions$iso)
+      filter(iso %in% L101.GCAM_EUR_regions$iso) %>%
       mutate(sector = "TPES")
 
     # Append TPES onto the end of the energy balances
@@ -135,19 +140,19 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       filter(iso %in% L101.GCAM_EUR_regions$iso) %>%
       select(-calculate_net) %>%
       bind_rows(L101.in_EJ_iso_TPES_Fi_Yh_Eurostat) %>%
-      left_join_error_no_match(GCAM_EUR_regions, by = "iso") %>%
+      left_join_error_no_match(L101.GCAM_EUR_regions, by = "iso") %>%
       group_by(GCAM_region_ID, sector, fuel, year) %>%
       summarise(value = sum(value)) %>%
       ungroup # FINAL OUTPUT TABLE - only Eurostat data
 
     # Update the L101.GCAM_EUR_regions mapping by removing iso codes whose data is not
-    # availabe in Eurostat (e.g Switzerland)
+    # available in Eurostat (e.g Switzerland)
     L101.GCAM_EUR_regions <- L101.GCAM_EUR_regions %>%
-      filter(iso %in% L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat$iso)
+      filter(GCAM_region_ID %in% L101.GCAM_EUR_regions$GCAM_region_ID)
 
     L101.en_bal_EJ_iso_Si_Fi_Yh_EUR <- L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
-      bind_rows(L101.en_bal_EJ_ctry_Si_Fi_Yh_full %>%
-                  filter(iso %in% L101.GCAM_EUR_regions$iso) %>%
+      bind_rows(L1011.en_bal_EJ_R_Si_Fi_Yh %>%
+                  filter(GCAM_region_ID %in% L101.GCAM_EUR_regions$GCAM_region_ID) %>%
                   select(-"GCAM_region_ID") %>%
                   filter(year < min(L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat$year)) %>%
                   # Setting to zero net fuel production from energy transformation sectors modeled under the industrial sector
@@ -164,7 +169,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       filter(grepl("trn", sector)) %>%
       left_join_error_no_match(select(enduse_fuel_aggregation, fuel, trn), by = "fuel") %>%
       select(-fuel) %>%
-      group_by(iso, sector, fuel = trn, year) %>%
+      group_by(GCAM_region_ID, sector, fuel = trn, year) %>%
       summarise(value = sum(value, na.rm = T)) %>%
       ungroup
 
@@ -173,7 +178,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       filter(grepl("bld", sector)) %>%
       left_join_error_no_match(select(enduse_fuel_aggregation, fuel, bld), by = "fuel") %>%
       select(-fuel) %>%
-      group_by(iso, sector, fuel = bld, year) %>%
+      group_by(GCAM_region_ID, sector, fuel = bld, year) %>%
       summarise(value = sum(value, na.rm = T)) %>%
       ungroup # FINAL OUTPUT TABLE - only Eurostat data
 
@@ -181,7 +186,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       filter(grepl("bld", sector)) %>%
       left_join_error_no_match(select(enduse_fuel_aggregation, fuel, bld), by = "fuel") %>%
       select(-fuel) %>%
-      group_by(iso, sector, fuel = bld, year) %>%
+      group_by(GCAM_region_ID, sector, fuel = bld, year) %>%
       summarise(value = sum(value, na.rm = T)) %>%
       ungroup # FINAL OUTPUT TABLE - temporally complete EUR data
 
