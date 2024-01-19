@@ -175,9 +175,8 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
 
     L101.en_bal_EJ_R_Si_Fi_Yh_EUR <- L101.en_bal_EJ_R_Si_Fi_Yh_Eurostat %>%
       bind_rows(L1011.en_bal_EJ_R_Si_Fi_Yh %>%
-                  filter(GCAM_region_ID %in% L101.GCAM_EUR_regions$GCAM_region_ID) %>%
-                  select(-"GCAM_region_ID") %>%
-                  filter(year < min(L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat$year))
+                  filter(GCAM_region_ID %in% L101.GCAM_EUR_regions$GCAM_region_ID,
+                         year < min(L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat$year))
                 ) # FINAL OUTPUT TABLE - temporally complete EUR data
 
     # 2. Building & Transport Downscale -----------
