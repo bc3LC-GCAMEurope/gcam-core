@@ -44,7 +44,7 @@ module_gcameurope_L111.rsrc_fos_Prod <- function(command, ...) {
       add_precursors( "L101.en_bal_EJ_R_Si_Fi_Yh_EUR") ->
       L111.Prod_EJ_R_F_Yh_EUR
 
-    return_data(L111.Prod_EJ_R_F_Yh_Eurostat)
+    return_data(L111.Prod_EJ_R_F_Yh_EUR)
   } else {
     stop("Unknown command")
   }
