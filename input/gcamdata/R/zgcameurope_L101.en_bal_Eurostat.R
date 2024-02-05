@@ -109,7 +109,8 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       rename(input = `in`, output = out) %>%
       # NAs in output are just end-use sectors, replace with 0
       tidyr::replace_na(list(output = 0)) %>%
-      mutate(net = input - output) %>%
+      mutate(net = input - output,
+             sector = paste0("net_CALCULATED_", sector)) %>%
       filter(net != 0) %>%
       select(iso, sector, fuel, year, value = net)
 
@@ -155,8 +156,9 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       mutate(sector = "TPES")
 
 
-    # Append TPES and IEA_TPES_diff sector onto the end of the energy balances
+    # Append TPES, IEA_TPES_diff, and net calculations sector onto the end of the energy balances
     L101.en_bal_EJ_R_Si_Fi_Yh_Eurostat <- L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
+      bind_rows(L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat_NETCALC) %>%
       select(-calculate_net) %>%
       # Filter to same years and region IDs as TPES
       filter(year %in% L1011.en_bal_EJ_R_Si_Fi_Yh$year) %>%
@@ -171,7 +173,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
     # Update the L101.GCAM_EUR_regions mapping by removing iso codes whose data is not
     # available in Eurostat (e.g Switzerland)
     L101.GCAM_EUR_regions <- L101.GCAM_EUR_regions %>%
-      filter(GCAM_region_ID %in% L101.GCAM_EUR_regions$GCAM_region_ID)
+      filter(GCAM_region_ID %in% L101.en_bal_EJ_R_Si_Fi_Yh_Eurostat$GCAM_region_ID)
 
     L101.en_bal_EJ_R_Si_Fi_Yh_EUR <- L101.en_bal_EJ_R_Si_Fi_Yh_Eurostat %>%
       bind_rows(L1011.en_bal_EJ_R_Si_Fi_Yh %>%
