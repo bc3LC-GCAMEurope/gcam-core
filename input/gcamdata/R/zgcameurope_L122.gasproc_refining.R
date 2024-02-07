@@ -24,7 +24,7 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
              FILE = "energy/A21.globaltech_coef",
              FILE = "energy/A21.globaltech_secout",
              FILE = "energy/A22.globaltech_coef",
-             "L101.en_bal_EJ_R_Si_Fi_Yh_EUR",
+             "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
              "L121.share_R_TPES_biofuel_tech_EUR",
              "L121.BiomassOilRatios_kgGJ_R_C_EUR"))
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -58,7 +58,7 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
     A21.globaltech_coef <- get_data(all_data, "energy/A21.globaltech_coef", strip_attributes = TRUE)
     A21.globaltech_secout <- get_data(all_data, "energy/A21.globaltech_secout")
     A22.globaltech_coef <- get_data(all_data, "energy/A22.globaltech_coef", strip_attributes = TRUE)
-    L101.en_bal_EJ_R_Si_Fi_Yh_EUR <- get_data(all_data, "L101.en_bal_EJ_R_Si_Fi_Yh_EUR", strip_attributes = TRUE)
+    L1012.en_bal_EJ_R_Si_Fi_Yh_EUR <- get_data(all_data, "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", strip_attributes = TRUE)
     L121.share_R_TPES_biofuel_tech_EUR <- get_data(all_data, "L121.share_R_TPES_biofuel_tech_EUR")
     L121.BiomassOilRatios_kgGJ_R_C_EUR <- get_data(all_data, "L121.BiomassOilRatios_kgGJ_R_C_EUR")
 
@@ -84,18 +84,18 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
                                 key = "Biofuel", value = "default_technology",
                                 -GCAM_region_ID, -region, -biomassOil_tech) %>%
       filter(!region %in% aglu.NO_AGLU_REGIONS,
-             GCAM_region_ID %in% L101.en_bal_EJ_R_Si_Fi_Yh_EUR$GCAM_region_ID) %>%
+             GCAM_region_ID %in% L1012.en_bal_EJ_R_Si_Fi_Yh_EUR$GCAM_region_ID) %>%
       left_join(L121.share_R_TPES_biofuel_tech_EUR, by = c("GCAM_region_ID", "Biofuel")) %>%
       mutate(technology = if_else(is.na(technology), default_technology, technology),
              biomassOil_tech = if_else(technology == "biodiesel" & !is.na(GCAM_commodity), GCAM_commodity, biomassOil_tech),
              share = if_else(is.na(share), 1, share)) %>%
       select(GCAM_region_ID, Biofuel, technology, biomassOil_tech, share)
 
-    # Creating fuel constant for biomass liquids that will be used to filter biofuels from L101.en_bal_EJ_R_Si_Fi_Yh_EUR and to create L122.out_EJ_R_biofuel_Yh
+    # Creating fuel constant for biomass liquids that will be used to filter biofuels from L1012.en_bal_EJ_R_Si_Fi_Yh_EUR and to create L122.out_EJ_R_biofuel_Yh
     # Use left_join because the row # will increase for any region with multiple biofuel production technologies (e.g.,
     # sugar cane ethanol, corn ethanol)
     BIOMASS_LIQUIDS <- c("refined biofuels_ethanol", "refined biofuels_FT")
-    L122.out_EJ_R_biofuel_Yh_EUR <- L101.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
+    L122.out_EJ_R_biofuel_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(sector == "TPES",
              fuel %in% BIOMASS_LIQUIDS) %>%
       mutate(Biofuel = if_else(fuel == "refined biofuels_ethanol", "ethanol", "biodiesel")) %>%
@@ -112,8 +112,8 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
       select(GCAM_region_ID, sector, fuel, biomassOil_tech, year, value)
 
     # 1b GAS AND COAL TO LIQUIDS ------------
-    # Create L122.out_EJ_R_gtlctl_Yh from L101.en_bal_EJ_R_Si_Fi_Yh_EUR for gas to liquids (gtl) and coal to liquids (ctl) sectors
-    L122.out_EJ_R_gtlctl_Yh_EUR <- L101.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
+    # Create L122.out_EJ_R_gtlctl_Yh from L1012.en_bal_EJ_R_Si_Fi_Yh_EUR for gas to liquids (gtl) and coal to liquids (ctl) sectors
+    L122.out_EJ_R_gtlctl_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(grepl("out", sector) & grepl("gtl|ctl",sector)) %>%
       mutate(sector = if_else(grepl("gtl", sector), "gtl", "ctl")) %>%
       group_by(GCAM_region_ID, sector, fuel, year) %>%
@@ -130,7 +130,7 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
 
     ESTONIA_ID <- GCAM_region_names %>% filter(region == "Estonia") %>% pull(GCAM_region_ID)
 
-    L122.in_EJ_gtlctl_F_Yh_estonia <- L101.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
+    L122.in_EJ_gtlctl_F_Yh_estonia <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(grepl("in|net", sector) & grepl("gtl|ctl",sector), GCAM_region_ID == ESTONIA_ID) %>%
       mutate(sector = if_else(grepl("gtl", sector), "gtl", "ctl")) %>%
       # filter to only fuels that are used in ctl and gtl techs in GCAM
@@ -153,13 +153,13 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
     # In contrast, biofuels are assigned different names, so they are not in the TPES of refined liquids.
 
     # Create tibble with appropriate sector and fuels for oil refining (output) for L122.out_EJ_R_oilrefining_Yh_EUR and add historical years
-    L122.out_EJ_R_oilrefining_Yh_EUR_noval <- tibble(GCAM_region_ID = unique(L101.en_bal_EJ_R_Si_Fi_Yh_EUR$GCAM_region_ID),
+    L122.out_EJ_R_oilrefining_Yh_EUR_noval <- tibble(GCAM_region_ID = unique(L1012.en_bal_EJ_R_Si_Fi_Yh_EUR$GCAM_region_ID),
                                                sector = "oil refining", fuel = "oil")%>%
       repeat_add_columns(tibble(year = HISTORICAL_YEARS))
 
     # Create en_bal_TPES_OIL, en_bal_oil, ctl_OIL, and gtlctl_oil to adjust the outputs of CTL and GTL given the same fuel names of the oil refining outputs (as mentioned in the note above)
     # Get output for refined liquids for oil refining (TPES) sector
-    en_bal_TPES_OIL <- L101.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
+    en_bal_TPES_OIL <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(sector == "TPES") %>%
       filter(fuel == "refined liquids") %>%
       select(GCAM_region_ID,sector, year, value_en_bal_TPES = value) %>%
@@ -167,7 +167,7 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
 
     # Output for refined liquids for net_oil refining sector
     # Should leave only final energy/liquids used in other transformation
-    en_bal_oil <- L101.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
+    en_bal_oil <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(grepl("^net", sector),
              grepl("oil refining", sector),
              fuel == "refined liquids") %>%
@@ -195,7 +195,7 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
       select(-value_en_bal, -value_gtlctl)
 
     # Oil refining: input of oil is equal to TPES, and input of other fuels is from net refinery energy use
-    L122.in_EJ_R_oilrefining_F_Yh_EUR <- L101.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
+    L122.in_EJ_R_oilrefining_F_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter((sector == "TPES" & fuel == "refined liquids") |
                grepl("^net", sector) & grepl("oil refining", sector) & fuel != "refined liquids") %>%
       mutate(sector = "oil refining",
@@ -327,12 +327,12 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
       left_join(select(calibrated_techs, supplysector, subsector, technology, sector, fuel), by = c("supplysector", "subsector", "technology"))
 
     # Gas processing output from biomass gasification is equal to regional TPES
-    L122.out_EJ_R_gasproc_bio_Yh_EUR <- L101.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
+    L122.out_EJ_R_gasproc_bio_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(sector == "TPES" , fuel == "gasified biomass") %>%
       mutate(sector = "gas processing", fuel = "biomass")
 
     # Gas processing output from coal gasification is calculated from the input of coal
-    L122.in_EJ_R_gasproc_coal_Yh_EUR <- L101.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
+    L122.in_EJ_R_gasproc_coal_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(sector == "in_gas processing", fuel == "coal") %>%
       mutate(sector = "gas processing")
 
@@ -344,7 +344,7 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
       select(-gas_coef)
 
     # Natural gas is equal to regional TPES minus upstream use of natural gas (e.g. GTL). Procedure and assumptiosn are explained below
-    L122.out_EJ_R_gasproc_gas_Yh_EUR <- L101.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
+    L122.out_EJ_R_gasproc_gas_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(sector == "TPES", fuel == "gas") %>%
       mutate(sector = "gas processing")
 
@@ -398,7 +398,7 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
       add_title("Outputs of gas processing by GCAM-Europe region / fuel / historical year ") %>%
       add_units("EJ") %>%
       add_precursors("common/GCAM_region_names", "energy/calibrated_techs",
-                     "energy/A_regions", "energy/A21.globaltech_coef", "energy/A22.globaltech_coef", "L101.en_bal_EJ_R_Si_Fi_Yh_EUR") ->
+                     "energy/A_regions", "energy/A21.globaltech_coef", "energy/A22.globaltech_coef", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR") ->
       L122.out_EJ_R_gasproc_F_Yh_EUR
 
     L122.in_EJ_R_gasproc_F_Yh_EUR %>%
@@ -434,7 +434,7 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
       add_units("Mt") %>%
       add_comments("Created by matching 1st generation bio with the global technologies coefficients for existing minicam energy inputs") %>%
       add_precursors("common/GCAM_region_names", "energy/calibrated_techs",
-                     "energy/A_regions", "energy/A21.globaltech_coef", "energy/A22.globaltech_coef", "L101.en_bal_EJ_R_Si_Fi_Yh_EUR",
+                     "energy/A_regions", "energy/A21.globaltech_coef", "energy/A22.globaltech_coef", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
                       "aglu/A_agRegionalTechnology", "L121.share_R_TPES_biofuel_tech_EUR", "L121.BiomassOilRatios_kgGJ_R_C_EUR") ->
       L122.in_Mt_R_C_Yh_EUR
 

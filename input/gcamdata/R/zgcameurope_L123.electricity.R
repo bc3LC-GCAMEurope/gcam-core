@@ -18,7 +18,7 @@ module_gcameurope_L123.electricity <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "energy/mappings/enduse_fuel_aggregation",
              FILE = "energy/A23.chp_elecratio",
-             "L101.en_bal_EJ_R_Si_Fi_Yh_EUR"))
+             "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L123.out_EJ_R_elec_F_Yh_EUR",
              "L123.in_EJ_R_elec_F_Yh_EUR",
@@ -36,7 +36,7 @@ module_gcameurope_L123.electricity <- function(command, ...) {
     # Load required inputs
     enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
     A23.chp_elecratio <- get_data(all_data, "energy/A23.chp_elecratio")
-    L101.en_bal_EJ_R_Si_Fi_Yh_EUR <- get_data(all_data, "L101.en_bal_EJ_R_Si_Fi_Yh_EUR")
+    L1012.en_bal_EJ_R_Si_Fi_Yh_EUR <- get_data(all_data, "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR")
 
 
     # 1. Electricity ===================================================
@@ -46,9 +46,9 @@ module_gcameurope_L123.electricity <- function(command, ...) {
       select(fuel,electricity) %>%
       filter(!is.na(electricity))
 
-    # Creates L123.in_EJ_R_elec_F_Yh_EUR based on L101.en_bal_EJ_R_Si_Fi_Yh_EUR and enduse_fuel_aggregation_electricity
+    # Creates L123.in_EJ_R_elec_F_Yh_EUR based on L1012.en_bal_EJ_R_Si_Fi_Yh_EUR and enduse_fuel_aggregation_electricity
     # Calculates the inputs by fuel (based on electricity input fuels), region ID and sector (electricity)
-    L123.in_EJ_R_elec_F_Yh_EUR <- L101.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
+    L123.in_EJ_R_elec_F_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(sector == "in_electricity generation",
              !fuel %in% c("heat", "electricity")) %>%
       mutate(sector = "electricity generation") %>%
@@ -59,9 +59,9 @@ module_gcameurope_L123.electricity <- function(command, ...) {
       summarise_all(sum) %>%
       ungroup()
 
-    # Creates L123.out_EJ_R_elec_F_Yh_EUR based on L101.en_bal_EJ_R_Si_Fi_Yh_EUR and enduse_fuel_aggregation_electricity
+    # Creates L123.out_EJ_R_elec_F_Yh_EUR based on L1012.en_bal_EJ_R_Si_Fi_Yh_EUR and enduse_fuel_aggregation_electricity
     # Calculates the electricity outputs by fuel, region ID and sector (electricity generation)
-    L123.out_EJ_R_elec_F_Yh_preadj_EUR <- L101.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
+    L123.out_EJ_R_elec_F_Yh_preadj_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(sector == "out_electricity generation",
              !fuel %in% c("heat", "electricity")) %>%
       mutate(sector = "electricity generation") %>%
@@ -106,7 +106,7 @@ module_gcameurope_L123.electricity <- function(command, ...) {
       filter(!is.na(industry))
 
     # Create Industry CHP estimates by fuel, region and industry sector.
-    L123.out_EJ_R_indchp_F_Yh_EUR <- L101.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
+    L123.out_EJ_R_indchp_F_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(sector == "out_chp_elec",
              !fuel %in% c("heat", "electricity")) %>%
       mutate(sector = "chp_elec") %>%
@@ -127,7 +127,7 @@ module_gcameurope_L123.electricity <- function(command, ...) {
     L123.out_EJ_R_elec_F_Yh_EUR %>%
       add_title("Outputs of electricity sector by GCAM-Europe region / fuel / historical year") %>%
       add_units("EJ") %>%
-      add_precursors("L101.en_bal_EJ_R_Si_Fi_Yh_EUR",
+      add_precursors("L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
                      "energy/mappings/enduse_fuel_aggregation", "energy/A23.chp_elecratio") ->
       L123.out_EJ_R_elec_F_Yh_EUR
 

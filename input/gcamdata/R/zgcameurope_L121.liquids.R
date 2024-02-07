@@ -22,7 +22,7 @@ module_gcameurope_L121.liquids <- function(command, ...) {
              FILE = "aglu/IIASA_biofuel_tech_mapping",
              FILE = "aglu/IIASA_biofuel_region_mapping",
              FILE = "aglu/A_OilSeed_SecOut",
-             "L101.en_bal_EJ_R_Si_Fi_Yh_EUR",
+             "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
              "L121.in_EJ_R_TPES_unoil_Yh",
              "L121.BiomassOilRatios_kgGJ_R_C"))
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -49,7 +49,7 @@ module_gcameurope_L121.liquids <- function(command, ...) {
     IIASA_biofuel_tech_mapping <- get_data(all_data, "aglu/IIASA_biofuel_tech_mapping", strip_attributes = TRUE)
     IIASA_biofuel_region_mapping <- get_data(all_data, "aglu/IIASA_biofuel_region_mapping", strip_attributes = TRUE)
     A_OilSeed_SecOut <- get_data(all_data, "aglu/A_OilSeed_SecOut", strip_attributes = TRUE)
-    L101.en_bal_EJ_R_Si_Fi_Yh_EUR <- get_data(all_data, "L101.en_bal_EJ_R_Si_Fi_Yh_EUR", strip_attributes = TRUE)
+    L1012.en_bal_EJ_R_Si_Fi_Yh_EUR <- get_data(all_data, "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", strip_attributes = TRUE)
     L121.in_EJ_R_TPES_unoil_Yh  <- get_data(all_data, "L121.in_EJ_R_TPES_unoil_Yh", strip_attributes = TRUE)
     L121.BiomassOilRatios_kgGJ_R_C  <- get_data(all_data, "L121.BiomassOilRatios_kgGJ_R_C", strip_attributes = TRUE)
 
@@ -57,10 +57,10 @@ module_gcameurope_L121.liquids <- function(command, ...) {
     # 1. Setting unconventional and crude oil consumption  ===================================================
     # Directly copying unconventional oil consumption calculated in module_energy_L121.liquids
     L121.in_EJ_R_TPES_unoil_Yh_EUR <- L121.in_EJ_R_TPES_unoil_Yh %>%
-      semi_join(L101.en_bal_EJ_R_Si_Fi_Yh_EUR, by = "GCAM_region_ID")
+      semi_join(L1012.en_bal_EJ_R_Si_Fi_Yh_EUR, by = "GCAM_region_ID")
 
     # Now subtract from refined liquids TPES and set remainder to crude oil
-    L121.in_EJ_R_TPES_crude_Yh_EUR <- L101.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
+    L121.in_EJ_R_TPES_crude_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(sector == "TPES", fuel == "refined liquids") %>%
       left_join(L121.in_EJ_R_TPES_unoil_Yh_EUR, by = c("GCAM_region_ID", "sector", "year")) %>%
       replace_na(list(value.y = 0)) %>%
@@ -86,7 +86,7 @@ module_gcameurope_L121.liquids <- function(command, ...) {
       left_join_error_no_match(iso_GCAM_regID, by = "iso") %>%
       select(GCAM_region_ID, Biofuel, technology, GCAM_commodity, share)
 
-    L121.share_R_TPES_biofuel_tech_EUR <- L101.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
+    L121.share_R_TPES_biofuel_tech_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(sector == "TPES",
              grepl("refined biofuels", fuel),
              year == max(HISTORICAL_YEARS),
@@ -103,7 +103,7 @@ module_gcameurope_L121.liquids <- function(command, ...) {
 
     # Direct copy of L121.BiomassOilRatios_kgGJ_R_C
     L121.BiomassOilRatios_kgGJ_R_C_EUR <- L121.BiomassOilRatios_kgGJ_R_C %>%
-      semi_join(L101.en_bal_EJ_R_Si_Fi_Yh_EUR, by = "GCAM_region_ID")
+      semi_join(L1012.en_bal_EJ_R_Si_Fi_Yh_EUR, by = "GCAM_region_ID")
 
     # ===================================================
     # Produce outputs
@@ -112,7 +112,7 @@ module_gcameurope_L121.liquids <- function(command, ...) {
       add_units("EJ") %>%
       add_comments("Unconventional oil subtracted from total primary energy supply of liquids") %>%
       add_comments("to determine crude oil supply") %>%
-      add_precursors("L121.in_EJ_R_TPES_unoil_Yh", "L101.en_bal_EJ_R_Si_Fi_Yh_EUR") ->
+      add_precursors("L121.in_EJ_R_TPES_unoil_Yh", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR") ->
       L121.in_EJ_R_TPES_crude_Yh_EUR
 
     L121.in_EJ_R_TPES_unoil_Yh_EUR %>%
@@ -120,7 +120,7 @@ module_gcameurope_L121.liquids <- function(command, ...) {
       add_units("EJ") %>%
       add_comments("Direct copy of GCAM-Europe regions in L121.in_EJ_R_TPES_unoil_Yh") %>%
       add_comments("Unconventional oil production shared out to GCAM regions") %>%
-      add_precursors("L121.in_EJ_R_TPES_unoil_Yh", "L101.en_bal_EJ_R_Si_Fi_Yh_EUR") ->
+      add_precursors("L121.in_EJ_R_TPES_unoil_Yh", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR") ->
       L121.in_EJ_R_TPES_unoil_Yh_EUR
 
     L121.share_R_TPES_biofuel_tech_EUR %>%
@@ -128,7 +128,7 @@ module_gcameurope_L121.liquids <- function(command, ...) {
       add_units("unitless") %>%
       add_comments("Ethanol and biodiesel consumption assigned to feedstock shares") %>%
       add_precursors("aglu/IIASA_biofuel_production", "aglu/IIASA_biofuel_region_mapping",
-                     "aglu/IIASA_biofuel_tech_mapping", "L101.en_bal_EJ_R_Si_Fi_Yh_EUR", "common/iso_GCAM_regID") ->
+                     "aglu/IIASA_biofuel_tech_mapping", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "common/iso_GCAM_regID") ->
       L121.share_R_TPES_biofuel_tech_EUR
 
     L121.BiomassOilRatios_kgGJ_R_C_EUR %>%
@@ -136,7 +136,7 @@ module_gcameurope_L121.liquids <- function(command, ...) {
       add_units("kg / GJ") %>%
       add_comments("Direct copy of GCAM-Europe regions in L121.BiomassOilRatios_kgGJ_R_C") %>%
       add_comments("Calculated from weighted average OilCrop oil contents and assumptions about losses") %>%
-      add_precursors( "L121.BiomassOilRatios_kgGJ_R_C", "L101.en_bal_EJ_R_Si_Fi_Yh_EUR") ->
+      add_precursors( "L121.BiomassOilRatios_kgGJ_R_C", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR") ->
       L121.BiomassOilRatios_kgGJ_R_C_EUR
 
 
