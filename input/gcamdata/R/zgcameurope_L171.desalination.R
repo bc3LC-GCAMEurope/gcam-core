@@ -7,9 +7,7 @@
 #' @param command API command to execute
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs, a vector of output names, or (if
-#'   \code{command} is "MAKE") all the generated outputs: \code{L171.out_km3_R_desalfromelec_Yh_EUR},
-#'   \code{L171.share_R_desal_basin}, \code{L171.out_km3_R_desal_F_tech_Yh_EUR}, \code{L171.in_km3_ctry_desal_Yh_EUR},
-#'   \code{L171.in_EJ_R_desal_F_Yh_EUR}.
+#'   \code{command} is "MAKE") all the generated outputs:  \code{L171.out_km3_R_desal_F_tech_Yh_EUR}, \code{L171.in_EJ_R_desal_F_Yh_EUR}.
 #' @details Generate estimates of desalinated water production for municipal and industrial purposes, by various cuts:
 #'   by country, by GCAM region, by technology, by basin, and also estimate the desalinated water production at combined
 #'   electric power and desalination facilities.
@@ -32,10 +30,7 @@ module_gcameurope_L171.desalination <- function(command, ...) {
              FILE = "water/nonirrigation_withdrawal",
              "L101.en_bal_EJ_R_Si_Fi_Yh_EUR"))
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L171.in_km3_ctry_desal_Yh_EUR",
-             "L171.out_km3_R_desalfromelec_Yh_EUR",
-             "L171.out_km3_R_desal_F_tech_Yh_EUR",
-             "L171.share_R_desal_basin_EUR",
+    return(c("L171.out_km3_R_desal_F_tech_Yh_EUR",
              "L171.in_EJ_R_desal_F_Yh_EUR"))
   } else if(command == driver.MAKE) {
 
@@ -265,25 +260,8 @@ module_gcameurope_L171.desalination <- function(command, ...) {
     # ===================================================
 
     # Produce outputs
-    L171.in_km3_ctry_desal_Yh_EUR %>%
-      add_title("Desalinated seawater consumption by country / historical year") %>%
-      add_units("km^3") %>%
-      add_comments("Total domestic supply of desalinated water; includes the secondary output of combined electric + desal plants") %>%
-      add_precursors("water/aquastat_ctry",
-                     "water/FAO_desal_AQUASTAT",
-                     "water/FAO_desal_missing_AQUASTAT") ->
-      L171.in_km3_ctry_desal_Yh_EUR
-
-    L171.out_km3_R_desalfromelec_Yh_EUR %>%
-      add_title("Desalinated seawater production from electricity sector by region / historical year") %>%
-      add_units("km^3") %>%
-      add_comments("This only applies to nations identified in the IEA energy balances as having combined electric + desal plants") %>%
-      same_precursors_as(L171.in_km3_ctry_desal_Yh_EUR) %>%
-      add_precursors("common/iso_GCAM_regID") ->
-      L171.out_km3_R_desalfromelec_Yh_EUR
-
     L171.out_km3_R_desal_F_tech_Yh_EUR %>%
-      add_title("Desalinated seawater production by region / fuel / technology / historical year") %>%
+      add_title("GCAM-Europe Desalinated seawater production by region / fuel / technology / historical year") %>%
       add_units("km^3") %>%
       add_comments("This does not include secondary output from electric + desal plants") %>%
       same_precursors_as(L171.out_km3_R_desalfromelec_Yh_EUR) %>%
@@ -293,28 +271,14 @@ module_gcameurope_L171.desalination <- function(command, ...) {
                      "L101.en_bal_EJ_R_Si_Fi_Yh_EUR") ->
       L171.out_km3_R_desal_F_tech_Yh_EUR
 
-    L171.share_R_desal_basin_EUR %>%
-      add_title("Desalinated seawater consumption by region / basin / historical year") %>%
-      add_units("km^3") %>%
-      add_comments("This includes secondary output from electric + desal plants") %>%
-      same_precursors_as(L171.in_km3_ctry_desal_Yh_EUR) %>%
-      add_precursors("aglu/LDS/Land_type_area_ha",
-                     "water/basin_to_country_mapping",
-                     "water/DesalData_capacity_basin",
-                     "water/nonirrigation_withdrawal") ->
-      L171.share_R_desal_basin_EUR
-
     L171.in_EJ_R_desal_F_Yh_EUR %>%
-      add_title("Desalination energy consumption by region / fuel / historical year") %>%
+      add_title("GCAM-Europe Desalination energy consumption by region / fuel / historical year") %>%
       add_units("km^3") %>%
       add_comments("This does not include energy inputs to electric + desal plants") %>%
       same_precursors_as(L171.out_km3_R_desal_F_tech_Yh_EUR) ->
       L171.in_EJ_R_desal_F_Yh_EUR
 
-    return_data(L171.in_km3_ctry_desal_Yh_EUR,
-                L171.out_km3_R_desalfromelec_Yh_EUR,
-                L171.out_km3_R_desal_F_tech_Yh_EUR,
-                L171.share_R_desal_basin_EUR,
+    return_data(L171.out_km3_R_desal_F_tech_Yh_EUR,
                 L171.in_EJ_R_desal_F_Yh_EUR)
   } else {
     stop("Unknown command")
