@@ -132,7 +132,7 @@ GEP_MAPE,Main activity producer electricity only,out_electricity generation,0
 GEP_MAPCHP,Main activity producer CHP,out_electricity generation,0
 GEP_APE,Autoproducer electricity only,out_electricity generation,0
 GEP_APCHP,Autoproducer CHP ,out_chp_elec,0
-GHP_MAPCHP,Main activity producer CHP,out_industry_chp,0
+GHP_MAPCHP,Main activity producer CHP,out_electricity_heat,0
 GHP_MAPH,Main activity producer heat only,out_heat,0
 GHP_APCHP,Autoproducer CHP ,out_industry_chp,0
 GHP_APH,Autoproducer heat only,out_heat,0

@@ -16,6 +16,7 @@ in_industry_feedstocks,biomass,,,
 in_industry_gtl,refined liquids,in_industry_gtl,gas,1
 out_industry_gtl,refined liquids,out_industry_gtl,gas,1
 in_industry_ownuse,electricity,net_electricity ownuse,electricity,0
+net_industry_ownuse,electricity,net_electricity ownuse,electricity,0
 in_industry_pipeline,gas,net_gas pipeline,gas,0
 in_trn_road,biomass,in_trn_road,refined biofuels_ethanol,0
 net_industry_oil refining,refined liquids,net_oil refining,refined liquids,0
