@@ -8,8 +8,7 @@
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
-#' the generated outputs: \code{L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat}, \code{L101.in_EJ_ctry_trn_Fi_Yh_Eurostat}, \code{L101.in_EJ_ctry_bld_Fi_Yh_Eurostat}.
-#' \code{L101.en_bal_EJ_iso_Si_Fi_Yh_EUR}, \code{L101.in_EJ_ctry_trn_Fi_Yh_EUR}, \code{L101.in_EJ_ctry_bld_Fi_Yh_EUR}, \code{L101.GCAM_EUR_regions}..
+#' the generated outputs: \code{L101.en_bal_EJ_R_Si_Fi_Yh_EUR}, \code{L101.in_EJ_R_trn_Fi_Yh_EUR}, \code{L101.in_EJ_R_bld_Fi_Yh_EUR}, \code{L101.GCAM_EUR_regions}..
 #' @details Assign Eurostat product and flow data to nomenclature used in GCAM (fuel and sector, respectively), summarizing
 #' by (generally) iso and/or region, sector, fuel, and year.
 #' @importFrom assertthat assert_that
