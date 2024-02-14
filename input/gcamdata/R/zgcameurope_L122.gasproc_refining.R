@@ -97,7 +97,8 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
     BIOMASS_LIQUIDS <- c("refined biofuels_ethanol", "refined biofuels_FT")
     L122.out_EJ_R_biofuel_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(sector == "TPES",
-             fuel %in% BIOMASS_LIQUIDS) %>%
+             fuel %in% BIOMASS_LIQUIDS,
+             year <= MODEL_FINAL_BASE_YEAR) %>%
       mutate(Biofuel = if_else(fuel == "refined biofuels_ethanol", "ethanol", "biodiesel")) %>%
       left_join(A_biofuel_types_R, by = c("GCAM_region_ID", "Biofuel")) %>%
       mutate(value = value * share) %>%
@@ -208,6 +209,7 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
 
     # Calculate region- and fuel-specific coefficients of crude oil refining
     L122.IO_R_oilrefining_F_Yh_EUR <- L122.in_EJ_R_oilrefining_F_Yh_EUR %>%
+      filter(year <= MODEL_FINAL_BASE_YEAR) %>%
       left_join(select(L122.out_EJ_R_oilrefining_Yh_EUR, -fuel), by = c("GCAM_region_ID", "sector", "year")) %>%
       mutate(value = if_else(value.y == 0, 0, value.x / value.y)) %>%
       select(-value.x, -value.y)
@@ -385,7 +387,8 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
     }
 
     # Combine (rbind) individual fuel tables
-    L122.out_EJ_R_gasproc_F_Yh_EUR <- bind_rows(L122.out_EJ_R_gasproc_gas_Yh_EUR, L122.out_EJ_R_gasproc_bio_Yh_EUR, L122.out_EJ_R_gasproc_coal_Yh_EUR)
+    L122.out_EJ_R_gasproc_F_Yh_EUR <- bind_rows(L122.out_EJ_R_gasproc_gas_Yh_EUR, L122.out_EJ_R_gasproc_bio_Yh_EUR, L122.out_EJ_R_gasproc_coal_Yh_EUR)  %>%
+      filter(year <= MODEL_FINAL_BASE_YEAR)
 
     # Calculate the inputs to gas processing
     L122.in_EJ_R_gasproc_F_Yh_EUR <- L122.out_EJ_R_gasproc_F_Yh_EUR %>%
