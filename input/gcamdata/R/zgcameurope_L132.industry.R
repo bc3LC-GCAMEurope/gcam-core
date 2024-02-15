@@ -20,6 +20,7 @@ module_gcameurope_L132.industry <- function(command, ...) {
     return(c(FILE = "energy/A_regions",
              FILE = "energy/mappings/enduse_fuel_aggregation",
              FILE = "energy/mappings/enduse_sector_aggregation",
+             "L101.GCAM_EUR_regions",
              "L121.in_EJ_R_TPES_unoil_Yh_EUR",
              "L122.in_EJ_R_refining_F_Yh_EUR",
              "L122.in_EJ_R_gasproc_F_Yh_EUR",
@@ -39,6 +40,7 @@ module_gcameurope_L132.industry <- function(command, ...) {
     A_regions <- get_data(all_data, "energy/A_regions")
     enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
     enduse_sector_aggregation <- get_data(all_data, "energy/mappings/enduse_sector_aggregation")
+    L101.GCAM_EUR_regions <- get_data(all_data, "L101.GCAM_EUR_regions")
     L121.in_EJ_R_TPES_unoil_Yh_EUR <- get_data(all_data, "L121.in_EJ_R_TPES_unoil_Yh_EUR")
     L122.in_EJ_R_refining_F_Yh_EUR <- get_data(all_data, "L122.in_EJ_R_refining_F_Yh_EUR")
     L122.in_EJ_R_gasproc_F_Yh_EUR <- get_data(all_data, "L122.in_EJ_R_gasproc_F_Yh_EUR")
@@ -158,7 +160,8 @@ module_gcameurope_L132.industry <- function(command, ...) {
 
     L132.in_EJ_R_indenergy_F_Yh_EUR %>%
       bind_rows(L132.in_EJ_R_inddeductions_F_Yh, L132.in_EJ_R_indheat_F_Yh) %>%
-      mutate(sector = temp_sector_value) ->
+      mutate(sector = temp_sector_value) %>%
+      ungroup() ->
       L132.in_EJ_R_Sindenergy_F_Yh
 
     # Drop heat in regions where this fuel is backed out to its fuel inputs
@@ -166,23 +169,21 @@ module_gcameurope_L132.industry <- function(command, ...) {
     A_regions %>%
       filter(has_district_heat == 0) %>%
       select(GCAM_region_ID) %>%
+      filter(GCAM_region_ID %in% L101.GCAM_EUR_regions$GCAM_region_ID) %>%
       unique %>%
       mutate(fuel = "heat") ->
       region_heat
 
     L132.in_EJ_R_Sindenergy_F_Yh %>%
       anti_join(region_heat, by = c("GCAM_region_ID", "fuel")) %>% # then drop the regions selected in region_heat
-      group_by(GCAM_region_ID, sector, fuel, year) %>%
-      summarise(value = sum(value)) ->
-      ungroup ->
-      L132.in_EJ_R_indenergy_F_Yh_EUR
-
-    # Where unit conversions have produced slightly negative numbers that should be 0, re-set to 0
-    L132.in_EJ_R_indenergy_F_Yh_EUR %>%
+      # Where unit conversions have produced slightly negative numbers that should be 0, re-set to 0
       filter(value < 0 & value > -1e-6) %>%
       mutate(value = 0) %>%
-      bind_rows(filter(L132.in_EJ_R_indenergy_F_Yh_EUR, !(value < 0 & value > -1e-6))) %>%
-      ungroup -> # using ungroup to address error when running driver for unknown reason
+      bind_rows(filter(L132.in_EJ_R_Sindenergy_F_Yh, !(value < 0 & value > -1e-6))) %>%
+
+      group_by(GCAM_region_ID, sector, fuel, year) %>%
+      summarise(value = sum(value)) %>%
+      ungroup() ->
       L132.in_EJ_R_indenergy_F_Yh_EUR
 
     # ===================================================

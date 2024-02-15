@@ -21,11 +21,27 @@ module_gcameurope_L222.en_transformation <- function(command, ...) {
              "L122.out_EJ_R_gasproc_F_Yh_EUR",
              "L122.out_EJ_R_refining_F_Yh_EUR",
              "L122.IO_R_oilrefining_F_Yh_EUR",
-             "L222.GlobalTechCoef_en"))
+             "L222.GlobalTechCoef_en",
+             "L222.Supplysector_en",
+             "L222.SectorUseTrialMarket_en",
+             "L222.SubsectorLogit_en",
+             "L222.SubsectorShrwt_en",
+             "L222.SubsectorShrwtFllt_en",
+             "L222.SubsectorInterp_en",
+             "L222.SubsectorInterpTo_en",
+             "L222.StubTech_en"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L222.StubTechProd_gasproc_EUR",
              "L222.StubTechProd_refining_EUR",
-             "L222.StubTechCoef_refining_EUR"))
+             "L222.StubTechCoef_refining_EUR",
+             "L222.Supplysector_en_EUR",
+             "L222.SectorUseTrialMarket_en_EUR",
+             "L222.SubsectorLogit_en_EUR",
+             "L222.SubsectorShrwt_en_EUR",
+             "L222.SubsectorShrwtFllt_en_EUR",
+             "L222.SubsectorInterp_en_EUR",
+             "L222.SubsectorInterpTo_en_EUR",
+             "L222.StubTech_en_EUR"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -46,6 +62,14 @@ module_gcameurope_L222.en_transformation <- function(command, ...) {
     L122.out_EJ_R_refining_F_Yh_EUR <- get_data(all_data, "L122.out_EJ_R_refining_F_Yh_EUR", strip_attributes = TRUE)
     L122.IO_R_oilrefining_F_Yh_EUR <- get_data(all_data, "L122.IO_R_oilrefining_F_Yh_EUR")
     L222.GlobalTechCoef_en <- get_data(all_data, "L222.GlobalTechCoef_en")
+    L222.Supplysector_en <- get_data(all_data, "L222.Supplysector_en")
+    L222.SectorUseTrialMarket_en <- get_data(all_data, "L222.SectorUseTrialMarket_en")
+    L222.SubsectorLogit_en <- get_data(all_data, "L222.SubsectorLogit_en")
+    L222.SubsectorShrwt_en <- get_data(all_data, "L222.SubsectorShrwt_en")
+    L222.SubsectorShrwtFllt_en <- get_data(all_data, "L222.SubsectorShrwtFllt_en")
+    L222.SubsectorInterp_en <- get_data(all_data, "L222.SubsectorInterp_en")
+    L222.SubsectorInterpTo_en <- get_data(all_data, "L222.SubsectorInterpTo_en")
+    L222.StubTech_en <- get_data(all_data, "L222.StubTech_en")
 
     # Gas production ===================================================
     #  generate base year calibrated outputs of gas processing by interpolating from historical values
@@ -143,6 +167,16 @@ module_gcameurope_L222.en_transformation <- function(command, ...) {
     # reorders columns to match expected model interface input
     L222.StubTechCoef_refining_EUR <- L222.StubTechCoef_refining_EUR[c(LEVEL2_DATA_NAMES[["StubTechYr"]], "minicam.energy.input", "coefficient", "market.name")]
 
+    # Copy logits, shareweights, etc from outputs of module_energy_L222.en_transformation --------------
+    L222.Supplysector_en_EUR <- L222.Supplysector_en %>% filter_regions_europe %>% add_comments_ifnotnull("L222.Supplysector_en filtered to europe regions")
+    L222.SectorUseTrialMarket_en_EUR <- L222.SectorUseTrialMarket_en %>% filter_regions_europe %>% add_comments_ifnotnull("L222.SectorUseTrialMarket_en filtered to europe regions")
+    L222.SubsectorLogit_en_EUR <- L222.SubsectorLogit_en %>% filter_regions_europe %>% add_comments_ifnotnull("L222.SubsectorLogit_en filtered to europe regions")
+    L222.SubsectorShrwt_en_EUR <-  L222.SubsectorShrwt_en %>% filter_regions_europe %>% add_comments_ifnotnull("L222.SubsectorShrwt_en filtered to europe regions")
+    L222.SubsectorShrwtFllt_en_EUR <-  L222.SubsectorShrwtFllt_en %>% filter_regions_europe %>% add_comments_ifnotnull("L222.SubsectorShrwtFllt_en filtered to europe regions")
+    L222.SubsectorInterp_en_EUR <-  L222.SubsectorInterp_en %>% filter_regions_europe %>% add_comments_ifnotnull("L222.SubsectorInterp_en filtered to europe regions")
+    L222.SubsectorInterpTo_en_EUR <-  L222.SubsectorInterpTo_en %>% filter_regions_europe %>% add_comments_ifnotnull("L222.SubsectorInterpTo_en filtered to europe regions")
+    L222.StubTech_en_EUR <-  L222.StubTech_en %>% filter_regions_europe %>% add_comments_ifnotnull("L222.StubTech_en filtered to europe regions")
+
     # Produce outputs ===================================================
     L222.StubTechProd_gasproc_EUR %>%
       add_title("Historical calibrated output of gas processing technologies", overwrite = T) %>%
@@ -166,10 +200,17 @@ module_gcameurope_L222.en_transformation <- function(command, ...) {
       add_precursors("L122.IO_R_oilrefining_F_Yh_EUR", "energy/calibrated_techs", "L101.GCAM_EUR_regions") ->
       L222.StubTechCoef_refining_EUR
 
-
     return_data( L222.StubTechProd_gasproc_EUR,
                  L222.StubTechProd_refining_EUR,
-                 L222.StubTechCoef_refining_EUR)
+                 L222.StubTechCoef_refining_EUR,
+                 L222.Supplysector_en_EUR,
+                 L222.SectorUseTrialMarket_en_EUR,
+                 L222.SubsectorLogit_en_EUR,
+                 L222.SubsectorShrwt_en_EUR,
+                 L222.SubsectorShrwtFllt_en_EUR,
+                 L222.SubsectorInterp_en_EUR,
+                 L222.SubsectorInterpTo_en_EUR,
+                 L222.StubTech_en_EUR)
   } else {
     stop("Unknown command")
   }

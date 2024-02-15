@@ -50,6 +50,24 @@ add_comments <- function(x, comments) {
   x
 }
 
+#' add_comments_ifnotnull
+#'
+#' Add character comments to a data system object if not null. Comments are written out
+#' with the data when the file is saved.
+#'
+#' @param x An object
+#' @param comments A character vector of comments
+#' @return \code{x} with comments appended to any existing comments.
+add_comments_ifnotnull <- function(x, comments) {
+  assertthat::assert_that(is.character(comments) | is.null(comments))
+  if (is.null(x)){x}
+  else{
+    comments <- gsub("[\r\n]", " ", comments)  # remove any line breaks (h/t CH)
+    attr(x, ATTR_COMMENTS) <- c(attr(x, ATTR_COMMENTS), comments)
+    x
+  }
+}
+
 #' add_legacy_name
 #'
 #' Add the legacy (old data system) name to a data system object.
