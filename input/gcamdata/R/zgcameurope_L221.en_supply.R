@@ -24,13 +24,39 @@ module_gcameurope_L221.en_supply <- function(command, ...) {
              FILE = "energy/A21.globaltech_secout",
              "L121.BiomassOilRatios_kgGJ_R_C_EUR",
              "L122.in_Mt_R_C_Yh_EUR",
-             "L221.GlobalTechCoef_en"))
+             "L221.GlobalTechCoef_en",
+
+             "L221.StubTechFractProd_en",
+             "L221.StubTechFractCalPrice_en",
+             "L221.Rsrc_en",
+             "L221.RsrcPrice_en",
+             "L221.Supplysector_en",
+             "L221.SectorUseTrialMarket_en",
+             "L221.SubsectorLogit_en",
+             "L221.SubsectorShrwt_en",
+             "L221.SubsectorShrwtFllt_en",
+             "L221.SubsectorInterp_en",
+             "L221.SubsectorInterpTo_en",
+             "L221.StubTech_en"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L221.StubTechCoef_bioOil_EUR",
              "L221.StubTechFractSecOut_en_EUR",
              "L221.StubTechCalInput_bioOil_EUR",
              "L221.StubTechInterp_bioOil_EUR",
-             "L221.StubTechShrwt_bioOil_EUR"))
+             "L221.StubTechShrwt_bioOil_EUR",
+
+             "L221.StubTechFractProd_en_EUR",
+             "L221.StubTechFractCalPrice_en_EUR",
+             "L221.Rsrc_en_EUR",
+             "L221.RsrcPrice_en_EUR",
+             "L221.Supplysector_en_EUR",
+             "L221.SectorUseTrialMarket_en_EUR",
+             "L221.SubsectorLogit_en_EUR",
+             "L221.SubsectorShrwt_en_EUR",
+             "L221.SubsectorShrwtFllt_en_EUR",
+             "L221.SubsectorInterp_en_EUR",
+             "L221.SubsectorInterpTo_en_EUR",
+             "L221.StubTech_en_EUR"))
   } else if(command == driver.MAKE) {
 
     # Silence global variable package check
@@ -151,6 +177,20 @@ module_gcameurope_L221.en_supply <- function(command, ...) {
       repeat_add_columns(tibble(year = MODEL_FUTURE_YEARS)) %>%
       mutate(share.weight = 1)
 
+    # Copy outputs and filter to Europe ----------------------------
+    L221.StubTechFractProd_en_EUR <- L221.StubTechFractProd_en %>% filter_regions_europe() %>% add_comments_ifnotnull("L221.StubTechFractProd_en filtered to europe regions")
+    L221.StubTechFractCalPrice_en_EUR <- L221.StubTechFractCalPrice_en %>% filter_regions_europe() %>% add_comments_ifnotnull("L221.StubTechFractCalPrice_en filtered to europe regions")
+    L221.Rsrc_en_EUR <- L221.Rsrc_en %>% filter_regions_europe() %>% add_comments_ifnotnull("L221.Rsrc_en filtered to europe regions")
+    L221.RsrcPrice_en_EUR <- L221.RsrcPrice_en %>% filter_regions_europe() %>% add_comments_ifnotnull("L221.RsrcPrice_en filtered to europe regions")
+    L221.Supplysector_en_EUR <- L221.Supplysector_en %>% filter_regions_europe() %>% add_comments_ifnotnull("L221.Supplysector_en filtered to europe regions")
+    L221.SectorUseTrialMarket_en_EUR <- L221.SectorUseTrialMarket_en %>% filter_regions_europe() %>% add_comments_ifnotnull("L221.SectorUseTrialMarket_en filtered to europe regions")
+    L221.SubsectorLogit_en_EUR <- L221.SubsectorLogit_en %>% filter_regions_europe() %>% add_comments_ifnotnull("L221.SubsectorLogit_en filtered to europe regions")
+    L221.SubsectorShrwt_en_EUR <- L221.SubsectorShrwt_en %>% filter_regions_europe() %>% add_comments_ifnotnull("L221.SubsectorShrwt_en filtered to europe regions")
+    L221.SubsectorShrwtFllt_en_EUR <- L221.SubsectorShrwtFllt_en %>% filter_regions_europe() %>% add_comments_ifnotnull("L221.SubsectorShrwtFllt_en filtered to europe regions")
+    L221.SubsectorInterp_en_EUR <- L221.SubsectorInterp_en %>% filter_regions_europe() %>% add_comments_ifnotnull("L221.SubsectorInterp_en filtered to europe regions")
+    L221.SubsectorInterpTo_en_EUR <- L221.SubsectorInterpTo_en %>% filter_regions_europe() %>% add_comments_ifnotnull("L221.SubsectorInterpTo_en filtered to europe regions")
+    L221.StubTech_en_EUR <- L221.StubTech_en %>% filter_regions_europe() %>% add_comments_ifnotnull("L221.StubTech_en filtered to europe regions")
+
     # Produce outputs ===================================================
     L221.StubTechCoef_bioOil_EUR %>%
       add_title("Coefficients of selected stub-technologies of biomassOil production") %>%
@@ -192,7 +232,20 @@ module_gcameurope_L221.en_supply <- function(command, ...) {
                 L221.StubTechFractSecOut_en_EUR,
                 L221.StubTechCalInput_bioOil_EUR,
                 L221.StubTechInterp_bioOil_EUR,
-                L221.StubTechShrwt_bioOil_EUR)
+                L221.StubTechShrwt_bioOil_EUR,
+
+                L221.StubTechFractProd_en_EUR,
+                L221.StubTechFractCalPrice_en_EUR,
+                L221.Rsrc_en_EUR,
+                L221.RsrcPrice_en_EUR,
+                L221.Supplysector_en_EUR,
+                L221.SectorUseTrialMarket_en_EUR,
+                L221.SubsectorLogit_en_EUR,
+                L221.SubsectorShrwt_en_EUR,
+                L221.SubsectorShrwtFllt_en_EUR,
+                L221.SubsectorInterp_en_EUR,
+                L221.SubsectorInterpTo_en_EUR,
+                L221.StubTech_en_EUR)
   } else {
     stop("Unknown command")
   }
