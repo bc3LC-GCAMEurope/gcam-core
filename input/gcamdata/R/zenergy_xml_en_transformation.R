@@ -101,7 +101,8 @@ module_energy_en_transformation_xml <- function(command, ...) {
                      "L222.GlobalTechKeyword_en",
                      "L222.StubTechProd_gasproc",
                      "L222.StubTechProd_refining",
-                     "L222.StubTechCoef_refining") ->
+                     "L222.StubTechCoef_refining") %>%
+      filter_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       en_transformation.xml
 
     return_data(en_transformation.xml)

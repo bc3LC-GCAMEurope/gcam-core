@@ -1257,3 +1257,43 @@ join.gdp.ts <- function(past, future, grouping) {
     rslt
   }
 }
+
+#' filter_regions
+#'
+#' Helper function to remove regions from a tibble
+#' @param df_list list with data and header
+#' @param regions_to_remove character vector of regions to remove
+#' @importFrom assertthat assert_that
+#' @importFrom dplyr filter left_join rename mutate group_by select summarise_all ungroup
+#' @return data object without specified regions
+#'
+filter_regions <- function(df_list, regions_to_remove){
+  assert_that(is_tibble(df_list$data))
+  assert_that(is.character(regions_to_remove))
+
+  if ("region" %in% names(df_list$data)){
+    df_list$data <- df_list$data %>% filter(!region %in% regions_to_remove)
+  }
+  if ("market.name" %in% names(df_list$data)){
+    df_list$data <- df_list$data %>% filter(!market.name %in% regions_to_remove)
+  }
+  return(df_list)
+}
+
+#' filter_regions_xml
+#'
+#' Helper function to remove regions from an xml object
+#' @param xml xml object that is produced at end of xml chunl
+#' @param regions_to_remove character vector of regions to remove
+#' @importFrom assertthat assert_that
+#' @importFrom dplyr filter left_join rename mutate group_by select summarise_all ungroup
+#' @return xml object without specified regions in each tibble
+#'
+filter_regions_xml <- function(xml, regions_to_remove) {
+  assert_that(is_data_list(xml))
+  assert_that(is.character(regions_to_remove))
+
+  xml_data_filtered <- lapply(xml$data_tables, filter_regions, regions_to_remove)
+  xml$data_tables <- xml_data_filtered
+  return (xml)
+}

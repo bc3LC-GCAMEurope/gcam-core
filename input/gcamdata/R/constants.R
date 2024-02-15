@@ -1117,6 +1117,18 @@ gcamusa.OC_1990_ONROAD_SCALING_FACTOR <- 1/1.4
 # If it is TRUE, onroad dust emissions will be included
 gcamusa.DUST <- TRUE
 
+# GCAM-EUR constants ======================================================================
+gcameurope.EUROSTAT_COUNTRIES <- c("Albania", "Austria", "Belgium", "Bosnia and Herzegovina",
+                                   "Bulgaria", "Croatia", "Cyprus", "Czech Republic",
+                                   "Denmark", "Estonia", "Finland", "France", "Germany",
+                                   "Greece", "Hungary", "Iceland", "Ireland", "Italy",
+                                   "Latvia", "Lithuania", "Luxembourg", "Macedonia",
+                                   "Malta", "Moldova", "Netherlands", "Norway",
+                                   "Poland", "Portugal", "Romania", "Serbia and Montenegro",
+                                   "Slovakia", "Slovenia", "Spain", "Sweden",
+                                   "Turkey", "UK", "Ukraine")
+
+
 # Time shift conditions ======================================================================
 # Uncomment these lines to run under 'timeshift' conditions
 # # HISTORICAL_YEARS <- 1971:2005       # normally 1971:2010
