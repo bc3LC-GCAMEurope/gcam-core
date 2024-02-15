@@ -1258,7 +1258,7 @@ join.gdp.ts <- function(past, future, grouping) {
   }
 }
 
-#' filter_regions
+#' remove_regions_data_tables
 #'
 #' Helper function to remove regions from a tibble
 #' @param df_list list with data and header
@@ -1267,7 +1267,7 @@ join.gdp.ts <- function(past, future, grouping) {
 #' @importFrom dplyr filter left_join rename mutate group_by select summarise_all ungroup
 #' @return data object without specified regions
 #'
-filter_regions <- function(df_list, regions_to_remove){
+remove_regions_data_tables <- function(df_list, regions_to_remove){
   assert_that(is_tibble(df_list$data))
   assert_that(is.character(regions_to_remove))
 
@@ -1280,7 +1280,7 @@ filter_regions <- function(df_list, regions_to_remove){
   return(df_list)
 }
 
-#' filter_regions_xml
+#' remove_regions_xml
 #'
 #' Helper function to remove regions from an xml object
 #' @param xml xml object that is produced at end of xml chunl
@@ -1289,11 +1289,37 @@ filter_regions <- function(df_list, regions_to_remove){
 #' @importFrom dplyr filter left_join rename mutate group_by select summarise_all ungroup
 #' @return xml object without specified regions in each tibble
 #'
-filter_regions_xml <- function(xml, regions_to_remove) {
+remove_regions_xml <- function(xml, regions_to_remove) {
   assert_that(is_data_list(xml))
   assert_that(is.character(regions_to_remove))
 
-  xml_data_filtered <- lapply(xml$data_tables, filter_regions, regions_to_remove)
+  xml_data_filtered <- lapply(xml$data_tables, remove_regions_data_tables, regions_to_remove)
   xml$data_tables <- xml_data_filtered
   return (xml)
+}
+
+#' filter_regions_europe
+#'
+#' Helper function to filter to regions from a tibble
+#' @param df tibble; ideally with a region/market.name columns
+#' @param regions_to_keep character vector of regions to remove
+#' @importFrom assertthat assert_that
+#' @importFrom dplyr filter left_join rename mutate group_by select summarise_all ungroup
+#' @return tibble without specified regions
+#'
+filter_regions_europe <- function(df, regions_to_keep = gcameurope.EUROSTAT_COUNTRIES) {
+  if(is.null(df)){return(df)}
+  else{
+    assert_that(is_tibble(df))
+    assert_that(is.character(regions_to_keep))
+
+
+    if ("region" %in% names(df)){
+      df <- df %>% filter(region %in% regions_to_keep)
+    }
+    if ("market.name" %in% names(df)){
+      df <- df %>% filter(market.name %in% regions_to_keep)
+    }
+    return (df)
+  }
 }
