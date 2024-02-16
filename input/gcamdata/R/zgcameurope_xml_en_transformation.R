@@ -11,18 +11,19 @@
 #' the generated outputs: \code{en_transformation_EUR.xml}. The corresponding file in the
 #' original data system was \code{batch_en_transformation_EUR.xml.R} (energy XML).
 module_gcameurope_en_transformation_xml <- function(command, ...) {
+  MODULE_INPUTS <- c("L222.StubTechProd_gasproc_EUR",
+                     "L222.StubTechProd_refining_EUR",
+                     "L222.StubTechCoef_refining_EUR",
+                     "L222.Supplysector_en_EUR",
+                     "L222.SectorUseTrialMarket_en_EUR",
+                     "L222.SubsectorLogit_en_EUR",
+                     "L222.SubsectorShrwt_en_EUR",
+                     "L222.SubsectorShrwtFllt_en_EUR",
+                     "L222.SubsectorInterp_en_EUR",
+                     "L222.SubsectorInterpTo_en_EUR",
+                     "L222.StubTech_en_EUR")
   if(command == driver.DECLARE_INPUTS) {
-    return(c("L222.StubTechProd_gasproc_EUR",
-             "L222.StubTechProd_refining_EUR",
-             "L222.StubTechCoef_refining_EUR",
-             "L222.Supplysector_en_EUR",
-             "L222.SectorUseTrialMarket_en_EUR",
-             "L222.SubsectorLogit_en_EUR",
-             "L222.SubsectorShrwt_en_EUR",
-             "L222.SubsectorShrwtFllt_en_EUR",
-             "L222.SubsectorInterp_en_EUR",
-             "L222.SubsectorInterpTo_en_EUR",
-             "L222.StubTech_en_EUR"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c(XML = "en_transformation_EUR.xml"))
   } else if(command == driver.MAKE) {
@@ -30,15 +31,7 @@ module_gcameurope_en_transformation_xml <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    L222.StubTechProd_gasproc_EUR <- get_data(all_data, "L222.StubTechProd_gasproc_EUR")
-    L222.StubTechProd_refining_EUR <- get_data(all_data, "L222.StubTechProd_refining_EUR")
-    L222.StubTechCoef_refining_EUR <- get_data(all_data, "L222.StubTechCoef_refining_EUR")
-    L222.Supplysector_en_EUR <- get_data(all_data, "L222.Supplysector_en_EUR")
-    L222.SectorUseTrialMarket_en_EUR <- get_data(all_data, "L222.SectorUseTrialMarket_en_EUR")
-    L222.SubsectorLogit_en_EUR <- get_data(all_data, "L222.SubsectorLogit_en_EUR")
-    L222.SubsectorShrwtFllt_en_EUR <- get_data(all_data, "L222.SubsectorShrwtFllt_en_EUR")
-    L222.SubsectorInterp_en_EUR <- get_data(all_data, "L222.SubsectorInterp_en_EUR")
-    L222.StubTech_en_EUR <- get_data(all_data, "L222.StubTech_en_EUR")
+    get_data_list(all_data, MODULE_INPUTS)
 
     year.share.weight <- share.weight <- NULL # silence package checks
     # ===================================================
@@ -57,17 +50,7 @@ module_gcameurope_en_transformation_xml <- function(command, ...) {
       add_xml_data(L222.StubTechProd_gasproc_EUR, "StubTechProd") %>%
       add_xml_data(L222.StubTechProd_refining_EUR, "StubTechProd") %>%
       add_xml_data(L222.StubTechCoef_refining_EUR, "StubTechCoef") %>%
-      add_precursors("L222.StubTechProd_gasproc_EUR",
-                     "L222.StubTechProd_refining_EUR",
-                     "L222.StubTechCoef_refining_EUR",
-                     "L222.Supplysector_en_EUR",
-                     "L222.SectorUseTrialMarket_en_EUR",
-                     "L222.SubsectorLogit_en_EUR",
-                     "L222.SubsectorShrwt_en_EUR",
-                     "L222.SubsectorShrwtFllt_en_EUR",
-                     "L222.SubsectorInterp_en_EUR",
-                     "L222.SubsectorInterpTo_en_EUR",
-                     "L222.StubTech_en_EUR") ->
+      add_precursors(MODULE_INPUTS) ->
       en_transformation_EUR.xml
 
     return_data(en_transformation_EUR.xml)
