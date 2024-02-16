@@ -18,6 +18,18 @@
 #' @importFrom tidyr gather
 #' @author RH Feb 2024
 module_gcameurope_L221.en_supply <- function(command, ...) {
+  OUTPUTS_TO_COPY_FILTER <- c("L221.StubTechFractProd_en",
+                              "L221.StubTechFractCalPrice_en",
+                              "L221.Rsrc_en",
+                              "L221.RsrcPrice_en",
+                              "L221.Supplysector_en",
+                              "L221.SectorUseTrialMarket_en",
+                              "L221.SubsectorLogit_en",
+                              "L221.SubsectorShrwt_en",
+                              "L221.SubsectorShrwtFllt_en",
+                              "L221.SubsectorInterp_en",
+                              "L221.SubsectorInterpTo_en",
+                              "L221.StubTech_en")
   if(command == driver.DECLARE_INPUTS) {
     return(c("L101.GCAM_EUR_regions",
              FILE = "aglu/A_agRegionalTechnology",
@@ -25,38 +37,16 @@ module_gcameurope_L221.en_supply <- function(command, ...) {
              "L121.BiomassOilRatios_kgGJ_R_C_EUR",
              "L122.in_Mt_R_C_Yh_EUR",
              "L221.GlobalTechCoef_en",
-
-             "L221.StubTechFractProd_en",
-             "L221.StubTechFractCalPrice_en",
-             "L221.Rsrc_en",
-             "L221.RsrcPrice_en",
-             "L221.Supplysector_en",
-             "L221.SectorUseTrialMarket_en",
-             "L221.SubsectorLogit_en",
-             "L221.SubsectorShrwt_en",
-             "L221.SubsectorShrwtFllt_en",
-             "L221.SubsectorInterp_en",
-             "L221.SubsectorInterpTo_en",
-             "L221.StubTech_en"))
+             OUTPUTS_TO_COPY_FILTER
+             ))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L221.StubTechCoef_bioOil_EUR",
              "L221.StubTechFractSecOut_en_EUR",
              "L221.StubTechCalInput_bioOil_EUR",
              "L221.StubTechInterp_bioOil_EUR",
              "L221.StubTechShrwt_bioOil_EUR",
-
-             "L221.StubTechFractProd_en_EUR",
-             "L221.StubTechFractCalPrice_en_EUR",
-             "L221.Rsrc_en_EUR",
-             "L221.RsrcPrice_en_EUR",
-             "L221.Supplysector_en_EUR",
-             "L221.SectorUseTrialMarket_en_EUR",
-             "L221.SubsectorLogit_en_EUR",
-             "L221.SubsectorShrwt_en_EUR",
-             "L221.SubsectorShrwtFllt_en_EUR",
-             "L221.SubsectorInterp_en_EUR",
-             "L221.SubsectorInterpTo_en_EUR",
-             "L221.StubTech_en_EUR"))
+             paste0(OUTPUTS_TO_COPY_FILTER, "_EUR")
+             ))
   } else if(command == driver.MAKE) {
 
     # Silence global variable package check
@@ -81,6 +71,9 @@ module_gcameurope_L221.en_supply <- function(command, ...) {
     L121.BiomassOilRatios_kgGJ_R_C_EUR <- get_data(all_data, "L121.BiomassOilRatios_kgGJ_R_C_EUR", strip_attributes = TRUE)
     L122.in_Mt_R_C_Yh_EUR <- get_data(all_data, "L122.in_Mt_R_C_Yh_EUR", strip_attributes = TRUE)
     L221.GlobalTechCoef_en <-  get_data(all_data, "L221.GlobalTechCoef_en", strip_attributes = TRUE)
+
+    # Create outputs that are simply copied from main scripts and filtered to Eurostat regions
+    copy_filter_europe(all_data, OUTPUTS_TO_COPY_FILTER)
 
     # L221.StubTechCoef_bioOil_EUR ==================================================
     # Stub technology coefficients - modify the global tech assumptions in regions where the crop characteristics differ
@@ -176,20 +169,6 @@ module_gcameurope_L221.en_supply <- function(command, ...) {
       select(region, supplysector, subsector, stub.technology) %>%
       repeat_add_columns(tibble(year = MODEL_FUTURE_YEARS)) %>%
       mutate(share.weight = 1)
-
-    # Copy outputs and filter to Europe ----------------------------
-    L221.StubTechFractProd_en_EUR <- L221.StubTechFractProd_en %>% filter_regions_europe() %>% add_comments_ifnotnull("L221.StubTechFractProd_en filtered to europe regions")
-    L221.StubTechFractCalPrice_en_EUR <- L221.StubTechFractCalPrice_en %>% filter_regions_europe() %>% add_comments_ifnotnull("L221.StubTechFractCalPrice_en filtered to europe regions")
-    L221.Rsrc_en_EUR <- L221.Rsrc_en %>% filter_regions_europe() %>% add_comments_ifnotnull("L221.Rsrc_en filtered to europe regions")
-    L221.RsrcPrice_en_EUR <- L221.RsrcPrice_en %>% filter_regions_europe() %>% add_comments_ifnotnull("L221.RsrcPrice_en filtered to europe regions")
-    L221.Supplysector_en_EUR <- L221.Supplysector_en %>% filter_regions_europe() %>% add_comments_ifnotnull("L221.Supplysector_en filtered to europe regions")
-    L221.SectorUseTrialMarket_en_EUR <- L221.SectorUseTrialMarket_en %>% filter_regions_europe() %>% add_comments_ifnotnull("L221.SectorUseTrialMarket_en filtered to europe regions")
-    L221.SubsectorLogit_en_EUR <- L221.SubsectorLogit_en %>% filter_regions_europe() %>% add_comments_ifnotnull("L221.SubsectorLogit_en filtered to europe regions")
-    L221.SubsectorShrwt_en_EUR <- L221.SubsectorShrwt_en %>% filter_regions_europe() %>% add_comments_ifnotnull("L221.SubsectorShrwt_en filtered to europe regions")
-    L221.SubsectorShrwtFllt_en_EUR <- L221.SubsectorShrwtFllt_en %>% filter_regions_europe() %>% add_comments_ifnotnull("L221.SubsectorShrwtFllt_en filtered to europe regions")
-    L221.SubsectorInterp_en_EUR <- L221.SubsectorInterp_en %>% filter_regions_europe() %>% add_comments_ifnotnull("L221.SubsectorInterp_en filtered to europe regions")
-    L221.SubsectorInterpTo_en_EUR <- L221.SubsectorInterpTo_en %>% filter_regions_europe() %>% add_comments_ifnotnull("L221.SubsectorInterpTo_en filtered to europe regions")
-    L221.StubTech_en_EUR <- L221.StubTech_en %>% filter_regions_europe() %>% add_comments_ifnotnull("L221.StubTech_en filtered to europe regions")
 
     # Produce outputs ===================================================
     L221.StubTechCoef_bioOil_EUR %>%

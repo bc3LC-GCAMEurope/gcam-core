@@ -1323,3 +1323,26 @@ filter_regions_europe <- function(df, regions_to_keep = gcameurope.EUROSTAT_COUN
     return (df)
   }
 }
+
+#' copy_filter_europe
+#'
+#' Helper function to copy an object from main data system and filter to Europe
+#' @param df_list Character vector of outputs from "main" datasystem to filter
+#' @param regions_to_keep character vector of regions to remove
+#' @importFrom assertthat assert_that
+#' @importFrom dplyr filter left_join rename mutate group_by select summarise_all ungroup
+#' @return list of new tibbles
+#'
+copy_filter_europe <- function(all_data, df_list, regions_to_keep = gcameurope.EUROSTAT_COUNTRIES) {
+    assert_that(is.character(df_list))
+    assert_that(is.character(regions_to_keep))
+
+    for (df_nm in df_list){
+      df <- get_data(all_data, df_nm)
+      df_new <- df %>% filter_regions_europe %>% add_copy_comment_europe(df_nm)
+      assign(paste0(df_nm, "_EUR"), df_new, envir = parent.frame())
+    }
+
+}
+
+

@@ -50,19 +50,18 @@ add_comments <- function(x, comments) {
   x
 }
 
-#' add_comments_ifnotnull
+#' add_copy_comment_europe
 #'
-#' Add character comments to a data system object if not null. Comments are written out
-#' with the data when the file is saved.
+#' Add comment to indicate object was copied and filtered to european regions
 #'
 #' @param x An object
-#' @param comments A character vector of comments
+#' @param copy_name A string with the name that has been copied
 #' @return \code{x} with comments appended to any existing comments.
-add_comments_ifnotnull <- function(x, comments) {
-  assertthat::assert_that(is.character(comments) | is.null(comments))
+add_copy_comment_europe <- function(x, copy_name) {
+  assertthat::assert_that(is.character(copy_name) | is.null(copy_name))
   if (is.null(x)){x}
   else{
-    comments <- gsub("[\r\n]", " ", comments)  # remove any line breaks (h/t CH)
+    comments <- paste(copy_name, "filtered to European regions")
     attr(x, ATTR_COMMENTS) <- c(attr(x, ATTR_COMMENTS), comments)
     x
   }
