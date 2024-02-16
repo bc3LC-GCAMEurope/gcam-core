@@ -23,7 +23,7 @@ ATTR_REFERENCE <- "reference"
 #' @param title Title of object (character)
 #' @param overwrite Allow overwrite of title? Logical
 #' @return \code{x} with units appended to any existing comments.
-add_title <- function(x, title, overwrite = FALSE) {
+add_title <- function(x, title, overwrite = TRUE) {
   assertthat::assert_that(is.character(title) | is.null(title))
 
   if(!overwrite && !is.null(attr(x, ATTR_TITLE))) {
@@ -121,7 +121,11 @@ get_units <- function(x) { attr(x, ATTR_UNITS) }
 #' @param ... Names of precursor objects (character)
 #' @return \code{x} with units appended to any existing comments.
 add_precursors <- function(x, ...) {
-  pc <- as.character(list(...))
+  pc <- list(...)
+  if(length(pc) == 1){
+    pc <- as.list(unlist(pc))
+  }
+  pc <- as.character(pc)
   attr(x, ATTR_PRECURSORS) <- c(attr(x, ATTR_PRECURSORS), pc)
   x
 }

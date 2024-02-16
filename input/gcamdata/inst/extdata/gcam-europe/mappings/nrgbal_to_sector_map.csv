@@ -80,7 +80,7 @@ NRG_BKBPB_E,BKB & PB plants,net_industry_energy transformation,0
 NRG_GW_E,Gas works,net_gas works,0
 NRG_BF_E,Blast furnaces,net_industry_energy_iron and steel,0
 NRG_PR_E,Petroleum refineries (oil refineries),net_industry_oil refining,0
-NRG_NI_E,Nuclear industry,net_chemical energy use,0
+NRG_NI_E,Nuclear industry,net_industry_energy transformation,0
 NRG_CL_E,Coal liquefaction plants,net_industry_ctl,0
 NRG_LNG_E,Liquefaction & regasification plants (LNG),net_industry_gtl,0
 NRG_BIOG_E,Gasification plants for biogas,net_industry_energy transformation,0

@@ -1268,8 +1268,10 @@ join.gdp.ts <- function(past, future, grouping) {
 #' @return data object without specified regions
 #'
 remove_regions_data_tables <- function(df_list, regions_to_remove){
-  assert_that(is_tibble(df_list$data))
+  assert_that(is_tibble(df_list$data) | is.null(df_list$data))
   assert_that(is.character(regions_to_remove))
+
+  if (is.null(df_list$data)){ return(df_list)}
 
   if ("region" %in% names(df_list$data)){
     df_list$data <- df_list$data %>% filter(!region %in% regions_to_remove)
@@ -1300,14 +1302,18 @@ remove_regions_xml <- function(xml, regions_to_remove) {
 
 #' filter_regions_europe
 #'
-#' Helper function to filter to regions from a tibble
+#' Helper function to filter to regions from a tibble. If you want to filter by ID,
+#' you need to provide the mapping file `region_ID_mapping` yourself, with at least
+#' two columns called `region` and `GCAM_region_ID` (e.g. common/GCAM_region_names).
 #' @param df tibble; ideally with a region/market.name columns
 #' @param regions_to_keep character vector of regions to remove
+#' @param region_ID_mapping mapping file between region NAMES and GCAM_region_ID
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr filter left_join rename mutate group_by select summarise_all ungroup
 #' @return tibble without specified regions
 #'
-filter_regions_europe <- function(df, regions_to_keep = gcameurope.EUROSTAT_COUNTRIES) {
+filter_regions_europe <- function(df, regions_to_keep = gcameurope.EUROSTAT_COUNTRIES,
+                                  region_ID_mapping = NULL) {
   if(is.null(df)){return(df)}
   else{
     assert_that(is_tibble(df))
@@ -1319,6 +1325,13 @@ filter_regions_europe <- function(df, regions_to_keep = gcameurope.EUROSTAT_COUN
     }
     if ("market.name" %in% names(df)){
       df <- df %>% filter(market.name %in% regions_to_keep)
+    }
+    if (!is.null(region_ID_mapping) && "GCAM_region_ID" %in% names(df)){
+      ids_to_keep = region_ID_mapping %>%
+        filter(region %in% regions_to_keep) %>%
+        distinct() %>%
+        pull(GCAM_region_ID)
+      df <- df %>% filter(GCAM_region_ID %in% ids_to_keep)
     }
     return (df)
   }
@@ -1339,6 +1352,7 @@ copy_filter_europe <- function(all_data, df_list, regions_to_keep = gcameurope.E
 
     for (df_nm in df_list){
       df <- get_data(all_data, df_nm)
+      if (is.null(df)){df <- missing_data()}
       df_new <- df %>% filter_regions_europe %>% add_copy_comment_europe(df_nm)
       assign(paste0(df_nm, "_EUR"), df_new, envir = parent.frame())
     }
