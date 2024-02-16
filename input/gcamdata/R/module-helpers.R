@@ -1268,8 +1268,10 @@ join.gdp.ts <- function(past, future, grouping) {
 #' @return data object without specified regions
 #'
 remove_regions_data_tables <- function(df_list, regions_to_remove){
-  assert_that(is_tibble(df_list$data))
+  assert_that(is_tibble(df_list$data) | is.null(df_list$data))
   assert_that(is.character(regions_to_remove))
+
+  if (is.null(df_list$data)){ return(df_list)}
 
   if ("region" %in% names(df_list$data)){
     df_list$data <- df_list$data %>% filter(!region %in% regions_to_remove)
