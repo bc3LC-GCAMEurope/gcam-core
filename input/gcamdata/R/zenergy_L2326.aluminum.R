@@ -39,7 +39,7 @@ module_energy_L2326.aluminum <- function(command, ...) {
              FILE = "energy/A326.globaltech_co2capture",
              FILE = "energy/A326.globaltech_cost",
              FILE = "energy/A326.globaltech_shrwt",
-			 FILE = "energy/A326.globaltech_retirement",
+			       FILE = "energy/A326.globaltech_retirement",
              FILE = "energy/A326.demand",
              "L1326.in_EJ_R_aluminum_Yh",
              "L1326.out_Mt_R_aluminum_Yh",
