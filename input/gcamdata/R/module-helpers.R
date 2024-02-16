@@ -1341,6 +1341,7 @@ copy_filter_europe <- function(all_data, df_list, regions_to_keep = gcameurope.E
 
     for (df_nm in df_list){
       df <- get_data(all_data, df_nm)
+      if (is.null(df)){df <- missing_data()}
       df_new <- df %>% filter_regions_europe %>% add_copy_comment_europe(df_nm)
       assign(paste0(df_nm, "_EUR"), df_new, envir = parent.frame())
     }
