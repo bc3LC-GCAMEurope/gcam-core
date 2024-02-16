@@ -23,7 +23,7 @@ ATTR_REFERENCE <- "reference"
 #' @param title Title of object (character)
 #' @param overwrite Allow overwrite of title? Logical
 #' @return \code{x} with units appended to any existing comments.
-add_title <- function(x, title, overwrite = FALSE) {
+add_title <- function(x, title, overwrite = TRUE) {
   assertthat::assert_that(is.character(title) | is.null(title))
 
   if(!overwrite && !is.null(attr(x, ATTR_TITLE))) {
