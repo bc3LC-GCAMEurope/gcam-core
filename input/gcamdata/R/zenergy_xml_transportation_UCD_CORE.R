@@ -16,8 +16,7 @@ module_energy_transportation_UCD_CORE_xml <- function(command, ...) {
 
 
   if(command == driver.DECLARE_INPUTS) {
-    return(c("L101.GCAM_EUR_regions",
-             "L254.Supplysector_trn",
+    return(c("L254.Supplysector_trn",
              "L254.FinalEnergyKeyword_trn",
              "L254.tranSubsectorLogit",
              "L254.tranSubsectorShrwtFllt",
@@ -61,49 +60,27 @@ module_energy_transportation_UCD_CORE_xml <- function(command, ...) {
 
     all_data <- list(...)[[1]]
 
-    # GCAM EUR regions with Eurostat data
-    L101.GCAM_EUR_regions <- get_data(all_data, "L101.GCAM_EUR_regions") %>%
-      pull(GCAMEU_region) %>%
-      unique()
-
     # Load required inputs
-    L254.tranSubsectorSpeed <- get_data(all_data, "L254.tranSubsectorSpeed") %>%
-      filter(!region %in% L101.GCAM_EUR_regions)
-    L254.StubTranTech <- get_data(all_data, "L254.StubTranTech") %>%
-      filter(!region %in% L101.GCAM_EUR_regions)
-    L254.StubTranTechLoadFactor <- get_data(all_data, "L254.StubTranTechLoadFactor") %>%
-      filter(!region %in% L101.GCAM_EUR_regions)
-    L254.StubTranTechCost <- get_data(all_data, "L254.StubTranTechCost") %>%
-      filter(!region %in% L101.GCAM_EUR_regions)
-    L254.StubTechTrackCapital <- get_data(all_data, "L254.StubTechTrackCapital") %>%
-      filter(!region %in% L101.GCAM_EUR_regions)
+    L254.tranSubsectorSpeed <- get_data(all_data, "L254.tranSubsectorSpeed")
+    L254.StubTranTech <- get_data(all_data, "L254.StubTranTech")
+    L254.StubTranTechLoadFactor <- get_data(all_data, "L254.StubTranTechLoadFactor")
+    L254.StubTranTechCost <- get_data(all_data, "L254.StubTranTechCost")
+    L254.StubTechTrackCapital <- get_data(all_data, "L254.StubTechTrackCapital")
 
-    L254.Supplysector_trn <- get_data(all_data, "L254.Supplysector_trn") %>%
-      filter(!region %in% L101.GCAM_EUR_regions)
-    L254.FinalEnergyKeyword_trn <- get_data(all_data, "L254.FinalEnergyKeyword_trn") %>%
-      filter(!region %in% L101.GCAM_EUR_regions)
-    L254.tranSubsectorLogit <- get_data(all_data, "L254.tranSubsectorLogit") %>%
-      filter(!region %in% L101.GCAM_EUR_regions)
-    L254.tranSubsectorShrwtFllt <- get_data(all_data, "L254.tranSubsectorShrwtFllt") %>%
-      filter(!region %in% L101.GCAM_EUR_regions)
-    L254.tranSubsectorInterp <- get_data(all_data, "L254.tranSubsectorInterp") %>%
-      filter(!region %in% L101.GCAM_EUR_regions)
+    L254.Supplysector_trn <- get_data(all_data, "L254.Supplysector_trn")
+    L254.FinalEnergyKeyword_trn <- get_data(all_data, "L254.FinalEnergyKeyword_trn")
+    L254.tranSubsectorLogit <- get_data(all_data, "L254.tranSubsectorLogit")
+    L254.tranSubsectorShrwtFllt <- get_data(all_data, "L254.tranSubsectorShrwtFllt")
+    L254.tranSubsectorInterp <- get_data(all_data, "L254.tranSubsectorInterp")
 
-    L254.tranSubsectorSpeed_passthru <- get_data(all_data, "L254.tranSubsectorSpeed_passthru") %>%
-      filter(!region %in% L101.GCAM_EUR_regions)
-    L254.tranSubsectorSpeed_noVOTT <- get_data(all_data, "L254.tranSubsectorSpeed_noVOTT") %>%
-      filter(!region %in% L101.GCAM_EUR_regions)
-    L254.tranSubsectorSpeed_nonmotor <- get_data(all_data, "L254.tranSubsectorSpeed_nonmotor") %>%
-      filter(!region %in% L101.GCAM_EUR_regions)
-    L254.tranSubsectorVOTT <- get_data(all_data, "L254.tranSubsectorVOTT") %>%
-      filter(!region %in% L101.GCAM_EUR_regions)
-    L254.tranSubsectorFuelPref <- get_data(all_data, "L254.tranSubsectorFuelPref") %>%
-      filter(!region %in% L101.GCAM_EUR_regions)
+    L254.tranSubsectorSpeed_passthru <- get_data(all_data, "L254.tranSubsectorSpeed_passthru")
+    L254.tranSubsectorSpeed_noVOTT <- get_data(all_data, "L254.tranSubsectorSpeed_noVOTT")
+    L254.tranSubsectorSpeed_nonmotor <- get_data(all_data, "L254.tranSubsectorSpeed_nonmotor")
+    L254.tranSubsectorVOTT <- get_data(all_data, "L254.tranSubsectorVOTT")
+    L254.tranSubsectorFuelPref <- get_data(all_data, "L254.tranSubsectorFuelPref")
 
-    L254.StubTech_passthru <- get_data(all_data, "L254.StubTech_passthru") %>%
-      filter(!region %in% L101.GCAM_EUR_regions)
-    L254.StubTech_nonmotor <- get_data(all_data, "L254.StubTech_nonmotor") %>%
-      filter(!region %in% L101.GCAM_EUR_regions)
+    L254.StubTech_passthru <- get_data(all_data, "L254.StubTech_passthru")
+    L254.StubTech_nonmotor <- get_data(all_data, "L254.StubTech_nonmotor")
     L254.GlobalTechShrwt_passthru<- get_data(all_data, "L254.GlobalTechShrwt_passthru")
     L254.GlobalTechShrwt_nonmotor <- get_data(all_data, "L254.GlobalTechShrwt_nonmotor")
     L254.GlobalTechCoef_passthru <- get_data(all_data, "L254.GlobalTechCoef_passthru")
@@ -111,24 +88,16 @@ module_energy_transportation_UCD_CORE_xml <- function(command, ...) {
     L254.GlobalTranTechInterp <- get_data(all_data, "L254.GlobalTranTechInterp")
     L254.GlobalTranTechShrwt <- get_data(all_data, "L254.GlobalTranTechShrwt")
     L254.GlobalTranTechSCurve <- get_data(all_data, "L254.GlobalTranTechSCurve")
-    L254.StubTranTechCalInput <- get_data(all_data, "L254.StubTranTechCalInput") %>%
-      filter(!region %in% L101.GCAM_EUR_regions)
+    L254.StubTranTechCalInput <- get_data(all_data, "L254.StubTranTechCalInput")
 
 
-    L254.StubTranTechCoef <- get_data(all_data, "L254.StubTranTechCoef") %>%
-      filter(!region %in% L101.GCAM_EUR_regions)
-    L254.StubTechCalInput_passthru <- get_data(all_data, "L254.StubTechCalInput_passthru") %>%
-      filter(!region %in% L101.GCAM_EUR_regions)
-    L254.StubTechProd_nonmotor <- get_data(all_data, "L254.StubTechProd_nonmotor") %>%
-      filter(!region %in% L101.GCAM_EUR_regions)
-    L254.PerCapitaBased_trn <- get_data(all_data, "L254.PerCapitaBased_trn") %>%
-      filter(!region %in% L101.GCAM_EUR_regions)
-    L254.PriceElasticity_trn <- get_data(all_data, "L254.PriceElasticity_trn") %>%
-      filter(!region %in% L101.GCAM_EUR_regions)
-    L254.IncomeElasticity_trn <- get_data(all_data, "L254.IncomeElasticity_trn") %>%
-      filter(!region %in% L101.GCAM_EUR_regions)
-    L254.BaseService_trn <- get_data(all_data, "L254.BaseService_trn") %>%
-      filter(!region %in% L101.GCAM_EUR_regions)
+    L254.StubTranTechCoef <- get_data(all_data, "L254.StubTranTechCoef")
+    L254.StubTechCalInput_passthru <- get_data(all_data, "L254.StubTechCalInput_passthru")
+    L254.StubTechProd_nonmotor <- get_data(all_data, "L254.StubTechProd_nonmotor")
+    L254.PerCapitaBased_trn <- get_data(all_data, "L254.PerCapitaBased_trn")
+    L254.PriceElasticity_trn <- get_data(all_data, "L254.PriceElasticity_trn")
+    L254.IncomeElasticity_trn <- get_data(all_data, "L254.IncomeElasticity_trn")
+    L254.BaseService_trn <- get_data(all_data, "L254.BaseService_trn")
 
     # ===================================================
 
@@ -274,6 +243,7 @@ module_energy_transportation_UCD_CORE_xml <- function(command, ...) {
                        "L254.PriceElasticity_trn",
                        "L254.IncomeElasticity_trn",
                        "L254.BaseService_trn")  %>%
+        remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) %>%
                         assign(xml_name, ., envir = curr_env)
 
 
