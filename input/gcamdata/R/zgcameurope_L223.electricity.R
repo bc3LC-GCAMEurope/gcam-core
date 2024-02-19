@@ -36,22 +36,25 @@ module_gcameurope_L223.electricity <- function(command, ...) {
                                "L223.SubsectorInterp_elec",
                                "L223.SubsectorInterpTo_elec",
                                "L223.StubTech_elec")
+
+  MODULE_INPUTS <- c(FILE = "common/GCAM_region_names",
+                     FILE = "energy/calibrated_techs",
+                     FILE = "energy/A23.globaltech_eff",
+                     "L1231.in_EJ_R_elec_F_tech_Yh_EUR",
+                     "L1231.out_EJ_R_elec_F_tech_Yh_EUR",
+                     "L1231.eff_R_elec_F_tech_Yh_EUR",
+                     OUTPUTS_TO_COPY_FILTER)
+
+  MODULE_OUTPUTS <- c("L223.StubTechCalInput_elec_EUR",
+                      "L223.StubTechFixOut_elec_EUR",
+                      "L223.StubTechProd_elec_EUR",
+                      "L223.StubTechEff_elec_EUR",
+                      paste0(OUTPUTS_TO_COPY_FILTER, "_EUR"))
+
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "common/GCAM_region_names",
-             FILE = "energy/calibrated_techs",
-             FILE = "energy/A23.globaltech_eff",
-             "L1231.in_EJ_R_elec_F_tech_Yh_EUR",
-             "L1231.out_EJ_R_elec_F_tech_Yh_EUR",
-             "L1231.eff_R_elec_F_tech_Yh_EUR",
-             OUTPUTS_TO_COPY_FILTER
-             ))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L223.StubTechCalInput_elec_EUR",
-             "L223.StubTechFixOut_elec_EUR",
-             "L223.StubTechProd_elec_EUR",
-             "L223.StubTechEff_elec_EUR",
-              paste0(OUTPUTS_TO_COPY_FILTER, "_EUR")
-             ))
+    return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -69,12 +72,7 @@ module_gcameurope_L223.electricity <- function(command, ...) {
       secondary.output <- output.ratio <- secout_coef <- NULL
 
     # Load required inputs
-    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names")
-    A23.globaltech_eff <- get_data(all_data, "energy/A23.globaltech_eff", strip_attributes = TRUE)
-    calibrated_techs <- get_data(all_data, "energy/calibrated_techs", strip_attributes = TRUE)
-    L1231.in_EJ_R_elec_F_tech_Yh_EUR <- get_data(all_data, "L1231.in_EJ_R_elec_F_tech_Yh_EUR")
-    L1231.out_EJ_R_elec_F_tech_Yh_EUR <- get_data(all_data, "L1231.out_EJ_R_elec_F_tech_Yh_EUR")
-    L1231.eff_R_elec_F_tech_Yh_EUR <- get_data(all_data, "L1231.eff_R_elec_F_tech_Yh_EUR")
+    get_data_list(all_data, MODULE_INPUTS)
 
     # Create outputs that are simply copied form main scripts and filtered to Eurostat regions
     copy_filter_europe(all_data, OUTPUTS_TO_COPY_FILTER)
@@ -222,12 +220,7 @@ module_gcameurope_L223.electricity <- function(command, ...) {
       add_precursors("energy/calibrated_techs", "common/GCAM_region_names", "L1231.eff_R_elec_F_tech_Yh_EUR", "energy/A23.globaltech_eff") ->
       L223.StubTechEff_elec_EUR
 
-    return_data(L223.Supplysector_elec_EUR, L223.ElecReserve_EUR, L223.SectorUseTrialMarket_elec_EUR, L223.SubsectorLogit_elec_EUR,
-                L223.SubsectorShrwt_elec_EUR, L223.SubsectorShrwtFllt_elec_EUR, L223.SubsectorShrwt_coal_EUR,
-                L223.SubsectorShrwt_nuc_EUR, L223.SubsectorShrwt_renew_EUR, L223.SubsectorInterp_elec_EUR,
-                L223.SubsectorInterpTo_elec_EUR, L223.StubTech_elec_EUR, L223.StubTechCapFactor_elec_EUR,
-                L223.StubTechCost_offshore_wind_EUR, L223.StubTechCalInput_elec_EUR, L223.StubTechFixOut_elec_EUR,
-                L223.StubTechFixOut_hydro_EUR, L223.StubTechProd_elec_EUR, L223.StubTechEff_elec_EUR)
+    return_data(MODULE_OUTPUTS)
   } else {
     stop("Unknown command")
   }

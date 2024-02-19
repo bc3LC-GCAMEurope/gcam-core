@@ -24,21 +24,24 @@ module_gcameurope_L222.en_transformation <- function(command, ...) {
                               "L222.SubsectorInterpTo_en",
                               "L222.StubTech_en"
                               )
+
+  MODULE_INPUTS <- c("L101.GCAM_EUR_regions",
+                     FILE = "energy/calibrated_techs",
+                     "L122.out_EJ_R_gasproc_F_Yh_EUR",
+                     "L122.out_EJ_R_refining_F_Yh_EUR",
+                     "L122.IO_R_oilrefining_F_Yh_EUR",
+                     "L222.GlobalTechCoef_en",
+                     OUTPUTS_TO_COPY_FILTER
+  )
+
+  MODULE_OUTPUTS <- c("L222.StubTechProd_gasproc_EUR",
+                      "L222.StubTechProd_refining_EUR",
+                      "L222.StubTechCoef_refining_EUR",
+                      paste0(OUTPUTS_TO_COPY_FILTER, "_EUR"))
   if(command == driver.DECLARE_INPUTS) {
-    return(c("L101.GCAM_EUR_regions",
-             FILE = "energy/calibrated_techs",
-             "L122.out_EJ_R_gasproc_F_Yh_EUR",
-             "L122.out_EJ_R_refining_F_Yh_EUR",
-             "L122.IO_R_oilrefining_F_Yh_EUR",
-             "L222.GlobalTechCoef_en",
-             OUTPUTS_TO_COPY_FILTER
-             ))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L222.StubTechProd_gasproc_EUR",
-             "L222.StubTechProd_refining_EUR",
-             "L222.StubTechCoef_refining_EUR",
-             paste0(OUTPUTS_TO_COPY_FILTER, "_EUR")
-             ))
+    return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -52,13 +55,7 @@ module_gcameurope_L222.en_transformation <- function(command, ...) {
       primary.consumption <- NULL
 
     # Load required inputs
-    GCAM_region_names <- get_data(all_data, "L101.GCAM_EUR_regions") %>%
-      distinct(GCAM_region_ID, region = GCAMEU_region)
-    calibrated_techs <- get_data(all_data, "energy/calibrated_techs", strip_attributes = TRUE)
-    L122.out_EJ_R_gasproc_F_Yh_EUR <- get_data(all_data, "L122.out_EJ_R_gasproc_F_Yh_EUR")
-    L122.out_EJ_R_refining_F_Yh_EUR <- get_data(all_data, "L122.out_EJ_R_refining_F_Yh_EUR", strip_attributes = TRUE)
-    L122.IO_R_oilrefining_F_Yh_EUR <- get_data(all_data, "L122.IO_R_oilrefining_F_Yh_EUR")
-    L222.GlobalTechCoef_en <- get_data(all_data, "L222.GlobalTechCoef_en")
+    get_data_list(all_data, MODULE_INPUTS)
 
     # Create outputs that are simply copied from main scripts and filtered to Eurostat regions
     copy_filter_europe(all_data, OUTPUTS_TO_COPY_FILTER)
@@ -182,17 +179,7 @@ module_gcameurope_L222.en_transformation <- function(command, ...) {
       add_precursors("L122.IO_R_oilrefining_F_Yh_EUR", "energy/calibrated_techs", "L101.GCAM_EUR_regions") ->
       L222.StubTechCoef_refining_EUR
 
-    return_data( L222.StubTechProd_gasproc_EUR,
-                 L222.StubTechProd_refining_EUR,
-                 L222.StubTechCoef_refining_EUR,
-                 L222.Supplysector_en_EUR,
-                 L222.SectorUseTrialMarket_en_EUR,
-                 L222.SubsectorLogit_en_EUR,
-                 L222.SubsectorShrwt_en_EUR,
-                 L222.SubsectorShrwtFllt_en_EUR,
-                 L222.SubsectorInterp_en_EUR,
-                 L222.SubsectorInterpTo_en_EUR,
-                 L222.StubTech_en_EUR)
+    return_data(MODULE_OUTPUTS)
   } else {
     stop("Unknown command")
   }

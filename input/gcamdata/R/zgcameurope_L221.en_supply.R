@@ -30,23 +30,25 @@ module_gcameurope_L221.en_supply <- function(command, ...) {
                               "L221.SubsectorInterp_en",
                               "L221.SubsectorInterpTo_en",
                               "L221.StubTech_en")
+  MODULE_INPUTS <- c("L101.GCAM_EUR_regions",
+                     FILE = "aglu/A_agRegionalTechnology",
+                     FILE = "energy/A21.globaltech_secout",
+                     "L121.BiomassOilRatios_kgGJ_R_C_EUR",
+                     "L122.in_Mt_R_C_Yh_EUR",
+                     "L221.GlobalTechCoef_en",
+                     OUTPUTS_TO_COPY_FILTER
+  )
+  MODULE_OUTPUTS <- c("L221.StubTechCoef_bioOil_EUR",
+                      "L221.StubTechFractSecOut_en_EUR",
+                      "L221.StubTechCalInput_bioOil_EUR",
+                      "L221.StubTechInterp_bioOil_EUR",
+                      "L221.StubTechShrwt_bioOil_EUR",
+                      paste0(OUTPUTS_TO_COPY_FILTER, "_EUR")
+  )
   if(command == driver.DECLARE_INPUTS) {
-    return(c("L101.GCAM_EUR_regions",
-             FILE = "aglu/A_agRegionalTechnology",
-             FILE = "energy/A21.globaltech_secout",
-             "L121.BiomassOilRatios_kgGJ_R_C_EUR",
-             "L122.in_Mt_R_C_Yh_EUR",
-             "L221.GlobalTechCoef_en",
-             OUTPUTS_TO_COPY_FILTER
-             ))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L221.StubTechCoef_bioOil_EUR",
-             "L221.StubTechFractSecOut_en_EUR",
-             "L221.StubTechCalInput_bioOil_EUR",
-             "L221.StubTechInterp_bioOil_EUR",
-             "L221.StubTechShrwt_bioOil_EUR",
-             paste0(OUTPUTS_TO_COPY_FILTER, "_EUR")
-             ))
+    return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
 
     # Silence global variable package check
@@ -64,14 +66,7 @@ module_gcameurope_L221.en_supply <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    GCAM_region_names <- get_data(all_data, "L101.GCAM_EUR_regions") %>%
-      distinct(GCAM_region_ID, region = GCAMEU_region)
-    A_agRegionalTechnology <- get_data(all_data, "aglu/A_agRegionalTechnology")
-    A21.globaltech_secout <- get_data(all_data, "energy/A21.globaltech_secout", strip_attributes = TRUE)
-    L121.BiomassOilRatios_kgGJ_R_C_EUR <- get_data(all_data, "L121.BiomassOilRatios_kgGJ_R_C_EUR", strip_attributes = TRUE)
-    L122.in_Mt_R_C_Yh_EUR <- get_data(all_data, "L122.in_Mt_R_C_Yh_EUR", strip_attributes = TRUE)
-    L221.GlobalTechCoef_en <-  get_data(all_data, "L221.GlobalTechCoef_en", strip_attributes = TRUE)
-
+    get_data_list(all_data, MODULE_INPUTS)
     # Create outputs that are simply copied from main scripts and filtered to Eurostat regions
     copy_filter_europe(all_data, OUTPUTS_TO_COPY_FILTER)
 
@@ -207,24 +202,7 @@ module_gcameurope_L221.en_supply <- function(command, ...) {
       same_precursors_as(L221.StubTechCalInput_bioOil_EUR) ->
       L221.StubTechShrwt_bioOil_EUR
 
-    return_data(L221.StubTechCoef_bioOil_EUR,
-                L221.StubTechFractSecOut_en_EUR,
-                L221.StubTechCalInput_bioOil_EUR,
-                L221.StubTechInterp_bioOil_EUR,
-                L221.StubTechShrwt_bioOil_EUR,
-
-                L221.StubTechFractProd_en_EUR,
-                L221.StubTechFractCalPrice_en_EUR,
-                L221.Rsrc_en_EUR,
-                L221.RsrcPrice_en_EUR,
-                L221.Supplysector_en_EUR,
-                L221.SectorUseTrialMarket_en_EUR,
-                L221.SubsectorLogit_en_EUR,
-                L221.SubsectorShrwt_en_EUR,
-                L221.SubsectorShrwtFllt_en_EUR,
-                L221.SubsectorInterp_en_EUR,
-                L221.SubsectorInterpTo_en_EUR,
-                L221.StubTech_en_EUR)
+    return_data(MODULE_OUTPUTS)
   } else {
     stop("Unknown command")
   }
