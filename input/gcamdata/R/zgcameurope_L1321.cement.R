@@ -21,13 +21,13 @@
 module_gcameurope_L1321.cement <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/iso_GCAM_regID",
+             FILE = "common/GCAM_region_names",
              FILE = "emissions/A_PrimaryFuelCCoef",
              FILE = "energy/mappings/cement_regions",
              FILE = "energy/Worrell_1994_cement",
              FILE = "energy/IEA_cement_elec_kwht",  #TO UPDATE?
              FILE = "energy/IEA_cement_TPE_GJt",    #TO UPDATE?
              FILE = "energy/IEA_cement_fuelshares", #TO UPDATE?
-             "L101.GCAM_EUR_regions",
              "L100.CDIAC_CO2_ctry_hist",
              "L102.CO2_Mt_R_F_Yh_EUR",
              "L123.in_EJ_R_elec_F_Yh_EUR",
@@ -53,7 +53,10 @@ module_gcameurope_L1321.cement <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID")
+    iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID") %>%
+      filter_regions_europe()
+    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>%
+      filter_regions_europe()
     A_PrimaryFuelCCoef <- get_data(all_data, "emissions/A_PrimaryFuelCCoef")
     cement_regions <- get_data(all_data, "energy/mappings/cement_regions")
     Worrell_1994_cement <- get_data(all_data, "energy/Worrell_1994_cement")
@@ -111,6 +114,7 @@ module_gcameurope_L1321.cement <- function(command, ...) {
       mutate(share = process_emissions_ktC / reg_process_emissions) %>%
       left_join_error_no_match(select(Worrell_1994_cement, Country, cement_prod_Mt, process_emissions_MtC), by = c("Worrell_region" = "Country")) %>%
       mutate(cement_prod_Mt = cement_prod_Mt * share, process_emissions_MtC = process_emissions_MtC * share) %>%
+      filter_regions_europe() %>%
 
       # Now match and aggregate Worrell's process CO2 emissions and cement production in 1994 by GCAM region and compute the emissions ratio
       # which is assumed to be constant for all other years
@@ -146,7 +150,7 @@ module_gcameurope_L1321.cement <- function(command, ...) {
       mutate(value = prod_emiss_ratio * value) %>%
       select(GCAM_region_ID, sector, year, value) %>%
       # wipe non EUR regions
-      filter(GCAM_region_ID %in% L101.GCAM_EUR_regions$GCAM_region_ID) ->
+      filter_regions_europe(region_ID_mapping = GCAM_region_names) ->
       L1321.out_Mt_R_cement_Yh_EUR
 
     # Calculate limestone consumption by region and fuel
@@ -234,6 +238,7 @@ module_gcameurope_L1321.cement <- function(command, ...) {
       filter(year %in% HISTORICAL_YEARS) %>%
       select(iso, year, cement) %>%
       rename(emiss_ktC = cement) %>%
+      filter_regions_europe() %>%
       # Match in region IDs by iso code
       left_join_error_no_match(iso_GCAM_regID, by = "iso") %>%
       # Replace process emissions with actual cement production
@@ -248,7 +253,7 @@ module_gcameurope_L1321.cement <- function(command, ...) {
       # remove unneeded columns from various left_joins
       select(iso, year, emiss_ktC, GCAM_region_ID, prod_Mt, IEA_intensity_region, elec_GJkg, TPE_GJkg, IEA_fuelshare_region) %>%
       # remove non-EUR regions
-      filter(iso %in% L101.GCAM_EUR_regions$iso) %>%
+      filter_regions_europe(region_ID_mapping = GCAM_region_names) %>%
       # Match in IO coefficients by region and year
       left_join_error_no_match(L1321.IO_R_elec_Yh, by = c("GCAM_region_ID", "year")) %>%
       rename(IOelec = value) %>%
@@ -341,8 +346,8 @@ module_gcameurope_L1321.cement <- function(command, ...) {
     L1321.in_EJ_R_cement_F_Y_EUR %>%
       left_join(L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>% filter(sector == "cement") %>% select(-sector),
                 by = c("GCAM_region_ID", "year", "fuel")) %>%
-      mutate(value = if_else(fuel == "coal" & GCAM_region_ID == SOUTH_KOREA_ID & value.x > value.y, value.y, value.x),
-             neg = if_else(fuel == "coal" & GCAM_region_ID == SOUTH_KOREA_ID & value.x > value.y, value.y - value.x, 0)) ->
+      mutate(value = ifelse(fuel == "coal" && GCAM_region_ID == SOUTH_KOREA_ID && value.x > value.y, value.y, value.x),
+             neg = ifelse(fuel == "coal" && GCAM_region_ID == SOUTH_KOREA_ID && value.x > value.y, value.y - value.x, 0)) ->
       L1321.in_EJ_R_cement_F_Y_adj
 
     # extra coal use will be moved to biomass
