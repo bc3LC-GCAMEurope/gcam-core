@@ -36,15 +36,13 @@ module_gcameurope_L221.en_supply <- function(command, ...) {
                      "L121.BiomassOilRatios_kgGJ_R_C_EUR",
                      "L122.in_Mt_R_C_Yh_EUR",
                      "L221.GlobalTechCoef_en",
-                     OUTPUTS_TO_COPY_FILTER
-  )
+                     OUTPUTS_TO_COPY_FILTER)
   MODULE_OUTPUTS <- c("L221.StubTechCoef_bioOil_EUR",
                       "L221.StubTechFractSecOut_en_EUR",
                       "L221.StubTechCalInput_bioOil_EUR",
                       "L221.StubTechInterp_bioOil_EUR",
                       "L221.StubTechShrwt_bioOil_EUR",
-                      paste0(OUTPUTS_TO_COPY_FILTER, "_EUR")
-  )
+                      paste0(OUTPUTS_TO_COPY_FILTER, "_EUR"))
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {

@@ -64,7 +64,8 @@ module_water_desalination_xml <- function(command, ...) {
                      "L271.GlobalTechCoef_desal",
                      "L271.GlobalTechShrwt_desal",
                      "L271.GlobalTechCost_desal",
-                     "L271.StubTechProd_desal") ->
+                     "L271.StubTechProd_desal") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES)->
       desalination.xml
 
     return_data(desalination.xml)
