@@ -43,14 +43,7 @@ module_gcameurope_heat_xml <- function(command, ...) {
       add_xml_data(L224.StubTechCalInput_heat_EUR, "StubTechCalInput") %>%
       add_xml_data(L224.StubTechSecOut_elec_EUR, "StubTechSecOut") %>%
       add_xml_data(L224.StubTechCost_elec_EUR, "StubTechCost") %>%
-      add_precursors("L224.Supplysector_heat_EUR",
-                     "L224.SubsectorLogit_heat_EUR",
-                     "L224.SubsectorShrwtFllt_heat_EUR",
-                     "L224.SubsectorInterp_heat_EUR",
-                     "L224.StubTech_heat_EUR",
-                     "L224.StubTechCalInput_heat_EUR",
-                     "L224.StubTechSecOut_elec_EUR",
-                     "L224.StubTechCost_elec_EUR") ->
+      add_precursors(MODULE_INPUTS) ->
       heat_EUR.xml
 
     return_data(heat_EUR.xml)
