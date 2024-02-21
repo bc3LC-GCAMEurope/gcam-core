@@ -67,6 +67,9 @@ module_gcameurope_L221.en_supply <- function(command, ...) {
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
+    GCAM_region_names <- L101.GCAM_EUR_regions %>%
+      distinct(GCAM_region_ID, region = GCAMEU_region)
+
     # Create outputs that are simply copied from main scripts and filtered to Eurostat regions
     copy_filter_europe(all_data, OUTPUTS_TO_COPY_FILTER)
 
