@@ -1128,6 +1128,14 @@ gcameurope.EUROSTAT_COUNTRIES <- c("Albania", "Austria", "Belgium", "Bosnia and 
                                    "Slovakia", "Slovenia", "Spain", "Sweden",
                                    "Turkey", "UK", "Ukraine")
 
+gcameurope.EUROSTAT_ISO <- c("aut","bel","bgr","hrv","cyp","cze","dnk","fro",
+                             "grl","est","fin","fra","mco","shn","spm","deu",
+                             "grc","hun","irl","ita","smr","vat","lva","ltu",
+                             "lux","mlt","nld","pol","prt","rom","rou","svk",
+                             "svn","and","esp","swe","alb","bih","isl","mkd",
+                             "mda","nor","sjm","mne","srb","scg","tur","chi",
+                             "flk","gbr","ggy","gib","imn","jey","tca","vgb",
+                             "wlf","ukr")
 
 # Time shift conditions ======================================================================
 # Uncomment these lines to run under 'timeshift' conditions
