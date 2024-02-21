@@ -27,7 +27,6 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
              FILE = "common/GCAM_region_names",
              FILE = "energy/mappings/enduse_fuel_aggregation",
              FILE = "energy/A323.subsector_interp",
-             "L101.GCAM_EUR_regions",
              "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
              "L1322.in_EJ_R_indenergy_F_Yh_EUR",
              "LB1092.Tradebalance_iron_steel_Mt_R_Y"))
@@ -56,11 +55,10 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
     L1322.in_EJ_R_indenergy_F_Yh_EUR <- get_data(all_data, "L1322.in_EJ_R_indenergy_F_Yh_EUR", strip_attributes = TRUE)
     LB1092.Tradebalance_iron_steel_Mt_R_Y <- get_data(all_data, "LB1092.Tradebalance_iron_steel_Mt_R_Y", strip_attributes = TRUE)
     L1012.en_bal_EJ_R_Si_Fi_Yh_EUR <- get_data(all_data, "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", strip_attributes = TRUE)
-    L101.GCAM_EUR_regions <- get_data(all_data, "L101.GCAM_EUR_regions")
     iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID") %>%
-      filter(iso %in% L101.GCAM_EUR_regions$iso)
+      filter_regions_europe()
     GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>%
-      filter(GCAM_region_ID %in% L101.GCAM_EUR_regions$GCAM_region_ID)
+      filter_regions_europe()
     enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
 
     #Estimate DRI (direct reduced iron) consumption from country-wise WSA DRI production, imports, and exports data
@@ -81,8 +79,11 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
       mutate(`EAF with scrap`=EAF-`EAF with DRI`,
              `EAF with DRI`=ifelse(`EAF with scrap`<=0,EAF,`EAF with DRI`),
              `EAF with scrap`=ifelse(`EAF with scrap`<0,0,`EAF with scrap`))%>%
-      select(-EAF)%>%
-      left_join(iso_GCAM_regID,by="country_name")%>%
+      select(-EAF) %>%
+      rename('region' = 'country_name') %>%
+      filter_regions_europe() %>%
+      rename('country_name' = 'region') %>%
+      left_join(iso_GCAM_regID,by="country_name") %>%
       select(-GCAM_region_ID,-country_name,-region_GCAM3)-> All_steel
 
 

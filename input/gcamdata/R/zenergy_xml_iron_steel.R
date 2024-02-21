@@ -91,7 +91,8 @@ module_energy_iron_steel_xml <- function(command, ...) {
                      "L2323.GlobalTechProfitShutdown_en", "L2323.StubTechProd_iron_steel",
                      "L2323.StubTechCoef_iron_steel", "L2323.PerCapitaBased_iron_steel", "L2323.BaseService_iron_steel",
                      "L2323.PriceElasticity_iron_steel","L2323.StubTechCost_iron_steel",
-                     "L2323.GlobalTechTrackCapital_iron_steel") ->
+                     "L2323.GlobalTechTrackCapital_iron_steel") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       iron_steel.xml
     return_data(iron_steel.xml)
   } else {
