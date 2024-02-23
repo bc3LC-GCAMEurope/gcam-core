@@ -29,9 +29,7 @@ module_gcameurope_L1233.Elec_water <- function(command, ...) {
   MODULE_OUTPUTS <- c("L1233.out_EJ_R_elec_F_tech_Yh_cool_EUR",
                       "L1233.in_EJ_R_elec_F_tech_Yh_cool_EUR",
                       "L1233.wdraw_km3_R_elec_EUR",
-                      "L1233.wdraw_km3_R_B_elec_EUR",
                       "L1233.wcons_km3_R_elec_EUR",
-                      "L1233.wcons_km3_R_B_elec_EUR",
                       "L1233.shrwt_R_elec_cool_Yf_EUR")
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -204,23 +202,6 @@ module_gcameurope_L1233.Elec_water <- function(command, ...) {
       select(-region_GCAM3, -plant_type) ->
       L1233.shrwt_R_elec_cool_Yf_EUR
 
-    # Addendum for basin-level calibration: write out the demands by basin
-    L1233.wdraw_km3_R_B_elec_EUR <- L1233.wdraw_km3_R_elec_EUR %>%
-      filter(water_type == "fresh") %>%
-      select(-water_type) %>%
-      left_join(filter(L103.water_mapping_R_B_W_Ws_share, water_type == "water withdrawals" & water_sector == "Electricity"),
-                by = "GCAM_region_ID") %>%
-      mutate(value = value * share) %>%
-      select(GCAM_region_ID, GCAM_basin_ID, sector, water_type, year, value)
-
-    L1233.wcons_km3_R_B_elec_EUR <- L1233.wcons_km3_R_elec_EUR %>%
-      filter(water_type == "fresh") %>%
-      select(-water_type) %>%
-      left_join(filter(L103.water_mapping_R_B_W_Ws_share, water_type == "water consumption" & water_sector == "Electricity"),
-                by = "GCAM_region_ID") %>%
-      mutate(value = value * share) %>%
-      select(GCAM_region_ID, GCAM_basin_ID, sector, water_type, year, value)
-
     ## OUTPUTS ------------------
     L1233.out_EJ_R_elec_F_tech_Yh_cool_EUR %>%
       add_title("Electricity output by region, fuel, technology, cooling system, and water type") %>%
@@ -290,22 +271,6 @@ module_gcameurope_L1233.Elec_water <- function(command, ...) {
                      "water/A23.CoolingSystemShares_RG3",
                      "water/elec_tech_water_map") ->
       L1233.shrwt_R_elec_cool_Yf_EUR
-
-    L1233.wdraw_km3_R_B_elec_EUR %>%
-      add_title("Water withdrawals for electricity generation by region, basin, and water type") %>%
-      add_units("km^3") %>%
-      add_comments("Computed by multiplying regional withdrawal volumes by basin-level shares") %>%
-      same_precursors_as(L1233.wdraw_km3_R_elec_EUR) %>%
-      add_precursors("L103.water_mapping_R_B_W_Ws_share") ->
-      L1233.wdraw_km3_R_B_elec_EUR
-
-    L1233.wcons_km3_R_B_elec_EUR %>%
-      add_title("Water consumption for electricity generation by region, basin, and water type") %>%
-      add_units("km^3") %>%
-      add_comments("Computed by multiplying regional consumption volumes by basin-level shares") %>%
-      same_precursors_as(L1233.wdraw_km3_R_elec_EUR) %>%
-      add_precursors("L103.water_mapping_R_B_W_Ws_share") ->
-      L1233.wcons_km3_R_B_elec_EUR
 
     return_data(MODULE_OUTPUTS)
   } else {
