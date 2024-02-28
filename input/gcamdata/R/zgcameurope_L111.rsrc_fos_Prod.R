@@ -35,7 +35,8 @@ module_gcameurope_L111.rsrc_fos_Prod <- function(command, ...) {
     # ------- HISTORICAL FOSSIL ENERGY PRODUCTION -------
     # Determine production for each primary fuel by country
     L111.Prod_EJ_R_F_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
-      filter(sector == "out_resources", fuel %in% energy.RSRC_FUELS, year %in% HISTORICAL_YEARS)
+      filter(sector == "out_resources", fuel %in% energy.RSRC_FUELS, year %in% HISTORICAL_YEARS) %>%
+      mutate(technology = fuel)
 
     # Produce outputs
     L111.Prod_EJ_R_F_Yh_EUR %>%

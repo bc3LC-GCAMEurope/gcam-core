@@ -191,7 +191,8 @@ module_energy_en_supply_xml <- function(command, ...) {
                      "L239.Consumption_intraregional",
                      "L239.CarbonCoef",
                      "L281.TechAccountOutput_entrade",
-                     "L281.TechAccountInput_entrade") ->
+                     "L281.TechAccountInput_entrade") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       en_supply.xml
 
     return_data(en_supply.xml)

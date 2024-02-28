@@ -1275,6 +1275,12 @@ remove_regions_data_tables <- function(df_list, regions_to_remove){
 
   if ("region" %in% names(df_list$data)){
     df_list$data <- df_list$data %>% filter(!region %in% regions_to_remove)
+    # if traded product, we may need to remove region names in subsector
+    if ("subsector" %in% names(df_list$data)){
+      if (any(grepl("traded", df_list$data$subsector))){
+        df_list$data <- df_list$data %>% filter(!grepl(paste(regions_to_remove, collapse = "|"), subsector))
+      }
+    }
   }
   if ("market.name" %in% names(df_list$data)){
     df_list$data <- df_list$data %>% filter(!market.name %in% regions_to_remove)
