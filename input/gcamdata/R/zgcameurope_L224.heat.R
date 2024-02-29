@@ -29,6 +29,7 @@ module_gcameurope_L224.heat <- function(command, ...) {
   MODULE_INPUTS <- c("L101.GCAM_EUR_regions",
                      FILE = "energy/calibrated_techs",
                      FILE = "energy/A_regions",
+                     FILE = "energy/A24.sector",
                      "L1231.eff_R_elec_F_tech_Yh_EUR",
                      "L124.in_EJ_R_heat_F_Yh_EUR",
                      "L124.heatoutratio_R_elec_F_tech_Yh_EUR",
