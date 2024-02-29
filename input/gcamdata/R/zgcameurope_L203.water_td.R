@@ -32,6 +32,8 @@ module_gcameurope_L203.water_td <- function(command, ...) {
                               "L203.TechCoef_desal_basin")
   MODULE_INPUTS <- c(FILE = "common/iso_GCAM_regID",
                      FILE = "common/GCAM_region_names",
+                     FILE = "water/basin_to_country_mapping",
+                     FILE = "water/water_td_sectors",
                      "L103.water_mapping_R_GLU_B_W_Ws_share",
                      "L103.water_mapping_R_B_W_Ws_share",
                      "L110.in_km3_water_primary",
