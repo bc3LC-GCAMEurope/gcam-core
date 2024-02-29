@@ -121,7 +121,7 @@ module_gcameurope_L123.electricity <- function(command, ...) {
     L123.in_EJ_R_indchp_F_Yh_EUR <- L123.out_EJ_R_indchp_F_Yh_EUR %>%
       full_join(filter(A23.chp_elecratio, fuel != "hydrogen"), by = "fuel") %>%
       mutate(value = value / elec_ratio) %>%
-      select(-value, -elec_ratio)
+      select(-elec_ratio)
 
     # Save results -------------
     L123.out_EJ_R_elec_F_Yh_EUR %>%
