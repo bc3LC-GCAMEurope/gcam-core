@@ -63,12 +63,26 @@ module_gcameurope_L239.ff_trade <- function(command, ...) {
     # Create outputs that are simply copied form main scripts and filtered to Eurostat regions
     copy_filter_europe(all_data, OUTPUTS_TO_COPY_FILTER)
 
+    # Base technology-level table for several tables to be written out")
+    A_ff_TradedTechnology_R_Y <- repeat_add_columns(A_ff_TradedTechnology,
+                                                    tibble(year = MODEL_YEARS)) %>%
+      repeat_add_columns(GCAM_region_names %>% filter_regions_europe) %>%
+      mutate(subsector = paste(region, subsector, sep = " "),
+             technology = subsector,
+             market.name = region,
+             region = gcam.USA_REGION)
+
+    A_ff_regionalTechnology_R_Y <-  repeat_add_columns(A_ff_RegionalTechnology,
+                                                       tibble(year = MODEL_YEARS)) %>%
+      repeat_add_columns(tibble(region = gcameurope.EUROSTAT_COUNTRIES)) %>%
+      mutate(market.name = if_else(market.name == "regional", region, market.name))
+
     # L239.Production_tra_EUR: Output (gross exports) of traded technologies -------------
     L239.GrossExports_EJ_R_C_Y <- left_join_error_no_match(L2011.ff_GrossTrade_EJ_R_C_Y_EUR,
                                                            GCAM_region_names,
                                                            by = "GCAM_region_ID") %>%
       select(region, GCAM_Commodity, year, GrossExp_EJ)
-    L239.Production_tra_EUR <- filter(A_ff_tradedTechnology_R_Y, year %in% MODEL_BASE_YEARS) %>%
+    L239.Production_tra_EUR <- filter(A_ff_TradedTechnology_R_Y, year %in% MODEL_BASE_YEARS) %>%
       left_join_error_no_match(L239.GrossExports_EJ_R_C_Y,
                                by = c(market.name = "region", minicam.energy.input = "GCAM_Commodity", "year")) %>%
       filter(market.name %in% gcameurope.EUROSTAT_COUNTRIES) %>%
@@ -83,7 +97,7 @@ module_gcameurope_L239.ff_trade <- function(command, ...) {
     L239.GrossImports_EJ_R_C_Y <- left_join_error_no_match(L2011.ff_GrossTrade_EJ_R_C_Y_EUR,
                                                            GCAM_region_names,
                                                            by = "GCAM_region_ID") %>%
-      left_join(select(A_ff_tradedTechnology, supplysector, minicam.energy.input),
+      left_join(select(A_ff_TradedTechnology, supplysector, minicam.energy.input),
                 by = c(GCAM_Commodity = "minicam.energy.input")) %>%
       select(region, supplysector, year, GrossImp_EJ)
 
