@@ -89,6 +89,7 @@ module_gcameurope_L201.water_resources_constrained <- function(command, ...) {
       filter(water_type == "water withdrawals") %>%
       distinct() %>%
       left_join(select(basin_to_country_mapping, GCAM_basin_ID, basin_name = GLU_name), by = "GCAM_basin_ID") %>%
+      filter_regions_europe(., region_ID_mapping = GCAM_region_names) %>%
       # ^^ non-restrictive join required (NA values generated for unused basins)
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       mutate(water_type = "water withdrawals",

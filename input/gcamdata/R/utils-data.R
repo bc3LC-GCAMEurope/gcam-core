@@ -306,7 +306,7 @@ get_data_list <- function(all_data, data_list, strip_attributes = FALSE, environ
     data = get_data(all_data, data_list[i], strip_attributes[i])
 
     if(!is.null(filter_region)){
-      data <- filter_regions_europe(data, regions_to_keep = filter_region, ...)
+      data <- filter_regions_europe(data, regions_to_keep_name = filter_region)
     }
     # assign it into the environment
     assign(curr_var_name, data, envir = environ)
