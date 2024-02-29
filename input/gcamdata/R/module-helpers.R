@@ -1334,6 +1334,9 @@ filter_regions_europe <- function(df,
     if ("iso" %in% names(df)){
       df <- df %>% filter(iso %in% regions_to_keep_iso)
     }
+    if ("iso" %in% names(df)){
+      df <- df %>% filter(iso %in% regions_to_keep_iso)
+    }
     if ("market.name" %in% names(df)){
       df <- df %>% filter(market.name %in% regions_to_keep_name)
     }

@@ -89,7 +89,8 @@ module_energy_aluminum_xml <- function(command, ...) {
                      "L2326.GlobalTechProfitShutdown_aluminum", "L2326.GlobalTechSCurve_aluminum",
                      "L2326.StubTechCalInput_aluminum","L2326.GlobalTechCapture_aluminum",
                      "L2326.PerCapitaBased_aluminum", "L2326.BaseService_aluminum",
-                     "L2326.PriceElasticity_aluminum", "L2326.GlobalTechTrackCapital_aluminum") ->
+                     "L2326.PriceElasticity_aluminum", "L2326.GlobalTechTrackCapital_aluminum") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       aluminum.xml
 
     return_data(aluminum.xml)
