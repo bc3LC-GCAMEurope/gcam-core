@@ -52,7 +52,8 @@ module_water_EFW_municipal_xml <- function(command, ...) {
                      "L274.StubTech_muni",
                      "L274.GlobalTechCoef_muni",
                      "L274.GlobalTechShrwt_muni",
-                     "L274.StubTechCoef_muni") ->
+                     "L274.StubTechCoef_muni") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       EFW_municipal.xml
 
     return_data(EFW_municipal.xml)

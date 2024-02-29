@@ -254,7 +254,8 @@ module_water_electricity_water_xml <- function(command, ...) {
                      "L2233.StubTechShrwt_elec_cool",
                      "L2233.GlobalTechCapital_elec_cool",
                      "L2233.GlobalIntTechCapital_elec_cool",
-                     "L223.GlobalTechCapFac_elec") ->
+                     "L223.GlobalTechCapFac_elec") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       electricity_water.xml
 
     return_data(electricity_water.xml)

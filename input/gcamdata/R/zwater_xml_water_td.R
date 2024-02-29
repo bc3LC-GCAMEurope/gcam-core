@@ -70,7 +70,8 @@ module_water_water_td_xml <- function(command, ...) {
                      "L203.SubsectorInterp_watertd", "L203.TechShrwt_watertd", "L203.TechInterp_watertd",
                      "L203.TechCoef_watertd", "L203.TechPmult_watertd", "L203.Production_watertd",
                      "L203.Supplysector_desal_basin", "L203.SubsectorLogit_desal_basin",
-                     "L203.SubsectorShrwtFllt_desal_basin", "L203.TechShrwt_desal_basin", "L203.TechCoef_desal_basin") ->
+                     "L203.SubsectorShrwtFllt_desal_basin", "L203.TechShrwt_desal_basin", "L203.TechCoef_desal_basin") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       water_td.xml
 
     return_data(water_td.xml)

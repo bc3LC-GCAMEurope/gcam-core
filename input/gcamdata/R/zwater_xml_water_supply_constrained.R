@@ -67,7 +67,8 @@ module_water_water_supply_constrained_xml <- function(command, ...) {
                      "L201.DepRsrcCurves_ground",
                      "L201.RenewRsrcTechShrwt",
                      "L201.RsrcTechShrwt",
-                     "L201.RsrcTechCoef") ->
+                     "L201.RsrcTechCoef") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
     water_supply_constrained.xml
     return_data(water_supply_constrained.xml)
   } else {

@@ -52,7 +52,8 @@ module_water_EFW_irrigation_xml <- function(command, ...) {
                      "L272.StubTech_irr",
                      "L272.GlobalTechCoef_irr",
                      "L272.GlobalTechShrwt_irr",
-                     "L272.StubTechCoef_irr") ->
+                     "L272.StubTechCoef_irr") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       EFW_irrigation.xml
 
     return_data(EFW_irrigation.xml)

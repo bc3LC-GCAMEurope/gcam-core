@@ -268,7 +268,7 @@ get_data <- function(all_data, name, strip_attributes = FALSE) {
 #' \code{data_list} (one logical value for each data_list item).
 #' @param environ The environment into which the data should be loaded.  If NULL (the default)
 #' the caller's environment will be used.
-get_data_list <- function(all_data, data_list, strip_attributes = FALSE, environ = NULL) {
+get_data_list <- function(all_data, data_list, strip_attributes = FALSE, environ = NULL, filter_region = NULL, ...) {
   # expecting a (potentially named) character vector for data_list
   assertthat::assert_that(is.character(data_list))
   data_list_names <- names(data_list)
@@ -304,6 +304,10 @@ get_data_list <- function(all_data, data_list, strip_attributes = FALSE, environ
     }
     # get the data
     data = get_data(all_data, data_list[i], strip_attributes[i])
+
+    if(!is.null(filter_region)){
+      data <- filter_regions_europe(data, regions_to_keep = filter_region, ...)
+    }
     # assign it into the environment
     assign(curr_var_name, data, envir = environ)
   }
