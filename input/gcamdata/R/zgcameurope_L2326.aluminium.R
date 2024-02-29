@@ -313,11 +313,9 @@ module_gcameurope_L2326.aluminum <- function(command, ...) {
       distinct ->
       calibrated_techs_export # temporary tibble
 
-    gcameurope.EUROSTAT_GCAMREGIONID <- iso_GCAM_regID %>%
-      filter(iso %in% gcameurope.EUROSTAT_ISO) %>%
-      select(GCAM_region_ID) %>%
-      distinct() %>%
-      pull(GCAM_region_ID)
+    gcameurope.EUROSTAT_GCAMREGIONID <- GCAM_region_names %>%
+      pull(GCAM_region_ID) %>%
+      unique()
 
     L1326.out_Mt_R_aluminum_Yh_EUR %>%
       mutate(fuel = "electricity") %>%
