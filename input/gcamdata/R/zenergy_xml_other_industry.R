@@ -8,7 +8,7 @@
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
-#' the generated outputs: \code{industry.xml}. The corresponding file in the
+#' the generated outputs: \code{other_industry.xml}. The corresponding file in the
 #' original data system was \code{batch_industry_xml.R} (energy XML).
 module_energy_other_industry_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
@@ -113,7 +113,8 @@ module_energy_other_industry_xml <- function(command, ...) {
                      "L232.StubTechProd_industry", "L232.StubTechCoef_industry", "L232.FuelPrefElast_indenergy",
                      "L232.PerCapitaBased_ind", "L232.PriceElasticity_ind", "L232.BaseService_ind",
                      "L232.SubsectorShrwtFllt_ind", "L232.Supplysector_ind",
-                     "L232.GlobalTechTrackCapital_ind") ->
+                     "L232.GlobalTechTrackCapital_ind") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       other_industry.xml
 
     return_data(other_industry.xml)
