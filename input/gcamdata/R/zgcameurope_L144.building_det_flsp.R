@@ -12,7 +12,7 @@
 #' \code{L144.hab_land_flsp_fin_EUR}, \code{L144.flsp_param_EUR}. The corresponding file in the
 #' original data system was \code{LA144.building_det_flsp.R} (energy level1).
 #' @details Commercial and residential floorspace was calculated at the country level, before aggregating to the regional level.
-#' When available, floorspace was calculated from country-specific datasets, including those for the USA, China, and South Africa.
+#' When available, floorspace was calculated from country-specific datasets, including those from Eurostat
 #' Floorspace for countries that did not have country-level data was calculated using GCAM 3.0 assumptions.
 #' Floorspace prices were calculated by dividing an assumed fraction of GDP for buildings by residential floorspace.
 #' @importFrom assertthat assert_that
@@ -26,11 +26,9 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
              FILE = "energy/A44.flsp_bm2_state_comm",
              FILE = "energy/A44.pcflsp_default",
              FILE = "energy/A44.HouseholdSize",
-             # FILE = "energy/CEDB_ResFloorspace_chn",
-             # FILE = "energy/RECS_ResFloorspace_usa",
-             # FILE = "energy/Other_pcflsp_m2_ctry_Yh",
-             FILE = "energy/IEA_PCResFloorspace",   # TODO: update?
-             FILE = "energy/Odyssee_ResFloorspacePerHouse",
+             FILE = "gcam-europe/estat_ilc_hcmh02_filtered_en",
+             FILE = "gcam-europe/estat_ilc_lvph01_filtered_en",
+             FILE = "gcam-europe/mappings/geo_to_iso_map",
              "L100.Pop_thous_ctry_Yh",
              "L102.gdp_mil90usd_GCAM3_R_Y",
              "L221.LN0_Land",   # TODO: update?
@@ -51,8 +49,9 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
     A44.flsp_bm2_state_comm <- get_data(all_data, "energy/A44.flsp_bm2_state_comm")
     A44.pcflsp_default <- get_data(all_data, "energy/A44.pcflsp_default")
     A44.HouseholdSize <- get_data(all_data, "energy/A44.HouseholdSize")
-    IEA_PCResFloorspace <- get_data(all_data, "energy/IEA_PCResFloorspace") %>% filter_regions_europe()
-    Odyssee_ResFloorspacePerHouse <- get_data(all_data, "energy/Odyssee_ResFloorspacePerHouse") %>% filter_regions_europe()
+    EUR_avDwelling <- get_data(all_data, "gcam-europe/estat_ilc_hcmh02_filtered_en")
+    EUR_avHousehold <- get_data(all_data, "gcam-europe/estat_ilc_lvph01_filtered_en")
+    geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map")
     L100.Pop_thous_ctry_Yh <- get_data(all_data, "L100.Pop_thous_ctry_Yh") %>% filter_regions_europe()
     L102.gdp_mil90usd_GCAM3_R_Y <- get_data(all_data, "L102.gdp_mil90usd_GCAM3_R_Y") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
     L221.LN0_Land<-get_data(all_data, "L221.LN0_Land", strip_attributes = TRUE)
@@ -83,8 +82,37 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
     # A44.pcflsp_default provides residential and commercial floorspace (m2) per person for 1975, 1990, and 2005 for GCAM3 regions
     # L100.Pop_thous_ctry_Yh provides country-level population data and will be used to switch between total floorspace and per capita data
 
-    # Odyssee_ResFloorspacePerHouse provides residential floorspace (m2) per house (not person) from 1980 to 2009 for 29 countries
-    # A44.HouseholdSize provides number of persons/dwelling data, which will be used to calculate floorspace per capita
+    # Eurostat data
+    # EUR_avDwelling provides residential floorspace (m2) for 2012 for EUR countries
+    # Divide floorspace by EUR_avHousehold, i.e., average number of people by household,
+    # to get per capita floorspace, and extrapolate to all historical years
+    EUR_avDwelling %>%
+      filter(freq == 'A', # annual frequency
+             unit == 'AVG', # average values
+             deg_urb == 'TOTAL', # all urbanization types by country
+             hhtyp == 'TOTAL') %>%  # all household types by country)
+      select(geo, year = TIME_PERIOD, value_flsp = OBS_VALUE) %>%
+      filter(year %in% HISTORICAL_YEARS) %>% # Ensure within historical time period
+      left_join_error_no_match(EUR_avHousehold %>%
+                                 filter(freq == 'A', # annual frequency
+                                        unit == 'AVG') %>% # average values
+                                 select(geo, year = TIME_PERIOD, value_numH = OBS_VALUE),
+                                 by = c("geo", "year")) %>%
+      # Divide floorspace by population to get per capita floorspace
+      mutate(value_pcflsp = value_flsp / value_numH) %>% # Note: converting to thousand m2 because population is in thousands
+      select(geo, year, value_pcflsp) %>%
+      left_join(geo_to_iso_map, by = 'geo') %>%
+      select(-geo) %>%
+      group_by(iso) %>%
+      # Expand table to include all historical years
+      complete(year = HISTORICAL_YEARS) %>%
+      # Extrapolate to fill out values for all years
+      # Since there is only one filled year, 2012, copy the value to all HISTORICAL_YEARS
+      mutate(value_pcflsp = ifelse(is.na(value_pcflsp), value_pcflsp[year == 2012], value_pcflsp)) %>%
+      ungroup() %>%
+      # Remove NAs from group regions and missing dweling / household size values
+      filter(complete.cases(.)) ->
+      L144.pcflsp_m2_EUR_Yh
 
     # We need to prepare some lists and reshape tables first
     # First, convert household data to long form so it can be joined at a later step
@@ -92,87 +120,10 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
       select(-Variable, -Unit) %>%
       gather_years(value_col = "value_pcdwelling")
 
-    # IEA_PCResFloorspace provides residential floorspace (m2) per person for 16 selected countries for 1980 to 2004
-    # Note that IEA data will be chosen over Odyssee for duplicate countries b/c it reports per capita instead of per house
-
-    # Reshape IEA data to long form
-    IEA_PCResFloorspace %>%
-      gather_years(value_col = "value_pcflsp") %>%
-      mutate(value_pcflsp = as.numeric(value_pcflsp)) ->
-      IEA_PCResFloorspace_long
-
-    # Create list of IEA iso's. It will be used to remove these iso's from Odyssee data.
-    # Also, create a list of years from IEA data in order to be used for filtering.
-    list_iso_IEA <- unique(IEA_PCResFloorspace_long$iso)
-    list_years_IEA <- unique(IEA_PCResFloorspace_long$year)
-
-    Odyssee_ResFloorspacePerHouse %>%
-      tidyr::gather(year, value_phflsp, matches(YEAR_PATTERN)) %>% # Convert to long form
-      mutate(year = as.integer(year)) %>% # Convert year to integer to both join with A44.HouseholdSize_long and be able to extrapolote later on
-      filter(!iso %in% list_iso_IEA) %>% # Remove iso's that are in IEA dataset
-      # left_join_error_no_match cannot be used because joining table does not contain every year, which will introduce NAs
-      left_join(A44.HouseholdSize_long, by = "year") %>%
-      # Extrapolate, using rule 2 so years outside of min-max range are assigned values from closest data, as opposed to NAs
-      mutate(value_pcdwelling = approx_fun(year, value_pcdwelling, rule = 2),
-             # Calculate per capita floorspace
-             value_pcflsp = value_phflsp / value_pcdwelling) %>%
-      select(iso, year, value_pcflsp) ->
-      L144.Odyssee_pcflsp_Yh
-
-    IEA_PCResFloorspace_long %>%
-      select(-country) %>% # Drop country column to bind with Odyssee table
-      bind_rows(L144.Odyssee_pcflsp_Yh) %>% # Bind with Odyssee table
-      filter(year %in% list_years_IEA) %>% # Restrict to year range from IEA table
-      # We want to drop any countries with all missing values. First we will drop all rows with missing per capita values,
-      # and then expand to all historical years. Countries with no per capita data for any year will consequently be removed.
-      # Note that this permanently removes Cyprus, which has data post 2004.
-      filter(!is.na(value_pcflsp)) %>%
-      group_by(iso) %>%
-      complete(year = HISTORICAL_YEARS) %>% # Exand table to all historical years.
-      ungroup() %>%
-      spread(year, value_pcflsp) %>% # Spread data to be able to do inter-year calculations
-      # Missing 1990 values will be replaced by 1991, 1992, 1995, and 1996 (in that order)
-      mutate(`1990` = replace(`1990`, is.na(`1990`), `1991`[is.na(`1990`)]),
-             `1990` = replace(`1990`, is.na(`1990`), `1992`[is.na(`1990`)]),
-             `1990` = replace(`1990`, is.na(`1990`), `1995`[is.na(`1990`)]),
-             `1990` = replace(`1990`, is.na(`1990`), `1996`[is.na(`1990`)])) ->
-      L144.OECD_pcflsp_Yh_wide # More inter-year math will be performed, so keep in wide format
-
-    # Calculate average 1980-1990 growth rates for countries with 1980 data. Apply this to the 1990 data to return estimated 1980 floorspace.
-    L144.OECD_pcflsp_Yh_wide %>%
-      filter(!is.na(`1980`)) %>%
-      summarise(`1980` = sum(`1980`),
-                `1990` = sum(`1990`)) %>%
-      mutate(growthrate_1980_1990 = `1990` / `1980`) %>%
-      pull(growthrate_1980_1990) -> # Save as single value
-      growthrate_1980_1990
-
-    # Calculate 1980 data from 1990 using calculated growth rate
-    L144.OECD_pcflsp_Yh_wide %>%
-      mutate(`1980` = replace(`1980`, is.na(`1980`), `1990`[is.na(`1980`)] / growthrate_1980_1990)) ->
-      L144.OECD_pcflsp_Yh_wide_2
-
-    # Fill out Belgium 2004 data with the ratio of France
-    L144.OECD_pcflsp_Yh_wide_2 %>%
-      filter(iso == "fra") %>%
-      mutate(value_fra_ratio = `2004` / `2001`) %>%
-      pull(value_fra_ratio) ->
-      value_fra_ratio
-
-    L144.OECD_pcflsp_Yh_wide_2 %>%
-      mutate(`2004` = replace(`2004`, iso == "bel", (`2001` * value_fra_ratio)[iso == "bel"])) %>%
-      # Extrapolate the time series to all historical years
-      gather_years(value_col = "value_pcflsp") %>%
-      group_by(iso) %>%
-      # Rule 2 is used so years outside of min-max range are assigned values from closest data, as opposed to NAs
-      mutate(value_pcflsp = approx_fun(year, value_pcflsp, rule = 2)) %>% # Interpolation step
-      ungroup() ->
-      L144.OECD_pcflsp_Yh_final
-
-    # Apply default estimates of per-capita floorspace to remaining countries in the world
+    # Apply default estimates of per-capita floorspace to remaining EUR countries
     # Extrapolate the defaults to all years
     # First, create list of countries already calculated, so that they can be removed from this more general list
-    list_iso_calc <- unique(L144.OECD_pcflsp_Yh_final$iso)
+    list_iso_calc <- unique(L144.pcflsp_m2_EUR_Yh$iso)
 
     A44.pcflsp_default %>%
       gather_years(value_col = "value_pcflsp") %>%
@@ -188,7 +139,7 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
       # Rule 2 is used so years outside of min-max range are assigned values from closest data, as opposed to NAs
       mutate(value_pcflsp = approx_fun(year, value_pcflsp, rule = 2)) %>%
       ungroup() %>%
-      bind_rows(L144.OECD_pcflsp_Yh_final) -> # Combine altogether
+      bind_rows(L144.pcflsp_m2_EUR_Yh) -> # Combine altogether
       L144.pcflsp_m2_ctry_Yh
 
     # Per capita floorspace was calculated for all countries.
@@ -213,6 +164,10 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
 
     # First, define which is by default the final observed year and save the regions with observed data beyond that point (up to the final calibration year)
     avg_fin_obs_year<-2005
+    iso_with_obs_data<-iso_GCAM_regID %>%
+      filter(iso %in% list_iso_calc) %>%
+      pull(GCAM_region_ID) %>%
+      unique()
     `%notin%` <- Negate(`%in%`) # A ancillary function to help data processing
 
     # Then, calculate the habitable land, which is going to be used to estimate the floorspace per capita in final calibration year for the rest of regions.
@@ -260,13 +215,14 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
 
     # Estimation of the Gompertz parameters(land.density.param,b.param,and income.param):
     # pcap_flsp~(obs_sat +(land.density.param * log(tot_dens)))* exp(-b.param * exp(-income.param * log(pcap_income)))
-    # USA has a different unique behaviour, as observed pcap flsp is significantly higher than countries with:
-    # - Similar (or higher) per capita income
-    # - Similar (or lower) population density
-    # Therefore, we substitute the parameters for USA by those estimated using subregional data (not included in the DS).
     L144.flsp_param_EUR_pre<-L144.flsp_bm2_R_res_Yh_EUR_pre %>%
       left_join_error_no_match(GCAM_region_names, by="GCAM_region_ID") %>%
-      filter(year <= avg_fin_obs_year) %>%
+      # take all periods from regions with observed data:
+      filter(GCAM_region_ID %in% iso_with_obs_data) %>%
+      bind_rows(L144.flsp_bm2_R_res_Yh_EUR_pre %>%
+                  left_join_error_no_match(GCAM_region_names, by="GCAM_region_ID") %>%
+                  filter(GCAM_region_ID %notin% iso_with_obs_data,
+                         year<=avg_fin_obs_year)) %>%
       rename(flps_bm2 = value) %>%
       #add GDP
       left_join_error_no_match(L102.gdp_mil90usd_GCAM3_R_Y, by = c("GCAM_region_ID", "year")) %>%
@@ -287,13 +243,12 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
       rename(area_thous_km2 = value) %>%
       mutate(tot_dens = pop/(area_thous_km2* 1E3))
 
-    # Estimation of the parameters for non USA:
+    # Estimation of the parameters:
     formula.gomp<- "pc_flsp~(100 -(a*log(tot_dens)))*exp(-b*exp(-c*log(pc_gdp_thous)))"
     start.value<-c(a=-0.5,b=0.005,c=0.05)
     fit.gomp<-nls(formula.gomp, L144.flsp_param_EUR_pre, start.value)
 
-    # Write the dataset with the fitted parameters for the 31 GCAM regions
-    # Add the tibble with USA-specific parameters
+    # Write the dataset with the fitted parameters for the EUR-GCAM regions
     L144.flsp_param_EUR<-L144.flsp_param_EUR_pre %>%
       select(region) %>%
       distinct() %>%
@@ -302,6 +257,7 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
              land.density.param = coef(fit.gomp)[1],
              b.param = coef(fit.gomp)[2],
              income.param = coef(fit.gomp)[3])
+
 
 
     # ----------------------------------
@@ -331,7 +287,7 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
     L144.flsp_bm2_R_res_Yh_EUR <- L144.flsp_bm2_R_res_Yh_EUR_pre %>%
       left_join(L144.flsp_bm2_R_res_Yh_EUR_finBaseYear_est, by = c("GCAM_region_ID", "year")) %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
-      mutate(value = if_else(year %in% c(avg_fin_obs_year:MODEL_FINAL_BASE_YEAR),flsp_est,value)) %>%
+      mutate(value = if_else(GCAM_region_ID %notin% iso_with_obs_data & year %in% c(avg_fin_obs_year:MODEL_FINAL_BASE_YEAR),flsp_est,value)) %>%
       select(-region,-flsp_est) %>%
       group_by(GCAM_region_ID) %>%
       mutate(value = if_else(is.na(value), approx_fun(year, value, rule = 1), value)) %>%
@@ -351,7 +307,6 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
 
     # GCAM3 region per capita floorspace data for 1975, 1990, and 2005
     # Regions will be downscaled to the country level.
-    # USA and South Africa will be joined.
     A44.pcflsp_default %>%
       gather_years(value_col = "value_pcflsp") %>%
       filter(gcam.consumer == "comm") %>%
@@ -413,11 +368,12 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
       add_title("Residential floorspace by GCAM region / historical year") %>%
       add_units("billion m2") %>%
       add_comments("Residential floorspace was calculated at the country level, before aggregating to the regional level") %>%
-      add_comments("Floorspace was calculated from various datasets, including those for the USA, China, and South Africa") %>%
+      add_comments("Floorspace was calculated from various datasets, including those from Eurostat") %>%
       add_comments("Floorspace for the remaining countries were calculated using GCAM 3.0 assumptions") %>%
       add_legacy_name("L144.flsp_bm2_R_res_Yh_EUR") %>%
       add_precursors("common/iso_GCAM_regID","common/GCAM_region_names", "energy/A44.pcflsp_default",
-                     "energy/A44.HouseholdSize", "energy/IEA_PCResFloorspace", "energy/Odyssee_ResFloorspacePerHouse",
+                     "energy/A44.HouseholdSize", "gcam-europe/estat_ilc_hcmh02_filtered_en",
+                     "gcam-europe/estat_ilc_lvph01_filtered_en", "gcam-europe/mappings/geo_to_iso_map",
                      "L100.Pop_thous_ctry_Yh") ->
       L144.flsp_bm2_R_res_Yh_EUR
 
@@ -425,7 +381,7 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
       add_title("Commercial floorspace by GCAM region / historical year") %>%
       add_units("billion m2") %>%
       add_comments("Commercial floorspace was calculated at the country level, before aggregating to the regional level") %>%
-      add_comments("USA and South Africa have their own datasets; other countries were calculated by GCAM3 regional floorspace data") %>%
+      add_comments("all countries were calculated by GCAM3 regional floorspace data") %>%
       add_legacy_name("L144.flsp_bm2_R_comm_Yh_EUR") %>%
       add_precursors("common/iso_GCAM_regID", "energy/A44.flsp_bm2_state_comm", "energy/A44.pcflsp_default",
                      "L100.Pop_thous_ctry_Yh", "L102.gdp_mil90usd_GCAM3_R_Y") ->
@@ -437,8 +393,8 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
       add_comments("A fraction of GDP pertaining to buildings was divided by residential floorspace") %>%
       add_legacy_name("L144.flspPrice_90USDm2_R_bld_Yh_EUR") %>%
       add_precursors("common/iso_GCAM_regID",  "energy/A44.pcflsp_default",
-                     "energy/A44.HouseholdSize", "energy/IEA_PCResFloorspace",
-                     "energy/Odyssee_ResFloorspacePerHouse", "L100.Pop_thous_ctry_Yh",
+                     "energy/A44.HouseholdSize", "gcam-europe/estat_ilc_hcmh02_filtered_en", "gcam-europe/estat_ilc_lvph01_filtered_en",
+                     "gcam-europe/mappings/geo_to_iso_map", "L100.Pop_thous_ctry_Yh",
                      "L102.gdp_mil90usd_GCAM3_R_Y") ->
       L144.flspPrice_90USDm2_R_bld_Yh_EUR
 
@@ -448,8 +404,9 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
       add_comments("Estimated based on historical/observed floorspace values") %>%
       add_legacy_name("L144.flsp_param_EUR") %>%
       add_precursors("common/iso_GCAM_regID","common/GCAM_region_names", "energy/A44.pcflsp_default",
-                     "energy/A44.HouseholdSize", "energy/IEA_PCResFloorspace", "energy/Odyssee_ResFloorspacePerHouse",
-                     "L100.Pop_thous_ctry_Yh") ->
+                     "energy/A44.HouseholdSize",
+                     "gcam-europe/estat_ilc_hcmh02_filtered_en", "gcam-europe/estat_ilc_lvph01_filtered_en",
+                     "gcam-europe/mappings/geo_to_iso_map", "L100.Pop_thous_ctry_Yh") ->
       L144.flsp_param_EUR
 
     return_data(L144.flsp_bm2_R_res_Yh_EUR, L144.flsp_bm2_R_comm_Yh_EUR, L144.flspPrice_90USDm2_R_bld_Yh_EUR,L144.hab_land_flsp_fin_EUR, L144.flsp_param_EUR)
