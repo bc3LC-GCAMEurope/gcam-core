@@ -53,7 +53,7 @@ O4699,Other oil products,refined liquids
 P1000,Peat and peat products,
 P1100,Peat,coal
 P1200,Peat Products,coal
-R5110-5150_W6000RI,Primary solid biofuels,biomass
+R5110-5150_W6000RI,Primary solid biofuels,biomass_tradbio
 R5160,Charcoal,biomass
 R5210B,Blended biogasoline,refined biofuels_ethanol
 R5210P,Pure biogasoline,refined biofuels_ethanol
