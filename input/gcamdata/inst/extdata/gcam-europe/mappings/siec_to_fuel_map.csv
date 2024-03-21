@@ -25,8 +25,10 @@ C0379,Other recovered gases,coal
 E7000,Electricity,electricity
 FE,Fossil energy,
 G3000,Natural gas,gas
+G3200,Liquefied natural gas,
 H8000,Heat,heat
 N900H,Nuclear heat,elec_nuclear
+O4000,Oil and petroleum products,
 O4000XBIO,Oil and petroleum products (excluding biofuel portion),
 O4100_TOT,Crude oil,refined liquids
 O4200,Natural gas liquids,refined liquids
@@ -42,6 +44,7 @@ O4652XR5210B,Motor gasoline (excluding biofuel portion),refined liquids
 O4653,Gasoline-type jet fuel,refined liquids
 O4661XR5230B,Kerosene-type jet fuel (excluding biofuel portion),refined liquids
 O4669,Other kerosene,refined liquids
+O4671,Gas oil and diesel oil,refined liquids
 O4671XR5220B,Gas oil and diesel oil (excluding biofuel portion),refined liquids
 O4680,Fuel oil,refined liquids
 O4691,White spirit and special boiling point industrial spirits,refined liquids
@@ -62,7 +65,7 @@ R5220P,Pure biodiesels,refined biofuels_FT
 R5230B,Blended bio jet kerosene,biomass
 R5230P,Pure bio jet kerosene,biomass
 R5290,Other liquid biofuels,biomass
-R5300,Biogases,gasified biomass
+R5300,Biogases,gas
 RA000,Renewables and biofuels,
 RA100,Hydro,elec_hydro
 RA200,Geothermal,elec_geothermal
@@ -72,6 +75,7 @@ RA420,Solar photovoltaic,elec_solar PV
 RA500,"Tide, wave, ocean",elec_hydro
 RA600,Ambient heat (heat pumps),
 S2000,Oil Shale and Oil Sands,coal
+SFF_P1000_S2000,"Solid fossil fuels, peat, peat products, oil shale and oil sands",coal
 TOTAL,Total energy,
 W6100,Industrial waste (non-renewable),biomass
 W6100_6220,Non-renewable waste,

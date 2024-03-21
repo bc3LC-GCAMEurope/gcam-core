@@ -91,7 +91,8 @@ module_energy_L144.building_det_en <- function(command, ...) {
       mutate(value = approx_fun(year, value, rule = 2)) %>%
       ungroup() %>%
       # NAs will be introduced in residential and commercial shell technology rows
-      left_join(calibrated_techs_bld_det, by = c("supplysector", "technology")) %>%
+      left_join(calibrated_techs_bld_det %>%
+                  filter(grepl("heating|cooling|other", service)), by = c("supplysector", "technology")) %>%
       select(supplysector, subsector, technology, year, value) ->
       L144.USA_TechChange
 
@@ -310,7 +311,7 @@ module_energy_L144.building_det_en <- function(command, ...) {
 
     # Subset the tech list to just the thermal services
     tech_list_ctry %>%
-      filter(service %in% thermal_services) %>%
+      filter(service %in% unique(hddcdd_mapping$service)) %>%
       left_join_error_no_match(hddcdd_mapping, by = "service") ->
       L144.ThermalServices
 

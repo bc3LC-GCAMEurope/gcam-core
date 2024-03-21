@@ -13,6 +13,19 @@ bld_resid,traditional biomass,resid heating,resid heating,traditional biomass,tr
 bld_resid,heat,resid heating,resid heating,district heat,district heat,district heat,resid,resid,resid_building
 bld_resid,electricity,resid cooling,resid cooling,electricity,electricity,elect_td_bld,resid,resid,resid_building
 bld_resid,gas,resid cooling,resid cooling,gas,gas,delivered gas,resid,resid,resid_building
+bld_resid,biomass,resid cooking,resid cooking,biomass,biomass,delivered biomass,resid,resid,resid_building
+bld_resid,coal,resid cooking,resid cooking,coal,coal,delivered coal,resid,resid,resid_building
+bld_resid,electricity,resid cooking,resid cooking,electricity,electricity,elect_td_bld,resid,resid,resid_building
+bld_resid,gas,resid cooking,resid cooking,gas,gas,delivered gas,resid,resid,resid_building
+bld_resid,refined liquids,resid cooking,resid cooking,refined liquids,refined liquids,refined liquids enduse,resid,resid,resid_building
+bld_resid,heat,resid cooking,resid cooking,district heat,district heat,district heat,resid,resid,resid_building
+bld_resid,biomass,resid hot water,resid hot water,biomass,biomass,delivered biomass,resid,resid,resid_building
+bld_resid,coal,resid hot water,resid hot water,coal,coal,delivered coal,resid,resid,resid_building
+bld_resid,electricity,resid hot water,resid hot water,electricity,electricity,elect_td_bld,resid,resid,resid_building
+bld_resid,gas,resid hot water,resid hot water,gas,gas,delivered gas,resid,resid,resid_building
+bld_resid,refined liquids,resid hot water,resid hot water,refined liquids,refined liquids,refined liquids enduse,resid,resid,resid_building
+bld_resid,heat,resid hot water,resid hot water,district heat,district heat,district heat,resid,resid,resid_building
+bld_resid,electricity,resid lighting,resid lighting,electricity,electricity,elect_td_bld,resid,resid,resid_building
 bld_resid,biomass,resid others,resid others,biomass,biomass,delivered biomass,resid,resid,resid_building
 bld_resid,coal,resid others,resid others,coal,coal,delivered coal,resid,resid,resid_building
 bld_resid,electricity,resid others,resid others,electricity,electricity,elect_td_bld,resid,resid,resid_building

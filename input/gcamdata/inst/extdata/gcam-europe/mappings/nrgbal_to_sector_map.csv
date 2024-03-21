@@ -122,6 +122,12 @@ FC_TRA_PIPE_E,Pipeline transport,in_industry_pipeline,0
 FC_TRA_NSP_E,Not elsewhere specified (transport),in_trn_unspecified,0
 FC_OTH_CP_E,Commercial & public services,in_bld_comm,0
 FC_OTH_HH_E,Households,in_bld_resid,0
+FC_OTH_HH_E_SH,Households,,
+FC_OTH_HH_E_SC,Households,,
+FC_OTH_HH_E_WH,Households,,
+FC_OTH_HH_E_CK,Households,,
+FC_OTH_HH_E_LE,Households,,
+FC_OTH_HH_E_OE,Households,,
 FC_OTH_AF_E,Agriculture & forestry,in_industry_agriculture,0
 FC_OTH_FISH_E,Fishing,in_industry_general,0
 FC_OTH_NSP_E,Not elsewhere specified (other),in_bld_comm,0
