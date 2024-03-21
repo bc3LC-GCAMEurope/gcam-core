@@ -64,6 +64,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       left_join(siec_to_fuel_map, by = "siec") %>%
       # Only want to remove NAs in sector/fuel
       filter(!is.na(sector), !is.na(fuel)) %>%
+      mutate(fuel = if_else(fuel == "biomass_tradbio" & sector != "in_bld_resid", "biomass", fuel)) %>%
       # Reset some sector-fuel combinations, as specified in Eurostat_sector_fuel_modifications
       left_join(Eurostat_sector_fuel_modifications, by = c("sector" = "sector_initial", "fuel" = "fuel_initial")) %>%
       mutate(sector = if_else(is.na(sector.y), sector, sector.y),
