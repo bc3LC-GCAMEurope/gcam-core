@@ -550,12 +550,17 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       replace_na(list(share_serv_fuel = 0)) ->
       L144.share_serv_fuel_yesS
 
-    # add biomass shares like the traditional biomass ones -> ATTENTION! the fuel_share_of_TFEbysector
+    # add biomass shares to resid cooking -> ATTENTION! the fuel_share_of_TFEbysector
     # will no longer sum up to 1 (but no problem since from this point onwards it is no longer used)
     L144.share_serv_fuel_yesS <- bind_rows(
       L144.share_serv_fuel_yesS,
-      L144.share_serv_fuel_yesS %>% filter(fuel == 'traditional biomass') %>%
-        mutate(fuel = 'biomass')
+      tibble(GCAM_region_ID = unique(L144.share_serv_fuel_yesS$GCAM_region_ID),
+             service = 'resid_cooking',
+             sector = 'bld_resid',
+             share_TFEbysector = 1,
+             fuel = 'biomass',
+             fuel_share_of_TFEbysector = 1,
+             share_serv_fuel = 1)
       )
 
 
