@@ -20,7 +20,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     return(c(FILE = "common/GCAM_region_names",
              FILE = "common/iso_GCAM_regID",
              FILE = "energy/A_regions",
-             FILE = "energy/calibrated_techs_bld_det",
+             FILE = "gcam-europe/calibrated_techs_bld_det_EUR",
              FILE = "energy/A44.cost_efficiency",
              FILE = "energy/A44.internal_gains",
              FILE = "energy/A44.share_serv_fuel",
@@ -51,7 +51,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>% filter_regions_europe()
     iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID") %>% filter_regions_europe()
     A_regions <- get_data(all_data, "energy/A_regions") %>% filter_regions_europe()
-    calibrated_techs_bld_det <- get_data(all_data, "energy/calibrated_techs_bld_det")
+    calibrated_techs_bld_det_EUR <- get_data(all_data, "gcam-europe/calibrated_techs_bld_det_EUR")
     A44.cost_efficiency <- get_data(all_data, "energy/A44.cost_efficiency", strip_attributes = TRUE)
     A44.internal_gains <- get_data(all_data, "energy/A44.internal_gains")
     A44.share_serv_fuel <- get_data(all_data, "energy/A44.share_serv_fuel")
@@ -178,7 +178,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       mutate(value = approx_fun(year, value, rule = 2)) %>%
       ungroup() %>%
       # NAs will be introduced in residential and commercial shell technology rows
-      left_join(calibrated_techs_bld_det, by = c("supplysector", "technology")) %>%
+      left_join(calibrated_techs_bld_det_EUR, by = c("supplysector", "technology")) %>%
       select(supplysector, subsector, technology, year, value) ->
       L144.USA_TechChange
 
@@ -374,7 +374,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     # First, create list of countries, which will be used to expand the table
     list_iso <- gcameurope.EUROSTAT_ISO
 
-    calibrated_techs_bld_det %>%
+    calibrated_techs_bld_det_EUR %>%
       select(sector, fuel, service) %>%
       repeat_add_columns(tibble::tibble(iso = list_iso)) %>%
       # Match in the names of the region_GCAM3
@@ -388,7 +388,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     # First, need to associate HDD and CDD with the corresponding services (heating and cooling, respectively)
     list_supplysector <- unique(A44.internal_gains$supplysector)
 
-    thermal_services <- calibrated_techs_bld_det %>%
+    thermal_services <- calibrated_techs_bld_det_EUR %>%
       filter(!supplysector %in% list_supplysector) %>%
       pull(service) %>%
       unique()
@@ -653,7 +653,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     # Match in sector, fuel, service into efficiency table
     L144.end_use_eff_EUR %>%
       filter(year %in% HISTORICAL_YEARS) %>%
-      left_join_error_no_match(calibrated_techs_bld_det, by = c("supplysector", "subsector", "technology")) %>%
+      left_join_error_no_match(calibrated_techs_bld_det_EUR, by = c("supplysector", "subsector", "technology")) %>%
       select(GCAM_region_ID, sector, fuel, service, year, value_eff = value) ->
       L144.end_use_eff_EUR_2f
 
@@ -707,7 +707,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       add_units("Unitless efficiency") %>%
       add_comments("End-use tech efficiency is the product of region-specific adjustment factors, tech-specific improvement rates, and tech-specific efficiency levels") %>%
       add_legacy_name("L144.end_use_eff_EUR") %>%
-      add_precursors("energy/A44.USA_TechChange", "energy/calibrated_techs_bld_det", "common/iso_GCAM_regID", "energy/A44.tech_eff_mult_RG3",
+      add_precursors("energy/A44.USA_TechChange", "energy/calibrated_techs_bld_det_EUR", "common/iso_GCAM_regID", "energy/A44.tech_eff_mult_RG3",
                      "energy/A_regions", "energy/A44.cost_efficiency", "common/GCAM_region_names") ->
       L144.end_use_eff_EUR
 
@@ -716,7 +716,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       add_units("Unitless efficiency") %>%
       add_comments("Shell efficiency is the product of region-specific adjustment factors and tech-specific improvement rates") %>%
       add_legacy_name("L144.shell_eff_R_Y_EUR") %>%
-      add_precursors("energy/A44.USA_TechChange", "energy/calibrated_techs_bld_det", "common/iso_GCAM_regID", "energy/A44.shell_eff_mult_RG3",
+      add_precursors("energy/A44.USA_TechChange", "energy/calibrated_techs_bld_det_EUR", "common/iso_GCAM_regID", "energy/A44.shell_eff_mult_RG3",
                      "common/GCAM_region_names") ->
       L144.shell_eff_R_Y_EUR
 
@@ -744,7 +744,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       add_comments("Start with table of efficiencies. Subset only the supplysector / subsector / technologies that are in the internal gains assumptions table.") %>%
       add_comments("Then divide the intgains assumptions by the efficiency, matching on supplysector / subsector / technology") %>%
       add_legacy_name("L144.internal_gains_EUR") %>%
-      add_precursors("energy/A44.USA_TechChange", "energy/calibrated_techs_bld_det", "common/iso_GCAM_regID", "energy/A44.tech_eff_mult_RG3",
+      add_precursors("energy/A44.USA_TechChange", "energy/calibrated_techs_bld_det_EUR", "common/iso_GCAM_regID", "energy/A44.tech_eff_mult_RG3",
                      "energy/A_regions", "energy/A44.cost_efficiency", "energy/A44.internal_gains", "common/GCAM_region_names") ->
       L144.internal_gains_EUR
 
@@ -753,7 +753,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       add_units("EJ/yr") %>%
       add_comments("Product of energy consumption and efficiency aggregated by region, sector, service") %>%
       add_legacy_name("L144.base_service_EJ_serv_EUR") %>%
-      add_precursors("energy/A44.USA_TechChange", "energy/calibrated_techs_bld_det", "common/iso_GCAM_regID", "energy/A44.tech_eff_mult_RG3",
+      add_precursors("energy/A44.USA_TechChange", "energy/calibrated_techs_bld_det_EUR", "common/iso_GCAM_regID", "energy/A44.tech_eff_mult_RG3",
                      "energy/A_regions", "energy/A44.cost_efficiency", "common/GCAM_region_names") ->
       L144.base_service_EJ_serv_EUR
 
