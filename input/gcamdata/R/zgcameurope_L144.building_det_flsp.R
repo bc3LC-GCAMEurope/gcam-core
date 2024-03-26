@@ -51,7 +51,7 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
     A44.HouseholdSize <- get_data(all_data, "energy/A44.HouseholdSize")
     EUR_avDwelling <- get_data(all_data, "gcam-europe/estat_ilc_hcmh02_filtered_en")
     EUR_avHousehold <- get_data(all_data, "gcam-europe/estat_ilc_lvph01_filtered_en")
-    geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map")
+    geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map") %>% filter_regions_europe()
     L100.Pop_thous_ctry_Yh <- get_data(all_data, "L100.Pop_thous_ctry_Yh") %>% filter_regions_europe()
     L102.gdp_mil90usd_GCAM3_R_Y <- get_data(all_data, "L102.gdp_mil90usd_GCAM3_R_Y") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
     L221.LN0_Land<-get_data(all_data, "L221.LN0_Land", strip_attributes = TRUE)
@@ -130,7 +130,7 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
       filter(gcam.consumer == "resid") %>%
       # Left_join_error_no_match cannot be used because the number of rows will change. Each region will be expanded
       # into their individual countries
-      left_join(iso_GCAM_regID, by = "region_GCAM3") %>%
+      left_join(iso_GCAM_regID, by = "region_GCAM3", relationship = "many-to-many") %>%
       filter_regions_europe() %>%
       filter(!iso %in% list_iso_calc) %>% # Filter out iso's already calculated
       select(iso, year, value_pcflsp) %>%
@@ -318,7 +318,7 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
       select(region_GCAM3, year, value_pcflsp) %>%
       # Left_join_error_no_match cannot be used because the number of rows will change. Each region will be expanded
       # into their individual countries
-      left_join(iso_GCAM_regID, by = "region_GCAM3") %>%
+      left_join(iso_GCAM_regID, by = "region_GCAM3", relationship = "many-to-many") %>%
       filter_regions_europe() %>%
       # left_join_error_no_match cannot be used because the population file does not have all the countries
       left_join(L100.Pop_thous_ctry_Yh, by = c("iso", "year")) %>%
