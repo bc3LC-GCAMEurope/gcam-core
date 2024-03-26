@@ -26,8 +26,9 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
              FILE = "energy/A44.share_serv_fuel",
              FILE = "energy/A44.shell_eff_mult_RG3",
              FILE = "energy/A44.tech_eff_mult_RG3",
-             FILE = "energy/A44.USA_TechChange",
              FILE = "energy/mappings/enduse_fuel_aggregation",
+             FILE = "gcam-europe/A44.USA_TechChange_EUR",
+             FILE = "gcam-europe/A44.globaltech_eff_EUR",
              FILE = "gcam-europe/estat_nrg_d_hhq_filtered_en",
              FILE = "gcam-europe/mappings/geo_to_iso_map",
              FILE = "gcam-europe/mappings/nrgbal_to_service_map",
@@ -57,7 +58,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     A44.share_serv_fuel <- get_data(all_data, "energy/A44.share_serv_fuel")
     A44.shell_eff_mult_RG3 <- get_data(all_data, "energy/A44.shell_eff_mult_RG3")
     A44.tech_eff_mult_RG3 <- get_data(all_data, "energy/A44.tech_eff_mult_RG3")
-    A44.USA_TechChange <- get_data(all_data, "energy/A44.USA_TechChange")
+    A44.USA_TechChange_EUR <- get_data(all_data, "gcam-europe/A44.USA_TechChange_EUR")
+    A44.globaltech_eff_EUR <- get_data(all_data, "gcam-europe/A44.globaltech_eff_EUR")
     enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
     EUR_hhEnergyConsum <- get_data(all_data, "gcam-europe/estat_nrg_d_hhq_filtered_en")
     nrgbal_to_service_map <- get_data(all_data, "gcam-europe/mappings/nrgbal_to_service_map")
@@ -167,8 +169,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     # Years will span historical and future time period
 
     # Write out the tech change table to all desired years, and convert to ratios from a base year
-    # A44.USA_TechChange reports improvement rates of technology (annual rate)
-    A44.USA_TechChange %>%
+    # A44.USA_TechChange_EUR reports improvement rates of technology (annual rate)
+    A44.USA_TechChange_EUR %>%
       gather_years %>% # Year needs to be integer (or numeric) for the interpolation step below
       # Expand table to include all historical and future years
       group_by(supplysector, technology) %>%
@@ -294,6 +296,24 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       mutate(value = value * value_tech) ->
       L144.end_use_eff_EUR_Index
 
+    # Compute the average effiency by technology and expand to all years
+    A44.globaltech_eff_EUR %>%
+      # Average by tech (since there is tech_detail column but we do not have more info about the EUR implemented technologies)
+      gather_years %>%
+      group_by(supplysector, subsector, technology, minicam.energy.input, year) %>%
+      dplyr::summarise(value = mean(value)) %>%
+      ungroup() %>%
+      mutate(year = as.integer(year)) %>%
+      # Expand to all years
+      group_by(supplysector, subsector, technology, minicam.energy.input) %>%
+      complete(year = HIST_FUT_YEARS) %>%
+      # Extrapolate to fill out values for all years
+      # Rule 2 is used in case there are years outside of min-max range, which will be assigned values from closest data
+      mutate(value = approx_fun(year, value, rule = 2)) %>%
+      ungroup() ->
+      L144.TechUSA_eff
+
+
     # These values are indexed to the USA in the base year. Unlike shells, the end-use technology values read to the model
     # are not just indices, so need to multiply through by assumed base efficiency levels for each technology
 
@@ -313,8 +333,12 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
 
     # Note that this produces a final output table.
     L144.end_use_eff_EUR_Index %>%
-      # Join efficiency values (by sector and technology)
-      left_join_error_no_match(A44.cost_efficiency, by = c("supplysector", "subsector", "technology")) %>%
+      # Join AVERAGE efficiency values (by sector and technology)
+      # TODO - acabar d'ajuntar aquests 2 datasets. Tenir en compte q abans era A44.cost_efficiency en lloc del d la línia 321
+      # i cal fer la mitjana entre les tech, pq hi ha més tech details q no tindrem en compte, d moment
+      left_join_error_no_match(L144.TechUSA_eff %>%
+                                 rename(efficiency = value),
+                               by = c("supplysector", "subsector", "technology", "year")) %>%
       # Multiply by efficiency values
       mutate(value = value * efficiency,
              # Prepare to drop region/subsector combinations where district heat and traditional biomass are not modeled
@@ -712,8 +736,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       add_units("Unitless efficiency") %>%
       add_comments("End-use tech efficiency is the product of region-specific adjustment factors, tech-specific improvement rates, and tech-specific efficiency levels") %>%
       add_legacy_name("L144.end_use_eff_EUR") %>%
-      add_precursors("energy/A44.USA_TechChange", "energy/calibrated_techs_bld_det_EUR", "common/iso_GCAM_regID", "energy/A44.tech_eff_mult_RG3",
-                     "energy/A_regions", "energy/A44.cost_efficiency", "common/GCAM_region_names") ->
+      add_precursors("gcam-europe/A44.USA_TechChange_EUR", "energy/calibrated_techs_bld_det_EUR", "common/iso_GCAM_regID", "energy/A44.tech_eff_mult_RG3",
+                     "energy/A_regions", "gcam-europe/A44.globaltech_eff_EUR", "common/GCAM_region_names") ->
       L144.end_use_eff_EUR
 
     L144.shell_eff_R_Y_EUR %>%
@@ -721,7 +745,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       add_units("Unitless efficiency") %>%
       add_comments("Shell efficiency is the product of region-specific adjustment factors and tech-specific improvement rates") %>%
       add_legacy_name("L144.shell_eff_R_Y_EUR") %>%
-      add_precursors("energy/A44.USA_TechChange", "energy/calibrated_techs_bld_det_EUR", "common/iso_GCAM_regID", "energy/A44.shell_eff_mult_RG3",
+      add_precursors("gcam-europe/A44.USA_TechChange_EUR", "energy/calibrated_techs_bld_det_EUR", "common/iso_GCAM_regID", "energy/A44.shell_eff_mult_RG3",
                      "common/GCAM_region_names") ->
       L144.shell_eff_R_Y_EUR
 
@@ -749,7 +773,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       add_comments("Start with table of efficiencies. Subset only the supplysector / subsector / technologies that are in the internal gains assumptions table.") %>%
       add_comments("Then divide the intgains assumptions by the efficiency, matching on supplysector / subsector / technology") %>%
       add_legacy_name("L144.internal_gains_EUR") %>%
-      add_precursors("energy/A44.USA_TechChange", "energy/calibrated_techs_bld_det_EUR", "common/iso_GCAM_regID", "energy/A44.tech_eff_mult_RG3",
+      add_precursors("gcam-europe/A44.USA_TechChange_EUR", "energy/calibrated_techs_bld_det_EUR", "common/iso_GCAM_regID", "energy/A44.tech_eff_mult_RG3",
                      "energy/A_regions", "energy/A44.cost_efficiency", "energy/A44.internal_gains", "common/GCAM_region_names") ->
       L144.internal_gains_EUR
 
@@ -758,7 +782,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       add_units("EJ/yr") %>%
       add_comments("Product of energy consumption and efficiency aggregated by region, sector, service") %>%
       add_legacy_name("L144.base_service_EJ_serv_EUR") %>%
-      add_precursors("energy/A44.USA_TechChange", "energy/calibrated_techs_bld_det_EUR", "common/iso_GCAM_regID", "energy/A44.tech_eff_mult_RG3",
+      add_precursors("gcam-europe/A44.USA_TechChange_EUR", "energy/calibrated_techs_bld_det_EUR", "common/iso_GCAM_regID", "energy/A44.tech_eff_mult_RG3",
                      "energy/A_regions", "energy/A44.cost_efficiency", "common/GCAM_region_names") ->
       L144.base_service_EJ_serv_EUR
 
