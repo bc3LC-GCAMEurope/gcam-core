@@ -29,6 +29,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
              FILE = "energy/mappings/enduse_fuel_aggregation",
              FILE = "gcam-europe/A44.USA_TechChange_EUR",
              FILE = "gcam-europe/A44.globaltech_eff_EUR",
+             FILE = "gcam-europe/A44.globaltech_cost_EUR",
              FILE = "gcam-europe/estat_nrg_d_hhq_filtered_en",
              FILE = "gcam-europe/mappings/geo_to_iso_map",
              FILE = "gcam-europe/mappings/nrgbal_to_service_map",
@@ -60,6 +61,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     A44.tech_eff_mult_RG3 <- get_data(all_data, "energy/A44.tech_eff_mult_RG3")
     A44.USA_TechChange_EUR <- get_data(all_data, "gcam-europe/A44.USA_TechChange_EUR")
     A44.globaltech_eff_EUR <- get_data(all_data, "gcam-europe/A44.globaltech_eff_EUR")
+    A44.globaltech_cost_EUR <- get_data(all_data, "gcam-europe/A44.globaltech_cost_EUR")
     enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
     EUR_hhEnergyConsum <- get_data(all_data, "gcam-europe/estat_nrg_d_hhq_filtered_en")
     nrgbal_to_service_map <- get_data(all_data, "gcam-europe/mappings/nrgbal_to_service_map")
@@ -353,17 +355,10 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     # 1C
     # Calculate building non-energy costs by supply sector, subsector, and technology
 
-    # Define discount rate
-    discount_rate_bld <- 0.1
-
     # A44.cost_efficiency reports base costs and efficiencies of building technologies
     # Note that this produces a final output table.
-    A44.cost_efficiency %>%
-      mutate(CRF = discount_rate_bld * ((1 + discount_rate_bld) ^ lifetime) / (((1 + discount_rate_bld) ^ lifetime) - 1),
-             CapitalCost = `installed cost` * CRF,
-             NonEnergyCost = CapitalCost + `O&M cost`,
-             ServiceOutput = UEC * efficiency,
-             NEcostPerService = NonEnergyCost / ServiceOutput * gdp_deflator(1975, 2005)) %>%
+    A44.globaltech_cost_EUR %>%
+      mutate(NEcostPerService = NEcostPerService * gdp_deflator(1975, 2005)) %>%
       select(supplysector, subsector, technology, NEcostPerService) ->
       L144.NEcost_75USDGJ_EUR # This is a final output table.
 
