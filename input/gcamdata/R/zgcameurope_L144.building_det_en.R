@@ -574,7 +574,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     L144.share_serv_fuel_yesS <- bind_rows(
       L144.share_serv_fuel_yesS,
       tibble(GCAM_region_ID = unique(L144.share_serv_fuel_yesS$GCAM_region_ID),
-             service = 'resid_cooking',
+             service = 'resid cooking',
              sector = 'bld_resid',
              share_TFEbysector = 1,
              fuel = 'biomass',
@@ -654,7 +654,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       replace_na(list(ServiceShare = 0)) %>%
       # Multiply these shares by the (final, adjusted) energy consumption by region / sector / fuel
       # Rows expanded due to years
-      left_join(L142.in_EJ_R_bld_F_Yh_EUR, by = c("GCAM_region_ID", "sector", "fuel")) %>%
+      left_join(L142.in_EJ_R_bld_F_Yh_EUR, by = c("GCAM_region_ID", "sector", "fuel"),
+                relationship = "many-to-many") %>%
       filter(year %in% HISTORICAL_YEARS) %>%
       mutate(value = ServiceShare * value,
              # This has a number of combinations that do not apply. Drop the known ones.
