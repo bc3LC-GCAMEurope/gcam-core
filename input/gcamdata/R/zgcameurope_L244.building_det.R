@@ -15,7 +15,11 @@
 #' \code{L244.SubsectorInterpTo_bld_EUR}, \code{L244.SubsectorLogit_bld_EUR}, \code{L244.FuelPrefElast_bld_EUR}, \code{L244.StubTech_bld_EUR}, \code{L244.StubTechEff_bld_EUR},
 #' \code{L244.StubTechCalInput_bld_EUR}, \code{L244.StubTechIntGainOutputRatio_EUR},
 #' \code{L244.DeleteGenericService_EUR}, \code{L244.DeleteThermalService_EUR},
-#' \code{L244.GompFnParam_EUR}.
+#' \code{L244.GompFnParam_EUR},
+#' \code{L244.GlobalTechShrwt_bld}, \code{L244.GlobalTechCost_bld}, \code{L244.DeleteGenericService},
+#' \code{L244.DeleteGenericService_EUR}, \code{L244.DeleteThermalService_EUR}, \code{L244.HDDCDD_A2_CCSM3x},
+#' \code{L244.HDDCDD_A2_HadCM3}, \code{L244.HDDCDD_B1_CCSM3x}, \code{L244.HDDCDD_B1_HadCM3},
+#' \code{L244.HDDCDD_constdd_no_GCM}.
 #' The corresponding file in the original data system was \code{L244.building_det.R} (energy level2).
 #' @details Creates level2 data for the building sector.
 #' @importFrom assertthat assert_that
@@ -33,6 +37,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              FILE = "gcam-europe/A44.subsector_logit_EUR",
              FILE = "gcam-europe/A44.subsector_shrwt_EUR",
              FILE = "gcam-europe/A44.fuelprefElasticity_EUR",
+             FILE = "gcam-europe/A44.globaltech_shrwt_EUR",
              FILE = "energy/A44.gcam_consumer",
              FILE = "energy/A44.demandFn_serv",
              FILE = "energy/A44.demandFn_flsp",
@@ -80,7 +85,15 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              "L244.StubTechIntGainOutputRatio_EUR",
              "L244.DeleteGenericService_EUR",
              "L244.DeleteThermalService_EUR",
-             "L244.GompFnParam_EUR"))
+             "L244.GompFnParam_EUR",
+             "L244.GlobalTechShrwt_bld_EUR",
+             "L244.GlobalTechCost_bld_EUR",
+             "L244.GlobalTechTrackCapital_bld_EUR",
+             "L244.HDDCDD_A2_CCSM3x_EUR",
+             "L244.HDDCDD_A2_HadCM3_EUR",
+             "L244.HDDCDD_B1_CCSM3x_EUR",
+             "L244.HDDCDD_B1_HadCM3_EUR",
+             "L244.HDDCDD_constdd_no_GCM_EUR"))
   } else if(command == driver.MAKE) {
 
     # Silence package checks
@@ -92,7 +105,8 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       value <- year <- year.fillout <- GCM <- NEcostPerService <- SRES <- base.building.size <-
       base.service <- building.node.input <- . <- GCAM_region_ID <-
       scenario <- area_thouskm2 <- flsp <- flsp_pc <- unadjust.satiation <- land.density.param <- tot.dens <-
-      b.param <- income.param <- gdp_pc <- flsp_est <- base_flsp <- bias.adjust.param <- NULL
+      b.param <- income.param <- gdp_pc <- flsp_est <- base_flsp <- bias.adjust.param <- L244.HDDCDD_A2_CCSM3x <-
+        L244.HDDCDD_A2_HadCM3 <- L244.HDDCDD_B1_CCSM3x <- L244.HDDCDD_B1_HadCM3 <- L244.HDDCDD_constdd_no_GCM <- NULL
 
     all_data <- list(...)[[1]]
 
@@ -105,6 +119,8 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     A44.subsector_logit_EUR <- get_data(all_data, "gcam-europe/A44.subsector_logit_EUR", strip_attributes = TRUE)
     A44.subsector_shrwt_EUR <- get_data(all_data, "gcam-europe/A44.subsector_shrwt_EUR", strip_attributes = TRUE)
     A44.fuelprefElasticity_EUR <- get_data(all_data, "gcam-europe/A44.fuelprefElasticity_EUR", strip_attributes = TRUE)
+    A44.globaltech_shrwt_EUR <- get_data(all_data, "gcam-europe/A44.globaltech_shrwt_EUR", strip_attributes = TRUE) %>%
+      gather_years
     A44.gcam_consumer <- get_data(all_data, "energy/A44.gcam_consumer", strip_attributes = TRUE)
     A44.demandFn_serv <- get_data(all_data, "energy/A44.demandFn_serv", strip_attributes = TRUE)
     A44.demandFn_flsp <- get_data(all_data, "energy/A44.demandFn_flsp", strip_attributes = TRUE)
@@ -552,6 +568,37 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              market.name = region) %>%
       select(LEVEL2_DATA_NAMES[["StubTechEff"]])
 
+    # L244.GlobalTechShrwt_bld: Default shareweights for global building technologies
+    L244.GlobalTechShrwt_bld <- A44.globaltech_shrwt_EUR %>%
+      # Repeat for all model years
+      complete(nesting(supplysector, subsector, technology), year = c(year, MODEL_YEARS)) %>%
+      # Interpolate
+      group_by(supplysector, subsector, technology) %>%
+      mutate(share.weight = approx_fun(year, value, rule = 2)) %>%
+      ungroup() %>%
+      filter(year %in% MODEL_YEARS) %>%
+      rename(sector.name = supplysector,
+             subsector.name = subsector) %>%
+      select(LEVEL2_DATA_NAMES[["GlobalTechYr"]], share.weight)
+    # L244.GlobalTechCost_bld: Non-fuel costs of global building technologies
+    L244.GlobalTechCost_bld <- L144.NEcost_75USDGJ_EUR %>%
+      mutate(input.cost = round(NEcostPerService, energy.DIGITS_COST)) %>%
+      repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
+      rename(sector.name = supplysector,
+             subsector.name = subsector) %>%
+      mutate(minicam.non.energy.input = "non-energy") %>%
+      select(LEVEL2_DATA_NAMES[["GlobalTechCost"]])
+    FCR <- (socioeconomics.DEFAULT_INTEREST_RATE * (1+socioeconomics.DEFAULT_INTEREST_RATE)^socioeconomics.BUILDINGS_CAP_PAYMENTS) /
+      ((1+socioeconomics.DEFAULT_INTEREST_RATE)^socioeconomics.BUILDINGS_CAP_PAYMENTS -1)
+    L244.GlobalTechCost_bld %>%
+      mutate(capital.coef = socioeconomics.BUILDINGS_CAPITAL_RATIO / FCR,
+             # note consumer ACs, etc are technically not investment but rather "consumer durable"
+             tracking.market = if_else(grepl('resid', sector.name),
+                                       socioeconomics.EN_DURABLE_MARKET_NAME, socioeconomics.EN_CAPITAL_MARKET_NAME),
+             depreciation.rate = socioeconomics.BUILDINGS_DEPRECIATION_RATE) %>%
+      select(LEVEL2_DATA_NAMES[['GlobalTechTrackCapital']]) ->
+      L244.GlobalTechTrackCapital_bld
+
     # L244.StubTechIntGainOutputRatio_EUR: Output ratios of internal gain energy from non-thermal building services
     L244.StubTechIntGainOutputRatio_EUR <- L144.internal_gains_EUR %>%
       filter(year %in% MODEL_YEARS) %>%
@@ -897,6 +944,30 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       same_precursors_as(L244.ThermalBaseService_EUR) ->
       L244.DeleteThermalService_EUR
 
+    L244.GlobalTechShrwt_bld %>%
+      add_title("Default shareweights for global building technologies") %>%
+      add_units("Unitless") %>%
+      add_comments("Values interpolated from A44.globaltech_shrwt") %>%
+      add_legacy_name("L244.GlobalTechShrwt_bld") %>%
+      add_precursors("gcam-europe/A44.globaltech_shrwt_EUR") ->
+      L244.GlobalTechShrwt_bld_EUR
+
+    L244.GlobalTechCost_bld %>%
+      add_title("Non-fuel costs of global building technologies") %>%
+      add_units("1975$/GJ-service") %>%
+      add_comments("Costs from L144.NEcost_75USDGJ expanded to model years") %>%
+      add_legacy_name("L244.GlobalTechCost_bld") %>%
+      add_precursors("L144.NEcost_75USDGJ_EUR") ->
+      L244.GlobalTechCost_bld_EUR
+
+    L244.GlobalTechTrackCapital_bld %>%
+      add_title("Convert non-energy inputs to track the annual capital investments.") %>%
+      add_units(("Coefficients")) %>%
+      add_comments("Track capital investments for purposes of macro economic calculations") %>%
+      same_precursors_as(L244.GlobalTechCost_bld) ->
+      L244.GlobalTechTrackCapital_bld_EUR
+
+
     return_data(L244.SubregionalShares_EUR, L244.PriceExp_IntGains_EUR, L244.Floorspace_EUR,
                 L244.DemandFunction_serv_EUR, L244.DemandFunction_flsp_EUR,
                 L244.Satiation_flsp_EUR, L244.SatiationAdder_EUR, L244.ThermalBaseService_EUR,
@@ -907,7 +978,8 @@ module_gcameurope_L244.building_det <- function(command, ...) {
                 L244.SubsectorInterpTo_bld_EUR, L244.FuelPrefElast_bld_EUR, L244.GompFnParam_EUR,
                 L244.StubTech_bld_EUR, L244.StubTechEff_bld_EUR, L244.StubTechCalInput_bld_EUR,
                 L244.DeleteGenericService_EUR, L244.DeleteThermalService_EUR, L244.SubsectorLogit_bld_EUR,
-                L244.StubTechIntGainOutputRatio_EUR)     # L244.DeleteThermalService_EUR
+                L244.StubTechIntGainOutputRatio_EUR,
+                L244.GlobalTechShrwt_bld_EUR, L244.GlobalTechCost_bld_EUR, L244.GlobalTechTrackCapital_bld_EUR)
   } else {
     stop("Unknown command")
   }

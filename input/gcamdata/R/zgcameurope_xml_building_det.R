@@ -39,7 +39,10 @@ module_gcameurope_building_det_xml <- function(command, ...) {
              "L244.StubTechIntGainOutputRatio_EUR",
              "L244.DeleteThermalService_EUR",
              "L244.DeleteGenericService_EUR",
-             "L244.GompFnParam_EUR"))
+             "L244.GompFnParam_EUR",
+             "L244.GlobalTechShrwt_bld_EUR",
+             "L244.GlobalTechCost_bld_EUR",
+             "L244.GlobalTechTrackCapital_bld_EUR"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c(XML = "building_det_EUR.xml"))
   } else if(command == driver.MAKE) {
@@ -75,6 +78,9 @@ module_gcameurope_building_det_xml <- function(command, ...) {
     L244.DeleteThermalService_EUR <- get_data(all_data, "L244.DeleteThermalService_EUR")
     L244.DeleteGenericService_EUR <- get_data(all_data, "L244.DeleteGenericService_EUR")
     L244.GompFnParam_EUR <- get_data(all_data, "L244.GompFnParam_EUR")
+    L244.GlobalTechShrwt_bld_EUR <- get_data(all_data, "L244.GlobalTechShrwt_bld_EUR")
+    L244.GlobalTechCost_bld_EUR <- get_data(all_data, "L244.GlobalTechCost_bld_EUR")
+    L244.GlobalTechTrackCapital_bld_EUR <- get_data(all_data, "L244.GlobalTechTrackCapital_bld_EUR")
 
     # ===================================================
 
@@ -102,7 +108,10 @@ module_gcameurope_building_det_xml <- function(command, ...) {
       add_xml_data(L244.StubTechEff_bld_EUR, "StubTechEff") %>%
       add_xml_data(L244.StubTechCalInput_bld_EUR, "StubTechCalInput") %>%
       add_xml_data(L244.StubTechIntGainOutputRatio_EUR, "StubTechIntGainOutputRatio") %>%
+      add_xml_data(L244.GlobalTechShrwt_bld_EUR, "GlobalTechShrwt") %>%
       add_node_equiv_xml("input") %>%
+      add_xml_data(L244.GlobalTechTrackCapital_bld_EUR, "GlobalTechTrackCapital") %>%
+      add_xml_data(L244.GlobalTechCost_bld_EUR, "GlobalTechCost") %>%
       add_precursors("L244.SubsectorInterpTo_bld_EUR", "L244.SubsectorInterp_bld_EUR" , "L244.SubsectorShrwtFllt_bld_EUR",
                      "L244.SubsectorShrwt_bld_EUR", "L244.FinalEnergyKeyword_bld_EUR", "L244.Supplysector_bld_EUR",
                      "L244.ShellConductance_bld_EUR", "L244.Intgains_scalar_EUR", "L244.GenericServiceSatiation_EUR",
@@ -111,7 +120,8 @@ module_gcameurope_building_det_xml <- function(command, ...) {
                      "L244.Floorspace_EUR", "L244.SubregionalShares_EUR", "L244.SubsectorLogit_bld_EUR",
                      "L244.FuelPrefElast_bld_EUR", "L244.StubTech_bld_EUR", "L244.StubTechEff_bld_EUR",
                      "L244.StubTechCalInput_bld_EUR", "L244.StubTechIntGainOutputRatio_EUR",
-                     "L244.DeleteThermalService_EUR", "L244.DeleteGenericService_EUR", "L244.PriceExp_IntGains_EUR") ->
+                     "L244.DeleteThermalService_EUR", "L244.DeleteGenericService_EUR", "L244.PriceExp_IntGains_EUR",
+                     "L244.GlobalTechCost_bld_EUR", "L244.GlobalTechCost_bld_EUR", "L244.GlobalTechShrwt_bld_EUR") ->
       building_det_EUR.xml
 
     # Some data inputs may not actually contain data. If so, do not add_xml_data.
