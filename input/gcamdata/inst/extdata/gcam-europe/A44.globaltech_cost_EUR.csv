@@ -28,13 +28,13 @@ resid cooking,electricity,electricity,1.2951476
 resid cooking,gas,gas,1.3739374
 resid cooking,refined liquids,refined liquids,1.8423003
 resid cooking,district heat,district heat,0.6710238
+resid cooking,traditional biomass,traditional biomass,0.6183447
 resid others,biomass,biomass,3.200354
 resid others,coal,coal,2.1335694
 resid others,gas,gas,3.0014812
 resid others,gas,hydrogen,3.278901
 resid others,electricity,electricity,2.5726981
 resid others,refined liquids,refined liquids,3.3424061
-resid others,traditional biomass,traditional biomass,0.6183447
 resid others,district heat,district heat,1.4272789
 comm heating,biomass,biomass,0.9884987
 comm heating,coal,coal,0.9884987

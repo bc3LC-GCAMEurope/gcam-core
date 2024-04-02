@@ -38,13 +38,13 @@ resid cooking,gas,gas,gas oven hi-eff,delivered gas,0.42,0.42,0.42,0.42,0.42,0.4
 resid cooking,refined liquids,refined liquids,lpg oven,refined liquids enduse,0.399,0.399,0.399,0.399,0.399,0.399,0.399,0.399,0.399
 resid cooking,refined liquids,refined liquids,lpg oven hi-eff,refined liquids enduse,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42
 resid cooking,district heat,district heat,district heat,district heat oven,1,1,1,1,1,1,1,1,1
+resid cooking,traditional biomass,traditional biomass,traditional biomass,traditional biomass,0.9714305,1.0100451,1.0151055,1.0201911,1.0253023,1.0304391,1.0356016,1.0407900,1.105116
 resid others,biomass,biomass,biomass,delivered biomass,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4
 resid others,coal,coal,coal,delivered coal,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4
 resid others,gas,gas,gas,delivered gas,1,1,1,1,1,1,1,1,1
 resid others,gas,hydrogen,hydrogen,delivered gas,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6
 resid others,electricity,electricity,electricity,elect_td_bld,1,1,1,1,1,1,1,1,1
 resid others,refined liquids,refined liquids,refined liquids,refined liquids enduse,1,1,1,1,1,1,1,1,1
-resid others,traditional biomass,traditional biomass,traditional biomass,traditional biomass,0.9714305,1.0100451,1.0151055,1.0201911,1.0253023,1.0304391,1.0356016,1.0407900,1.105116
 resid others,district heat,district heat,district heat,district heat,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9
 comm heating,biomass,biomass,wood furnace,delivered biomass,0.65,0.65,0.65,0.65,0.65,0.65,0.65,0.65,0.65
 comm heating,coal,coal,coal furnace,delivered coal,0.65,0.65,0.65,0.65,0.65,0.65,0.65,0.65,0.65

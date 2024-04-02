@@ -17,6 +17,7 @@ resid cooking,electricity,start-year,,1
 resid cooking,gas,start-year,,1
 resid cooking,refined liquids,start-year,,1
 resid cooking,district heat,start-year,,1
+resid cooking,traditional biomass,start-year,,1
 resid lighting,electricity,start-year,,1
 resid hot water,biomass,start-year,,1
 resid hot water,coal,start-year,,1
@@ -31,7 +32,6 @@ resid others,coal,start-year,,1
 resid others,electricity,start-year,,1
 resid others,gas,start-year,,1
 resid others,refined liquids,start-year,,1
-resid others,traditional biomass,start-year,,1
 resid others,district heat,start-year,,1
 comm heating,biomass,start-year,,1
 comm heating,coal,start-year,,1

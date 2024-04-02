@@ -91,9 +91,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     L101.in_EJ_R_bld_Fi_Yh_EUR_comm <- L101.in_EJ_R_bld_Fi_Yh_EUR %>%
       filter(sector == 'in_bld_comm')
 
-    ############################################################################
-    ############################################################################
-    # Compute the service-fuel shares from the Eurostat data (EUR_hhEnergyConsum) by iso & year
+    # Compute the service-fuel shares from the Eurostat data (EUR_hhEnergyConsum) by iso & year ############################################################################
     # and add them to the GCAM basic shares (A44.share_serv_fuel)
     EUR_hhEnergyConsum_shares <- EUR_hhEnergyConsum %>%
       filter(freq == 'A') %>% # Annual frequency
@@ -159,18 +157,16 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       unique()
 
 
-    ############################################################################
-    ############################################################################
-
     # Note that RG3, region_GCAM3, and GCAM 3.0 region are used interchangeably.
-
-    # 1A
-    # Calculate building end-use shell efficiency by GCAM region ID / GCAM 3.0 region names / supplysector / subsector / technology / year
+    # 1A Calculate building end-use shell efficiency ############################################################################
+    #  by GCAM region ID / GCAM 3.0 region names / supplysector / subsector / technology / year
     # Years will span historical and future time period
 
     # Write out the tech change table to all desired years, and convert to ratios from a base year
     # A44.USA_TechChange_EUR reports improvement rates of technology (annual rate)
     A44.USA_TechChange_EUR %>%
+      mutate(supplysector = if_else(supplysector == "resid others" & technology == "traditional biomass",
+                                    "resid cooking", supplysector)) %>%
       gather_years %>% # Year needs to be integer (or numeric) for the interpolation step below
       # Expand table to include all historical and future years
       group_by(supplysector, technology) %>%
@@ -267,8 +263,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       L144.shell_eff_R_Y_EUR # This is a final output table.
 
 
-    # 1B
-    # Calculate building end-use technology efficiency by GCAM region ID / GCAM 3.0 region names / supplysector / subsector / technology / year
+    # 1B Calculate building end-use technology efficiency  ############################################################################
+    # by GCAM region ID / GCAM 3.0 region names / supplysector / subsector / technology / year
     # Years will span historical and future time period
 
     # A44.tech_eff_mult_RG3 reports efficiency multipliers from the USA to the given GCAM 3.0 regions.
@@ -317,19 +313,12 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     # These values are indexed to the USA in the base year. Unlike shells, the end-use technology values read to the model
     # are not just indices, so need to multiply through by assumed base efficiency levels for each technology
 
-    # First, create two lists, which will be used to exclude district heat and traditional biomass in regions where these
-    # are not modeled.
+    # First, create two lists, which will be used to exclude district heat in regions where not modeled.
     regions_NoDistHeat <- A_regions %>%
       # 0 indicates district heat is not modeled
       filter(has_district_heat == 0) %>%
       mutate(regions_NoDistHeat = paste(GCAM_region_ID, "district heat")) %>%
       pull(regions_NoDistHeat)
-
-    regions_NoTradBio <- A_regions %>%
-      # 0 indicates traditional biomass is not modeled
-      filter(tradbio_region == 0) %>%
-      mutate(regions_NoTradBio = paste(GCAM_region_ID, "traditional biomass")) %>%
-      pull(regions_NoTradBio)
 
     # Note that this produces a final output table.
     L144.end_use_eff_EUR_Index %>%
@@ -339,17 +328,17 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
                                by = c("supplysector", "subsector", "technology", "year")) %>%
       # Multiply by efficiency values
       mutate(value = value * efficiency,
-             # Prepare to drop region/subsector combinations where district heat and traditional biomass are not modeled
+             # Prepare to drop region/subsector combinations where district heat are not modeled
              region_subsector = paste(GCAM_region_ID, subsector),
              year = as.integer(year)) %>%
-      # Drop district heat and traditional biomass in regions where these are not modeled
-      filter(!region_subsector %in% c(regions_NoDistHeat, regions_NoTradBio)) %>%
+      # Drop district heat in regions where these are not modeled
+      filter(!region_subsector %in% c(regions_NoDistHeat)) %>%
       select(GCAM_region_ID, region_GCAM3, supplysector, subsector, technology, year, value) ->
       L144.end_use_eff_EUR # This is a final output table.
 
 
-    # 1C
-    # Calculate building non-energy costs by supply sector, subsector, and technology
+    # 1C Calculate building non-energy costs ############################################################################
+    # by supply sector, subsector, and technology
 
     # A44.globaltech_cost_EUR reports direct costs of building technologies
     # Note that this produces a final output table.
@@ -359,10 +348,10 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       L144.NEcost_75USDGJ_EUR # This is a final output table.
 
 
-    # 1D
-    # Calculate building energy consumption by GCAM region ID / sector / fuel / service / historical year
+    # 2A Calculate building energy consumption ############################################################################
+    # by GCAM region ID / sector / fuel / service / historical year
 
-    # 1D.1 Consider the standard GCAM procedure to compute it -- for bld_comm and regions not present in the EUR_hhEnergyConsum_shares
+    # 2A Consider the standard GCAM procedure to compute it -- for bld_comm and regions not present in the EUR_hhEnergyConsum_shares
 
     # A44.share_serv_fuel reports shares of residential and commercial TFE by region
     # Service share data is share of total TFE by sector, not share within each fuel
@@ -544,7 +533,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
 
 
 
-    # 1D.2 Consider the refined shares to compute it -- for bld_resid for regions present in the EUR_hhEnergyConsum_shares
+    # 2B Consider the refined shares to compute it ##########################################################################
+    # for bld_resid for regions present in the EUR_hhEnergyConsum_shares
 
     # A44.share_serv_fuel reports shares of residential and commercial TFE by region
     # Service share data is share of total TFE by sector, not share within each fuel
@@ -559,6 +549,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     EUR_hhEnergyConsum_shares %>%
       # Join fuel share data
       left_join_error_no_match(L144.share_fuel_yesS, by = c("GCAM_region_ID", "sector", "fuel")) %>%
+      # filter to calib techs
+      semi_join(calibrated_techs_bld_det_EUR, by = c("service", "sector", "fuel")) %>%
       # Calculate service share
       mutate(share_serv_fuel = share_TFEbysector / fuel_share_of_TFEbysector) %>%
       # Replace NAs with 0 for regions that do not have any of a given fuel type
@@ -616,7 +608,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       L144.EJ_RegionSectorFuelService_yesS
 
 
-    # 1D.3 Bind all region-sector-fuel-service consumption
+    # 2C Bind all region-sector-fuel-service consumption ########################################################################
     L144.EJ_RegionSectorFuelService <- bind_rows(
       L144.EJ_RegionSectorFuelService_yesS,
       L144.EJ_RegionSectorFuelService_noS
@@ -633,7 +625,6 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       L144.EJ_RegionSectorFuel
 
     # Create new list of regions where heat is not modeled as a separate fuel (different syntax for heat from before)
-    # Already have list for traditional biomass regions
     regions_noheat <- A_regions %>%
       filter(has_district_heat == 0) %>%
       mutate(regions_noheat = paste(GCAM_region_ID, "heat")) %>%
@@ -655,20 +646,19 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       filter(year %in% HISTORICAL_YEARS) %>%
       mutate(value = ServiceShare * value,
              # This has a number of combinations that do not apply. Drop the known ones.
-             # This would be regions where heat or traditional biomass are not modeled as separate fuels.
+             # This would be regions where heat not modeled as separate fuels.
              # This should take care of all missing values
              # First, prepare columns concatenating fuel with region and sector
              regions_fuel = paste(GCAM_region_ID, fuel),
              sector_fuel = paste(sector, fuel)) %>%
       filter(!regions_fuel %in% regions_noheat,
-             !regions_fuel %in% regions_NoTradBio,
              sector_fuel != "bld_comm traditional biomass") %>%  # Note that the number of rows didn't decrease
       select(GCAM_region_ID, sector, fuel, service, year, value) ->
       L144.in_EJ_R_bld_serv_F_Yh_EUR # This is a final output table.
 
 
-    # 1E
-    # Calculate building energy output by each service by GCAM region ID / sector / service / fuel / historical year
+    # 2D Calculate building energy output by each service ###########################################################################
+    #  by GCAM region ID / sector / service / fuel / historical year
     # Base service (output by each service) is the product of energy consumption and efficiency, aggregated by region, sector, service
 
     # Match in sector, fuel, service into efficiency table
@@ -692,8 +682,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       L144.base_service_EJ_serv_EUR # This is a final output table.
 
 
-    # 1F
-    # Internal gains: internal gain energy released, divided by efficiency of each technology
+    # 3 Internal gains ##############################################################################################
+    # internal gain energy released, divided by efficiency of each technology
 
     # Using the table of efficiencies, subset only the supplysector/subsector/technologies that
     # are in the internal gains assumptions table. Then divide the intgains assumptions by the
@@ -721,7 +711,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       L144.internal_gains_EUR # This is a final output table.
 
 
-    # ===================================================
+    # OUTPUTS ===================================================
 
     L144.end_use_eff_EUR %>%
       add_title("Building end-use technology efficiency by GCAM region ID / GCAM 3.0 region name / supplysector / subsector / technology / year") %>%

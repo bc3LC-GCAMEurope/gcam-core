@@ -108,16 +108,10 @@ module_gcameurope_L142.building_agg <- function(command, ...) {
       pull(concatenate_list_no_heat) ->
       concatenate_list_no_heat
 
-    A_regions %>%
-      filter(tradbio_region == 0) %>%
-      mutate(concatenate_list_no_tradbio = paste(GCAM_region_ID, "traditional biomass")) %>%
-      pull(concatenate_list_no_tradbio) ->
-      concatenate_list_no_tradbio
-
     # Now those region ID/fuel input pairs will be removed
     L142.in_EJ_R_Sbld_F_Yh %>%
       mutate(conc_column = paste(GCAM_region_ID, fuel)) %>% # Create concatenate list in base dataframe to match the syntax of our lists above
-      filter(!conc_column %in% concatenate_list_no_heat, !conc_column %in% concatenate_list_no_tradbio) %>% # Dropping heat in regions where this fuel is backed out to its fuel inputs
+      filter(!conc_column %in% concatenate_list_no_heat) %>% # Dropping heat in regions where this fuel is backed out to its fuel inputs
       group_by(GCAM_region_ID, sector, fuel, year) %>%
       summarise(value = sum(value)) %>%
       ungroup() ->

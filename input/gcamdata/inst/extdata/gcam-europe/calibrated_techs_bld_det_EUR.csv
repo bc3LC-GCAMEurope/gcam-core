@@ -19,6 +19,7 @@ bld_resid,electricity,resid cooking,resid cooking,electricity,electricity,elect_
 bld_resid,gas,resid cooking,resid cooking,gas,gas,delivered gas,resid,resid,resid_building
 bld_resid,refined liquids,resid cooking,resid cooking,refined liquids,refined liquids,refined liquids enduse,resid,resid,resid_building
 bld_resid,heat,resid cooking,resid cooking,district heat,district heat,district heat,resid,resid,resid_building
+bld_resid,traditional biomass,resid cooking,resid cooking,traditional biomass,traditional biomass,traditional biomass,resid,resid,resid_building
 bld_resid,biomass,resid hot water,resid hot water,biomass,biomass,delivered biomass,resid,resid,resid_building
 bld_resid,coal,resid hot water,resid hot water,coal,coal,delivered coal,resid,resid,resid_building
 bld_resid,electricity,resid hot water,resid hot water,electricity,electricity,elect_td_bld,resid,resid,resid_building
@@ -31,7 +32,6 @@ bld_resid,coal,resid others,resid others,coal,coal,delivered coal,resid,resid,re
 bld_resid,electricity,resid others,resid others,electricity,electricity,elect_td_bld,resid,resid,resid_building
 bld_resid,gas,resid others,resid others,gas,gas,delivered gas,resid,resid,resid_building
 bld_resid,refined liquids,resid others,resid others,refined liquids,refined liquids,refined liquids enduse,resid,resid,resid_building
-bld_resid,traditional biomass,resid others,resid others,traditional biomass,traditional biomass,traditional biomass,resid,resid,resid_building
 bld_resid,heat,resid others,resid others,district heat,district heat,district heat,resid,resid,resid_building
 bld_comm,biomass,comm heating,comm heating,biomass,biomass,delivered biomass,comm,comm,comm_building
 bld_comm,coal,comm heating,comm heating,coal,coal,delivered coal,comm,comm,comm_building

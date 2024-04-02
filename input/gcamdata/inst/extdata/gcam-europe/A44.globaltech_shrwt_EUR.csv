@@ -19,6 +19,7 @@ resid cooking,electricity,electricity,1,1,1,1,1
 resid cooking,gas,gas,1,1,1,1,1
 resid cooking,refined liquids,refined liquids,1,1,1,1,1
 resid cooking,district heat,district heat,1,1,1,1,1
+resid cooking,traditional biomass,traditional biomass,1,1,1,1,1
 resid lighting,electricity,electricity,1,1,1,1,1
 resid hot water,biomass,biomass,1,1,1,1,1
 resid hot water,coal,coal,1,1,1,1,1
@@ -31,7 +32,6 @@ resid others,coal,coal,1,1,1,1,1
 resid others,electricity,electricity,1,1,1,1,1
 resid others,gas,gas,1,1,1,1,1
 resid others,refined liquids,refined liquids,1,1,1,1,1
-resid others,traditional biomass,traditional biomass,1,1,1,1,1
 resid others,district heat,district heat,1,1,1,1,1
 comm heating,biomass,biomass,1,1,1,1,1
 comm heating,coal,coal,1,1,1,1,1

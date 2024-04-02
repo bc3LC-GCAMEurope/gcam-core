@@ -1,7 +1,7 @@
 # File: A44.subsector_interp_EUR.csv
 # Title: Building default subsector shareweight interpolation
 # Units: NA
-# Column types: ccccccc 
+# Column types: ccccccc
 # ----------
 supplysector,subsector,apply.to,from.year,to.year,to.value,interpolation.function
 resid heating,biomass,share-weight,final-calibration-year,end-year,,fixed
@@ -19,6 +19,7 @@ resid cooking,electricity,share-weight,final-calibration-year,end-year,,fixed
 resid cooking,gas,share-weight,final-calibration-year,end-year,,fixed
 resid cooking,refined liquids,share-weight,final-calibration-year,end-year,,fixed
 resid cooking,district heat,share-weight,final-calibration-year,end-year,,fixed
+resid cooking,traditional biomass,share-weight,final-calibration-year,end-year,,fixed
 resid hot water,biomass,share-weight,final-calibration-year,end-year,,fixed
 resid hot water,coal,share-weight,final-calibration-year,end-year,,fixed
 resid hot water,electricity,share-weight,final-calibration-year,end-year,,fixed
@@ -31,7 +32,6 @@ resid others,coal,share-weight,final-calibration-year,end-year,,fixed
 resid others,electricity,share-weight,final-calibration-year,end-year,,fixed
 resid others,gas,share-weight,final-calibration-year,end-year,,fixed
 resid others,refined liquids,share-weight,final-calibration-year,end-year,,fixed
-resid others,traditional biomass,share-weight,final-calibration-year,end-year,,fixed
 resid others,district heat,share-weight,final-calibration-year,end-year,,fixed
 comm heating,biomass,share-weight,final-calibration-year,end-year,,fixed
 comm heating,coal,share-weight,final-calibration-year,end-year,,fixed
