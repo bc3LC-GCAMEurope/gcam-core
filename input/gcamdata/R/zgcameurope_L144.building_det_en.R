@@ -107,11 +107,14 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       # add GCAM fuels
       left_join(siec_to_fuel_map, by = 'siec') %>% # deleting heat pumpts (because they are not present in the mapping file)
       filter(!is.na(fuel)) %>%
-      filter(!(grepl("elec_", fuel) & !grepl("electricity generation",service))) %>% # remove renewables & biofuels
+      filter(!(grepl("elec_", fuel) & !grepl("electricity generation", service))) %>% # remove renewables & biofuels
       # compute by GCAM_region_ID total fuel-service consumption
       group_by(GCAM_region_ID, year, unit, service, fuel) %>%
       summarise(value_eurostat = sum(value_eurostat)) %>%
       ungroup() %>%
+      # filter to calib techs
+      semi_join(calibrated_techs_bld_det_EUR %>% mutate(fuel = if_else(fuel == "traditional biomass", "biomass_tradbio", fuel)),
+                by = c("service", "fuel")) %>%
       # compute shares fuel-service by country
       group_by(GCAM_region_ID, year, unit) %>%
       mutate(total_by_iso = sum(value_eurostat)) %>%
@@ -132,13 +135,16 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       slice(which.min(year_diff)) %>%
       select(GCAM_region_ID, service, fuel, sector, closest_year = year)
 
+
     # joint the datasets and fill the shares with the latest available year for each group
     EUR_hhEnergyConsum_shares <- EUR_hhEnergyConsum_shares %>%
       left_join_error_no_match(closest_year,
                                by = c('GCAM_region_ID', 'service', 'fuel', 'sector')) %>%
+      group_by(GCAM_region_ID, service, fuel, sector) %>%
       mutate(share_TFEbysector = ifelse(year == 2015 & is.na(share_TFEbysector),
                                         share_TFEbysector[year == closest_year],
                                         share_TFEbysector)) %>%
+      ungroup %>%
       filter(year == 2015) %>%
       select(-year_diff, -closest_year, -year) %>%
       # update the fuel names
@@ -158,7 +164,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
 
 
     # Note that RG3, region_GCAM3, and GCAM 3.0 region are used interchangeably.
-    # 1A Calculate building end-use shell efficiency ############################################################################
+    # 1A building end-use shell efficiency ############################################################################
     #  by GCAM region ID / GCAM 3.0 region names / supplysector / subsector / technology / year
     # Years will span historical and future time period
 
@@ -263,7 +269,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       L144.shell_eff_R_Y_EUR # This is a final output table.
 
 
-    # 1B Calculate building end-use technology efficiency  ############################################################################
+    # 1B building end-use technology efficiency  ############################################################################
     # by GCAM region ID / GCAM 3.0 region names / supplysector / subsector / technology / year
     # Years will span historical and future time period
 
@@ -337,7 +343,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       L144.end_use_eff_EUR # This is a final output table.
 
 
-    # 1C Calculate building non-energy costs ############################################################################
+    # 1C building non-energy costs ############################################################################
     # by supply sector, subsector, and technology
 
     # A44.globaltech_cost_EUR reports direct costs of building technologies
@@ -348,7 +354,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       L144.NEcost_75USDGJ_EUR # This is a final output table.
 
 
-    # 2A Calculate building energy consumption ############################################################################
+    # 2A building energy consumption for missing regions ############################################################################
     # by GCAM region ID / sector / fuel / service / historical year
 
     # 2A Consider the standard GCAM procedure to compute it -- for bld_comm and regions not present in the EUR_hhEnergyConsum_shares
@@ -533,8 +539,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
 
 
 
-    # 2B Consider the refined shares to compute it ##########################################################################
-    # for bld_resid for regions present in the EUR_hhEnergyConsum_shares
+    # 2B building energy consumption for detailed Eurostat regions ##########################################################################
+    # Consider the refined shares to compute it for bld_resid for regions present in the EUR_hhEnergyConsum_shares
 
     # A44.share_serv_fuel reports shares of residential and commercial TFE by region
     # Service share data is share of total TFE by sector, not share within each fuel
@@ -549,8 +555,6 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     EUR_hhEnergyConsum_shares %>%
       # Join fuel share data
       left_join_error_no_match(L144.share_fuel_yesS, by = c("GCAM_region_ID", "sector", "fuel")) %>%
-      # filter to calib techs
-      semi_join(calibrated_techs_bld_det_EUR, by = c("service", "sector", "fuel")) %>%
       # Calculate service share
       mutate(share_serv_fuel = share_TFEbysector / fuel_share_of_TFEbysector) %>%
       # Replace NAs with 0 for regions that do not have any of a given fuel type
