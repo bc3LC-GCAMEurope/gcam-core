@@ -56,8 +56,10 @@ module_gcameurope_en_supply_xml <- function(command, ...) {
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
-    L281.TechAccountOutput_entrade <- L281.TechAccountOutput_entrade %>% filter_regions_europe()
-    L281.TechAccountInput_entrade <- L281.TechAccountInput_entrade %>% filter_regions_europe()
+    L281.TechAccountOutput_entrade <- L281.TechAccountOutput_entrade  %>%
+      filter(grepl(paste(gcameurope.EUROSTAT_COUNTRIES, collapse = "|"), subsector))
+    L281.TechAccountInput_entrade <- L281.TechAccountInput_entrade  %>%
+      filter(grepl(paste(gcameurope.EUROSTAT_COUNTRIES, collapse = "|"), subsector))
     # ===================================================
 
     # Produce outputs

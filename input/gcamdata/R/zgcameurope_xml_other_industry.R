@@ -1,6 +1,6 @@
 # Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
 
-#' module_energy_other_industry_xml
+#' module_gcameurope_other_industry_xml
 #'
 #' Construct XML data structure for \code{other_industry_EUR.xml}.
 #'
@@ -10,7 +10,7 @@
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{industry.xml}. The corresponding file in the
 #' original data system was \code{batch_industry_xml.R} (energy XML).
-module_energy_other_industry_xml <- function(command, ...) {
+module_gcameurope_other_industry_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c("L232.SubsectorLogit_ind_EUR",
              "L232.FinalEnergyKeyword_ind_EUR",

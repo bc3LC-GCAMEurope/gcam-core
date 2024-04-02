@@ -62,21 +62,32 @@ module_gcameurope_L224.heat <- function(command, ...) {
     # Create outputs that are simply copied from main scripts and filtered to Eurostat regions
     copy_filter_europe(all_data, OUTPUTS_TO_COPY_FILTER)
 
+    # Some regions missing, add them in here
+    for (df_nm in paste0(OUTPUTS_TO_COPY_FILTER, "_EUR")){
+      df <- get(df_nm)
+      if ("region" %in% names(df)){
+        missing_regions <- L101.GCAM_EUR_regions %>%
+          distinct(region = GCAMEU_region) %>%
+          anti_join(df, by = "region")
+
+        df_no_region <- df %>%
+          select(-region) %>%
+          distinct()
+
+        assign(df_nm,
+               missing_regions %>% repeat_add_columns(df_no_region) %>% bind_rows(df))
+      }
+    }
+
 
     # L224.StubTechCalInput_heat_EUR ------------
-    # Create list of regions with district heat modeled
-    A_regions %>%
-      filter(has_district_heat == 1) %>%
-      select(region) -> heat_region
-
     L124.in_EJ_R_heat_F_Yh_EUR %>%
       left_join(GCAM_region_names, by = "GCAM_region_ID") %>%
       left_join(calibrated_techs %>%
                   select(sector, fuel, supplysector, subsector, technology, minicam.energy.input) %>%
                   distinct, by = c("sector", "fuel")) %>%
       rename(stub.technology = technology) %>%
-      filter(year %in% MODEL_BASE_YEARS,
-             region %in% heat_region$region) %>%
+      filter(year %in% MODEL_BASE_YEARS) %>%
       select(LEVEL2_DATA_NAMES[["StubTechYr"]], "minicam.energy.input", "value") %>%
       mutate(calibrated.value = round(value, energy.DIGITS_CALOUTPUT),
              year.share.weight = year,
@@ -118,7 +129,6 @@ module_gcameurope_L224.heat <- function(command, ...) {
       filter(year %in% MODEL_YEARS) %>%
       rename(efficiency = value) %>%
       left_join(GCAM_region_names, by = "GCAM_region_ID") %>%
-      filter(region %in% heat_region$region) %>%
       filter(fuel == "gas") %>%
       filter(efficiency < energy.DEFAULT_ELECTRIC_EFFICIENCY) %>%
       mutate(cost_modifier = energy.GAS_PRICE * (1 / energy.DEFAULT_ELECTRIC_EFFICIENCY - 1 / efficiency)) -> L224.eff_cost_adj_Rh_elec_gas_sc_Y

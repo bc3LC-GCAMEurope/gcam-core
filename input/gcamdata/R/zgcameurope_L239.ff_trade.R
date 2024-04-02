@@ -60,8 +60,22 @@ module_gcameurope_L239.ff_trade <- function(command, ...) {
     # Load required inputs ----
     get_data_list(all_data, MODULE_INPUTS)
 
-    # Create outputs that are simply copied form main scripts and filtered to Eurostat regions
-    copy_filter_europe(all_data, OUTPUTS_TO_COPY_FILTER)
+    # Create outputs that are simply copied form main scripts and filtered to Eurostat
+    # Only for non-traded outputs
+    copy_filter_europe(all_data, OUTPUTS_TO_COPY_FILTER[!grepl("_tra", OUTPUTS_TO_COPY_FILTER)])
+
+    # need to repeat and keep USA for trade outputs
+    L239.Supplysector_tra_EUR <- L239.Supplysector_tra
+    L239.SectorUseTrialMarket_tra_EUR <- L239.SectorUseTrialMarket_tra
+    L239.SubsectorAll_tra_EUR <- L239.SubsectorAll_tra %>%
+      filter(grepl(paste(gcameurope.EUROSTAT_COUNTRIES, collapse = "|"), subsector))
+    L239.TechShrwt_tra_EUR <- L239.TechShrwt_tra %>%
+      filter(grepl(paste(gcameurope.EUROSTAT_COUNTRIES, collapse = "|"), subsector))
+    L239.TechCost_tra_EUR <- L239.TechCost_tra %>%
+      filter(grepl(paste(gcameurope.EUROSTAT_COUNTRIES, collapse = "|"), subsector))
+    L239.TechCoef_tra_EUR  <- L239.TechCoef_tra %>%
+      filter(grepl(paste(gcameurope.EUROSTAT_COUNTRIES, collapse = "|"), subsector))
+
 
     # Base technology-level table for several tables to be written out")
     A_ff_TradedTechnology_R_Y <- repeat_add_columns(A_ff_TradedTechnology,

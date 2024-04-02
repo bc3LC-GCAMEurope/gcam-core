@@ -156,8 +156,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
     # 1b. Subsector information
     # L232.SubsectorLogit_ind_EUR: Subsector logit exponents of industry sector
     A32.subsector_logit %>%
-      write_to_all_regions(c(LEVEL2_DATA_NAMES[["SubsectorLogit"]], LOGIT_TYPE_COLNAME), GCAM_region_names) %>%
-      anti_join(L232.rm_heat_techs_R, by = c("region", "subsector")) -> # Remove non-existent heat subsectors from each region
+      write_to_all_regions(c(LEVEL2_DATA_NAMES[["SubsectorLogit"]], LOGIT_TYPE_COLNAME), GCAM_region_names) -> # Remove non-existent heat subsectors from each region
       L232.SubsectorLogit_ind_EUR
 
     # L232.SubsectorShrwtFllt_ind_EUR: Subsector shareweights of industry sector
