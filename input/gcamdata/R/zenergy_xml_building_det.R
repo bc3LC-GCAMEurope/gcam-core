@@ -122,8 +122,7 @@ module_energy_building_det_xml <- function(command, ...) {
                      "L244.FuelPrefElast_bld", "L244.StubTech_bld", "L244.StubTechEff_bld",
                      "L244.StubTechCalInput_bld", "L244.StubTechIntGainOutputRatio", "L244.GlobalTechShrwt_bld",
                      "L244.GlobalTechCost_bld", "L244.DeleteThermalService", "L244.DeleteGenericService", "L244.PriceExp_IntGains",
-                     "L244.GlobalTechTrackCapital_bld") %>%
-      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
+                     "L244.GlobalTechTrackCapital_bld") ->
       building_det.xml
 
     # Some data inputs may not actually contain data. If so, do not add_xml_data.
@@ -158,6 +157,10 @@ module_energy_building_det_xml <- function(command, ...) {
         add_xml_data(L244.SubsectorInterpTo_bld, "SubsectorInterp") ->
         building_det.xml
     }
+
+    building_det.xml %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
+      building_det.xml
 
     return_data(building_det.xml)
   } else {

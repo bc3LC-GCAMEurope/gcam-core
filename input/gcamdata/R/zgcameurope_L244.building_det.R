@@ -538,24 +538,6 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     L244.StubTech_bld_EUR <- L244.Tech_bld %>%
       rename(stub.technology = technology)
 
-    # L244.StubTechCalInput_bld_EUR: Calibrated energy consumption by buildings technologies
-    L244.StubTechCalInput_bld_EUR <- L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
-      filter(year %in% MODEL_BASE_YEARS) %>%
-      rename(calibrated.value = value) %>%
-      mutate(calibrated.value = round(calibrated.value, energy.DIGITS_CALOUTPUT)) %>%
-      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
-      left_join_error_no_match(calibrated_techs_bld_det_EUR, by = c("sector", "service", "fuel")) %>%
-      mutate(share.weight.year = year,
-             stub.technology = technology) %>%
-      group_by(region, supplysector, subsector, year) %>%
-      mutate(subs.share.weight = sum(calibrated.value)) %>%
-      ungroup() %>%
-      # If aggregated calibrated value > 0, set subsector shareweight to 1, else set to 0
-      mutate(subs.share.weight = if_else(subs.share.weight > 0, 1, 0),
-             # If calibrated value for specific technology > 0 , set tech shareweight to 1, else set to 0
-             tech.share.weight = if_else(calibrated.value > 0, 1, 0)) %>%
-      select(LEVEL2_DATA_NAMES[["StubTechCalInput"]])
-
     # L244.StubTechEff_bld_EUR: Assumed efficiencies (all years) of buildings technologies
     L244.StubTechEff_bld_EUR <- L144.end_use_eff_EUR %>%
       filter(year %in% MODEL_YEARS) %>%
@@ -567,6 +549,28 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       mutate(stub.technology = technology,
              market.name = region) %>%
       select(LEVEL2_DATA_NAMES[["StubTechEff"]])
+
+    # L244.StubTechCalInput_bld_EUR: Calibrated energy consumption by buildings technologies
+    L244.StubTechCalInput_bld_EUR <- L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
+      filter(year %in% MODEL_BASE_YEARS) %>%
+      rename(calibrated.value = value) %>%
+      mutate(calibrated.value = round(calibrated.value, energy.DIGITS_CALOUTPUT)) %>%
+      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
+      left_join_error_no_match(calibrated_techs_bld_det_EUR, by = c("sector", "service", "fuel")) %>%
+      # ensure all techs in L244.StubTechEff_bld_EUR are given calibrated values
+      complete(distinct(L244.StubTechEff_bld_EUR %>%  filter(year %in% MODEL_BASE_YEARS),
+                        region, supplysector, subsector, technology = stub.technology, minicam.energy.input, year)) %>%
+      tidyr::replace_na(list(calibrated.value = 0)) %>%
+      mutate(share.weight.year = year,
+             stub.technology = technology) %>%
+      group_by(region, supplysector, subsector, year) %>%
+      mutate(subs.share.weight = sum(calibrated.value)) %>%
+      ungroup() %>%
+      # If aggregated calibrated value > 0, set subsector shareweight to 1, else set to 0
+      mutate(subs.share.weight = if_else(subs.share.weight > 0, 1, 0),
+             # If calibrated value for specific technology > 0 , set tech shareweight to 1, else set to 0
+             tech.share.weight = if_else(calibrated.value > 0, 1, 0)) %>%
+      select(LEVEL2_DATA_NAMES[["StubTechCalInput"]])
 
     # L244.GlobalTechShrwt_bld: Default shareweights for global building technologies
     L244.GlobalTechShrwt_bld <- A44.globaltech_shrwt_EUR %>%
