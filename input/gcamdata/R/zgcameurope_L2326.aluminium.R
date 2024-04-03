@@ -237,8 +237,8 @@ module_gcameurope_L2326.aluminum <- function(command, ...) {
       filter(supplysector != "aluminum") %>%
       left_join(L2326.StubTechCalInput_aluminum_EUR_tmp,
                 by = c("region", "supplysector", "subsector", "stub.technology", "year", "minicam.energy.input")) %>%
-      mutate(fuel = NULL,sector = NULL, value = NULL,GCAM_region_ID  = NULL,calibrated.value = replace_na(calibrated.value,0),
-             share.weight.year = year) %>%
+      mutate(fuel = NULL,sector = NULL, value = NULL,GCAM_region_ID  = NULL,
+             calibrated.value = replace_na(calibrated.value, 0), share.weight.year = year) %>%
       rename(calOutputValue = calibrated.value) %>%  # temporary column name change to accommodate function set_subsector_shrwt
       set_subsector_shrwt %>%
       rename(calibrated.value = calOutputValue) %>% # temporary column name changeto accommodate function set_subsector_shrwt

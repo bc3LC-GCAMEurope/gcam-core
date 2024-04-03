@@ -51,23 +51,14 @@ module_gcameurope_L1326.aluminum <- function(command, ...) {
     IAA_ctry_region <- get_data(all_data, "energy/mappings/IAA_ctry_region") %>% filter_regions_europe()
     iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID") %>% filter_regions_europe()
 
-    # ===================================================
-    # 2. Perform computations
-
     # Set constants used for this chunk
-    # ---------------------------------
     # Determine historical years not available in data set (additional years) to copy values from final available year (final_CO2_year)
-
-    # ===================================================
-
     gcameurope.EUROSTAT_GCAMREGIONID <- iso_GCAM_regID %>%
       filter(iso %in% gcameurope.EUROSTAT_ISO) %>%
-      select(GCAM_region_ID) %>%
-      distinct() %>%
+      distinct(GCAM_region_ID) %>%
       pull(GCAM_region_ID)
 
-    # First downscale IAA production and energy data to countries, using country-level USGS data
-
+    # 1a. country shares from IAA production and energy data  ===================================================
     # country to IAA region mapping varies by aluminum data category. Create full mapping tables
     IAA_ctry_region_full <- IAA_ctry_region %>%
       gather(-iso, key = "data_type", value = "region") %>%
@@ -85,7 +76,6 @@ module_gcameurope_L1326.aluminum <- function(command, ...) {
       select(iso, year, flow, var, IAA_region, share) %>%
       filter_regions_europe()
 
-
     # Country level data only goes back to 1990
     # for earlier years, use 1990 country shares within IAA regions to downscale
     ctry_shares %>% filter(year == min(year)) %>%
@@ -94,6 +84,7 @@ module_gcameurope_L1326.aluminum <- function(command, ...) {
       bind_rows(ctry_shares) ->
       ctry_shares
 
+    # 1b. Downscale USGS regional data to countries using IAA shares ===================================================
     # Downscale regional aluminum and alumina production
     L1326.out_Mt_ctry_aluminum_Yh <- aluminum_prod_region %>%
       mutate(var = "production",
@@ -107,8 +98,8 @@ module_gcameurope_L1326.aluminum <- function(command, ...) {
       select(iso, year, flow, value) %>%
       filter_regions_europe() %>%
       # Set 0s to the regions that have 0 historical production
-      complete(nesting(year, flow), iso = gcameurope.EUROSTAT_ISO, value = 0)
-
+      complete(nesting(year, flow), iso = gcameurope.EUROSTAT_ISO) %>%
+      tidyr::replace_na(list(value = 0))
 
     # Aggregate production to GCAM regions
     L1326.out_Mt_R_aluminum_Yh_EUR <- L1326.out_Mt_ctry_aluminum_Yh %>%
@@ -116,19 +107,25 @@ module_gcameurope_L1326.aluminum <- function(command, ...) {
       group_by(GCAM_region_ID, year, flow) %>%
       summarise(value = sum(value)) %>%
       ungroup %>%
-      select(GCAM_region_ID, year, sector=flow, value) %>%
+      select(GCAM_region_ID, year, sector = flow, value) %>%
       # Set 0s to the regions that have 0 historical production
-      complete(nesting(year, sector), GCAM_region_ID = gcameurope.EUROSTAT_GCAMREGIONID, value = 0)
+      complete(nesting(year, sector), GCAM_region_ID = gcameurope.EUROSTAT_GCAMREGIONID)  %>%
+      tidyr::replace_na(list(value = 0))
 
+    # Downscale energy use for aluminum/alumina production
     L1326.in_EJ_ctry_aluminum_Yh <- aluminum_energy_region %>%
       mutate(var = "energy") %>%
       rename(value_region = value) %>%
+      # alumina data starts in 1985, aluminum in 1980
+      # filter to start in first year where we have data for both
+      filter(year >= min(year[flow == "Alumina"])) %>%
       left_join(ctry_shares, by = c("year", "flow", "var", "IAA_region")) %>%
       mutate(value = value_region * share) %>%
       na.omit %>%
       select(iso, year, flow, fuel, value) %>%
       # Set 0s to the regions that have 0 historical production
-      complete(nesting(year, flow, fuel), iso = gcameurope.EUROSTAT_ISO, value = 0)
+      complete(nesting(year, flow, fuel), iso = gcameurope.EUROSTAT_ISO)  %>%
+      tidyr::replace_na(list(value = 0))
 
     # Aggregate to GCAM regions and combine aluminum and alumina fuel use
     L1326.in_EJ_R_aluminum_Yh_EUR <- L1326.in_EJ_ctry_aluminum_Yh %>%
@@ -139,7 +136,7 @@ module_gcameurope_L1326.aluminum <- function(command, ...) {
       ungroup %>%
       select(GCAM_region_ID, year, sector, fuel, value)
 
-    # check whether there are regions/years with energy use but no production
+    # 1c. check whether there are regions/years with energy use but no production   ===================================================
     L1326.in_EJ_R_aluminum_Yh_EUR %>%
       group_by(GCAM_region_ID, year) %>%
       summarise(en = sum(value)) %>%
@@ -176,9 +173,10 @@ module_gcameurope_L1326.aluminum <- function(command, ...) {
       ungroup()->
       L1326.in_EJ_R_aluminum_Yh_EUR
 
-    #Calculate the remaining industrial energy use and feedstock
+    # 2. Calculate the remaining industrial energy use and feedstock   ===================================================
     L1325.in_EJ_R_indenergy_F_Yh_EUR %>%
-      complete(GCAM_region_ID, nesting(sector, fuel, year), fill = list(value = 0)) %>%
+      complete(GCAM_region_ID, nesting(sector, fuel, year))  %>%
+      tidyr::replace_na(list(value = 0)) %>%
       rename(raw = value) %>%
       left_join(L1326.in_EJ_R_aluminum_Yh_EUR %>%
                   group_by(GCAM_region_ID, year, fuel) %>%
@@ -218,7 +216,7 @@ module_gcameurope_L1326.aluminum <- function(command, ...) {
       mutate(sector = if_else(fuel == "electricity", "Aluminum", "Alumina")) ->
       L1326.in_EJ_R_aluminum_Yh_EUR
 
-    #Calculate coefficients
+    # 3. Calculate coefficients   ===================================================
     L1326.in_EJ_R_aluminum_Yh_EUR %>%
       rename(input = value) %>%
       left_join(L1326.out_Mt_R_aluminum_Yh_EUR %>% rename(output = value), by = c("GCAM_region_ID", "year", "sector")) %>%
