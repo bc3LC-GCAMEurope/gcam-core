@@ -40,15 +40,19 @@ module_gcameurope_L117.tradbio <- function(command, ...) {
     L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(fuel == "biomass_tradbio", sector == "TPES") %>%
       group_by(GCAM_region_ID, sector, fuel) %>%
-      summarise(value = max(value)) ->
+      summarise(value = max(value)) %>%
+      ungroup ->
       L117.maxSubResource_tradbio
+
+    # Add 0 for missing countries
+    L117.maxSubResource_tradbio <- L117.maxSubResource_tradbio %>%
+      complete(nesting(sector, fuel), GCAM_region_ID = unique(L1012.en_bal_EJ_R_Si_Fi_Yh_EUR$GCAM_region_ID)) %>%
+      tidyr::replace_na(list(value = 0))
 
     # Writing the supply curves to all regions, multiplying maxSubResouce by quantity available at each grade
     repeat_add_columns(A17.tradbio_curves, L117.maxSubResource_tradbio) %>%
       arrange(GCAM_region_ID) %>%
-      mutate(available = available*value) %>%
-      # Removing resource curves in regions where this fuel does not apply
-      filter(value != 0) %>%
+      mutate(available = available * value) %>%
       select(GCAM_region_ID, resource, subresource, grade, available, extractioncost) %>%
 
       # ===================================================
