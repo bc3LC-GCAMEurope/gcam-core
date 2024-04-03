@@ -18,7 +18,6 @@ resid cooking,coal,share-weight,final-calibration-year,end-year,,fixed
 resid cooking,electricity,share-weight,final-calibration-year,end-year,,fixed
 resid cooking,gas,share-weight,final-calibration-year,end-year,,fixed
 resid cooking,refined liquids,share-weight,final-calibration-year,end-year,,fixed
-resid cooking,district heat,share-weight,final-calibration-year,end-year,,fixed
 resid cooking,traditional biomass,share-weight,final-calibration-year,end-year,,fixed
 resid hot water,biomass,share-weight,final-calibration-year,end-year,,fixed
 resid hot water,coal,share-weight,final-calibration-year,end-year,,fixed
@@ -32,7 +31,6 @@ resid others,coal,share-weight,final-calibration-year,end-year,,fixed
 resid others,electricity,share-weight,final-calibration-year,end-year,,fixed
 resid others,gas,share-weight,final-calibration-year,end-year,,fixed
 resid others,refined liquids,share-weight,final-calibration-year,end-year,,fixed
-resid others,district heat,share-weight,final-calibration-year,end-year,,fixed
 comm heating,biomass,share-weight,final-calibration-year,end-year,,fixed
 comm heating,coal,share-weight,final-calibration-year,end-year,,fixed
 comm heating,electricity,share-weight,final-calibration-year,end-year,,fixed

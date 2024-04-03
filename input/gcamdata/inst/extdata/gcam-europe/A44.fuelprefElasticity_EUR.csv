@@ -18,8 +18,7 @@ resid cooking,coal,-0.7
 resid cooking,electricity,0
 resid cooking,gas,0
 resid cooking,refined liquids,-0.5
-resid cooking,district heat,-0.5
-resid cooking,district heat,-0.5
+resid cooking,traditional biomass,-0.5
 resid lighting,electricity,0
 resid hot water,biomass,-1
 resid hot water,coal,-0.7

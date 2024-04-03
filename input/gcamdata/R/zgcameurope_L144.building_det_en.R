@@ -292,6 +292,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     L144.TechMult_R %>%
       # Subset the technology multiplier table so that it includes only energy-consuming techs (no shells)
       filter(!grepl("shell", technology)) %>%
+      semi_join(calibrated_techs_bld_det_EUR, by = c("supplysector", "subsector", "technology")) %>%
       # Join efficiency multipliers (by GCAM 3.0 region and year)
       left_join_error_no_match(LA44.tech_eff_mult_RG3_complete, by = c("region_GCAM3", "year")) %>%
       # Multiply value by efficiency multiplier
