@@ -61,7 +61,8 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
       filter_regions_europe()
     enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
 
-    #Estimate DRI (direct reduced iron) consumption from country-wise WSA DRI production, imports, and exports data
+    # 1. Estimate DRI (direct reduced iron) consumption ============================================================
+    # from country-wise WSA DRI production, imports, and exports data
     DRI_stats %>%
       gather(year,value,-metric,-country_name)%>%
       spread(metric,value)%>%
@@ -87,9 +88,7 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
       select(-GCAM_region_ID,-country_name,-region_GCAM3)-> All_steel
 
 
-    # ===================================================
-    # 2. Perform computations
-    # ===================================================
+    # 2. Recalculate steel production  ===================================================
     # Recalculate steel production by technology across years to be consistent
     # with the iron and steel trade balance (consumption = production - exports + imports)
     # Change steel production to long format and aggregate to region level
@@ -136,6 +135,7 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
       select(GCAM_region_ID, year,subsector, value) %>%
       filter(year %in% HISTORICAL_YEARS) -> L1323.out_Mt_R_iron_steel_Yh_EUR
 
+    # 3. shareweights  ===================================================
     # L2323.SubsectorInterp_iron_steel: Subsector shareweight interpolation of iron and steel sector
     A323.subsector_interp %>%
       filter(is.na(to.value)) %>%
@@ -150,9 +150,11 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
 
     L1323.SubsectorInterp_iron_steel_EUR$interpolation.function[which(L1323.SubsectorInterp_iron_steel_EUR$region %in% unique((L1323.index %>%
                                                                                                                          filter(BLASTFUR == 0 |`EAF with scrap`== 0 |`EAF with DRI` == 0))$region))] <- "linear"
-    # Get steel energy use from IEA energy balances
+
+    # 4a. Calculate energy consumption ==============================================================
+    # Get steel energy use from Eurostat energy balances
     L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
-      filter(grepl("steel", sector)) %>%
+      filter(sector == "iron and steel" | (grepl("steel", sector) & grepl("net", sector)) ) %>%
       group_by(GCAM_region_ID, fuel, year) %>%
       summarise(value = sum(value)) %>%
       ungroup() %>%
@@ -178,21 +180,18 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
              unit = "EJ") ->
       Intensity_literature
 
-    # Scaler: IEA's estimates of fuel consumption divided by bottom-up estimate of energy consumption
+    # Scaler: Eurostat's estimates of fuel consumption divided by bottom-up estimate of energy consumption
     Intensity_literature %>%
       group_by(GCAM_region_ID, year, fuel) %>%
       dplyr::summarise(energy_use = sum(energy_use)) %>%
       ungroup() %>%
       left_join(en_steel %>% select(GCAM_region_ID, year, fuel, value),by = c("GCAM_region_ID","fuel",  "year"))%>%
-      mutate(value = replace_na(value,0), #replace NA IEA data with zero
-             value= if_else(value == 0 & energy_use > 0, energy_use, value), #if bottom-up calculation is non-zero and IEA value is zero, then set IEA value = bottom-up value
-             scalar = replace_na(value / energy_use, 1), #calculate scalar = IEA data/bottom-up data, if NA replace scaler = 1
-             scalar = if_else(energy_use == 0 & value > 0, 1, scalar),  #if IEA data is non-zero, but bottom-up data is zero; set scaler = 1
-             scalar = if_else(scalar>=6,1,scalar), #if IEA data is 6 times higher or lower than bottom-up calculation; then do not scale the results (i.e., scaler = 1)
+      mutate(value = replace_na(value,0), #replace NA Eurostat data with zero
+             value= if_else(value == 0 & energy_use > 0, energy_use, value), #if bottom-up calculation is non-zero and Eurostat value is zero, then set Eurostat value = bottom-up value
+             scalar = replace_na(value / energy_use, 1), #calculate scalar = Eurostat data/bottom-up data, if NA replace scaler = 1
+             scalar = if_else(energy_use == 0 & value > 0, 1, scalar),  #if Eurostat data is non-zero, but bottom-up data is zero; set scaler = 1
+             scalar = if_else(scalar>=6,1,scalar), #if Eurostat data is 6 times higher or lower than bottom-up calculation; then do not scale the results (i.e., scaler = 1)
              scalar = if_else(scalar<=0.16,1,scalar)) -> Scaler
-
-
-
 
     # Intensity scaled = Intensity from the literature times scaler.
     Intensity_literature %>%
@@ -211,7 +210,6 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
       na.omit %>%
       mutate(coefficient=coefficient*ratio)%>%
       select(-ratio)
-
 
     # Use IO to calculate energy input
     L1323.out_Mt_R_iron_steel_Yh_EUR %>%
@@ -240,8 +238,7 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
       mutate(value = if_else(value > 0 , value, 0)) ->
       L1323.in_EJ_R_indenergy_F_Yh_EUR
 
-    #Adjust negative energy use
-
+    # 4b. Adjust negative energy use ============================================================
     # Identify rows with negative energy use
     L1323.in_EJ_R_indenergy_F_Yh_EUR_tmp %>%
       filter(value < 0) %>%
@@ -253,8 +250,6 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
       left_join(negative,by = c("GCAM_region_ID", "year", "fuel")) %>%
       mutate(coefficient = if_else(replace_na(value, 0) < 0, 0, coefficient),value = NULL) ->
       L1323.IO_GJkg_R_iron_steel_F_Yh_EUR
-
-    #Recalculate
 
     # Recalculate the input steel energy with revised IO coefficients
     L1323.out_Mt_R_iron_steel_Yh_EUR %>%
@@ -277,9 +272,7 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
       mutate(value = raw - value , raw = NULL) ->
       L1323.in_EJ_R_indenergy_F_Yh_EUR
 
-    # ===================================================
-    # Produce outputs
-
+    # Produce outputs ===================================================
     L1323.out_Mt_R_iron_steel_Yh_EUR %>%
       add_title("Historical steel outputs by region, fuel, and year") %>%
       add_units("Mt iron_steel") %>%
