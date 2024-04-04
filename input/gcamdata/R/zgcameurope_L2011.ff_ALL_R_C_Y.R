@@ -45,7 +45,7 @@ module_gcameurope_L2011.ff_ALL_R_C_Y <- function(command, ...) {
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
 
-    # Replace IEA data with Eurostat data wherever available
+    # Part 0: Replace IEA data with Eurostat data wherever available ----------------------------
     L1012.en_bal_EJ_R_Si_Fi_Yh <- L1012.en_bal_EJ_R_Si_Fi_Yh %>%
       anti_join(L1012.en_bal_EJ_R_Si_Fi_Yh_EUR, by = c("GCAM_region_ID")) %>%
       bind_rows(L1012.en_bal_EJ_R_Si_Fi_Yh_EUR)
@@ -68,7 +68,7 @@ module_gcameurope_L2011.ff_ALL_R_C_Y <- function(command, ...) {
     # Total production is taken from L111.Prod_EJ_R_F_Yh and total consumption is calculated from
     # L1012.en_bal_EJ_R_Si_Fi_Yh and L121.in_EJ_R_TPES_crude_Yh/unoil.
 
-    #Part 1: Calculate toal consumption of fuels by region
+    # Part 1: Calculate toal consumption of fuels by region ----------------------------
     bind_rows(L1012.en_bal_EJ_R_Si_Fi_Yh,
               L121.in_EJ_R_TPES_crude_Yh,
               L121.in_EJ_R_TPES_unoil_Yh) %>%
@@ -83,7 +83,7 @@ module_gcameurope_L2011.ff_ALL_R_C_Y <- function(command, ...) {
       select(GCAM_region_ID, fuel, year, consumption = value) ->
       ff_consumption
 
-    #Part 2: Gather total production of fossil fuels
+    # Part 2: Gather total production of fossil fuels ----------------------------
     L111.Prod_EJ_R_F_Yh %>%
       select(GCAM_region_ID, fuel, year, production = value, technology) %>%
       mutate(fuel= if_else(technology=="unconventional oil","crude oil",fuel)) %>%
@@ -98,7 +98,7 @@ module_gcameurope_L2011.ff_ALL_R_C_Y <- function(command, ...) {
       distinct()->
       ff_production
 
-    #Part 3: Calculate net-trade by subtracting consumption from production by region and year
+    #Part 3: Calculate net-trade by subtracting consumption from production by region and year ----------------------------
     ff_production %>%
       left_join_error_no_match(ff_consumption, by = c("GCAM_region_ID", "fuel", "year")) %>%
       mutate(net_trade = production - consumption) %>%
@@ -106,7 +106,7 @@ module_gcameurope_L2011.ff_ALL_R_C_Y <- function(command, ...) {
       select(region, fuel, year, production, consumption, net_trade) ->
       L2011.ff_ALL_EJ_R_C_Y_EUR
 
-    #Part 4: Adjust Comtrade's trade to match GCAM's calibrated data
+    #Part 4: Adjust Comtrade's trade to match GCAM's calibrated data ----------------------------
 
     L1011.ff_GrossTrade_EJ_R_C_Y %>%
       filter(year == MODEL_FINAL_BASE_YEAR) %>%
@@ -158,7 +158,7 @@ module_gcameurope_L2011.ff_ALL_R_C_Y <- function(command, ...) {
       bind_rows(L2011.ff_GrossTrade_EJ_R_C_Final_Cal_Year_adj)->
       L2011.ff_GrossTrade_EJ_R_C_Y_EUR
 
-    #Produce outputs
+    # Produce outputs ----------------------------
     L2011.ff_ALL_EJ_R_C_Y_EUR %>%
       add_title("L2011.ff_ALL_EJ_R_C_Y_EUR") %>%
       add_units("EJ") %>%
