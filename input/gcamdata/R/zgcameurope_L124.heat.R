@@ -51,13 +51,13 @@ module_gcameurope_L124.heat <- function(command, ...) {
       filter(has_district_heat == 1) %>%
       select(GCAM_region_ID) -> heat_regionIDs
 
-    # Fuel inputs to district heat --------------
+    # 1. Fuel inputs to district heat --------------
     # Process fuel inputs in all regions; some will have the energy assigned to bld/ind, and others have a district heat sector
     L124.in_EJ_R_heat_F_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(sector == "in_heat") %>%
       mutate(sector = sub("in_", "", sector)) %>%
       left_join(enduse_fuel_aggregation, by = "fuel") %>%
-      na.omit() %>%
+      filter(!is.na(heat)) %>%
       select(GCAM_region_ID, sector, year, value, heat) %>%
       rename(fuel = heat) %>%
       group_by(fuel, sector, GCAM_region_ID, year) %>% # removed -> temp
@@ -78,7 +78,7 @@ module_gcameurope_L124.heat <- function(command, ...) {
       left_join(distinct(calibrated_techs), by = c("supplysector", "subsector", "technology", "minicam.energy.input")) %>%
       select(supplysector, subsector, technology, minicam.energy.input, year, value, sector, fuel)
 
-    # Heat output: fuel inputs to heat divided by exogenous input-output coefficients --------------
+    # 2. Heat output: fuel inputs to heat divided by exogenous input-output coefficients --------------
     L124.out_EJ_R_heat_F_Yh_EUR <- L124.in_EJ_R_heat_F_Yh_EUR %>%
       left_join_error_no_match(L124.globaltech_coef %>%
                                  rename(IO_Coef = value),
@@ -87,7 +87,7 @@ module_gcameurope_L124.heat <- function(command, ...) {
       select(-IO_Coef) %>%
       filter(GCAM_region_ID %in% heat_regionIDs$GCAM_region_ID)
 
-    # Secondary output of heat from main activity CHP plants ----------
+    # 3a. Secondary output of heat from main activity CHP plants ----------
     L124.out_EJ_R_heatfromelec_F_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(sector %in% c("out_electricity_heat") ,
              GCAM_region_ID %in% heat_regionIDs$GCAM_region_ID) %>%
@@ -100,7 +100,7 @@ module_gcameurope_L124.heat <- function(command, ...) {
       ungroup() %>%
       filter(fuel != is.na(fuel))
 
-    # Secondary output coefficients on heat produced by main activity CHP plants -------------
+    # 3b. Secondary output coefficients on heat produced by main activity CHP plants -------------
     L124.heatoutratio_R_elec_F_tech_Yh_EUR <- L1231.out_EJ_R_elec_F_tech_Yh_EUR %>%
       filter(GCAM_region_ID %in% heat_regionIDs$GCAM_region_ID,
              year %in% HISTORICAL_YEARS) %>%
@@ -189,8 +189,7 @@ module_gcameurope_L124.heat <- function(command, ...) {
       mutate(value = value + (norm_val * heat_val)) %>%
       select(fuel, sector, GCAM_region_ID, year, value) -> L124.out_EJ_R_heat_F_Yh_EUR
 
-    # ===================================================
-    # Produce outputs
+    # Produce outputs ===================================================
     L124.in_EJ_R_heat_F_Yh_EUR %>%
       add_title("Inputs to heat by GCAM region / fuel / historical year") %>%
       add_units("EJ") %>%

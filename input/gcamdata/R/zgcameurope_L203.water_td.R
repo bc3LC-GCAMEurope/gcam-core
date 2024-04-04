@@ -43,6 +43,7 @@ module_gcameurope_L203.water_td <- function(command, ...) {
                      "L125.LC_bm2_R_GLU",
                      "L132.water_km3_R_ind_Yh",
                      "L145.municipal_water_R_W_Yh_km3",
+                     "L171.share_R_desal_basin",
                      "L173.in_desal_km3_ctry_ind_Yh",
                      "L173.in_desal_km3_ctry_muni_Yh",
                      OUTPUTS_TO_COPY_FILTER)
@@ -56,7 +57,6 @@ module_gcameurope_L203.water_td <- function(command, ...) {
 
     all_data <- list(...)[[1]]
 
-    # Load required inputs
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
 
@@ -96,6 +96,28 @@ module_gcameurope_L203.water_td <- function(command, ...) {
       bind_rows(L203.water_td_info_irr) %>%
       filter_regions_europe() %>%
       select(region, water.sector, supplysector_root, supplysector, subsector, technology, water_type, basin_share, has.desal.input)
+
+    # For desalination, only create subsectors for basins where desalination exists
+    L203.desal_basins <- L171.share_R_desal_basin %>%
+      filter_regions_europe(region_ID_mapping = GCAM_region_names) %>%
+      rename(basin_share = share) %>%
+      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
+      left_join_error_no_match(select(basin_to_country_mapping, GCAM_basin_ID, subsector = GLU_name),
+                               by = "GCAM_basin_ID") %>%
+      select(region, subsector, basin_share)
+
+    # L203.water_td_info is first filtered to the water sectors that can take an input of desalinated water, and second,
+    # using inner_join, this table is further filtered to only basins where desalination occurs, while joining in
+    # the basin-within-region share of desalinated water production for each region
+    L203.water_td_info_desal <- filter(L203.water_td_info, has.desal.input == 1 & water_type == "water withdrawals") %>%
+      select(-basin_share) %>%
+      inner_join(L203.desal_basins, by = c("region", "subsector")) %>%
+      mutate(technology = water.DESAL,
+             water_type = water.DESAL) %>%
+      distinct()
+
+    L203.water_td_info <- bind_rows(L203.water_td_info, L203.water_td_info_desal) %>%
+      select(-has.desal.input)
 
     # 2. L203.watertd_desal ----------------------
     # Calibrated flows of water through the T&D sectors
