@@ -119,6 +119,16 @@ module_gcameurope_L131.enduse <- function(command, ...) {
       select(-value.x, -value.y) ->
       Enduse_heat
 
+    # Remove heat consumption from regions with no production
+    Enduse_elect_scaled_heat_unscaled <- Enduse_elect_scaled_heat_unscaled %>%
+      filter(fuel == "heat") %>%
+      left_join(Enduse_heat %>% ungroup,
+                by = c("GCAM_region_ID", "year")) %>%
+      tidyr::replace_na(list(value.y = 0)) %>%
+      mutate(value = if_else(value.y == 0, 0, value.x)) %>%
+      select(-value.x, -value.y) %>%
+      bind_rows(Enduse_elect_scaled_heat_unscaled %>% filter(fuel != "heat"))
+
     # Subset the end use sectors and aggregate by fuel. Only in regions where heat is modeled as a separate fuel.
     A_regions %>%
       filter(has_district_heat == 1) %>% # Filtering for regions where heat is modeled as a separate fuel
