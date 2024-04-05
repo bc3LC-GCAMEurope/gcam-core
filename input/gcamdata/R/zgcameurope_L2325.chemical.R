@@ -20,11 +20,6 @@
 #' @importFrom tidyr gather spread
 #' @author Yang Liu Dec 2019
 module_gcameurope_L2325.chemical <- function(command, ...) {
-
-  INCOME_ELASTICITY_OUTPUTS <- c("GCAM3",
-                                 paste0("gSSP", 1:5),
-                                 paste0("SSP", 1:5))
-
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/GCAM_region_names",
              FILE = "energy/calibrated_techs",
@@ -90,9 +85,7 @@ module_gcameurope_L2325.chemical <- function(command, ...) {
       calOutputValue.x <- calOutputValue.y <- output_tot <- stub.technology <- market.name <- terminal_coef <-
       share.weight <- interpolation.function <- NULL
 
-    # ===================================================
-    # 1. Perform computations
-    # Create tables to delete technologies and subsectors in regions where heat is not modeled as a fuel
+    # 0. Delete technologies and subsectors in regions where heat is not modeled as a fuel ===================================================
     has_not_heat <- filter(A_regions, has_district_heat == 0) # intermediate tibble
 
     calibrated_techs %>%
@@ -103,7 +96,7 @@ module_gcameurope_L2325.chemical <- function(command, ...) {
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") ->
       L2325.rm_heat_techs_R # intermediate tibble
 
-    # 1a. Supplysector information
+    # 1a. Supplysector information ===================================================================
     # L2325.Supplysector_chemical_EUR: Supply sector information for chemical sector
     A325.sector %>%
       write_to_all_regions(c(LEVEL2_DATA_NAMES[["Supplysector"]], LOGIT_TYPE_COLNAME), GCAM_region_names) ->
@@ -115,7 +108,7 @@ module_gcameurope_L2325.chemical <- function(command, ...) {
       na.omit ->
       L2325.FinalEnergyKeyword_chemical_EUR
 
-    # 1b. Subsector information
+    # 1b. Subsector information ===================================================================
     # L2325.SubsectorLogit_chemical_EUR: Subsector logit exponents of chemical sector
     A325.subsector_logit %>%
       write_to_all_regions(c(LEVEL2_DATA_NAMES[["SubsectorLogit"]], LOGIT_TYPE_COLNAME), GCAM_region_names) %>%
@@ -136,7 +129,7 @@ module_gcameurope_L2325.chemical <- function(command, ...) {
       anti_join(L2325.rm_heat_techs_R, by = c("region", "subsector")) -> # Remove non-existent heat subsectors from each region
       L2325.SubsectorInterp_chemical_EUR
 
-    # 1c. Technology information
+    # 1c. Technology information ===================================================================
     # L2325.StubTech_chemical_EUR: Identification of stub technologies of chemical
     # Note: assuming that technology list in the shareweight table includes the full set (any others would default to a 0 shareweight)
     A325.globaltech_shrwt %>%
@@ -188,7 +181,7 @@ module_gcameurope_L2325.chemical <- function(command, ...) {
       bind_rows(L2325.globaltech_retirement_future) ->
       L2325.globaltech_retirement
 
-    # Calibration and region-specific data
+    # 2a. calibrated input ====================================================
     # L2325.StubTechCalInput_indenergy: calibrated input of industrial energy use technologies (including cogen)
     L2325.GlobalTechEff_chemical %>%
       rename(supplysector = sector.name,
@@ -231,7 +224,7 @@ module_gcameurope_L2325.chemical <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["StubTechCalInput"]]) ->
       L2325.StubTechCalInput_chemical_EUR
 
-
+    # 2b. calibrated output ====================================================
     # L2325.StubTechProd_chemical_EUR: calibrated output of chemical sector
     # First, calculate service output by technology, for energy-use and feedstocks
     L2325.in_EJ_R_chemical_F_Yh %>%
@@ -261,12 +254,17 @@ module_gcameurope_L2325.chemical <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["StubTechProd"]]) ->
       L2325.StubTechProd_chemical_EUR
 
+    # 2c. calibrated coef ====================================================
     # L2325.StubTechCoef_chemical_EUR: calibrated output of industrial sector
     # Next, aggregate service output by sector to calculate the portion of each input
     L2325.out_EJ_R_ind_serv_F_Yh %>%
       group_by(region, GCAM_region_ID, supplysector, year) %>%
       summarise(calOutputValue = sum(calOutputValue)) %>%
       ungroup %>%
+      # explicitly set zeros for any supplysectors that have been dropped
+      # otherwise we get non-zero coefficients with zero calOutput for chemical feedstocks
+      complete(nesting(region, GCAM_region_ID), supplysector = pull(distinct(L2325.out_EJ_R_ind_serv_F_Yh, supplysector)),
+               year = MODEL_BASE_YEARS, fill = list(calOutputValue = 0)) %>%
       left_join_error_no_match(select(L2325.StubTechProd_chemical_EUR, calOutputValue, region, year),
                                by = c("region", "year")) %>%
       rename(calOutputValue = calOutputValue.x,
@@ -295,7 +293,7 @@ module_gcameurope_L2325.chemical <- function(command, ...) {
       filter(year %in% MODEL_YEARS) ->   # drop the terminal coef year if it's outside of the model years
       L2325.StubTechCoef_chemical_EUR
 
-
+    # 3. Demand ====================================================
     # L2325.PerCapitaBased_chemical_EUR: per-capita based flag for chemical exports final demand
     A325.demand %>%
       write_to_all_regions(LEVEL2_DATA_NAMES[["PerCapitaBased"]], GCAM_region_names)  ->
@@ -338,8 +336,7 @@ module_gcameurope_L2325.chemical <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["PriceElasticity"]]) ->
       L2325.PriceElasticity_chemical_EUR
 
-    # ===================================================
-    # Produce outputs
+    # Produce outputs ===================================================
     L2325.Supplysector_chemical_EUR %>%
       add_title("Supply sector information for chemical sector") %>%
       add_units("NA") %>%

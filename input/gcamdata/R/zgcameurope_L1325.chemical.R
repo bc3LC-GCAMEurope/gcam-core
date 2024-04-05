@@ -25,7 +25,9 @@ module_gcameurope_L1325.chemical <- function(command, ...) {
              "L1322.in_EJ_R_indenergy_F_Yh_EUR",
              "L1322.in_EJ_R_indfeed_F_Yh_EUR",
              "L1324.in_EJ_R_indenergy_F_Yh_EUR",
-             "L1323.in_EJ_R_indfeed_F_Yh_EUR"))
+             "L1323.in_EJ_R_indfeed_F_Yh_EUR",
+             "L124.out_EJ_R_heat_F_Yh_EUR",
+             "L124.out_EJ_R_heatfromelec_F_Yh_EUR"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L1325.in_EJ_R_chemical_F_Y_EUR",
              "L1325.in_EJ_R_indenergy_F_Yh_EUR",
@@ -50,16 +52,10 @@ module_gcameurope_L1325.chemical <- function(command, ...) {
     L132.in_EJ_R_indfeed_F_Yh_EUR <- get_data(all_data, "L132.in_EJ_R_indfeed_F_Yh_EUR")
     L1322.in_EJ_R_indenergy_F_Yh_EUR <- get_data(all_data, "L1322.in_EJ_R_indenergy_F_Yh_EUR")
     L1322.in_EJ_R_indfeed_F_Yh_EUR <- get_data(all_data, "L1322.in_EJ_R_indfeed_F_Yh_EUR")
-    # ===================================================
-    # 2. Perform computations
+    L124.out_EJ_R_heat_F_Yh_EUR <- get_data(all_data, "L124.out_EJ_R_heat_F_Yh_EUR")
+    L124.out_EJ_R_heatfromelec_F_Yh_EUR <- get_data(all_data, "L124.out_EJ_R_heatfromelec_F_Yh_EUR")
 
-    # Set constants used for this chunk
-    # ---------------------------------
-    # Determine historical years not available in data set (additional years) to copy values from final available year (final_CO2_year)
-
-    # ===================================================
-
-    # Construction energy and feedstock input
+    # 1. Chemical energy and feedstock input ===================================================
     L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(grepl("chemical", sector)) ->
       L1325.in_EJ_R_chemical_F_Y_EUR
@@ -78,7 +74,7 @@ module_gcameurope_L1325.chemical <- function(command, ...) {
       anti_join(regions_feedstock_only, by = c("GCAM_region_ID", "year")) ->
       L1325.in_EJ_R_chemical_F_Y_EUR
 
-    #Mapping the fuel used in chemical sector
+    # Mapping the fuel used in chemical sector
     L1325.in_EJ_R_chemical_F_Y_EUR %>%
       left_join(select(enduse_fuel_aggregation, fuel, industry), by = "fuel") %>%
       select(-fuel, fuel = industry) %>%
@@ -88,11 +84,17 @@ module_gcameurope_L1325.chemical <- function(command, ...) {
       ungroup() ->
       L1325.in_EJ_R_chemical_F_Y_EUR
 
-    ## Heat: drop heat in regions where heat is not modeled as a final fuel
-    A_regions %>%
-      filter(has_district_heat == 0) %>%
+    # 2a. Heat: drop heat in regions where heat is not modeled as a final fuel ==================================
+    bind_rows(L124.out_EJ_R_heat_F_Yh_EUR, L124.out_EJ_R_heatfromelec_F_Yh_EUR) %>%
+      filter(year %in% MODEL_BASE_YEARS) %>%
+      group_by(GCAM_region_ID) %>%
+      summarise(value = sum(value)) %>%
+      ungroup %>%
+      complete(GCAM_region_ID = pull(distinct(A_regions %>%
+                                           filter(region %in% gcameurope.EUROSTAT_COUNTRIES), GCAM_region_ID)),
+               fill = list(value = 0)) %>%
+      filter(value == 0) %>%
       select(GCAM_region_ID) %>%
-      unique %>%
       mutate(fuel = "heat") ->
       region_heat
 
@@ -103,7 +105,7 @@ module_gcameurope_L1325.chemical <- function(command, ...) {
       ungroup ->
       L1325.in_EJ_R_chemical_F_Y_EUR_raw
 
-    #Minus fertilizer energy and feedstock
+    # 2b. Subtract fertilizer energy and feedstock =========================================
     L1325.in_EJ_R_chemical_F_Y_EUR_raw %>%
       filter(grepl("energy", sector), value > 0) %>%
       left_join_error_no_match(L1321.in_EJ_R_indenergy_F_Yh_EUR%>%
@@ -138,7 +140,7 @@ module_gcameurope_L1325.chemical <- function(command, ...) {
       bind_rows(L1325.in_EJ_R_chemical_F_Y_EUR_NECHEM) ->
       L1325.in_EJ_R_chemical_F_Y_EUR
 
-    #Calculate the remaining industrial energy use and feedstock
+    # 3a. Calculate the remaining industrial energy use and feedstock =================================================
     L1324.in_EJ_R_indenergy_F_Yh_EUR %>%
       complete(GCAM_region_ID, nesting(sector, fuel, year), fill = list(value = 0)) %>%
       rename(raw = value) %>%
@@ -172,7 +174,7 @@ module_gcameurope_L1325.chemical <- function(command, ...) {
       mutate(value = NULL) ->
       indfeed_tmp
 
-    #Adjust negative energy use
+    # 3b. Adjust negative energy use =================================================
     L1325.in_EJ_R_chemical_F_Y_EUR %>%
       filter(grepl("energy", sector)) %>%
       left_join(indenergy_tmp %>% select(-sector),by = c("GCAM_region_ID", "fuel", "year"))  %>%
@@ -212,8 +214,7 @@ module_gcameurope_L1325.chemical <- function(command, ...) {
       bind_rows(L1325.in_EJ_R_indfeed_F_Yh_recal) ->
       L1325.in_EJ_R_chemical_F_Y_EUR
 
-    # ===================================================
-    # Produce outputs
+    # Produce outputs ===================================================
     L1325.in_EJ_R_chemical_F_Y_EUR %>%
       add_title("Historical input energy use for the chemical sector") %>%
       add_units("EJ") %>%

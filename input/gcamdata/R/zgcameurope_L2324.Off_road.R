@@ -297,6 +297,14 @@ module_gcameurope_L2324.Off_road <- function(command, ...) {
       group_by(region, GCAM_region_ID, supplysector, year) %>%
       summarise(calOutputValue = sum(calOutputValue)) %>%
       ungroup %>%
+      # explicitly set zeros for any supplysectors that have been dropped
+      # otherwise we get non-zero coefficients with zero calOutput for construction feedstocks
+      complete(nesting(region, GCAM_region_ID),
+               supplysector = pull(distinct(L2324.out_EJ_R_Off_road_serv_F_Yh %>%
+                                              filter(supplysector != "agricultural energy use" & supplysector != "mining energy use"),
+                                            supplysector)),
+               year = MODEL_BASE_YEARS,
+               fill = list(calOutputValue = 0)) %>%
       left_join_error_no_match(select(L2324.StubTechProd_Off_road_EUR, calOutputValue, region, year),
                                by = c("region", "year")) %>%
       rename(calOutputValue = calOutputValue.x,
