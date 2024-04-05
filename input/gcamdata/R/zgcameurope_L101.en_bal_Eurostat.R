@@ -72,6 +72,17 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
              calculate_net = if_else(is.na(calculate_net.y), calculate_net.x, calculate_net.y),
              .keep = "unused")
 
+    # See what year a country becomes available
+    # At end, will substitute out for IEA data
+   year_filters <- L101.Eurostat_en_bal_ctry_hist %>%
+     group_by(iso) %>%
+     summarise(across(matches(YEAR_PATTERN), ~all(is.na(.x)))) %>%
+     gather_years() %>%
+     filter(value == TRUE, year <= MODEL_FINAL_BASE_YEAR) %>%
+     left_join_error_no_match(GCAM32_to_EU %>% select(iso, GCAM_region_ID), by = "iso") %>%
+     distinct(year, GCAM_region_ID)
+
+
     # Drop some sector-fuel combinations that are not relevant
     # Electricity-generation-only fuels (e.g., wind, solar, hydro, geothermal) consumed by sectors other than electricity generation
     # REVISIT FOR GCAM-EUROPE - THIS REMOVES BUILDING SOLAR THERMAL and GEOTHERMAL HEATING (TURKEY & ICELAND)
@@ -175,10 +186,15 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
     L101.GCAM_EUR_regions <- L101.GCAM_EUR_regions %>%
       filter(GCAM_region_ID %in% L101.en_bal_EJ_R_Si_Fi_Yh_Eurostat$GCAM_region_ID)
 
+    L101.en_bal_EJ_R_Si_Fi_Yh_EUR_replace_na_years <- L1011.en_bal_EJ_R_Si_Fi_Yh %>%
+      semi_join(year_filters, by = c("GCAM_region_ID", "year"))
+
     L101.en_bal_EJ_R_Si_Fi_Yh_EUR <- L101.en_bal_EJ_R_Si_Fi_Yh_Eurostat %>%
+      anti_join(year_filters, by = c("GCAM_region_ID", "year")) %>%
       bind_rows(L1011.en_bal_EJ_R_Si_Fi_Yh %>%
                   filter(GCAM_region_ID %in% L101.GCAM_EUR_regions$GCAM_region_ID,
-                         year < min(L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat$year))
+                         year < min(L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat$year)),
+                L101.en_bal_EJ_R_Si_Fi_Yh_EUR_replace_na_years
                 ) # FINAL OUTPUT TABLE - temporally complete EUR data
 
     # 2. Building & Transport Downscale -----------
