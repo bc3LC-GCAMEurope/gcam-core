@@ -497,6 +497,11 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     L144.in_EJ_ctry_bld_thrm_F_unscaled_noS %>%
       left_join_error_no_match(L144.scalers_RG3_bld_thrm_F_noS, by = c("region_GCAM3", "sector", "fuel", "service")) %>%
       mutate(Energy_final_EJ = Energy_adj_EJ * scaler) %>%
+      # group_by region since some European countries have multiple countries listed in this data
+      group_by(GCAM_region_ID, sector, fuel, service) %>%
+      summarise(Energy_final_EJ = sum(Energy_final_EJ),
+                Energy_tot_EJ = sum(Energy_tot_EJ)) %>%
+      ungroup %>%
       # Now we can compute the shares of energy allocated to heating and cooling. Other will be the residual.
       mutate(share_serv_fuel = Energy_final_EJ / Energy_tot_EJ) %>%
       replace_na(list(share_serv_fuel = 0)) %>%
