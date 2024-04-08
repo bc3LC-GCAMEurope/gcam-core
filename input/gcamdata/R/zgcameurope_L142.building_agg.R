@@ -19,7 +19,7 @@ module_gcameurope_L142.building_agg <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "energy/A_regions",
              FILE = "energy/mappings/enduse_fuel_aggregation",
-             FILE = "energy/mappings/enduse_sector_aggregation",
+             FILE = "gcam-europe/mappings/enduse_sector_aggregation",
              "L124.in_EJ_R_heat_F_Yh_EUR",
              "L131.in_EJ_R_Senduse_F_Yh_EUR",
              "L131.share_R_Senduse_heat_Yh_EUR"))
@@ -32,7 +32,7 @@ module_gcameurope_L142.building_agg <- function(command, ...) {
     # Load required inputs
     A_regions <- get_data(all_data, "energy/A_regions") %>% filter_regions_europe()
     enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
-    enduse_sector_aggregation <- get_data(all_data, "energy/mappings/enduse_sector_aggregation")
+    enduse_sector_aggregation <- get_data(all_data, "gcam-europe/mappings/enduse_sector_aggregation")
     L124.in_EJ_R_heat_F_Yh_EUR <- get_data(all_data, "L124.in_EJ_R_heat_F_Yh_EUR")
     L131.in_EJ_R_Senduse_F_Yh_EUR <- get_data(all_data, "L131.in_EJ_R_Senduse_F_Yh_EUR")
     L131.share_R_Senduse_heat_Yh_EUR <- get_data(all_data, "L131.share_R_Senduse_heat_Yh_EUR")
@@ -125,7 +125,7 @@ module_gcameurope_L142.building_agg <- function(command, ...) {
       add_comments("Building sector energy consumption was obtained from end use energy consumption data") %>%
       add_comments("Fuel inputs to heat were added to building energy use in regions where heat is not modeled as a final fuel") %>%
       add_legacy_name("L142.in_EJ_R_bld_F_Yh_EUR") %>%
-      add_precursors("energy/A_regions", "energy/mappings/enduse_fuel_aggregation", "energy/mappings/enduse_sector_aggregation",
+      add_precursors("energy/A_regions", "energy/mappings/enduse_fuel_aggregation", "gcam-europe/mappings/enduse_sector_aggregation",
                      "L124.in_EJ_R_heat_F_Yh_EUR", "L131.in_EJ_R_Senduse_F_Yh_EUR", "L131.share_R_Senduse_heat_Yh_EUR") ->
       L142.in_EJ_R_bld_F_Yh_EUR
 

@@ -22,7 +22,7 @@
 module_gcameurope_L131.enduse <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "energy/A_regions",
-             FILE = "energy/mappings/enduse_sector_aggregation",
+             FILE = "gcam-europe/mappings/enduse_sector_aggregation",
              FILE = "water/EFW_mapping",
              "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
              "L122.in_EJ_R_refining_F_Yh_EUR",
@@ -41,7 +41,7 @@ module_gcameurope_L131.enduse <- function(command, ...) {
 
     # Load required inputs
     A_regions <- get_data(all_data, "energy/A_regions")
-    enduse_sector_aggregation <- get_data(all_data, "energy/mappings/enduse_sector_aggregation")
+    enduse_sector_aggregation <- get_data(all_data, "gcam-europe/mappings/enduse_sector_aggregation")
     EFW_mapping <- get_data(all_data, "water/EFW_mapping")
     L1012.en_bal_EJ_R_Si_Fi_Yh_EUR <- get_data(all_data, "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", strip_attributes = TRUE)
     L122.in_EJ_R_refining_F_Yh_EUR <- get_data(all_data, "L122.in_EJ_R_refining_F_Yh_EUR")
@@ -206,7 +206,7 @@ module_gcameurope_L131.enduse <- function(command, ...) {
       add_units("EJ") %>%
       add_comments("Scalers were used to balance electricity and district heat production and consumption within each region") %>%
       add_legacy_name("L131.in_EJ_R_Senduse_F_Yh_EUR") %>%
-      add_precursors("energy/mappings/enduse_sector_aggregation", "water/EFW_mapping", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
+      add_precursors("gcam-europe/mappings/enduse_sector_aggregation", "water/EFW_mapping", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
                      "L121.in_EJ_R_unoil_F_Yh", "L122.in_EJ_R_refining_F_Yh_EUR", "L126.out_EJ_R_electd_F_Yh_EUR") ->
       L131.in_EJ_R_Senduse_F_Yh_EUR
 
@@ -215,7 +215,7 @@ module_gcameurope_L131.enduse <- function(command, ...) {
       add_units("Unitless") %>%
       add_comments("Share of regional heat demand by each sector was calculated for regions where heat is not modeled separately from the fuels used to produce it. Moreoever, regions having zero heat consumption by demand sectors while nevertheless also having heat production, this was assigned to industry") %>%
       add_legacy_name("L131.share_R_Senduse_heat_Yh_EUR") %>%
-      add_precursors("energy/A_regions", "energy/mappings/enduse_sector_aggregation",
+      add_precursors("energy/A_regions", "gcam-europe/mappings/enduse_sector_aggregation",
                      "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
                      "L121.in_EJ_R_unoil_F_Yh",
                      "L122.in_EJ_R_refining_F_Yh_EUR",
