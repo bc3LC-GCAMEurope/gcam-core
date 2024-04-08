@@ -172,8 +172,10 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
       filter(grepl("^net", sector),
              grepl("oil refining", sector),
              fuel == "refined liquids") %>%
-      select(GCAM_region_ID, sector, year, value_en_bal_net_oil = value) %>%
       mutate(sector = "oil refining") %>%
+      group_by(GCAM_region_ID, sector, year) %>%
+      summarise(value_en_bal_net_oil = sum(value)) %>%
+      ungroup %>%
       left_join_error_no_match(en_bal_TPES_OIL, by = c("GCAM_region_ID", "sector", "year")) %>%
       mutate(value_en_bal = value_en_bal_TPES - value_en_bal_net_oil) %>%
       group_by(GCAM_region_ID, sector, year) %>%
