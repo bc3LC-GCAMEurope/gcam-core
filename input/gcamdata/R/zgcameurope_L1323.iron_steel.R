@@ -81,10 +81,8 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
              `EAF with DRI`=ifelse(`EAF with scrap`<=0,EAF,`EAF with DRI`),
              `EAF with scrap`=ifelse(`EAF with scrap`<0,0,`EAF with scrap`))%>%
       select(-EAF) %>%
-      rename('region' = 'country_name') %>%
+      left_join(iso_GCAM_regID, by = "country_name") %>%
       filter_regions_europe() %>%
-      rename('country_name' = 'region') %>%
-      left_join(iso_GCAM_regID,by="country_name") %>%
       select(-GCAM_region_ID,-country_name,-region_GCAM3)-> All_steel
 
 
