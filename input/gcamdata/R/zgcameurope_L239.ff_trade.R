@@ -36,6 +36,7 @@ module_gcameurope_L239.ff_trade <- function(command, ...) {
       FILE = "energy/A_ff_TradedTechnology",
       "L2011.ff_GrossTrade_EJ_R_C_Y_EUR",
       "L2011.ff_ALL_EJ_R_C_Y_EUR",
+      "L239.Production_tra",
       OUTPUTS_TO_COPY_FILTER)
 
   MODULE_OUTPUTS <-
@@ -67,15 +68,18 @@ module_gcameurope_L239.ff_trade <- function(command, ...) {
     # need to repeat and keep USA for trade outputs
     L239.Supplysector_tra_EUR <- L239.Supplysector_tra
     L239.SectorUseTrialMarket_tra_EUR <- L239.SectorUseTrialMarket_tra
-    L239.SubsectorAll_tra_EUR <- L239.SubsectorAll_tra %>%
-      filter(grepl(paste(gcameurope.EUROSTAT_COUNTRIES, collapse = "|"), subsector))
-    L239.TechShrwt_tra_EUR <- L239.TechShrwt_tra %>%
-      filter(grepl(paste(gcameurope.EUROSTAT_COUNTRIES, collapse = "|"), subsector))
-    L239.TechCost_tra_EUR <- L239.TechCost_tra %>%
-      filter(grepl(paste(gcameurope.EUROSTAT_COUNTRIES, collapse = "|"), subsector))
-    L239.TechCoef_tra_EUR  <- L239.TechCoef_tra %>%
-      filter(grepl(paste(gcameurope.EUROSTAT_COUNTRIES, collapse = "|"), subsector))
-
+    L239.SubsectorAll_tra_EUR <- L239.SubsectorAll_tra # %>%
+      # filter(grepl(paste(gcameurope.EUROSTAT_COUNTRIES, collapse = "|"), subsector))
+    L239.TechShrwt_tra_EUR <- L239.TechShrwt_tra # %>%
+      # filter(grepl(paste(gcameurope.EUROSTAT_COUNTRIES, collapse = "|"), subsector))
+    L239.TechCost_tra_EUR <- L239.TechCost_tra # %>%
+      # filter(grepl(paste(gcameurope.EUROSTAT_COUNTRIES, collapse = "|"), subsector))
+    L239.TechCoef_tra_EUR  <- L239.TechCoef_tra # %>%
+      # filter(grepl(paste(gcameurope.EUROSTAT_COUNTRIES, collapse = "|"), subsector))
+    L239.TechShrwt_reg_EUR <- L239.TechShrwt_reg %>%
+      filter(region %in% c(gcameurope.EUROSTAT_COUNTRIES))
+    L239.TechCoef_reg_EUR <- L239.TechCoef_reg %>%
+      filter(region %in% gcameurope.EUROSTAT_COUNTRIES)
 
     # Base technology-level table for several tables to be written out")
     A_ff_TradedTechnology_R_Y <- repeat_add_columns(A_ff_TradedTechnology,
@@ -105,7 +109,10 @@ module_gcameurope_L239.ff_trade <- function(command, ...) {
              share.weight.year = year,
              subs.share.weight = if_else(calOutputValue > 0, 1, 0),
              tech.share.weight = subs.share.weight) %>%
-      select(LEVEL2_DATA_NAMES[["Production"]])
+      select(LEVEL2_DATA_NAMES[["Production"]]) %>%
+    # add in non-europe regions
+      bind_rows(L239.Production_tra %>% filter(!grepl(paste(gcameurope.EUROSTAT_COUNTRIES, collapse = "|"), subsector)))
+
 
     # L239.Production_reg_imp_EUR: Output (flow) of gross imports -----------------
     L239.GrossImports_EJ_R_C_Y <- left_join_error_no_match(L2011.ff_GrossTrade_EJ_R_C_Y_EUR,
@@ -158,7 +165,8 @@ module_gcameurope_L239.ff_trade <- function(command, ...) {
       add_comments("Regional exports of commodities that are traded between GCAM regions") %>%
       add_precursors("common/GCAM_region_names",
                      "energy/A_ff_tradedTechnology",
-                     "L2011.ff_GrossTrade_EJ_R_C_Y_EUR") ->
+                     "L2011.ff_GrossTrade_EJ_R_C_Y_EUR",
+                     "L239.Production_tra") ->
       L239.Production_tra_EUR
 
     L239.Production_reg_imp_EUR %>%

@@ -82,6 +82,7 @@ module_gcameurope_L2392.gas_trade <- function(command, ...) {
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
 
+    # 0. Cleanup -------------------
     # Delete natural gas from regional and traded supplysectors
     L2392.Delete_Supplysector_tra_NG_EUR <- L239.Supplysector_tra %>%
       filter(supplysector == "traded natural gas")
@@ -136,7 +137,7 @@ module_gcameurope_L2392.gas_trade <- function(command, ...) {
       # use anti_join to remove entries already in L202.CarbonCoef
       anti_join(L202.CarbonCoef, by = c("region", "PrimaryFuelCO2Coef.name", "PrimaryFuelCO2Coef")) -> L2392.CarbonCoef_NG_EUR
 
-    # 1. TRADED SECTOR / SUBSECTOR / TECHNOLOGY")
+    # 1a. TRADED SECTOR -------------------------------------------
     # L2392.Supplysector_tra: generic supplysector info for traded natural gas commodities
     # By convention, traded commodity information is contained within the USA region (could be within any)
     A_ff_TradedSector_NG$region <- gcam.USA_REGION
@@ -149,6 +150,7 @@ module_gcameurope_L2392.gas_trade <- function(command, ...) {
     L2392.SectorUseTrialMarket_tra_NG_EUR <- select(A_ff_TradedSector_NG, region, supplysector) %>%
       mutate(use.trial.market = 1)
 
+    # 1b. TRADED SUBSECTOR -------------------------------------------
     # L2392.SubsectorAll_tra_NG_EUR: generic subsector info for traded natural gas commodities
     # Traded commodities have the region set to USA and the subsector gets the region name pre-pended
     # process LNG which is mapped to all regions
@@ -199,6 +201,7 @@ module_gcameurope_L2392.gas_trade <- function(command, ...) {
                                            L2392.SubsectorAll_tra_stat_diff_exports,
                                            L2392.SubsectorAll_tra_stat_diff_imports)
 
+    # 1c. TRADED TECHNOLOGY -------------------------------------------
     # Base technology-level table for several tables to be written out")
     # process LNG which is mapped to all regions
     A_ff_TradedTechnology_R_Y_LNG <- repeat_add_columns(A_ff_TradedTechnology_NG,
@@ -341,6 +344,7 @@ module_gcameurope_L2392.gas_trade <- function(command, ...) {
     L2392.ProfitShutdown_tra_NG_EUR <- select(A_ff_TradedTechnology_R_Y_NG, LEVEL2_DATA_NAMES[["TechProfitShutdown"]]) %>%
       filter(!(stringr::str_detect(technology, "statistical differences")))
 
+    # 1d. TRADED CAL OUTPUT --------------------------------------
     # L2392.Production_tra: Output (gross exports) of traded technologies
     # LNG
     L2392.Production_tra_LNG <- filter(A_ff_TradedTechnology_R_Y_LNG, year %in% MODEL_BASE_YEARS) %>%
@@ -393,11 +397,12 @@ module_gcameurope_L2392.gas_trade <- function(command, ...) {
                                          L2392.Production_tra_stat_diff_imports)
 
 
-    # PART 2: DOMESTIC SUPPLY SECTOR / SUBSECTOR / TECHNOLOGY")
+    # 2a: DOMESTIC SUPPLY SECTOR --------------------------------------
     # L2392.Supplysector_reg_NG_EUR: generic supplysector info for regional natural gas commodities
     L2392.Supplysector_reg_NG_EUR <- L239.Supplysector_reg %>%
       filter(supplysector == "regional natural gas")
 
+    # 2b: DOMESTIC SUBSECTOR --------------------------------------
     # L2392.SubsectorAll_reg_NG_EUR: generic subsector info for regional natural gas  commodities (competing domestic vs imported)
     L2392.NestingSubsectorAll_reg_NG_EUR <- write_to_all_regions(A_ff_RegionalNestingSubsector_NG,
                                                              c(LEVEL2_DATA_NAMES[["SubsectorAllTo"]], "logit.type"),
@@ -408,6 +413,7 @@ module_gcameurope_L2392.gas_trade <- function(command, ...) {
                                                       c(LEVEL2_DATA_NAMES[["SubsectorAllTo"]],"subsector0", "logit.type"),
                                                       GCAM_region_names)
 
+    # 2c: DOMESTIC TECHNOLOGY --------------------------------------
     # Base technology-level table for several tables to be written out")
     # process domestic natural gas and LNG which are mapped to all regions
     No_IMPORT_REGIONS <- c("Cyprus", "Iceland", "Malta")
@@ -487,6 +493,7 @@ module_gcameurope_L2392.gas_trade <- function(command, ...) {
     # L2392.TechSCurve_reg_NG_EUR: profit shutdown decider for regional technologies
     L2392.ProfitShutdown_reg_NG_EUR <- select(A_ff_RegionalTechnology_R_Y_NG, LEVEL2_DATA_NAMES[["TechProfitShutdown"]], "subsector0")
 
+    # 2d: DOMESTIC CAL OUTPUT --------------------------------------
     # L2392.Production_reg_imp: Output (flow) of gross imports
     #LNG
     L2392.Production_reg_imp_LNG <- A_ff_RegionalTechnology_R_Y_NG %>%
@@ -521,7 +528,7 @@ module_gcameurope_L2392.gas_trade <- function(command, ...) {
       filter(supplysector == "regional natural gas") %>%
       mutate(subsector0 = subsector)
 
-    # Produce outputs
+    # Produce outputs --------------------------------
     L2392.Delete_Supplysector_tra_NG_EUR %>%
       add_title("Delete traded natural gas supplysector") %>%
       add_units("none") %>%
