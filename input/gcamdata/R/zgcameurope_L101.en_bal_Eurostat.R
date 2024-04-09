@@ -158,13 +158,13 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
              sector = "IEA_TPES_diff") %>%
       select(-value.x, -value.y)
 
-    # Update TPES
-    L101.in_EJ_R_TPES_Fi_Yh_Eurostat <- L101.in_EJ_R_TPES_Fi_Yh_Eurostat_unadj %>%
-      bind_rows(L101.in_EJ_R_Fi_Yh_Eurostat_statdiff) %>%
-      group_by(GCAM_region_ID, fuel, year) %>%
-      summarise(value = sum(value)) %>%
-      ungroup %>%
-      mutate(sector = "TPES")
+    # # Update TPES
+    # L101.in_EJ_R_TPES_Fi_Yh_Eurostat <- L101.in_EJ_R_TPES_Fi_Yh_Eurostat_unadj %>%
+    #   bind_rows(L101.in_EJ_R_Fi_Yh_Eurostat_statdiff) %>%
+    #   group_by(GCAM_region_ID, fuel, year) %>%
+    #   summarise(value = sum(value)) %>%
+    #   ungroup %>%
+    #   mutate(sector = "TPES")
 
 
     # Append TPES, IEA_TPES_diff, and net calculations sector onto the end of the energy balances
@@ -177,7 +177,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       group_by(GCAM_region_ID, sector, fuel, year) %>%
       summarise(value = sum(value)) %>%
       ungroup %>%
-      bind_rows(L101.in_EJ_R_TPES_Fi_Yh_Eurostat,
+      bind_rows(L101.in_EJ_R_TPES_Fi_Yh_Eurostat_unadj,
                 L101.in_EJ_R_Fi_Yh_Eurostat_statdiff)
 
 

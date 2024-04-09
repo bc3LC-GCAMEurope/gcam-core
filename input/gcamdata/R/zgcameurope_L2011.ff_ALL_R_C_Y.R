@@ -68,11 +68,11 @@ module_gcameurope_L2011.ff_ALL_R_C_Y <- function(command, ...) {
     # Total production is taken from L111.Prod_EJ_R_F_Yh and total consumption is calculated from
     # L1012.en_bal_EJ_R_Si_Fi_Yh and L121.in_EJ_R_TPES_crude_Yh/unoil.
 
-    # Part 1: Calculate toal consumption of fuels by region ----------------------------
+    # Part 1: Calculate total consumption of fuels by region ----------------------------
     bind_rows(L1012.en_bal_EJ_R_Si_Fi_Yh,
               L121.in_EJ_R_TPES_crude_Yh,
               L121.in_EJ_R_TPES_unoil_Yh) %>%
-      filter(sector == "TPES",
+      filter(sector %in% c("TPES", "IEA_TPES_diff"),
              year %in% HISTORICAL_YEARS,
              fuel %in% c("gas", "coal", "crude oil", "unconventional oil")) %>%
       #Unconventional oil is crude oil
