@@ -92,8 +92,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       filter(sector == 'in_bld_comm')
 
     # Compute the service-fuel shares from the Eurostat data (EUR_hhEnergyConsum) by iso & year ############################################################################
-    # and add them to the GCAM basic shares (A44.share_serv_fuel)
-    EUR_hhEnergyConsum_shares <- EUR_hhEnergyConsum %>%
+    # First aggregate detailed data to GCAM region, year, service
+    EUR_hhEnergyConsum_R_Y_S <-  EUR_hhEnergyConsum %>%
       filter(freq == 'A') %>% # Annual frequency
       select(geo, year = TIME_PERIOD, value_eurostat = OBS_VALUE, nrg_bal, siec, unit) %>%
       # add iso codes
@@ -106,12 +106,28 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       filter(!is.na(service)) %>% # remove nrg_bal == TOTAL
       # add GCAM fuels
       left_join(siec_to_fuel_map, by = 'siec') %>% # deleting heat pumpts (because they are not present in the mapping file)
-      filter(!is.na(fuel)) %>%
       filter(!(grepl("elec_", fuel) & !grepl("electricity generation", service))) %>% # remove renewables & biofuels
+      # compute by GCAM_region_ID total fuel-service consumption
+      group_by(GCAM_region_ID, year, unit, service, fuel, product) %>%
+      summarise(value_eurostat = sum(value_eurostat)) %>%
+      ungroup() %>%
+      # need to adjust fuel mapping - normally "Oil and petroleum products" is an aggregated category
+      # but here it is not always (and therefore needs to be mapped to refined liquids)
+      # so we remap it whenever:
+      # "Oil and petroleum products" is non-zero and there is no other consumption of refined liquids
+      group_by(year, GCAM_region_ID, service) %>%
+      mutate(ref_liq_total = sum(value_eurostat[fuel == "refined liquids"], na.rm = T),
+             fuel = if_else(product == "Oil and petroleum products" & ref_liq_total == 0,
+                            "refined liquids",
+                            fuel)) %>%
+      filter(!is.na(fuel)) %>%
       # compute by GCAM_region_ID total fuel-service consumption
       group_by(GCAM_region_ID, year, unit, service, fuel) %>%
       summarise(value_eurostat = sum(value_eurostat)) %>%
-      ungroup() %>%
+      ungroup()
+
+    # Compute the service-fuel shares and add them to the GCAM basic shares (A44.share_serv_fuel)
+    EUR_hhEnergyConsum_shares <- EUR_hhEnergyConsum_R_Y_S %>%
       # filter to calib techs
       semi_join(calibrated_techs_bld_det_EUR %>% mutate(fuel = if_else(fuel == "traditional biomass", "biomass_tradbio", fuel)),
                 by = c("service", "fuel")) %>%
@@ -154,6 +170,22 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       select(-fuel) %>%
       rename(fuel = bld)
 
+    # adjust zero/missing values when there are non-zero values in L142.in_EJ_R_bld_F_Yh_EUR
+    EUR_share_fillin <- L142.in_EJ_R_bld_F_Yh_EUR %>%
+      semi_join(EUR_hhEnergyConsum_shares, by = c("GCAM_region_ID", "sector")) %>%
+      filter(value != 0,
+             fuel != "biomass") %>% # don't need to consider biomass because it is assigned to cooking later on %>%
+      anti_join(EUR_hhEnergyConsum_shares %>% filter(share_TFEbysector != 0),
+                by = c("GCAM_region_ID", "sector", "fuel")) %>%
+      distinct(GCAM_region_ID, sector, fuel) %>%
+      left_join(EUR_hhEnergyConsum_shares %>% distinct(service, sector, fuel), by = c("sector", "fuel")) %>%
+      mutate(share_TFEbysector = 0.001)
+
+    EUR_hhEnergyConsum_shares <- EUR_hhEnergyConsum_shares %>%
+      bind_rows(EUR_share_fillin) %>%
+      group_by(GCAM_region_ID) %>%
+      mutate(share_TFEbysector = share_TFEbysector / sum(share_TFEbysector )) %>%
+      ungroup
 
     # GCAM_region_ID that have or do not have EUR_hhEnergyConsum_shares
     GCAM_region_ID_with_shares <- unique(EUR_hhEnergyConsum_shares$GCAM_region_ID)
@@ -360,17 +392,26 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
 
     # 2A Consider the standard GCAM procedure to compute it -- for bld_comm and regions not present in the EUR_hhEnergyConsum_shares
 
+    # don´t want any zeros
+    A44.share_serv_fuel_adj <- A44.share_serv_fuel %>%
+      mutate(share_TFEbysector = if_else( share_TFEbysector == 0,
+                                         0.001,
+                                         share_TFEbysector)) %>%
+      group_by(region_GCAM3, sector) %>%
+      mutate(share_TFEbysector = share_TFEbysector / sum(share_TFEbysector)) %>%
+      ungroup
+
     # A44.share_serv_fuel reports shares of residential and commercial TFE by region
     # Service share data is share of total TFE by sector, not share within each fuel
     # So, re-normalize
-    A44.share_serv_fuel %>%
+    A44.share_serv_fuel_adj %>%
       # Dropping service
       group_by(region_GCAM3, sector, fuel) %>%
       summarise(fuel_share_of_TFEbysector = sum(share_TFEbysector)) %>%
       ungroup() ->
       L144.share_fuel_noS
 
-    A44.share_serv_fuel %>%
+    A44.share_serv_fuel_adj %>%
       # Join fuel share data
       left_join_error_no_match(L144.share_fuel_noS, by = c("region_GCAM3", "sector", "fuel")) %>%
       # Calculate service share
@@ -378,7 +419,6 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       # Replace NAs with 0 for regions that do not have any of a given fuel type
       replace_na(list(share_serv_fuel = 0)) ->
       L144.share_serv_fuel_noS
-
 
     # For making the energy consumption table, start with the tech list that will be in each region,
     # and repeat by number of countries from IEA
@@ -666,7 +706,17 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       select(GCAM_region_ID, sector, fuel, service, year, value) ->
       L144.in_EJ_R_bld_serv_F_Yh_EUR # This is a final output table.
 
+    # confirm that energy totals are the same as L142.in_EJ_R_bld_F_Yh_EUR
+    L144.in_EJ_check <- L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
+      group_by(GCAM_region_ID, sector, fuel, year) %>%
+      summarise(value = sum(value)) %>%
+      ungroup
 
+   check <- L142.in_EJ_R_bld_F_Yh_EUR %>%
+     filter(value != 0) %>%
+     left_join(L144.in_EJ_check, by = c("GCAM_region_ID", "sector", "fuel", "year")) %>%
+     mutate(diff = round(abs(value.y - value.x), energy.DIGITS_CALOUTPUT))
+  stopifnot(max(check$diff) == 0)
     # 2D Calculate building energy output by each service ###########################################################################
     #  by GCAM region ID / sector / service / fuel / historical year
     # Base service (output by each service) is the product of energy consumption and efficiency, aggregated by region, sector, service
@@ -690,7 +740,6 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       summarise(value = sum(value)) %>%
       ungroup() ->
       L144.base_service_EJ_serv_EUR # This is a final output table.
-
 
     # 3 Internal gains ##############################################################################################
     # internal gain energy released, divided by efficiency of each technology
