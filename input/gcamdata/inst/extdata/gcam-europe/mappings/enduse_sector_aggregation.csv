@@ -1,7 +1,7 @@
 # File: enduse_sector_aggregation.csv
 # Title: Mapping from first intermediate sector to aggregated intermediate sector
 # Units: None
-# Column types: cc 
+# Column types: cc
 # ----------
 sector,sector_agg
 in_bld_comm,in_bld_comm
@@ -23,7 +23,7 @@ in_trn_rail,in_trn_rail
 in_trn_road,in_trn_road
 in_trn_unspecified,in_trn_unspecified
 net_industry_energy transformation,in_industry_energy
-net_industry_oil refining,in_industry_energy
 net_industry_energy_iron and steel,in_industry_energy
 net_CALCULATED_industry_energy_iron and steel,in_industry_energy
 net_CALCULATED_industry_energy transformation,in_industry_energy
+net_industry_general,in_industry_energy
