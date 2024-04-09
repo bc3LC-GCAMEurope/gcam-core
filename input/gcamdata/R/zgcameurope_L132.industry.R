@@ -56,9 +56,7 @@ module_gcameurope_L132.industry <- function(command, ...) {
       trn <- fuel <- industry <- GCAM_region_ID <- year <-
       value <- value.x <- value.y <- has_district_heat <- fuel.y <- fuel.x <- NULL
 
-    # 1. Perform computations
-
-    # Calculation of industrial energy consumption
+    # 1. Industrial energy consumption ---------------------
     L131.in_EJ_R_Senduse_F_Yh_EUR %>%
       filter(grepl("industry", sector)) %>%
       left_join_error_no_match(enduse_sector_aggregation, by = "sector") %>%
@@ -83,6 +81,7 @@ module_gcameurope_L132.industry <- function(command, ...) {
       mutate(sector = sub("in_", "", sector)) ->
       L132.in_EJ_R_indenergy_F_Yh_EUR
 
+    # 2. Calculate deductions for energy transformation -------------------
     # Compile the net energy use by unconventional oil production, gas processing, refining, and CHP that were derived elsewhere
     # This energy will need to be deducted from industrial energy use
     # The electricity demands for unconventional oil has been done in LA121
@@ -96,8 +95,9 @@ module_gcameurope_L132.industry <- function(command, ...) {
       L132.in_EJ_R_indunoil_F_Yh
 
     ## Gas processing: This is complicated. Coal is not deducted, as inputs to coal gasification were mapped directly
-    # from the IEA energy balances, not derived from known fuel outputs multiplied by assumed IO coefs. The reason for doing this is that
-    # coal is one of several possible inputs to "gas works", and there is only one output. So no way to disaggregate fuel inputs if calculating from the output.
+    # from the IEA energy balances, not derived from known fuel outputs multiplied by assumed IO coefs.
+    # The reason for doing this is that coal is one of several possible inputs to "gas works",
+    # and there is only one output. So no way to disaggregate fuel inputs if calculating from the output.
     # Biogas is treated as primary energy in the IEA energy balances, so not relevant here.
     ## Natural gas processing net energy use is the only one that may need to be calculated (09/2013: It is currently 0 as the IO coef is 1).
     L122.in_EJ_R_gasproc_F_Yh_EUR %>%
@@ -151,6 +151,7 @@ module_gcameurope_L132.industry <- function(command, ...) {
       rename(fuel = fuel.x) ->
       L132.in_EJ_R_indheat_F_Yh
 
+    # 3. Subtract deductions---------------------------------------
     # Re-calculate industrial energy as original estimate minus fuel inputs to unconventional oil production, gas processing, and refining, and plus inputs to heat
     L132.in_EJ_R_indenergy_F_Yh_EUR %>%
       select(sector) %>%
@@ -186,9 +187,7 @@ module_gcameurope_L132.industry <- function(command, ...) {
       ungroup() ->
       L132.in_EJ_R_indenergy_F_Yh_EUR
 
-    # ===================================================
-
-    # Produce outputs
+    # Produce outputs ===================================================
     L132.in_EJ_R_indenergy_F_Yh_EUR %>%
       add_title("Industrial energy consumption (not including CHP) by GCAM region / fuel / historical year") %>%
       add_units("EJ") %>%

@@ -132,7 +132,7 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
     ESTONIA_ID <- GCAM_region_names %>% filter(region == "Estonia") %>% pull(GCAM_region_ID)
 
     L122.in_EJ_gtlctl_F_Yh_estonia <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
-      filter(grepl("in|net", sector) & grepl("gtl|ctl",sector), GCAM_region_ID == ESTONIA_ID) %>%
+      filter(grepl("^in", sector) & grepl("gtl|ctl",sector), GCAM_region_ID == ESTONIA_ID) %>%
       mutate(sector = if_else(grepl("gtl", sector), "gtl", "ctl")) %>%
       # filter to only fuels that are used in ctl and gtl techs in GCAM
       semi_join(L122.globaltech_coef, by = c("sector", "fuel")) %>%
