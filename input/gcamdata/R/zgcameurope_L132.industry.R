@@ -58,8 +58,8 @@ module_gcameurope_L132.industry <- function(command, ...) {
 
     # 1. Industrial energy consumption ---------------------
     L131.in_EJ_R_Senduse_F_Yh_EUR %>%
-      filter(grepl("industry", sector)) %>%
-      left_join_error_no_match(enduse_sector_aggregation, by = "sector") %>%
+      left_join_error_no_match(enduse_sector_aggregation, by = "sector")%>%
+      filter(grepl("industry", sector_agg)) %>%
       select(-sector) %>%
       rename(sector = sector_agg) %>%
       left_join(enduse_fuel_aggregation, by = "fuel") %>% # left_join_error_no_match caused error so left_join was used
@@ -126,33 +126,33 @@ module_gcameurope_L132.industry <- function(command, ...) {
       mutate(value = -1 * value) ->
       L132.in_EJ_R_inddeductions_F_Yh
 
-    ## Heat: fuel inputs to heat need to be added to industrial energy use, in regions where heat is not modeled as a final fuel
-    # Calculate the share of heat consumed by the industrial sector, in regions where heat is not modeled as a separate fuel
-    L131.share_R_Senduse_heat_Yh_EUR %>%
-      filter(grepl("industry", sector)) %>%
-      select(-sector) %>%
-      group_by(GCAM_region_ID, fuel, year) %>%
-      summarise(value = sum(value)) %>%
-      ungroup ->
-      L132.share_R_indenergy_heat_Yh
-
-    # Multiply these shares by the energy inputs to heat
-    A_regions %>%
-      filter(has_district_heat == 0) %>%
-      select(GCAM_region_ID) %>%
-      unlist ->
-      has_district_heat_GCAM_region_ID
-
-    L124.in_EJ_R_heat_F_Yh_EUR %>%
-      filter(GCAM_region_ID %in% has_district_heat_GCAM_region_ID) %>%
-      left_join_error_no_match(L132.share_R_indenergy_heat_Yh, by = c("GCAM_region_ID", "year")) %>%
-      mutate(value = value.x * value.y) %>%
-      select(-fuel.y, -value.y, -value.x) %>%
-      rename(fuel = fuel.x) ->
-      L132.in_EJ_R_indheat_F_Yh
+    # ## Heat: fuel inputs to heat need to be added to industrial energy use, in regions where heat is not modeled as a final fuel
+    # # Calculate the share of heat consumed by the industrial sector, in regions where heat is not modeled as a separate fuel
+    # L131.share_R_Senduse_heat_Yh_EUR %>%
+    #   filter(grepl("industry", sector)) %>%
+    #   select(-sector) %>%
+    #   group_by(GCAM_region_ID, fuel, year) %>%
+    #   summarise(value = sum(value)) %>%
+    #   ungroup ->
+    #   L132.share_R_indenergy_heat_Yh
+    #
+    # # Multiply these shares by the energy inputs to heat
+    # A_regions %>%
+    #   filter(has_district_heat == 0) %>%
+    #   select(GCAM_region_ID) %>%
+    #   unlist ->
+    #   has_district_heat_GCAM_region_ID
+    #
+    # L124.in_EJ_R_heat_F_Yh_EUR %>%
+    #   filter(GCAM_region_ID %in% has_district_heat_GCAM_region_ID) %>%
+    #   left_join_error_no_match(L132.share_R_indenergy_heat_Yh, by = c("GCAM_region_ID", "year")) %>%
+    #   mutate(value = value.x * value.y) %>%
+    #   select(-fuel.y, -value.y, -value.x) %>%
+    #   rename(fuel = fuel.x) ->
+    #   L132.in_EJ_R_indheat_F_Yh
 
     # 3. Subtract deductions---------------------------------------
-    # Re-calculate industrial energy as original estimate minus fuel inputs to unconventional oil production, gas processing, and refining, and plus inputs to heat
+    # # Re-calculate industrial energy as original estimate minus fuel inputs to unconventional oil production, gas processing, and refining, and plus inputs to heat
     L132.in_EJ_R_indenergy_F_Yh_EUR %>%
       select(sector) %>%
       unique %>%
@@ -160,27 +160,27 @@ module_gcameurope_L132.industry <- function(command, ...) {
       temp_sector_value
 
     L132.in_EJ_R_indenergy_F_Yh_EUR %>%
-      bind_rows(L132.in_EJ_R_inddeductions_F_Yh, L132.in_EJ_R_indheat_F_Yh) %>%
+      bind_rows(L132.in_EJ_R_inddeductions_F_Yh) %>% #, L132.in_EJ_R_indheat_F_Yh) %>%
       mutate(sector = temp_sector_value) %>%
       ungroup() ->
       L132.in_EJ_R_Sindenergy_F_Yh
 
     # Drop heat in regions where this fuel is backed out to its fuel inputs
     # first extract regions where doesn't have district_heat
-    A_regions %>%
-      filter(has_district_heat == 0) %>%
-      select(GCAM_region_ID) %>%
-      filter(GCAM_region_ID %in% L101.GCAM_EUR_regions$GCAM_region_ID) %>%
-      unique %>%
-      mutate(fuel = "heat") ->
-      region_heat
+    # A_regions %>%
+    #   filter(has_district_heat == 0) %>%
+    #   select(GCAM_region_ID) %>%
+    #   filter(GCAM_region_ID %in% L101.GCAM_EUR_regions$GCAM_region_ID) %>%
+    #   unique %>%
+    #   mutate(fuel = "heat") ->
+    #   region_heat
 
     L132.in_EJ_R_Sindenergy_F_Yh %>%
-      anti_join(region_heat, by = c("GCAM_region_ID", "fuel")) %>% # then drop the regions selected in region_heat
-      # Where unit conversions have produced slightly negative numbers that should be 0, re-set to 0
-      filter(value < 0 & value > -1e-6) %>%
-      mutate(value = 0) %>%
-      bind_rows(filter(L132.in_EJ_R_Sindenergy_F_Yh, !(value < 0 & value > -1e-6))) %>%
+      # anti_join(region_heat, by = c("GCAM_region_ID", "fuel")) %>% # then drop the regions selected in region_heat
+      # # Where unit conversions have produced slightly negative numbers that should be 0, re-set to 0
+      # filter(value < 0 & value > -1e-6) %>%
+      # mutate(value = 0) %>%
+      # bind_rows(filter(L132.in_EJ_R_Sindenergy_F_Yh, !(value < 0 & value > -1e-6))) %>%
 
       group_by(GCAM_region_ID, sector, fuel, year) %>%
       summarise(value = sum(value)) %>%

@@ -27,3 +27,6 @@ net_industry_energy_iron and steel,in_industry_energy
 net_CALCULATED_industry_energy_iron and steel,in_industry_energy
 net_CALCULATED_industry_energy transformation,in_industry_energy
 net_industry_general,in_industry_energy
+net_CALCULATED_gas works,in_industry_energy
+net_industry_ownuse,in_industry_energy
+net_gas works,in_industry_energy

@@ -26,6 +26,7 @@ module_gcameurope_L131.enduse <- function(command, ...) {
              FILE = "water/EFW_mapping",
              "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
              "L122.in_EJ_R_refining_F_Yh_EUR",
+             "L124.in_EJ_R_heat_F_Yh_EUR",
              "L124.out_EJ_R_heat_F_Yh_EUR",
              "L124.out_EJ_R_heatfromelec_F_Yh_EUR",
              "L126.out_EJ_R_electd_F_Yh_EUR"))
@@ -48,6 +49,7 @@ module_gcameurope_L131.enduse <- function(command, ...) {
     L124.out_EJ_R_heat_F_Yh_EUR <- get_data(all_data, "L124.out_EJ_R_heat_F_Yh_EUR")
     L124.out_EJ_R_heatfromelec_F_Yh_EUR <- get_data(all_data, "L124.out_EJ_R_heatfromelec_F_Yh_EUR")
     L126.out_EJ_R_electd_F_Yh_EUR <- get_data(all_data, "L126.out_EJ_R_electd_F_Yh_EUR")
+    L124.in_EJ_R_heat_F_Yh_EUR  <- get_data(all_data, "L124.in_EJ_R_heat_F_Yh_EUR")
 
     # 1. ELECTRICITY SCALING  ===================================================
     # First, subset and aggregate the "upstream" electricity demands by the energy system that are not being scaled
@@ -164,7 +166,25 @@ module_gcameurope_L131.enduse <- function(command, ...) {
       filter(fuel != "heat_scaled") %>%
       bind_rows(Enduse_heat_scaled) %>%
       arrange(GCAM_region_ID, sector, fuel, year) ->
-      L131.in_EJ_R_Senduse_F_Yh_EUR # Output table 1
+      L131.in_EJ_R_Senduse_F_Yh_EUR_tmp # Output table 1
+
+    # There are some regions that have heat production that is not included in the energy balance
+    # this was done because for regions with heat from elec but no direct production of district heat
+    # Subtract the fuel consumption used for this derived heat production here
+    ExtraHeatProduction <- L124.in_EJ_R_heat_F_Yh_EUR %>%
+      left_join_error_no_match(L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
+                                 filter(sector == "in_heat") %>%
+                                 mutate(sector = "heat"), by = c("GCAM_region_ID", "sector", "fuel", "year")) %>%
+      mutate(deduction = value.x - value.y,
+             sector = "in_industry_general") %>%
+      select(GCAM_region_ID, sector, fuel, year, deduction)
+
+    L131.in_EJ_R_Senduse_F_Yh_EUR <- L131.in_EJ_R_Senduse_F_Yh_EUR_tmp %>%
+      left_join(ExtraHeatProduction, by = c("GCAM_region_ID", "sector", "fuel", "year")) %>%
+      tidyr::replace_na(list(deduction = 0)) %>%
+      mutate(value = value - deduction) %>%
+      select(-deduction)
+
 
     # Heat in some regions is not modeled separately from the fuels used to produce it
     A_regions %>%
