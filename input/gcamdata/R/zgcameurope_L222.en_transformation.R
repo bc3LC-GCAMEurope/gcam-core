@@ -42,6 +42,7 @@ module_gcameurope_L222.en_transformation <- function(command, ...) {
                       "L222.GlobalTechCoef_en_EUR",
                       "L222.GlobalTechShrwt_en_EUR",
                       "L222.BaseService_IEA_TPES_diff_EUR",
+                      "L222.SubsectorShrwt_IEA_TPES_diff_EUR",
                       paste0(OUTPUTS_TO_COPY_FILTER, "_EUR"))
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -164,6 +165,10 @@ module_gcameurope_L222.en_transformation <- function(command, ...) {
     L222.StubTechCoef_refining_EUR <- L222.StubTechCoef_refining_EUR[c(LEVEL2_DATA_NAMES[["StubTechYr"]], "minicam.energy.input", "coefficient", "market.name")]
 
     # IEA_TPES_diff tech -------------------
+    # Wherever IEA consumption is greater than Eurostat consumption, we will have this consumed by
+    # a pass-through sector IEA_TPES_diff
+    # This is so that trade doesn't change in other regions from core
+    # However this doesn't work if IEA consumption is less - in that case we will add to production after calculating trade
     L222.Supplysector_en_EUR <- L222.Supplysector_en_EUR %>%
       filter(supplysector == "gas processing") %>%
       mutate(supplysector = "IEA_TPES_diff") %>%
@@ -175,12 +180,11 @@ module_gcameurope_L222.en_transformation <- function(command, ...) {
              subsector = "IEA_TPES_diff") %>%
       bind_rows(L222.SubsectorLogit_en_EUR)
 
-    L222.SubsectorShrwt_en_EUR <-  L222.SubsectorLogit_en_EUR %>%
+    L222.SubsectorShrwt_IEA_TPES_diff_EUR <-  L222.SubsectorLogit_en_EUR %>%
       filter(supplysector == "IEA_TPES_diff") %>%
       distinct(region, supplysector, subsector) %>%
       repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
-      mutate(share.weight = if_else(year == MODEL_FINAL_BASE_YEAR, 1, 0)) %>%
-      bind_rows(L222.SubsectorShrwt_en_EUR)
+      mutate(share.weight = if_else(year == MODEL_FINAL_BASE_YEAR, 1, 0))
 
     L222.StubTech_en_EUR <- L222.SubsectorLogit_en_EUR %>%
       filter(supplysector == "IEA_TPES_diff") %>%
@@ -193,7 +197,8 @@ module_gcameurope_L222.en_transformation <- function(command, ...) {
              year %in% MODEL_BASE_YEARS,
              fuel %in% c("coal", "gas", "refined liquids")) %>%
       mutate(fuel = sub("refined liquids", "oil", fuel),
-             fuel = sub("gas", "natural gas", fuel)) %>%
+             fuel = sub("gas", "natural gas", fuel),
+             value = if_else(value < 0, 0, value)) %>% # can't have negatives
       left_join_error_no_match(L101.GCAM_EUR_regions %>%  distinct(GCAM_region_ID, region = GCAMEU_region),
                                by = "GCAM_region_ID") %>%
       select(-GCAM_region_ID)
@@ -210,6 +215,7 @@ module_gcameurope_L222.en_transformation <- function(command, ...) {
       set_subsector_shrwt()
 
     L222.GlobalTechCoef_en_EUR <- L222.StubTech_en_EUR %>%
+      filter(supplysector == "IEA_TPES_diff") %>%
       repeat_add_columns(tibble(year = MODEL_BASE_YEARS)) %>%
       mutate(minicam.energy.input = case_when(
         stub.technology == "oil" ~ "regional oil",
@@ -219,6 +225,7 @@ module_gcameurope_L222.en_transformation <- function(command, ...) {
       rename(sector.name = supplysector, subsector.name = subsector, technology = stub.technology)
 
     L222.GlobalTechShrwt_en_EUR <- L222.StubTech_en_EUR %>%
+      filter(supplysector == "IEA_TPES_diff") %>%
       repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
       mutate(share.weight = if_else(year <= MODEL_FINAL_BASE_YEAR, 1, 0)) %>%
       rename(sector.name = supplysector, subsector.name = subsector, technology = stub.technology)

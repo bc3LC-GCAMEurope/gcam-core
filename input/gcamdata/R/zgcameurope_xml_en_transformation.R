@@ -18,6 +18,7 @@ module_gcameurope_en_transformation_xml <- function(command, ...) {
                      "L222.SectorUseTrialMarket_en_EUR",
                      "L222.SubsectorLogit_en_EUR",
                      "L222.SubsectorShrwt_en_EUR",
+                     "L222.SubsectorShrwt_IEA_TPES_diff_EUR",
                      "L222.SubsectorShrwtFllt_en_EUR",
                      "L222.SubsectorInterp_en_EUR",
                      "L222.SubsectorInterpTo_en_EUR",
@@ -48,7 +49,7 @@ module_gcameurope_en_transformation_xml <- function(command, ...) {
       add_logit_tables_xml(L222.Supplysector_en_EUR, "Supplysector") %>%
       add_xml_data(L222.SectorUseTrialMarket_en_EUR, "SectorUseTrialMarket") %>%
       add_logit_tables_xml(L222.SubsectorLogit_en_EUR, "SubsectorLogit") %>%
-      add_xml_data(L222.SubsectorShrwt_en_EUR, "SubsectorShrwt") %>%
+      add_xml_data(L222.SubsectorShrwt_IEA_TPES_diff_EUR, "SubsectorShrwt") %>%
       add_xml_data(L222.SubsectorShrwtFllt_en_EUR, "SubsectorShrwtFllt") %>%
       add_xml_data(L222.SubsectorInterp_en_EUR, "SubsectorInterp") %>%
       add_xml_data(L222.StubTech_en_EUR, "StubTech") %>%
