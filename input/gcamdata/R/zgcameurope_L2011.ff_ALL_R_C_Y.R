@@ -72,7 +72,7 @@ module_gcameurope_L2011.ff_ALL_R_C_Y <- function(command, ...) {
     bind_rows(L1012.en_bal_EJ_R_Si_Fi_Yh,
               L121.in_EJ_R_TPES_crude_Yh,
               L121.in_EJ_R_TPES_unoil_Yh) %>%
-      filter(sector %in% c("TPES", "IEA_TPES_diff"),
+      filter(sector == "TPES",
              year %in% HISTORICAL_YEARS,
              fuel %in% c("gas", "coal", "crude oil", "unconventional oil")) %>%
       #Unconventional oil is crude oil

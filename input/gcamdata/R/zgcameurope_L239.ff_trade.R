@@ -146,24 +146,24 @@ module_gcameurope_L239.ff_trade <- function(command, ...) {
       select(region, GCAM_Commodity, year, GrossExp_EJ)
     L239.Prod_EJ_R_C_Y <- select(L2011.ff_ALL_EJ_R_C_Y_EUR, region, GCAM_Commodity = fuel, year, Prod_EJ = production)
 
-    # Add in extra domestic consumption from negative IEA_TPES_diff values
-    IEA_TPES_diff_prod <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
-      filter(sector == "IEA_TPES_diff",
-             fuel %in% c("coal", "gas", "refined liquids"),
-             value < 0) %>%
-      mutate(value = value * -1,
-             GCAM_Commodity = case_when(
-               fuel == "gas" ~ "natural gas",
-               fuel == "refined liquids" ~ "crude oil",
-               fuel == "coal" ~ "coal")) %>%
-      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
-      select(region, GCAM_Commodity, year, Prod_EJ = value)
-
-    L239.Prod_EJ_R_C_Y <- L239.Prod_EJ_R_C_Y %>%
-      bind_rows(IEA_TPES_diff_prod) %>%
-      group_by(region, GCAM_Commodity, year) %>%
-      summarise(Prod_EJ = sum(Prod_EJ)) %>%
-      ungroup
+    # # Add in extra domestic consumption from negative IEA_TPES_diff values
+    # IEA_TPES_diff_prod <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
+    #   filter(sector == "IEA_TPES_diff",
+    #          fuel %in% c("coal", "gas", "refined liquids"),
+    #          value < 0) %>%
+    #   mutate(value = value * -1,
+    #          GCAM_Commodity = case_when(
+    #            fuel == "gas" ~ "natural gas",
+    #            fuel == "refined liquids" ~ "crude oil",
+    #            fuel == "coal" ~ "coal")) %>%
+    #   left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
+    #   select(region, GCAM_Commodity, year, Prod_EJ = value)
+    #
+    # L239.Prod_EJ_R_C_Y <- L239.Prod_EJ_R_C_Y %>%
+    #   bind_rows(IEA_TPES_diff_prod) %>%
+    #   group_by(region, GCAM_Commodity, year) %>%
+    #   summarise(Prod_EJ = sum(Prod_EJ)) %>%
+    #   ungroup
 
     L239.Production_reg_dom_EUR <- A_ff_regionalTechnology_R_Y %>%
       filter(year %in% MODEL_BASE_YEARS,

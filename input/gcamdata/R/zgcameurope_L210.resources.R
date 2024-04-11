@@ -116,30 +116,30 @@ module_gcameurope_L210.resources <- function(command, ...) {
     copy_filter_europe(all_data, OUTPUTS_TO_COPY_FILTER)
 
     # change fuel names
-    L111.Prod_EJ_R_F_Yh_EUR <- L111.Prod_EJ_R_F_Yh_EUR %>%
-      mutate(fuel = case_when(
-        fuel == "gas" ~ "natural gas",
-        fuel == "refined liquids" ~ "crude oil",
-        fuel == "coal" ~ "coal"),
-        technology = fuel)
+    # L111.Prod_EJ_R_F_Yh_EUR <- L111.Prod_EJ_R_F_Yh_EUR %>%
+    #   mutate(fuel = case_when(
+    #     fuel == "gas" ~ "natural gas",
+    #     fuel == "refined liquids" ~ "crude oil",
+    #     fuel == "coal" ~ "coal"),
+    #     technology = fuel)
 
-    # Wherever IEA consumption is less than Eurostat consumption, add to production after calculating trade
-    IEA_TPES_diff_prod <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
-      filter(sector == "IEA_TPES_diff",
-             fuel %in% c("coal", "gas", "refined liquids"),
-             value < 0) %>%
-      mutate(value = value * -1,
-             sector = "out_resources",
-             fuel = case_when(
-               fuel == "gas" ~ "natural gas",
-               fuel == "refined liquids" ~ "crude oil",
-               fuel == "coal" ~ "coal"),
-             technology = fuel)
-
-    L111.Prod_EJ_R_F_Yh_EUR <- bind_rows(L111.Prod_EJ_R_F_Yh_EUR, IEA_TPES_diff_prod) %>%
-      group_by(GCAM_region_ID, sector, fuel, year, technology) %>%
-      summarise(value = sum(value)) %>%
-      ungroup()
+    # # Wherever IEA consumption is less than Eurostat consumption, add to production after calculating trade
+    # IEA_TPES_diff_prod <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
+    #   filter(sector == "IEA_TPES_diff",
+    #          fuel %in% c("coal", "gas", "refined liquids"),
+    #          value < 0) %>%
+    #   mutate(value = value * -1,
+    #          sector = "out_resources",
+    #          fuel = case_when(
+    #            fuel == "gas" ~ "natural gas",
+    #            fuel == "refined liquids" ~ "crude oil",
+    #            fuel == "coal" ~ "coal"),
+    #          technology = fuel)
+    #
+    # L111.Prod_EJ_R_F_Yh_EUR <- bind_rows(L111.Prod_EJ_R_F_Yh_EUR, IEA_TPES_diff_prod) %>%
+    #   group_by(GCAM_region_ID, sector, fuel, year, technology) %>%
+    #   summarise(value = sum(value)) %>%
+    #   ungroup()
 
     L111.RsrcCurves_EJ_R_Ffos <- L111.RsrcCurves_EJ_R_Ffos %>%
       filter_regions_europe(region_ID_mapping  = GCAM_region_names)
