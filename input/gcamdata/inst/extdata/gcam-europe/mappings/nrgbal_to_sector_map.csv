@@ -20,11 +20,11 @@ TI_GW_E,Gas works,in_gas works,1
 TI_RPI_E,Refineries & petrochemical industry,,
 TI_PF_E,Patent fuel plants,in_industry_energy transformation,1
 TI_BKBPB_E,BKB & PB plants,in_industry_energy transformation,1
-TI_CL_E,Coal liquefaction plants,in_industry_ctl,1
+TI_CL_E,Coal liquefaction plants,in_industry_ctl,0
 TI_BNG_E,For blended natural gas,in_gas works,1
 TI_LBB_E,Liquid biofuels blended,in_industry_energy transformation,1
 TI_CPP_E,Charcoal production plants,in_industry_energy transformation,1
-TI_GTL_E,Gas-to-liquids plants,in_industry_gtl,1
+TI_GTL_E,Gas-to-liquids plants,in_industry_gtl,0
 TI_NSP_E,Not elsewhere specified ,,
 TI_EHG_MAPE_E,Main activity producer electricity only,in_electricity generation,0
 TI_EHG_MAPCHP_E,Main activity producer CHP,in_electricity generation,0
@@ -49,11 +49,11 @@ TO_GW,Gas works,out_gas works,1
 TO_RPI,Refineries & petrochemical industry,,
 TO_PF,Patent fuel plants,out_industry_energy transformation,1
 TO_BKBPB,BKB & PB plants,out_industry_energy transformation,1
-TO_CL,Coal liquefaction plants,out_industry_ctl,1
+TO_CL,Coal liquefaction plants,out_industry_ctl,0
 TO_BNG,Blended in natural gas,out_gas works,1
 TO_LBB,Liquid biofuels blended,out_industry_energy transformation,1
 TO_CPP,Charcoal production plants,out_industry_energy transformation,1
-TO_GTL,Gas-to-liquids plants,out_industry_gtl,1
+TO_GTL,Gas-to-liquids plants,out_industry_gtl,0
 TO_NSP,Not elsewhere specified ,,
 TO_EHG_MAPE,Main activity producer electricity only,,
 TO_EHG_MAPCHP,Main activity producer CHP,,

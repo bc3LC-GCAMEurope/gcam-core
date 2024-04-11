@@ -110,8 +110,8 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
 
     # Calculate transformation losses of liquid/gas energy transformation sectors plus
     # consumption of fuels for electricity/heat/final energy consumption
-    # For coal, only relevant transformation is 1)industry_energy_iron and steel 2) gas works 3) industry_ctl 4)industry_energy transformation
-    # For natural gas, only relevant transformation is 1)gas works 2) industry_gtl
+    # For coal, only relevant transformation is 1)industry_energy_iron and steel 2) gas works 3)industry_energy transformation
+    # For natural gas, only relevant transformation is 1)gas works
     # For refined liquids, only relevant transformation is 1)industry_oil refining
     L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat_NETCALC <-  L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
       filter(calculate_net == 1) %>%
@@ -125,19 +125,28 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       filter(net != 0) %>%
       select(iso, sector, fuel, year, value = net)
 
-    # Because we have input and output, we don't need to adjust for sectors that change fuel names
-    # For example in GCAM-core, gas works has net consumption of coal, but then some gasified coal as final energy is counted as gas
+    # We do not need to adjust gas works, but do need to adjust gtl and ctl
+    # In GCAM-core, gas works has net consumption of coal, but then some gasified coal as final energy is counted as gas
     # Here we have the input of coal and the output of gas, so that in the net calculation, we get the correct amount
     # of coal input and then a negative gas output that offsets as gasified coal in the end use
     # Since there is no trade of finished coal or gas products, any consumption in the energy transformation sector
-    # needs to be offset in the end use (would not be true if this occured in any refining sectors)
+    # needs to be offset in the end use
+
+    # For ctl and gtl, we have input of gas/coal that needs to be counted as TPES in gas/coal. Then some of the refined liquid consumption
+    # should be offset based on the output of gtl/ctl techs
+    L101.gtl_ctl_offet <- L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
+      filter(grepl("out", sector) & grepl("gtl|ctl",sector),
+             fuel %in% c("coal", "gas")) %>%
+      mutate(fuel = "refined liquids",
+             value = value * -1)
 
     # Calculate the total primary energy supply (TPES) in each region and fuel as the sum of all flows that are inputs
     # This guarantees that our TPES will be consistent with the tracked forms of consumption
     # (i.e. no statistical differences, stock changes, transfers)
     L101.in_EJ_R_TPES_Fi_Yh_Eurostat_unadj <- L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat %>%
       filter(grepl("^in_|^net_", sector), calculate_net == 0) %>%
-      bind_rows(L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat_NETCALC) %>%
+      bind_rows(L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat_NETCALC,
+                L101.gtl_ctl_offet) %>%
       group_by(iso, fuel, year) %>%
       summarise(value = sum(value)) %>%
       ungroup %>%
