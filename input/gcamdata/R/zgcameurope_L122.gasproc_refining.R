@@ -140,6 +140,11 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
       summarise(value = sum(value)) %>%
       ungroup
 
+    L122.IO_EJ_gtlctl_F_Yh_estonia <- L122.in_EJ_gtlctl_F_Yh_estonia %>%
+      left_join_error_no_match(L122.out_EJ_R_gtlctl_Yh_EUR, by = c("GCAM_region_ID", "sector", "fuel", "year")) %>%
+      mutate(value = if_else(value.y == 0, 0, value.x / value.y)) %>%
+      select(-value.x, -value.y)
+
     L122.in_EJ_R_gtlctl_F_Yh_EUR <- L122.out_EJ_R_gtlctl_Yh_EUR %>%
       rename(valueInput = value) %>%
       left_join(L122.gtlctl_coef, by = c("sector", "fuel", "year")) %>%
@@ -147,6 +152,7 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
       select(GCAM_region_ID, sector, fuel, year, value) %>%
       filter(GCAM_region_ID != ESTONIA_ID) %>%
       bind_rows(L122.in_EJ_gtlctl_F_Yh_estonia)
+
 
     # 1c. CRUDE OIL REFINING --------------
     # NOTE: This is complicated. The outputs of CTL and GTL have the same fuel name as the output of oil refining,
@@ -214,7 +220,8 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
       filter(year <= MODEL_FINAL_BASE_YEAR) %>%
       left_join(select(L122.out_EJ_R_oilrefining_Yh_EUR, -fuel), by = c("GCAM_region_ID", "sector", "year")) %>%
       mutate(value = if_else(value.y == 0, 0, value.x / value.y)) %>%
-      select(-value.x, -value.y)
+      select(-value.x, -value.y) %>%
+      bind_rows(L122.IO_EJ_gtlctl_F_Yh_estonia)
 
     # Combine all calibrated refinery input and output tables
     # Note - the biofuel tables have some extra columns that are used in subsequent steps but don't apply for these outputs
