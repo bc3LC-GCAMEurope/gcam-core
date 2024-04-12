@@ -155,8 +155,6 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
 
 
     # 1c. CRUDE OIL REFINING --------------
-    # NOTE: This is complicated. The outputs of CTL and GTL have the same fuel name as the output of oil refining,
-    # so need to be deducted from TPES in order to calculate regional output of oil refining.
     # In contrast, biofuels are assigned different names, so they are not in the TPES of refined liquids.
 
     # Create tibble with appropriate sector and fuels for oil refining (output) for L122.out_EJ_R_oilrefining_Yh_EUR and add historical years
@@ -188,20 +186,12 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
       summarise(value_en_bal = sum(value_en_bal)) %>%
       ungroup
 
-    # Output for coal for CTL & GTL sector
-    gtlctl_oil <- L122.out_EJ_R_gtlctl_Yh_EUR %>%
-      group_by(GCAM_region_ID, year) %>%
-      summarise(value_gtlctl = sum(value)) %>%
-      ungroup %>%
-      mutate(sector = "oil refining")
-
     # Final adjustments to fuel outputs for CTL and GTL to tackle the Note (NOTE*1) made above
     # left_join_error_no_match could be used here since it has some problems with the timeshifting test
     L122.out_EJ_R_oilrefining_Yh_EUR <- L122.out_EJ_R_oilrefining_Yh_EUR_noval %>%
       left_join_error_no_match(en_bal_oil, by = c("GCAM_region_ID", "sector", "year")) %>%
-      left_join_error_no_match(gtlctl_oil, by = c("GCAM_region_ID", "sector", "year")) %>%
-      mutate(value = value_en_bal - value_gtlctl) %>%
-      select(-value_en_bal, -value_gtlctl)
+      mutate(value = value_en_bal) %>%
+      select(-value_en_bal)
 
     # Oil refining: input of oil is equal to TPES, and input of other fuels is from net refinery energy use
     L122.in_EJ_R_oilrefining_F_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
