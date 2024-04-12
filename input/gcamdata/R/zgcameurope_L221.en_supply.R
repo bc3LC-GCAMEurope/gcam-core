@@ -34,6 +34,7 @@ module_gcameurope_L221.en_supply <- function(command, ...) {
                      FILE = "aglu/A_agRegionalTechnology",
                      FILE = "energy/A21.globaltech_secout",
                      "L121.BiomassOilRatios_kgGJ_R_C_EUR",
+                     "L122.BiomassSecOutRatio_kgGJ_R_C_EUR_adj",
                      "L122.in_Mt_R_C_Yh_EUR",
                      "L221.GlobalTechCoef_en",
                      OUTPUTS_TO_COPY_FILTER)
@@ -112,7 +113,7 @@ module_gcameurope_L221.en_supply <- function(command, ...) {
     L221.globaltech_secout_R %>%
       distinct(region) -> L221.ddgs_regions
 
-    L221.BiomassOilSecOut_kgGJ_R_C <- left_join_error_no_match(L121.BiomassOilRatios_kgGJ_R_C_EUR, GCAM_region_names,
+    L221.BiomassOilSecOut_kgGJ_R_C <- left_join_error_no_match(L122.BiomassSecOutRatio_kgGJ_R_C_EUR_adj, GCAM_region_names,
                                                                by = "GCAM_region_ID") %>%
       select(region, GCAM_commodity, SecOutRatio)
 

@@ -16,17 +16,19 @@
 #' @importFrom tidyr complete gather nesting
 #' @author RH, February 2024
 module_gcameurope_L122.gasproc_refining <- function(command, ...) {
+  MODULE_INPUTS <- c(FILE = "common/GCAM_region_names",
+                     FILE = "aglu/A_agRegionalTechnology",
+                     FILE = "energy/calibrated_techs",
+                     FILE = "energy/A_regions",
+                     FILE = "energy/A21.globaltech_coef",
+                     FILE = "energy/A21.globaltech_secout",
+                     FILE = "energy/A22.globaltech_coef",
+                     "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
+                     "L121.share_R_TPES_biofuel_tech_EUR",
+                     "L121.BiomassOilRatios_kgGJ_R_C_EUR",
+                     "L108.ag_Feed_Mt_R_C_Y")
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "common/GCAM_region_names",
-             FILE = "aglu/A_agRegionalTechnology",
-             FILE = "energy/calibrated_techs",
-             FILE = "energy/A_regions",
-             FILE = "energy/A21.globaltech_coef",
-             FILE = "energy/A21.globaltech_secout",
-             FILE = "energy/A22.globaltech_coef",
-             "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
-             "L121.share_R_TPES_biofuel_tech_EUR",
-             "L121.BiomassOilRatios_kgGJ_R_C_EUR"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L122.out_EJ_R_gasproc_F_Yh_EUR",
              "L122.in_EJ_R_gasproc_F_Yh_EUR",
@@ -34,7 +36,8 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
              "L122.out_EJ_R_refining_F_Yh_EUR",
              "L122.in_EJ_R_refining_F_Yh_EUR",
              "L122.in_Mt_R_C_Yh_EUR",
-             "L122.FeedOut_Mt_R_C_Yh_EUR"))
+             "L122.FeedOut_Mt_R_C_Yh_EUR",
+             "L122.BiomassSecOutRatio_kgGJ_R_C_EUR_adj"))
   } else if(command == driver.MAKE) {
 
     EcYield_kgm2_hi <- EcYield_kgm2_lo <- GCAM_commodity <- GCAM_region_ID <- GLU <-
@@ -51,17 +54,7 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs ----
-    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names")
-    A_agRegionalTechnology <- get_data(all_data, "aglu/A_agRegionalTechnology")
-    calibrated_techs <- get_data(all_data, "energy/calibrated_techs")
-    A_regions <- get_data(all_data, "energy/A_regions")
-    A21.globaltech_coef <- get_data(all_data, "energy/A21.globaltech_coef", strip_attributes = TRUE)
-    A21.globaltech_secout <- get_data(all_data, "energy/A21.globaltech_secout")
-    A22.globaltech_coef <- get_data(all_data, "energy/A22.globaltech_coef", strip_attributes = TRUE)
-    L1012.en_bal_EJ_R_Si_Fi_Yh_EUR <- get_data(all_data, "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", strip_attributes = TRUE)
-    L121.share_R_TPES_biofuel_tech_EUR <- get_data(all_data, "L121.share_R_TPES_biofuel_tech_EUR")
-    L121.BiomassOilRatios_kgGJ_R_C_EUR <- get_data(all_data, "L121.BiomassOilRatios_kgGJ_R_C_EUR")
-
+    get_data_list(all_data, MODULE_INPUTS)
 
     # Most of the technologies (in calibrated_techs.csv) have inputs from outputs based on exogenous coefficients (A22.globaltech_coef).
     # Extracting those coefficients and interpolating them to 2010.
@@ -155,8 +148,6 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
 
 
     # 1c. CRUDE OIL REFINING --------------
-    # In contrast, biofuels are assigned different names, so they are not in the TPES of refined liquids.
-
     # Create tibble with appropriate sector and fuels for oil refining (output) for L122.out_EJ_R_oilrefining_Yh_EUR and add historical years
     L122.out_EJ_R_oilrefining_Yh_EUR_noval <- tibble(GCAM_region_ID = unique(L1012.en_bal_EJ_R_Si_Fi_Yh_EUR$GCAM_region_ID),
                                                sector = "oil refining", fuel = "oil")%>%
@@ -303,15 +294,47 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
       mutate(GCAM_commodity = if_else(is.na(primary.crop), GCAM_commodity, primary.crop)) %>%
       select(passthrough.sector = supplysector, GCAM_commodity, fractional.secondary.output, year, output.ratio)
 
-
     # 02/2020 modification (gpk) - replace with region-specific secondary output ratios for selected regions/commodities
-    L122.FeedOut_Mt_R_C_Yh_EUR <- L122.in_EJ_R_1stgenbio_F_Yh_EUR %>%
+    L122.FeedOut_Mt_R_C_Yh_EUR_unadj <- L122.in_EJ_R_1stgenbio_F_Yh_EUR %>%
       inner_join(L121.feed_output_ratio_EUR, by = c("passthrough.sector", "GCAM_commodity", "year")) %>%
       left_join(select(L121.BiomassOilRatios_kgGJ_R_C_EUR, GCAM_region_ID, GCAM_commodity, rev_output.ratio = SecOutRatio),
                 by = c("GCAM_region_ID", "GCAM_commodity")) %>%
       mutate(value = if_else(is.na(rev_output.ratio), value * output.ratio, value * rev_output.ratio)) %>%
       select(GCAM_region_ID, GCAM_commodity, fractional.secondary.output, year, value)
 
+    # The aglu sector is assuming the same DDGS output from GCAM-Europe as GCAM-core (there are no _EUR outputs from aglu)
+    # So we need to adjust the secondary output ratio in L121.BiomassOilRatios_kgGJ_R_C_EUR to ensure DDGS output
+    # stays the same
+    # First calculate the difference between feed output calculated above and that expected by ag sector
+    L122.DDGS_adjust_ratio <- L122.FeedOut_Mt_R_C_Yh_EUR_unadj %>%
+      filter(year >= min(L108.ag_Feed_Mt_R_C_Y$year)) %>%
+      group_by(GCAM_region_ID, fractional.secondary.output, year) %>%
+      summarise(value = sum(value)) %>%
+      ungroup %>%
+      left_join_error_no_match(L108.ag_Feed_Mt_R_C_Y, by = c("GCAM_region_ID", "year",
+                                                             "fractional.secondary.output" = "GCAM_commodity")) %>%
+      mutate(adj_ratio = if_else(value.x == 0, 1, value.y / value.x)) %>%
+      select(GCAM_region_ID, year, adj_ratio)
+
+    # Now return adjust output ratios
+    L122.BiomassSecOutRatio_kgGJ_R_C_EUR_adj <- L121.feed_output_ratio_EUR %>%
+      repeat_add_columns(distinct(L122.DDGS_adjust_ratio, GCAM_region_ID)) %>%
+      left_join(select(L121.BiomassOilRatios_kgGJ_R_C_EUR, GCAM_region_ID, GCAM_commodity, rev_output.ratio = SecOutRatio),
+                by = c("GCAM_region_ID", "GCAM_commodity")) %>%
+      mutate(output.ratio = if_else(is.na(rev_output.ratio), output.ratio, rev_output.ratio)) %>%
+      select(GCAM_region_ID, GCAM_commodity, year, output.ratio) %>%
+      left_join(L122.DDGS_adjust_ratio, by = c("GCAM_region_ID", "year")) %>%
+      tidyr::replace_na(list(adj_ratio = 1)) %>%
+      mutate(SecOutRatio = output.ratio * adj_ratio) %>%
+      select(GCAM_region_ID, GCAM_commodity, year, SecOutRatio)
+
+    # recalculate output
+    L122.FeedOut_Mt_R_C_Yh_EUR <- L122.in_EJ_R_1stgenbio_F_Yh_EUR %>%
+      inner_join(L121.feed_output_ratio_EUR, by = c("passthrough.sector", "GCAM_commodity", "year")) %>%
+      left_join(select(L122.BiomassSecOutRatio_kgGJ_R_C_EUR_adj, GCAM_region_ID, GCAM_commodity, rev_output.ratio = SecOutRatio, year),
+                by = c("GCAM_region_ID", "GCAM_commodity", "year")) %>%
+      mutate(value = if_else(is.na(rev_output.ratio), value * output.ratio, value * rev_output.ratio)) %>%
+      select(GCAM_region_ID, GCAM_commodity, fractional.secondary.output, year, value)
 
     # 2. GAS PROCESSING ----------------------
     # Note: Gas processing input-output coefficients are exogenous
@@ -448,13 +471,22 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
       add_precursors("energy/A21.globaltech_secout") ->
       L122.FeedOut_Mt_R_C_Yh_EUR
 
+    L122.BiomassSecOutRatio_kgGJ_R_C_EUR_adj %>%
+      add_title("Adjusted secondary output ratios fro DDGS") %>%
+      add_units("kg / GJ") %>%
+      add_comments("Created to ensure DDGS output matches L108.ag_Feed_Mt_R_C_Y input") %>%
+      same_precursors_as(L122.FeedOut_Mt_R_C_Yh_EUR) %>%
+      add_precursors("L108.ag_Feed_Mt_R_C_Y") ->
+      L122.BiomassSecOutRatio_kgGJ_R_C_EUR_adj
+
     return_data(L122.out_EJ_R_gasproc_F_Yh_EUR,
                 L122.in_EJ_R_gasproc_F_Yh_EUR,
                 L122.IO_R_oilrefining_F_Yh_EUR,
                 L122.out_EJ_R_refining_F_Yh_EUR,
                 L122.in_EJ_R_refining_F_Yh_EUR,
                 L122.in_Mt_R_C_Yh_EUR,
-                L122.FeedOut_Mt_R_C_Yh_EUR)
+                L122.FeedOut_Mt_R_C_Yh_EUR,
+                L122.BiomassSecOutRatio_kgGJ_R_C_EUR_adj)
   } else {
     stop("Unknown command")
   }
