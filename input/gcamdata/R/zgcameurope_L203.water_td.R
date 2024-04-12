@@ -36,7 +36,7 @@ module_gcameurope_L203.water_td <- function(command, ...) {
                      FILE = "water/water_td_sectors",
                      "L103.water_mapping_R_GLU_B_W_Ws_share",
                      "L103.water_mapping_R_B_W_Ws_share",
-                     "L110.in_km3_water_primary",
+                     "L110.in_km3_water_primary_EUR",
                      "L1233.wdraw_km3_R_elec_EUR",
                      "L1233.wcons_km3_R_elec_EUR",
                      "L133.water_demand_livestock_R_B_W_km3",
@@ -170,7 +170,7 @@ module_gcameurope_L203.water_td <- function(command, ...) {
       filter_regions_europe()
 
     # Total withdrawal and consumption volumes by each region and sector
-    L203.water_km3_primary <- L110.in_km3_water_primary %>%
+    L203.water_km3_primary <- L110.in_km3_water_primary_EUR %>%
       mutate(water.sector = "Mining")
     L1233.wcons_km3_R_elec_EUR <- filter(L1233.wcons_km3_R_elec_EUR, water_type == "fresh") %>%
       mutate(water_type = "water consumption")
@@ -229,7 +229,7 @@ module_gcameurope_L203.water_td <- function(command, ...) {
                      "common/GCAM_region_names",
                      "L103.water_mapping_R_GLU_B_W_Ws_share",
                      "L103.water_mapping_R_B_W_Ws_share",
-                     "L110.in_km3_water_primary",
+                     "L110.in_km3_water_primary_EUR",
                      "L1233.wdraw_km3_R_elec_EUR",
                      "L1233.wcons_km3_R_elec_EUR",
                      "L133.water_demand_livestock_R_B_W_km3",
