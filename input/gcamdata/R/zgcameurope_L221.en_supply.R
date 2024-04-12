@@ -115,7 +115,7 @@ module_gcameurope_L221.en_supply <- function(command, ...) {
 
     L221.BiomassOilSecOut_kgGJ_R_C <- left_join_error_no_match(L122.BiomassSecOutRatio_kgGJ_R_C_EUR_adj, GCAM_region_names,
                                                                by = "GCAM_region_ID") %>%
-      select(region, GCAM_commodity, SecOutRatio)
+      select(region, GCAM_commodity, SecOutRatio, year)
 
     L221.globaltech_secout_R %>%
       gather_years() %>%
@@ -127,7 +127,7 @@ module_gcameurope_L221.en_supply <- function(command, ...) {
       ungroup() %>%
       filter(year %in% MODEL_YEARS) %>%
       # replace the region-specific secondary output coefficients where elsewhere indicated
-      left_join(L221.BiomassOilSecOut_kgGJ_R_C, by = c("region", technology = "GCAM_commodity")) %>%
+      left_join(L221.BiomassOilSecOut_kgGJ_R_C, by = c("region", technology = "GCAM_commodity", "year")) %>%
       mutate(output.ratio = if_else(is.na(SecOutRatio), output.ratio, SecOutRatio)) %>%
       select(region, supplysector, subsector, stub.technology = technology, fractional.secondary.output,
              output.ratio, year) -> L221.StubTechFractSecOut_en_EUR
