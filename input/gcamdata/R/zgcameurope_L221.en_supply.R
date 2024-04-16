@@ -115,7 +115,8 @@ module_gcameurope_L221.en_supply <- function(command, ...) {
 
     L221.BiomassOilSecOut_kgGJ_R_C <- left_join_error_no_match(L122.BiomassSecOutRatio_kgGJ_R_C_EUR_adj, GCAM_region_names,
                                                                by = "GCAM_region_ID") %>%
-      select(region, GCAM_commodity, SecOutRatio, year)
+      select(region, GCAM_commodity, SecOutRatio, year) %>%
+      mutate(GCAM_commodity = gsub("Corn", "regional corn for ethanol", GCAM_commodity))
 
     L221.globaltech_secout_R %>%
       gather_years() %>%
