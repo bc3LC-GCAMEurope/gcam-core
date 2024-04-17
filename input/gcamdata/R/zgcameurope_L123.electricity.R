@@ -18,13 +18,16 @@ module_gcameurope_L123.electricity <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "energy/mappings/enduse_fuel_aggregation",
              FILE = "energy/A23.chp_elecratio",
+             FILE = "common/GCAM32_to_EU",
+             "L101.CHP_IO_EUR",
              "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L123.out_EJ_R_elec_F_Yh_EUR",
              "L123.in_EJ_R_elec_F_Yh_EUR",
              "L123.eff_R_elec_F_Yh_EUR",
              "L123.out_EJ_R_indchp_F_Yh_EUR",
-             "L123.in_EJ_R_indchp_F_Yh_EUR"))
+             "L123.in_EJ_R_indchp_F_Yh_EUR",
+             "L123.eff_R_indchp_F_Yh_EUR"))
   } else if(command == driver.MAKE) {
 
     year <- value <- GCAM_region_ID <- fuel <- sector <- electricity <-
@@ -34,10 +37,11 @@ module_gcameurope_L123.electricity <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
+    GCAM32_to_EU <- get_data(all_data, "common/GCAM32_to_EU")
     enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
     A23.chp_elecratio <- get_data(all_data, "energy/A23.chp_elecratio")
     L1012.en_bal_EJ_R_Si_Fi_Yh_EUR <- get_data(all_data, "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR")
-
+    L101.CHP_IO_EUR <- get_data(all_data, "L101.CHP_IO_EUR")
 
     # 1. Electricity ===================================================
 
@@ -117,11 +121,30 @@ module_gcameurope_L123.electricity <- function(command, ...) {
       summarise_all(sum) %>%
       ungroup()
 
+    # Adjustments for regions that will have negative gas use in base year if we don't increase
+    # their elec coefficients
+    ADJ_REGIONS <- c("Iceland", "Malta", "Cyprus")
+    ADJ_REGION_IDS <- GCAM32_to_EU %>% filter(country_name %in% ADJ_REGIONS) %>% pull(GCAM_region_ID)
+
     # Estimates inputs for CHP in the industry sector based on outputs and the electricity ration by fuel (output/elec_ratio)
+    # First use calculated IO coefs from Eurostat, but apply limits based on A23.chp_elecratio
     L123.in_EJ_R_indchp_F_Yh_EUR <- L123.out_EJ_R_indchp_F_Yh_EUR %>%
       full_join(filter(A23.chp_elecratio, fuel != "hydrogen"), by = "fuel") %>%
-      mutate(value = value / elec_ratio) %>%
-      select(-elec_ratio)
+      mutate(product = if_else(fuel == "biomass", "Bioenergy", "Fossil energy")) %>%
+      left_join(L101.CHP_IO_EUR, by = c("GCAM_region_ID", "year", "product")) %>%
+      mutate(chp_coef = if_else(is.na(chp_coef), elec_ratio, chp_coef),
+             # Limit to within +/-50% of default
+             chp_coef_adj = if_else(chp_coef > elec_ratio, pmin(chp_coef, 1.5 * elec_ratio), chp_coef),
+             chp_coef_adj = if_else(chp_coef < elec_ratio, pmax(chp_coef, 0.5 * elec_ratio), chp_coef_adj),
+             chp_coef_adj = if_else(GCAM_region_ID %in% ADJ_REGION_IDS & fuel == "gas",
+                                    2.1 * elec_ratio, chp_coef_adj)) %>%
+      mutate(value = value / chp_coef_adj)
+
+    L123.eff_R_indchp_F_Yh_EUR <- L123.in_EJ_R_indchp_F_Yh_EUR %>%
+      select(GCAM_region_ID, sector, fuel, year, value = chp_coef_adj)
+
+    L123.in_EJ_R_indchp_F_Yh_EUR <- L123.in_EJ_R_indchp_F_Yh_EUR %>%
+      select(GCAM_region_ID, sector, fuel, year, value)
 
     # Save results -------------
     L123.out_EJ_R_elec_F_Yh_EUR %>%
@@ -153,10 +176,20 @@ module_gcameurope_L123.electricity <- function(command, ...) {
     L123.in_EJ_R_indchp_F_Yh_EUR %>%
       add_title("Inputs to industrial CHP by GCAM-Europe region / fuel / historical year") %>%
       add_units("EJ") %>%
-      same_precursors_as(L123.out_EJ_R_elec_F_Yh_EUR) ->
+      add_precursors("L101.CHP_IO_EUR", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
+                     "energy/mappings/enduse_fuel_aggregation", "energy/A23.chp_elecratio") ->
       L123.in_EJ_R_indchp_F_Yh_EUR
 
-    return_data(L123.out_EJ_R_elec_F_Yh_EUR, L123.in_EJ_R_elec_F_Yh_EUR, L123.eff_R_elec_F_Yh_EUR, L123.out_EJ_R_indchp_F_Yh_EUR, L123.in_EJ_R_indchp_F_Yh_EUR)
+
+    L123.eff_R_indchp_F_Yh_EUR %>%
+      add_title("CHP electricity efficiency by GCAM-Europe region / fuel / historical year") %>%
+      add_units("EJ") %>%
+      add_precursors("L101.CHP_IO_EUR", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
+                     "energy/mappings/enduse_fuel_aggregation", "energy/A23.chp_elecratio") ->
+      L123.eff_R_indchp_F_Yh_EUR
+
+    return_data(L123.out_EJ_R_elec_F_Yh_EUR, L123.in_EJ_R_elec_F_Yh_EUR, L123.eff_R_elec_F_Yh_EUR,
+                L123.out_EJ_R_indchp_F_Yh_EUR, L123.in_EJ_R_indchp_F_Yh_EUR, L123.eff_R_indchp_F_Yh_EUR)
   } else {
     stop("Unknown command")
   }

@@ -97,13 +97,28 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
       mutate(value = value * share) %>%
       select(GCAM_region_ID, technology, biomassOil_tech, year, value)
 
+    # Adjustments for regions that will have negative gas use in base year if we don't decrease
+    # their gas coefficients
+    # Will need to add this to L122.IO_R_oilrefining_F_Yh_EUR
+    ADJ_REGIONS <- c("Iceland", "Malta", "Cyprus")
+    ADJ_REGION_IDS <- GCAM_region_names %>% filter(region %in% ADJ_REGIONS) %>% pull(GCAM_region_ID)
+
     # To get the inputs, left_join with the technology coefficients so as to repeat rows for techs with multiple inputs
     # (e.g., corn, gas, electricity inputs to corn ethanol technology)
     L122.in_EJ_R_biofuel_F_Yh_EUR <- rename(L122.out_EJ_R_biofuel_Yh_EUR, output = value) %>%
       left_join(L122.globaltech_coef, by = c( "technology", "year")) %>%
       rename(coefficient = value) %>%
-      mutate(value = output * coefficient) %>%
+      mutate(coefficient = if_else(GCAM_region_ID %in% ADJ_REGION_IDS & minicam.energy.input == "wholesale gas",
+                                   0, coefficient),
+             value = output * coefficient) %>%
       select(GCAM_region_ID, sector, fuel, biomassOil_tech, year, value)
+
+    L122.IO_biofuel_EUR <- L122.in_EJ_R_biofuel_F_Yh_EUR %>%
+      filter(GCAM_region_ID %in% ADJ_REGION_IDS,  fuel == "gas", value != 0) %>%
+      left_join_error_no_match(L122.out_EJ_R_biofuel_Yh_EUR,
+                               by = c("GCAM_region_ID", "sector" = "technology", "biomassOil_tech", "year")) %>%
+      mutate(value = value.x / value.y) %>%
+      select(GCAM_region_ID, sector, fuel, year, value)
 
     # 1b GAS AND COAL TO LIQUIDS ------------
     # Create L122.out_EJ_R_gtlctl_Yh from L1012.en_bal_EJ_R_Si_Fi_Yh_EUR for gas to liquids (gtl) and coal to liquids (ctl) sectors
@@ -202,7 +217,8 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
       left_join(select(L122.out_EJ_R_oilrefining_Yh_EUR, -fuel), by = c("GCAM_region_ID", "sector", "year")) %>%
       mutate(value = if_else(value.y == 0, 0, value.x / value.y)) %>%
       select(-value.x, -value.y) %>%
-      bind_rows(L122.IO_EJ_gtlctl_F_Yh_estonia)
+      bind_rows(L122.IO_EJ_gtlctl_F_Yh_estonia) %>%
+      bind_rows(L122.IO_biofuel_EUR)
 
     # Combine all calibrated refinery input and output tables
     # Note - the biofuel tables have some extra columns that are used in subsequent steps but don't apply for these outputs

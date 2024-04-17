@@ -29,7 +29,8 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
     return(c("L101.GCAM_EUR_regions",
              "L101.en_bal_EJ_R_Si_Fi_Yh_EUR",
              "L101.in_EJ_R_trn_Fi_Yh_EUR",
-             "L101.in_EJ_R_bld_Fi_Yh_EUR"))
+             "L101.in_EJ_R_bld_Fi_Yh_EUR",
+             "L101.CHP_IO_EUR"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -61,7 +62,24 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       left_join_error_no_match(geo_to_iso_map, by = "geo") %>%
       # Ok to have NAs
       left_join(nrgbal_to_sector_map, by = "nrg_bal") %>%
-      left_join(siec_to_fuel_map, by = "siec") %>%
+      left_join(siec_to_fuel_map, by = "siec")
+
+    # save the overall fossil elec ratio of CHP
+    # the default values assume 25% in A23.chp_elecratio
+    # these cause issues because they are so low, so going to save the overall bioenergy and fossil
+    # IO values here (not saving individual fuel IOs because they are more problematic)
+    L101.CHP_IO_EUR <- L101.Eurostat_en_bal_ctry_hist %>%
+      filter(sector %in% c("out_chp_elec", "in_industry_chp"),
+             product %in% c("Bioenergy", "Fossil energy")) %>%
+      gather_years() %>%
+      filter(value != 0) %>%
+      group_by(iso, year, product) %>%
+      summarise(chp_coef = value[sector == "out_chp_elec"] / value[sector == "in_industry_chp"]) %>%
+      ungroup %>%
+      left_join_error_no_match(GCAM32_to_EU %>% select(iso, GCAM_region_ID), by = "iso") %>%
+      distinct(GCAM_region_ID, product, year, chp_coef)
+
+    L101.Eurostat_en_bal_ctry_hist <- L101.Eurostat_en_bal_ctry_hist %>%
       # Only want to remove NAs in sector/fuel
       filter(!is.na(sector), !is.na(fuel)) %>%
       mutate(fuel = if_else(fuel == "biomass_tradbio" & sector != "in_bld_resid", "biomass", fuel)) %>%
@@ -257,10 +275,18 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       same_precursors_as(L101.in_EJ_R_trn_Fi_Yh_EUR) ->
       L101.in_EJ_R_bld_Fi_Yh_EUR
 
+    L101.CHP_IO_EUR %>%
+      add_title("Eurostat IO ratios for elec production from CHP") %>%
+      add_units("EJ / EJ") %>%
+      add_comments("For bioenergy and fossils") %>%
+      same_precursors_as(L101.en_bal_EJ_R_Si_Fi_Yh_EUR) ->
+      L101.CHP_IO_EUR
+
     return_data(L101.GCAM_EUR_regions,
                 L101.en_bal_EJ_R_Si_Fi_Yh_EUR,
                 L101.in_EJ_R_trn_Fi_Yh_EUR,
-                L101.in_EJ_R_bld_Fi_Yh_EUR)
+                L101.in_EJ_R_bld_Fi_Yh_EUR,
+                L101.CHP_IO_EUR)
   } else {
     stop("Unknown command")
   }
