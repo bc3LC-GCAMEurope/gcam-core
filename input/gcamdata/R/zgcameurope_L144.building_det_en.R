@@ -126,6 +126,29 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       summarise(value_eurostat = sum(value_eurostat)) %>%
       ungroup()
 
+    # Some regions are missing resid others, so we calculate the average service share in the regions with resid others
+    # and add in those shares (with electricity) NOTE: Shares will be slightly less than average share since we add to sum
+    MEAN_RESID_OTHER_ELEC_PROP <- EUR_hhEnergyConsum_R_Y_S %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
+      group_by(GCAM_region_ID) %>%
+      filter(any(service == "resid others" & fuel == "electricity")) %>%
+      summarise(resid_other_elec_prop = value_eurostat[service == "resid others" & fuel == "electricity"] / sum(value_eurostat)) %>%
+      ungroup %>%
+      filter(resid_other_elec_prop != 0) %>%
+      summarise(mean(resid_other_elec_prop)) %>%  pull()
+
+    missing_resid_other_elec <- EUR_hhEnergyConsum_R_Y_S %>%
+      group_by(GCAM_region_ID, year) %>%
+      filter(!any(service == "resid others" & fuel == "electricity")) %>%
+      summarise(value_eurostat = sum(value_eurostat)) %>%
+      ungroup %>%
+      mutate(value_eurostat = MEAN_RESID_OTHER_ELEC_PROP * value_eurostat,
+             service = "resid others",
+             fuel = "electricity",
+             unit = "TJ")
+
+    EUR_hhEnergyConsum_R_Y_S <- bind_rows(EUR_hhEnergyConsum_R_Y_S, missing_resid_other_elec)
+
     # Compute the service-fuel shares and add them to the GCAM basic shares (A44.share_serv_fuel)
     EUR_hhEnergyConsum_shares <- EUR_hhEnergyConsum_R_Y_S %>%
       # filter to calib techs
