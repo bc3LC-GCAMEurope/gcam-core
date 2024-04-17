@@ -136,6 +136,8 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       tidyr::separate(sector, into = c("flow", "sector"), sep = "_", extra = "merge") %>%
       tidyr::pivot_wider(names_from = flow, values_from = value) %>%
       rename(input = `in`, output = out) %>%
+      # remove sectors that only have an output
+      filter(input != 0, !is.na(input)) %>%
       # NAs in output are just end-use sectors, replace with 0
       tidyr::replace_na(list(output = 0)) %>%
       mutate(net = input - output,
