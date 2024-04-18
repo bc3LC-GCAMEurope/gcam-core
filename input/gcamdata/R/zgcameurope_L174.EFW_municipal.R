@@ -237,10 +237,7 @@ module_gcameurope_L174.EFW_municipal <- function(command, ...) {
       ungroup()
 
     # Region-level input-output coefficients, by process (sector)
-    L174.IO_GJkm3_R_muniEFW_F_Yh_EUR <- L174.in_ALL_ctry_muniEFW_F_Yh %>%
-      left_join_error_no_match(select(iso_GCAM_regID, iso, GCAM_region_ID),
-                               by = "iso") %>%
-      semi_join(L101.en_bal_EJ_R_Si_Fi_Yh_EUR, by = "GCAM_region_ID") %>%
+    L174.IO_GJkm3_R_muniEFW_F_Yh_EUR <- L174.in_ALL_R_muniEFW_F_Yh %>%
       group_by(GCAM_region_ID, sector, fuel, year) %>%
       summarise(water_km3 = sum(water_km3),
                 energy_EJ = sum(energy_EJ),
