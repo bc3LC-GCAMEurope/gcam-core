@@ -41,11 +41,11 @@ module_gcameurope_L203.water_td <- function(command, ...) {
                      "L1233.wcons_km3_R_elec_EUR",
                      "L133.water_demand_livestock_R_B_W_km3",
                      "L125.LC_bm2_R_GLU",
-                     "L132.water_km3_R_ind_Yh",
+                     "L132.water_km3_R_ind_Yh_EUR",
                      "L145.municipal_water_R_W_Yh_km3",
                      "L171.share_R_desal_basin",
-                     "L173.in_desal_km3_ctry_ind_Yh",
-                     "L173.in_desal_km3_ctry_muni_Yh",
+                     "L173.in_desal_km3_ctry_ind_Yh_EUR",
+                     "L173.in_desal_km3_ctry_muni_Yh_EUR",
                      OUTPUTS_TO_COPY_FILTER)
   MODULE_OUTPUTS <- c("L203.Production_watertd_EUR",
                       paste0(OUTPUTS_TO_COPY_FILTER, "_EUR"))
@@ -127,11 +127,11 @@ module_gcameurope_L203.water_td <- function(command, ...) {
     # share (desal versus freshwater withdrawals). The first part below computes the water_type shares by region, from
     # the total water withdrawals by sector and the desal water inputs. Note that the basin-wise share of withdrawals do
     # not consider use of desalinated water (as per the definition of "withdrawals").
-    L173.in_desal_km3_ctry_ind_Yh <- mutate(L173.in_desal_km3_ctry_ind_Yh, water.sector = water.MANUFACTURING) %>%
+    L173.in_desal_km3_ctry_ind_Yh_EUR <- mutate(L173.in_desal_km3_ctry_ind_Yh_EUR, water.sector = water.MANUFACTURING) %>%
       rename(desal_km3 = desal_ind_km3)
-    L173.in_desal_km3_ctry_muni_Yh <- mutate(L173.in_desal_km3_ctry_muni_Yh, water.sector = water.MUNICIPAL) %>%
+    L173.in_desal_km3_ctry_muni_Yh_EUR <- mutate(L173.in_desal_km3_ctry_muni_Yh_EUR, water.sector = water.MUNICIPAL) %>%
       rename(desal_km3 = desal_muni_km3)
-    L203.in_desal_km3_ctry_S_Yh <- bind_rows(L173.in_desal_km3_ctry_ind_Yh, L173.in_desal_km3_ctry_muni_Yh)
+    L203.in_desal_km3_ctry_S_Yh <- bind_rows(L173.in_desal_km3_ctry_ind_Yh_EUR, L173.in_desal_km3_ctry_muni_Yh_EUR)
     L203.watertd_desal <- filter(L203.in_desal_km3_ctry_S_Yh, year %in% MODEL_BASE_YEARS) %>%
       left_join_error_no_match(select(iso_GCAM_regID, iso, GCAM_region_ID), by = "iso") %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
@@ -146,7 +146,7 @@ module_gcameurope_L203.water_td <- function(command, ...) {
     # 3. L203.water_type_shares -------------------
     # Prepare the water withdrawals by industry and municipal sectors for merging, merge, and deduct
     # the input of desalinated water above to calibrate the input from "water withdrawals"
-    L203.water_km3_R_ind_Yh <- mutate(L132.water_km3_R_ind_Yh, water.sector = water.MANUFACTURING) %>%
+    L203.water_km3_R_ind_Yh <- mutate(L132.water_km3_R_ind_Yh_EUR, water.sector = water.MANUFACTURING) %>%
       filter(water_type == "water withdrawals") %>%
       rename(total_water_km3 = water_km3)
 
@@ -178,7 +178,7 @@ module_gcameurope_L203.water_td <- function(command, ...) {
       mutate(water_type = "water withdrawals")
     L203.water_km3_elec <- bind_rows(L1233.wdraw_km3_R_elec_EUR, L1233.wcons_km3_R_elec_EUR) %>%
       mutate(water.sector = "Electricity")
-    L203.water_km3_ind <- L132.water_km3_R_ind_Yh %>%
+    L203.water_km3_ind <- L132.water_km3_R_ind_Yh_EUR %>%
       rename(value = water_km3) %>%
       mutate(water.sector = water.MANUFACTURING)
     L203.water_km3_livestock <- L133.water_demand_livestock_R_B_W_km3 %>%
@@ -234,10 +234,10 @@ module_gcameurope_L203.water_td <- function(command, ...) {
                      "L1233.wcons_km3_R_elec_EUR",
                      "L133.water_demand_livestock_R_B_W_km3",
                      "L125.LC_bm2_R_GLU",
-                     "L132.water_km3_R_ind_Yh",
+                     "L132.water_km3_R_ind_Yh_EUR",
                      "L145.municipal_water_R_W_Yh_km3",
-                     "L173.in_desal_km3_ctry_ind_Yh",
-                     "L173.in_desal_km3_ctry_muni_Yh") ->
+                     "L173.in_desal_km3_ctry_ind_Yh_EUR",
+                     "L173.in_desal_km3_ctry_muni_Yh_EUR") ->
       L203.Production_watertd_EUR
 
     return_data(MODULE_OUTPUTS)

@@ -20,7 +20,7 @@ module_gcameurope_L232.water_demand_manufacturing <- function(command, ...) {
     return(c(FILE = "common/GCAM_region_names",
              FILE = "water/water_td_sectors",
              FILE = "energy/A32.globaltech_coef",
-             "L132.water_km3_R_ind_Yh",
+             "L132.water_km3_R_ind_Yh_EUR",
              "L232.StubTechProd_industry_EUR"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L232.TechCoef_EUR"))
@@ -37,7 +37,7 @@ module_gcameurope_L232.water_demand_manufacturing <- function(command, ...) {
     GCAM_region_names <- get_data(all_data, "common/GCAM_region_names")
     water_td_sectors <- get_data(all_data, "water/water_td_sectors")
     A32.globaltech_coef <- get_data(all_data, "energy/A32.globaltech_coef")
-    L132.water_km3_R_ind_Yh <- get_data(all_data, "L132.water_km3_R_ind_Yh") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
+    L132.water_km3_R_ind_Yh_EUR <- get_data(all_data, "L132.water_km3_R_ind_Yh_EUR") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
 
     # Extrapolate this one to all model years if necessary
     get_data(all_data, "L232.StubTechProd_industry_EUR") %>%
@@ -54,7 +54,7 @@ module_gcameurope_L232.water_demand_manufacturing <- function(command, ...) {
     # First, compute historical coefficients, as total withdrawals/consumption divided by industrial sector output
     # (base-service)
     L232.water_km3_R_ind_Yh <-
-      filter(L132.water_km3_R_ind_Yh, year %in% MODEL_BASE_YEARS) %>%
+      filter(L132.water_km3_R_ind_Yh_EUR, year %in% MODEL_BASE_YEARS) %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       left_join_error_no_match(L232.StubTechProd_industry_EUR, by = c("region", "year")) %>%
       rename(energy_EJ = calOutputValue) %>%
@@ -83,7 +83,7 @@ module_gcameurope_L232.water_demand_manufacturing <- function(command, ...) {
       add_precursors("common/GCAM_region_names",
                      "water/water_td_sectors",
                      "energy/A32.globaltech_coef",
-                     "L132.water_km3_R_ind_Yh",
+                     "L132.water_km3_R_ind_Yh_EUR",
                      "L232.StubTechProd_industry_EUR") ->
       L232.TechCoef_EUR
 

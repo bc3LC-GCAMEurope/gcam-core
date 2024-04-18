@@ -16,6 +16,10 @@
 #' @importFrom tidyr complete gather nesting replace_na
 #' @author RH February 2024
 module_gcameurope_L174.EFW_municipal <- function(command, ...) {
+  MODULE_OUTPUTS <- c("L174.in_EJ_R_muniEFWtot_F_Yh_EUR",
+                      "L174.IO_GJkm3_R_muniEFW_F_Yh_EUR",
+                      "L174.water_km3_R_muniEFW_Yh_EUR",
+                      "L174.WWtrtfrac_R_muni_Yh_EUR")
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/iso_GCAM_regID",
              FILE = "water/EFW_mapping",
@@ -24,11 +28,10 @@ module_gcameurope_L174.EFW_municipal <- function(command, ...) {
              "L101.en_bal_EJ_R_Si_Fi_Yh_EUR",
              "L145.municipal_water_ctry_W_Yh_km3",
              "L145.municipal_water_eff_ctry_Yh",
-             "L173.trtshr_ctry_Yh",
-             "L173.in_desal_km3_ctry_muni_Yh"))
+             "L173.trtshr_ctry_Yh_EUR",
+             "L173.in_desal_km3_ctry_muni_Yh_EUR"))
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L174.in_EJ_R_muniEFWtot_F_Yh_EUR",
-             "L174.IO_GJkm3_R_muniEFW_F_Yh_EUR"))
+    return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -48,10 +51,22 @@ module_gcameurope_L174.EFW_municipal <- function(command, ...) {
     A74.globaltech_coef <- get_data(all_data, "water/A74.globaltech_coef")
 
     L101.en_bal_EJ_R_Si_Fi_Yh_EUR <- get_data(all_data, "L101.en_bal_EJ_R_Si_Fi_Yh_EUR")
-    L145.municipal_water_ctry_W_Yh_km3 <- get_data(all_data, "L145.municipal_water_ctry_W_Yh_km3", strip_attributes = TRUE)
-    L145.municipal_water_eff_ctry_Yh <- get_data(all_data, "L145.municipal_water_eff_ctry_Yh")
-    L173.trtshr_ctry_Yh <- get_data(all_data, "L173.trtshr_ctry_Yh")
-    L173.in_desal_km3_ctry_muni_Yh <- get_data(all_data, "L173.in_desal_km3_ctry_muni_Yh")
+    L145.municipal_water_ctry_W_Yh_km3 <- get_data(all_data, "L145.municipal_water_ctry_W_Yh_km3", strip_attributes = TRUE) %>%
+      mutate(iso = gsub("srb", "scg", iso),
+             iso = gsub("mne", "scg", iso)) %>%
+      group_by(iso, year) %>%
+      summarise(withdrawals = sum(withdrawals)) %>%
+      ungroup %>%
+      filter_regions_europe() %>%
+      # remove some islands
+      filter(!iso %in% c("flk", "gib", "mco", "tca", "vgb"))
+    L145.municipal_water_eff_ctry_Yh <- get_data(all_data, "L145.municipal_water_eff_ctry_Yh")  %>%
+      mutate(iso = gsub("srb", "scg", iso)) %>%
+      filter_regions_europe() %>%
+      # remove some islands
+      filter(!iso %in% c("flk", "gib", "mco", "tca", "vgb"))
+    L173.trtshr_ctry_Yh_EUR <- get_data(all_data, "L173.trtshr_ctry_Yh_EUR")
+    L173.in_desal_km3_ctry_muni_Yh_EUR <- get_data(all_data, "L173.in_desal_km3_ctry_muni_Yh_EUR")
 
     # Keeping all water calculations needed for energy calculations
     # But removing any water outputs that would be unchanged from GCAM-Europe
@@ -91,7 +106,7 @@ module_gcameurope_L174.EFW_municipal <- function(command, ...) {
     L174.water_km3_ctry_muniWWTrt_Yh <- L174.water_km3_ctry_muniAbs_Yh %>%
       mutate(sector = muniWWTrt) %>%
       left_join_error_no_match(L145.municipal_water_eff_ctry_Yh, by = c("iso", "year")) %>%
-      left_join_error_no_match(L173.trtshr_ctry_Yh, by = c("iso", "year"),
+      left_join_error_no_match(L173.trtshr_ctry_Yh_EUR, by = c("iso", "year"),
                                ignore_columns = "trtshr") %>%
       # Not all countries are present in the trtshr data; just assume zero wastewater treatment share
       replace_na(list(trtshr = 0)) %>%
@@ -102,7 +117,7 @@ module_gcameurope_L174.EFW_municipal <- function(command, ...) {
     # Part 1.5: Adjust municipal water abstraction and treatment flow volumes for desalinated water
     # Abstraction and treatment-related energy for desalinated water is already accounted
     L174.water_km3_ctry_muniAbs_Yh <-
-      left_join_error_no_match(L174.water_km3_ctry_muniAbs_Yh, L173.in_desal_km3_ctry_muni_Yh,
+      left_join_error_no_match(L174.water_km3_ctry_muniAbs_Yh, L173.in_desal_km3_ctry_muni_Yh_EUR,
                                by = c("iso", "year"),
                                ignore_columns = "desal_muni_km3") %>%
       mutate(desal_muni_km3 = if_else(is.na(desal_muni_km3), 0, desal_muni_km3),
@@ -110,6 +125,17 @@ module_gcameurope_L174.EFW_municipal <- function(command, ...) {
       select(-desal_muni_km3)
 
     L174.water_km3_ctry_muniTrt_Yh <- mutate(L174.water_km3_ctry_muniAbs_Yh, sector = muniTrt)
+
+    # Merge the four country-level tables and aggregate by GCAM region (water flow volumes)
+    # This table is written out
+    L174.water_km3_R_muniEFW_Yh_EUR <- bind_rows(L174.water_km3_ctry_muniAbs_Yh,
+                                             L174.water_km3_ctry_muniTrt_Yh,
+                                             L174.water_km3_ctry_muniDist_Yh,
+                                             L174.water_km3_ctry_muniWWTrt_Yh) %>%
+      left_join_error_no_match(select(iso_GCAM_regID, iso, GCAM_region_ID), by = "iso") %>%
+      group_by(GCAM_region_ID, sector, year) %>%
+      summarise(water_km3 = sum(water_km3)) %>%
+      ungroup()
 
     # Part 2: Calculating energy for water requirements associated with manufacturing freshwater withdrawal volumes ------
     # This step starts by joining water flow volumes and EFW coefficients, adjusting abstraction-related coefficients
@@ -223,6 +249,20 @@ module_gcameurope_L174.EFW_municipal <- function(command, ...) {
       mutate(coefficient = if_else(water_km3 == 0, default_coef, energy_EJ / water_km3)) %>%
       select(GCAM_region_ID, sector, fuel, year, coefficient)
 
+    # Part 4: Calculating region-level wastewater treatment fractions ----------------.
+    # The numerator is the total volume of wastewater treated, calculated above. The denominator is the total water
+    # withdrawals of the municipal sector (this includes desalinated water used by the municipal sector)
+    L174.WWtrtfrac_R_muni_Yh_EUR <- subset(L174.in_ALL_ctry_muniEFW_F_Yh, sector == muniWWTrt) %>%
+      rename(WWtrt_km3 = water_km3) %>%
+      left_join_error_no_match(L145.municipal_water_ctry_W_Yh_km3, by = c("iso", "year")) %>%
+      left_join_error_no_match(select(iso_GCAM_regID, iso, GCAM_region_ID), by = "iso") %>%
+      group_by(GCAM_region_ID, sector, year) %>%
+      summarise(WWtrt_km3 = sum(WWtrt_km3),
+                water_km3 = sum(withdrawals)) %>%
+      ungroup() %>%
+      mutate(WWtrtfrac = WWtrt_km3 / water_km3) %>%
+      select(GCAM_region_ID, sector, year, WWtrtfrac)
+
     # Produce outputs  ===================================================
     L174.in_EJ_R_muniEFWtot_F_Yh_EUR %>%
       add_title("GCAM-Europe Electricity energy for municipal water processes by region / historical year") %>%
@@ -230,7 +270,7 @@ module_gcameurope_L174.EFW_municipal <- function(command, ...) {
       add_comments("Amounts of energy capped at exogenous threshold of country-level sectoral electricity demands") %>%
       add_precursors("common/iso_GCAM_regID", "water/EFW_mapping", "water/Liu_EFW_inventory", "water/A74.globaltech_coef",
                      "L101.en_bal_EJ_R_Si_Fi_Yh_EUR", "L145.municipal_water_ctry_W_Yh_km3", "L145.municipal_water_eff_ctry_Yh",
-                     "L173.trtshr_ctry_Yh", "L173.in_desal_km3_ctry_muni_Yh") ->
+                     "L173.trtshr_ctry_Yh_EUR", "L173.in_desal_km3_ctry_muni_Yh_EUR") ->
       L174.in_EJ_R_muniEFWtot_F_Yh_EUR
 
     L174.IO_GJkm3_R_muniEFW_F_Yh_EUR %>%
@@ -240,9 +280,27 @@ module_gcameurope_L174.EFW_municipal <- function(command, ...) {
       same_precursors_as(L174.in_EJ_R_muniEFWtot_F_Yh_EUR) ->
       L174.IO_GJkm3_R_muniEFW_F_Yh_EUR
 
+    L174.water_km3_R_muniEFW_Yh_EUR %>%
+      add_title("GCAM_Europe Water flow volumes for municipal water processes by region / historical year") %>%
+      add_units("km^3") %>%
+      add_comments("Amounts of water abstracted, treated, and the wastewater treated in the manufacturing sector") %>%
+      add_precursors("water/EFW_mapping",
+                     "water/Liu_EFW_inventory",
+                     "L145.municipal_water_ctry_W_Yh_km3",
+                     "L145.municipal_water_eff_ctry_Yh",
+                     "L173.trtshr_ctry_Yh_EUR",
+                     "L173.in_desal_km3_ctry_muni_Yh_EUR") ->
+      L174.water_km3_R_muniEFW_Yh_EUR
 
-    return_data(L174.in_EJ_R_muniEFWtot_F_Yh_EUR,
-                L174.IO_GJkm3_R_muniEFW_F_Yh_EUR)
+    L174.WWtrtfrac_R_muni_Yh_EUR %>%
+      add_title("GCAM_Europe Municipal wastewater treated divided by municipal water withdrawals by GCAM region / historical year") %>%
+      add_units("Unitless share") %>%
+      add_comments("This fraction relates wastewater treatment volumes to municipal water withdrawals") %>%
+      same_precursors_as(L174.water_km3_R_muniEFW_Yh_EUR) %>%
+      add_precursors("common/iso_GCAM_regID") ->
+      L174.WWtrtfrac_R_muni_Yh_EUR
+
+    return_data(MODULE_OUTPUTS)
   } else {
     stop("Unknown command")
   }
