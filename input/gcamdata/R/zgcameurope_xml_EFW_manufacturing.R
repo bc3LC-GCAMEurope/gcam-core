@@ -1,6 +1,6 @@
 # Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
 
-#' module_water_EFW_manufacturing_xml
+#' module_gcameurope_EFW_manufacturing_xml
 #'
 #' Construct XML data structure for \code{EFW_manufacturing_EUR.xml}.
 #'
@@ -9,7 +9,7 @@
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{EFW_manufacturing_EUR.xml}.
-module_water_EFW_manufacturing_xml <- function(command, ...) {
+module_gcameurope_EFW_manufacturing_xml <- function(command, ...) {
   MODULE_INPUTS <- c("L273.Supplysector_ind_EUR",
                      "L273.FinalEnergyKeyword_ind_EUR",
                      "L273.SubsectorLogit_ind_EUR",
