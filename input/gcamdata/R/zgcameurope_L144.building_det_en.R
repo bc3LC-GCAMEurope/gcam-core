@@ -147,7 +147,14 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
              fuel = "electricity",
              unit = "TJ")
 
-    EUR_hhEnergyConsum_R_Y_S <- bind_rows(EUR_hhEnergyConsum_R_Y_S, missing_resid_other_elec)
+    EUR_hhEnergyConsum_R_Y_S <- bind_rows(EUR_hhEnergyConsum_R_Y_S, missing_resid_other_elec) %>%
+      # also ensure that there are no zeros for resid others electricity
+      group_by(GCAM_region_ID, year) %>%
+      mutate(sum_energy = sum(value_eurostat)) %>%
+      ungroup %>%
+      mutate(value_eurostat = if_else(service == "resid others" & fuel == "electricity" & value_eurostat == 0,
+                                      sum_energy * MEAN_RESID_OTHER_ELEC_PROP, value_eurostat)) %>%
+      select(-sum_energy)
 
     # Compute the service-fuel shares and add them to the GCAM basic shares (A44.share_serv_fuel)
     EUR_hhEnergyConsum_shares <- EUR_hhEnergyConsum_R_Y_S %>%
@@ -761,7 +768,10 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       # Aggregate across fuel types (by region, sector, service)
       group_by(GCAM_region_ID, sector, service, year) %>%
       summarise(value = sum(value)) %>%
-      ungroup() ->
+      ungroup() %>%
+      # explicitly set zeros for any services without values
+      complete(nesting(GCAM_region_ID, year), nesting(sector, service)) %>%
+      tidyr::replace_na(list(value = 0)) ->
       L144.base_service_EJ_serv_EUR # This is a final output table.
 
     # 3 Internal gains ##############################################################################################
