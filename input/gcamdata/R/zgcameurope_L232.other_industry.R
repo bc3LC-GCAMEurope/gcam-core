@@ -310,7 +310,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
                                  filter(grepl("cogen", technology)),
                                by = c("year", "fuel" = "subsector.name")) %>%
       mutate(output.ratio = value / efficiency,
-             output.ratio = round(output.ratio, energy.DIGITS_EFFICIENCY),
+             output.ratio = round(output.ratio, energy.DIGITS_COEFFICIENT),
              fractional.secondary.output = "electricity") %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       select(region, supplysector = sector.name, subsector = fuel,

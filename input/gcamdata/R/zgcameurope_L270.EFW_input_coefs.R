@@ -85,7 +85,7 @@ module_gcameurope_L270.EFW_input_coefs <- function(command, ...) {
       select(region, water.supplysector, minicam.energy.input, year, coef_revised) %>%
       group_by(region, water.supplysector, minicam.energy.input) %>%
       complete(year = MODEL_YEARS) %>%
-      mutate(coef_revised = if_else(year > 2010, coef_revised[year == 2010], coef_revised)) %>%
+      mutate(coef_revised = if_else(year > 2010, coef_revised[year == 2015], coef_revised)) %>%
       ungroup()
 
     # This method uses the function used in GCAM (C++) for determining non-CO2 pollutant emissions factor reduction as a
