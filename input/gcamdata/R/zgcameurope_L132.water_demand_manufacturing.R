@@ -51,6 +51,7 @@ module_gcameurope_L132.water_demand_manufacturing <- function(command, ...) {
     Vassolo_mfg_water <- get_data(all_data, "water/Vassolo_mfg_water")
 
     # only want regions not in Eurostat
+    L101.en_bal_EJ_R_Si_Fi_Yh_EUR <- get_data(all_data, "L101.en_bal_EJ_R_Si_Fi_Yh_EUR")
     L101.en_bal_EJ_ctry_Si_Fi_Yh_full <- get_data(all_data, "L101.en_bal_EJ_ctry_Si_Fi_Yh_full") %>%
       anti_join(L101.en_bal_EJ_R_Si_Fi_Yh_EUR, by = "GCAM_region_ID")
     L101.en_bal_EJ_R_Si_Fi_Yh_EUR <- get_data(all_data, "L101.en_bal_EJ_R_Si_Fi_Yh_EUR")
