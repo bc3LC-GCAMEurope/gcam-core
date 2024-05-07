@@ -23,7 +23,8 @@
 #' @author RH February 2024
 module_gcameurope_L126.distribution <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
-    return(c("L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
+    return(c(FILE = "common/GCAM_region_names",
+             "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
              "L122.out_EJ_R_gasproc_F_Yh_EUR",
              "L123.out_EJ_R_elec_F_Yh_EUR",
              "L123.out_EJ_R_indchp_F_Yh_EUR"))
@@ -54,7 +55,7 @@ module_gcameurope_L126.distribution <- function(command, ...) {
     L122.out_EJ_R_gasproc_F_Yh_EUR <- get_data(all_data, "L122.out_EJ_R_gasproc_F_Yh_EUR")
     L123.out_EJ_R_elec_F_Yh_EUR <- get_data(all_data, "L123.out_EJ_R_elec_F_Yh_EUR")
     L123.out_EJ_R_indchp_F_Yh_EUR <- get_data(all_data, "L123.out_EJ_R_indchp_F_Yh_EUR")
-
+    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names")
     # 1. ELECTRICITY OWNUSE ===================================================
     # i.e., electricity consumed onsite prior to any transmission and distribution losses
     # Summing industrial CHP electricity generation and electricity generation by GCAM region ID and year
@@ -119,6 +120,15 @@ module_gcameurope_L126.distribution <- function(command, ...) {
       mutate(value_electd_out = value - value_electd, # Creating values for table, L126.out_EJ_R_electd_F_Yh_EUR (i.e. ouput), by subtracting electricity generation (without ownuse) by transmission and distribution consumption
              value_electd_IO = value / value_electd_out) -> # Creating values for table, L126.IO_R_electd_F_Yh_EUR, by dividing input by output
       Electricity_distribution_all
+
+    # Need to adjust Moldova because the majority of electricity is imported
+    # so production - losses results in missing electricity for demand
+    # Set maximum IO to 1.5
+    MOLDOVA_ID <- GCAM_region_names %>% filter(region == "Moldova") %>%  pull(GCAM_region_ID)
+    Electricity_distribution_all <- Electricity_distribution_all %>%
+      mutate(value_electd_IO = if_else(value_electd_IO > 1.5 & GCAM_region_ID == MOLDOVA_ID, 1.5, value_electd_IO),
+             value_electd_out = value / value_electd_IO)
+
 
     # Table Electricity_distribution_all is separated to create the final tables
     Electricity_distribution_all %>%

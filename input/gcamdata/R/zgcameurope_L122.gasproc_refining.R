@@ -112,10 +112,10 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
       select(GCAM_region_ID, sector, fuel, biomassOil_tech, year, value)
 
     L122.IO_biofuel_EUR <- L122.in_EJ_R_biofuel_F_Yh_EUR %>%
-      filter(GCAM_region_ID %in% ADJ_REGION_IDS,  fuel == "gas", value != 0) %>%
+      filter(GCAM_region_ID %in% ADJ_REGION_IDS,  fuel == "gas") %>%
       left_join_error_no_match(L122.out_EJ_R_biofuel_Yh_EUR,
                                by = c("GCAM_region_ID", "sector" = "technology", "biomassOil_tech", "year")) %>%
-      mutate(value = value.x / value.y) %>%
+      mutate(value = if_else(value.y == 0, 0, value.x / value.y)) %>%
       select(GCAM_region_ID, sector, fuel, year, value)
 
     # 1b GAS AND COAL TO LIQUIDS ------------

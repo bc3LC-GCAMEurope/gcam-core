@@ -31,3 +31,5 @@ net_CALCULATED_gas works,in_industry_energy
 net_industry_ownuse,in_industry_energy
 net_gas works,in_industry_energy
 net_CALCULATED_industry_gtl,in_industry_energy
+net_industry_gtl,in_industry_energy
+net_industry_ctl,in_industry_energy

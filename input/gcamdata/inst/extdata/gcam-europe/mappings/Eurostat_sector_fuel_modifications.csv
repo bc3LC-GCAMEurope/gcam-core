@@ -22,3 +22,4 @@ in_trn_road,biomass,in_trn_road,refined biofuels_ethanol,0
 net_industry_oil refining,refined liquids,net_oil refining,refined liquids,0
 net_industry_oil refining,electricity,net_oil refining,electricity,0
 net_industry_oil refining,gas,net_oil refining,gas,0
+net_industry_oil refining,coal,net_industry_energy transformation,coal,0

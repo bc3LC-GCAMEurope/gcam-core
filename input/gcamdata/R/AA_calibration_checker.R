@@ -80,14 +80,14 @@
 #'     }
 #'
 #'     # 1. Stub techs with explicit cal input/output -------------------------------
-#'     StubTech_CalInput <- bind_rows(lapply(c(CAL_INPUTS, CAL_INPUTS_EUR), get)) %>%
+#'     StubTech_CalInput <- bind_rows(lapply(c(CAL_INPUTS, CAL_INPUTS_EUR), get, envir=sys.frame(sys.parent(0)))) %>%
 #'       select(-share.weight.year, -subs.share.weight, -tech.share.weight, -year.share.weight, -share.weight) %>%
 #'       replace_na(list(sce = TRN_SCE)) %>%
 #'       filter(sce == TRN_SCE) %>%
 #'       mutate(subsector = if_else(is.na(subsector), tranSubsector, subsector)) %>%
 #'       select(-sce, -tranSubsector, calInputValue = calibrated.value)
 #'
-#'     StubTech_CalOutput <- bind_rows(lapply(c(CAL_OUTPUTS, CAL_OUTPUTS_EUR), get)) %>%
+#'     StubTech_CalOutput <- bind_rows(lapply(c(CAL_OUTPUTS, CAL_OUTPUTS_EUR), get, envir=sys.frame(sys.parent(0)))) %>%
 #'       select(-share.weight.year, -subs.share.weight, -tech.share.weight, -year.share.weight, -share.weight,
 #'              -subsector.share.weight) %>%
 #'       mutate(stub.technology = if_else(is.na(stub.technology), technology, stub.technology),
@@ -95,11 +95,11 @@
 #'       select(-technology, -fixedOutput)
 #'
 #'     # 2a. Combine global and regional coefs -------------
-#'     StubTechCoef <- bind_rows(lapply(c(STUBTECH_COEFS, STUBTECH_COEFS_EUR), get)) %>%
+#'     StubTechCoef <- bind_rows(lapply(c(STUBTECH_COEFS, STUBTECH_COEFS_EUR), get, envir=sys.frame(sys.parent(0)))) %>%
 #'       mutate(coefficient = if_else(is.na(coefficient), 1 / efficiency, coefficient)) %>%
 #'       select(-market.name, -efficiency)
 #'
-#'     AllCoefs <- bind_rows(lapply(GLOBAL_COEFS, get)) %>%
+#'     AllCoefs <- bind_rows(lapply(GLOBAL_COEFS, get, envir=sys.frame(sys.parent(0)))) %>%
 #'       rename(supplysector = sector.name, subsector = subsector.name,
 #'              stub.technology = technology) %>%
 #'       gcamdata::repeat_add_columns(distinct(StubTech_CalInput, region)) %>%
@@ -190,7 +190,7 @@
 #'     StubTechCoef_Dist <- StubTechCoef %>%
 #'       semi_join(L226.GlobalTechEff_en, by = c("supplysector" = "sector.name"))
 #'
-#'     AllCoefs_Dist <- bind_rows(lapply(GLOBAL_EFFS, get)) %>%
+#'     AllCoefs_Dist <- bind_rows(lapply(GLOBAL_EFFS, get, envir=sys.frame(sys.parent(0)))) %>%
 #'       rename(supplysector = sector.name, subsector = subsector.name,
 #'              stub.technology = technology) %>%
 #'       mutate(coefficient = 1 / efficiency,
@@ -248,7 +248,7 @@
 #'       mutate(efficiency = if_else(is.na(efficiency), 1 / coefficient, efficiency)) %>%
 #'       select(-coefficient)
 #'
-#'     AllEff_Dist <- bind_rows(lapply(GLOBAL_EFFS, get)) %>%
+#'     AllEff_Dist <- bind_rows(lapply(GLOBAL_EFFS, get, envir=sys.frame(sys.parent(0)))) %>%
 #'       rename(supplysector = sector.name, subsector = subsector.name,
 #'              stub.technology = technology) %>%
 #'       mutate(stub.technology = if_else(is.na(stub.technology), intermittent.technology, stub.technology)) %>%
@@ -276,7 +276,7 @@
 #'
 #'     # 5b. Outputs: Calculate implied outputs with secondary output --------------------------------
 #'     # for now just cogen
-#'     SecOutRatio <- bind_rows(lapply(GLOBAL_SECOUT, get))  %>%
+#'     SecOutRatio <- bind_rows(lapply(GLOBAL_SECOUT, get, envir=sys.frame(sys.parent(0))))  %>%
 #'       rename(supplysector = sector.name, subsector = subsector.name,
 #'              stub.technology = technology) %>%
 #'       gcamdata::repeat_add_columns(distinct(StubTech_CalInput, region)) %>%
@@ -310,7 +310,8 @@
 #'
 #'     tmp_diff <- CalInput_R_Y %>%
 #'       left_join(CalOutput_R_Y, by = c("region", "minicam.energy.input" = "output", "year")) %>%
-#'       mutate(diff = calOutputValue - calInputValue)
+#'       mutate(diff = calOutputValue - calInputValue) %>%
+#'       filter(year == 2015)
 #'
 #'     x <- tmp_diff %>% filter(!is.na(diff)) %>% filter(abs(diff) > 1e-6, year == 2015)
 #'

@@ -337,7 +337,8 @@ module_gcameurope_L201.water_resources_constrained <- function(command, ...) {
       repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
       mutate(technology = subresource,
              minicam.energy.input = elec_input_name,
-             coefficient = round(elec_coef, energy.DIGITS_COEFFICIENT)) %>%
+             coefficient = round(elec_coef, energy.DIGITS_COEFFICIENT),
+             coefficient = if_else(year %in% MODEL_BASE_YEARS, 0, coefficient)) %>%
       select(LEVEL2_DATA_NAMES[["ResTechCoef"]]) ->
       L201.RsrcTechCoef_EUR
 
