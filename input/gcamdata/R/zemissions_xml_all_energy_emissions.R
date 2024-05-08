@@ -96,7 +96,8 @@ module_emissions_all_energy_emissions_xml <- function(command, ...) {
                      "L201.nonghg_steepness_res", "L201.nonghg_res", "L201.ghg_res",
                      "L201.ResReadInControl_nonghg_res", "L201.ResReadInControl_ghg_res", "L232.nonco2_prc",
                      "L232.nonco2_max_reduction", "L232.nonco2_steepness", "L241.nonco2_tech_coeff",
-                     "L241.OutputEmissCoeff_elec", "L241.nonco2_max_reduction", "L241.nonco2_steepness") ->
+                     "L241.OutputEmissCoeff_elec", "L241.nonco2_max_reduction", "L241.nonco2_steepness") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       all_energy_emissions.xml
     # need to call add_precursors indirectly to ensure input_names gets "unlisted"
     all_energy_emissions.xml <- do.call("add_precursors", c(list(all_energy_emissions.xml), input_names))
@@ -107,7 +108,8 @@ module_emissions_all_energy_emissions_xml <- function(command, ...) {
       add_xml_data(L252.ResMAC_fos, "ResMAC") %>%
       add_xml_data(L252.ResMAC_fos_tc_average, "ResMACTC") %>%
       add_xml_data(L252.ResMAC_fos_phaseInTime, "ResMACPhaseIn") %>%
-      add_precursors("L252.ResMAC_fos", "L252.ResMAC_fos_tc_average", "L252.ResMAC_fos_phaseInTime") ->
+      add_precursors("L252.ResMAC_fos", "L252.ResMAC_fos_tc_average", "L252.ResMAC_fos_phaseInTime") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       all_energy_emissions_MAC.xml
 
     return_data(all_energy_emissions.xml,
