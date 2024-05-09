@@ -739,7 +739,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     # complete resid cooling to have gas and electricity
     L144.in_EJ_R_bld_serv_F_Yh_EUR_residcooling <- L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
       filter(service == 'resid cooling') %>%
-      complete(GCAM_region_ID, sector, fuel, service, year, fill = list(value = 0))
+      complete(GCAM_region_ID = unique(iso_GCAM_regID$GCAM_region_ID),
+               sector, fuel, service, year, fill = list(value = 0))
 
     L144.in_EJ_R_bld_serv_F_Yh_EUR <- bind_rows(
       L144.in_EJ_R_bld_serv_F_Yh_EUR %>% filter(service != 'resid cooling'),
@@ -771,7 +772,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
   # complete resid cooling to have gas and electricity
   L144.end_use_eff_EUR_2f_residcooling <- L144.end_use_eff_EUR_2f %>%
     filter(service == 'resid cooling') %>%
-    complete(GCAM_region_ID, sector, fuel, service, year, fill = list(value = 0))
+    complete(GCAM_region_ID = unique(iso_GCAM_regID$GCAM_region_ID),
+             sector, fuel, service, year, fill = list(value_eff = 0))
 
   L144.end_use_eff_EUR_2f <- bind_rows(
     L144.end_use_eff_EUR_2f %>% filter(service != 'resid cooling'),
@@ -793,7 +795,18 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       # explicitly set zeros for any services without values
       complete(nesting(GCAM_region_ID, year), nesting(sector, service)) %>%
       tidyr::replace_na(list(value = 0)) ->
-      L144.base_service_EJ_serv_EUR # This is a final output table.
+      L144.base_service_EJ_serv_EUR
+
+    # complete resid cooling to have gas and electricity
+    L144.in_EJ_R_bld_serv_F_Yh_EUR_residcooling <- L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
+      filter(service == 'resid cooling') %>%
+      complete(GCAM_region_ID = unique(iso_GCAM_regID$GCAM_region_ID),
+               sector, fuel, service, year, fill = list(value = 0))
+
+    L144.in_EJ_R_bld_serv_F_Yh_EUR <- bind_rows(
+      L144.in_EJ_R_bld_serv_F_Yh_EUR %>% filter(service != 'resid cooling'),
+      L144.in_EJ_R_bld_serv_F_Yh_EUR_residcooling
+    ) # This is a final output table.
 
     # 3 Internal gains ##############################################################################################
     # internal gain energy released, divided by efficiency of each technology

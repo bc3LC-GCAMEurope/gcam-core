@@ -47,14 +47,16 @@ module_emissions_all_fgas_emissions_xml <- function(command, ...) {
       add_xml_data(L241.hfc_future, "OutputEmissCoeff") %>%
       add_xml_data(L241.fgas_all_units, "StubTechEmissUnits") %>%
       add_precursors("L241.hfc_all", "L241.pfc_all",
-                     "L241.hfc_future", "L241.fgas_all_units") ->
+                     "L241.hfc_future", "L241.fgas_all_units") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       all_fgas_emissions.xml
 
     create_xml("all_fgas_emissions_MAC.xml") %>%
       add_xml_data(L252.MAC_higwp, "MAC") %>%
       add_xml_data(L252.MAC_higwp_tc_average, "MACTC") %>%
       add_xml_data(L252.MAC_higwp_phaseInTime, "MACPhaseIn") %>%
-      add_precursors("L252.MAC_higwp", "L252.MAC_higwp_tc_average", "L252.MAC_higwp_phaseInTime") ->
+      add_precursors("L252.MAC_higwp", "L252.MAC_higwp_tc_average", "L252.MAC_higwp_phaseInTime") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       all_fgas_emissions_MAC.xml
 
     return_data(all_fgas_emissions.xml,
