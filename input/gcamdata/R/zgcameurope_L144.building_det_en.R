@@ -733,7 +733,11 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
              sector_fuel = paste(sector, fuel)) %>%
       filter(!regions_fuel %in% regions_noheat,
              sector_fuel != "bld_comm traditional biomass") %>%  # Note that the number of rows didn't decrease
-      select(GCAM_region_ID, sector, fuel, service, year, value) ->
+      select(GCAM_region_ID, sector, fuel, service, year, value) %>%
+      # complete each sector-service-fuel setting 0
+      complete(GCAM_region_ID, sector, fuel, service, year, fill = list(value = 0)) %>%
+      inner_join(unique(calibrated_techs_bld_det_EUR %>% select(sector, service, fuel)),
+                 by = c('sector', 'service', 'fuel')) ->
       L144.in_EJ_R_bld_serv_F_Yh_EUR # This is a final output table.
 
     # confirm that energy totals are the same as L142.in_EJ_R_bld_F_Yh_EUR
@@ -747,16 +751,20 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
      left_join(L144.in_EJ_check, by = c("GCAM_region_ID", "sector", "fuel", "year")) %>%
      mutate(diff = round(abs(value.y - value.x), energy.DIGITS_CALOUTPUT))
   stopifnot(max(check$diff) == 0)
-    # 2D Calculate building energy output by each service ###########################################################################
-    #  by GCAM region ID / sector / service / fuel / historical year
-    # Base service (output by each service) is the product of energy consumption and efficiency, aggregated by region, sector, service
+  # 2D Calculate building energy output by each service ###########################################################################
+  #  by GCAM region ID / sector / service / fuel / historical year
+  # Base service (output by each service) is the product of energy consumption and efficiency, aggregated by region, sector, service
 
-    # Match in sector, fuel, service into efficiency table
-    L144.end_use_eff_EUR %>%
-      filter(year %in% HISTORICAL_YEARS) %>%
-      left_join_error_no_match(calibrated_techs_bld_det_EUR, by = c("supplysector", "subsector", "technology")) %>%
-      select(GCAM_region_ID, sector, fuel, service, year, value_eff = value) ->
-      L144.end_use_eff_EUR_2f
+  # Match in sector, fuel, service into efficiency table
+  L144.end_use_eff_EUR %>%
+    filter(year %in% HISTORICAL_YEARS) %>%
+    left_join_error_no_match(calibrated_techs_bld_det_EUR, by = c("supplysector", "subsector", "technology")) %>%
+    select(GCAM_region_ID, sector, fuel, service, year, value_eff = value) %>%
+    # complete each sector-service-fuel setting 0
+    complete(GCAM_region_ID, sector, fuel, service, year, fill = list(value_eff = 0)) %>%
+    inner_join(unique(calibrated_techs_bld_det_EUR %>% select(sector, service, fuel)),
+               by = c('sector', 'service', 'fuel')) ->
+    L144.end_use_eff_EUR_2f
 
     # Calculate base service, which is the product of energy consumption and efficiency
     # Note that this produces a final output table
