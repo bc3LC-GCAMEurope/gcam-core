@@ -1,0 +1,152 @@
+# File: nrgbal_to_sector_map.csv
+# Title: Mapping from flows in Eurostat energy balances to intermediate sector names
+# Units: NA
+# Source: Eurostat (Complete energy balance downloaded December 2023 from https://ec.europa.eu/eurostat/data/database; definitions at https://ec.europa.eu/eurostat/documents/38154/4956218/ENERGY-BALANCE-GUIDE.pdf/de76d0d2-8b17-b47c-f6f5-415bd09b7750?t=1632139948586)
+# Column types: ccci
+# ----------
+nrg_bal,sector_EUROSTAT,sector,calculate_net
+PPRD,Primary production,out_resources,0
+RCV_RCY,Recovered & recycled products,,
+IMP,Imports,,
+EXP,Exports,,
+STK_CHG,Change in stock,,
+GAE,Gross available energy,,
+INTMARB,International maritime bunkers,in_trn_international ship,0
+INTAVI,International aviation,in_trn_international air,0
+TI_EHG_E,Electricity & heat generation,,
+TI_CO_E,Coke ovens,in_industry_energy_iron and steel,1
+TI_BF_E,Blast furnaces,in_industry_energy_iron and steel,1
+TI_GW_E,Gas works,in_gas works,1
+TI_RPI_E,Refineries & petrochemical industry,,
+TI_PF_E,Patent fuel plants,in_industry_energy transformation,1
+TI_BKBPB_E,BKB & PB plants,in_industry_energy transformation,1
+TI_CL_E,Coal liquefaction plants,in_industry_ctl,0
+TI_BNG_E,For blended natural gas,in_gas works,1
+TI_LBB_E,Liquid biofuels blended,in_industry_energy transformation,1
+TI_CPP_E,Charcoal production plants,in_industry_energy transformation,1
+TI_GTL_E,Gas-to-liquids plants,in_industry_gtl,0
+TI_NSP_E,Not elsewhere specified ,,
+TI_EHG_MAPE_E,Main activity producer electricity only,in_electricity generation,0
+TI_EHG_MAPCHP_E,Main activity producer CHP,in_electricity generation,0
+TI_EHG_MAPH_E,Main activity producer heat only,in_heat,0
+TI_EHG_APE_E,Autoproducer electricity only,in_electricity generation,0
+TI_EHG_APCHP_E,Autoproducer CHP ,in_industry_chp,0
+TI_EHG_APH_E,Autoproducer heat only,in_heat,0
+TI_EHG_EDHP,Electrically driven heat pumps,in_industry_energy transformation elec heat,0
+TI_EHG_EB,Electric boilers,in_industry_energy transformation elec heat,0
+TI_EHG_EPS,Electricity for pumped storage,in_electricity ownuse,0
+TI_EHG_DHEP,Derived heat for electricity production,,
+TI_RPI_RI_E,Refinery intake,in_industry_oil refining,1
+TI_RPI_BPI_E,Backflows from petrochemical industry,,
+TI_RPI_PT_E,Products transferred,,
+TI_RPI_IT_E,Interproduct transfers,,
+TI_RPI_DU_E,Direct use,in_industry_oil refining,1
+TI_RPI_PII_E,Petrochemical industry intake,,
+TO_EHG,Electricity & heat generation,,
+TO_CO,Coke ovens,out_industry_energy_iron and steel,1
+TO_BF,Blast furnaces,out_industry_energy_iron and steel,1
+TO_GW,Gas works,out_gas works,1
+TO_RPI,Refineries & petrochemical industry,,
+TO_PF,Patent fuel plants,out_industry_energy transformation,1
+TO_BKBPB,BKB & PB plants,out_industry_energy transformation,1
+TO_CL,Coal liquefaction plants,out_industry_ctl,0
+TO_BNG,Blended in natural gas,out_gas works,1
+TO_LBB,Liquid biofuels blended,out_industry_energy transformation,1
+TO_CPP,Charcoal production plants,out_industry_energy transformation,1
+TO_GTL,Gas-to-liquids plants,out_industry_gtl,0
+TO_NSP,Not elsewhere specified ,,
+TO_EHG_MAPE,Main activity producer electricity only,,
+TO_EHG_MAPCHP,Main activity producer CHP,,
+TO_EHG_MAPH,Main activity producer heat only,,
+TO_EHG_APE,Autoproducer electricity only,,
+TO_EHG_APCHP,Autoproducer CHP ,,
+TO_EHG_APH,Autoproducer heat only,,
+TO_EHG_EDHP,Electrically driven heat pumps,out_industry_energy transformation elec heat,0
+TO_EHG_EB,Electric boilers,out_industry_energy transformation elec heat,0
+TO_EHG_PH,Pumped hydro,out_electricity ownuse,0
+TO_EHG_OTH,Other sources,,
+TO_RPI_RO,Refinery output,out_industry_oil refining,1
+TO_RPI_BKFLOW,Backflows,,
+TO_RPI_PT,Products transferred,,
+TO_RPI_IT,Interproduct transfers,,
+TO_RPI_PPR,Primary product receipts,out_industry_oil refining,1
+TO_RPI_PIR,Petrochemical industry returns,,
+NRG_EHG_E,Own use in electricity & heat generation,net_industry_ownuse,0
+NRG_CM_E,Coal mines,net_industry_energy transformation,0
+NRG_OIL_NG_E,Oil & natural gas extraction plants,net_industry_energy transformation,0
+NRG_PF_E,Patent fuel plants,net_industry_energy transformation,0
+NRG_CO_E,Coke ovens,net_industry_energy_iron and steel,0
+NRG_BKBPB_E,BKB & PB plants,net_industry_energy transformation,0
+NRG_GW_E,Gas works,net_gas works,0
+NRG_BF_E,Blast furnaces,net_industry_energy_iron and steel,0
+NRG_PR_E,Petroleum refineries (oil refineries),net_industry_oil refining,0
+NRG_NI_E,Nuclear industry,net_industry_energy transformation,0
+NRG_CL_E,Coal liquefaction plants,net_industry_ctl,0
+NRG_LNG_E,Liquefaction & regasification plants (LNG),net_industry_gtl,0
+NRG_BIOG_E,Gasification plants for biogas,net_industry_energy transformation,0
+NRG_GTL_E,Gas-to-liquids (GTL) plants,net_industry_gtl,0
+NRG_CPP_E,Charcoal production plants,net_industry_energy transformation,0
+NRG_NSP_E,Not elsewhere specified (energy),net_industry_general,0
+NRGSUP,Total energy supply,,
+TI_E,Transformation input,,
+TO,Transformation output,,
+NRG_E,Energy sector,,
+DL,Distribution losses,in_industry_energy distribution,0
+TI_NRG_FC_IND_NE,Non-energy use industry/transformation/energy,,
+FC_TRA_NE,Non-energy use in transport sector,,
+FC_OTH_NE,Non-energy use in other sectors,,
+TI_NE,Non-energy use in transformation sector,,
+NRG_NE,Non-energy use in energy sector,,
+FC_IND_NE,Non-energy use in industry sector,in_industry_feedstocks,0
+FC_IND_E,Industry ,in_industry_general,0
+FC_TRA_E,Transport,,
+FC_OTH_E,Other,,
+FC_IND_IS_E,Iron & steel,iron and steel,0
+FC_IND_CPC_E,Chemical & petrochemical,chemical energy use,0
+FC_IND_NFM_E,Non-ferrous metals,,
+FC_IND_NMM_E,Non-metallic minerals,cement,0
+FC_IND_TE_E,Transport equipment,,
+FC_IND_MAC_E,Machinery,,
+FC_IND_MQ_E,Mining & quarrying,mining energy use,0
+FC_IND_FBT_E,"Food, beverages & tobacco",,
+FC_IND_PPP_E,"Paper, pulp & printing",,
+FC_IND_WP_E,Wood & wood products,,
+FC_IND_CON_E,Construction,construction energy use,0
+FC_IND_TL_E,Textile & leather,,
+FC_IND_NSP_E,Not elsewhere specified (industry),,
+FC_TRA_RAIL_E,Rail,in_trn_rail,0
+FC_TRA_ROAD_E,Road,in_trn_road,0
+FC_TRA_DAVI_E,Domestic aviation,in_trn_domestic air,0
+FC_TRA_DNAVI_E,Domestic navigation,in_trn_domestic ship,0
+FC_TRA_PIPE_E,Pipeline transport,in_industry_pipeline,0
+FC_TRA_NSP_E,Not elsewhere specified (transport),in_trn_unspecified,0
+FC_OTH_CP_E,Commercial & public services,in_bld_comm,0
+FC_OTH_HH_E,Households,in_bld_resid,0
+FC_OTH_HH_E_SH,Households,,
+FC_OTH_HH_E_SC,Households,,
+FC_OTH_HH_E_WH,Households,,
+FC_OTH_HH_E_CK,Households,,
+FC_OTH_HH_E_LE,Households,,
+FC_OTH_HH_E_OE,Households,,
+FC_OTH_AF_E,Agriculture & forestry,in_industry_agriculture,0
+FC_OTH_FISH_E,Fishing,in_industry_general,0
+FC_OTH_NSP_E,Not elsewhere specified (other),in_bld_comm,0
+AFC,Available for final consumption,,
+FC_NE,Final non-energy consumption,,
+FC_E,Final energy consumption,,
+GEP_MAPE,Main activity producer electricity only,out_electricity generation,0
+GEP_MAPCHP,Main activity producer CHP,out_electricity generation,0
+GEP_APE,Autoproducer electricity only,out_electricity generation,0
+GEP_APCHP,Autoproducer CHP ,out_chp_elec,0
+GHP_MAPCHP,Main activity producer CHP,out_electricity_heat,0
+GHP_MAPH,Main activity producer heat only,out_heat,0
+GHP_APCHP,Autoproducer CHP ,out_industry_chp,0
+GHP_APH,Autoproducer heat only,out_heat,0
+GIC,Gross inland consumption,,
+FC_IND_E*,Industry* ,,
+STATDIFF,Statistical differences,,
+GEP,Gross electricity production,,
+GHP,Gross heat production,,
+FEC2020-2030,Final energy consumption (Europe 2020-2030),,
+GIC2020-2030,Gross inland consumption (Europe 2020-2030),,
+PEC2020-2030,Primary energy consumption (Europe 2020-2030),,

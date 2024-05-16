@@ -146,20 +146,20 @@ module_energy_en_supply_xml <- function(command, ...) {
       add_xml_data(L221.StubTechFractCalPrice_en, "StubTechFractCalPrice") %>%
       add_xml_data(L221.Rsrc_en, "Rsrc") %>%
       add_xml_data(L221.RsrcPrice_en, "RsrcPrice") %>%
-      add_logit_tables_xml(L239.Supplysector_tra, "Supplysector") %>%
-      add_xml_data(L239.SectorUseTrialMarket_tra, "SectorUseTrialMarket") %>%
-      add_logit_tables_xml(L239.SubsectorAll_tra, "SubsectorAllTo", base_logit_header = "SubsectorLogit") %>%
-      add_xml_data(L239.TechShrwt_tra, "TechShrwt") %>%
-      add_xml_data(L239.TechCost_tra, "TechCost") %>%
+      # add_logit_tables_xml(L239.Supplysector_tra, "Supplysector") %>%
+      # add_xml_data(L239.SectorUseTrialMarket_tra, "SectorUseTrialMarket") %>%
+      # add_logit_tables_xml(L239.SubsectorAll_tra, "SubsectorAllTo", base_logit_header = "SubsectorLogit") %>%
+      # add_xml_data(L239.TechShrwt_tra, "TechShrwt") %>%
+      # add_xml_data(L239.TechCost_tra, "TechCost") %>%
       add_node_equiv_xml("input") %>%
       add_xml_data(L281.TechAccountInput_entrade, "TechAccountInput") %>%
-      add_xml_data(L239.TechCoef_tra, "TechCoef") %>%
-      add_xml_data(L239.Production_tra, "Production") %>%
+      # add_xml_data(L239.TechCoef_tra, "TechCoef") %>%
+      # add_xml_data(L239.Production_tra, "Production") %>%
       add_logit_tables_xml(L239.Supplysector_reg, "Supplysector") %>%
       add_logit_tables_xml(L239.SubsectorAll_reg, "SubsectorAllTo", base_logit_header = "SubsectorLogit") %>%
       add_xml_data(L239.TechShrwt_reg, "TechShrwt") %>%
       add_xml_data(L239.TechCoef_reg, "TechCoef") %>%
-      add_xml_data(L281.TechAccountOutput_entrade, "TechAccountOutput") %>%
+      # add_xml_data(L281.TechAccountOutput_entrade, "TechAccountOutput") %>%
       add_xml_data(L239.Production_reg_imp, "Production") %>%
       add_xml_data(L239.Production_reg_dom, "Production") %>%
       add_xml_data(L239.Consumption_intraregional, "Production") %>%
@@ -191,7 +191,8 @@ module_energy_en_supply_xml <- function(command, ...) {
                      "L239.Consumption_intraregional",
                      "L239.CarbonCoef",
                      "L281.TechAccountOutput_entrade",
-                     "L281.TechAccountInput_entrade") ->
+                     "L281.TechAccountInput_entrade") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       en_supply.xml
 
     return_data(en_supply.xml)

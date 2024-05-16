@@ -123,7 +123,8 @@ module_energy_resources_xml <- function(command, ...) {
                      "L210.SmthRenewRsrcCurvesGdpElast_roofPV", "L210.GrdRenewRsrcCurves_geo", "L210.GrdRenewRsrcMax_geo",
                      "L210.GrdRenewRsrcCurves_tradbio", "L210.GrdRenewRsrcMax_tradbio", "L210.ResSubresourceProdLifetime", "L210.SubresourcePriceAdder",
                      "L210.ResReserveTechLifetime", "L210.ResReserveTechDeclinePhase", "L210.ResReserveTechProfitShutdown", "L210.ResTechShrwt","L210.ResTechCoef","L210.ResTechCost",
-                     "L210.ResReserveTechInvestmentInput") ->
+                     "L210.ResReserveTechInvestmentInput") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       resources.xml
 
     return_data(resources.xml)

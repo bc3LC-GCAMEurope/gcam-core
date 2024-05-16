@@ -310,7 +310,7 @@ module_energy_L144.building_det_en <- function(command, ...) {
 
     # Subset the tech list to just the thermal services
     tech_list_ctry %>%
-      filter(service %in% thermal_services) %>%
+      filter(service %in% unique(hddcdd_mapping$service)) %>%
       left_join_error_no_match(hddcdd_mapping, by = "service") ->
       L144.ThermalServices
 

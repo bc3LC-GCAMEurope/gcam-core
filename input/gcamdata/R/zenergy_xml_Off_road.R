@@ -95,7 +95,8 @@ module_energy_Off_road_xml <- function(command, ...) {
                      "L2324.GlobalTechShrwt_Off_road", "L2324.GlobalTechCoef_Off_road", "L2324.GlobalTechCost_Off_road",
                      "L2324.StubTechCalInput_Off_road","L2324.StubTechProd_Off_road","L2324.GlobalTechEff_Off_road",
                      "L2324.PerCapitaBased_Off_road", "L2324.BaseService_Off_road",
-                     "L2324.PriceElasticity_Off_road", "L2324.GlobalTechTrackCapital_Off_road") ->
+                     "L2324.PriceElasticity_Off_road", "L2324.GlobalTechTrackCapital_Off_road") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       Off_road.xml
 
     return_data(Off_road.xml)

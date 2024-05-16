@@ -25,7 +25,8 @@ module_aglu_L108.ag_Feed_R_C_Y <- function(command, ...) {
       "L101.ag_Feed_Mt_R_C_Y",
       "L101.ag_Prod_Mt_R_C_Y",
       "L107.an_Feed_Mt_R_C_Sys_Fd_Y",
-      "L122.FeedOut_Mt_R_C_Yh")
+      "L122.FeedOut_Mt_R_C_Yh",
+      "L122.FeedOut_Mt_R_C_Yh_EUR")
 
   MODULE_OUTPUTS <-
     c("L108.ag_Feed_Mt_R_C_Y",
@@ -48,6 +49,10 @@ module_aglu_L108.ag_Feed_R_C_Y <- function(command, ...) {
 
     # Load required inputs ----
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
+
+    L122.FeedOut_Mt_R_C_Yh <- L122.FeedOut_Mt_R_C_Yh %>%
+      anti_join(L122.FeedOut_Mt_R_C_Yh_EUR, by = c("GCAM_region_ID")) %>%
+      bind_rows(L122.FeedOut_Mt_R_C_Yh_EUR)
 
     # Compute aggregate demand by region, feed, and year from the IMAGE data
     L107.an_Feed_Mt_R_C_Sys_Fd_Y %>%

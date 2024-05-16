@@ -1,0 +1,47 @@
+# File: A44.subsector_interp_EUR.csv
+# Title: Building default subsector shareweight interpolation
+# Units: NA
+# Column types: ccccccc
+# ----------
+supplysector,subsector,apply.to,from.year,to.year,to.value,interpolation.function
+resid heating,biomass,share-weight,final-calibration-year,end-year,,fixed
+resid heating,coal,share-weight,final-calibration-year,end-year,,fixed
+resid heating,electricity,share-weight,final-calibration-year,end-year,,fixed
+resid heating,gas,share-weight,final-calibration-year,end-year,,fixed
+resid heating,refined liquids,share-weight,final-calibration-year,end-year,,fixed
+resid heating,traditional biomass,share-weight,final-calibration-year,end-year,,fixed
+resid heating,district heat,share-weight,final-calibration-year,end-year,,fixed
+resid cooling,electricity,share-weight,final-calibration-year,end-year,,fixed
+resid cooling,gas,share-weight,final-calibration-year,end-year,,fixed
+resid cooking,biomass,share-weight,final-calibration-year,end-year,,fixed
+resid cooking,coal,share-weight,final-calibration-year,end-year,,fixed
+resid cooking,electricity,share-weight,final-calibration-year,end-year,,fixed
+resid cooking,gas,share-weight,final-calibration-year,end-year,,fixed
+resid cooking,refined liquids,share-weight,final-calibration-year,end-year,,fixed
+resid cooking,traditional biomass,share-weight,final-calibration-year,end-year,,fixed
+resid hot water,biomass,share-weight,final-calibration-year,end-year,,fixed
+resid hot water,coal,share-weight,final-calibration-year,end-year,,fixed
+resid hot water,electricity,share-weight,final-calibration-year,end-year,,fixed
+resid hot water,gas,share-weight,final-calibration-year,end-year,,fixed
+resid hot water,refined liquids,share-weight,final-calibration-year,end-year,,fixed
+resid hot water,district heat,share-weight,final-calibration-year,end-year,,fixed
+resid lighting,electricity,share-weight,final-calibration-year,end-year,,fixed
+resid others,biomass,share-weight,final-calibration-year,end-year,,fixed
+resid others,coal,share-weight,final-calibration-year,end-year,,fixed
+resid others,electricity,share-weight,final-calibration-year,end-year,,fixed
+resid others,gas,share-weight,final-calibration-year,end-year,,fixed
+resid others,refined liquids,share-weight,final-calibration-year,end-year,,fixed
+comm heating,biomass,share-weight,final-calibration-year,end-year,,fixed
+comm heating,coal,share-weight,final-calibration-year,end-year,,fixed
+comm heating,electricity,share-weight,final-calibration-year,end-year,,fixed
+comm heating,gas,share-weight,final-calibration-year,end-year,,fixed
+comm heating,refined liquids,share-weight,final-calibration-year,end-year,,fixed
+comm heating,district heat,share-weight,final-calibration-year,end-year,,fixed
+comm cooling,electricity,share-weight,final-calibration-year,end-year,,fixed
+comm cooling,gas,share-weight,final-calibration-year,end-year,,fixed
+comm others,biomass,share-weight,final-calibration-year,end-year,,fixed
+comm others,coal,share-weight,final-calibration-year,end-year,,fixed
+comm others,electricity,share-weight,final-calibration-year,end-year,,fixed
+comm others,gas,share-weight,final-calibration-year,end-year,,fixed
+comm others,refined liquids,share-weight,final-calibration-year,end-year,,fixed
+comm others,district heat,share-weight,final-calibration-year,end-year,,fixed

@@ -1,0 +1,13 @@
+
+# File: nrgbal_to_sector_map.csv
+# Title: Mapping of household types codes
+# Units: NA
+# Source: Eurostat https://ec.europa.eu/eurostat/databrowser/view/ilc_hcmh02__custom_10447653/default/table?lang=en
+# Column types: cc
+# ----------
+hhtyp,household_type
+TOTAl,Total
+A1,Single person
+A2,Two adults
+HH_NDCH,`Households without dependent children`
+HH_DCH,`Households with dependent children`

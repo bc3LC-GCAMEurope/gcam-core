@@ -104,7 +104,8 @@ module_energy_en_distribution_xml <- function(command, ...) {
                      "L226.GlobalTechShrwt_en",
                      "L226.StubTechCoef_elecownuse",
                      "L226.StubTechCoef_electd",
-                     "L226.StubTechCoef_gaspipe") ->
+                     "L226.StubTechCoef_gaspipe") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       en_distribution.xml
 
     return_data(en_distribution.xml)

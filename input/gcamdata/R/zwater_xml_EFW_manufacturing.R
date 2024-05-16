@@ -52,7 +52,8 @@ module_water_EFW_manufacturing_xml <- function(command, ...) {
                      "L273.StubTech_ind",
                      "L273.GlobalTechCoef_ind",
                      "L273.GlobalTechShrwt_ind",
-                     "L273.StubTechCoef_ind") ->
+                     "L273.StubTechCoef_ind") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       EFW_manufacturing.xml
 
     return_data(EFW_manufacturing.xml)

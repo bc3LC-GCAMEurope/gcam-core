@@ -96,7 +96,8 @@ module_energy_en_Fert_xml <- function(command, ...) {
                      "L2322.StubTechFixOut_Fert_imp",
                      "L2322.StubTechFixOut_Fert_exp",
                      "L2322.PerCapitaBased_Fert",
-                     "L2322.BaseService_Fert") ->
+                     "L2322.BaseService_Fert") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       en_Fert.xml
 
     return_data(en_Fert.xml)

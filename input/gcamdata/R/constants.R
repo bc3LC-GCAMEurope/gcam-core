@@ -660,6 +660,9 @@ socioeconomics.FINAL_DEMAND_SECTORS <- c("other industrial energy use",
                                          "iron and steel",
                                          "resid cooling",
                                          "resid heating",
+                                         "resid hot water",
+                                         "resid cooking",
+                                         "resid lighting",
                                          "resid others",
                                          "comm cooling",
                                          "comm heating",
@@ -1116,6 +1119,26 @@ gcamusa.OC_1990_ONROAD_SCALING_FACTOR <- 1/1.4
 # If this variable is FALSE, onroad dust emissions (CEDS 1A3b_Road-noncomb) will not be included
 # If it is TRUE, onroad dust emissions will be included
 gcamusa.DUST <- TRUE
+
+# GCAM-EUR constants ======================================================================
+gcameurope.EUROSTAT_COUNTRIES <- c("Albania", "Austria", "Belgium", "Bosnia and Herzegovina",
+                                   "Bulgaria", "Croatia", "Cyprus", "Czech Republic",
+                                   "Denmark", "Estonia", "Finland", "France", "Germany",
+                                   "Greece", "Hungary", "Iceland", "Ireland", "Italy",
+                                   "Latvia", "Lithuania", "Luxembourg", "Macedonia",
+                                   "Malta", "Moldova", "Netherlands", "Norway",
+                                   "Poland", "Portugal", "Romania", "Serbia and Montenegro",
+                                   "Slovakia", "Slovenia", "Spain", "Sweden",
+                                   "Turkey", "UK", "Ukraine")
+
+gcameurope.EUROSTAT_ISO <- c("aut","bel","bgr","hrv","cyp","cze","dnk","fro",
+                             "grl","est","fin","fra","mco","shn","spm","deu",
+                             "grc","hun","irl","ita","smr","vat","lva","ltu",
+                             "lux","mlt","nld","pol","prt","rom","rou","svk",
+                             "svn","and","esp","swe","alb","bih","isl","mkd",
+                             "mda","nor","sjm","mne","srb","scg","tur","chi",
+                             "flk","gbr","ggy","gib","imn","jey","tca","vgb",
+                             "wlf","ukr")
 
 # Time shift conditions ======================================================================
 # Uncomment these lines to run under 'timeshift' conditions

@@ -99,7 +99,6 @@ module_energy_transportation_UCD_CORE_xml <- function(command, ...) {
     L254.IncomeElasticity_trn <- get_data(all_data, "L254.IncomeElasticity_trn")
     L254.BaseService_trn <- get_data(all_data, "L254.BaseService_trn")
 
-
     # ===================================================
 
     # Produce outputs
@@ -107,7 +106,7 @@ module_energy_transportation_UCD_CORE_xml <- function(command, ...) {
     # we need to assign xml_tmp to a correctly-named variable in the current environment
     # transportation_UCD_CORE.xml <- transportation_UCD_SSP1.xml <- transportation_UCD_SSP2.xml <-
     #   transportation_UCD_SSP3.xml <- transportation_UCD_SSP5.xml <- transportation_UCD_CORE_highEV.xml <- NULL  # silence package check notes
-    transportation_UCD_CORE.xml <- transportation_UCD_SSP1.xml <- transportation_UCD_SSP2.xml <-
+    transportation_UCD_CORE.xml <- transportation_UCD_SSP1.xml <- transportation_UCD_CORE_highEV.xml <-
       transportation_UCD_SSP3.xml <- transportation_UCD_SSP5.xml <- NULL  # silence package check notes
 
     ret_data <- c()
@@ -211,7 +210,8 @@ module_energy_transportation_UCD_CORE_xml <- function(command, ...) {
         add_xml_data(L254.PriceElasticity_trn_SSP, "PriceElasticity") %>%
         add_xml_data(L254.IncomeElasticity_trn_SSP, "IncomeElasticity") %>%
         add_xml_data(L254.BaseService_trn_SSP, "BaseService") %>%
-        add_precursors("L254.Supplysector_trn",
+        add_precursors("L101.GCAM_EUR_regions",
+                       "L254.Supplysector_trn",
                        "L254.FinalEnergyKeyword_trn",
                        "L254.tranSubsectorLogit",
                        "L254.tranSubsectorShrwtFllt",
@@ -243,6 +243,7 @@ module_energy_transportation_UCD_CORE_xml <- function(command, ...) {
                        "L254.PriceElasticity_trn",
                        "L254.IncomeElasticity_trn",
                        "L254.BaseService_trn")  %>%
+        remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) %>%
                         assign(xml_name, ., envir = curr_env)
 
 

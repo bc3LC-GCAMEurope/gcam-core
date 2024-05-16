@@ -97,7 +97,8 @@ module_energy_cement_xml <- function(command, ...) {
                      "L2321.GlobalTechShrwt_cement", "L2321.GlobalTechCoef_cement", "L2321.GlobalTechCost_cement",
                      "L2321.GlobalTechCapture_cement", "L2321.StubTechProd_cement", "L2321.StubTechCalInput_cement_heat",
                      "L2321.StubTechCoef_cement", "L2321.PerCapitaBased_cement", "L2321.BaseService_cement",
-                     "L2321.PriceElasticity_cement", "L2321.GlobalTechTrackCapital_cement") ->
+                     "L2321.PriceElasticity_cement", "L2321.GlobalTechTrackCapital_cement") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       cement.xml
 
     return_data(cement.xml)

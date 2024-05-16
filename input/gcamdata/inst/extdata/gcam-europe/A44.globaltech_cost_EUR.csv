@@ -1,0 +1,52 @@
+# File: A44.globaltech_cost_EUR.csv
+# Title: Building technology costs per service for gcameurope
+# Units: 1975$/GJ
+# Source: Same as gcamusa A44.globaltech_eff. Heat pumps have been removed and traditional biomass and district heat have been added, as well as some biomass and coal technologies for different supplysectors. Unpublished inputs to the NEMS model, as well as some biomass and coal technologies for different supplysectors. Unpublished inputs to the NEMS model
+# Column types: cccn
+# ----------
+supplysector,subsector,technology,NEcostPerService
+resid heating,biomass,biomass,0.9417305
+resid heating,coal,coal,0.9417305
+resid heating,gas,gas,1.3739374
+resid heating,gas,hydrogen,1.4809598
+resid heating,electricity,electricity,1.2951476
+resid heating,refined liquids,refined liquids,1.8423003
+resid heating,traditional biomass,traditional biomass,0.2748199
+resid heating,district heat,district heat,0.6710238
+resid cooling,electricity,electricity,6.712409
+resid cooling,gas,gas,11.242246
+resid hot water,biomass,biomass,0.9417305
+resid hot water,coal,coal,0.9417305
+resid hot water,gas,gas,1.3739374
+resid hot water,electricity,electricity,5.502
+resid hot water,refined liquids,refined liquids,9.879
+resid hot water,district heat,district heat,1.2951476
+resid lighting,electricity,electricity,1.2951476
+resid cooking,biomass,biomass,0.9417305
+resid cooking,coal,coal,0.9417305
+resid cooking,electricity,electricity,1.2951476
+resid cooking,gas,gas,1.3739374
+resid cooking,refined liquids,refined liquids,1.8423003
+resid cooking,traditional biomass,traditional biomass,0.6183447
+resid others,biomass,biomass,3.200354
+resid others,coal,coal,2.1335694
+resid others,gas,gas,3.0014812
+resid others,gas,hydrogen,3.278901
+resid others,electricity,electricity,2.5726981
+resid others,refined liquids,refined liquids,3.3424061
+comm heating,biomass,biomass,0.9884987
+comm heating,coal,coal,0.9884987
+comm heating,gas,gas,1.5356661
+comm heating,gas,hydrogen,1.6483274
+comm heating,electricity,electricity,1.2799009
+comm heating,refined liquids,refined liquids,1.7065345
+comm heating,district heat,district heat,0.5793888
+comm cooling,gas,gas,2.629955
+comm cooling,electricity,electricity,4.949514
+comm others,biomass,biomass,3.200354
+comm others,coal,coal,2.133569
+comm others,gas,gas,3.085298
+comm others,gas,hydrogen,3.341378
+comm others,electricity,electricity,2.621402
+comm others,refined liquids,refined liquids,3.342406
+comm others,district heat,district heat,1.618934

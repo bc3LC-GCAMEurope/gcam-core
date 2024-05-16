@@ -23,7 +23,7 @@ ATTR_REFERENCE <- "reference"
 #' @param title Title of object (character)
 #' @param overwrite Allow overwrite of title? Logical
 #' @return \code{x} with units appended to any existing comments.
-add_title <- function(x, title, overwrite = FALSE) {
+add_title <- function(x, title, overwrite = TRUE) {
   assertthat::assert_that(is.character(title) | is.null(title))
 
   if(!overwrite && !is.null(attr(x, ATTR_TITLE))) {
@@ -48,6 +48,23 @@ add_comments <- function(x, comments) {
   comments <- gsub("[\r\n]", " ", comments)  # remove any line breaks (h/t CH)
   attr(x, ATTR_COMMENTS) <- c(attr(x, ATTR_COMMENTS), comments)
   x
+}
+
+#' add_copy_comment_europe
+#'
+#' Add comment to indicate object was copied and filtered to european regions
+#'
+#' @param x An object
+#' @param copy_name A string with the name that has been copied
+#' @return \code{x} with comments appended to any existing comments.
+add_copy_comment_europe <- function(x, copy_name) {
+  assertthat::assert_that(is.character(copy_name) | is.null(copy_name))
+  if (is.null(x)){x}
+  else{
+    comments <- paste(copy_name, "filtered to European regions")
+    attr(x, ATTR_COMMENTS) <- c(attr(x, ATTR_COMMENTS), comments)
+    x
+  }
 }
 
 #' add_legacy_name
@@ -104,7 +121,11 @@ get_units <- function(x) { attr(x, ATTR_UNITS) }
 #' @param ... Names of precursor objects (character)
 #' @return \code{x} with units appended to any existing comments.
 add_precursors <- function(x, ...) {
-  pc <- as.character(list(...))
+  pc <- list(...)
+  if(length(pc) == 1){
+    pc <- as.list(unlist(pc))
+  }
+  pc <- as.character(pc)
   attr(x, ATTR_PRECURSORS) <- c(attr(x, ATTR_PRECURSORS), pc)
   x
 }
@@ -247,7 +268,7 @@ get_data <- function(all_data, name, strip_attributes = FALSE) {
 #' \code{data_list} (one logical value for each data_list item).
 #' @param environ The environment into which the data should be loaded.  If NULL (the default)
 #' the caller's environment will be used.
-get_data_list <- function(all_data, data_list, strip_attributes = FALSE, environ = NULL) {
+get_data_list <- function(all_data, data_list, strip_attributes = FALSE, environ = NULL, filter_region = NULL, ...) {
   # expecting a (potentially named) character vector for data_list
   assertthat::assert_that(is.character(data_list))
   data_list_names <- names(data_list)
@@ -283,6 +304,10 @@ get_data_list <- function(all_data, data_list, strip_attributes = FALSE, environ
     }
     # get the data
     data = get_data(all_data, data_list[i], strip_attributes[i])
+
+    if(!is.null(filter_region)){
+      data <- filter_regions_europe(data, regions_to_keep_name = filter_region)
+    }
     # assign it into the environment
     assign(curr_var_name, data, envir = environ)
   }

@@ -1,0 +1,13 @@
+# File: nrgbal_to_service_map.csv
+# Title: Mapping from flows Households energy consmption in Eurostat energy balances to GCAM services
+# Units: NA
+# Source: Eurostat (Complete energy balance downloaded December 2023 from https://ec.europa.eu/eurostat/data/database; definitions at https://ec.europa.eu/eurostat/documents/38154/4956218/ENERGY-BALANCE-GUIDE.pdf/de76d0d2-8b17-b47c-f6f5-415bd09b7750?t=1632139948586; and household energy consumption from https://ec.europa.eu/eurostat/databrowser/view/nrg_d_hhq__custom_10504687/default/table?lang=en)
+# Column types: ccc
+# ----------
+nrg_bal,sector_EUROSTAT,service
+FC_OTH_HH_E_SH,Households,resid heating
+FC_OTH_HH_E_SC,Households,resid cooling
+FC_OTH_HH_E_WH,Households,resid hot water
+FC_OTH_HH_E_CK,Households,resid cooking
+FC_OTH_HH_E_LE,Households,resid lighting
+FC_OTH_HH_E_OE,Households,resid others

@@ -76,3 +76,7 @@ xcuserdata
 *.xcuserstate
 .Rproj.user
 input/gcamdata/inst/extdata/emissions/CEDS/desktop.ini
+exe/configuration.xml
+exe/run-gcam.bat
+input/gcamdata/comparisson_Russells_Eurostat_BLD_data.csv
+input/gcamdata/R/comparisson_Russell_Eurostat_BLD.R

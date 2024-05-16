@@ -1,0 +1,49 @@
+# File: geo_to_iso_map.csv
+# Title: Mapping from geos in Eurostat energy balances to country iso codes
+# Units: NA
+# Source: Eurostat (Complete energy balance downloaded December 2023 from https://ec.europa.eu/eurostat/data/database; definitions at https://ec.europa.eu/eurostat/documents/38154/4956218/ENERGY-BALANCE-GUIDE.pdf/de76d0d2-8b17-b47c-f6f5-415bd09b7750?t=1632139948586)
+# Column types: cc
+# ----------
+geo,iso
+AL,alb
+AT,aut
+BA,bih
+BE,bel
+BG,bgr
+CY,cyp
+CZ,cze
+CH,che
+DE,deu
+DK,dnk
+EE,est
+EL,grc
+ES,esp
+EU27_2020,
+FI,fin
+FR,fra
+GE,geo
+HR,hrv
+HU,hun
+IE,irl
+IS,isl
+IT,ita
+LT,ltu
+LU,lux
+LV,lva
+MD,mda
+ME,mne
+MK,mkd
+MT,mlt
+NL,nld
+NO,nor
+PL,pol
+PT,prt
+RO,rom
+RS,srb
+SE,swe
+SI,svn
+SK,svk
+TR,tur
+UA,ukr
+UK,gbr
+XK,srb

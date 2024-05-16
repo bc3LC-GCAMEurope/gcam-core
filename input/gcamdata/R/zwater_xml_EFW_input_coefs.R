@@ -26,7 +26,8 @@ module_water_EFW_input_coefs_xml <- function(command, ...) {
     # Produce outputs
     create_xml("EFW_input_coefs.xml") %>%
       add_xml_data(L270.TechCoef_EFW, "TechCoef") %>%
-      add_precursors("L270.TechCoef_EFW") ->
+      add_precursors("L270.TechCoef_EFW") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       EFW_input_coefs.xml
 
     return_data(EFW_input_coefs.xml)

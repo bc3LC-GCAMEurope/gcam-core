@@ -42,7 +42,7 @@ module_energy_heat_xml <- function(command, ...) {
     L224.StubTechSecOut_elec <- get_data(all_data, "L224.StubTechSecOut_elec")
     L224.StubTechCost_elec <- get_data(all_data, "L224.StubTechCost_elec")
 
-    share.weight <- year.share.weight <- NULL # Silence package checks 
+    share.weight <- year.share.weight <- NULL # Silence package checks
 
     # ===================================================
     # Rename the tibble columns to match the header info.
@@ -72,7 +72,8 @@ module_energy_heat_xml <- function(command, ...) {
                      "L224.GlobalTechShrwt_heat",
                      "L224.StubTechCalInput_heat",
                      "L224.StubTechSecOut_elec",
-                     "L224.StubTechCost_elec") ->
+                     "L224.StubTechCost_elec") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       heat.xml
 
     return_data(heat.xml)
