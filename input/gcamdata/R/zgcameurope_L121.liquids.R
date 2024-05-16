@@ -19,7 +19,8 @@ module_gcameurope_L121.liquids <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/iso_GCAM_regID",
              FILE = "aglu/IIASA_biofuel_production",
-             FILE = "aglu/IIASA_biofuel_tech_mapping",
+             FILE = "gcam-europe/EU_AGR_OUTLOOK_biofuel_production",
+             FILE = "gcam-europe/IIASA_biofuel_tech_mapping_EUR", # These file maps Other Veg oil to Soybean
              FILE = "aglu/IIASA_biofuel_region_mapping",
              FILE = "aglu/A_OilSeed_SecOut",
              "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
@@ -45,8 +46,9 @@ module_gcameurope_L121.liquids <- function(command, ...) {
 
     # Load required inputs
     iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID", strip_attributes = TRUE)
+    EU_AGR_OUTLOOK_biofuel_production <- get_data(all_data, "gcam-europe/EU_AGR_OUTLOOK_biofuel_production", strip_attributes = TRUE)
     IIASA_biofuel_production <- get_data(all_data, "aglu/IIASA_biofuel_production", strip_attributes = TRUE)
-    IIASA_biofuel_tech_mapping <- get_data(all_data, "aglu/IIASA_biofuel_tech_mapping", strip_attributes = TRUE)
+    IIASA_biofuel_tech_mapping_EUR <- get_data(all_data, "gcam-europe/IIASA_biofuel_tech_mapping_EUR", strip_attributes = TRUE)
     IIASA_biofuel_region_mapping <- get_data(all_data, "aglu/IIASA_biofuel_region_mapping", strip_attributes = TRUE)
     A_OilSeed_SecOut <- get_data(all_data, "aglu/A_OilSeed_SecOut", strip_attributes = TRUE)
     L1012.en_bal_EJ_R_Si_Fi_Yh_EUR <- get_data(all_data, "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", strip_attributes = TRUE)
@@ -71,10 +73,38 @@ module_gcameurope_L121.liquids <- function(command, ...) {
     # 2. Downscale biofuel consumption to specific technologies, per data from IIASA ----------
     # Shouldn't be any different than version from main GCAM calculation
     # can change in future if we want to use country specific data
-    L121.share_R_biofuel_tech <- left_join(IIASA_biofuel_production,
-                                              IIASA_biofuel_tech_mapping,
+
+    # Calculate import shares using IIASA data
+    bio_imp_shares <- IIASA_biofuel_production %>%
+      filter(Region == "EU-27",
+             Source == "Imported") %>%
+      group_by(Region, Biofuel, Source) %>%
+      mutate(prod_bio = sum(Production_ML)) %>%
+      ungroup() %>%
+      mutate(share = Production_ML / prod_bio) %>%
+      select(-Production_ML, -prod_bio)
+
+    # Adjust data from EU_AGR outlook to match the required format
+    EU_AGR_OUTLOOK_biofuel_production_adj <- EU_AGR_OUTLOOK_biofuel_production %>%
+      gather(year, value, -Region, -Biofuel, -Crop, -Source) %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
+      select(-year)
+
+    EU_AGR_OUTLOOK_biofuel_production_fin <- EU_AGR_OUTLOOK_biofuel_production_adj %>%
+      filter(Source == "Imported") %>%
+      select(-Crop) %>%
+      repeat_add_columns(tibble(Crop = unique(IIASA_biofuel_tech_mapping_EUR$Crop))) %>%
+      left_join(bio_imp_shares, by = join_by(Region, Biofuel, Source, Crop)) %>%
+      filter(complete.cases(.)) %>%
+      mutate(value = value * share) %>%
+      select(-share) %>%
+      bind_rows(EU_AGR_OUTLOOK_biofuel_production_adj %>% filter(Source == "Domestic"))
+
+    L121.share_R_biofuel_tech <- left_join(EU_AGR_OUTLOOK_biofuel_production_fin,
+                                              IIASA_biofuel_tech_mapping_EUR,
                                               by = c("Biofuel", "Crop")) %>%
-      left_join(IIASA_biofuel_region_mapping, by = "Region") %>%
+      left_join(IIASA_biofuel_region_mapping, by = "Region", relationship = "many-to-many") %>%
+      rename(Production_ML = value) %>%
       filter(!is.na(technology),
              Production_ML > 0) %>%
       group_by(iso, Biofuel, technology, GCAM_commodity) %>%
@@ -128,7 +158,8 @@ module_gcameurope_L121.liquids <- function(command, ...) {
       add_units("unitless") %>%
       add_comments("Ethanol and biodiesel consumption assigned to feedstock shares") %>%
       add_precursors("aglu/IIASA_biofuel_production", "aglu/IIASA_biofuel_region_mapping",
-                     "aglu/IIASA_biofuel_tech_mapping", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "common/iso_GCAM_regID") ->
+                     "gcam-europe/IIASA_biofuel_tech_mapping", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "common/iso_GCAM_regID",
+                     "gcam-europe/EU_AGR_OUTLOOK_biofuel_production") ->
       L121.share_R_TPES_biofuel_tech_EUR
 
     L121.BiomassOilRatios_kgGJ_R_C_EUR %>%
