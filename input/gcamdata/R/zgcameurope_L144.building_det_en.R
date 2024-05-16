@@ -734,7 +734,18 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       filter(!regions_fuel %in% regions_noheat,
              sector_fuel != "bld_comm traditional biomass") %>%  # Note that the number of rows didn't decrease
       select(GCAM_region_ID, sector, fuel, service, year, value) ->
-      L144.in_EJ_R_bld_serv_F_Yh_EUR # This is a final output table.
+      L144.in_EJ_R_bld_serv_F_Yh_EUR
+
+    # complete resid cooling to have gas and electricity
+    L144.in_EJ_R_bld_serv_F_Yh_EUR_residcooling <- L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
+      filter(service == 'resid cooling') %>%
+      complete(GCAM_region_ID = unique(iso_GCAM_regID$GCAM_region_ID),
+               sector, fuel, service, year, fill = list(value = 0))
+
+    L144.in_EJ_R_bld_serv_F_Yh_EUR <- bind_rows(
+      L144.in_EJ_R_bld_serv_F_Yh_EUR %>% filter(service != 'resid cooling'),
+      L144.in_EJ_R_bld_serv_F_Yh_EUR_residcooling
+    ) # This is a final output table.
 
     # confirm that energy totals are the same as L142.in_EJ_R_bld_F_Yh_EUR
     L144.in_EJ_check <- L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
@@ -747,16 +758,28 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
      left_join(L144.in_EJ_check, by = c("GCAM_region_ID", "sector", "fuel", "year")) %>%
      mutate(diff = round(abs(value.y - value.x), energy.DIGITS_CALOUTPUT))
   stopifnot(max(check$diff) == 0)
-    # 2D Calculate building energy output by each service ###########################################################################
-    #  by GCAM region ID / sector / service / fuel / historical year
-    # Base service (output by each service) is the product of energy consumption and efficiency, aggregated by region, sector, service
+  # 2D Calculate building energy output by each service ###########################################################################
+  #  by GCAM region ID / sector / service / fuel / historical year
+  # Base service (output by each service) is the product of energy consumption and efficiency, aggregated by region, sector, service
 
-    # Match in sector, fuel, service into efficiency table
-    L144.end_use_eff_EUR %>%
-      filter(year %in% HISTORICAL_YEARS) %>%
-      left_join_error_no_match(calibrated_techs_bld_det_EUR, by = c("supplysector", "subsector", "technology")) %>%
-      select(GCAM_region_ID, sector, fuel, service, year, value_eff = value) ->
-      L144.end_use_eff_EUR_2f
+  # Match in sector, fuel, service into efficiency table
+  L144.end_use_eff_EUR %>%
+    filter(year %in% HISTORICAL_YEARS) %>%
+    left_join_error_no_match(calibrated_techs_bld_det_EUR, by = c("supplysector", "subsector", "technology")) %>%
+    select(GCAM_region_ID, sector, fuel, service, year, value_eff = value) ->
+    L144.end_use_eff_EUR_2f
+
+  # complete resid cooling to have gas and electricity
+  L144.end_use_eff_EUR_2f_residcooling <- L144.end_use_eff_EUR_2f %>%
+    filter(service == 'resid cooling') %>%
+    complete(GCAM_region_ID = unique(iso_GCAM_regID$GCAM_region_ID),
+             sector, fuel, service, year, fill = list(value_eff = 0))
+
+  L144.end_use_eff_EUR_2f <- bind_rows(
+    L144.end_use_eff_EUR_2f %>% filter(service != 'resid cooling'),
+    L144.end_use_eff_EUR_2f_residcooling
+  )
+
 
     # Calculate base service, which is the product of energy consumption and efficiency
     # Note that this produces a final output table
@@ -772,7 +795,18 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       # explicitly set zeros for any services without values
       complete(nesting(GCAM_region_ID, year), nesting(sector, service)) %>%
       tidyr::replace_na(list(value = 0)) ->
-      L144.base_service_EJ_serv_EUR # This is a final output table.
+      L144.base_service_EJ_serv_EUR
+
+    # complete resid cooling to have gas and electricity
+    L144.in_EJ_R_bld_serv_F_Yh_EUR_residcooling <- L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
+      filter(service == 'resid cooling') %>%
+      complete(GCAM_region_ID = unique(iso_GCAM_regID$GCAM_region_ID),
+               sector, fuel, service, year, fill = list(value = 0))
+
+    L144.in_EJ_R_bld_serv_F_Yh_EUR <- bind_rows(
+      L144.in_EJ_R_bld_serv_F_Yh_EUR %>% filter(service != 'resid cooling'),
+      L144.in_EJ_R_bld_serv_F_Yh_EUR_residcooling
+    ) # This is a final output table.
 
     # 3 Internal gains ##############################################################################################
     # internal gain energy released, divided by efficiency of each technology
