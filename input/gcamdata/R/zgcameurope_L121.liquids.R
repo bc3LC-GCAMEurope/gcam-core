@@ -94,7 +94,7 @@ module_gcameurope_L121.liquids <- function(command, ...) {
       filter(Source == "Imported") %>%
       select(-Crop) %>%
       repeat_add_columns(tibble(Crop = unique(IIASA_biofuel_tech_mapping_EUR$Crop))) %>%
-      left_join(bio_imp_shares, by = join_by(Region, Biofuel, Source, Crop)) %>%
+      left_join(bio_imp_shares, by = c("Region", "Biofuel", "Source", "Crop")) %>%
       filter(complete.cases(.)) %>%
       mutate(value = value * share) %>%
       select(-share) %>%

@@ -69,14 +69,25 @@ module_gcameurope_L239.ff_trade <- function(command, ...) {
     # need to repeat and keep USA for trade outputs
     L239.Supplysector_tra_EUR <- L239.Supplysector_tra
     L239.SectorUseTrialMarket_tra_EUR <- L239.SectorUseTrialMarket_tra
-    L239.SubsectorAll_tra_EUR <- L239.SubsectorAll_tra # %>%
-      # filter(grepl(paste(gcameurope.EUROSTAT_COUNTRIES, collapse = "|"), subsector))
-    L239.TechShrwt_tra_EUR <- L239.TechShrwt_tra # %>%
-      # filter(grepl(paste(gcameurope.EUROSTAT_COUNTRIES, collapse = "|"), subsector))
-    L239.TechCost_tra_EUR <- L239.TechCost_tra # %>%
-      # filter(grepl(paste(gcameurope.EUROSTAT_COUNTRIES, collapse = "|"), subsector))
-    L239.TechCoef_tra_EUR  <- L239.TechCoef_tra # %>%
-      # filter(grepl(paste(gcameurope.EUROSTAT_COUNTRIES, collapse = "|"), subsector))
+
+    # Need logits for all european regions for L239.SubsectorAll_tra_EUR and L239.SubsectorAll_reg_EUR
+    L239.SubsectorAll_tra_EUR <- L239.SubsectorAll_tra %>%
+      tidyr::separate(subsector, into = c("market", "subsector"), sep = " traded ") %>%
+      complete(market = unique(GCAM_region_names$region), nesting(region, supplysector, logit.year.fillout, logit.exponent, year.fillout, share.weight,
+                       apply.to, from.year, to.year, to.value, interpolation.function, logit.type)) %>%
+      mutate(subsector = paste(market, supplysector, sep = " ")) %>%
+      select(-market)
+
+    L239.SubsectorAll_reg_EUR <- L239.SubsectorAll_reg %>%
+      filter_regions_europe() %>%
+      complete(region = gcameurope.EUROSTAT_COUNTRIES,
+               nesting(supplysector, subsector, logit.year.fillout, logit.exponent,
+                       year.fillout, share.weight, apply.to, from.year, to.year, to.value,
+                       interpolation.function, logit.type))
+
+    L239.TechShrwt_tra_EUR <- L239.TechShrwt_tra
+    L239.TechCost_tra_EUR <- L239.TechCost_tra
+    L239.TechCoef_tra_EUR  <- L239.TechCoef_tra
     L239.TechShrwt_reg_EUR <- L239.TechShrwt_reg %>%
       filter(region %in% c(gcameurope.EUROSTAT_COUNTRIES))
     L239.TechCoef_reg_EUR <- L239.TechCoef_reg %>%
@@ -145,25 +156,6 @@ module_gcameurope_L239.ff_trade <- function(command, ...) {
                                                            by = "GCAM_region_ID") %>%
       select(region, GCAM_Commodity, year, GrossExp_EJ)
     L239.Prod_EJ_R_C_Y <- select(L2011.ff_ALL_EJ_R_C_Y_EUR, region, GCAM_Commodity = fuel, year, Prod_EJ = production)
-
-    # # Add in extra domestic consumption from negative IEA_TPES_diff values
-    # IEA_TPES_diff_prod <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
-    #   filter(sector == "IEA_TPES_diff",
-    #          fuel %in% c("coal", "gas", "refined liquids"),
-    #          value < 0) %>%
-    #   mutate(value = value * -1,
-    #          GCAM_Commodity = case_when(
-    #            fuel == "gas" ~ "natural gas",
-    #            fuel == "refined liquids" ~ "crude oil",
-    #            fuel == "coal" ~ "coal")) %>%
-    #   left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
-    #   select(region, GCAM_Commodity, year, Prod_EJ = value)
-    #
-    # L239.Prod_EJ_R_C_Y <- L239.Prod_EJ_R_C_Y %>%
-    #   bind_rows(IEA_TPES_diff_prod) %>%
-    #   group_by(region, GCAM_Commodity, year) %>%
-    #   summarise(Prod_EJ = sum(Prod_EJ)) %>%
-    #   ungroup
 
     L239.Production_reg_dom_EUR <- A_ff_regionalTechnology_R_Y %>%
       filter(year %in% MODEL_BASE_YEARS,
