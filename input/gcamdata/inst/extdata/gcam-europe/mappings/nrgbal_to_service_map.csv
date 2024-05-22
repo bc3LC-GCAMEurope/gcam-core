@@ -9,5 +9,5 @@ FC_OTH_HH_E_SH,Households,resid heating
 FC_OTH_HH_E_SC,Households,resid cooling
 FC_OTH_HH_E_WH,Households,resid hot water
 FC_OTH_HH_E_CK,Households,resid cooking
-FC_OTH_HH_E_LE,Households,resid lighting
+FC_OTH_HH_E_LE,Households,resid other appliance
 FC_OTH_HH_E_OE,Households,resid others

@@ -101,7 +101,7 @@ resid hot water,electricity,electricity,,,,,,
 resid hot water,gas,gas,50,46,80,80,50,60
 resid hot water,refined liquids,refined liquids,90,46,80,50,50,60
 resid hot water,district heat,district heat,,,,,,
-resid lighting,electricity,electricity,,,,,,
+resid other appliance,electricity,electricity,,,,,,
 resid cooling,electricity,electricity,,,,,,
 resid cooling,gas,gas,50,46,80,80,50,60
 resid others,biomass,biomass,50,46,80,92,90,60

@@ -102,7 +102,7 @@ resid hot water,electricity,electricity,,,,,,
 resid hot water,gas,gas,3.5,3.5,3.5,3.5,3.5,3.5
 resid hot water,refined liquids,refined liquids,3.5,3.5,3.5,3.5,3.5,3.5
 resid hot water,district heat,district heat,,,,,,
-resid lighting,electricity,electricity,,,,,,
+resid other appliance,electricity,electricity,,,,,,
 resid others,biomass,biomass,3.5,3.5,3.5,3.5,3.5,3.5
 resid others,coal,coal,3.5,3.5,3.5,3.5,3.5,3.5
 resid others,electricity,electricity,,,,,,

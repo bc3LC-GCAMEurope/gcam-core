@@ -292,7 +292,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     # First, separate the thermal from the generic services. Generic services will be assumed to produce
     # internal gain energy, so anything in the internal gains assumptions table will be assumed generic
-    generic_services <- c('resid others','resid lighting','resid hot water','resid cooking','comm others')
+    generic_services <- c('resid others','resid other appliance','resid hot water','resid cooking','comm others')
     thermal_services <- dplyr::setdiff(unique(A44.sector_EUR$supplysector), generic_services)
 
     # Base-service: filter only the model base years and change names as indicated in calibrated_techs_bld_det_EUR

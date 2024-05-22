@@ -21,7 +21,7 @@ resid hot water,gas,gas,1.3739374
 resid hot water,electricity,electricity,5.502
 resid hot water,refined liquids,refined liquids,9.879
 resid hot water,district heat,district heat,1.2951476
-resid lighting,electricity,electricity,1.2951476
+resid other appliance,electricity,electricity,1.2951476
 resid cooking,biomass,biomass,0.9417305
 resid cooking,coal,coal,0.9417305
 resid cooking,electricity,electricity,1.2951476

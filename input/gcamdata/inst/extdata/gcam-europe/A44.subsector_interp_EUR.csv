@@ -25,7 +25,7 @@ resid hot water,electricity,share-weight,final-calibration-year,end-year,,fixed
 resid hot water,gas,share-weight,final-calibration-year,end-year,,fixed
 resid hot water,refined liquids,share-weight,final-calibration-year,end-year,,fixed
 resid hot water,district heat,share-weight,final-calibration-year,end-year,,fixed
-resid lighting,electricity,share-weight,final-calibration-year,end-year,,fixed
+resid other appliance,electricity,share-weight,final-calibration-year,end-year,,fixed
 resid others,biomass,share-weight,final-calibration-year,end-year,,fixed
 resid others,coal,share-weight,final-calibration-year,end-year,,fixed
 resid others,electricity,share-weight,final-calibration-year,end-year,,fixed

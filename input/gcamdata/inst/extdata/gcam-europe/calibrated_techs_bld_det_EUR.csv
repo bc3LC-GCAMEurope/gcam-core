@@ -25,7 +25,7 @@ bld_resid,electricity,resid hot water,resid hot water,electricity,electricity,el
 bld_resid,gas,resid hot water,resid hot water,gas,gas,delivered gas,resid,resid,resid_building
 bld_resid,refined liquids,resid hot water,resid hot water,refined liquids,refined liquids,refined liquids enduse,resid,resid,resid_building
 bld_resid,heat,resid hot water,resid hot water,district heat,district heat,district heat,resid,resid,resid_building
-bld_resid,electricity,resid lighting,resid lighting,electricity,electricity,elect_td_bld,resid,resid,resid_building
+bld_resid,electricity,resid other appliance,resid other appliance,electricity,electricity,elect_td_bld,resid,resid,resid_building
 bld_resid,biomass,resid others,resid others,biomass,biomass,delivered biomass,resid,resid,resid_building
 bld_resid,coal,resid others,resid others,coal,coal,delivered coal,resid,resid,resid_building
 bld_resid,electricity,resid others,resid others,electricity,electricity,elect_td_bld,resid,resid,resid_building

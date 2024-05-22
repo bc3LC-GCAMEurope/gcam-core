@@ -103,7 +103,7 @@ resid hot water,refined liquids,refined liquids,0.0007,0.04,0.0929,0.0025,0.0013
 resid hot water,district heat,district heat,,,,,,
 resid cooling,electricity,electricity,,,,,,
 resid cooling,gas,gas,0,0,0,0,0,0
-resid lighting,electricity,electricity,,,,,,
+resid other appliance,electricity,electricity,,,,,,
 resid others,biomass,biomass,0.0035,0.04,0.0929,0,0,0.0453
 resid others,coal,coal,0.0181,0.0256,0.6444,0.0651,0.0521,0.286
 resid others,electricity,electricity,,,,,,
