@@ -65,7 +65,7 @@ R5220P,Pure biodiesels,refined biofuels_FT
 R5230B,Blended bio jet kerosene,biomass
 R5230P,Pure bio jet kerosene,biomass
 R5290,Other liquid biofuels,biomass
-R5300,Biogases,gas
+R5300,Biogases,gasified biomass
 RA000,Renewables and biofuels,
 RA100,Hydro,elec_hydro
 RA200,Geothermal,elec_geothermal
