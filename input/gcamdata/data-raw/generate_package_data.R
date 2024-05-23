@@ -132,6 +132,7 @@ generate_level2_data_names <- function() {
   level2_data_names[["CalInput"]] <- c(level2_data_names[["TechYr"]], "minicam.energy.input", "calibrated.value", "share.weight.year", "subs.share.weight", "tech.share.weight")
   # Market name is specified for efficiencies or coefficients
   level2_data_names[["TechCoef"]] <- c(level2_data_names[["TechYr"]], "minicam.energy.input", "coefficient", "market.name")
+  level2_data_names[["TechCoefNoCreate"]] <- level2_data_names[["TechCoef"]]
   level2_data_names[["TechEff"]] <- c(level2_data_names[["TechYr"]], "minicam.energy.input", "efficiency", "market.name")
   level2_data_names[["TechCost"]] <- c(level2_data_names[["TechYr"]], "minicam.non.energy.input", "input.cost")
   level2_data_names[["TechPmult"]] <- c(level2_data_names[["TechYr"]], "pMult")

@@ -25,7 +25,7 @@ module_gcameurope_water_demand_primary_xml <- function(command, ...) {
 
     # Produce outputs
     create_xml("water_demand_primary_EUR.xml") %>%
-      add_xml_data(L210.TechCoef_EUR, "TechCoef") %>%
+      add_xml_data(L210.TechCoef_EUR, "TechCoefNoCreate") %>%
       add_precursors("L210.TechCoef_EUR") ->
       water_demand_primary_EUR.xml
 

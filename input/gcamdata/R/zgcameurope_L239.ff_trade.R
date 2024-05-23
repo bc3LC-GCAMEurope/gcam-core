@@ -168,6 +168,18 @@ module_gcameurope_L239.ff_trade <- function(command, ...) {
              tech.share.weight = subs.share.weight) %>%
       select(LEVEL2_DATA_NAMES[["Production"]])
 
+    # Remove domestic techs from regions with zero production in all historical years --------------------
+    zero_domestic_consume <- L239.Production_reg_dom_EUR %>%
+      group_by(region, supplysector, subsector, technology) %>%
+      filter(all(calOutputValue <= 0)) %>%
+      ungroup %>%
+      distinct(region, supplysector, subsector, technology)
+
+    L239.Production_reg_dom_EUR <- L239.Production_reg_dom_EUR  %>%  anti_join(zero_domestic_consume, by = c("supplysector", "subsector", "technology", "region"))
+    L239.PrimaryConsKeyword_en_EUR <-  L239.PrimaryConsKeyword_en_EUR %>%  anti_join(zero_domestic_consume, by = c("supplysector", "subsector", "technology", "region"))
+    L239.SubsectorAll_reg_EUR <- L239.SubsectorAll_reg_EUR %>%  anti_join(zero_domestic_consume, by = c("supplysector", "subsector", "region"))
+    L239.TechShrwt_reg_EUR <- L239.TechShrwt_reg_EUR %>%  anti_join(zero_domestic_consume, by = c("supplysector", "subsector", "technology", "region"))
+    L239.TechCoef_reg_EUR <- L239.TechCoef_reg_EUR %>%  anti_join(zero_domestic_consume, by = c("supplysector", "subsector", "technology", "region"))
     # Produce outputs ----
     L239.Production_tra_EUR %>%
       add_title("Technology calibration for traded ff commodities") %>%
