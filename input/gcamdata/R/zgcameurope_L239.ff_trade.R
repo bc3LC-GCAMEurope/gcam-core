@@ -69,15 +69,9 @@ module_gcameurope_L239.ff_trade <- function(command, ...) {
     # need to repeat and keep USA for trade outputs
     L239.Supplysector_tra_EUR <- L239.Supplysector_tra
     L239.SectorUseTrialMarket_tra_EUR <- L239.SectorUseTrialMarket_tra
+    L239.SubsectorAll_tra_EUR <- L239.SubsectorAll_tra
 
-    # Need logits for all european regions for L239.SubsectorAll_tra_EUR and L239.SubsectorAll_reg_EUR
-    L239.SubsectorAll_tra_EUR <- L239.SubsectorAll_tra %>%
-      tidyr::separate(subsector, into = c("market", "subsector"), sep = " traded ") %>%
-      complete(market = unique(GCAM_region_names$region), nesting(region, supplysector, logit.year.fillout, logit.exponent, year.fillout, share.weight,
-                       apply.to, from.year, to.year, to.value, interpolation.function, logit.type)) %>%
-      mutate(subsector = paste(market, supplysector, sep = " ")) %>%
-      select(-market)
-
+    # Need logits for all european regions for L239.SubsectorAll_reg_EUR
     L239.SubsectorAll_reg_EUR <- L239.SubsectorAll_reg %>%
       filter_regions_europe() %>%
       complete(region = gcameurope.EUROSTAT_COUNTRIES,
@@ -100,7 +94,10 @@ module_gcameurope_L239.ff_trade <- function(command, ...) {
       mutate(subsector = paste(region, subsector, sep = " "),
              technology = subsector,
              market.name = region,
-             region = gcam.USA_REGION)
+             region = gcam.USA_REGION) %>%
+      # Need to remove exports from regions with no fossil resources
+      semi_join(L239.SubsectorAll_tra_EUR, by = c("supplysector", "subsector"))
+
 
     A_ff_regionalTechnology_R_Y <-  repeat_add_columns(A_ff_RegionalTechnology,
                                                        tibble(year = MODEL_YEARS)) %>%
