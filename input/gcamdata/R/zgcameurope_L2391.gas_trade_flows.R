@@ -203,7 +203,9 @@ module_gcameurope_L2391.gas_trade_flows <- function(command, ...) {
     L239.Production_tra %>%
       select(-region) %>%
       mutate(region = gsub(" traded natural gas", "", technology)) %>%
-      select(region, year, calOutputValue) -> L2391.Production_tra
+      select(region, year, calOutputValue) %>%
+      complete(year, region = GCAM_region_names$region) %>%
+      tidyr::replace_na(list(calOutputValue = 0)) -> L2391.Production_tra
 
     # Partition calibrated exports by region between pipeline & LNG
     # Join calibrated gross NG trade and shares, calculate calibrated value by trade vehicle
