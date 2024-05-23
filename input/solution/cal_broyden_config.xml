@@ -41,7 +41,7 @@
         <solution-tolerance>0.005</solution-tolerance>
         <solution-floor>0.0001</solution-floor>
         <calibration-tolerance>0.02</calibration-tolerance>
-        <max-model-calcs>1000</max-model-calcs>
+        <max-model-calcs>2000</max-model-calcs>
 
         <preconditioner-solver-component>
             <solution-info-filter>solvable && !(has-market-flag="fully-calibrated")</solution-info-filter>
