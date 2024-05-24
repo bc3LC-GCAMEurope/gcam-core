@@ -32,6 +32,7 @@ module_socio_L281.macro_account_tracking <- function(command, ...) {
              "L2325.GlobalTechEff_chemical",
              "L2326.GlobalTechCoef_aluminum",
              "L244.StubTechEff_bld",
+             "L244.StubTechEff_bld_EUR",
              "L254.StubTranTechCoef",
              # Net energy trade tracking
              "L239.TechCoef_tra",
@@ -70,6 +71,7 @@ module_socio_L281.macro_account_tracking <- function(command, ...) {
                                  "L2325.GlobalTechEff_chemical",
                                  "L2326.GlobalTechCoef_aluminum",
                                  "L244.StubTechEff_bld",
+                                 "L244.StubTechEff_bld_EUR",
                                  "L254.StubTranTechCoef")
 
     # Note: this table will produce gas trade both the "old" way and the LNG/pipeline way
@@ -240,6 +242,7 @@ module_socio_L281.macro_account_tracking <- function(command, ...) {
                      "L2325.GlobalTechEff_chemical",
                      "L2326.GlobalTechCoef_aluminum",
                      "L244.StubTechEff_bld",
+                     "L244.StubTechEff_bld_EUR",
                      "L254.StubTranTechCoef") ->
       L281.GlobalTechAccountOutputUseBasePrice_fd
 
