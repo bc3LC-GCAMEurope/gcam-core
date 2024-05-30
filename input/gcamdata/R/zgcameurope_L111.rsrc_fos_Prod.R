@@ -21,7 +21,7 @@ module_gcameurope_L111.rsrc_fos_Prod <- function(command, ...) {
                      FILE = "energy/mappings/IEA_product_rsrc",
                      FILE = "energy/rsrc_unconv_oil_prod_bbld",
                      FILE = "energy/A11.fos_curves",
-                     "L100.IEA_en_bal_ctry_hist",
+                     FILE = "energy/mappings/IEA_flow_sector",
                      "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
                      "L100.IEA_en_bal_ctry_hist",
                      "L1012.en_bal_EJ_R_Si_Fi_Yh",
@@ -29,7 +29,8 @@ module_gcameurope_L111.rsrc_fos_Prod <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L111.Prod_EJ_R_F_Yh_EUR"))
+    return(c("L111.Prod_EJ_R_F_Yh_EUR",
+             "L111.RsrcCurves_EJ_R_Ffos_EUR"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -93,14 +94,91 @@ module_gcameurope_L111.rsrc_fos_Prod <- function(command, ...) {
         fuel == "gas" ~ "natural gas"),
         technology = fuel)
 
-    # Produce outputs
+
+    # ------- FOSSIL RESOURCE SUPPLY CURVES --------------------------
+
+    # Using supply curves from GCAM 3.0 (same as MiniCAM) (83-93)
+    # These need to be downscaled to the country level (on the basis of resource production) and then
+    # aggregated by the new GCAM regions. This requires that all regions have the same price points
+
+
+    if(is.null(L100.IEA_en_bal_ctry_hist)) {
+      # Proprietary IEA energy data are not available, so used saved outputs
+      L111.RsrcCurves_EJ_R_Ffos_EUR <- extract_prebuilt_data("L111.RsrcCurves_EJ_R_Ffos_EUR")
+    } else {
+
+      MULT_REGIONS <- c("Denmark", "France", "Italy", "Spain", "Norway", "Serbia and Montenegro", "UK")
+      MULT_IDs <- GCAM32_to_EU %>%  filter(GCAMEU_region %in% MULT_REGIONS) %>%  distinct(GCAM_region_ID) %>%  pull
+      # first downscale GCAM Europe regions to iso to get correct GCAM3 region later
+      L111.Prod_EJ_ctry_F_Yh_EUR <- L111.Prod_EJ_R_F_Yh_EUR %>%
+        left_join_error_no_match(GCAM32_to_EU %>%
+                                   # remove france and uk territories
+                                   filter(!(GCAM_region_ID %in% MULT_IDs &
+                                              !country_name %in% gsub("UK", "United Kingdom", MULT_REGIONS)),
+                                          iso != "rou", iso != "lie") %>%
+                                   distinct(iso, GCAM_region_ID), by = "GCAM_region_ID") %>%
+        filter(year >= 2010) %>%
+        group_by(iso, resource = fuel, GCAM_region_ID) %>%
+        summarise(CumulSum = sum(value)) %>%
+        ungroup
+
+      # convert IEA resource data to EJ and filter out all Eurostat regions
+      L111.Prod_EJ_ctry_F_Yh_IEA <-  L100.IEA_en_bal_ctry_hist %>%
+        filter(FLOW == "INDPROD", PRODUCT %in% IEA_product_rsrc$PRODUCT) %>%
+        gather_years %>%
+        # bring in resource information and summarise
+        left_join_error_no_match(IEA_product_rsrc, by = "PRODUCT") %>%
+        # add in conversion - need in EJ to combine with L111.Prod_EJ_R_F_Yh_EUR
+        left_join_error_no_match(IEA_flow_sector, by = c("FLOW" = "flow_code")) %>%
+        group_by(iso, resource) %>%
+        filter(year > 1990) %>%
+        summarise(CumulSum = sum(value * conversion)) %>%
+        ungroup %>%
+        left_join_error_no_match(select(GCAM32_to_EU, iso, GCAM_region_ID), by = "iso") %>%
+        anti_join(L111.Prod_EJ_ctry_F_Yh_EUR, by = "GCAM_region_ID")
+
+      L111.Prod_share_ctry_F_Yh <- bind_rows(L111.Prod_EJ_ctry_F_Yh_EUR, L111.Prod_EJ_ctry_F_Yh_IEA) %>%
+        # calculate production shares of country within GCAM 3.0 region (95-102)
+        left_join_error_no_match(select(GCAM32_to_EU, iso, region_GCAM3), by = "iso") %>%
+        group_by(resource, region_GCAM3) %>%
+        mutate(share = CumulSum / sum(CumulSum)) %>%   # share of iso within region
+        ungroup %>%
+        select(iso, resource, share, region_GCAM3)
+
+
+      L111.RsrcCurves_EJ_R_Ffos_EUR <- L111.Prod_share_ctry_F_Yh %>%
+        left_join(A11.fos_curves, by = c("resource", "region_GCAM3")) %>%
+        mutate(available = available * share) %>%
+        left_join_error_no_match(select(GCAM32_to_EU, iso, GCAM_region_ID, GCAMEU_region), by = "iso") %>%
+        group_by(GCAM_region_ID, resource, subresource, grade, region = GCAMEU_region) %>%
+        summarise(available = sum(available)) %>%
+        ungroup %>%
+        filter_regions_europe() %>%
+        select(-region) %>%
+        left_join_error_no_match(distinct(A11.fos_curves, resource, subresource, grade, extractioncost),
+                                  by = c("resource", "subresource", "grade"))
+
+      L111.RsrcCurves_EJ_R_Ffos_EUR %>%
+        add_title("Fossil resource supply curves for Eurostat", overwrite = TRUE) %>%
+        add_units("available: EJ; extractioncost: 1975$/GJ") %>%
+        add_comments("Downscale GCAM3.0 supply curves to the country level (on the basis of resource") %>%
+        add_comments("production) and aggregate by the new GCAM regions.") %>%
+        add_comments("Use crude oil production shares as a proxy for unconventional oil resources.") %>%
+        add_precursors("common/iso_GCAM_regID", "energy/A11.fos_curves",
+                       "energy/mappings/IEA_product_rsrc", "L100.IEA_en_bal_ctry_hist",
+                       "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR") ->
+        L111.RsrcCurves_EJ_R_Ffos_EUR
+    }
+
+    # Produce outputs ------------------------------
     L111.Prod_EJ_R_F_Yh_EUR %>%
       add_title("Historical fossil energy production") %>%
       add_units("EJ") %>%
       add_precursors( "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR") ->
       L111.Prod_EJ_R_F_Yh_EUR
 
-    return_data(L111.Prod_EJ_R_F_Yh_EUR)
+    return_data(L111.Prod_EJ_R_F_Yh_EUR, L111.RsrcCurves_EJ_R_Ffos_EUR)
+
   } else {
     stop("Unknown command")
   }

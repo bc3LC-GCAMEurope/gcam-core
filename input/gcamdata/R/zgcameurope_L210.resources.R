@@ -37,7 +37,6 @@ module_gcameurope_L210.resources <- function(command, ...) {
                                "L210.GrdRenewRsrcMax_geo",
                                "L210.GrdRenewRsrcCurves_EGS",
                                "L210.GrdRenewRsrcMax_EGS",
-                               "L210.ResSubresourceProdLifetime",
                                "L210.SubresourcePriceAdder",
                                "L210.ResReserveTechLifetime",
                                "L210.ResReserveTechDeclinePhase",
@@ -54,7 +53,7 @@ module_gcameurope_L210.resources <- function(command, ...) {
                     FILE = "energy/A10.TechChange_SSPs",
                     FILE = "energy/A10.EnvironCost_SSPs",
                     FILE = "energy/A15.roofPV_TechChange",
-                    FILE = "energy/A10.ResSubresourceProdLifetime",
+                    FILE = "gcam-europe/A10.ResSubresourceProdLifetime",
                     FILE = "energy/A10.SubresourcePriceAdder",
                     FILE = "energy/A10.ResReserveTechLifetime",
                     FILE = "energy/A10.ResReserveTechDeclinePhase",
@@ -62,7 +61,7 @@ module_gcameurope_L210.resources <- function(command, ...) {
                     FILE = "energy/A21.globalrsrctech_cost",
                     FILE = "energy/A21.globalrsrctech_coef",
                     "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
-                    "L111.RsrcCurves_EJ_R_Ffos",
+                    "L111.RsrcCurves_EJ_R_Ffos_EUR",
                     "L111.Prod_EJ_R_F_Yh_EUR",
                     "L112.RsrcCurves_Mt_R_U",
                     "L113.RsrcCurves_EJ_R_MSW",
@@ -86,6 +85,7 @@ module_gcameurope_L210.resources <- function(command, ...) {
                       "L210.RsrcCurves_fos_EUR",
                       "L210.ReserveCalReserve_EUR",
                       "L210.RsrcCalProd_EUR",
+                      "L210.ResSubresourceProdLifetime_EUR",
                       paste0(OUTPUTS_TO_COPY_FILTER, "_EUR"))
 
   if(command == driver.DECLARE_INPUTS) {
@@ -114,9 +114,6 @@ module_gcameurope_L210.resources <- function(command, ...) {
 
     # Create outputs that are simply copied from main scripts and filtered to Eurostat regions
     copy_filter_europe(all_data, OUTPUTS_TO_COPY_FILTER)
-
-    L111.RsrcCurves_EJ_R_Ffos <- L111.RsrcCurves_EJ_R_Ffos %>%
-      filter_regions_europe(region_ID_mapping  = GCAM_region_names)
 
     # 1A. Tradbio: Output unit, price unit, market -------------
     L210.rsrc_info_tradbio_EUR <- A10.rsrc_info %>%
@@ -249,31 +246,31 @@ module_gcameurope_L210.resources <- function(command, ...) {
       ReserveTotal_EJ_R_F
 
 
-    L111.RsrcCurves_EJ_R_Ffos_pre <- L111.RsrcCurves_EJ_R_Ffos %>%
+    L111.RsrcCurves_EJ_R_Ffos_EUR_pre <- L111.RsrcCurves_EJ_R_Ffos_EUR %>%
       group_by(GCAM_region_ID, resource,subresource) %>%
       summarize(available = sum(available)) %>%
       ungroup()
 
     regions <- GCAM_region_names %>% filter_regions_europe() %>% distinct(GCAM_region_ID)
-    rsrc_regions <- distinct(L111.RsrcCurves_EJ_R_Ffos_pre, GCAM_region_ID)
+    rsrc_regions <- distinct(L111.RsrcCurves_EJ_R_Ffos_EUR_pre, GCAM_region_ID)
 
     no_rsrc_regions <- unique(anti_join(regions, rsrc_regions, by = "GCAM_region_ID"))
 
-    L111.RsrcCurves_EJ_R_Ffos_noRsrc <- tibble(
+    L111.RsrcCurves_EJ_R_Ffos_EUR_noRsrc <- tibble(
       no_rsrc_regions) %>%
-      repeat_add_columns(tibble(subresource = unique(L111.RsrcCurves_EJ_R_Ffos_pre$subresource))) %>%
+      repeat_add_columns(tibble(subresource = unique(L111.RsrcCurves_EJ_R_Ffos_EUR_pre$subresource))) %>%
       mutate(resource = if_else(subresource == "unconventional oil", "crude oil", subresource),
              available = 0) %>%
       filter(!is.na(GCAM_region_ID))
 
-    L111.RsrcCurves_EJ_R_Ffos_pre %>%
-      bind_rows(L111.RsrcCurves_EJ_R_Ffos_noRsrc) %>%
+    L111.RsrcCurves_EJ_R_Ffos_EUR_pre %>%
+      bind_rows(L111.RsrcCurves_EJ_R_Ffos_EUR_noRsrc) %>%
       left_join_error_no_match(ReserveTotal_EJ_R_F %>% rename(subresource = technology), ., by=c("GCAM_region_ID", "fuel" = "resource","subresource")) %>%
       filter(value > available) %>%
       mutate(available = value - available) %>%
       select(-value) %>%
       rename(resource = fuel) %>%
-      left_join_error_no_match(L111.RsrcCurves_EJ_R_Ffos %>%
+      left_join_error_no_match(L111.RsrcCurves_EJ_R_Ffos_EUR %>%
                                  group_by(GCAM_region_ID, resource, subresource) %>%
                                  filter(extractioncost == max(extractioncost)) %>%
                                  ungroup() %>%
@@ -290,8 +287,8 @@ module_gcameurope_L210.resources <- function(command, ...) {
                   # anyways.
                   mutate(extractioncost = extractioncost * 1.2,
                          available = 0)) %>%
-      bind_rows(L111.RsrcCurves_EJ_R_Ffos, .) ->
-      L111.RsrcCurves_EJ_R_Ffos
+      bind_rows(L111.RsrcCurves_EJ_R_Ffos_EUR, .) ->
+      L111.RsrcCurves_EJ_R_Ffos_EUR
 
     # 2C. Fossil: Calibrated production ----------------------------------
     # L210.RsrcCalProd_EUR: calibrated production of depletable resources
@@ -333,7 +330,7 @@ module_gcameurope_L210.resources <- function(command, ...) {
 
     # 2D. Fossil: Resource supply curves ---------------------------------------------
     # L210.RsrcCurves_fos_EUR: supply curves of fossil resources
-    L210.RsrcCurves_fos_EUR <- L111.RsrcCurves_EJ_R_Ffos %>%
+    L210.RsrcCurves_fos_EUR <- L111.RsrcCurves_EJ_R_Ffos_EUR %>%
       # Add region name
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       mutate(available = round(available, energy.DIGITS_RESOURCE)) %>%
@@ -366,6 +363,12 @@ module_gcameurope_L210.resources <- function(command, ...) {
       anti_join(L210.ResTechShrwt_EUR, by = c("region", "resource", "subresource", "technology", "year")) %>%
       bind_rows(L210.ResTechShrwt_EUR)
 
+    # Resource-reserve assumptions which just need to get copied to all regions and years
+    A10.ResSubresourceProdLifetime %>%
+      repeat_add_columns(GCAM_region_names) %>%
+      filter_regions_europe() %>%
+      select(LEVEL2_DATA_NAMES[["ResSubresourceProdLifetime"]]) ->
+      L210.ResSubresourceProdLifetime_EUR
 
     # Produce outputs ===================================================
     L210.RenewRsrc_EUR %>%
@@ -394,14 +397,14 @@ module_gcameurope_L210.resources <- function(command, ...) {
       add_units("EJ cumulative") %>%
       add_comments("Calibrated reserve additions in each model year from which") %>%
       add_comments("the vintage will produce from for the assumed lifetime") %>%
-      add_precursors("L111.Prod_EJ_R_F_Yh_EUR", "energy/A10.ResSubresourceProdLifetime", "common/GCAM_region_names", "energy/A10.subrsrc_info") ->
+      add_precursors("L111.Prod_EJ_R_F_Yh_EUR", "gcam-europe/A10.ResSubresourceProdLifetime", "common/GCAM_region_names", "energy/A10.subrsrc_info") ->
       L210.ReserveCalReserve_EUR
 
     L210.RsrcCurves_fos_EUR %>%
       add_title("Supply curves of fossil resources") %>%
       add_units("available: EJ; extractioncost: 1975$/GJ") %>%
-      add_comments("Data from L111.RsrcCurves_EJ_R_Ffos") %>%
-      add_precursors("L111.RsrcCurves_EJ_R_Ffos", "L111.Prod_EJ_R_F_Yh_EUR", "energy/A10.ResSubresourceProdLifetime", "common/GCAM_region_names") ->
+      add_comments("Data from L111.RsrcCurves_EJ_R_Ffos_EUR") %>%
+      add_precursors("L111.RsrcCurves_EJ_R_Ffos_EUR", "L111.Prod_EJ_R_F_Yh_EUR", "gcam-europe/A10.ResSubresourceProdLifetime", "common/GCAM_region_names") ->
       L210.RsrcCurves_fos_EUR
 
     L210.GrdRenewRsrcCurves_tradbio_EUR %>%
