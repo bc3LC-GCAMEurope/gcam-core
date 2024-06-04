@@ -1,0 +1,40 @@
+# File: grid_regions.csv
+# Title: European country-grid groupings mappings
+# Units: NA
+# Column types: cc
+# ----------
+region,grid_region
+Austria,Central_Western_Europe
+Belgium,Central_Western_Europe
+Bulgaria,South_Eastern_Europe
+Croatia,South_Eastern_Europe
+Cyprus,South_Eastern_Europe
+Czech Republic,Central_Eastern_Europe
+Denmark,Northern_Europe
+Estonia,Northern_Europe
+Finland,Northern_Europe
+France,Central_Western_Europe
+Germany,Central_Western_Europe
+Greece,South_Eastern_Europe
+Hungary,Central_Eastern_Europe
+Ireland,British_Isles
+Italy,Appenine_Peninsula
+Latvia,Northern_Europe
+Lithuania,Northern_Europe
+Luxembourg,Central_Western_Europe
+Malta,Appenine_Peninsula
+Netherlands,Central_Western_Europe
+Poland,Central_Eastern_Europe
+Portugal,Iberian_Peninsula
+Romania,Central_Eastern_Europe
+Slovakia,Central_Eastern_Europe
+Slovenia,Central_Eastern_Europe
+Spain,Iberian_Peninsula
+Sweden,Northern_Europe
+Albania,South_Eastern_Europe
+Bosnia and Herzegovina,South_Eastern_Europe
+Macedonia,South_Eastern_Europe
+Norway,Northern_Europe
+Serbia and Montenegro,South_Eastern_Europe
+Switzerland,Central_Western_Europe
+UK,British_Isles
