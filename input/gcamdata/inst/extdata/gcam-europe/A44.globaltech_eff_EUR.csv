@@ -1,23 +1,23 @@
 # File: A44.globaltech_eff_EUR.csv
 # Title: Building default technology efficiency for gcameurope
 # Units: Unitless
-# Source: Same as gcamusa A44.globaltech_eff. Heat pumps have been removed and traditional biomass and district heat have been added, as well as some biomass and coal technologies for different supplysectors. Unpublished inputs to the NEMS model; provided by EIA. Assumptions are simliar to the 2016 Annual Energy Outlook (Table 22; https://www.eia.gov/outlooks/aeo/data/browser/#/?id=30-AEO2016&cases=ref2016~ref_no_cpp&sourcekey=0).
+# Source: Same as gcamusa A44.globaltech_eff. Heat pumps have been removed and traditional biomass and district heat have been added, as well as some biomass and coal technologies for different supplysectors. Unpublished inputs to the NEMS model; provided by EIA. Assumptions are simliar to the 2016 Annual Energy Outlook (Table 22; https://www.eia.gov/outlooks/aeo/data/browser/#/?id=30-AEO2016&cases=ref2016~ref_no_cpp&sourcekey=0)
 # Column types: cccccnnnnnnnnn
 # ----------
 supplysector,subsector,technology,technology_detail,minicam.energy.input,1971,2010,2015,2020,2025,2030,2035,2040,2100
-resid heating,biomass,biomass,wood furnace,delivered biomass,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4
-resid heating,coal,coal,coal furnace,delivered coal,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4
-resid heating,gas,gas,gas furnace,delivered gas,0.78,0.78,0.8,0.8,0.8,0.8,0.8,0.8,0.8
-resid heating,gas,gas,gas furnace hi-eff,delivered gas,0.98,0.98,0.98,0.98,0.98,0.98,0.98,0.98,0.98
-resid heating,gas,hydrogen,hydrogen furnace,delivered gas,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8
-resid heating,electricity,electricity,electric furnace,elect_td_bld,0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99
-resid heating,refined liquids,refined liquids,fuel furnace,refined liquids enduse,0.8,0.8,0.83,0.83,0.83,0.83,0.83,0.83,0.83
-resid heating,refined liquids,refined liquids,fuel furnace hi-eff,refined liquids enduse,0.97,0.97,0.97,0.97,0.97,0.97,0.97,0.97,0.97
-resid heating,traditional biomass,traditional biomass,traditional biomass furnace,traditional biomass,0.9714305,1.0100451,1.0151055,1.0201911,1.0253023,1.0304391,1.0356016,1.0407900,1.105116
-resid heating,district heat,district heat,district heat furnace,district heat,1,1,1,1,1,1,1,1,1
-resid cooling,electricity,electricity,air conditioning,elect_td_bld,3.043,3.043,3.81,3.81,3.81,3.81,3.81,3.81,3.81
-resid cooling,electricity,electricity,air conditioning hi-eff,elect_td_bld,7.03,7.03,7.03,7.03,7.03,7.03,7.03,7.03,7.03
-resid cooling,gas,gas,gas air conditioning,delivered gas,0.83,0.83,0.83,0.83,0.83,0.83,0.83,0.83,0.83
+resid heating modern,biomass,biomass,wood furnace,delivered biomass,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4
+resid heating coal,coal,coal,coal furnace,delivered coal,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4
+resid heating modern,gas,gas,gas furnace,delivered gas,0.78,0.78,0.8,0.8,0.8,0.8,0.8,0.8,0.8
+resid heating modern,gas,gas,gas furnace hi-eff,delivered gas,0.98,0.98,0.98,0.98,0.98,0.98,0.98,0.98,0.98
+resid heating modern,gas,hydrogen,hydrogen furnace,delivered gas,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8
+resid heating modern,electricity,electricity,electric furnace,elect_td_bld,0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99
+resid heating modern,refined liquids,refined liquids,fuel furnace,refined liquids enduse,0.8,0.8,0.83,0.83,0.83,0.83,0.83,0.83,0.83
+resid heating modern,refined liquids,refined liquids,fuel furnace hi-eff,refined liquids enduse,0.97,0.97,0.97,0.97,0.97,0.97,0.97,0.97,0.97
+resid heating TradBio,traditional biomass,traditional biomass,traditional biomass furnace,traditional biomass,0.9714305,1.0100451,1.0151055,1.0201911,1.0253023,1.0304391,1.0356016,1.04079,1.105116
+resid heating modern,district heat,district heat,district heat furnace,district heat,1,1,1,1,1,1,1,1,1
+resid cooling modern,electricity,electricity,air conditioning,elect_td_bld,3.043,3.043,3.81,3.81,3.81,3.81,3.81,3.81,3.81
+resid cooling modern,electricity,electricity,air conditioning hi-eff,elect_td_bld,7.03,7.03,7.03,7.03,7.03,7.03,7.03,7.03,7.03
+resid cooling modern,gas,gas,gas air conditioning,delivered gas,0.83,0.83,0.83,0.83,0.83,0.83,0.83,0.83,0.83
 resid hot water,biomass,biomass,wood water heater,delivered biomass,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4
 resid hot water,coal,coal,coal water heater,delivered coal,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4
 resid hot water,gas,gas,gas water heater,delivered gas,0.59,0.59,0.62,0.62,0.62,0.62,0.62,0.62,0.62
@@ -37,13 +37,13 @@ resid cooking,gas,gas,gas oven,delivered gas,0.399,0.399,0.399,0.399,0.399,0.399
 resid cooking,gas,gas,gas oven hi-eff,delivered gas,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42
 resid cooking,refined liquids,refined liquids,lpg oven,refined liquids enduse,0.399,0.399,0.399,0.399,0.399,0.399,0.399,0.399,0.399
 resid cooking,refined liquids,refined liquids,lpg oven hi-eff,refined liquids enduse,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42
-resid cooking,traditional biomass,traditional biomass,traditional biomass,traditional biomass,0.9714305,1.0100451,1.0151055,1.0201911,1.0253023,1.0304391,1.0356016,1.0407900,1.105116
-resid others,biomass,biomass,biomass,delivered biomass,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4
-resid others,coal,coal,coal,delivered coal,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4
-resid others,gas,gas,gas,delivered gas,1,1,1,1,1,1,1,1,1
-resid others,gas,hydrogen,hydrogen,delivered gas,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6
-resid others,electricity,electricity,electricity,elect_td_bld,1,1,1,1,1,1,1,1,1
-resid others,refined liquids,refined liquids,refined liquids,refined liquids enduse,1,1,1,1,1,1,1,1,1
+resid cooking,traditional biomass,traditional biomass,traditional biomass,traditional biomass,0.9714305,1.0100451,1.0151055,1.0201911,1.0253023,1.0304391,1.0356016,1.04079,1.105116
+resid others modern,biomass,biomass,biomass,delivered biomass,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4
+resid others coal,coal,coal,coal,delivered coal,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4
+resid others modern,gas,gas,gas,delivered gas,1,1,1,1,1,1,1,1,1
+resid others modern,gas,hydrogen,hydrogen,delivered gas,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6
+resid others modern,electricity,electricity,electricity,elect_td_bld,1,1,1,1,1,1,1,1,1
+resid others modern,refined liquids,refined liquids,refined liquids,refined liquids enduse,1,1,1,1,1,1,1,1,1
 comm heating,biomass,biomass,wood furnace,delivered biomass,0.65,0.65,0.65,0.65,0.65,0.65,0.65,0.65,0.65
 comm heating,coal,coal,coal furnace,delivered coal,0.65,0.65,0.65,0.65,0.65,0.65,0.65,0.65,0.65
 comm heating,gas,gas,gas furnace,delivered gas,0.758,0.758,0.775,0.775,0.775,0.775,0.775,0.775,0.775

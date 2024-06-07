@@ -104,6 +104,7 @@
 #include "functions/include/building_service_input.h"
 #include "functions/include/satiation_demand_function.h"
 #include "functions/include/food_demand_input.h"
+#include "technologies/include/ag_storage_technology.h"
 #include "functions/include/nested_ces_production_function_macro.h"
 #include <typeinfo>
 
@@ -834,6 +835,29 @@ void XMLDBOutputter::startVisitTechnology( const Technology* aTechnology, const 
             }
         }
     }
+    const AgStorageTechnology* agStorageTech = dynamic_cast <const AgStorageTechnology*> (mCurrentTechnology);
+    if (agStorageTech) {
+        writeItemToBuffer(agStorageTech->mStoredValue, "closing-stock",
+            *childBuffer, mTabs.get(), 0, mCurrentOutputUnit);
+
+        const Modeltime* modeltime = scenario->getModeltime();
+        int techYear = agStorageTech->getYear(); 
+        int techPeriod = modeltime->getyr_to_per(techYear);
+        double openStock = techPeriod <= modeltime->getFinalCalibrationPeriod() ? 
+            agStorageTech->mOpeningStock : 
+            agStorageTech->mStoredValue * agStorageTech->mLossCoefficient;
+        
+        writeItemToBuffer(openStock, "opening-stock",
+            *childBuffer, mTabs.get(), 0, mCurrentOutputUnit);
+
+        writeItemToBuffer(agStorageTech->mStorageCost, "storage-cost",
+            *childBuffer, mTabs.get(), 0, mCurrentOutputUnit);
+
+        writeItemToBuffer(agStorageTech->mAdjExpectedPrice, "adj-exp-price",
+            *childBuffer, mTabs.get(), 0, mCurrentOutputUnit);
+
+
+    }
 }
 
 void XMLDBOutputter::endVisitTechnology( const Technology* aTechnology,
@@ -1389,10 +1413,16 @@ void XMLDBOutputter::startVisitClimateModel( const IClimateModel* aClimateModel,
                            aClimateModel->getForcing( "SO2", util::round( year ) ),
                            year );
         
-        // DirSO2 Forcing
-        writeItemUsingYear( "forcing-DirSO2", "W/m^2",
-                           aClimateModel->getForcing( "DirSO2", util::round( year ) ),
+        // NH3 Forcing
+        writeItemUsingYear( "forcing-NH3", "W/m^2",
+                           aClimateModel->getForcing( "NH3", util::round( year ) ),
                            year );
+        
+        // aci Forcing
+        writeItemUsingYear( "forcing-aci", "W/m^2",
+                           aClimateModel->getForcing( "aci", util::round( year ) ),
+                           year );
+        
         
         // TropO3 Forcing
         writeItemUsingYear( "forcing-TropO3", "W/m^2",
@@ -1476,11 +1506,7 @@ void XMLDBOutputter::startVisitClimateModel( const IClimateModel* aClimateModel,
         writeItemUsingYear( "forcing-total", "W/m^2",
                             aClimateModel->getTotalForcing( year ),
                              year );
-        
-        // RCP Forcing
-        writeItemUsingYear( "forcing-RCP", "W/m^2",
-                           aClimateModel->getForcing( "RCP", year ),
-                           year );
+ 
      }
 
     // Write net terrestrial uptake
@@ -1765,14 +1791,6 @@ void XMLDBOutputter::startVisitNationalAccount( const NationalAccount* aNational
     attrs[ "name" ] = aNationalAccount->enumToXMLName(NationalAccount::CONSUMER_DURABLE_INV);
     XMLWriteElementWithAttributes( currValue, "account", mBuffer, mTabs.get(), attrs );
 
-    currValue = aNationalAccount->getAccountValue( NationalAccount::GDP_PER_CAPITA );
-    attrs[ "name" ] = aNationalAccount->enumToXMLName(NationalAccount::GDP_PER_CAPITA);
-    XMLWriteElementWithAttributes( currValue, "account", mBuffer, mTabs.get(), attrs );
-    
-    currValue = aNationalAccount->getAccountValue( NationalAccount::GDP_PER_CAPITA_PPP );
-    attrs[ "name" ] = aNationalAccount->enumToXMLName(NationalAccount::GDP_PER_CAPITA_PPP);
-    XMLWriteElementWithAttributes( currValue, "account", mBuffer, mTabs.get(), attrs );
-
     currValue = aNationalAccount->getAccountValue( NationalAccount::VALUE_ADDED );
     attrs[ "name" ] = aNationalAccount->enumToXMLName(NationalAccount::VALUE_ADDED);
     XMLWriteElementWithAttributes( currValue, "account", mBuffer, mTabs.get(), attrs );
@@ -1818,7 +1836,17 @@ void XMLDBOutputter::startVisitNationalAccount( const NationalAccount* aNational
     attrs[ "name" ] = aNationalAccount->enumToXMLName(NationalAccount::LABOR_WAGES);
     XMLWriteElementWithAttributes( currValue, "account", mBuffer, mTabs.get(), attrs );
     
-    attrs[ "unit" ] = "mil pers";
+    // per cap values have different units
+    attrs[ "unit" ] = "thous 1990$ percap";
+    currValue = aNationalAccount->getAccountValue( NationalAccount::GDP_PER_CAPITA );
+    attrs[ "name" ] = aNationalAccount->enumToXMLName(NationalAccount::GDP_PER_CAPITA);
+    XMLWriteElementWithAttributes( currValue, "account", mBuffer, mTabs.get(), attrs );
+    
+    currValue = aNationalAccount->getAccountValue( NationalAccount::GDP_PER_CAPITA_PPP );
+    attrs[ "name" ] = aNationalAccount->enumToXMLName(NationalAccount::GDP_PER_CAPITA_PPP);
+    XMLWriteElementWithAttributes( currValue, "account", mBuffer, mTabs.get(), attrs );
+
+    attrs[ "unit" ] = "thous pers";
     // labor force in persons
     currValue = aNationalAccount->getAccountValue( NationalAccount::LABOR_FORCE );
     attrs[ "name" ] = aNationalAccount->enumToXMLName(NationalAccount::LABOR_FORCE);
@@ -1939,11 +1967,17 @@ void XMLDBOutputter::startVisitBuildingNodeInput(const BuildingNodeInput* aBuild
     mBufferStack.push(childBuffer);
 
     if (aBuildingNodeInput->getSatiationDemandFunction() ) {
-        writeItemToBuffer(aBuildingNodeInput->getSatiationDemandFunction()->mSatiationImpedance,
+        writeItemToBuffer(aBuildingNodeInput->getSatiationDemandFunction()->mParsedSatiationImpedance,
             "satiation-impedance", *childBuffer, mTabs.get(), 1, "unitless");
-        writeItemToBuffer(aBuildingNodeInput->getSatiationDemandFunction()->mSatiationLevel,
-            "satiation-level", *childBuffer, mTabs.get(), 1, "GJ/m^2");
+        writeItemToBuffer(aBuildingNodeInput->getSatiationDemandFunction()->mParsedSatiationLevel,
+            "satiation-level", *childBuffer, mTabs.get(), 1, "m^2/pers");
+    }  else  {
+
+    writeItemToBuffer(aBuildingNodeInput->mBiasAdjustParam,
+        "bias-adder", *childBuffer, mTabs.get(), 1, "m^2/pers");
+
     }
+
     const Modeltime* modeltime = scenario->getModeltime();
     for( int per = 0; per < modeltime->getmaxper(); ++per ) {
         double price = aBuildingNodeInput->getPricePaid( mCurrentRegion, per );
@@ -1956,6 +1990,8 @@ void XMLDBOutputter::startVisitBuildingNodeInput(const BuildingNodeInput* aBuild
             writeItemToBuffer( floorspace, "floorspace",
                 *childBuffer, mTabs.get(), per, "billion m^2" );
         }
+
+
     }
 }
 
@@ -1983,16 +2019,25 @@ void XMLDBOutputter::endVisitBuildingNodeInput( const BuildingNodeInput* aBuildi
 void XMLDBOutputter::startVisitBuildingServiceInput( const BuildingServiceInput* aBuildingServiceInput, const int aPeriod ) {
     startVisitInput( aBuildingServiceInput, aPeriod );
 
-    writeItemToBuffer( aBuildingServiceInput->getSatiationDemandFunction()->mSatiationImpedance,
+    if (aBuildingServiceInput->getSatiationDemandFunction()) {
+    writeItemToBuffer( aBuildingServiceInput->getSatiationDemandFunction()->mParsedSatiationImpedance,
                        "satiation-impedance", *mBufferStack.top(), mTabs.get(), 1, "unitless" );
-    writeItemToBuffer( aBuildingServiceInput->getSatiationDemandFunction()->mSatiationLevel,
+    writeItemToBuffer( aBuildingServiceInput->getSatiationDemandFunction()->mParsedSatiationLevel,
                        "satiation-level", *mBufferStack.top(), mTabs.get(), 1, "GJ/m^2" );
+    }
+
     const Modeltime* modeltime = scenario->getModeltime();
     for( int per = 0; per < modeltime->getmaxper(); ++per ) {
         double serviceDensity = aBuildingServiceInput->mServiceDensity[ per ];
         if( !objects::isEqual<double>( serviceDensity, 0.0 ) ) {
             writeItemToBuffer( serviceDensity, "service-density",
                 *mBufferStack.top(), mTabs.get(), per, "GJ/m^2" );
+        }
+
+        double BiasAdderEn = aBuildingServiceInput->getBiasAdder( per );
+        if (!objects::isEqual<double>(BiasAdderEn, 0.0)) {
+            writeItemToBuffer(BiasAdderEn, "bias-adder",
+                *mBufferStack.top(), mTabs.get(), per, "GJ/m^2");
         }
     }
 }

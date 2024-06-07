@@ -208,7 +208,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       anti_join(EUR_hhEnergyConsum_shares %>% filter(share_TFEbysector != 0),
                 by = c("GCAM_region_ID", "sector", "fuel")) %>%
       distinct(GCAM_region_ID, sector, fuel) %>%
-      left_join(EUR_hhEnergyConsum_shares %>% distinct(service, sector, fuel), by = c("sector", "fuel")) %>%
+      left_join(EUR_hhEnergyConsum_shares %>% distinct(service, sector, fuel), by = c("sector", "fuel"),relationship = "many-to-many") %>%
       mutate(share_TFEbysector = 0.001)
 
     EUR_hhEnergyConsum_shares <- EUR_hhEnergyConsum_shares %>%
@@ -390,7 +390,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       pull(regions_NoDistHeat)
 
     # Note that this produces a final output table.
-    L144.end_use_eff_EUR_Index %>%
+    L144.end_use_eff_EUR <-  L144.end_use_eff_EUR_Index %>%
       # Join AVERAGE efficiency values (by sector and technology)
       left_join_error_no_match(L144.TechUSA_eff %>%
                                  rename(efficiency = value),
@@ -402,8 +402,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
              year = as.integer(year)) %>%
       # Drop district heat in regions where these are not modeled
       filter(!region_subsector %in% c(regions_NoDistHeat)) %>%
-      select(GCAM_region_ID, region_GCAM3, supplysector, subsector, technology, year, value) ->
-      L144.end_use_eff_EUR # This is a final output table.
+      select(GCAM_region_ID, region_GCAM3, supplysector, subsector, technology, year, value)
+ # This is a final output table.
 
 
     # 1C building non-energy costs ############################################################################
@@ -783,9 +783,9 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
 
     # Calculate base service, which is the product of energy consumption and efficiency
     # Note that this produces a final output table
-    L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
+  L144.base_service_EJ_serv_EUR <- L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
       # Join efficiency data
-      left_join_error_no_match(L144.end_use_eff_EUR_2f, by = c("GCAM_region_ID", "sector", "fuel", "service", "year")) %>%
+      left_join(L144.end_use_eff_EUR_2f, by = c("GCAM_region_ID", "sector", "fuel", "service", "year")) %>%
       # Energy output is the product of energy consumption and efficiency
       mutate(value = value * value_eff) %>%
       # Aggregate across fuel types (by region, sector, service)
@@ -794,8 +794,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       ungroup() %>%
       # explicitly set zeros for any services without values
       complete(nesting(GCAM_region_ID, year), nesting(sector, service)) %>%
-      tidyr::replace_na(list(value = 0)) ->
-      L144.base_service_EJ_serv_EUR
+      tidyr::replace_na(list(value = 0))
+
 
     # complete resid cooling to have gas and electricity
     L144.in_EJ_R_bld_serv_F_Yh_EUR_residcooling <- L144.in_EJ_R_bld_serv_F_Yh_EUR %>%

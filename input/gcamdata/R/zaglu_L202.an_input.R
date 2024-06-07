@@ -22,7 +22,6 @@
 #' @importFrom tidyr complete replace_na
 #' @author BBL August 2017
 module_aglu_L202.an_input <- function(command, ...) {
-
   MODULE_INPUTS <-
     c(FILE = "common/GCAM_region_names",
       FILE = "energy/A_regions",
@@ -43,7 +42,11 @@ module_aglu_L202.an_input <- function(command, ...) {
       "L109.ag_ALL_Mt_R_C_Y",
       "L1321.ag_prP_R_C_75USDkg",
       "L1321.an_prP_R_C_75USDkg",
-      "L233.TechCoef")
+      "L110.For_ALL_bm3_R_Y",
+      "L233.TechCoef",
+      "L110.IO_Coefs_pulp",
+      "L1321.For_Cost",
+      "L1327.IO_woodpulp_energy")
 
   MODULE_OUTPUTS <-
     c("L202.RenewRsrc",
@@ -68,7 +71,10 @@ module_aglu_L202.an_input <- function(command, ...) {
       "L202.StubTechProd_an",
       "L202.StubTechCoef_an",
       "L202.StubTechCost_an",
-      "L202.ag_consP_R_C_75USDkg")
+      "L202.ag_consP_R_C_75USDkg",
+      "L202.StubTechCost_For_proc",
+      "L202.StubTechProd_in_Forest",
+      "L202.StubTechProd_in_pulp_energy")
 
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -91,6 +97,11 @@ module_aglu_L202.an_input <- function(command, ...) {
     # Load required inputs ----
 
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
+
+    L110.For_ALL_bm3_R_Y <- L110.For_ALL_bm3_R_Y %>% filter(GCAM_commodity %in% aglu.FOREST_COMMODITIES) %>%  group_by(GCAM_commodity, GCAM_region_ID,year) %>%
+      mutate(value=sum(Prod_bm3)) %>% ungroup() %>% select(GCAM_commodity, GCAM_region_ID,year,value) %>% distinct() %>% mutate(GCAM_commodity= paste0(GCAM_commodity,"_processing"))
+    L110.IO_Coefs_pulp <-L110.IO_Coefs_pulp
+    L1321.For_Cost <- L1321.For_Cost %>% mutate(GCAM_commodity = paste0(GCAM_commodity, "_processing"))
 
     # 1. Livestock feed IO coef in GCAM regions ----
     # Moved to here from LA107 (XZ)
@@ -296,8 +307,42 @@ module_aglu_L202.an_input <- function(command, ...) {
       mutate(share.weight.year = year,
              subs.share.weight = if_else(calOutputValue > 0, 1, 0),
              tech.share.weight = if_else(calOutputValue > 0, 1, 0)) %>%
-      select(LEVEL2_DATA_NAMES[["StubTechProd"]]) ->
+      select(LEVEL2_DATA_NAMES[["StubTechProd"]]) %>%
+      #Take out forest supply sectors from this
+      filter(!stub.technology %in% c(aglu.FOREST_COMMODITIES, "woodpulp_energy"))->
       L202.StubTechProd_in
+
+    A_an_input_technology %>%
+      write_to_all_regions(c(LEVEL2_DATA_NAMES[["Tech"]]), GCAM_region_names) %>%
+      mutate(stub.technology = technology) %>%
+      filter(stub.technology %in% aglu.FOREST_COMMODITIES) %>%
+      repeat_add_columns(tibble(year = MODEL_BASE_YEARS)) %>%
+      # not every region/technology/year has a match, so need to use left_join
+      left_join(L110.For_ALL_bm3_R_Y %>% left_join_error_no_match(GCAM_region_names, by = c("GCAM_region_ID")), by = c("region", "supplysector" = "GCAM_commodity", "year")) %>%
+      mutate(calOutputValue = round(value, aglu.DIGITS_CALOUTPUT)) %>%
+      # subsector and technology shareweights (subsector requires the year as well)
+      mutate(share.weight.year = year,
+             subs.share.weight = if_else(calOutputValue > 0, 1, 0),
+             tech.share.weight = if_else(calOutputValue > 0, 1, 0)) %>%
+      select(LEVEL2_DATA_NAMES[["StubTechProd"]]) ->L202.StubTechProd_in_Forest
+      #Take out forest supply sectors from this
+
+    # MMC modification for linkage to pulp and paper industry 9/22
+    A_an_input_technology %>%
+      write_to_all_regions(c(LEVEL2_DATA_NAMES[["Tech"]]), GCAM_region_names) %>%
+      mutate(stub.technology = technology) %>%
+      filter(stub.technology == "woodpulp_energy") %>%
+      repeat_add_columns(tibble(year = MODEL_BASE_YEARS)) %>%
+      # not every region/technology/year has a match, so need to use left_join
+      left_join(L1327.IO_woodpulp_energy %>% left_join_error_no_match(GCAM_region_names, by = c("GCAM_region_ID")),
+                by = c("region", "supplysector" = "GCAM_commodity", "year")) %>%
+      mutate(calOutputValue = round(calOutputValue, aglu.DIGITS_CALOUTPUT)) %>%
+      # subsector and technology shareweights (subsector requires the year as well)
+      mutate(share.weight.year = year,
+             subs.share.weight = if_else(calOutputValue > 0, 1, 0),
+             tech.share.weight = if_else(calOutputValue > 0, 1, 0)) %>%
+      select(LEVEL2_DATA_NAMES[["StubTechProd"]]) -> L202.StubTechProd_in_pulp_energy
+
 
     # L202.Supplysector_an: generic animal production supplysector info (159-162)
     A_an_supplysector %>%
@@ -372,6 +417,56 @@ module_aglu_L202.an_input <- function(command, ...) {
       select(-value, -GCAM_region_ID) ->
       L202.StubTechCoef_an
 
+    A_an_input_technology %>%
+      write_to_all_regions(c(LEVEL2_DATA_NAMES[["Tech"]], "minicam.energy.input", "market.name"), GCAM_region_names) %>%
+      rename(stub.technology = technology) %>%
+      filter(stub.technology %in% aglu.FOREST_COMMODITIES) %>%
+      repeat_add_columns(tibble(year = c(MODEL_BASE_YEARS, MODEL_FUTURE_YEARS))) %>%
+      left_join(L110.IO_Coefs_pulp%>% left_join_error_no_match(GCAM_region_names, by = c("GCAM_region_ID")), by = c("region","year")) %>%
+      mutate(coefficient = IO,
+             coefficient=if_else(stub.technology == "woodpulp",aglu.FOREST_PULP_CONVERSION,coefficient)) %>%
+      group_by(GCAM_region_ID,stub.technology) %>%
+      mutate(coefficient= if_else(is.na(coefficient),approx_fun(year, coefficient, rule = 1),coefficient)) %>%
+      ungroup() %>%
+      select(colnames(L202.StubTechCoef_an))->L202.StubTechCoef_an_Forest
+
+    # NOTE- Woodpulp IO coefficients have large range between regions in calibration years.
+    # We can adjust this in future years by cutting off values beyond interquartile range. But for now we just maintain the calibration values.
+
+    PHASE_IN_YEAR <- 2100
+
+    pulp_coef_adj_final_year <- L1327.IO_woodpulp_energy %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
+      select(GCAM_region_ID, coefficient) %>%
+      # adjusted IO values will be assigned to the year they are fully phased in, and interpolated for years in between. We are basically maintaining calibration values to 2100
+      mutate(year = PHASE_IN_YEAR,
+             coefficient = coefficient)
+
+    A_an_input_technology %>%
+      write_to_all_regions(c(LEVEL2_DATA_NAMES[["Tech"]], "minicam.energy.input", "market.name"), GCAM_region_names) %>%
+      rename(stub.technology = technology) %>%
+      filter(stub.technology == "woodpulp_energy") %>%
+      repeat_add_columns(tibble(year = c(MODEL_BASE_YEARS, MODEL_FUTURE_YEARS))) %>%
+      left_join(L1327.IO_woodpulp_energy %>%
+                  select(GCAM_region_ID, year, coefficient) %>%
+                  # Add adjusted values for 2100
+                  bind_rows(pulp_coef_adj_final_year) %>%
+                  left_join_error_no_match(GCAM_region_names, by = c("GCAM_region_ID")), by = c("region","year")) -> stub_tech_temp
+
+    #Given the current version of dplyr used in GCAM, the if_else used currenty used cannot distinguish between different types of NAs. As an example, we replace the NA values above with
+    #NA_real_ values.
+    stub_tech_temp[is.na(stub_tech_temp)] <- NA_real_
+
+
+    stub_tech_temp %>%
+      group_by(region,stub.technology) %>%
+      mutate(coefficient= if_else(is.na(coefficient), approx_fun(year, coefficient, rule = 2),coefficient)) %>%
+      ungroup() %>%
+      select(colnames(L202.StubTechCoef_an)) ->
+      L202.StubTechCoef_an_pulp_energy
+
+    L202.StubTechCoef_an %>% bind_rows(L202.StubTechCoef_an_Forest) ->L202.StubTechCoef_an
+
     # For values beyond the coefficient time series, use the final available year
     final_coef_year <- max(L202.an_FeedIO_R_C_Sys_Fd_Y.mlt$year)
     final_coef_year_data <- filter(L202.StubTechCoef_an, year == final_coef_year) %>% select(-year)
@@ -380,6 +475,7 @@ module_aglu_L202.an_input <- function(command, ...) {
       select(-coefficient) %>%
       left_join(final_coef_year_data, by = c("region", "supplysector", "subsector", "stub.technology", "minicam.energy.input", "market.name")) %>%
       bind_rows(filter(L202.StubTechCoef_an, ! year > final_coef_year)) %>%
+      bind_rows(L202.StubTechCoef_an_pulp_energy) %>% #Add this after, since future coefficients are already adjusted
       select(LEVEL2_DATA_NAMES[["StubTechCoef"]]) ->
       L202.StubTechCoef_an
 
@@ -574,6 +670,7 @@ module_aglu_L202.an_input <- function(command, ...) {
       repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
       repeat_add_columns(GCAM_region_names) %>%
       filter(!region %in% aglu.NO_AGLU_REGIONS) %>%
+      filter(!minicam.energy.input %in% c("regional industrial_roundwood")) %>%
       mutate(stub.technology = technology,
              minicam.non.energy.input = "non-feed") %>%
       left_join_error_no_match(L202.an_nonFeedCost_R_C_3 %>%
@@ -583,6 +680,18 @@ module_aglu_L202.an_input <- function(command, ...) {
       mutate(input.cost = round(nonFeedCost, aglu.DIGITS_CALPRICE)) %>%
       select(LEVEL2_DATA_NAMES[["StubTechCost"]]) ->
       L202.StubTechCost_an
+
+    A_an_input_technology %>%
+      repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
+      repeat_add_columns(GCAM_region_names) %>%
+      filter(!region %in% aglu.NO_AGLU_REGIONS) %>%
+      filter(minicam.energy.input %in% c("regional industrial_roundwood")) %>%
+      mutate(stub.technology = technology,
+             minicam.non.energy.input = "non-feed") %>%
+      left_join(L1321.For_Cost, by = c("GCAM_region_ID","supplysector"="GCAM_commodity")) %>%
+      mutate(input.cost = if_else(is.na(ForCost),0,ForCost)) %>%
+      select(LEVEL2_DATA_NAMES[["StubTechCost"]]) ->
+      L202.StubTechCost_For_proc
 
 
     # Remove any regions for which agriculture and land use are not modeled (308-320)
@@ -771,6 +880,16 @@ module_aglu_L202.an_input <- function(command, ...) {
                      "energy/A_regions", "common/GCAM_region_names") ->
       L202.StubTechProd_in
 
+    L202.StubTechProd_in_Forest %>%
+      add_title("Base year output of the inputs (feed types) to animal production") %>%
+      add_units("Mt/yr") %>%
+      add_comments("Calibrated primary sources of animal feed commodities, specific to each region and time period.") %>%
+      add_legacy_name("L202.StubTechProd_in_Forest") %>%
+      add_precursors("aglu/A_an_input_technology",
+                     "energy/A_regions", "common/GCAM_region_names",
+                     "L202.StubTechProd_in") ->
+      L202.StubTechProd_in_Forest
+
     L202.Supplysector_an %>%
       add_title("Generic animal production supplysector info") %>%
       add_units("NA") %>%
@@ -829,6 +948,18 @@ module_aglu_L202.an_input <- function(command, ...) {
                      "L108.an_Feed_Mt_R_C_Sys_Fd_Y_adj", "L109.ag_ALL_Mt_R_C_Y") ->
       L202.StubTechCost_an
 
+    L202.StubTechCost_For_proc %>%
+      add_title("Costs of forest production technologies") %>%
+      add_units("1975$/m3") %>%
+      add_comments("Animal feed cost, prices, and technology") %>%
+      add_comments("This is the non-feed cost; i.e., all costs of producing animal commodities except for the feed.") %>%
+      add_legacy_name("L202.StubTechCost_For_proc") %>%
+      same_precursors_as(L202.StubTechCoef_an) %>%
+      add_precursors("L1321.ag_prP_R_C_75USDkg", "L1321.an_prP_R_C_75USDkg",
+                     "L109.ag_ALL_Mt_R_C_Y",
+                     "L110.IO_Coefs_pulp","L1321.For_Cost","L110.For_ALL_bm3_R_Y") ->
+      L202.StubTechCost_For_proc
+
     # Return also the consumer prices, to be made available elsewhere
     L202.ag_consP_R_C_75USDkg %>%
       add_title("Consumer costs of crops") %>%
@@ -838,6 +969,15 @@ module_aglu_L202.an_input <- function(command, ...) {
       add_precursors("L1321.ag_prP_R_C_75USDkg", "L109.ag_ALL_Mt_R_C_Y") ->
       L202.ag_consP_R_C_75USDkg
 
+    L202.StubTechProd_in_pulp_energy %>%
+      add_title("Base year output of the inputs to woodpulp energy") %>%
+      add_units("EJ/yr") %>%
+      add_comments("Calibrated woodpulp energy to be used in paper production, specific to each region and time period.") %>%
+      add_legacy_name("L202.StubTechProd_in_pulp_energy") %>%
+      add_precursors("aglu/A_an_input_technology", "L110.For_ALL_bm3_R_Y",
+                     "energy/A_regions", "common/GCAM_region_names",
+                     "L1327.IO_woodpulp_energy") ->
+      L202.StubTechProd_in_pulp_energy
 
     return_data(MODULE_OUTPUTS)
   } else {

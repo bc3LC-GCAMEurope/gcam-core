@@ -1,0 +1,40 @@
+# File: geo_shares.csv
+# Title:  Geothermal potential for different EU countries in 2050
+# Units: Twh
+# Source: http://www.geoelec.eu/wp-content/uploads/2011/09/D-2.5-GEOELEC-prospective-study.pdf
+# Column types: cccin
+# ----------
+country,iso,region_GCAM3,GCAM_region_ID,pot
+Albania,alb,Eastern Europe,55,8
+Bosnia and Herzegovina,bih,Eastern Europe,57,8
+"Macedonia, the former Yugoslav Republic of",mkd,Eastern Europe,59,8
+Bulgaria,bgr,Eastern Europe,30,72
+Croatia,hrv,Eastern Europe,31,50
+Czech Republic,cze,Eastern Europe,33,31
+Hungary,hun,Eastern Europe,40,174
+Poland,pol,Eastern Europe,48,144
+Romania,rom,Eastern Europe,50,105
+Slovakia,svk,Eastern Europe,51,55
+Slovenia,svn,Eastern Europe,52,8
+Serbia and Montenegro,scg,Eastern Europe,62,31
+Austria,aut,Western Europe,28,67
+Belgium,bel,Western Europe,29,22
+Denmark,dnk,Western Europe,34,29
+France,fra,Western Europe,37,653
+Germany,deu,Western Europe,38,346
+Greece,grc,Western Europe,39,81
+Iceland,isl,Western Europe,58,322
+Ireland,irl,Western Europe,41,27
+Italy,ita,Western Europe,42,226
+Luxembourg,lux,Western Europe,45,3
+Portugal,prt,Western Europe,49,63
+Spain,esp,Western Europe,53,349
+Sweden,swe,Western Europe,54,1
+Switzerland,che,Western Europe,63,43
+Netherlands,nld,Western Europe,47,52
+Turkey,tur,Western Europe,64,966
+United Kingdom,gbr,Western Europe,65,42
+Cyprus,cyp,Western Europe,32,1
+Finland,fin,Western Europe,36,1
+Malta,mlt,Western Europe,46,1
+Norway,nor,Western Europe,61,1

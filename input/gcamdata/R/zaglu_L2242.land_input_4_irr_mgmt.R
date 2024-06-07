@@ -3,7 +3,7 @@
 #' module_aglu_L2242.land_input_4_irr_mgmt
 #'
 #' Generate logit exponent of the fourth land node that specifies crop commodity and GLU by region,
-#' and generate the ghost node share for the bionenergy node.
+#' and generate the ghost node share for the bioenergy node.
 #'
 #' @param command API command to execute
 #' @param ... other optional parameters, depending on command
@@ -12,23 +12,32 @@
 #' the generated outputs: \code{L2242.LN4_Logit}, \code{L2242.LN4_NodeGhostShare}, \code{L2242.LN4_NodeIsGhostShareRel}. The corresponding file in the
 #' original data system was \code{L2242.land_input_4_irr_mgmt.R} (aglu level2).
 #' @details This chunk generates the logit exponent of the fourth land nest that specifies crop commodity and GLU by region,
-#' and the ghost node share for the bionenergy node in future years, and specifies whether the bionenergy ghost node share is relative.
+#' and the ghost node share for the bioenergy node in future years, and specifies whether the bioenergy ghost node share is relative.
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr bind_rows distinct filter if_else left_join mutate select
 #' @importFrom tidyr separate
 #' @author RC August 2017
 module_aglu_L2242.land_input_4_irr_mgmt <- function(command, ...) {
+
+  MODULE_INPUTS <-
+    c(FILE = "common/GCAM_region_names",
+      FILE = "aglu/A_LandNode_logit_irr",
+      FILE = "aglu/A_bio_ghost_share",
+      FILE = "aglu/A_LT_Mapping",
+      FILE = "aglu/A_LandLeaf3",
+      FILE = "aglu/A_biomassSupplyShare_R",
+      "L2012.AgYield_bio_ref",
+      "L2012.AgProduction_ag_irr_mgmt")
+
+  MODULE_OUTPUTS <-
+    c("L2242.LN4_Logit",
+      "L2242.LN4_NodeGhostShare",
+      "L2242.LN4_NodeIsGhostShareRel")
+
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "aglu/A_LandNode_logit_irr",
-             FILE = "aglu/A_bio_ghost_share",
-             FILE = "aglu/A_LT_Mapping",
-             FILE = "aglu/A_LandLeaf3",
-             "L2012.AgYield_bio_ref",
-             "L2012.AgProduction_ag_irr_mgmt"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L2242.LN4_Logit",
-             "L2242.LN4_NodeGhostShare",
-             "L2242.LN4_NodeIsGhostShareRel"))
+    return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
 
     # silence package check notes
@@ -38,13 +47,8 @@ module_aglu_L2242.land_input_4_irr_mgmt <- function(command, ...) {
 
     all_data <- list(...)[[1]]
 
-    # Load required inputs
-    A_LandNode_logit_irr <- get_data(all_data, "aglu/A_LandNode_logit_irr")
-    A_bio_ghost_share <- get_data(all_data, "aglu/A_bio_ghost_share")
-    A_LT_Mapping <- get_data(all_data, "aglu/A_LT_Mapping")
-    A_LandLeaf3 <- get_data(all_data, "aglu/A_LandLeaf3")
-    L2012.AgYield_bio_ref <- get_data(all_data, "L2012.AgYield_bio_ref", strip_attributes = TRUE)
-    L2012.AgProduction_ag_irr_mgmt <- get_data(all_data, "L2012.AgProduction_ag_irr_mgmt")
+    # Load required inputs ----
+    get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
 
     # L2242.LN4_Logit: Logit exponent of the fourth land nest by region
     # There are no technologies that are disaggregated to irrigated and rainfed but not to lo- and hi-input techs,
@@ -63,8 +67,23 @@ module_aglu_L2242.land_input_4_irr_mgmt <- function(command, ...) {
              LandNode2 = paste(LandNode2, GLU_name, sep = "_"),
              LandNode3 = paste(LandNode3, GLU_name, sep = "_"),
              LandNode4 = paste(LandNode4, GLU_name, sep = "_")) %>%
-      select(LEVEL2_DATA_NAMES[["LN4_Logit"]], LOGIT_TYPE_COLNAME) ->
+      select(LEVEL2_DATA_NAMES[["LN4_Logit"]], all_of(LOGIT_TYPE_COLNAME)) ->
       L2242.LN4_Logit
+
+
+
+    # assert that all regions in GCAM_region_names are in A_biomassSupplyShare_R
+    if (GCAM_region_names %>% distinct(region) %>% dplyr::setdiff(A_biomassSupplyShare_R %>% distinct(region)) %>% nrow > 0) {
+      warning("Regions doesn't exist in A_biomassSupplyShare_R follow USA assumptions (High). Consider adding all GCAM regions to aglu/A_biomassSupplyShare_R to avoid this warning.")
+    }
+
+    A_biomassSupplyShare_R %>%
+      right_join(GCAM_region_names %>% distinct(region), by = "region") %>%
+      # set missing to USA's value so region breakout won't have any issue
+      replace_na(list(preference = A_biomassSupplyShare_R$preference[A_biomassSupplyShare_R$region == "USA"])) %>%
+      left_join(A_bio_ghost_share, by = "preference") %>%
+      select(region, year, ghost.share) ->
+      A_bio_ghost_share_R
 
     # L2242.LN4_NodeGhostShare:
     # Specify ghost node share for bioenergy node in future years (starting with first bio year).
@@ -81,8 +100,11 @@ module_aglu_L2242.land_input_4_irr_mgmt <- function(command, ...) {
              LandNode4 = paste(LandLeaf, GLU_name, sep = aglu.LT_GLU_DELIMITER)) %>%
       repeat_add_columns(tibble::tibble(year = MODEL_FUTURE_YEARS)) %>%
       filter(year >= aglu.BIO_START_YEAR) %>%
-      left_join(A_bio_ghost_share, by = "year") %>%
+      left_join(A_bio_ghost_share_R, by = c("year", "region")) %>%
+      group_by(region, AgSupplySubsector, GCAM_commodity, GLU_name, LandNode1, LandNode2, LandNode3, LandNode4,
+               Land_Type, LandLeaf, LandAllocatorRoot) %>%
       mutate(ghost.unnormalized.share = approx_fun(year, ghost.share)) %>%
+      ungroup() %>%
       select(LEVEL2_DATA_NAMES[["LN4_NodeGhostShare"]]) ->
       L2242.LN4_NodeGhostShare
 
@@ -117,6 +139,8 @@ module_aglu_L2242.land_input_4_irr_mgmt <- function(command, ...) {
       add_legacy_name("L2242.LN4_NodeGhostShare") %>%
       add_precursors("L2012.AgYield_bio_ref",
                      "aglu/A_bio_ghost_share",
+                     "aglu/A_biomassSupplyShare_R",
+                     "common/GCAM_region_names",
                      "aglu/A_LT_Mapping") ->
       L2242.LN4_NodeGhostShare
 
@@ -129,7 +153,7 @@ module_aglu_L2242.land_input_4_irr_mgmt <- function(command, ...) {
       same_precursors_as("L2242.LN4_NodeGhostShare") ->
       L2242.LN4_NodeIsGhostShareRel
 
-    return_data(L2242.LN4_Logit, L2242.LN4_NodeGhostShare, L2242.LN4_NodeIsGhostShareRel)
+    return_data(MODULE_OUTPUTS)
   } else {
     stop("Unknown command")
   }

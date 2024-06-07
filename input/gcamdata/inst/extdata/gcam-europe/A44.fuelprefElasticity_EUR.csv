@@ -4,15 +4,15 @@
 # Column types: ccn
 # ----------
 supplysector,subsector,fuelprefElasticity
-resid heating,biomass,-1
-resid heating,coal,-0.7
-resid heating,electricity,0
-resid heating,gas,0
-resid heating,refined liquids,0
-resid heating,traditional biomass,-2
-resid heating,district heat,-0.5
-resid cooling,electricity,0
-resid cooling,gas,-1
+resid heating modern,biomass,-1
+resid heating coal,coal,-0.7
+resid heating modern,electricity,0
+resid heating modern,gas,0
+resid heating modern,refined liquids,0
+resid heating TradBio,traditional biomass,-2
+resid heating modern,district heat,-0.5
+resid cooling modern,electricity,0
+resid cooling modern,gas,-1
 resid cooking,biomass,-1
 resid cooking,coal,-0.7
 resid cooking,electricity,0
@@ -26,12 +26,12 @@ resid hot water,electricity,0
 resid hot water,gas,0
 resid hot water,refined liquids,-0.5
 resid hot water,district heat,-0.5
-resid others,biomass,-1
-resid others,coal,-1
-resid others,electricity,0
-resid others,gas,0
-resid others,refined liquids,-1
-resid others,traditional biomass,-2
+resid others modern,biomass,-1
+resid others coal,coal,-1
+resid others modern,electricity,0
+resid others modern,gas,0
+resid others modern,refined liquids,-1
+resid others TradBio,traditional biomass,-2
 comm heating,biomass,-1
 comm heating,coal,-0.7
 comm heating,electricity,0

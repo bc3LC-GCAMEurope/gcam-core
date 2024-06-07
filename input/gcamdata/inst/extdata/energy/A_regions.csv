@@ -5,69 +5,69 @@
 # Column types: icicccnic
 # ----------
 GCAM_region_ID,region,tradbio_region,ethanol,biodiesel,biomassOil_tech,elect_td_techchange,has_district_heat,region.class
-1,USA,0,corn ethanol,biodiesel,OilCrop,0.0001,0,A
+1,USA,1,corn ethanol,biodiesel,OilCrop,0.0001,0,A
 2,Africa_Eastern,1,corn ethanol,biodiesel,OilCrop,0.00025,0,E
 3,Africa_Northern,1,corn ethanol,biodiesel,OilCrop,0.00025,0,E
 4,Africa_Southern,1,corn ethanol,biodiesel,OilCrop,0.00025,0,E
 5,Africa_Western,1,corn ethanol,biodiesel,OilCrop,0.00025,0,E
-6,Australia_NZ,0,corn ethanol,biodiesel,OilCrop,0.0001,0,B
+6,Australia_NZ,1,corn ethanol,biodiesel,OilCrop,0.0001,0,B
 7,Brazil,1,sugar cane ethanol,biodiesel,Soybean,0.00075,0,D
-8,Canada,0,corn ethanol,biodiesel,OilCrop,0.0001,0,B
+8,Canada,1,corn ethanol,biodiesel,OilCrop,0.0001,0,B
 9,Central America and Caribbean,1,sugar cane ethanol,biodiesel,OilPalm,0.00075,0,D
-10,Central Asia,0,corn ethanol,biodiesel,OilCrop,0.0001,0,D
+10,Central Asia,1,corn ethanol,biodiesel,OilCrop,0.0001,0,D
 11,China,1,corn ethanol,biodiesel,Soybean,0.0001,1,D
 12,India,1,corn ethanol,biodiesel,Soybean,0.002,0,E
 13,Indonesia,1,sugar cane ethanol,biodiesel,OilPalm,0.00025,0,E
-14,Japan,0,corn ethanol,biodiesel,Soybean,0.0001,0,D
+14,Japan,1,corn ethanol,biodiesel,Soybean,0.0001,0,D
 15,Mexico,1,corn ethanol,biodiesel,OilCrop,0.00075,0,D
-16,Middle East,0,corn ethanol,biodiesel,OilCrop,0.0004,0,D
+16,Middle East,1,corn ethanol,biodiesel,OilCrop,0.0004,0,D
 17,Pakistan,1,corn ethanol,biodiesel,OilCrop,0.00025,0,E
-18,Russia,0,corn ethanol,biodiesel,OilCrop,0.0004,1,D
+18,Russia,1,corn ethanol,biodiesel,OilCrop,0.0004,1,D
 19,South Africa,1,corn ethanol,biodiesel,OilCrop,0.00025,0,E
 20,South America_Northern,1,sugar cane ethanol,biodiesel,OilPalm,0.00075,0,D
 21,South America_Southern,1,corn ethanol,biodiesel,Soybean,0.00075,0,D
 22,South Asia,1,corn ethanol,biodiesel,OilCrop,0.00025,0,E
-23,South Korea,0,corn ethanol,biodiesel,Soybean,0.0001,0,D
+23,South Korea,1,corn ethanol,biodiesel,Soybean,0.0001,0,D
 24,Southeast Asia,1,sugar cane ethanol,biodiesel,OilPalm,0.00025,0,E
-25,Taiwan,0,sugar cane ethanol,biodiesel,OilPalm,0.0001,0,D
+25,Taiwan,1,sugar cane ethanol,biodiesel,OilPalm,0.0001,0,D
 26,Argentina,1,corn ethanol,biodiesel,Soybean,0.00075,0,D
 27,Colombia,1,sugar cane ethanol,biodiesel,OilCrop,0.00075,0,D
-28,Austria,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-29,Belgium,0,corn ethanol,biodiesel,OilCrop,0.0001,0,C
-30,Bulgaria,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-31,Croatia,0,corn ethanol,biodiesel,OilCrop,0.0002,1,C
-32,Cyprus,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-33,Czech Republic,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-34,Denmark,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-35,Estonia,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-36,Finland,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-37,France,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-38,Germany,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-39,Greece,0,corn ethanol,biodiesel,OilCrop,0.0001,0,C
-40,Hungary,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-41,Ireland,0,corn ethanol,biodiesel,OilCrop,0.0001,0,C
-42,Italy,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-43,Latvia,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-44,Lithuania,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-45,Luxembourg,0,corn ethanol,biodiesel,OilCrop,0.0001,0,C
-46,Malta,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-47,Netherlands,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-48,Poland,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-49,Portugal,0,corn ethanol,biodiesel,OilCrop,0.0001,0,C
-50,Romania,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-51,Slovakia,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-52,Slovenia,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-53,Spain,0,corn ethanol,biodiesel,OilCrop,0.0001,0,C
-54,Sweden,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-55,Albania,0,corn ethanol,biodiesel,OilCrop,0.0002,1,C
-56,Belarus,0,corn ethanol,biodiesel,OilCrop,0.0002,1,D
-57,Bosnia and Herzegovina,0,corn ethanol,biodiesel,OilCrop,0.0002,1,C
-58,Iceland,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-59,Macedonia,0,corn ethanol,biodiesel,OilCrop,0.0002,1,C
-60,Moldova,0,corn ethanol,biodiesel,OilCrop,0.0002,1,D
-61,Norway,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-62,Serbia and Montenegro,0,corn ethanol,biodiesel,OilCrop,0.0002,1,C
-63,Switzerland,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-64,Turkey,0,corn ethanol,biodiesel,OilCrop,0.0002,0,C
-65,UK,0,corn ethanol,biodiesel,OilCrop,0.0001,1,C
-66,Ukraine,0,corn ethanol,biodiesel,OilCrop,0.0002,1,D
+28,Austria,1,corn ethanol,biodiesel,OilCrop,0.0001,1,C
+29,Belgium,1,corn ethanol,biodiesel,OilCrop,0.0001,0,C
+30,Bulgaria,1,corn ethanol,biodiesel,OilCrop,0.0001,1,C
+31,Croatia,1,corn ethanol,biodiesel,OilCrop,0.0002,1,C
+32,Cyprus,1,corn ethanol,biodiesel,OilCrop,0.0001,1,C
+33,Czech Republic,1,corn ethanol,biodiesel,OilCrop,0.0001,1,C
+34,Denmark,1,corn ethanol,biodiesel,OilCrop,0.0001,1,C
+35,Estonia,1,corn ethanol,biodiesel,OilCrop,0.0001,1,C
+36,Finland,1,corn ethanol,biodiesel,OilCrop,0.0001,1,C
+37,France,1,corn ethanol,biodiesel,OilCrop,0.0001,1,C
+38,Germany,1,corn ethanol,biodiesel,OilCrop,0.0001,1,C
+39,Greece,1,corn ethanol,biodiesel,OilCrop,0.0001,0,C
+40,Hungary,1,corn ethanol,biodiesel,OilCrop,0.0001,1,C
+41,Ireland,1,corn ethanol,biodiesel,OilCrop,0.0001,0,C
+42,Italy,1,corn ethanol,biodiesel,OilCrop,0.0001,1,C
+43,Latvia,1,corn ethanol,biodiesel,OilCrop,0.0001,1,C
+44,Lithuania,1,corn ethanol,biodiesel,OilCrop,0.0001,1,C
+45,Luxembourg,1,corn ethanol,biodiesel,OilCrop,0.0001,0,C
+46,Malta,1,corn ethanol,biodiesel,OilCrop,0.0001,1,C
+47,Netherlands,1,corn ethanol,biodiesel,OilCrop,0.0001,1,C
+48,Poland,1,corn ethanol,biodiesel,OilCrop,0.0001,1,C
+49,Portugal,1,corn ethanol,biodiesel,OilCrop,0.0001,0,C
+50,Romania,1,corn ethanol,biodiesel,OilCrop,0.0001,1,C
+51,Slovakia,1,corn ethanol,biodiesel,OilCrop,0.0001,1,C
+52,Slovenia,1,corn ethanol,biodiesel,OilCrop,0.0001,1,C
+53,Spain,1,corn ethanol,biodiesel,OilCrop,0.0001,0,C
+54,Sweden,1,corn ethanol,biodiesel,OilCrop,0.0001,1,C
+55,Albania,1,corn ethanol,biodiesel,OilCrop,0.0002,1,C
+56,Belarus,1,corn ethanol,biodiesel,OilCrop,0.0002,1,D
+57,Bosnia and Herzegovina,1,corn ethanol,biodiesel,OilCrop,0.0002,1,C
+58,Iceland,1,corn ethanol,biodiesel,OilCrop,0.0001,1,C
+59,Macedonia,1,corn ethanol,biodiesel,OilCrop,0.0002,1,C
+60,Moldova,1,corn ethanol,biodiesel,OilCrop,0.0002,1,D
+61,Norway,1,corn ethanol,biodiesel,OilCrop,0.0001,1,C
+62,Serbia and Montenegro,1,corn ethanol,biodiesel,OilCrop,0.0002,1,C
+63,Switzerland,1,corn ethanol,biodiesel,OilCrop,0.0001,1,C
+64,Turkey,1,corn ethanol,biodiesel,OilCrop,0.0002,0,C
+65,UK,1,corn ethanol,biodiesel,OilCrop,0.0001,1,C
+66,Ukraine,1,corn ethanol,biodiesel,OilCrop,0.0002,1,D
