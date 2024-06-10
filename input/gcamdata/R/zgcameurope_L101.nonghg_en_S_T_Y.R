@@ -31,7 +31,7 @@ module_gcameurope_L101.nonghg_en_S_T_Y <- function(command, ...) {
              "L1322.in_EJ_R_indenergy_F_Yh_EUR",
              "L144.in_EJ_R_bld_serv_F_Yh_EUR",
              "L154.in_EJ_R_trn_m_sz_tech_F_Yh_EUR",
-             "L1322.Fert_Prod_MtN_R_F_Y_EUR",
+             "L1322.Fert_Prod_MtNH3_R_F_Y_EUR",
              "L1321.in_EJ_R_cement_F_Y_EUR",
              "L124.in_EJ_R_heat_F_Yh_EUR",
              "L111.Prod_EJ_R_F_Yh_EUR",
@@ -76,14 +76,14 @@ module_gcameurope_L101.nonghg_en_S_T_Y <- function(command, ...) {
     L144.in_EJ_R_bld_serv_F_Yh_EUR <- get_data(all_data, "L144.in_EJ_R_bld_serv_F_Yh_EUR")
     L154.in_EJ_R_trn_m_sz_tech_F_Yh_EUR <- get_data(all_data, "L154.in_EJ_R_trn_m_sz_tech_F_Yh_EUR") %>%
       spread(year, value)
-    L1322.Fert_Prod_MtN_R_F_Y_EUR <- get_data(all_data, "L1322.Fert_Prod_MtN_R_F_Y_EUR")
+    L1322.Fert_Prod_MtNH3_R_F_Y_EUR <- get_data(all_data, "L1322.Fert_Prod_MtNH3_R_F_Y_EUR")
     L1321.in_EJ_R_cement_F_Y_EUR <- get_data(all_data, "L1321.in_EJ_R_cement_F_Y_EUR")
     L124.in_EJ_R_heat_F_Yh_EUR <- get_data(all_data, "L124.in_EJ_R_heat_F_Yh_EUR")
     L111.Prod_EJ_R_F_Yh_EUR <- get_data(all_data, "L111.Prod_EJ_R_F_Yh_EUR")
 
     # Add technology columns and combine all energy driver data into a single dataframe
     bind_rows(spread(L1322.in_EJ_R_indenergy_F_Yh_EUR, year, value),
-              spread(L1322.Fert_Prod_MtN_R_F_Y_EUR, year, value),
+              spread(L1322.Fert_Prod_MtNH3_R_F_Y_EUR, year, value),
               spread(L1321.in_EJ_R_cement_F_Y_EUR, year, value),
               spread(L124.in_EJ_R_heat_F_Yh_EUR, year, value),
               spread(L111.Prod_EJ_R_F_Yh_EUR, year, value),
@@ -203,7 +203,7 @@ module_gcameurope_L101.nonghg_en_S_T_Y <- function(command, ...) {
                      "L1322.in_EJ_R_indenergy_F_Yh_EUR",
                      "L144.in_EJ_R_bld_serv_F_Yh_EUR",
                      "L154.in_EJ_R_trn_m_sz_tech_F_Yh_EUR",
-                     "L1322.Fert_Prod_MtN_R_F_Y_EUR",
+                     "L1322.Fert_Prod_MtNH3_R_F_Y_EUR",
                      "L1321.in_EJ_R_cement_F_Y_EUR",
                      "L124.in_EJ_R_heat_F_Yh_EUR",
                      "L111.Prod_EJ_R_F_Yh_EUR") ->
