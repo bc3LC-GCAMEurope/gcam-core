@@ -15,7 +15,7 @@
 #' @details Calculates the fraction of electricity generation by fuel, by horizontal load segment, by grid region, in 2010.
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr distinct filter mutate pull select
-#' @author MTB August 2018
+#' @author RLH June 2024
 module_gcameurope_L1236.elec_load_segments_solver <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-europe/elecS_horizontal_to_vertical_map",
@@ -29,7 +29,6 @@ module_gcameurope_L1236.elec_load_segments_solver <- function(command, ...) {
 
     all_data <- list(...)[[1]]
 
-
     # Load required inputs
     elecS_horizontal_to_vertical_map <- get_data(all_data, "gcam-europe/elecS_horizontal_to_vertical_map")
     L1234.out_EJ_grid_elec_F_EUR <- get_data(all_data, "L1234.out_EJ_grid_elec_F_EUR")
@@ -42,7 +41,7 @@ module_gcameurope_L1236.elec_load_segments_solver <- function(command, ...) {
 
     # Optimization function -----------
     # SET UPPER LIMIT TO 1 - CUMSUM(EARLIER FRACTIONS)
-    optimize_seg_fractions <- function(df, demand, ulim, MAX_DECREASE = 0.5){
+    optimize_seg_fractions <- function(df, demand, ulim, MAX_DECREASE = 0.5, llim = NA){
       ## objective function ##
       # Minimizing the change in fractions from supply
       # so (x1-f1)^2 + (x2-f2)^2 + ... + (xn-fn)^2
@@ -66,11 +65,15 @@ module_gcameurope_L1236.elec_load_segments_solver <- function(command, ...) {
         TOT_GEN
       }
 
+      # if no explicit vector of lower limits provided, set lower limit to
+      # the minimum of the upper limit and the FRACTION * MAX_DECREASE
+      if (all(is.na(llim))){ llim <- pmin(FRACTIONS * MAX_DECREASE, ulim) }
+
       # don't want algorithm to just set some fractions to zero
       # limit decrease to 50% of current fraction
-      optimized_fractions <- nloptr(x0 =  pmin(rep(0.5, length(FRACTIONS)), ulim),
+      optimized_fractions <- nloptr(x0 =  pmax(pmin(rep(0.5, length(FRACTIONS)), ulim), llim),
                                     eval_f = eval_f, eval_grad_f = eval_grad_f,
-                                    lb = pmin(FRACTIONS * MAX_DECREASE, ulim),
+                                    lb = llim,
                                     ub = ulim,
                                     eval_g_eq = eval_eq, eval_jac_g_eq = eval_jac_g_eq,
                                     opts = list("algorithm" = "NLOPT_LD_SLSQP",
@@ -133,23 +136,27 @@ module_gcameurope_L1236.elec_load_segments_solver <- function(command, ...) {
             ULIM <- supply %>% filter(segment %in% HORIZ_SEGS[1:(seg_num - 1)]) %>% group_by(fuel) %>% summarise(limit = 1 - sum(fraction)) %>%  pull(limit)
           }
 
+          # start by setting lower limit for all to 50% of original fraction, or 1 if original fraction was 1
+          LLIM_START <-  pmin(ifelse(supply_tmp$fraction == 1, 1, supply_tmp$fraction * 0.5), ULIM)
 
-          supply_tmp$optimized_fractions <- round(optimize_seg_fractions(supply_tmp, supply_segment, ulim = ULIM), 6)
-
-          # check if optimized generation is equal to needed generation. If not, reduce MAX_DECREASE
-          if (round(sum(supply_tmp$optimized_fractions * supply_tmp$tot_generation), 5) > round(supply_segment, 5)){
-            supply_tmp$optimized_fractions <- round(optimize_seg_fractions(supply_tmp, supply_segment, ulim = ULIM, MAX_DECREASE = 0.1), 6)
-            # try one more time with no maximum
-            if (round(sum(supply_tmp$optimized_fractions * supply_tmp$tot_generation), 5) > round(supply_segment, 5)){
-              supply_tmp$optimized_fractions <- round(optimize_seg_fractions(supply_tmp, supply_segment, ulim = ULIM, MAX_DECREASE = 0), 6)
-              # try one more time with no maximum
-              stopifnot(round(sum(supply_tmp$optimized_fractions * supply_tmp$tot_generation), 5) == round(supply_segment, 5))
-            }
+          # We are going to use a while loop to gradually reduce the lower limits for the fractions until we get a solution
+          TOT_GEN_EQUILIZED <- F
+          llim_mult <- 1
+          while((!TOT_GEN_EQUILIZED) & llim_mult >= 0){
+            optimized_fractions <- optimize_seg_fractions(supply_tmp, supply_segment, ulim = ULIM, llim = LLIM_START * llim_mult)
+            TOT_GEN_EQUILIZED <- round(sum(optimized_fractions * supply_tmp$tot_generation), 5) == round(supply_segment, 5)
+            # decrease by 10% at a time
+            llim_mult <- llim_mult - 0.1
           }
+
+          stopifnot(TOT_GEN_EQUILIZED)
+
+          supply_tmp$optimized_fractions <- optimized_fractions
 
           supply_tmp <- supply_tmp %>%
             mutate(optimized_generation = optimized_fractions * tot_generation,
-                   gen_diff = round(generation - optimized_generation, 6)) %>%
+                   # gen_diff = round(generation - optimized_generation, 6)) %>%
+                   gen_diff = generation - optimized_generation) %>%
             select(grid_region, segment, fuel, year, generation = optimized_generation, fraction = optimized_fractions, tot_generation, gen_diff)
 
           # Now adjust main df with this segment data
@@ -162,8 +169,8 @@ module_gcameurope_L1236.elec_load_segments_solver <- function(command, ...) {
             group_by(grid_region, fuel, year) %>%
             # assigning based on fraction of fuel in remaining segments
             # if all segments have fraction of 0, apply 100% to next segment
-            mutate(fraction = if_else(all(fraction == 0) & gen_diff != 0, 1, fraction),
-                   generation = if_else(gen_diff != 0, round(generation + gen_diff * fraction / sum(fraction), 6), generation)) %>%
+            mutate(fraction = if_else(all(fraction == 0) & gen_diff != 0 & segment == HORIZ_SEGS[(seg_num + 1)], 1, fraction),
+                   generation = if_else(gen_diff != 0, generation + gen_diff * fraction / sum(fraction), generation)) %>%
             ungroup %>%
             mutate(fraction = generation / tot_generation) %>%
             # add in adjusted segment
@@ -183,8 +190,8 @@ module_gcameurope_L1236.elec_load_segments_solver <- function(command, ...) {
       }
     }
 
-    # Check that supply by fuel and by segment is correct
-    CHECK_ROUND <- 3
+    # Check that supply by fuel and by segment is correct ------------------------------
+    CHECK_ROUND <- 6
     L1236_gen_R_F_Y <- L1236.grid_elec_supply_EUR %>%
       group_by(grid_region, fuel, year) %>%
       summarise(generation = round(sum(generation), CHECK_ROUND)) %>%
@@ -195,8 +202,11 @@ module_gcameurope_L1236.elec_load_segments_solver <- function(command, ...) {
       summarise(generation = round(sum(generation), CHECK_ROUND)) %>%
       ungroup
 
-    stopifnot(dplyr::all_equal(L1236_gen_R_F_Y,
-                     L1235_gen_R_F_Y))
+    FUEL_check <-L1235_gen_R_F_Y %>%
+      left_join_error_no_match(L1236_gen_R_F_Y, by = dplyr::join_by(grid_region, fuel, year)) %>%
+      mutate(diff = generation.x - generation.y)
+
+    stopifnot(all(abs(FUEL_check$diff) < 0.00001))
 
     CHECK_ROUND <- 6
     L1236_gen_R_SEG_Y <- L1236.grid_elec_supply_EUR %>%
@@ -219,9 +229,7 @@ module_gcameurope_L1236.elec_load_segments_solver <- function(command, ...) {
 
     stopifnot(all(abs(SEG_check$diff) < 0.00001))
 
-    # ===================================================
-
-    # Produce outputs
+    # Produce outputs ===================================================
 
     L1236.grid_elec_supply_EUR %>%
       add_title("Electricity supply by fuel by horizontal load segment in each grid region.") %>%
