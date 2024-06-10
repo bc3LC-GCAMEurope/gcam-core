@@ -17,7 +17,9 @@ module_gcameurope_L1234.elec_gridregions <- function(command, ...) {
   MODULE_INPUTS <- c(FILE = "gcam-europe/mappings/grid_regions",
                      FILE = "common/GCAM_region_names",
                      "L123.out_EJ_R_elec_F_Yh_EUR",
-                     "L123.in_EJ_R_elec_F_Yh_EUR")
+                     "L123.in_EJ_R_elec_F_Yh_EUR",
+                     "L123.out_EJ_R_elec_F_Yh",
+                     "L123.in_EJ_R_elec_F_Yh")
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -33,6 +35,16 @@ module_gcameurope_L1234.elec_gridregions <- function(command, ...) {
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
+
+    # combine EUR data with non-EUR regions
+    # to ensure switzerland, etc added to grids
+    L123.out_EJ_R_elec_F_Yh_EUR <- L123.out_EJ_R_elec_F_Yh %>%
+      anti_join(L123.out_EJ_R_elec_F_Yh_EUR, by = "GCAM_region_ID") %>%
+      bind_rows(L123.out_EJ_R_elec_F_Yh_EUR)
+
+    L123.in_EJ_R_elec_F_Yh_EUR <- L123.in_EJ_R_elec_F_Yh %>%
+      anti_join(L123.in_EJ_R_elec_F_Yh_EUR, by = "GCAM_region_ID") %>%
+      bind_rows(L123.in_EJ_R_elec_F_Yh_EUR)
 
     # ===================================================
     # Data Processing

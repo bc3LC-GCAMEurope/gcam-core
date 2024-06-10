@@ -18,7 +18,8 @@ module_gcameurope_L1232.Elec_subregions <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-europe/mappings/grid_regions",
              FILE = "common/GCAM_region_names",
-             "L1231.out_EJ_R_elec_F_tech_Yh_EUR"))
+             "L1231.out_EJ_R_elec_F_tech_Yh_EUR",
+             "L1231.out_EJ_R_elec_F_tech_Yh"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L1232.out_EJ_sR_elec_EUR"))
   } else if(command == driver.MAKE) {
@@ -32,10 +33,17 @@ module_gcameurope_L1232.Elec_subregions <- function(command, ...) {
     grid_regions <- get_data(all_data, "gcam-europe/mappings/grid_regions")
     GCAM_region_names <- get_data(all_data, "common/GCAM_region_names")
     L1231.out_EJ_R_elec_F_tech_Yh_EUR <- get_data(all_data, "L1231.out_EJ_R_elec_F_tech_Yh_EUR")
+    L1231.out_EJ_R_elec_F_tech_Yh <- get_data(all_data, "L1231.out_EJ_R_elec_F_tech_Yh")
+
+    # combine EUR data with non-EUR regions
+    # to ensure switzerland, etc added to grids
+    L1231.out_EJ_R_elec_F_tech_Yh <- L1231.out_EJ_R_elec_F_tech_Yh %>%
+      anti_join(L1231.out_EJ_R_elec_F_tech_Yh_EUR, by = "GCAM_region_ID") %>%
+      bind_rows(L1231.out_EJ_R_elec_F_tech_Yh_EUR)
 
     # ===================================================
     # Aggregating states to electricity subregions
-    L1232.out_EJ_sR_elec_EUR <- L1231.out_EJ_R_elec_F_tech_Yh_EUR %>%
+    L1232.out_EJ_sR_elec_EUR <- L1231.out_EJ_R_elec_F_tech_Yh %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       # Want to drop Belarus, Ukraine, Turkey, Moldova, Iceland
       inner_join(grid_regions, by = "region") %>%
