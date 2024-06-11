@@ -45,7 +45,6 @@ module_gcameurope_L1239.elec_ctry_fractions <- function(command, ...) {
 
     # ===================================================
     # Data Processing
-
     # Create table of electricity generation by load segment | fuel | state
     # L123.out_EJ_R_elec_F_Yh_EUR contains electricity generation by fuel & state
     L1239.R_elec_supply <- L123.out_EJ_R_elec_F_Yh_EUR %>%
@@ -68,7 +67,9 @@ module_gcameurope_L1239.elec_ctry_fractions <- function(command, ...) {
       left_join(L1236.grid_elec_supply_EUR %>%
                   select(grid_region, segment, fuel, year, fraction),
                 by = c("grid_region", "fuel", "year")) %>%
-      mutate(generation = tot_generation * fraction) %>%
+      mutate(segment = if_else(is.na(segment) & tot_generation == 0, "base load generation", segment),
+             fraction = if_else(is.na(fraction) & tot_generation == 0, 0, fraction),
+             generation = tot_generation * fraction) %>%
       select(GCAM_region_ID, grid_region, segment, fuel, year, tot_generation, fraction, generation)
 
     # ===================================================
