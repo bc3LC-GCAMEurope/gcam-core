@@ -39,9 +39,7 @@ module_gcameurope_L1239.elec_ctry_fractions <- function(command, ...) {
 
     # combine EUR data with non-EUR regions
     # to ensure switzerland, etc added to grids
-    L123.out_EJ_R_elec_F_Yh_EUR <- L123.out_EJ_R_elec_F_Yh %>%
-      anti_join(L123.out_EJ_R_elec_F_Yh_EUR, by = "GCAM_region_ID") %>%
-      bind_rows(L123.out_EJ_R_elec_F_Yh_EUR)
+    L123.out_EJ_R_elec_F_Yh_EUR <- replace_with_eurostat(L123.out_EJ_R_elec_F_Yh, L123.out_EJ_R_elec_F_Yh_EUR)
 
     # ===================================================
     # Data Processing

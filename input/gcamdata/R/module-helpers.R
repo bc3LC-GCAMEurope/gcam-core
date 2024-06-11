@@ -1373,4 +1373,28 @@ copy_filter_europe <- function(all_data, df_list, regions_to_keep = gcameurope.E
 
 }
 
+#' replace_with_eurostat
+#'
+#' Helper function to take a dataset with global data and replace the european regions with eurostat data
+#' @param global_df Tibble of global data
+#' @param eur_df Tibble of european data
+#' @importFrom assertthat assert_that
+#' @importFrom dplyr filter left_join rename mutate group_by select summarise_all ungroup
+#' @return new tibble
+#'
+replace_with_eurostat <- function(global_df, eur_df){
+  assert_that(is_tibble(global_df))
+  assert_that(is_tibble(eur_df))
+  if("GCAM_region_ID" %in% names(global_df) & "GCAM_region_ID" %in% names(eur_df)){
+    global_df %>%
+      anti_join(eur_df, by = "GCAM_region_ID") %>%
+      bind_rows(eur_df)
+  } else if("region" %in% names(global_df) & "region" %in% names(eur_df)){
+    global_df %>%
+      anti_join(eur_df, by = "region") %>%
+      bind_rows(eur_df)
+  }
+
+}
+
 

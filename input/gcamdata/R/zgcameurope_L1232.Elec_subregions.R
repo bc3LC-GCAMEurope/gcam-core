@@ -37,9 +37,7 @@ module_gcameurope_L1232.Elec_subregions <- function(command, ...) {
 
     # combine EUR data with non-EUR regions
     # to ensure switzerland, etc added to grids
-    L1231.out_EJ_R_elec_F_tech_Yh <- L1231.out_EJ_R_elec_F_tech_Yh %>%
-      anti_join(L1231.out_EJ_R_elec_F_tech_Yh_EUR, by = "GCAM_region_ID") %>%
-      bind_rows(L1231.out_EJ_R_elec_F_tech_Yh_EUR)
+    L1231.out_EJ_R_elec_F_tech_Yh <- replace_with_eurostat(L1231.out_EJ_R_elec_F_tech_Yh, L1231.out_EJ_R_elec_F_tech_Yh_EUR)
 
     # ===================================================
     # Aggregating states to electricity subregions

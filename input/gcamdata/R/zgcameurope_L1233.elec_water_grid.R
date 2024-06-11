@@ -51,12 +51,8 @@ module_gcameurope_L1233.elec_water_grid <- function(command, ...) {
 
     # combine EUR data with non-EUR regions
     # to ensure switzerland, etc added to grids
-    L1233.out_EJ_R_elec_F_tech_Yh_cool_EUR <- L1233.out_EJ_R_elec_F_tech_Yh_cool %>%
-      anti_join(L1233.out_EJ_R_elec_F_tech_Yh_cool_EUR, by = "GCAM_region_ID") %>%
-      bind_rows(L1233.out_EJ_R_elec_F_tech_Yh_cool_EUR) %>%
-      # now filter only to regions in grid regions
-      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
-      semi_join(grid_regions, by = "region")
+    L1233.out_EJ_R_elec_F_tech_Yh_cool_EUR <- replace_with_eurostat(L1233.out_EJ_R_elec_F_tech_Yh_cool, L1233.out_EJ_R_elec_F_tech_Yh_cool_EUR) %>%
+      filter_regions_europe(regions_to_keep_name = grid_regions$region, region_ID_mapping = GCAM_region_names)
 
     # add in segment options to cooling techs
     L1233.out_EJ_R_elecS_F_tech_cool_EUR <- L1233.out_EJ_R_elec_F_tech_Yh_cool_EUR %>%
