@@ -17,24 +17,58 @@ GCAM_region_ID,region,preference,preference_alternative
 9,Central America and Caribbean,High,Low
 10,Central Asia,High,Low
 11,China,High,High
-12,EU-12,High,High
-13,EU-15,High,High
-14,Europe_Eastern,High,High
-15,Europe_Non_EU,High,High
-16,European Free Trade Association,High,High
-17,India,High,Low
-18,Indonesia,High,Low
-19,Japan,High,Low
-20,Mexico,High,Low
-21,Middle East,High,Low
-22,Pakistan,High,Low
-23,Russia,High,Low
-24,South Africa,High,Low
-25,South America_Northern,High,Low
-26,South America_Southern,High,Low
-27,South Asia,High,Low
-28,South Korea,High,Low
-29,Southeast Asia,High,Low
-30,Taiwan,High,Low
-31,Argentina,High,High
-32,Colombia,High,Low
+12,India,High,Low
+13,Indonesia,High,Low
+14,Japan,High,Low
+15,Mexico,High,Low
+16,Middle East,High,Low
+17,Pakistan,High,Low
+18,Russia,High,Low
+19,South Africa,High,Low
+20,South America_Northern,High,Low
+21,South America_Southern,High,Low
+22,South Asia,High,Low
+23,South Korea,High,Low
+24,Southeast Asia,High,Low
+25,Taiwan,High,Low
+26,Argentina,High,High
+27,Colombia,High,Low
+28,Austria,High,High
+29,Belgium,High,High
+30,Bulgaria,High,High
+31,Croatia,High,High
+32,Cyprus,High,High
+33,Czech Republic,High,High
+34,Denmark,High,High
+35,Estonia,High,High
+36,Finland,High,High
+37,France,High,High
+38,Germany,High,High
+39,Greece,High,High
+40,Hungary,High,High
+41,Ireland,High,High
+42,Italy,High,High
+43,Latvia,High,High
+44,Lithuania,High,High
+45,Luxembourg,High,High
+46,Malta,High,High
+47,Netherlands,High,High
+48,Poland,High,High
+49,Portugal,High,High
+50,Romania,High,High
+51,Slovakia,High,High
+52,Slovenia,High,High
+53,Spain,High,High
+54,Sweden,High,High
+55,Albania,High,High
+56,Belarus,High,High
+57,Bosnia and Herzegovina,High,High
+58,Iceland,High,High
+59,Macedonia,High,High
+60,Moldova,High,High
+61,Norway,High,High
+62,Serbia and Montenegro,High,High
+63,Switzerland,High,High
+64,Turkey,High,High
+65,UK,High,High
+66,Ukraine,High,High

@@ -17,25 +17,59 @@ GCAM_region_ID,region,intercept,units
 9,Central America and Caribbean,0.0467,EJ
 10,Central Asia,-0.0469,EJ
 11,China,0.1817,EJ
-12,EU-12,0.0565,EJ
-13,EU-15,-0.3085,EJ
-14,Europe_Eastern,0.0412,EJ
-15,Europe_Non_EU,-0.0422,EJ
-16,European Free Trade Association,-0.0399,EJ
-17,India,0.0467,EJ
-18,Indonesia,0.0467,EJ
-19,Japan,-0.21,EJ
-20,Mexico,-0.0395,EJ
-21,Middle East,0.0467,EJ
-22,Pakistan,0.0467,EJ
-23,Russia,0.1742,EJ
-24,South Africa,0.0467,EJ
-25,South America_Northern,-0.0165,EJ
-26,South America_Southern,0.0467,EJ
-27,South Asia,0.0467,EJ
-28,South Korea,-0.0134,EJ
-29,Southeast Asia,0.1075,EJ
-30,Taiwan,-0.0163,EJ
-31,Argentina,0.0467,EJ
-32,Colombia,0.0117,EJ
+30,Bulgaria,0.0565,EJ
+32,Cyprus,0.0565,EJ
+33,Czech Republic,0.0565,EJ
+35,Estonia,0.0565,EJ
+40,Hungary,0.0565,EJ
+43,Latvia,0.0565,EJ
+44,Lithuania,0.0565,EJ
+46,Malta,0.0565,EJ
+48,Poland,0.0565,EJ
+50,Romania,0.0565,EJ
+51,Slovakia,0.0565,EJ
+52,Slovenia,0.0565,EJ
+28,Austria,-0.3085,EJ
+29,Belgium,-0.3085,EJ
+34,Denmark,-0.3085,EJ
+36,Finland,-0.3085,EJ
+37,France,-0.3085,EJ
+38,Germany,-0.3085,EJ
+39,Greece,-0.3085,EJ
+41,Ireland,-0.3085,EJ
+42,Italy,-0.3085,EJ
+45,Luxembourg,-0.3085,EJ
+47,Netherlands,-0.3085,EJ
+49,Portugal,-0.3085,EJ
+53,Spain,-0.3085,EJ
+54,Sweden,-0.3085,EJ
+65,UK,-0.3085,EJ
+56,Belarus,0.0412,EJ
+60,Moldova,0.0412,EJ
+66,Ukraine,0.0412,EJ
+31,Croatia,-0.0422,EJ
+55,Albania,-0.0422,EJ
+57,Bosnia and Herzegovina,-0.0422,EJ
+59,Macedonia,-0.0422,EJ
+62,Serbia and Montenegro,-0.0422,EJ
+64,Turkey,-0.0422,EJ
+58,Iceland,-0.0399,EJ
+61,Norway,-0.0399,EJ
+63,Switzerland,-0.0399,EJ
+12,India,0.0467,EJ
+13,Indonesia,0.0467,EJ
+14,Japan,-0.21,EJ
+15,Mexico,-0.0395,EJ
+16,Middle East,0.0467,EJ
+17,Pakistan,0.0467,EJ
+18,Russia,0.1742,EJ
+19,South Africa,0.0467,EJ
+20,South America_Northern,-0.0165,EJ
+21,South America_Southern,0.0467,EJ
+22,South Asia,0.0467,EJ
+23,South Korea,-0.0134,EJ
+24,Southeast Asia,0.1075,EJ
+25,Taiwan,-0.0163,EJ
+26,Argentina,0.0467,EJ
+27,Colombia,0.0117,EJ
 ,default,0.0467,EJ

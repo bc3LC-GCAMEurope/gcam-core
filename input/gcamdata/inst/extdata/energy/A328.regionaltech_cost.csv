@@ -5,23 +5,17 @@
 # Column types: cccccnnnn
 # ----------
 region,supplysector,subsector,technology,minicam.non.energy.input,1971,2010,2050,2100
+USA,food processing,food processing,food processing,non-energy,0.3258,0.3258,0.3258,0.3258
 Africa_Eastern,food processing,food processing,food processing,non-energy,0.0293,0.0293,0.0293,0.0293
 Africa_Northern,food processing,food processing,food processing,non-energy,0.0633,0.0633,0.0633,0.0633
 Africa_Southern,food processing,food processing,food processing,non-energy,0.0705,0.0705,0.0705,0.0705
 Africa_Western,food processing,food processing,food processing,non-energy,0.0198,0.0198,0.0198,0.0198
-Argentina,food processing,food processing,food processing,non-energy,0.1261,0.1261,0.1261,0.1261
 Australia_NZ,food processing,food processing,food processing,non-energy,0.515,0.515,0.515,0.515
 Brazil,food processing,food processing,food processing,non-energy,0.0955,0.0955,0.0955,0.0955
 Canada,food processing,food processing,food processing,non-energy,0.3881,0.3881,0.3881,0.3881
 Central America and Caribbean,food processing,food processing,food processing,non-energy,0.1209,0.1209,0.1209,0.1209
 Central Asia,food processing,food processing,food processing,non-energy,0.0632,0.0632,0.0632,0.0632
 China,food processing,food processing,food processing,non-energy,0.0616,0.0616,0.0616,0.0616
-Colombia,food processing,food processing,food processing,non-energy,0.0879,0.0879,0.0879,0.0879
-EU-12,food processing,food processing,food processing,non-energy,0.2039,0.2039,0.2039,0.2039
-EU-15,food processing,food processing,food processing,non-energy,0.3718,0.3718,0.3718,0.3718
-Europe_Eastern,food processing,food processing,food processing,non-energy,0.0334,0.0334,0.0334,0.0334
-Europe_Non_EU,food processing,food processing,food processing,non-energy,0.116,0.116,0.116,0.116
-European Free Trade Association,food processing,food processing,food processing,non-energy,0.3691,0.3691,0.3691,0.3691
 India,food processing,food processing,food processing,non-energy,0.0145,0.0145,0.0145,0.0145
 Indonesia,food processing,food processing,food processing,non-energy,0.0522,0.0522,0.0522,0.0522
 Japan,food processing,food processing,food processing,non-energy,0.4934,0.4934,0.4934,0.4934
@@ -36,4 +30,44 @@ South Asia,food processing,food processing,food processing,non-energy,0.0196,0.0
 South Korea,food processing,food processing,food processing,non-energy,0.1815,0.1815,0.1815,0.1815
 Southeast Asia,food processing,food processing,food processing,non-energy,0.0633,0.0633,0.0633,0.0633
 Taiwan,food processing,food processing,food processing,non-energy,0.1128,0.1128,0.1128,0.1128
-USA,food processing,food processing,food processing,non-energy,0.3258,0.3258,0.3258,0.3258
+Argentina,food processing,food processing,food processing,non-energy,0.1261,0.1261,0.1261,0.1261
+Colombia,food processing,food processing,food processing,non-energy,0.0879,0.0879,0.0879,0.0879
+Austria,food processing,food processing,food processing,non-energy,0.3718,0.3718,0.3718,0.3718
+Belgium,food processing,food processing,food processing,non-energy,0.3718,0.3718,0.3718,0.3718
+Bulgaria,food processing,food processing,food processing,non-energy,0.2039,0.2039,0.2039,0.2039
+Croatia,food processing,food processing,food processing,non-energy,0.116,0.116,0.116,0.116
+Cyprus,food processing,food processing,food processing,non-energy,0.2039,0.2039,0.2039,0.2039
+Czech Republic,food processing,food processing,food processing,non-energy,0.2039,0.2039,0.2039,0.2039
+Denmark,food processing,food processing,food processing,non-energy,0.3718,0.3718,0.3718,0.3718
+Estonia,food processing,food processing,food processing,non-energy,0.2039,0.2039,0.2039,0.2039
+Finland,food processing,food processing,food processing,non-energy,0.3718,0.3718,0.3718,0.3718
+France,food processing,food processing,food processing,non-energy,0.3718,0.3718,0.3718,0.3718
+Germany,food processing,food processing,food processing,non-energy,0.3718,0.3718,0.3718,0.3718
+Greece,food processing,food processing,food processing,non-energy,0.3718,0.3718,0.3718,0.3718
+Hungary,food processing,food processing,food processing,non-energy,0.2039,0.2039,0.2039,0.2039
+Ireland,food processing,food processing,food processing,non-energy,0.3718,0.3718,0.3718,0.3718
+Italy,food processing,food processing,food processing,non-energy,0.3718,0.3718,0.3718,0.3718
+Latvia,food processing,food processing,food processing,non-energy,0.2039,0.2039,0.2039,0.2039
+Lithuania,food processing,food processing,food processing,non-energy,0.2039,0.2039,0.2039,0.2039
+Luxembourg,food processing,food processing,food processing,non-energy,0.3718,0.3718,0.3718,0.3718
+Malta,food processing,food processing,food processing,non-energy,0.2039,0.2039,0.2039,0.2039
+Netherlands,food processing,food processing,food processing,non-energy,0.3718,0.3718,0.3718,0.3718
+Poland,food processing,food processing,food processing,non-energy,0.2039,0.2039,0.2039,0.2039
+Portugal,food processing,food processing,food processing,non-energy,0.3718,0.3718,0.3718,0.3718
+Romania,food processing,food processing,food processing,non-energy,0.2039,0.2039,0.2039,0.2039
+Slovakia,food processing,food processing,food processing,non-energy,0.2039,0.2039,0.2039,0.2039
+Slovenia,food processing,food processing,food processing,non-energy,0.2039,0.2039,0.2039,0.2039
+Spain,food processing,food processing,food processing,non-energy,0.3718,0.3718,0.3718,0.3718
+Sweden,food processing,food processing,food processing,non-energy,0.3718,0.3718,0.3718,0.3718
+Albania,food processing,food processing,food processing,non-energy,0.116,0.116,0.116,0.116
+Belarus,food processing,food processing,food processing,non-energy,0.0334,0.0334,0.0334,0.0334
+Bosnia and Herzegovina,food processing,food processing,food processing,non-energy,0.116,0.116,0.116,0.116
+Iceland,food processing,food processing,food processing,non-energy,0.3691,0.3691,0.3691,0.3691
+Macedonia,food processing,food processing,food processing,non-energy,0.116,0.116,0.116,0.116
+Moldova,food processing,food processing,food processing,non-energy,0.0334,0.0334,0.0334,0.0334
+Norway,food processing,food processing,food processing,non-energy,0.3691,0.3691,0.3691,0.3691
+Serbia and Montenegro,food processing,food processing,food processing,non-energy,0.116,0.116,0.116,0.116
+Switzerland,food processing,food processing,food processing,non-energy,0.3691,0.3691,0.3691,0.3691
+Turkey,food processing,food processing,food processing,non-energy,0.116,0.116,0.116,0.116
+UK,food processing,food processing,food processing,non-energy,0.3718,0.3718,0.3718,0.3718
+Ukraine,food processing,food processing,food processing,non-energy,0.0334,0.0334,0.0334,0.0334
