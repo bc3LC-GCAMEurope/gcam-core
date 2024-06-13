@@ -66,7 +66,9 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       # specific transformation for other sources of elec gen for the balancing of trade
       mutate(sector = if_else(sector_EUROSTAT == "Other sources" & product == "Electricity", "out_electricity generation", sector),
              fuel = if_else(sector_EUROSTAT == "Other sources" & product == "Electricity", "other_sources", fuel),
-             calculate_net = if_else(sector_EUROSTAT == "Other sources" & product == "Electricity", as.integer(0), calculate_net))
+             calculate_net = if_else(sector_EUROSTAT == "Other sources" & product == "Electricity", as.integer(0), calculate_net),
+             # only want stat diff for elec to be counted as net_ownuse
+             sector = if_else(sector_EUROSTAT == "Statistical differences" & fuel != "electricity", NA_character_, sector))
 
     # save the overall fossil elec ratio of CHP
     # the default values assume 25% in A23.chp_elecratio

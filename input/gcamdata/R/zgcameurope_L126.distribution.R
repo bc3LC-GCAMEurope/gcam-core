@@ -82,7 +82,8 @@ module_gcameurope_L126.distribution <- function(command, ...) {
       Electricity_total
 
     # Filtering energy balance by to electricity ownuse sectors
-    # Pumped hydro has input and output, so we need to calculate the difference
+    # Pumped hydro has input and output, so we need to calculate the difference -- no longer the case, since this would double count
+    # pumped hydro is already included in hydro production, would need to be removed to avoid double counting
     L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(grepl("electricity ownuse", sector),
              fuel == "electricity") %>%
@@ -108,7 +109,7 @@ module_gcameurope_L126.distribution <- function(command, ...) {
       L126.IO_R_elecownuse_F_Yh_EUR
 
     # 2. ELECTRICITY TRANSMISSION AND DISTRIBUTION =========================================
-    # electd_out is the consumption of electricity, minus losses and ownuse
+    # electd_out is the FE consumption of electricity, without losses and ownuse
     L126.out_EJ_R_electd_F_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(fuel == "electricity",
              grepl("^in|net", sector),
@@ -118,11 +119,11 @@ module_gcameurope_L126.distribution <- function(command, ...) {
       summarise(value = sum(value)) %>%
       ungroup
 
-    # electd_in is the consumption of electricity, ownuse
+    # electd_in is the FE consumption of electricity and distribution losses
     L126.in_EJ_R_electd_F_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(fuel == "electricity",
              grepl("^in|net", sector),
-             !(grepl("distribution", sector))) %>%
+             !(grepl("ownuse", sector))) %>%
       mutate(sector = "electricity distribution") %>%
       group_by(GCAM_region_ID, sector, fuel, year) %>%
       summarise(value = sum(value)) %>%

@@ -63,7 +63,7 @@ TO_EHG_APCHP,Autoproducer CHP ,,
 TO_EHG_APH,Autoproducer heat only,,
 TO_EHG_EDHP,Electrically driven heat pumps,out_industry_energy transformation elec heat,0
 TO_EHG_EB,Electric boilers,out_industry_energy transformation elec heat,0
-TO_EHG_PH,Pumped hydro,out_electricity ownuse,0
+TO_EHG_PH,Pumped hydro,,0
 TO_EHG_OTH,Other sources,,
 TO_RPI_RO,Refinery output,out_industry_oil refining,1
 TO_RPI_BKFLOW,Backflows,,
@@ -144,7 +144,7 @@ GHP_APCHP,Autoproducer CHP ,out_industry_chp,0
 GHP_APH,Autoproducer heat only,out_heat,0
 GIC,Gross inland consumption,,
 FC_IND_E*,Industry* ,,
-STATDIFF,Statistical differences,,
+STATDIFF,Statistical differences,in_electricity ownuse,0
 GEP,Gross electricity production,,
 GHP,Gross heat production,,
 FEC2020-2030,Final energy consumption (Europe 2020-2030),,
