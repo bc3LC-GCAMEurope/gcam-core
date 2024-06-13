@@ -16,26 +16,32 @@
 #' @importFrom tidyr complete gather nesting
 #' @author RH, February 2024
 module_gcameurope_L122.gasproc_refining <- function(command, ...) {
-  MODULE_INPUTS <- c(FILE = "common/GCAM_region_names",
-                     FILE = "aglu/A_agRegionalTechnology",
-                     FILE = "energy/calibrated_techs",
-                     FILE = "energy/A_regions",
-                     FILE = "energy/A21.globaltech_coef",
-                     FILE = "energy/A21.globaltech_secout",
-                     FILE = "energy/A22.globaltech_coef",
-                     "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
-                     "L121.share_R_TPES_biofuel_tech_EUR",
-                     "L121.BiomassOilRatios_kgGJ_R_C_EUR")
+  MODULE_INPUTS <-
+    c(FILE = "common/GCAM_region_names",
+      FILE = "aglu/A_agStorageSector",
+      FILE = "energy/calibrated_techs",
+      FILE = "energy/A_regions",
+      FILE = "energy/A21.globaltech_coef",
+      FILE = "energy/A21.globaltech_secout",
+      FILE = "energy/A22.globaltech_coef",
+      "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
+      "L121.share_R_TPES_biofuel_tech_EUR",
+      "L121.BiomassOilRatios_kgGJ_R_C_EUR")
+
+  MODULE_OUTPUTS <-
+    c("L122.out_EJ_R_gasproc_F_Yh_EUR",
+      "L122.in_EJ_R_gasproc_F_Yh_EUR",
+      "L122.IO_R_oilrefining_F_Yh_EUR",
+      "L122.out_EJ_R_refining_F_Yh_EUR",
+      "L122.in_EJ_R_refining_F_Yh_EUR",
+      "L122.in_Mt_R_C_Yh_EUR",
+      "L122.FeedOut_Mt_R_C_Yh_EUR")
+
+
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L122.out_EJ_R_gasproc_F_Yh_EUR",
-             "L122.in_EJ_R_gasproc_F_Yh_EUR",
-             "L122.IO_R_oilrefining_F_Yh_EUR",
-             "L122.out_EJ_R_refining_F_Yh_EUR",
-             "L122.in_EJ_R_refining_F_Yh_EUR",
-             "L122.in_Mt_R_C_Yh_EUR",
-             "L122.FeedOut_Mt_R_C_Yh_EUR"))
+    return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
 
     EcYield_kgm2_hi <- EcYield_kgm2_lo <- GCAM_commodity <- GCAM_region_ID <- GLU <-
@@ -53,6 +59,7 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
 
     # Load required inputs ----
     get_data_list(all_data, MODULE_INPUTS)
+
 
     # Most of the technologies (in calibrated_techs.csv) have inputs from outputs based on exogenous coefficients (A22.globaltech_coef).
     # Extracting those coefficients and interpolating them to 2010.
@@ -251,9 +258,9 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
 
     # 2/13/2019 GPK - Revisions related to ag trade - if any of these commodities in the "traded" set, then the
     # commodity name needs to be re-set to match the primary crop name (e.g., from "regional corn" to "Corn"). This is
-    # done with the A_agRegionalTechnology assumptions table.
-    biofuel_feedstock_cropname <- filter(A_agRegionalTechnology, market.name == "regional") %>%
-      select(regional.crop = "supplysector", primary.crop = "minicam.energy.input")
+    # 9/26/2023 XZ - due to storage update the mapping changed here
+    biofuel_feedstock_cropname <- A_agStorageSector %>%
+      select(regional.crop = "supplysector", primary.crop = "GCAM_commodity")
 
     L122.in_EJ_R_1stgenbio_F_Yh_EUR <- L122.in_EJ_R_1stgenbio_F_Yh_EUR %>%
       left_join(biofuel_feedstock_cropname, by = c(GCAM_commodity = "regional.crop")) %>%
@@ -440,7 +447,7 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
       add_comments("Created by matching 1st generation bio with the global technologies coefficients for existing minicam energy inputs") %>%
       add_precursors("common/GCAM_region_names", "energy/calibrated_techs",
                      "energy/A_regions", "energy/A21.globaltech_coef", "energy/A22.globaltech_coef", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
-                      "aglu/A_agRegionalTechnology", "L121.share_R_TPES_biofuel_tech_EUR", "L121.BiomassOilRatios_kgGJ_R_C_EUR") ->
+                      "aglu/A_agStorageSector", "L121.share_R_TPES_biofuel_tech_EUR", "L121.BiomassOilRatios_kgGJ_R_C_EUR") ->
       L122.in_Mt_R_C_Yh_EUR
 
     L122.FeedOut_Mt_R_C_Yh_EUR %>%
@@ -451,13 +458,7 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
       add_precursors("energy/A21.globaltech_secout") ->
       L122.FeedOut_Mt_R_C_Yh_EUR
 
-    return_data(L122.out_EJ_R_gasproc_F_Yh_EUR,
-                L122.in_EJ_R_gasproc_F_Yh_EUR,
-                L122.IO_R_oilrefining_F_Yh_EUR,
-                L122.out_EJ_R_refining_F_Yh_EUR,
-                L122.in_EJ_R_refining_F_Yh_EUR,
-                L122.in_Mt_R_C_Yh_EUR,
-                L122.FeedOut_Mt_R_C_Yh_EUR)
+    return_data(MODULE_OUTPUTS)
   } else {
     stop("Unknown command")
   }
