@@ -65,10 +65,23 @@ module_gcameurope_L123.electricity <- function(command, ...) {
 
     # Creates L123.out_EJ_R_elec_F_Yh_EUR based on L1012.en_bal_EJ_R_Si_Fi_Yh_EUR and enduse_fuel_aggregation_electricity
     # Calculates the electricity outputs by fuel, region ID and sector (electricity generation)
-    L123.out_EJ_R_elec_F_Yh_preadj_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
+    L123.out_EJ_R_elec_F_Yh_preadj_EUR_other <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(sector == "out_electricity generation",
              !fuel %in% c("heat", "electricity")) %>%
-      mutate(sector = "electricity generation") %>%
+      mutate(sector = "electricity generation")
+
+    # need to distribute other sources between all other fuel generation
+    L123.out_EJ_R_elec_F_Yh_preadj_EUR <- L123.out_EJ_R_elec_F_Yh_preadj_EUR_other %>%
+      filter(fuel != "other_sources") %>%
+      group_by(GCAM_region_ID, sector, year) %>%
+      mutate(share = value / sum(value)) %>%
+      ungroup %>%
+      left_join(L123.out_EJ_R_elec_F_Yh_preadj_EUR_other %>%
+                                     filter(fuel == "other_sources"),
+                               by = c("GCAM_region_ID", "sector", "year")) %>%
+      tidyr::replace_na(list(value.y = 0)) %>%
+      mutate(value = value.x + share * value.y) %>%
+      select(GCAM_region_ID, sector, fuel = fuel.x, year, value) %>%
       left_join_error_no_match(enduse_fuel_aggregation_electricity, by = "fuel") %>%
       select(GCAM_region_ID, sector, fuel = electricity, year, outputs = value) %>%
       group_by(GCAM_region_ID, sector, fuel, year) %>%

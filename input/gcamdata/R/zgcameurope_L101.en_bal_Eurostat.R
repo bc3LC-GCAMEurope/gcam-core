@@ -62,7 +62,11 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       left_join_error_no_match(geo_to_iso_map, by = "geo") %>%
       # Ok to have NAs
       left_join(nrgbal_to_sector_map, by = "nrg_bal") %>%
-      left_join(siec_to_fuel_map, by = "siec")
+      left_join(siec_to_fuel_map, by = "siec") %>%
+      # specific transformation for other sources of elec gen for the balancing of trade
+      mutate(sector = if_else(sector_EUROSTAT == "Other sources" & product == "Electricity", "out_electricity generation", sector),
+             fuel = if_else(sector_EUROSTAT == "Other sources" & product == "Electricity", "other_sources", fuel),
+             calculate_net = if_else(sector_EUROSTAT == "Other sources" & product == "Electricity", as.integer(0), calculate_net))
 
     # save the overall fossil elec ratio of CHP
     # the default values assume 25% in A23.chp_elecratio
