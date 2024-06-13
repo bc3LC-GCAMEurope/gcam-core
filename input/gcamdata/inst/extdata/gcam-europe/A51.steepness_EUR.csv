@@ -89,26 +89,25 @@ resid heating TradBio,traditional biomass,traditional biomass,3.5,3.5,3.5,3.5,3.
 resid heating modern,district heat,district heat,,,,,,
 resid cooling modern,electricity,electricity,,,,,,
 resid cooling modern,gas,gas,3.5,3.5,3.5,3.5,3.5,3.5
-resid cooking,biomass,biomass,3.5,3.5,3.5,3.5,3.5,3.5
-resid cooking,coal,coal,3.5,3.5,3.5,3.5,3.5,3.5
-resid cooking,electricity,electricity,,,,,,
-resid cooking,gas,gas,3.5,3.5,3.5,3.5,3.5,3.5
-resid cooking,refined liquids,refined liquids,3.5,3.5,3.5,3.5,3.5,3.5
-resid cooking,traditional biomass,traditional biomass,3.5,3.5,3.5,3.5,3.5,
-resid cooking,district heat,district heat,,,,,,
-resid hot water,biomass,biomass,3.5,3.5,3.5,3.5,3.5,3.5
-resid hot water,coal,coal,3.5,3.5,3.5,3.5,3.5,3.5
-resid hot water,electricity,electricity,,,,,,
-resid hot water,gas,gas,3.5,3.5,3.5,3.5,3.5,3.5
-resid hot water,refined liquids,refined liquids,3.5,3.5,3.5,3.5,3.5,3.5
-resid hot water,district heat,district heat,,,,,,
-resid other appliance,electricity,electricity,,,,,,
+resid cooking modern,biomass,biomass,3.5,3.5,3.5,3.5,3.5,3.5
+resid cooking coal,coal,coal,3.5,3.5,3.5,3.5,3.5,3.5
+resid cooking modern,electricity,electricity,,,,,,
+resid cooking modern,gas,gas,3.5,3.5,3.5,3.5,3.5,3.5
+resid cooking modern,refined liquids,refined liquids,3.5,3.5,3.5,3.5,3.5,3.5
+resid cooking TradBio,traditional biomass,traditional biomass,3.5,3.5,3.5,3.5,3.5,
+resid cooking modern,district heat,district heat,,,,,,
+resid hot water modern,biomass,biomass,3.5,3.5,3.5,3.5,3.5,3.5
+resid hot water coal,coal,coal,3.5,3.5,3.5,3.5,3.5,3.5
+resid hot water modern,electricity,electricity,,,,,,
+resid hot water modern,gas,gas,3.5,3.5,3.5,3.5,3.5,3.5
+resid hot water modern,refined liquids,refined liquids,3.5,3.5,3.5,3.5,3.5,3.5
+resid hot water modern,district heat,district heat,,,,,,
+resid other appliance modern,electricity,electricity,,,,,,
 resid others modern,biomass,biomass,3.5,3.5,3.5,3.5,3.5,3.5
 resid others coal,coal,coal,3.5,3.5,3.5,3.5,3.5,3.5
 resid others modern,electricity,electricity,,,,,,
 resid others modern,gas,gas,3.5,3.5,3.5,3.5,3.5,3.5
 resid others modern,refined liquids,refined liquids,3.5,3.5,3.5,3.5,3.5,3.5
-resid others TradBio,traditional biomass,traditional biomass,3.5,3.5,3.5,3.5,3.5,
 resid others modern,district heat,district heat,,,,,,
 comm heating,biomass,biomass,3.5,3.5,3.5,3.5,3.5,3.5
 comm heating,coal,coal,3.5,3.5,3.5,3.5,3.5,3.5

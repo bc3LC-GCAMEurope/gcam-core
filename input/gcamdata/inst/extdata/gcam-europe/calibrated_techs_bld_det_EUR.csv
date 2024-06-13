@@ -13,19 +13,19 @@ bld_resid,traditional biomass,resid heating TradBio,resid heating TradBio,tradit
 bld_resid,heat,resid heating modern,resid heating modern,district heat,district heat,district heat,resid,resid,resid_building
 bld_resid,electricity,resid cooling modern,resid cooling modern,electricity,electricity,elect_td_bld,resid,resid,resid_building
 bld_resid,gas,resid cooling modern,resid cooling modern,gas,gas,delivered gas,resid,resid,resid_building
-bld_resid,biomass,resid cooking,resid cooking,biomass,biomass,delivered biomass,resid,resid,resid_building
-bld_resid,coal,resid cooking,resid cooking,coal,coal,delivered coal,resid,resid,resid_building
-bld_resid,electricity,resid cooking,resid cooking,electricity,electricity,elect_td_bld,resid,resid,resid_building
-bld_resid,gas,resid cooking,resid cooking,gas,gas,delivered gas,resid,resid,resid_building
-bld_resid,refined liquids,resid cooking,resid cooking,refined liquids,refined liquids,refined liquids enduse,resid,resid,resid_building
-bld_resid,traditional biomass,resid cooking,resid cooking,traditional biomass,traditional biomass,traditional biomass,resid,resid,resid_building
-bld_resid,biomass,resid hot water,resid hot water,biomass,biomass,delivered biomass,resid,resid,resid_building
-bld_resid,coal,resid hot water,resid hot water,coal,coal,delivered coal,resid,resid,resid_building
-bld_resid,electricity,resid hot water,resid hot water,electricity,electricity,elect_td_bld,resid,resid,resid_building
-bld_resid,gas,resid hot water,resid hot water,gas,gas,delivered gas,resid,resid,resid_building
-bld_resid,refined liquids,resid hot water,resid hot water,refined liquids,refined liquids,refined liquids enduse,resid,resid,resid_building
-bld_resid,heat,resid hot water,resid hot water,district heat,district heat,district heat,resid,resid,resid_building
-bld_resid,electricity,resid other appliance,resid other appliance,electricity,electricity,elect_td_bld,resid,resid,resid_building
+bld_resid,biomass,resid cooking modern,resid cooking modern,biomass,biomass,delivered biomass,resid,resid,resid_building
+bld_resid,coal,resid cooking coal,resid cooking coal,coal,coal,delivered coal,resid,resid,resid_building
+bld_resid,electricity,resid cooking modern,resid cooking modern,electricity,electricity,elect_td_bld,resid,resid,resid_building
+bld_resid,gas,resid cooking modern,resid cooking modern,gas,gas,delivered gas,resid,resid,resid_building
+bld_resid,refined liquids,resid cooking modern,resid cooking modern,refined liquids,refined liquids,refined liquids enduse,resid,resid,resid_building
+bld_resid,traditional biomass,resid cooking TradBio,resid cooking TradBio,traditional biomass,traditional biomass,traditional biomass,resid,resid,resid_building
+bld_resid,biomass,resid hot water modern,resid hot water modern,biomass,biomass,delivered biomass,resid,resid,resid_building
+bld_resid,coal,resid hot water coal,resid hot water coal,coal,coal,delivered coal,resid,resid,resid_building
+bld_resid,electricity,resid hot water modern,resid hot water modern,electricity,electricity,elect_td_bld,resid,resid,resid_building
+bld_resid,gas,resid hot water modern,resid hot water modern,gas,gas,delivered gas,resid,resid,resid_building
+bld_resid,refined liquids,resid hot water modern,resid hot water modern,refined liquids,refined liquids,refined liquids enduse,resid,resid,resid_building
+bld_resid,heat,resid hot water modern,resid hot water modern,district heat,district heat,district heat,resid,resid,resid_building
+bld_resid,electricity,resid other appliance modern,resid other appliance modern,electricity,electricity,elect_td_bld,resid,resid,resid_building
 bld_resid,biomass,resid others modern,resid others modern,biomass,biomass,delivered biomass,resid,resid,resid_building
 bld_resid,coal,resid others coal,resid others coal,coal,coal,delivered coal,resid,resid,resid_building
 bld_resid,electricity,resid others modern,resid others modern,electricity,electricity,elect_td_bld,resid,resid,resid_building
@@ -47,5 +47,5 @@ bld_comm,refined liquids,comm others,comm others,refined liquids,refined liquids
 bld_comm,heat,comm others,comm others,district heat,district heat,district heat,comm,comm,comm_building
 bld_comm,hydrogen,comm heating,comm heating,gas,hydrogen,H2 retail delivery,comm,comm,comm_building
 bld_comm,hydrogen,comm others,comm others,gas,hydrogen,H2 retail delivery,comm,comm,comm_building
-bld_resid,hydrogen,resid heating,resid heating,gas,hydrogen,H2 retail delivery,resid,resid,resid_building
-bld_resid,hydrogen,resid others,resid others,gas,hydrogen,H2 retail delivery,resid,resid,resid_building
+bld_resid,hydrogen,resid heating modern,resid heating modern,gas,hydrogen,H2 retail delivery,resid,resid,resid_building
+bld_resid,hydrogen,resid others modern,resid others modern,gas,hydrogen,H2 retail delivery,resid,resid,resid_building

@@ -212,8 +212,7 @@ module_energy_building_det_xml <- function(command, ...) {
     }
 
     building_det.xml %>%
-      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
-      building_det.xml
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) -> building_det.xml
 
     return_data(building_det.xml)
   } else {

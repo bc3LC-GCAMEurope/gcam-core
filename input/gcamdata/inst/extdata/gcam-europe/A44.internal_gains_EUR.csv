@@ -1,0 +1,20 @@
+# File: A44.internal_gains_EUR.csv
+# Title: Internal gains fuel input ratio
+# Units: Unitless
+# Column types: cccn 
+# ----------
+supplysector,subsector,technology,input.ratio
+resid others modern,biomass,biomass,0.5
+resid others coal,coal,coal,0.5
+resid others modern,electricity,electric,0.5
+resid others modern,gas,gas,0.5
+resid others modern,refined liquids,oil,0.5
+resid others modern,district heat,district heat,0.5
+comm others,biomass,biomass,0.5
+comm others,coal,coal,0.5
+comm others,electricity,electric,0.5
+comm others,gas,gas,0.5
+comm others,refined liquids,oil,0.5
+comm others,district heat,district heat,0.5
+resid others modern,gas,hydrogen,0.5
+comm others,gas,hydrogen,0.5

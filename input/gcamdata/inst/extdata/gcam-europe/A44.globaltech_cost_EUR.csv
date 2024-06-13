@@ -15,19 +15,19 @@ resid heating TradBio,traditional biomass,traditional biomass,0.2748199
 resid heating modern,district heat,district heat,0.6710238
 resid cooling modern,electricity,electricity,6.712409
 resid cooling modern,gas,gas,11.242246
-resid hot water,biomass,biomass,0.9417305
-resid hot water,coal,coal,0.9417305
-resid hot water,gas,gas,1.3739374
-resid hot water,electricity,electricity,5.502
-resid hot water,refined liquids,refined liquids,9.879
-resid hot water,district heat,district heat,1.2951476
-resid other appliance,electricity,electricity,1.2951476
-resid cooking,biomass,biomass,0.9417305
-resid cooking,coal,coal,0.9417305
-resid cooking,electricity,electricity,1.2951476
-resid cooking,gas,gas,1.3739374
-resid cooking,refined liquids,refined liquids,1.8423003
-resid cooking,traditional biomass,traditional biomass,0.6183447
+resid hot water modern,biomass,biomass,0.9417305
+resid hot water coal,coal,coal,0.9417305
+resid hot water modern,gas,gas,1.3739374
+resid hot water modern,electricity,electricity,5.502
+resid hot water modern,refined liquids,refined liquids,9.879
+resid hot water modern,district heat,district heat,1.2951476
+resid other appliance modern,electricity,electricity,1.2951476
+resid cooking modern,biomass,biomass,0.9417305
+resid cooking coal,coal,coal,0.9417305
+resid cooking modern,electricity,electricity,1.2951476
+resid cooking modern,gas,gas,1.3739374
+resid cooking modern,refined liquids,refined liquids,1.8423003
+resid cooking TradBio,traditional biomass,traditional biomass,0.6183447
 resid others modern,biomass,biomass,3.200354
 resid others coal,coal,coal,2.1335694
 resid others modern,gas,gas,3.0014812

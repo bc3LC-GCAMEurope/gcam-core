@@ -39,6 +39,8 @@ MODEL_FINAL_BASE_YEAR   <- 2015
 
 gcam.USA_CODE            <- 1
 gcam.USA_REGION          <- "USA"
+gcam.DEU_CODE            <- 38
+gcam.DEU_REGION          <- "Germany"
 gcam.WESTERN_EUROPE_CODE <- 13
 gcam.LOGIT_TYPES         <- c("relative-cost-logit", "absolute-cost-logit")
 gcam.EQUIV_TABLE         <- "EQUIV_TABLE"
@@ -514,6 +516,9 @@ energy.GDP_MID_SATIATION      <- 10.5
 energy.INTERNAL_GAINS_SCALAR_USA_H <- -930
 energy.INTERNAL_GAINS_SCALAR_USA_C <- 350
 
+energy.INTERNAL_GAINS_SCALAR_DEU_H <- -930
+energy.INTERNAL_GAINS_SCALAR_DEU_C <- 350
+
 # Used to avoid negative/zero energy when disaggregating detailed industries (cement, fertilizer)
 energy.MIN_IN_EJ_IND <- 1e-3
 
@@ -704,23 +709,22 @@ socioeconomics.FINAL_DEMAND_SECTORS <- c("other industrial energy use",
                                          "chemical energy use",
                                          "alumina",
                                          "iron and steel",
-                                         "resid cooling",
-                                         "resid heating",
-                                         "resid hot water",
-                                         "resid cooking",
-                                         "resid other appliance",
-                                         "resid others",
                                          "process heat food processing",
                                          "process heat paper",
                                          "waste biomass for paper",
-                                         # TO BE ADDED w MULTIPLE CONSUMERS
-                                         #paste0("resid cooling modern_d", seq(1,10)),
-                                         #paste0("resid heating modern_d", seq(1,10)),
-                                         #paste0("resid heating coal_d", seq(1,10)),
-                                         #paste0("resid heating TradBio_d", seq(1,10)),
-                                         #paste0("resid others modern_d", seq(1,10)),
-                                         #paste0("resid others coal_d", seq(1,10)),
-                                         #paste0("resid others TradBio_d", seq(1,10)),
+                                         paste0("resid cooling modern_d", seq(1,10)),
+                                         paste0("resid cooking modern_d", seq(1,10)),
+                                         paste0("resid cooking coal_d", seq(1,10)),
+                                         paste0("resid cooking TradBio_d", seq(1,10)),
+                                         paste0("resid hot water modern_d", seq(1,10)),
+                                         paste0("resid hot water coal_d", seq(1,10)),
+                                         paste0("resid heating modern_d", seq(1,10)),
+                                         paste0("resid heating coal_d", seq(1,10)),
+                                         paste0("resid heating TradBio_d", seq(1,10)),
+                                         paste0("resid others appliance modern_d", seq(1,10)),
+                                         paste0("resid others modern_d", seq(1,10)),
+                                         paste0("resid others coal_d", seq(1,10)),
+                                         paste0("resid others TradBio_d", seq(1,10)),
                                          "comm cooling",
                                          "comm heating",
                                          "comm others",

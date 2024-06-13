@@ -13,19 +13,19 @@ resid heating TradBio,traditional biomass,traditional biomass,1,1,1,1,1
 resid heating modern,district heat,district heat,1,1,1,1,1
 resid cooling modern,electricity,electricity,1,1,1,1,1
 resid cooling modern,gas,gas,1,1,1,1,1
-resid cooking,biomass,biomass,1,1,1,1,1
-resid cooking,coal,coal,1,1,1,1,1
-resid cooking,electricity,electricity,1,1,1,1,1
-resid cooking,gas,gas,1,1,1,1,1
-resid cooking,refined liquids,refined liquids,1,1,1,1,1
-resid cooking,traditional biomass,traditional biomass,1,1,1,1,1
-resid other appliance,electricity,electricity,1,1,1,1,1
-resid hot water,biomass,biomass,1,1,1,1,1
-resid hot water,coal,coal,1,1,1,1,1
-resid hot water,electricity,electricity,1,1,1,1,1
-resid hot water,gas,gas,1,1,1,1,1
-resid hot water,refined liquids,refined liquids,1,1,1,1,1
-resid hot water,district heat,district heat,1,1,1,1,1
+resid cooking modern,biomass,biomass,1,1,1,1,1
+resid cooking coal,coal,coal,1,1,1,1,1
+resid cooking modern,electricity,electricity,1,1,1,1,1
+resid cooking modern,gas,gas,1,1,1,1,1
+resid cooking modern,refined liquids,refined liquids,1,1,1,1,1
+resid cooking TradBio,traditional biomass,traditional biomass,1,1,1,1,1
+resid other appliance modern,electricity,electricity,1,1,1,1,1
+resid hot water modern,biomass,biomass,1,1,1,1,1
+resid hot water coal,coal,coal,1,1,1,1,1
+resid hot water modern,electricity,electricity,1,1,1,1,1
+resid hot water modern,gas,gas,1,1,1,1,1
+resid hot water modern,refined liquids,refined liquids,1,1,1,1,1
+resid hot water modern,district heat,district heat,1,1,1,1,1
 resid others modern,biomass,biomass,1,1,1,1,1
 resid others coal,coal,coal,1,1,1,1,1
 resid others modern,electricity,electricity,1,1,1,1,1
@@ -45,7 +45,7 @@ comm others,electricity,electricity,1,1,1,1,1
 comm others,gas,gas,1,1,1,1,1
 comm others,refined liquids,refined liquids,1,1,1,1,1
 comm others,district heat,district heat,1,1,1,1,1
-resid heating,gas,hydrogen,0,0,0,1,1
-resid others,gas,hydrogen,0,0,0,1,1
+resid heating modern,gas,hydrogen,0,0,0,1,1
+resid others modern,gas,hydrogen,0,0,0,1,1
 comm heating,gas,hydrogen,0,0,0,1,1
 comm others,gas,hydrogen,0,0,0,1,1

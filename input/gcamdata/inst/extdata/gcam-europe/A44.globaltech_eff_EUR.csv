@@ -18,26 +18,26 @@ resid heating modern,district heat,district heat,district heat furnace,district 
 resid cooling modern,electricity,electricity,air conditioning,elect_td_bld,3.043,3.043,3.81,3.81,3.81,3.81,3.81,3.81,3.81
 resid cooling modern,electricity,electricity,air conditioning hi-eff,elect_td_bld,7.03,7.03,7.03,7.03,7.03,7.03,7.03,7.03,7.03
 resid cooling modern,gas,gas,gas air conditioning,delivered gas,0.83,0.83,0.83,0.83,0.83,0.83,0.83,0.83,0.83
-resid hot water,biomass,biomass,wood water heater,delivered biomass,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4
-resid hot water,coal,coal,coal water heater,delivered coal,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4
-resid hot water,gas,gas,gas water heater,delivered gas,0.59,0.59,0.62,0.62,0.62,0.62,0.62,0.62,0.62
-resid hot water,gas,gas,gas water heater hi-eff,delivered gas,0.82,0.82,0.82,0.82,0.82,0.82,0.82,0.82,0.82
-resid hot water,electricity,electricity,electric resistance water heater,elect_td_bld,0.894,0.894,0.9,0.9,0.9,0.9,0.9,0.9,0.9
-resid hot water,electricity,electricity,electric resistance water heater hi-eff,elect_td_bld,0.95,0.95,0.95,0.96,0.96,0.96,0.96,0.96,0.96
-resid hot water,refined liquids,refined liquids,fuel water heater,refined liquids enduse,0.59,0.59,0.62,0.62,0.62,0.62,0.62,0.62,0.62
-resid hot water,refined liquids,refined liquids,fuel water heater hi-eff,refined liquids enduse,0.82,0.82,0.82,0.82,0.82,0.82,0.82,0.82,0.82
-resid hot water,district heat,district heat,district heat water heater,district heat,1,1,1,1,1,1,1,1,1
-resid other appliance,electricity,electricity,incandescent,elect_td_bld,4.028,4.028,5.5,5.5,5.5,5.5,5.5,5.5,5.5
-resid other appliance,electricity,electricity,fluorescent,elect_td_bld,18.667,18.667,18.667,19.167,19.167,19.639,19.639,20.139,20.139
-resid other appliance,electricity,electricity,solid state,elect_td_bld,12.222,12.222,25.556,43.611,49.861,56.111,56.111,56.111,56.111
-resid cooking,biomass,biomass,wood oven,delivered biomass,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4
-resid cooking,coal,coal,coal oven,delivered coal,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4
-resid cooking,electricity,electricity,electric oven,elect_td_bld,0.621,0.621,0.621,0.621,0.621,0.621,0.621,0.621,0.621
-resid cooking,gas,gas,gas oven,delivered gas,0.399,0.399,0.399,0.399,0.399,0.399,0.399,0.399,0.399
-resid cooking,gas,gas,gas oven hi-eff,delivered gas,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42
-resid cooking,refined liquids,refined liquids,lpg oven,refined liquids enduse,0.399,0.399,0.399,0.399,0.399,0.399,0.399,0.399,0.399
-resid cooking,refined liquids,refined liquids,lpg oven hi-eff,refined liquids enduse,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42
-resid cooking,traditional biomass,traditional biomass,traditional biomass,traditional biomass,0.9714305,1.0100451,1.0151055,1.0201911,1.0253023,1.0304391,1.0356016,1.04079,1.105116
+resid hot water modern,biomass,biomass,wood water heater,delivered biomass,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4
+resid hot water coal,coal,coal,coal water heater,delivered coal,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4
+resid hot water modern,gas,gas,gas water heater,delivered gas,0.59,0.59,0.62,0.62,0.62,0.62,0.62,0.62,0.62
+resid hot water modern,gas,gas,gas water heater hi-eff,delivered gas,0.82,0.82,0.82,0.82,0.82,0.82,0.82,0.82,0.82
+resid hot water modern,electricity,electricity,electric resistance water heater,elect_td_bld,0.894,0.894,0.9,0.9,0.9,0.9,0.9,0.9,0.9
+resid hot water modern,electricity,electricity,electric resistance water heater hi-eff,elect_td_bld,0.95,0.95,0.95,0.96,0.96,0.96,0.96,0.96,0.96
+resid hot water modern,refined liquids,refined liquids,fuel water heater,refined liquids enduse,0.59,0.59,0.62,0.62,0.62,0.62,0.62,0.62,0.62
+resid hot water modern,refined liquids,refined liquids,fuel water heater hi-eff,refined liquids enduse,0.82,0.82,0.82,0.82,0.82,0.82,0.82,0.82,0.82
+resid hot water modern,district heat,district heat,district heat water heater,district heat,1,1,1,1,1,1,1,1,1
+resid other appliance modern,electricity,electricity,incandescent,elect_td_bld,4.028,4.028,5.5,5.5,5.5,5.5,5.5,5.5,5.5
+resid other appliance modern,electricity,electricity,fluorescent,elect_td_bld,18.667,18.667,18.667,19.167,19.167,19.639,19.639,20.139,20.139
+resid other appliance modern,electricity,electricity,solid state,elect_td_bld,12.222,12.222,25.556,43.611,49.861,56.111,56.111,56.111,56.111
+resid cooking modern,biomass,biomass,wood oven,delivered biomass,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4
+resid cooking coal,coal,coal,coal oven,delivered coal,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4
+resid cooking modern,electricity,electricity,electric oven,elect_td_bld,0.621,0.621,0.621,0.621,0.621,0.621,0.621,0.621,0.621
+resid cooking modern,gas,gas,gas oven,delivered gas,0.399,0.399,0.399,0.399,0.399,0.399,0.399,0.399,0.399
+resid cooking modern,gas,gas,gas oven hi-eff,delivered gas,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42
+resid cooking modern,refined liquids,refined liquids,lpg oven,refined liquids enduse,0.399,0.399,0.399,0.399,0.399,0.399,0.399,0.399,0.399
+resid cooking modern,refined liquids,refined liquids,lpg oven hi-eff,refined liquids enduse,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42
+resid cooking TradBio,traditional biomass,traditional biomass,traditional biomass,traditional biomass,0.9714305,1.0100451,1.0151055,1.0201911,1.0253023,1.0304391,1.0356016,1.04079,1.105116
 resid others modern,biomass,biomass,biomass,delivered biomass,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4
 resid others coal,coal,coal,coal,delivered coal,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4
 resid others modern,gas,gas,gas,delivered gas,1,1,1,1,1,1,1,1,1

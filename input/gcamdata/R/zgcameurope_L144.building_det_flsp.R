@@ -54,8 +54,8 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
     geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map") %>% filter_regions_europe()
     L100.Pop_thous_ctry_Yh <- get_data(all_data, "L100.Pop_thous_ctry_Yh") %>% filter_regions_europe()
     L102.gdp_mil90usd_GCAM3_R_Y <- get_data(all_data, "L102.gdp_mil90usd_GCAM3_R_Y") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
-    L221.LN0_Land<-get_data(all_data, "L221.LN0_Land", strip_attributes = TRUE)
-    L221.LN1_UnmgdAllocation<-get_data(all_data, "L221.LN1_UnmgdAllocation", strip_attributes = TRUE)
+    L221.LN0_Land<-get_data(all_data, "L221.LN0_Land", strip_attributes = TRUE) %>% filter_regions_europe()
+    L221.LN1_UnmgdAllocation<-get_data(all_data, "L221.LN1_UnmgdAllocation", strip_attributes = TRUE) %>% filter_regions_europe()
     # ===================================================
 
     # Silence package notes
@@ -256,8 +256,10 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
       mutate(unadjust.satiation = energy.OBS_UNADJ_SAT,
              land.density.param = coef(fit.gomp)[1],
              b.param = coef(fit.gomp)[2],
-             income.param = coef(fit.gomp)[3])
-
+             income.param = coef(fit.gomp)[3]) %>%
+      mutate(year = if_else(region %in% regions_with_obs_data, MODEL_FINAL_BASE_YEAR, avg_fin_obs_year)) %>%
+      left_join_error_no_match(L144.flsp_param_EUR_pre %>% select(region,tot_dens,year), by = c("region", "year")) %>%
+      select(-year)
 
 
     # ----------------------------------
@@ -409,7 +411,7 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
                      "gcam-europe/mappings/geo_to_iso_map", "L100.Pop_thous_ctry_Yh") ->
       L144.flsp_param_EUR
 
-    return_data(L144.flsp_bm2_R_res_Yh_EUR, L144.flsp_bm2_R_comm_Yh_EUR, L144.flspPrice_90USDm2_R_bld_Yh_EUR,L144.hab_land_flsp_fin_EUR, L144.flsp_param_EUR)
+    return_data(L144.flsp_bm2_R_res_Yh_EUR, L144.flsp_bm2_R_comm_Yh_EUR, L144.flspPrice_90USDm2_R_bld_Yh_EUR, L144.hab_land_flsp_fin_EUR, L144.flsp_param_EUR)
   } else {
     stop("Unknown command")
   }

@@ -13,25 +13,24 @@ resid heating TradBio,traditional biomass,-2
 resid heating modern,district heat,-0.5
 resid cooling modern,electricity,0
 resid cooling modern,gas,-1
-resid cooking,biomass,-1
-resid cooking,coal,-0.7
-resid cooking,electricity,0
-resid cooking,gas,0
-resid cooking,refined liquids,-0.5
-resid cooking,traditional biomass,-0.5
-resid other appliance,electricity,0
-resid hot water,biomass,-1
-resid hot water,coal,-0.7
-resid hot water,electricity,0
-resid hot water,gas,0
-resid hot water,refined liquids,-0.5
-resid hot water,district heat,-0.5
+resid cooking modern,biomass,-1
+resid cooking coal,coal,-0.7
+resid cooking modern,electricity,0
+resid cooking modern,gas,0
+resid cooking modern,refined liquids,-0.5
+resid cooking TradBio,traditional biomass,-0.5
+resid other appliance modern,electricity,0
+resid hot water modern,biomass,-1
+resid hot water coal,coal,-0.7
+resid hot water modern,electricity,0
+resid hot water modern,gas,0
+resid hot water modern,refined liquids,-0.5
+resid hot water modern,district heat,-0.5
 resid others modern,biomass,-1
 resid others coal,coal,-1
 resid others modern,electricity,0
 resid others modern,gas,0
 resid others modern,refined liquids,-1
-resid others TradBio,traditional biomass,-2
 comm heating,biomass,-1
 comm heating,coal,-0.7
 comm heating,electricity,0

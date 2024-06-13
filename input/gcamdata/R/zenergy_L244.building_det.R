@@ -274,8 +274,8 @@ module_energy_L244.building_det <- function(command, ...) {
       left_join_error_no_match(A_regions %>% select(region,GCAM_region_ID), by=c("region")) %>%
       left_join_error_no_match(L144.income_shares %>%
                                  filter(scen %in% c(socioeconomics.BASE_INCSHARE_BASE,socioeconomics.BASE_INCSHARE_SCENARIO)) %>%
-                                 rename(pop.year.fillout=year)
-                                 ,by=c("GCAM_region_ID","group","pop.year.fillout")) %>%
+                                 rename(pop.year.fillout=year),
+                               by=c("GCAM_region_ID","group","pop.year.fillout")) %>%
       mutate(subregional.population.share = 1/n_groups) %>%
       unite(gcam.consumer,c("gcam.consumer","group"),sep = "_") %>%
       rename(subregional.income.share = share) %>%
@@ -454,7 +454,7 @@ module_energy_L244.building_det <- function(command, ...) {
 
     # Combine observed data with the bias adder to obtain historical residential floorspace (BM2)
     L244.Floorspace_resid<-L244.Floorspace_resid_est %>%
-      select(region, gcam.consumer, nodeInput, building.node.input, year, flsp_est) %>%
+      select(region, gcam.consumer, year, flsp_est) %>%
       left_join_error_no_match(L244.Floorspace_resid_adder, by = c("region", "gcam.consumer","year")) %>%
       mutate(base.building.size = flsp_est + bias.adder,
              nodeInput = "resid",
@@ -725,10 +725,8 @@ module_energy_L244.building_det <- function(command, ...) {
       left_join_error_no_match(L244.Floorspace,by=c("region","year","gcam.consumer", "nodeInput", "building.node.input")) %>%
       rename(observed_flsp_bm2 = base.building.size) %>%
       left_join_error_no_match(L101.Pop_thous_R_Yh_gr, by = c("year", "GCAM_region_ID","gcam.consumer","region")) %>%
-      rename(pop_thous = value) %>%
       mutate(observed_pcflsp = observed_flsp_bm2*1E9 / (pop_thous*1E3)) %>%
       left_join_error_no_match(L102.pcgdp_thous90USD_Scen_R_Y_gr %>% filter(scenario == socioeconomics.BASE_GDP_SCENARIO),by = c("year", "GCAM_region_ID","region","gcam.consumer")) %>%
-      rename(pcGDP_thous90USD = value) %>%
       mutate(est_pcflsp = satiation.level * (1-exp(-log(2)*pcGDP_thous90USD/`satiation-impedance`)),
              est_flsp_bm2 = (est_pcflsp*pop_thous*1E3) / 1E9) %>%
       group_by(region,nodeInput,building.node.input,year) %>%
@@ -2098,7 +2096,6 @@ module_energy_L244.building_det <- function(command, ...) {
       filter(year == MODEL_FINAL_BASE_YEAR)
 
     L244.GenericServiceAdder_aggObs_gr<-L244.GenericBaseService %>%
-      rename(obs = value) %>%
       filter(year == MODEL_FINAL_BASE_YEAR)
 
     trad_fuels_oth<-c("resid others coal","resid others TradBio")
@@ -2248,7 +2245,6 @@ module_energy_L244.building_det <- function(command, ...) {
       filter(year== MODEL_FINAL_BASE_YEAR)
 
     L244.ThermalServiceAdder_aggObs_gr<-L244.ThermalBaseService %>%
-      rename(obs = value) %>%
       filter(year== MODEL_FINAL_BASE_YEAR)
 
 

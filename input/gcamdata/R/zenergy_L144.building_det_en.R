@@ -325,7 +325,7 @@ module_energy_L144.building_det_en <- function(command, ...) {
 
     # Subset the tech list to just the thermal services
     tech_list_ctry %>%
-      filter(service %in% unique(hddcdd_mapping$service)) %>%
+      filter(service %in% thermal_services) %>%
       left_join_error_no_match(hddcdd_mapping, by = "service") ->
       L144.ThermalServices
 
@@ -557,28 +557,29 @@ module_energy_L144.building_det_en <- function(command, ...) {
 
     # 1G
     # Create L144.prices_bld to calibrate satiation impedance (mu) at region level within the DS
-    L144.prices_bld <- GCAM_region_names %>%
-      repeat_add_columns(tibble(market = unique(L144.base_service_EJ_serv$service))) %>%
-      repeat_add_columns(tibble(year = MODEL_BASE_YEARS)) %>%
-      mutate(value = 1) %>%
-      rename(price = value) %>%
-      # select historical years
-      filter(year <= max(MODEL_BASE_YEARS))
+    # L144.prices_bld <- GCAM_region_names %>%
+    #   repeat_add_columns(tibble(market = unique(L144.base_service_EJ_serv$service))) %>%
+    #   repeat_add_columns(tibble(year = MODEL_BASE_YEARS)) %>%
+    #   mutate(value = 1) %>%
+    #   rename(price = value) %>%
+    #   # select historical years
+    #   filter(year <= max(MODEL_BASE_YEARS))
 
-    #L144.prices_bld<-A44.Calprice_bld %>%
-    #  left_join_error_no_match(GCAM_region_names,by="region") %>%
-    # gather_years() %>%
-    # # Add 1975 and extrapolate prices using rule 2
-    # group_by(region,GCAM_region_ID,market) %>%
-    # complete(nesting(year = MODEL_BASE_YEARS)) %>%
-    # mutate(value = if_else(is.na(value),approx_fun(year, value, rule = 2),value)) %>%
-      # Add all historical years and linerly extrapolate (rule 1)
-    # complete(nesting(year = HISTORICAL_YEARS)) %>%
-    # mutate(value = if_else(is.na(value),approx_fun(year, value, rule = 2),value)) %>%
-    # ungroup() %>%
-    # rename(price = value) %>%
-      # select historical years
-    # filter(year <= max(MODEL_BASE_YEARS))
+
+    L144.prices_bld<-A44.Calprice_bld %>%
+     left_join_error_no_match(GCAM_region_names,by="region") %>%
+    gather_years() %>%
+    # Add 1975 and extrapolate prices using rule 2
+    group_by(region,GCAM_region_ID,market) %>%
+    complete(nesting(year = MODEL_BASE_YEARS)) %>%
+    mutate(value = if_else(is.na(value),approx_fun(year, value, rule = 2),value)) %>%
+    # Add all historical years and linerly extrapolate (rule 1)
+    complete(nesting(year = HISTORICAL_YEARS)) %>%
+    mutate(value = if_else(is.na(value),approx_fun(year, value, rule = 2),value)) %>%
+    ungroup() %>%
+    rename(price = value) %>%
+    # select historical years
+    filter(year <= max(MODEL_BASE_YEARS))
 
 
     # ===================================================

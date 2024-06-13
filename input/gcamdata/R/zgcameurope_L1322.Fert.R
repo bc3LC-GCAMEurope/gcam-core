@@ -62,11 +62,6 @@ module_gcameurope_L1322.Fert <- function(command, ...) {
     # Load required inputs ----
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
 
-    gcam.GER_CODE <- iso_GCAM_regID %>%
-      filter(country_name == 'Germany') %>%
-      pull(GCAM_region_ID) %>%
-      unique()
-
     # Compute fertilizer production and energy inputs by technology ----
     # Disaggregating fertilizer production by country / year to production technologies (gas, coal, oil)
 
@@ -312,7 +307,7 @@ module_gcameurope_L1322.Fert <- function(command, ...) {
     # Obtain fertilizer input-output cofficient for natural gas in aglu.FERT_PRICE_YEAR
     L1322.IO_R_Fert_F_Yh_EUR %>%
       filter(year == aglu.FERT_PRICE_YEAR,
-             GCAM_region_ID == gcam.GER_CODE,
+             GCAM_region_ID == gcam.DEU_CODE,
              fuel == "gas") %>%
       pull(value) -> # Save coefficient as single number
       L1322.IO_GJkgNH3_Fert_gas

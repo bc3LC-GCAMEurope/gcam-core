@@ -11,19 +11,19 @@ resid heating modern,gas,start-year,,1
 resid heating modern,refined liquids,start-year,,1
 resid heating TradBio,traditional biomass,start-year,,1
 resid heating modern,district heat,start-year,,1
-resid cooking,biomass,start-year,,1
-resid cooking,coal,start-year,,1
-resid cooking,electricity,start-year,,1
-resid cooking,gas,start-year,,1
-resid cooking,refined liquids,start-year,,1
-resid cooking,traditional biomass,start-year,,1
-resid other appliance,electricity,start-year,,1
-resid hot water,biomass,start-year,,1
-resid hot water,coal,start-year,,1
-resid hot water,electricity,start-year,,1
-resid hot water,gas,start-year,,1
-resid hot water,refined liquids,start-year,,1
-resid hot water,district heat,start-year,,1
+resid cooking modern,biomass,start-year,,1
+resid cooking coal,coal,start-year,,1
+resid cooking modern,electricity,start-year,,1
+resid cooking modern,gas,start-year,,1
+resid cooking modern,refined liquids,start-year,,1
+resid cooking TradBio,traditional biomass,start-year,,1
+resid other appliance modern,electricity,start-year,,1
+resid hot water modern,biomass,start-year,,1
+resid hot water coal,coal,start-year,,1
+resid hot water modern,electricity,start-year,,1
+resid hot water modern,gas,start-year,,1
+resid hot water modern,refined liquids,start-year,,1
+resid hot water modern,district heat,start-year,,1
 resid cooling modern,electricity,start-year,,1
 resid cooling modern,gas,start-year,,1
 resid others modern,biomass,start-year,,1
