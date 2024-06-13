@@ -15,7 +15,7 @@
 #' @importFrom tidyr replace_na pivot_longer
 #' @author RH June 2024
 module_gcameurope_L1261.elec_trade <- function(command, ...) {
-  MODULE_INPUTS <- c(FILE = "common/GCAM_region_names",
+  MODULE_INPUTS <- c(FILE = "common/GCAM32_to_EU",
                      FILE = "gcam-europe/mappings/grid_regions",
                      FILE = "gcam-europe/eurostat_elec_exports",
                      FILE = "gcam-europe/eurostat_elec_imports",
@@ -36,6 +36,26 @@ module_gcameurope_L1261.elec_trade <- function(command, ...) {
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
+
+    # 0. Mappings to eurostat trade balance ----------------------
+    # need to map grid regions to eurostat data
+    country_code_mapping <- distinct(eurostat_elec_exports, code = code_exporter, region = export_ctry) %>%
+      bind_rows(distinct(eurostat_elec_imports, code = code_importer, region = import_ctry)) %>%
+      distinct() %>%
+      # make some adjustments to certain countries
+      mutate(region = gsub("Czechia", "Czech Republic", region),
+             region = gsub("Netherlands \\(the\\)", "Netherlands", region),
+             region = gsub("North Macedonia", "Macedonia", region),
+             region = gsub("^Serbia", "Serbia and Montenegro", region),
+             region = gsub("^Montenegro", "Serbia and Montenegro", region),
+             region = gsub("United Kingdom", "UK", region))
+
+    grid_region_mapping <- grid_regions %>%
+      left_join(country_code_mapping, by = "region") %>%
+      # add Andorra and Liechtenstein
+      bind_rows(tibble(grid_region = c("Iberian_Peninsula", "Central_Western_Europe"),
+                       code = c("AD", "LI"),
+                       region = c("Andorra", "Liechtenstein")))
 
     # 1a. L126 Net exports outside of grid regions -------------------------
     # check difference between total generation and total demand
@@ -61,49 +81,38 @@ module_gcameurope_L1261.elec_trade <- function(command, ...) {
 
     # 1b. Eurostat trade balance net exports --------------------------
     # combine exports and imports and remove duplicated rows
-    L1261.elec_trade_GWH <- bind_rows(eurostat_elec_exports, eurostat_elec_imports) %>%  distinct()
-
-    # need to map grid regions to eurostat data
-    country_code_mapping <- distinct(L1261.elec_trade_GWH, code = code_exporter, region = export_ctry) %>%
-      bind_rows(distinct(L1261.elec_trade_GWH, code = code_importer, region = import_ctry)) %>%
-      distinct() %>%
-      # make some adjustments to certain countries
-      mutate(region = gsub("Czechia", "Czech Republic", region),
-             region = gsub("Netherlands \\(the\\)", "Netherlands", region),
-             region = gsub("North Macedonia", "Macedonia", region),
-             region = gsub("^Serbia", "Serbia and Montenegro", region),
-             region = gsub("^Montenegro", "Serbia and Montenegro", region),
-             region = gsub("United Kingdom", "UK", region))
-
-    grid_region_mapping <- grid_regions %>%
-      left_join(country_code_mapping, by = "region") %>%
-      select(-region) %>%
-      # add Andorra and Liechtenstein
-      bind_rows(tibble(grid_region = c("Iberian_Peninsula", "Central_Western_Europe"),
-                       code = c("AD", "LI")))
-
-    L1261.elec_trade_grid_EJ <- L1261.elec_trade_GWH %>%
-      left_join(grid_region_mapping %>%  rename(grid_region_exporter = grid_region), by = c("code_exporter" = "code")) %>%
-      left_join(grid_region_mapping %>%  rename(grid_region_importer = grid_region), by = c("code_importer" = "code")) %>%
+    L1261.elec_trade_GWH <- bind_rows(eurostat_elec_exports, eurostat_elec_imports) %>%  distinct() %>%
+      left_join(grid_region_mapping %>%  rename(grid_region_exporter = grid_region, region_exporter = region), by = c("code_exporter" = "code")) %>%
+      left_join(grid_region_mapping %>%  rename(grid_region_importer = grid_region, region_importer = region), by = c("code_importer" = "code")) %>%
+      mutate(region_exporter = if_else(is.na(region_exporter), export_ctry, region_exporter),
+             region_importer = if_else(is.na(region_importer), import_ctry, region_importer)) %>%
       # If trade partner is not part of a grid region, label it as EXTERIOR
       tidyr::replace_na(list(grid_region_exporter = "EXTERIOR", grid_region_importer = "EXTERIOR")) %>%
+      gather_years() %>%
+      filter(!is.na(value), value != 0) %>%
+      # often the import and export balances have slight differences (e.g. exports from Spain to Portugal != imports in Portugal from Spain)
+      # so when there are two values for same importers and exporters, just take average
+      group_by(region_importer, region_exporter, grid_region_exporter, grid_region_importer, year) %>%
+      summarise(value = mean(value)) %>%
+      ungroup
+
+    # isolate to trade with exterior regions
+    L1261.elec_trade_grid_EJ <- L1261.elec_trade_GWH %>%
       filter(grid_region_exporter == "EXTERIOR" | grid_region_importer == "EXTERIOR",
              # not interested in, for example, trade between turkey and iraq, two regions outside of the grid regions
              !(grid_region_exporter == "EXTERIOR" & grid_region_importer == "EXTERIOR")) %>%
-      gather_years() %>%
-      filter(!is.na(value), value != 0) %>%
       # summarise and convert from GWH to EJ
-      group_by(import_ctry, grid_region_importer, export_ctry, grid_region_exporter, year) %>%
+      group_by(region_importer, grid_region_importer, region_exporter, grid_region_exporter, year) %>%
       summarise(value = sum(value) * CONV_GWH_EJ) %>%
       ungroup
 
     L1261.net_exterior_exports_EJ <- L1261.elec_trade_grid_EJ %>%
       # set imports to negative value
       mutate(value = if_else(grid_region_exporter == "EXTERIOR", -1 * value, value),
-             import_ctry = if_else(grid_region_importer == "EXTERIOR", "EXTERIOR", import_ctry),
-             export_ctry = if_else(grid_region_exporter == "EXTERIOR", "EXTERIOR", export_ctry)) %>%
-      select(import_ctry, export_ctry, year, value) %>%
-      tidyr::pivot_longer(cols = c(import_ctry, export_ctry), names_to = "trade", values_to = "region") %>%
+             region_importer = if_else(grid_region_importer == "EXTERIOR", "EXTERIOR", region_importer),
+             region_exporter = if_else(grid_region_exporter == "EXTERIOR", "EXTERIOR", region_exporter)) %>%
+      select(region_importer, region_exporter, year, value) %>%
+      tidyr::pivot_longer(cols = c(region_importer, region_exporter), names_to = "trade", values_to = "region") %>%
       filter(region != "EXTERIOR") %>%
       group_by(year, region) %>%
       summarise(net_exports = sum(value)) %>%
@@ -113,7 +122,6 @@ module_gcameurope_L1261.elec_trade <- function(command, ...) {
       group_by(region) %>%
       mutate(net_exports = if_else(year < min(L1261.elec_trade_grid_EJ$year), net_exports[year == min(L1261.elec_trade_grid_EJ$year)], net_exports)) %>%
       ungroup
-
 
     # 1c Ownuse adjust ------------------------------
     L1261.ownuse_adjustments <- L1261.net_exterior_exports_EJ %>%
@@ -127,7 +135,7 @@ module_gcameurope_L1261.elec_trade <- function(command, ...) {
       filter(!(sign(sum(net_exports)) != sign(cal_net_exports) & sign(net_exports) != sign(cal_net_exports))) %>%
       mutate(ownuse_adj = net_exports * cal_net_exports / sum(net_exports)) %>%
       ungroup %>%
-      left_join_error_no_match(GCAM_region_names, by = "region") %>%
+      left_join_error_no_match(distinct(GCAM32_to_EU, country_name, GCAM_region_ID) , by = c("region" = "country_name")) %>%
       select(year, GCAM_region_ID, ownuse_adj)
 
     L1261.out_EJ_R_elecownuse_F_Yh_EUR <- L126.out_EJ_R_elecownuse_F_Yh_EUR %>%
@@ -159,14 +167,9 @@ module_gcameurope_L1261.elec_trade <- function(command, ...) {
 
     # 2. Produce unadjusted trade balances between grid regions ---------------
     L1261.elec_trade_R_EJ_EUR_pre <- L1261.elec_trade_GWH %>%
-      left_join(grid_region_mapping %>%  rename(grid_region_exporter = grid_region), by = c("code_exporter" = "code")) %>%
-      left_join(grid_region_mapping %>%  rename(grid_region_importer = grid_region), by = c("code_importer" = "code")) %>%
-      # If trade partner is not part of a grid region, label it as EXTERIOR
-      tidyr::replace_na(list(grid_region_exporter = "EXTERIOR", grid_region_importer = "EXTERIOR")) %>%
       # Only want trade between grid_regions
       filter(grid_region_exporter != "EXTERIOR", grid_region_importer != "EXTERIOR",
              grid_region_exporter != grid_region_importer) %>%
-      gather_years() %>%
       group_by(grid_region_exporter, grid_region_importer, year) %>%
       summarise(value = sum(value, na.rm = T) * CONV_GWH_EJ) %>%
       ungroup
