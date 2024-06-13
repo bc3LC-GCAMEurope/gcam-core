@@ -385,7 +385,7 @@ module_gcameurope_L1322.Fert <- function(command, ...) {
       add_units("Mt NH3") %>%
       add_comments("Generic fertilizer production data was broken down using country-level fuel share and energy intensity data.") %>%
       add_comments("Shares of fertilizer production were modified so that industrial energy/feedstock for any fuels were not negative for any country, before aggregating to the regional level.") %>%
-      add_legacy_name("L1322.Fert_Prod_MtN_R_F_Y") %>%
+      add_legacy_name("L1322.Fert_Prod_MtNH3_R_F_Y_EUR") %>%
       add_precursors("common/iso_GCAM_regID",
                      "energy/mappings/IEA_ctry",
                      "energy/IEA_Fert_fuel_data",
