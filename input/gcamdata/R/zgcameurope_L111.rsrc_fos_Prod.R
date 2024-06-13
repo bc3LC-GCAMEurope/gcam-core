@@ -8,7 +8,7 @@
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
-#' the generated outputs: \code{L111.Prod_EJ_R_F_Yh_EUR}.
+#' the generated outputs: \code{L111.Prod_EJ_R_F_Yh_EUR}, \code{L111.RsrcCurves_EJ_R_Ffos_EUR}. \code{L210.DeleteRsrcTradBio_EUR}.
 #' @details For historical fossil energy production, determine regional shares of production for each primary fuel,
 #' interpolate unconventional oil production to all historical years, deduct unconventional oil from total oil,
 #' and include it in calibrated production table.
@@ -18,7 +18,9 @@
 #' @author RH January 2024
 module_gcameurope_L111.rsrc_fos_Prod <- function(command, ...) {
   MODULE_INPUTS <- c(FILE = "common/GCAM32_to_EU",
+                     FILE = "common/GCAM_region_names",
                      FILE = "energy/mappings/IEA_product_rsrc",
+                     FILE = "energy/mappings/enduse_fuel_aggregation",
                      FILE = "energy/rsrc_unconv_oil_prod_bbld",
                      FILE = "energy/A11.fos_curves",
                      FILE = "energy/mappings/IEA_flow_sector",
@@ -30,7 +32,8 @@ module_gcameurope_L111.rsrc_fos_Prod <- function(command, ...) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L111.Prod_EJ_R_F_Yh_EUR",
-             "L111.RsrcCurves_EJ_R_Ffos_EUR"))
+             "L111.RsrcCurves_EJ_R_Ffos_EUR",
+             "L210.DeleteRsrcTradBio_EUR"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -108,7 +111,7 @@ module_gcameurope_L111.rsrc_fos_Prod <- function(command, ...) {
     } else {
 
       MULT_REGIONS <- c("Denmark", "France", "Italy", "Spain", "Norway", "Serbia and Montenegro", "UK")
-      MULT_IDs <- GCAM32_to_EU %>%  filter(GCAMEU_region %in% MULT_REGIONS) %>%  distinct(GCAM_region_ID) %>%  pull
+      MULT_IDs <- GCAM32_to_EU %>% filter(GCAMEU_region %in% MULT_REGIONS) %>%  distinct(GCAM_region_ID) %>%  pull
       # first downscale GCAM Europe regions to iso to get correct GCAM3 region later
       L111.Prod_EJ_ctry_F_Yh_EUR <- L111.Prod_EJ_R_F_Yh_EUR %>%
         left_join_error_no_match(GCAM32_to_EU %>%
@@ -158,26 +161,53 @@ module_gcameurope_L111.rsrc_fos_Prod <- function(command, ...) {
         left_join_error_no_match(distinct(A11.fos_curves, resource, subresource, grade, extractioncost),
                                   by = c("resource", "subresource", "grade"))
 
-      L111.RsrcCurves_EJ_R_Ffos_EUR %>%
-        add_title("Fossil resource supply curves for Eurostat", overwrite = TRUE) %>%
-        add_units("available: EJ; extractioncost: 1975$/GJ") %>%
-        add_comments("Downscale GCAM3.0 supply curves to the country level (on the basis of resource") %>%
-        add_comments("production) and aggregate by the new GCAM regions.") %>%
-        add_comments("Use crude oil production shares as a proxy for unconventional oil resources.") %>%
-        add_precursors("common/iso_GCAM_regID", "energy/A11.fos_curves",
-                       "energy/mappings/IEA_product_rsrc", "L100.IEA_en_bal_ctry_hist",
-                       "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR") ->
-        L111.RsrcCurves_EJ_R_Ffos_EUR
-    }
+
+    # -------
+    # Some regions do not have traditional biomass in MODEL historical years
+    # Delete those resources to avoid errors from the dependency_finder_log
+    L210.DeleteRsrcTradBio_EUR<-L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
+      filter(year %in% MODEL_BASE_YEARS,
+             fuel == "biomass_tradbio") %>%
+      left_join_error_no_match(enduse_fuel_aggregation %>% select(fuel,bld), by = "fuel") %>%
+      left_join_error_no_match(GCAM_region_names %>% filter_regions_europe(), by = "GCAM_region_ID") %>%
+      mutate(resource = bld) %>%
+      select(-bld,-fuel) %>%
+      group_by(region,resource)%>%
+      summarise(value=sum(value)) %>%
+      ungroup() %>%
+      filter(value==0) %>%
+      select(LEVEL2_DATA_NAMES[["DeleteRsrc"]])
 
     # Produce outputs ------------------------------
+
+    L111.RsrcCurves_EJ_R_Ffos_EUR %>%
+      add_title("Fossil resource supply curves for Eurostat", overwrite = TRUE) %>%
+      add_units("available: EJ; extractioncost: 1975$/GJ") %>%
+      add_comments("Downscale GCAM3.0 supply curves to the country level (on the basis of resource") %>%
+      add_comments("production) and aggregate by the new GCAM regions.") %>%
+      add_comments("Use crude oil production shares as a proxy for unconventional oil resources.") %>%
+      add_precursors("common/iso_GCAM_regID", "energy/A11.fos_curves",
+                     "energy/mappings/IEA_product_rsrc", "L100.IEA_en_bal_ctry_hist",
+                     "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR") ->
+      L111.RsrcCurves_EJ_R_Ffos_EUR
+    }
+
     L111.Prod_EJ_R_F_Yh_EUR %>%
       add_title("Historical fossil energy production") %>%
       add_units("EJ") %>%
       add_precursors( "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR") ->
       L111.Prod_EJ_R_F_Yh_EUR
 
-    return_data(L111.Prod_EJ_R_F_Yh_EUR, L111.RsrcCurves_EJ_R_Ffos_EUR)
+    L210.DeleteRsrcTradBio_EUR %>%
+      add_title("Delete sectors with no TradBio production in model base years") %>%
+      add_units("unitless") %>%
+      add_comments("Regions with no Primary Solid Fuels according to IEA balances") %>%
+      add_legacy_name("L210.DeleteRsrcTradBio_EUR") %>%
+      add_precursors("common/GCAM_region_names", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
+                     "energy/mappings/enduse_fuel_aggregation") ->
+      L210.DeleteRsrcTradBio_EUR
+
+    return_data(L111.Prod_EJ_R_F_Yh_EUR, L111.RsrcCurves_EJ_R_Ffos_EUR, L210.DeleteRsrcTradBio_EUR)
 
   } else {
     stop("Unknown command")
