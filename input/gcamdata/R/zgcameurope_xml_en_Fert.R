@@ -2,7 +2,7 @@
 
 #' module_gcameurope_en_Fert_xml
 #'
-#' Construct XML data structure for \code{en_Fert.xml}.
+#' Construct XML data structure for \code{en_Fert_EUR.xml}.
 #'
 #' @param command API command to execute
 #' @param ... other optional parameters, depending on command
@@ -13,7 +13,7 @@
 module_gcameurope_en_Fert_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c("L2322.Supplysector_Fert_EUR",
-             "L2322.Supplysector_Fert_EUR",
+             "L2322.SectorUseTrialMarket_tra_EUR",
              "L2322.FinalEnergyKeyword_Fert_EUR",
              "L2322.SubsectorLogit_Fert_EUR",
              "L2322.SubsectorShrwtFllt_Fert_EUR",
@@ -36,7 +36,7 @@ module_gcameurope_en_Fert_xml <- function(command, ...) {
 
     # Load required inputs
     L2322.Supplysector_Fert_EUR <- get_data(all_data, "L2322.Supplysector_Fert_EUR")
-    L2322.Supplysector_Fert_EUR <- get_data(all_data, "L2322.Supplysector_Fert_EUR")
+    L2322.SectorUseTrialMarket_tra_EUR <- get_data(all_data, "L2322.SectorUseTrialMarket_tra_EUR")
     L2322.FinalEnergyKeyword_Fert_EUR <- get_data(all_data, "L2322.FinalEnergyKeyword_Fert_EUR")
     L2322.SubsectorLogit_Fert_EUR <- get_data(all_data, "L2322.SubsectorLogit_Fert_EUR")
     L2322.SubsectorShrwtFllt_Fert_EUR <- get_data(all_data, "L2322.SubsectorShrwtFllt_Fert_EUR")
@@ -57,7 +57,7 @@ module_gcameurope_en_Fert_xml <- function(command, ...) {
     # Produce outputs
     create_xml("en_Fert_EUR.xml") %>%
       add_logit_tables_xml(L2322.Supplysector_Fert_EUR, "Supplysector") %>%
-      add_xml_data(L2322.Supplysector_Fert_EUR, "SectorUseTrialMarket") %>%
+      add_xml_data(L2322.SectorUseTrialMarket_tra_EUR, "SectorUseTrialMarket") %>%
       add_xml_data(L2322.FinalEnergyKeyword_Fert_EUR, "FinalEnergyKeyword") %>%
       add_logit_tables_xml(L2322.SubsectorLogit_Fert_EUR, "SubsectorLogit") %>%
       add_xml_data(L2322.SubsectorShrwtFllt_Fert_EUR, "SubsectorShrwtFllt") %>%
@@ -73,7 +73,7 @@ module_gcameurope_en_Fert_xml <- function(command, ...) {
       add_xml_data(L2322.StubTechProd_FertDomCons_EUR, "StubTechProd") %>%
       add_xml_data(L2322.StubTechProd_NtoAg_EUR, "StubTechProd") %>%
       add_precursors("L2322.Supplysector_Fert_EUR",
-                     "L2322.Supplysector_Fert_EUR",
+                     "L2322.SectorUseTrialMarket_tra_EUR",
                      "L2322.FinalEnergyKeyword_Fert_EUR",
                      "L2322.SubsectorLogit_Fert_EUR",
                      "L2322.SubsectorShrwtFllt_Fert_EUR",

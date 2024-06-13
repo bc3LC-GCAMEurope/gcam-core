@@ -202,6 +202,21 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
       mutate(market.name = gcam.USA_REGION) ->
       L2322.StubTechMarket_FertImports_EUR
 
+    # Carbon capture rates from technologies with CCS
+    # L2322.GlobalTechCapture_Fert: CO2 capture fractions from global fertilizer production technologies with CCS
+    ## No need to consider historical periods or intermittent technologies here
+    A322.globaltech_co2capture %>%
+      gather_years(value_col = "remove.fraction") %>%
+      complete(nesting(supplysector, subsector, technology), year = c(year, MODEL_FUTURE_YEARS)) %>%
+      arrange(supplysector, subsector, technology, year) %>%
+      group_by(supplysector, subsector, technology) %>%
+      mutate(remove.fraction = approx_fun(year, remove.fraction, rule = 1),
+             remove.fraction = round(remove.fraction, energy.DIGITS_REMOVE.FRACTION)) %>%
+      ungroup %>%
+      filter(year %in% MODEL_FUTURE_YEARS) %>%
+      rename(sector.name = supplysector, subsector.name = subsector) %>%
+      mutate(storage.market = "carbon-storage") ->
+      L2322.GlobalTechCapture_Fert
 
     # Retirement information
     A322.globaltech_retirement %>%
@@ -386,7 +401,7 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
       add_units("Unitless") %>%
       add_comments("For fertilizer sector, the share weights from A322.globaltech_shrwt are interpolated into all base years and future years") %>%
       add_precursors("common/GCAM_region_names") %>%
-      add_precursors("energy/A322.globaltech_shrwt") ->
+      same_precursors_as("energy/A322.globaltech_shrwt") ->
       L2322.TechShrwt_TradedFert_EUR
 
     L2322.TechCoef_TradedFert_EUR %>%
@@ -394,7 +409,7 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
       add_units("unitless IO") %>%
       add_comments("Traded technologies are not assigned to the global technology database") %>%
       add_precursors("common/GCAM_region_names") %>%
-      add_precursors("energy/A322.globaltech_coef") ->
+      same_precursors_as("energy/A322.globaltech_shrwt") ->
       L2322.TechCoef_TradedFert_EUR
 
     L2322.StubTechMarket_FertImports_EUR %>%
@@ -402,7 +417,7 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
       add_units("unitless IO") %>%
       add_comments("Import markets are cleared within the USA region") %>%
       add_precursors("common/GCAM_region_names") %>%
-      add_precursors("energy/A322.globaltech_coef") ->
+      same_precursors_as("energy/A322.globaltech_shrwt") ->
       L2322.StubTechMarket_FertImports_EUR
 
     L2322.StubTechProd_FertProd_EUR %>%
@@ -461,8 +476,8 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
                 L2322.StubTech_Fert_EUR, L2322.TechShrwt_TradedFert_EUR,
                 L2322.TechCoef_TradedFert_EUR, L2322.StubTechMarket_FertImports_EUR,
                 L2322.StubTechProd_FertProd_EUR, L2322.StubTechCoef_Fert_EUR,
-                L2322.Production_FertExport_EUR, L2322.StubTechProd_FertImport_EUR,
-                L2322.StubTechProd_FertDomCons_EUR, L2322.StubTechProd_NtoAg_EUR)
+                L2322.Production_FertExport_EUR, L2322.StubTechProd_FertImport_EUR, L2322.StubTechProd_FertDomCons_EUR,
+                L2322.StubTechProd_NtoAg_EUR)
   } else {
     stop("Unknown command")
   }

@@ -13,7 +13,7 @@
 #' @details Fertilizer production and energy information was calculated using country-level fuel share and energy intensity data
 #' to allocate generic fertilizer production data across technologies. Re-allocation of energy use between energy and feedstock
 #' quantities for the industrial sector was done to avoid negative values at the country level, before aggregating
-#' to the regional level. Also, a final cost table was calculated using USA market fertilizer price data and H2A characteristics
+#' to the regional level. Also, a final cost table was calculated using DEU market fertilizer price data and H2A characteristics
 #' of hydrogen production technologies.
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr filter group_by left_join mutate pull select summarise
@@ -25,14 +25,13 @@ module_gcameurope_L1322.Fert <- function(command, ...) {
     c(FILE = "common/iso_GCAM_regID",
       FILE = "energy/mappings/IEA_ctry",
       FILE = "energy/IEA_Fert_fuel_data",
+      "L142.ag_Fert_Prod_MtN_ctry_Y",
       FILE = "energy/H2A_Prod_Tech",
       FILE = "energy/A10.rsrc_info",
       FILE = "energy/A21.globaltech_cost",
       FILE = "energy/A22.globaltech_cost",
-      "L101.GCAM_EUR_regions",
-      "L142.ag_Fert_Prod_MtN_ctry_Y",
       "L1321.in_EJ_R_indenergy_F_Yh_EUR",
-      "L132.in_EJ_R_indfeed_F_Yh_EUR")
+      "L132.in_EJ_R_indfeed_F_Yh_EUR"  )
 
   MODULE_OUTPUTS <-
     c("L1322.Fert_Prod_MtNH3_R_F_Y_EUR",
@@ -61,6 +60,7 @@ module_gcameurope_L1322.Fert <- function(command, ...) {
 
     # Load required inputs ----
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
+
 
     # Compute fertilizer production and energy inputs by technology ----
     # Disaggregating fertilizer production by country / year to production technologies (gas, coal, oil)
@@ -113,7 +113,7 @@ module_gcameurope_L1322.Fert <- function(command, ...) {
 
     # Checking total energy inputs to fertilizer against industrial energy use for each region
     # First, create a couple lists to use to expand table in a later step
-    list_GCAM_region_ID <- list_GCAM_region_ID <- iso_GCAM_regID %>% filter_regions_europe() %>% pull('GCAM_region_ID') %>% unique()
+    list_GCAM_region_ID <- iso_GCAM_regID %>% filter_regions_europe() %>% pull('GCAM_region_ID') %>% unique()
     list_fuels <- unique(L1322.Fert_Prod_MtNH3_ctry_F_Y$fuel)
 
     # Aggregate by GCAM region
@@ -267,7 +267,7 @@ module_gcameurope_L1322.Fert <- function(command, ...) {
     # Calculate fertilizer non-energy costs by technology ----
     # These technologies include gas, gas with CCS, coal, coal with CCS, and oil
     # First, calculate gas cost per kg NH3
-    # Calculating non-energy costs for gas technology as GER market fertilizer price minus GCAM fuel costs
+    # Calculating non-energy costs for gas technology as DEU market fertilizer price minus GCAM fuel costs
     # Calculate the gas price as the sum of resource costs plus intermediate sectoral mark-ups
 
 
@@ -437,7 +437,7 @@ module_gcameurope_L1322.Fert <- function(command, ...) {
     L1322.Fert_NEcost_75USDkgNH3_F_EUR %>%
       add_title("Fertilizer non-energy costs by technology") %>%
       add_units("1975USD/kgNH3") %>%
-      add_comments("Gas was calculated using USA market fertilizer price minus GCAM fuel costs.") %>%
+      add_comments("Gas was calculated using DEU market fertilizer price minus GCAM fuel costs.") %>%
       add_comments("Gas with CCS, coal, and coal with CCS were calculated using H2A characteristics of hydrogen production technologies") %>%
       add_comments("Oil was set to generally balance the total net costs with natural gas steam reforming.") %>%
       add_legacy_name("L1322.Fert_NEcost_75USDkgNH3_F_EUR") %>%
