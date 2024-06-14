@@ -38,7 +38,7 @@ module_gcameurope_L232.water_demand_manufacturing <- function(command, ...) {
   MODULE_OUTPUTS <-
     c("L232.TechCoef_EUR",
       "L2327.TechCoef_paper_EUR",
-      "L232.TechCoef_EUR_food_EUR")
+      "L232.TechCoef_food_EUR")
 
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -307,14 +307,14 @@ module_gcameurope_L232.water_demand_manufacturing <- function(command, ...) {
       complete(year = MODEL_YEARS) %>%
       mutate(coefficient = if_else(year %in% MODEL_FUTURE_YEARS, coefficient[year == max(MODEL_BASE_YEARS)], coefficient)) %>%
       ungroup() ->
-      L232.TechCoef_food
+      L232.TechCoef_food_EUR
 
     # add attributes for output
-    L232.TechCoef_food %>%
+    L232.TechCoef_food_EUR %>%
       add_title("Water withdrawal and consumption coefficients for food processing industry") %>%
       add_units("km3/Pcal") %>%
       add_comments("Food processing industry water demand coefficients by region, water type, and year") %>%
-      add_legacy_name("L232.TechCoef_food") %>%
+      add_legacy_name("L232.TechCoef_food_EUR") %>%
       add_precursors("common/GCAM_region_names",
                      "water/water_td_sectors",
                      "L132.water_km3_R_ind_Yh_EUR",
@@ -323,7 +323,7 @@ module_gcameurope_L232.water_demand_manufacturing <- function(command, ...) {
                      "L1328.out_Pcal_R_food_Yh_EUR",
                      "L1328.in_EJ_R_food_F_Yh_EUR",
                      "L2328.StubTechProd_food_EUR") ->
-      L232.TechCoef_food
+      L232.TechCoef_food_EUR
 
     return_data(MODULE_OUTPUTS)
   } else {
