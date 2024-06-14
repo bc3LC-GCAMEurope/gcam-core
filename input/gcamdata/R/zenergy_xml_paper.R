@@ -91,7 +91,8 @@ module_energy_paper_xml <- function(command, ...) {
                      "L2327.GlobalTechCoef_paper", "L2327.GlobalTechCost_paper", "L2327.GlobalTechCapture_paper",
                      "L2327.StubTechProd_paper", "L2327.StubTechCalInput_paper_heat", "L2327.StubTechCoef_paper",
                      "L2327.PerCapitaBased_paper", "L2327.BaseService_paper", "L2327.PriceElasticity_paper",
-                     "L2327.GlobalTechSecOut_paper", "L2327.GlobalTechTrackCapital_paper") ->
+                     "L2327.GlobalTechSecOut_paper", "L2327.GlobalTechTrackCapital_paper") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       paper.xml
 
     return_data(paper.xml)
