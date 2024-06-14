@@ -22,8 +22,8 @@ module_gcameurope_L114.bcoc_en_R_S_T_Y <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/iso_GCAM_regID",
              FILE = "emissions/mappings/EPA_ghg_tech",
-             FILE = "emissions/mappings/GCAM_sector_tech",
-             FILE = "emissions/mappings/GCAM_sector_tech_Revised",
+             FILE = "gcam-europe/GCAM_sector_tech_EUR",
+             FILE = "gcam-europe/GCAM_sector_tech_Revised_EUR",
              "L101.in_EJ_R_en_Si_F_Yh_EUR",
              "L104.bcoc_tgej_USA_en_T_1990",
              FILE = "emissions/RCP_BC_2000",
@@ -42,10 +42,10 @@ module_gcameurope_L114.bcoc_en_R_S_T_Y <- function(command, ...) {
     # Load required inputs
     iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID") %>% filter_regions_europe()
     EPA_ghg_tech <- get_data(all_data, "emissions/mappings/EPA_ghg_tech")
-    GCAM_sector_tech <- get_data(all_data, "emissions/mappings/GCAM_sector_tech")
+    GCAM_sector_tech_EUR <- get_data(all_data, "gcam-europe/GCAM_sector_tech_EUR")
 
     if (energy.TRAN_UCD_MODE == "rev.mode"){
-      GCAM_sector_tech <- get_data(all_data, "emissions/mappings/GCAM_sector_tech_Revised")
+      GCAM_sector_tech_EUR <- get_data(all_data, "gcam-europe/GCAM_sector_tech_Revised_EUR")
 
     }
 
@@ -62,11 +62,11 @@ module_gcameurope_L114.bcoc_en_R_S_T_Y <- function(command, ...) {
       # Repeat by the names of the gases whose default coefficients will be joined in
       repeat_add_columns(tibble(Non.CO2 = c("BC", "OC"))) %>%
       # Join in the sectors and fuels that correspond to the default BC and OC emissions coefs
-      # Note: many of the sector/tech combinations in the GCAM_sector_tech mapping file are duplicates, so
+      # Note: many of the sector/tech combinations in the GCAM_sector_tech_EUR mapping file are duplicates, so
       # the appropriate function to use whenever this table is joined in is the 'first' match. Dealing with this
-      # would require a third "by" column (fuel), which would require modifications to the GCAM_sector_tech
+      # would require a third "by" column (fuel), which would require modifications to the GCAM_sector_tech_EUR
       # mapping table.
-      left_join_keep_first_only(select(GCAM_sector_tech, sector, technology,BCOC_agg_sector, BCOC_agg_fuel),
+      left_join_keep_first_only(select(GCAM_sector_tech_EUR, sector, technology,BCOC_agg_sector, BCOC_agg_fuel),
                                 by = c("sector", "technology"))
 
     # Prepare the BC/OC default emissions factors (computed in L104) for joining into the BCOC driver table
@@ -84,7 +84,7 @@ module_gcameurope_L114.bcoc_en_R_S_T_Y <- function(command, ...) {
       inner_join(BCOC_default_coefs, by = c("BCOC_agg_sector", "BCOC_agg_fuel", "Non.CO2")) %>%
       mutate(unscaled_emissions = energy * emissions.factor) %>%
       # Match in the RCP sectors used for scaling these emissions prior to aggregation
-      left_join_keep_first_only(select(GCAM_sector_tech, sector, technology, RCP_agg_sector),
+      left_join_keep_first_only(select(GCAM_sector_tech_EUR, sector, technology, RCP_agg_sector),
                                 by = c("sector", "technology"))
 
     # Aggregate by the broader "RCP" categories for computing scalers
@@ -115,7 +115,7 @@ module_gcameurope_L114.bcoc_en_R_S_T_Y <- function(command, ...) {
       left_join_error_no_match(BCOC_emissions_scaler, by = c("GCAM_region_ID", "Non.CO2", "RCP_agg_sector")) %>%
       mutate(input.emissions = unscaled_emissions * scaler) %>%
       # Join in the supplysector/subsector/technology from the mapping table
-      left_join_keep_first_only(select(GCAM_sector_tech, sector, fuel, technology, supplysector, subsector, stub.technology),
+      left_join_keep_first_only(select(GCAM_sector_tech_EUR, sector, fuel, technology, supplysector, subsector, stub.technology),
                                 by = c("sector", "fuel", "technology")) %>%
       # Group by categories for GCAM and aggregate the emissions
       group_by(GCAM_region_ID, Non.CO2, supplysector, subsector, stub.technology) %>%
@@ -125,7 +125,7 @@ module_gcameurope_L114.bcoc_en_R_S_T_Y <- function(command, ...) {
     # Compile energy consumption by the corresponding technologies in order to compute emissions coefficients
     BCOC_drivers_GCAMtech <- BCOC_drivers %>%
       filter(Non.CO2 == "BC") %>% # we only need one of the two
-      left_join_keep_first_only(select(GCAM_sector_tech, sector, fuel, technology, supplysector, subsector, stub.technology),
+      left_join_keep_first_only(select(GCAM_sector_tech_EUR, sector, fuel, technology, supplysector, subsector, stub.technology),
                                 by = c("sector", "fuel", "technology")) %>%
       group_by(GCAM_region_ID, supplysector, subsector, stub.technology) %>%
       summarise(energy = sum(energy)) %>%
@@ -149,8 +149,8 @@ module_gcameurope_L114.bcoc_en_R_S_T_Y <- function(command, ...) {
       add_legacy_name("L114.bcoc_tgej_R_en_S_F_2000_EUR") %>%
       add_precursors("common/iso_GCAM_regID",
                      "emissions/mappings/EPA_ghg_tech",
-                     "emissions/mappings/GCAM_sector_tech",
-                     "emissions/mappings/GCAM_sector_tech_Revised",
+                     "gcam-europe/GCAM_sector_tech_EUR",
+                     "gcam-europe/GCAM_sector_tech_Revised_EUR",
                      "L101.in_EJ_R_en_Si_F_Yh_EUR",
                      "L104.bcoc_tgej_USA_en_T_1990",
                      "emissions/RCP_BC_2000",

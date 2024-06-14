@@ -27,8 +27,8 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/GCAM_region_names",
              FILE = "common/iso_GCAM_regID",
-             FILE = "emissions/mappings/CEDS_sector_tech_proc",
-             FILE = "emissions/mappings/CEDS_sector_tech_proc_revised",
+             FILE = "gcam-europe/CEDS_sector_tech_proc_EUR",
+             FILE = "gcam-europe/CEDS_sector_tech_proc_revised_EUR",
              FILE = "energy/mappings/UCD_techs",
              FILE = "emissions/mappings/UCD_techs_emissions_revised",
              FILE = "energy/calibrated_techs",
@@ -66,7 +66,7 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
              FILE = "emissions/EPA_country_map",
              FILE = "emissions/EPA/EPA_2019_raw",
              FILE = "emissions/EPA_CH4N2O_map",
-             FILE = "emissions/GCAM_EPA_CH4N2O_energy_map",
+             FILE = "gcam-europe/GCAM_EPA_CH4N2O_energy_map_EUR",
              # BC OC assumption files
              FILE = "gcam-usa/emissions/BC_OC_assumptions",
              FILE = "gcam-europe/BCOC_PM25_ratios_EUR"))
@@ -186,9 +186,9 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
     }
     #kbn Add code below so that we can use revised sub-sectors from transportation model
     if (energy.TRAN_UCD_MODE == "rev.mode"){
-      GCAM_sector_tech <- get_data(all_data, "emissions/mappings/CEDS_sector_tech_proc_revised") %>% distinct()
+      GCAM_sector_tech <- get_data(all_data, "gcam-europe/CEDS_sector_tech_proc_revised_EUR") %>% distinct()
     }else{
-      GCAM_sector_tech <- get_data(all_data, "emissions/mappings/CEDS_sector_tech_proc")}
+      GCAM_sector_tech <- get_data(all_data, "gcam-europe/CEDS_sector_tech_proc_EUR")}
 
     #kbn Add code below so that we can use revised sub-sectors from transportation model
     if (energy.TRAN_UCD_MODE == "rev.mode"){
@@ -206,7 +206,7 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
 
     calibrated_techs_bld_det_EUR <- get_data(all_data, "gcam-europe/calibrated_techs_bld_det_EUR")
     L101.in_EJ_R_en_Si_F_Yh_EUR <- get_data(all_data, "L101.in_EJ_R_en_Si_F_Yh_EUR") %>%
-      gather_years(value_col = "energy")
+      gather_years(value_col = "energy") %>% distinct()
     L1326.in_EJ_R_indenergy_F_Yh_EUR <- get_data(all_data, "L1326.in_EJ_R_indenergy_F_Yh_EUR")
     L1323.in_EJ_R_iron_steel_F_Y_EUR <- get_data(all_data, "L1323.in_EJ_R_iron_steel_F_Y_EUR")
     L1324.in_EJ_R_Off_road_F_Y_EUR <- get_data(all_data, "L1324.in_EJ_R_Off_road_F_Y_EUR")
@@ -238,7 +238,7 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
     EPA_master <- get_data(all_data, "emissions/EPA/EPA_2019_raw")
     EPA_CH4N2O_map <- get_data(all_data, "emissions/EPA_CH4N2O_map")
     EPA_country_map <- get_data(all_data, "emissions/EPA_country_map") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
-    GCAM_EPA_CH4N2O_map <- get_data(all_data, "emissions/GCAM_EPA_CH4N2O_energy_map")
+    GCAM_EPA_CH4N2O_map <- get_data(all_data, "gcam-europe/GCAM_EPA_CH4N2O_energy_map_EUR")
     L111.Prod_EJ_R_F_Yh <- get_data(all_data, "L111.Prod_EJ_R_F_Yh_EUR",strip_attributes = TRUE)
 
     #kbn calculate emissions for different modes here
@@ -1720,7 +1720,7 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
       add_precursors("L102.ceds_GFED_nonco2_tg_R_S_F", "L102.ceds_int_shipping_nonco2_tg_S_F", "emissions/CEDS/ceds_sector_map","emissions/CEDS/ceds_fuel_map", "common/GCAM_region_names",
                      "common/iso_GCAM_regID","energy/mappings/UCD_techs","energy/calibrated_techs","gcam-europe/calibrated_techs_bld_det_EUR",
                      "emissions/mappings/Trn_subsector","gcam-europe/CEDS_sector_tech_combustion_EUR","emissions/mappings/Trn_subsector_revised",
-                     "emissions/mappings/CEDS_sector_tech_proc","emissions/mappings/calibrated_outresources","emissions/mappings/CEDS_sector_tech_proc_revised",
+                     "gcam-europe/CEDS_sector_tech_proc_EUR","emissions/mappings/calibrated_outresources","gcam-europe/CEDS_sector_tech_proc_revised_EUR",
                      "L101.in_EJ_R_en_Si_F_Yh_EUR", "L1326.in_EJ_R_indenergy_F_Yh_EUR", "L1323.in_EJ_R_iron_steel_F_Y_EUR", "L1324.in_EJ_R_Off_road_F_Y_EUR",
                      "L1325.in_EJ_R_chemical_F_Y_EUR", "L1326.in_EJ_R_aluminum_Yh_EUR","gcam-europe/CEDS_sector_tech_combustion_revised_EUR",
                      "emissions/mappings/UCD_techs_emissions_revised","L154.IEA_histfut_data_times_UCD_shares",
@@ -1814,7 +1814,7 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
       add_legacy_name("L113.ghg_tg_R_an_C_Sys_Fd_Yh_EUR") %>%
       add_precursors("L102.ceds_GFED_nonco2_tg_R_S_F","L102.ceds_int_shipping_nonco2_tg_S_F","emissions/CEDS/ceds_sector_map","emissions/CEDS/ceds_fuel_map", "common/GCAM_region_names",
                      "common/iso_GCAM_regID","gcam-europe/CEDS_sector_tech_combustion_EUR", "gcam-europe/CEDS_sector_tech_combustion_revised_EUR",
-                     "emissions/mappings/CEDS_sector_tech_proc", "L107.an_Prod_Mt_R_C_Sys_Fd_Y","emissions/mappings/CEDS_sector_tech_proc_revised",
+                     "gcam-europe/CEDS_sector_tech_proc_EUR", "L107.an_Prod_Mt_R_C_Sys_Fd_Y","gcam-europe/CEDS_sector_tech_proc_revised_EUR",
                      "L103.ghg_tgmt_USA_an_Sepa_F_2005") ->
       L113.ghg_tg_R_an_C_Sys_Fd_Yh_EUR
 
@@ -1937,7 +1937,7 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
       add_precursors("emissions/CEDS/ceds_sector_map","emissions/CEDS/ceds_fuel_map", "common/GCAM_region_names",
                      "common/iso_GCAM_regID","gcam-europe/CEDS_sector_tech_combustion_EUR","gcam-europe/CEDS_sector_tech_combustion_revised_EUR",
                      "emissions/EPA_FCCC_IndProc_2005", "emissions/EPA/EPA_2019_raw", "emissions/EPA_CH4N2O_map",
-                     "emissions/GCAM_EPA_CH4N2O_energy_map"
+                     "gcam-europe/GCAM_EPA_CH4N2O_energy_map_EUR"
       ) ->
       L131.nonco2_tg_R_prc_S_S_Yh_EUR
 

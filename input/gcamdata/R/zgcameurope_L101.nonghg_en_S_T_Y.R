@@ -24,8 +24,8 @@ module_gcameurope_L101.nonghg_en_S_T_Y <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "energy/mappings/IEA_flow_sector",
              FILE = "energy/mappings/IEA_product_fuel",
-             FILE = "emissions/mappings/GCAM_sector_tech",
-             FILE = "emissions/mappings/GCAM_sector_tech_Revised",
+             FILE = "gcam-europe/GCAM_sector_tech_EUR",
+             FILE = "gcam-europe/GCAM_sector_tech_Revised_EUR",
              FILE = "emissions/mappings/EPA_tech",
              "L1231.in_EJ_R_elec_F_tech_Yh_EUR",
              "L1322.in_EJ_R_indenergy_F_Yh_EUR",
@@ -60,9 +60,9 @@ module_gcameurope_L101.nonghg_en_S_T_Y <- function(command, ...) {
     # Load required inputs
     IEA_flow_sector <- get_data(all_data, "energy/mappings/IEA_flow_sector")
     IEA_product_fuel <- get_data(all_data, "energy/mappings/IEA_product_fuel")
-    GCAM_sector_tech <- get_data(all_data, "emissions/mappings/GCAM_sector_tech")
+    GCAM_sector_tech_EUR <- get_data(all_data, "gcam-europe/GCAM_sector_tech_EUR")
     if (energy.TRAN_UCD_MODE == "rev.mode"){
-      GCAM_sector_tech <- get_data(all_data, "emissions/mappings/GCAM_sector_tech_Revised")
+      GCAM_sector_tech_EUR <- get_data(all_data, "gcam-europe/GCAM_sector_tech_Revised_EUR")
     }
 
     EPA_tech <- get_data(all_data, "emissions/mappings/EPA_tech")
@@ -99,7 +99,8 @@ module_gcameurope_L101.nonghg_en_S_T_Y <- function(command, ...) {
 
       # Bind all together
       bind_rows(temp,
-                spread(L1231.in_EJ_R_elec_F_tech_Yh_EUR, year, value)) ->
+                spread(L1231.in_EJ_R_elec_F_tech_Yh_EUR, year, value)) %>%
+      distinct() ->
       # NOTE we need to pass the L101.in_EJ_R_en_Si_F_Yh_EUR dataset on in WIDE, not
       # long, format, because it doesn't reshape cleanly (there are multiple year/row combinations)
       L101.in_EJ_R_en_Si_F_Yh_EUR
@@ -109,7 +110,7 @@ module_gcameurope_L101.nonghg_en_S_T_Y <- function(command, ...) {
       L101.in_EJ_EUR_en_Sepa_F_Yh.mlt
 
     # Subset for EUR only and aggregate to EPA categories
-    GCAM_sector_tech %>%
+    GCAM_sector_tech_EUR %>%
       select(EPA_agg_sector, EPA_agg_fuel, sector, fuel) %>%
       distinct(sector, fuel, .keep_all = TRUE) ->
       temp   # dataset we're about to merge below, replicating `match` behavior
@@ -196,8 +197,8 @@ module_gcameurope_L101.nonghg_en_S_T_Y <- function(command, ...) {
       add_legacy_name("L101.in_EJ_R_en_Si_F_Yh_EUR") %>%
       add_precursors("energy/mappings/IEA_flow_sector",
                      "energy/mappings/IEA_product_fuel",
-                     "emissions/mappings/GCAM_sector_tech",
-                     "emissions/mappings/GCAM_sector_tech_Revised",
+                     "gcam-europe/GCAM_sector_tech_EUR",
+                     "gcam-europe/GCAM_sector_tech_Revised_EUR",
                      "emissions/mappings/EPA_tech",
                      "L1231.in_EJ_R_elec_F_tech_Yh_EUR",
                      "L1322.in_EJ_R_indenergy_F_Yh_EUR",

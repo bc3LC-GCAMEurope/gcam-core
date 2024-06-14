@@ -28,6 +28,7 @@ module_gcameurope_L241.en_newtech_nonco2 <- function(command, ...) {
              FILE = "energy/A22.globaltech_input_driver",
              FILE = "energy/A23.globaltech_input_driver",
              FILE = "energy/A25.globaltech_input_driver",
+             FILE = "energy/A26.globaltech_input_driver",
              "L111.nonghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR",
              "L112.ghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR",
              "L223.GlobalTechEff_elec"))
@@ -61,7 +62,8 @@ module_gcameurope_L241.en_newtech_nonco2 <- function(command, ...) {
     bind_rows(
       get_data(all_data, "energy/A22.globaltech_input_driver"),
       get_data(all_data, "energy/A23.globaltech_input_driver"),
-      get_data(all_data, "energy/A25.globaltech_input_driver")
+      get_data(all_data, "energy/A25.globaltech_input_driver"),
+      get_data(all_data, "energy/A26.globaltech_input_driver")
     ) %>%
       rename(stub.technology = technology) ->
       EnTechInputMap
@@ -253,8 +255,8 @@ module_gcameurope_L241.en_newtech_nonco2 <- function(command, ...) {
                                       "year")) %>%
       mutate(emiss.coeff = round(emiss.coeff / efficiency, emissions.DIGITS_EMISS_COEF)) %>%
       select(LEVEL2_DATA_NAMES[["OutputEmissCoeff"]]) ->
-      L241.OutputEmissCoeff_elec_EUR
-    L241.nonco2_tech_coeff_EUR <- filter(L241.nonco2_tech_coeff_EUR, supplysector != "electricity")
+      L241.OutputEmissCoeff_elec_replace.outliers_EUR
+    L241.nonco2_tech_coeff_replace.outliers_EUR <- filter(L241.nonco2_tech_coeff_EUR, supplysector != "electricity")
 
     L241.nonco2_max_reduction_EUR %>%
       unite(region_bio, region, stub.technology, sep = "~", remove = FALSE) %>%
@@ -268,6 +270,27 @@ module_gcameurope_L241.en_newtech_nonco2 <- function(command, ...) {
       filter(!stub.technology %in% L241.firstgenbio_techs | region_bio %in% region_biofuels) %>%
       select(-region_bio) ->
       L241.nonco2_steepness_EUR
+
+    ## Replace outlier EFs with the global median
+    # SO2 is "regional" (SO2_1, SO2_2, etc.). For this pollutant, we find the median by SO2 grouping rather than globally
+    # In the future, this can be refined to use a global SO2 median.
+    # list columns to group by (emission factor medians will based on this grouping)
+    to_group <- c( "year", "Non.CO2", "supplysector", "subsector", "stub.technology" )
+    # list columns to keep in final table
+    names <- c( "region", "Non.CO2", "year", "supplysector", "subsector", "stub.technology", "emiss.coeff")
+    # Name of column containing emission factors
+    ef_col_name <- "emiss.coeff"
+    L241.OutputEmissCoeff_elec_EUR <- replace_outlier_EFs(L241.OutputEmissCoeff_elec_replace.outliers_EUR, to_group, names, ef_col_name)
+
+    # SO2 is "regional" (SO2_1, SO2_2, etc.). For this pollutant, we find the median by SO2 grouping rather than globally
+    # In the future, this can be refined to use a global SO2 median.
+    # list columns to group by (emission factor medians will based on this grouping)
+    to_group <- c( "year", "Non.CO2", "supplysector", "subsector", "stub.technology" )
+    # list columns to keep in final table
+    names <- c( "region", "Non.CO2", "year", "supplysector", "subsector", "stub.technology", "emiss.coeff", "input.name")
+    # Name of column containing emission factors
+    ef_col_name <- "emiss.coeff"
+    L241.nonco2_tech_coeff_EUR <- replace_outlier_EFs(L241.nonco2_tech_coeff_replace.outliers_EUR, to_group, names, ef_col_name)
 
     # ===================================================
 
@@ -283,6 +306,7 @@ module_gcameurope_L241.en_newtech_nonco2 <- function(command, ...) {
                      "energy/A22.globaltech_input_driver",
                      "energy/A23.globaltech_input_driver",
                      "energy/A25.globaltech_input_driver",
+                     "energy/A26.globaltech_input_driver",
                      "L111.nonghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR",
                      "L112.ghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR")  ->
       L241.nonco2_tech_coeff_EUR

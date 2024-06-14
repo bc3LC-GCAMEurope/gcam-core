@@ -22,8 +22,8 @@ module_gcameurope_L252.MACC <- function(command, ...) {
     return(c(FILE = "emissions/A_regions",
              FILE = "emissions/A_MACC_TechChange_omit",
              FILE = "emissions/A_MACC_TechChange_SSP_Mult",
-             FILE = "emissions/mappings/CEDS_sector_tech_proc",
-             FILE = "emissions/mappings/CEDS_sector_tech_proc_revised",
+             FILE = "gcam-europe/CEDS_sector_tech_proc_EUR",
+             FILE = "gcam-europe/CEDS_sector_tech_proc_revised_EUR",
              FILE = "common/GCAM_region_names",
              FILE = "emissions/EPA_MACC_PhaseInTime",
              "L152.MAC_pct_R_S_Proc_EPA",
@@ -33,7 +33,8 @@ module_gcameurope_L252.MACC <- function(command, ...) {
              "L211.AGRBio_EUR",
              "L232.nonco2_prc_EUR",
              "L241.hfc_all_EUR",
-             "L241.pfc_all_EUR"))
+             "L241.pfc_all_EUR",
+             FILE = "socioeconomics/income_shares"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L252.ResMAC_fos_EUR",
              "L252.AgMAC_EUR",
@@ -69,9 +70,9 @@ module_gcameurope_L252.MACC <- function(command, ...) {
     GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>% filter_regions_europe()
     A_MACC_TechChange_omit <- get_data(all_data, "emissions/A_MACC_TechChange_omit")
     A_MACC_TechChange_SSP_Mult <- get_data(all_data, "emissions/A_MACC_TechChange_SSP_Mult")
-    GCAM_sector_tech <- get_data(all_data, "emissions/mappings/CEDS_sector_tech_proc")
+    GCAM_sector_tech <- get_data(all_data, "gcam-europe/CEDS_sector_tech_proc_EUR")
     if (energy.TRAN_UCD_MODE == "rev.mode"){
-      GCAM_sector_tech <- get_data(all_data, "emissions/mappings/CEDS_sector_tech_proc_revised")
+      GCAM_sector_tech <- get_data(all_data, "gcam-europe/CEDS_sector_tech_proc_revised_EUR")
 
     }
 
@@ -84,7 +85,19 @@ module_gcameurope_L252.MACC <- function(command, ...) {
     L241.hfc_all_EUR <- get_data(all_data, "L241.hfc_all_EUR", strip_attributes = TRUE)
     L241.pfc_all_EUR <- get_data(all_data, "L241.pfc_all_EUR", strip_attributes = TRUE)
     EPA_MACC_PhaseInTime <- get_data(all_data, "emissions/EPA_MACC_PhaseInTime")
+    income_shares<-get_data(all_data, "socioeconomics/income_shares") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
+    groups<-income_shares %>% select(category) %>% distinct()
 
+    # First, adjust GCAM_sector_tech to include consumer-group data
+    GCAM_sector_tech_resid<- GCAM_sector_tech %>%
+      filter(grepl("resid",sector)) %>%
+      repeat_add_columns(tibble(group = unique(income_shares$category))) %>%
+      unite(sector,c("sector","group"),sep = "_", remove = F) %>%
+      unite(supplysector,c("supplysector","group"),sep = "_", remove = T)
+
+    GCAM_sector_tech<- GCAM_sector_tech %>%
+      filter(!grepl("resid",sector)) %>%
+      bind_rows(GCAM_sector_tech_resid)
 
     # update MAC using 2019 EPA
     # Prepare the table with all MAC curves for matching
@@ -564,7 +577,7 @@ module_gcameurope_L252.MACC <- function(command, ...) {
       add_units("tax: 1990 USD; mac.reduction: % reduction") %>%
       add_comments("Category data from L201.ghg_res_EUR given tax and mac.reduction data from L152.MAC_pct_R_S_Proc_EPA") %>%
       add_legacy_name("L252.ResMAC_fos_EUR") %>%
-      add_precursors("emissions/A_regions", "emissions/mappings/CEDS_sector_tech_proc", "emissions/mappings/CEDS_sector_tech_proc_revised",
+      add_precursors("emissions/A_regions", "gcam-europe/CEDS_sector_tech_proc_EUR", "gcam-europe/CEDS_sector_tech_proc_revised_EUR",
                      "L152.MAC_pct_R_S_Proc_EPA", "L201.ghg_res_EUR") ->
       L252.ResMAC_fos_EUR
 
@@ -590,7 +603,7 @@ module_gcameurope_L252.MACC <- function(command, ...) {
       add_units("tax: 1990 USD; mac.reduction: % reduction") %>%
       add_comments("Category data from L211.AGREmissions_EUR and L211.AGRBio_EUR given tax and mac.reduction data from L152.MAC_pct_R_S_Proc_EPA") %>%
       add_legacy_name("L252.AgMAC_EUR") %>%
-      add_precursors("emissions/A_regions", "emissions/mappings/CEDS_sector_tech_proc", "emissions/mappings/CEDS_sector_tech_proc_revised",
+      add_precursors("emissions/A_regions", "gcam-europe/CEDS_sector_tech_proc_EUR", "gcam-europe/CEDS_sector_tech_proc_revised_EUR",
                      "L152.MAC_pct_R_S_Proc_EPA", "L211.AGREmissions_EUR", "L211.AGRBio_EUR") ->
       L252.AgMAC_EUR
 
@@ -607,7 +620,7 @@ module_gcameurope_L252.MACC <- function(command, ...) {
       add_units("tax: 1990 USD; mac.reduction: % reduction") %>%
       add_comments("Category data from L211.AnEmissions_EUR given tax and mac.reduction data from L152.MAC_pct_R_S_Proc_EPA") %>%
       add_legacy_name("L252.MAC_an_EUR") %>%
-      add_precursors("emissions/A_regions", "emissions/mappings/CEDS_sector_tech_proc", "emissions/mappings/CEDS_sector_tech_proc_revised",
+      add_precursors("emissions/A_regions", "gcam-europe/CEDS_sector_tech_proc_EUR", "gcam-europe/CEDS_sector_tech_proc_revised_EUR",
                      "L152.MAC_pct_R_S_Proc_EPA", "L211.AnEmissions_EUR") ->
       L252.MAC_an_EUR
 
@@ -624,7 +637,7 @@ module_gcameurope_L252.MACC <- function(command, ...) {
       add_units("tax: 1990 USD; mac.reduction: % reduction") %>%
       add_comments("Category data from L232.nonco2_prc_EUR given tax and mac.reduction data from L152.MAC_pct_R_S_Proc_EPA") %>%
       add_legacy_name("L252.MAC_prc_EUR") %>%
-      add_precursors("emissions/A_regions", "emissions/mappings/CEDS_sector_tech_proc", "emissions/mappings/CEDS_sector_tech_proc_revised",
+      add_precursors("emissions/A_regions", "gcam-europe/CEDS_sector_tech_proc_EUR", "gcam-europe/CEDS_sector_tech_proc_revised_EUR",
                      "L152.MAC_pct_R_S_Proc_EPA", "L232.nonco2_prc_EUR") ->
       L252.MAC_prc_EUR
 
@@ -650,9 +663,9 @@ module_gcameurope_L252.MACC <- function(command, ...) {
       add_units("tax: 1990 USD; mac.reduction: % reduction") %>%
       add_comments("Category data from L241.hfc_all_EUR and L241.pfc_all_EUR given tax and mac.reduction data from L152.MAC_pct_R_S_Proc_EPA") %>%
       add_legacy_name("L252.MAC_higwp_EUR") %>%
-      add_precursors("emissions/A_regions", "emissions/mappings/CEDS_sector_tech_proc", "emissions/mappings/CEDS_sector_tech_proc_revised",
+      add_precursors("emissions/A_regions", "gcam-europe/CEDS_sector_tech_proc_EUR", "gcam-europe/CEDS_sector_tech_proc_revised_EUR",
                      "L152.MAC_pct_R_S_Proc_EPA", "L241.hfc_all_EUR", "L241.pfc_all_EUR", "common/GCAM_region_names",
-                     "emissions/A_MACC_TechChange_omit") ->
+                     "socioeconomics/income_shares", "emissions/A_MACC_TechChange_omit") ->
       L252.MAC_higwp_EUR
 
     L252.MAC_higwp_phaseInTime_EUR %>%

@@ -13,6 +13,7 @@
 module_gcameurope_all_energy_emissions_xml <- function(command, ...) {
   input_names <- c("L201.en_pol_emissions_EUR",
                    "L201.en_ghg_emissions_EUR",
+                   "L201.en_iron_and_steel_ef",
                    "L201.OutputEmissions_elec_EUR",
                    "L201.nonghg_max_reduction_EUR",
                    "L201.nonghg_steepness_EUR",
@@ -46,6 +47,7 @@ module_gcameurope_all_energy_emissions_xml <- function(command, ...) {
     # Load required inputs
     L201.en_pol_emissions_EUR <- get_data(all_data, "L201.en_pol_emissions_EUR")
     L201.en_ghg_emissions_EUR <- get_data(all_data, "L201.en_ghg_emissions_EUR")
+    L201.en_iron_and_steel_ef <- get_data(all_data, "L201.en_iron_and_steel_ef")
     L201.OutputEmissions_elec_EUR <- get_data(all_data, "L201.OutputEmissions_elec_EUR")
     L201.nonghg_max_reduction_EUR <- get_data(all_data, "L201.nonghg_max_reduction_EUR")
     L201.nonghg_steepness_EUR <- get_data(all_data, "L201.nonghg_steepness_EUR")
@@ -91,7 +93,7 @@ module_gcameurope_all_energy_emissions_xml <- function(command, ...) {
       add_xml_data(L241.nonco2_max_reduction_EUR, "GDPCtrlMax") %>%
       add_xml_data(L241.nonco2_steepness_EUR, "GDPCtrlSteep") %>%
       add_precursors("L201.en_pol_emissions_EUR", "L201.en_ghg_emissions_EUR",
-                     "L201.OutputEmissions_elec_EUR",
+                     "L201.en_iron_and_steel_ef", "L201.OutputEmissions_elec",
                      "L201.nonghg_max_reduction_EUR", "L201.nonghg_steepness_EUR", "L201.nonghg_max_reduction_res_EUR",
                      "L201.nonghg_steepness_res_EUR", "L201.nonghg_res_EUR", "L201.ghg_res_EUR",
                      "L201.ResReadInControl_nonghg_res_EUR", "L201.ResReadInControl_ghg_res_EUR", "L232.nonco2_prc_EUR",
