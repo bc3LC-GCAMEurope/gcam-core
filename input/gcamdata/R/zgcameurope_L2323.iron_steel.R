@@ -140,8 +140,8 @@ module_gcameurope_L2323.iron_steel <- function(command, ...) {
 
     # Calculate average steel production costs by sub sector for countries in transition zero database and combine
     # with OECD average data
-    all_steel_production_costs <- rbind(aggregate_steel_production_costs(data=TZ_steel_production_costs,agg_region=Country),
-                                        oecd_steel_production_costs)
+    all_steel_production_costs <- bind_rows(aggregate_steel_production_costs(data=TZ_steel_production_costs,agg_region=Country),
+                                            oecd_steel_production_costs)
 
     #add capital costs and CCS costs to estimate total production costs
     all_steel_production_costs <-  TZ_steel_cost_gcam_mapping%>%

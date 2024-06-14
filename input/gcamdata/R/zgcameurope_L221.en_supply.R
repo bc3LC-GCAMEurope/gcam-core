@@ -31,7 +31,7 @@ module_gcameurope_L221.en_supply <- function(command, ...) {
                               "L221.SubsectorInterpTo_en",
                               "L221.StubTech_en")
   MODULE_INPUTS <- c("L101.GCAM_EUR_regions",
-                     FILE = "aglu/A_agRegionalTechnology",
+                     FILE = "aglu/A_agStorageSector ",
                      FILE = "energy/A21.globaltech_secout",
                      "L121.BiomassOilRatios_kgGJ_R_C_EUR",
                      "L122.in_Mt_R_C_Yh_EUR",
@@ -89,8 +89,8 @@ module_gcameurope_L221.en_supply <- function(command, ...) {
 
     # First build the table with the available technologies.
     # GCAM_commodity -> regional crop name (if a traded crop) -> passthrough supplysector/subsector/technology
-    biofuel_feedstock_cropname <- filter(A_agRegionalTechnology, market.name == "regional") %>%
-      select(passthru_tech_input = "supplysector", GCAM_commodity = "minicam.energy.input")
+    biofuel_feedstock_cropname <- A_agStorageSector %>%
+      select(passthru_tech_input = "supplysector", GCAM_commodity)
 
     L221.biofuel_types_region <- distinct(L122.in_Mt_R_C_Yh_EUR, GCAM_region_ID, GCAM_commodity) %>%
       # join in the regional crop name (resetting to default gcam commodity for crops that aren't traded)
@@ -179,7 +179,7 @@ module_gcameurope_L221.en_supply <- function(command, ...) {
       add_units("fractions") %>%
       add_comments("Secondary outputs are only written out to relevant regions and technologies") %>%
       add_legacy_name("L221.StubTechFractSecOut_en_EUR") %>%
-      add_precursors("aglu/A_agRegionalTechnology", "energy/A21.globaltech_secout", "common/GCAM_region_names", "L122.in_Mt_R_C_Yh_EUR") ->
+      add_precursors("aglu/A_agStorageSector ", "energy/A21.globaltech_secout", "common/GCAM_region_names", "L122.in_Mt_R_C_Yh_EUR") ->
       L221.StubTechFractSecOut_en_EUR
 
     L221.StubTechCalInput_bioOil_EUR %>%

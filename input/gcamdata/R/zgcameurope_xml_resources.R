@@ -40,7 +40,8 @@ module_gcameurope_resources_xml <- function(command, ...) {
                        "L210.ResReserveTechInvestmentInput_EUR",
                        "L210.ResTechShrwt_EUR",
                        "L210.ResTechCoef_EUR",
-                       "L210.ResTechCost_EUR"))
+                       "L210.ResTechCost_EUR",
+                       "L210.DeleteRsrcTradBio_EUR"))
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -89,6 +90,7 @@ module_gcameurope_resources_xml <- function(command, ...) {
       add_xml_data(L210.GrdRenewRsrcCurves_tradbio_EUR, "GrdRenewRsrcCurves") %>%
       add_xml_data(L210.GrdRenewRsrcMax_tradbio_EUR, "GrdRenewRsrcMax") %>%
       add_xml_data(L210.ResTechShrwt_EUR, "ResTechShrwt") %>%
+      add_xml_data(L210.DeleteRsrcTradBio_EUR, "DeleteRsrc") %>%
       add_precursors(MODULE_INPUTS) ->
       resources_EUR.xml
 
