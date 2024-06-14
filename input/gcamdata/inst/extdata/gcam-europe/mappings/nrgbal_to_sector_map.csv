@@ -98,7 +98,7 @@ FC_OTH_NE,Non-energy use in other sectors,,
 TI_NE,Non-energy use in transformation sector,,
 NRG_NE,Non-energy use in energy sector,,
 FC_IND_NE,Non-energy use in industry sector,in_industry_feedstocks,0
-FC_IND_E,Industry ,in_industry_general,0
+FC_IND_E,Industry,in_industry_general,0
 FC_TRA_E,Transport,,
 FC_OTH_E,Other,,
 FC_IND_IS_E,Iron & steel,iron and steel,0
@@ -108,8 +108,8 @@ FC_IND_NMM_E,Non-metallic minerals,cement,0
 FC_IND_TE_E,Transport equipment,,
 FC_IND_MAC_E,Machinery,,
 FC_IND_MQ_E,Mining & quarrying,mining energy use,0
-FC_IND_FBT_E,"Food, beverages & tobacco",,
-FC_IND_PPP_E,"Paper, pulp & printing",,
+FC_IND_FBT_E,"Food, beverages & tobacco",food processing,0
+FC_IND_PPP_E,"Paper, pulp & printing",paper,0
 FC_IND_WP_E,Wood & wood products,,
 FC_IND_CON_E,Construction,construction energy use,0
 FC_IND_TL_E,Textile & leather,,

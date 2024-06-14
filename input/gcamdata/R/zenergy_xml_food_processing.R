@@ -88,7 +88,8 @@ module_energy_food_processing_xml <- function(command, ...) {
                      "L2328.GlobalTechCoef_food", "L2328.GlobalTechCost_food", "L2328.StubTechCost_food",
                      "L2328.StubTechProd_food", "L2328.StubTechCalInput_food_heat", "L2328.StubTechCoef_food",
                      "L2328.GlobalTechSecOut_food", "L2328.StubCalorieContent", "L2328.StubCaloriePriceConv",
-                     "L2328.GlobalTechTrackCapital_food") ->
+                     "L2328.GlobalTechTrackCapital_food") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       food_processing.xml
 
     return_data(food_processing.xml)
