@@ -29,10 +29,12 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
              FILE = "gcam-europe/estat_ilc_hcmh02_filtered_en",
              FILE = "gcam-europe/estat_ilc_lvph01_filtered_en",
              FILE = "gcam-europe/mappings/geo_to_iso_map",
+             FILE = "socioeconomics/income_shares",
              "L100.Pop_thous_ctry_Yh",
              "L102.gdp_mil90usd_GCAM3_R_Y",
-             "L221.LN0_Land",   # TODO: update?
-             "L221.LN1_UnmgdAllocation"))   # TODO: update?
+             "L102.pcgdp_thous90USD_Scen_R_Y",
+             "L221.LN0_Land",
+             "L221.LN1_UnmgdAllocation"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L144.flsp_bm2_R_res_Yh_EUR",
              "L144.flsp_bm2_R_comm_Yh_EUR",
@@ -54,8 +56,12 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
     geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map") %>% filter_regions_europe()
     L100.Pop_thous_ctry_Yh <- get_data(all_data, "L100.Pop_thous_ctry_Yh") %>% filter_regions_europe()
     L102.gdp_mil90usd_GCAM3_R_Y <- get_data(all_data, "L102.gdp_mil90usd_GCAM3_R_Y") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
+    L102.pcgdp_thous90USD_Scen_R_Y <- get_data(all_data, "L102.pcgdp_thous90USD_Scen_R_Y") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
     L221.LN0_Land<-get_data(all_data, "L221.LN0_Land", strip_attributes = TRUE) %>% filter_regions_europe()
     L221.LN1_UnmgdAllocation<-get_data(all_data, "L221.LN1_UnmgdAllocation", strip_attributes = TRUE) %>% filter_regions_europe()
+    income_shares<-get_data(all_data, "socioeconomics/income_shares") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
+    n_groups<-nrow(unique(get_data(all_data, "socioeconomics/income_shares") %>%
+                            select(category)))
     # ===================================================
 
     # Silence package notes
@@ -143,8 +149,8 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
       L144.pcflsp_m2_ctry_Yh
 
     # Per capita floorspace was calculated for all countries.
-    # Now we can calculate total floorspace and aggregate by GCAM region.
-    # Multiply by population, match in the region names, and aggregate by (new) GCAM region
+    # Now is possible to calculate total floorspace and aggregate by GCAM region.
+    # Multiply by population, match in the region names, and aggregate by GCAM region
     # This produces the final output table for the residential sector.
     L144.pcflsp_m2_ctry_Yh %>%
       # left_join_error_no_match cannot be used because the population file does not have all the countries
@@ -207,7 +213,7 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
 
     # ----------------------------------
     # Population per GCAM region is also used for the floorspace estimation:
-    L100.Pop_thous_R_Y<-L100.Pop_thous_ctry_Yh %>%
+    L100.Pop_R_Y<-L100.Pop_thous_ctry_Yh %>%
       left_join_error_no_match(iso_GCAM_regID %>% select(GCAM_region_ID,iso), by="iso") %>%
       group_by(GCAM_region_ID,year) %>%
       summarise(value=sum(value)*1E3) %>%
@@ -225,14 +231,14 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
                          year<=avg_fin_obs_year)) %>%
       rename(flps_bm2 = value) %>%
       #add GDP
-      left_join_error_no_match(L102.gdp_mil90usd_GCAM3_R_Y, by = c("GCAM_region_ID", "year")) %>%
-      mutate(gdp=value * 1E6) %>%
-      select(-value) %>%
-      #Add population to estimate pc_GDP
-      left_join_error_no_match(L100.Pop_thous_R_Y, by = c("GCAM_region_ID", "year")) %>%
+      left_join_error_no_match(L102.pcgdp_thous90USD_Scen_R_Y %>%
+                                 filter(scenario == socioeconomics.BASE_GDP_SCENARIO),
+                               by = c("GCAM_region_ID", "year")) %>%
+      rename(pc_gdp_thous = value) %>%
+      #Add population to estimate pc_flsp
+      left_join_error_no_match(L100.Pop_R_Y, by = c("GCAM_region_ID", "year")) %>%
       rename(pop = value) %>%
-      mutate(pc_gdp_thous= gdp / (pop * 1E3),
-             pc_flsp = (flps_bm2* 1E9) / pop) %>%
+      mutate(pc_flsp = (flps_bm2* 1E9) / pop) %>%
       left_join_error_no_match(L144.hab_land_flsp_fin_EUR %>%
                                  group_by(region,Units) %>%
                                  complete(nesting(year=min(L144.flsp_bm2_R_res_Yh_EUR_pre$year):max(L144.flsp_bm2_R_res_Yh_EUR_pre$year))) %>%
@@ -245,7 +251,7 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
 
     # Estimation of the parameters:
     formula.gomp<- "pc_flsp~(100 -(a*log(tot_dens)))*exp(-b*exp(-c*log(pc_gdp_thous)))"
-    start.value<-c(a=-0.5,b=0.005,c=0.05)
+    start.value<-c(a = -0.5,b = 0.005,c = 0.05)
     fit.gomp<-nls(formula.gomp, L144.flsp_param_EUR_pre, start.value)
 
     # Write the dataset with the fitted parameters for the EUR-GCAM regions
@@ -257,7 +263,7 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
              land.density.param = coef(fit.gomp)[1],
              b.param = coef(fit.gomp)[2],
              income.param = coef(fit.gomp)[3]) %>%
-      mutate(year = if_else(region %in% regions_with_obs_data, MODEL_FINAL_BASE_YEAR, avg_fin_obs_year)) %>%
+      mutate(year = avg_fin_obs_year) %>%
       left_join_error_no_match(L144.flsp_param_EUR_pre %>% select(region,tot_dens,year), by = c("region", "year")) %>%
       select(-year)
 
@@ -267,25 +273,30 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
     L144.flsp_bm2_R_res_Yh_EUR_finBaseYear_est <- L144.flsp_bm2_R_res_Yh_EUR_pre %>%
       rename(flsp_bm2 = value) %>%
       filter(year == MODEL_FINAL_BASE_YEAR) %>%
-      left_join_error_no_match(L102.gdp_mil90usd_GCAM3_R_Y %>% filter(year == MODEL_FINAL_BASE_YEAR)
+      left_join_error_no_match(L102.pcgdp_thous90USD_Scen_R_Y %>% filter(year == MODEL_FINAL_BASE_YEAR, scenario== socioeconomics.BASE_GDP_SCENARIO)
                                , by = c("GCAM_region_ID","year")) %>%
-      rename(gdp_mil = value) %>%
-      left_join_error_no_match(L100.Pop_thous_R_Y, by = c("GCAM_region_ID", "year")) %>%
+      rename(pc_gdp_thous = value) %>%
+      left_join_error_no_match(L100.Pop_R_Y, by = c("GCAM_region_ID", "year")) %>%
       rename(pop = value) %>%
-      mutate(pc_gdp_thous = gdp_mil*1E3/pop) %>%
+      mutate(gdp = pc_gdp_thous *1E3 * pop) %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       left_join_error_no_match(L144.flsp_param_EUR, by = "region") %>%
-      left_join_error_no_match(L144.hab_land_flsp_fin_EUR %>% filter(year==MODEL_FINAL_BASE_YEAR),by=c("region","year")) %>%
-      rename(area_thouskm2=value) %>%
-      mutate(tot.dens=(pop/1E3)/area_thouskm2,
-             flsp_pc_est=(`unadjust.satiation` +(-`land.density.param`*log(tot.dens)))*exp(-`b.param`
-                                                                                           *exp(-`income.param`*log(pc_gdp_thous))),
-             flsp_est = flsp_pc_est * pop / 1E9) %>%
-      select(GCAM_region_ID,flsp_est) %>%
+      #add multiple consumers
+      repeat_add_columns(tibble(category= unique(income_shares$category))) %>%
+      left_join_error_no_match(income_shares, by = c("GCAM_region_ID", "year","category")) %>%
+      mutate(gdp_gr = gdp * shares,
+             pop_gr = pop/n_groups,
+             pc_gdp_thous_gr = (gdp_gr/pop_gr)/1E3) %>%
+      mutate(flsp_pc_est=(`unadjust.satiation` +(-`land.density.param`*log(tot_dens)))*exp(-`b.param`
+                                                                                           *exp(-`income.param`*log(pc_gdp_thous_gr)))) %>%
+      mutate(flsp_est = flsp_pc_est * pop_gr / 1E9) %>%
+      group_by(GCAM_region_ID) %>%
+      summarise(flsp_est=sum(flsp_est)) %>%
+      ungroup() %>%
       mutate(year = MODEL_FINAL_BASE_YEAR)
 
     # ----------------------------------
-    # Finally, substitute the values from final observed year (avg_fin_obs_year) to final calibration year for the regions without observed data (regions_with_obs_data)
+    # Finally, substitute the values from final observed year (avg_fin_obs_year) to final calibration year for the regions without observed data
     L144.flsp_bm2_R_res_Yh_EUR <- L144.flsp_bm2_R_res_Yh_EUR_pre %>%
       left_join(L144.flsp_bm2_R_res_Yh_EUR_finBaseYear_est, by = c("GCAM_region_ID", "year")) %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
@@ -376,7 +387,7 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
       add_precursors("common/iso_GCAM_regID","common/GCAM_region_names", "energy/A44.pcflsp_default",
                      "energy/A44.HouseholdSize", "gcam-europe/estat_ilc_hcmh02_filtered_en",
                      "gcam-europe/estat_ilc_lvph01_filtered_en", "gcam-europe/mappings/geo_to_iso_map",
-                     "L100.Pop_thous_ctry_Yh") ->
+                     "L100.Pop_thous_ctry_Yh", "L102.pcgdp_thous90USD_Scen_R_Y","socioeconomics/income_shares") ->
       L144.flsp_bm2_R_res_Yh_EUR
 
     L144.flsp_bm2_R_comm_Yh_EUR %>%
@@ -408,10 +419,11 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
       add_precursors("common/iso_GCAM_regID","common/GCAM_region_names", "energy/A44.pcflsp_default",
                      "energy/A44.HouseholdSize",
                      "gcam-europe/estat_ilc_hcmh02_filtered_en", "gcam-europe/estat_ilc_lvph01_filtered_en",
-                     "gcam-europe/mappings/geo_to_iso_map", "L100.Pop_thous_ctry_Yh") ->
+                     "gcam-europe/mappings/geo_to_iso_map", "L100.Pop_thous_ctry_Yh", "L102.pcgdp_thous90USD_Scen_R_Y") ->
       L144.flsp_param_EUR
 
-    return_data(L144.flsp_bm2_R_res_Yh_EUR, L144.flsp_bm2_R_comm_Yh_EUR, L144.flspPrice_90USDm2_R_bld_Yh_EUR, L144.hab_land_flsp_fin_EUR, L144.flsp_param_EUR)
+    return_data(L144.flsp_bm2_R_res_Yh_EUR, L144.flsp_bm2_R_comm_Yh_EUR, L144.flspPrice_90USDm2_R_bld_Yh_EUR,
+                L144.hab_land_flsp_fin_EUR, L144.flsp_param_EUR)
   } else {
     stop("Unknown command")
   }
