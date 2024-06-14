@@ -38,11 +38,15 @@ module_gcameurope_L223.electricity <- function(command, ...) {
                                "L223.StubTech_elec")
 
   MODULE_INPUTS <- c(FILE = "common/GCAM_region_names",
+                     FILE = "gcam-europe/mappings/grid_regions",
                      FILE = "energy/calibrated_techs",
                      FILE = "energy/A23.globaltech_eff",
                      "L1231.in_EJ_R_elec_F_tech_Yh_EUR",
                      "L1231.out_EJ_R_elec_F_tech_Yh_EUR",
                      "L1231.eff_R_elec_F_tech_Yh_EUR",
+                     "L1231.in_EJ_R_elec_F_tech_Yh",
+                     "L1231.out_EJ_R_elec_F_tech_Yh",
+                     "L1231.eff_R_elec_F_tech_Yh",
                      OUTPUTS_TO_COPY_FILTER)
 
   MODULE_OUTPUTS <- c("L223.StubTechCalInput_elec_EUR",
@@ -75,7 +79,21 @@ module_gcameurope_L223.electricity <- function(command, ...) {
     get_data_list(all_data, MODULE_INPUTS)
 
     # Create outputs that are simply copied form main scripts and filtered to Eurostat regions
-    copy_filter_europe(all_data, OUTPUTS_TO_COPY_FILTER)
+    copy_filter_europe(all_data, OUTPUTS_TO_COPY_FILTER,
+                       regions_to_keep = union(grid_regions$region, gcameurope.EUROSTAT_COUNTRIES))
+
+    # 0. Add in switzerland to eurostat data ---------------------
+    L1231.in_EJ_R_elec_F_tech_Yh_EUR <- replace_with_eurostat(L1231.in_EJ_R_elec_F_tech_Yh, L1231.in_EJ_R_elec_F_tech_Yh_EUR) %>%
+      filter_regions_europe(regions_to_keep_name = union(grid_regions$region, gcameurope.EUROSTAT_COUNTRIES),
+                            region_ID_mapping = GCAM_region_names)
+
+    L1231.out_EJ_R_elec_F_tech_Yh_EUR <- replace_with_eurostat(L1231.out_EJ_R_elec_F_tech_Yh, L1231.out_EJ_R_elec_F_tech_Yh_EUR) %>%
+      filter_regions_europe(regions_to_keep_name = union(grid_regions$region, gcameurope.EUROSTAT_COUNTRIES),
+                            region_ID_mapping = GCAM_region_names)
+
+    L1231.eff_R_elec_F_tech_Yh_EUR <- replace_with_eurostat(L1231.eff_R_elec_F_tech_Yh, L1231.eff_R_elec_F_tech_Yh_EUR) %>%
+      filter_regions_europe(regions_to_keep_name = union(grid_regions$region, gcameurope.EUROSTAT_COUNTRIES),
+                            region_ID_mapping = GCAM_region_names)
 
     # Calibrated input values for electricity sector technologies ========================================
     # generate base year calibrated inputs of electricity by interpolating from historical values
