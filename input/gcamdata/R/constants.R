@@ -1140,6 +1140,8 @@ gcameurope.EUROSTAT_ISO <- c("aut","bel","bgr","hrv","cyp","cze","dnk","fro",
                              "flk","gbr","ggy","gib","imn","jey","tca","vgb",
                              "wlf","ukr")
 
+gcameurope.TRADE_REGION <- "Austria"
+
 # Time shift conditions ======================================================================
 # Uncomment these lines to run under 'timeshift' conditions
 # # HISTORICAL_YEARS <- 1971:2005       # normally 1971:2010
