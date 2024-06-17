@@ -1412,38 +1412,65 @@ remove_regions_xml <- function(xml, regions_to_remove) {
 #' @param regions_to_keep_name character vector of regions to keep
 #' @param regions_to_keep_iso character vector of regions to keep
 #' @param region_ID_mapping mapping file between region NAMES and GCAM_region_ID
+#' @param inverse if TRUE, remove all european regions
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr filter left_join rename mutate group_by select summarise_all ungroup
 #' @return tibble without specified regions
 filter_regions_europe <- function(df,
                                   regions_to_keep_name = gcameurope.EUROSTAT_COUNTRIES,
                                   regions_to_keep_iso = gcameurope.EUROSTAT_ISO,
-                                  region_ID_mapping = NULL) {
+                                  region_ID_mapping = NULL,
+                                  inverse = FALSE) {
   if(is.null(df)){return(df)}
   else{
     assert_that(is_tibble(df))
     assert_that(is.character(regions_to_keep_name))
     assert_that(is.character(regions_to_keep_iso))
 
-    if ("region" %in% names(df)){
-      df <- df %>% filter(region %in% regions_to_keep_name)
+    if (!inverse) {
+      if ("region" %in% names(df)){
+        df <- df %>% filter(region %in% regions_to_keep_name)
+      }
+      if ("iso" %in% names(df)){
+        df <- df %>% filter(iso %in% regions_to_keep_iso)
+      }
+      if ("iso" %in% names(df)){
+        df <- df %>% filter(iso %in% regions_to_keep_iso)
+      }
+      if ("market.name" %in% names(df)){
+        df <- df %>% filter(market.name %in% regions_to_keep_name)
+      }
+      if (!is.null(region_ID_mapping) && "GCAM_region_ID" %in% names(df)){
+        ids_to_keep = region_ID_mapping %>%
+          filter(region %in% regions_to_keep_name) %>%
+          distinct() %>%
+          pull(GCAM_region_ID)
+        df <- df %>% filter(GCAM_region_ID %in% ids_to_keep)
+      }
     }
-    if ("iso" %in% names(df)){
-      df <- df %>% filter(iso %in% regions_to_keep_iso)
+
+    if (inverse) {
+      if ("region" %in% names(df)){
+        df <- df %>% filter(!region %in% regions_to_keep_name)
+      }
+      if ("iso" %in% names(df)){
+        df <- df %>% filter(!iso %in% regions_to_keep_iso)
+      }
+      if ("iso" %in% names(df)){
+        df <- df %>% filter(!iso %in% regions_to_keep_iso)
+      }
+      if ("market.name" %in% names(df)){
+        df <- df %>% filter(!market.name %in% regions_to_keep_name)
+      }
+      if (!is.null(region_ID_mapping) && "GCAM_region_ID" %in% names(df)){
+        ids_to_keep = region_ID_mapping %>%
+          filter(!region %in% regions_to_keep_name) %>%
+          distinct() %>%
+          pull(GCAM_region_ID)
+        df <- df %>% filter(GCAM_region_ID %in% ids_to_keep)
+      }
     }
-    if ("iso" %in% names(df)){
-      df <- df %>% filter(iso %in% regions_to_keep_iso)
-    }
-    if ("market.name" %in% names(df)){
-      df <- df %>% filter(market.name %in% regions_to_keep_name)
-    }
-    if (!is.null(region_ID_mapping) && "GCAM_region_ID" %in% names(df)){
-      ids_to_keep = region_ID_mapping %>%
-        filter(region %in% regions_to_keep_name) %>%
-        distinct() %>%
-        pull(GCAM_region_ID)
-      df <- df %>% filter(GCAM_region_ID %in% ids_to_keep)
-    }
+
     return (df)
   }
 }

@@ -86,10 +86,6 @@ module_energy_en_Fert_xml <- function(command, ...) {
       add_xml_data(L2322.GlobalTechProfitShutdown_Fert, "GlobalTechProfitShutdown") %>%
       add_xml_data(L2322.StubTechProd_FertProd, "StubTechProd") %>%
       add_xml_data(L2322.StubTechCoef_Fert, "StubTechCoef") %>%
-      add_xml_data(L2322.Production_FertExport, "Production") %>%
-      add_xml_data(L2322.StubTechProd_FertImport, "StubTechProd") %>%
-      add_xml_data(L2322.StubTechProd_FertDomCons, "StubTechProd") %>%
-      add_xml_data(L2322.StubTechProd_NtoAg, "StubTechProd") %>%
       add_precursors("L2322.Supplysector_Fert",
                      "L2322.SectorUseTrialMarket_tra",
                      "L2322.FinalEnergyKeyword_Fert",
@@ -112,10 +108,23 @@ module_energy_en_Fert_xml <- function(command, ...) {
                      "L2322.StubTechProd_FertImport",
                      "L2322.StubTechProd_FertDomCons",
                      "L2322.StubTechProd_NtoAg") %>%
-  remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       en_Fert.xml
 
-    return_data(en_Fert.xml)
+    # add (global) trading
+    en_Fert.xml <- en_Fert.xml %>%
+    add_xml_data(L2322.Production_FertExport %>%
+                   rename(original_region_column = region) %>%
+                   mutate(region = str_extract(technology, ".*(?= traded ammonia)")) %>%
+                   filter_regions_europe() %>%
+                   select(-region) %>%
+                   rename(region = original_region_column), "Production") %>%
+      add_xml_data(L2322.StubTechProd_FertImport %>% filter_regions_europe(inverse = TRUE), "StubTechProd") %>%
+      add_xml_data(L2322.StubTechProd_FertDomCons %>% filter_regions_europe(inverse = TRUE), "StubTechProd") %>%
+      add_xml_data(L2322.StubTechProd_NtoAg %>% filter_regions_europe(inverse = TRUE), "StubTechProd")
+
+
+     return_data(en_Fert.xml)
   } else {
     stop("Unknown command")
   }
