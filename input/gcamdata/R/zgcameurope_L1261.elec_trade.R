@@ -184,7 +184,9 @@ module_gcameurope_L1261.elec_trade <- function(command, ...) {
     L1261.elec_imports_R_EJ_EUR <- L1261.elec_trade_R_EJ_EUR_pre %>%
       group_by(grid_region = grid_region_importer, year) %>%
       summarise(imports = sum(value)) %>%
-      ungroup
+      ungroup %>%
+      # explicitly write zeros for any missing years (just ukraine/moldova in 1996)
+      complete(grid_region, year = unique(L1261.elec_trade_R_EJ_EUR_pre$year), fill = list(imports = 0))
 
     L1261.elec_trade_R_EJ_EUR <- L1261.elec_exports_R_EJ_EUR %>%
       left_join_error_no_match(L1261.elec_imports_R_EJ_EUR, by = c("grid_region", "year")) %>%
