@@ -21,8 +21,8 @@ module_gcameurope_L1261.elec_trade <- function(command, ...) {
                      FILE = "gcam-europe/eurostat_elec_imports",
                      "L126.in_EJ_R_elecownuse_F_Yh_EUR",
                      "L126.out_EJ_R_elecownuse_F_Yh_EUR",
-                     "L126.in_EJ_R_electd_F_Yh_EUR",
-                     "L126.out_EJ_R_electd_F_Yh_EUR")
+                     "L126.in_EJ_R_electd_F_Yh_EUR_grid",
+                     "L126.out_EJ_R_electd_F_Yh_EUR_grid")
   MODULE_OUTPUTS <- c("L1261.out_EJ_R_elecownuse_F_Yh_EUR",
                       "L1261.IO_R_elecownuse_F_Yh_EUR",
                       "L1261.elec_trade_R_EJ_EUR")
@@ -67,7 +67,7 @@ module_gcameurope_L1261.elec_trade <- function(command, ...) {
       summarise(gen = sum(value)) %>%
       ungroup
 
-    total_demand <- L126.in_EJ_R_electd_F_Yh_EUR %>%
+    total_demand <- L126.in_EJ_R_electd_F_Yh_EUR_grid %>%
       # Demand includes ownuse, calculating here the net ownuse consumption as in - out
       bind_rows(L126.in_EJ_R_elecownuse_F_Yh_EUR,
                 L126.out_EJ_R_elecownuse_F_Yh_EUR %>%  mutate(value = -1 * value)) %>%
@@ -145,7 +145,7 @@ module_gcameurope_L1261.elec_trade <- function(command, ...) {
       select(-ownuse_adj)
 
     # 1d Check that net_exports outside of grids are now 0 ---------------
-    total_demand_ownuse_adj <- L126.in_EJ_R_electd_F_Yh_EUR %>%
+    total_demand_ownuse_adj <- L126.in_EJ_R_electd_F_Yh_EUR_grid %>%
       # Demand includes ownuse, calculating here the net ownuse consumption as in - out
       bind_rows(L126.in_EJ_R_elecownuse_F_Yh_EUR,
                 L1261.out_EJ_R_elecownuse_F_Yh_EUR %>%  mutate(value = -1 * value)) %>%

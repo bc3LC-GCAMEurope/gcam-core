@@ -21,15 +21,17 @@
 #' @author RH February 2024
 module_gcameurope_L131.enduse <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "energy/A_regions",
-             FILE = "gcam-europe/mappings/enduse_sector_aggregation",
-             FILE = "water/EFW_mapping",
-             "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
-             "L122.in_EJ_R_refining_F_Yh_EUR",
-             "L124.in_EJ_R_heat_F_Yh_EUR",
-             "L124.out_EJ_R_heat_F_Yh_EUR",
-             "L124.out_EJ_R_heatfromelec_F_Yh_EUR",
-             "L126.out_EJ_R_electd_F_Yh_EUR"))
+    MODULE_INPUTS <- c(FILE = "energy/A_regions",
+                       FILE = "gcam-europe/mappings/enduse_sector_aggregation",
+                       FILE = "water/EFW_mapping",
+                       "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
+                       "L122.in_EJ_R_refining_F_Yh_EUR",
+                       "L124.in_EJ_R_heat_F_Yh_EUR",
+                       "L124.out_EJ_R_heat_F_Yh_EUR",
+                       "L124.out_EJ_R_heatfromelec_F_Yh_EUR",
+                       "L126.out_EJ_R_electd_F_Yh_EUR",
+                       "L126.out_EJ_R_electd_F_Yh_EUR_grid")
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L131.in_EJ_R_Senduse_F_Yh_EUR",
              "L131.share_R_Senduse_heat_Yh_EUR"))
@@ -41,15 +43,10 @@ module_gcameurope_L131.enduse <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    A_regions <- get_data(all_data, "energy/A_regions")
-    enduse_sector_aggregation <- get_data(all_data, "gcam-europe/mappings/enduse_sector_aggregation")
-    EFW_mapping <- get_data(all_data, "water/EFW_mapping")
-    L1012.en_bal_EJ_R_Si_Fi_Yh_EUR <- get_data(all_data, "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", strip_attributes = TRUE)
-    L122.in_EJ_R_refining_F_Yh_EUR <- get_data(all_data, "L122.in_EJ_R_refining_F_Yh_EUR")
-    L124.out_EJ_R_heat_F_Yh_EUR <- get_data(all_data, "L124.out_EJ_R_heat_F_Yh_EUR")
-    L124.out_EJ_R_heatfromelec_F_Yh_EUR <- get_data(all_data, "L124.out_EJ_R_heatfromelec_F_Yh_EUR")
-    L126.out_EJ_R_electd_F_Yh_EUR <- get_data(all_data, "L126.out_EJ_R_electd_F_Yh_EUR")
-    L124.in_EJ_R_heat_F_Yh_EUR  <- get_data(all_data, "L124.in_EJ_R_heat_F_Yh_EUR")
+    get_data_list(all_data, MODULE_INPUTS)
+
+    # replace normal electd data with grid_region data
+    L126.out_EJ_R_electd_F_Yh_EUR <- replace_with_eurostat(L126.out_EJ_R_electd_F_Yh_EUR, L126.out_EJ_R_electd_F_Yh_EUR_grid)
 
     # 1. ELECTRICITY SCALING  ===================================================
     # First, subset and aggregate the "upstream" electricity demands by the energy system that are not being scaled

@@ -22,7 +22,7 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
                      "L126.in_EJ_R_elecownuse_F_Yh_EUR",
                      "L1261.out_EJ_R_elecownuse_F_Yh_EUR",
                      "L126.in_EJ_R_elecownuse_F_Yh",
-                     "L126.in_EJ_R_electd_F_Yh_EUR",
+                     "L126.in_EJ_R_electd_F_Yh_EUR_grid",
                      "L126.in_EJ_R_electd_F_Yh",
                      "L123.out_EJ_R_indchp_F_Yh_EUR",
                      "L123.out_EJ_R_indchp_F_Yh",
@@ -66,7 +66,7 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
     L126.in_EJ_R_elecownuse_F_Yh_EUR <- replace_with_eurostat(L126.in_EJ_R_elecownuse_F_Yh, L126.in_EJ_R_elecownuse_F_Yh_EUR) %>%
       filter_regions_europe(regions_to_keep_name = grid_regions$region, region_ID_mapping = GCAM_region_names)
 
-    L126.in_EJ_R_electd_F_Yh_EUR <- replace_with_eurostat(L126.in_EJ_R_electd_F_Yh, L126.in_EJ_R_electd_F_Yh_EUR) %>%
+    L126.in_EJ_R_electd_F_Yh_EUR_grid <- replace_with_eurostat(L126.in_EJ_R_electd_F_Yh, L126.in_EJ_R_electd_F_Yh_EUR_grid) %>%
       filter_regions_europe(regions_to_keep_name = grid_regions$region, region_ID_mapping = GCAM_region_names)
 
     L123.out_EJ_R_indchp_F_Yh_EUR <- replace_with_eurostat(L123.out_EJ_R_indchp_F_Yh, L123.out_EJ_R_indchp_F_Yh_EUR) %>%
@@ -171,7 +171,7 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
       L2232.net_EJ_sR_ownuse_elec_EUR
 
     # Consumption: the sum of all demands in each grid region, equal to the input to the elect_td sectors
-    L126.in_EJ_R_electd_F_Yh_EUR %>%
+    L126.in_EJ_R_electd_F_Yh_EUR_grid %>%
       filter(year %in% MODEL_BASE_YEARS) %>%
       left_join_error_no_match(grid_regions, by = "GCAM_region_ID") %>%
       group_by(grid_region, year) %>%

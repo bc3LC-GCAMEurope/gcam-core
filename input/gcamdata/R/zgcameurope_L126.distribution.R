@@ -53,13 +53,16 @@ module_gcameurope_L126.distribution <- function(command, ...) {
 
     # Add in switzerland to eurostat electricity data ---------------------
     L1012.en_bal_EJ_R_Si_Fi_Yh_EUR <- replace_with_eurostat(L1012.en_bal_EJ_R_Si_Fi_Yh, L1012.en_bal_EJ_R_Si_Fi_Yh_EUR) %>%
-      filter_regions_europe(regions_to_keep_name = grid_regions$region, region_ID_mapping = GCAM_region_names)
+      filter_regions_europe(regions_to_keep_name = union(grid_regions$region, gcameurope.EUROSTAT_COUNTRIES),
+                            region_ID_mapping = GCAM_region_names)
 
     L123.out_EJ_R_elec_F_Yh_EUR <- replace_with_eurostat(L123.out_EJ_R_elec_F_Yh, L123.out_EJ_R_elec_F_Yh_EUR) %>%
-      filter_regions_europe(regions_to_keep_name = grid_regions$region, region_ID_mapping = GCAM_region_names)
+      filter_regions_europe(regions_to_keep_name =  union(grid_regions$region, gcameurope.EUROSTAT_COUNTRIES),
+                            region_ID_mapping = GCAM_region_names)
 
     L123.out_EJ_R_indchp_F_Yh_EUR <- replace_with_eurostat(L123.out_EJ_R_indchp_F_Yh, L123.out_EJ_R_indchp_F_Yh_EUR) %>%
-      filter_regions_europe(regions_to_keep_name = grid_regions$region, region_ID_mapping = GCAM_region_names)
+      filter_regions_europe(regions_to_keep_name =  union(grid_regions$region, gcameurope.EUROSTAT_COUNTRIES),
+                            region_ID_mapping = GCAM_region_names)
 
     # 1. ELECTRICITY OWNUSE ===================================================
     # i.e., electricity consumed onsite prior to any transmission and distribution losses
@@ -109,32 +112,46 @@ module_gcameurope_L126.distribution <- function(command, ...) {
       L126.IO_R_elecownuse_F_Yh_EUR
 
     # 2. ELECTRICITY TRANSMISSION AND DISTRIBUTION =========================================
-    # electd_out is the FE consumption of electricity, without losses and ownuse
-    L126.out_EJ_R_electd_F_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
-      filter(fuel == "electricity",
-             grepl("^in|net", sector),
-             !(grepl("ownuse|distribution", sector))) %>%
-      mutate(sector = "electricity distribution") %>%
+    # Preparing electricity generation output (i.e., L126.out_EJ_R_elecownuse_F_Yh_EUR) to be joined later with energy balance
+    L126.out_EJ_R_elecownuse_F_Yh_EUR %>%
+      ungroup() %>% # Need to ungroup to deselect sector and fuel
+      select(-sector, -fuel) ->
+      Electricity_ownuse_out
+
+    # Filtering energy balance by "net_electricity distribution" sector and joining with electricity generation output
+    L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
+      filter(sector == "net_electricity distribution") %>%
+      mutate(sector = replace(sector, sector == "net_electricity distribution", "electricity distribution")) %>% # Renaming sector as "electricity distribution"
       group_by(GCAM_region_ID, sector, fuel, year) %>%
-      summarise(value = sum(value)) %>%
-      ungroup
+      summarise(value_electd = sum(value)) %>%
+      ungroup() %>%
+      left_join_error_no_match(Electricity_ownuse_out, by = c("GCAM_region_ID", "year")) %>% # Joining electricity generation output (L126.out_EJ_R_elecownuse_F_Yh_EUR, wherein electricity ownuse was subtracted from electricity generation)
+      mutate(value_electd_out = value - value_electd, # Creating values for table, L126.out_EJ_R_electd_F_Yh_EUR (i.e. ouput), by subtracting electricity generation (without ownuse) by transmission and distribution consumption
+             value_electd_IO = value / value_electd_out) -> # Creating values for table, L126.IO_R_electd_F_Yh_EUR, by dividing input by output
+      Electricity_distribution_all
 
-    # electd_in is the FE consumption of electricity and distribution losses
-    L126.in_EJ_R_electd_F_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
-      filter(fuel == "electricity",
-             grepl("^in|net", sector),
-             !(grepl("ownuse", sector))) %>%
-      mutate(sector = "electricity distribution") %>%
-      group_by(GCAM_region_ID, sector, fuel, year) %>%
-      summarise(value = sum(value)) %>%
-      ungroup
+    # Need to adjust Moldova because the majority of electricity is imported
+    # so production - losses results in missing electricity for demand
+    # Set maximum IO to 1.5
+    MOLDOVA_ID <- GCAM_region_names %>% filter(region == "Moldova") %>%  pull(GCAM_region_ID)
+    Electricity_distribution_all <- Electricity_distribution_all %>%
+      mutate(value_electd_IO = if_else(value_electd_IO > 1.5 & GCAM_region_ID == MOLDOVA_ID, 1.5, value_electd_IO),
+             value_electd_out = value / value_electd_IO)
 
-    # generate IO factors
-    L126.IO_R_electd_F_Yh_EUR <- L126.in_EJ_R_electd_F_Yh_EUR %>%
-      left_join_error_no_match(L126.out_EJ_R_electd_F_Yh_EUR, by = c("GCAM_region_ID", "sector", "fuel", "year")) %>%
-      mutate(IO = value.x / value.y) %>%
-      select(-value.x, -value.y)
 
+    # Table Electricity_distribution_all is separated to create the final tables
+    Electricity_distribution_all %>%
+      select(GCAM_region_ID, sector, fuel, year, value) ->
+      L126.in_EJ_R_electd_F_Yh_EUR
+    Electricity_distribution_all %>%
+      select(GCAM_region_ID, sector, fuel, year, value = value_electd_out) ->
+      L126.out_EJ_R_electd_F_Yh_EUR
+    Electricity_distribution_all %>%
+      select(GCAM_region_ID, sector, fuel, year, value = value_electd_IO) %>%
+      # Correct Nan in Srb&Mne in 1975 by extrapolating the next available coef (1990)
+      group_by(GCAM_region_ID, sector, fuel) %>%
+      mutate(value = if_else(!is.nan(value), value, approx_fun(year, value, 2))) %>%
+      ungroup()  -> L126.IO_R_electd_F_Yh_EUR
 #
     # 3. GAS PIPELINE  =========================================
     # Preparing to be joined later - summing by GCAM region ID and year
