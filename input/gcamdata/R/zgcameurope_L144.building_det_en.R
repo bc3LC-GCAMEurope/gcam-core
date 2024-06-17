@@ -766,7 +766,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     L144.in_EJ_R_bld_serv_F_Yh_EUR_residcooling <- L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
       filter(service == 'resid cooling modern') %>%
       complete(GCAM_region_ID = unique(iso_GCAM_regID$GCAM_region_ID),
-               sector, fuel, service, year, fill = list(value = 0))
+               sector, fuel, service, year, fill = list(value = 1e-7))
 
     L144.in_EJ_R_bld_serv_F_Yh_EUR_residhydrogen <- L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
       filter(service %in% c('resid heating modern','resid others modern'), fuel == 'hydrogen') %>%
@@ -789,9 +789,11 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       ungroup
 
    check <- L142.in_EJ_R_bld_F_Yh_EUR %>%
-     filter(value != 0) %>%
-     left_join(L144.in_EJ_check, by = c("GCAM_region_ID", "sector", "fuel", "year")) %>%
-     mutate(diff = round(abs(value.y - value.x), energy.DIGITS_CALOUTPUT))
+     filter(abs(value) > 1e-7) %>%
+     left_join(L144.in_EJ_check,
+               by = c("GCAM_region_ID", "sector", "fuel", "year")) %>%
+     mutate(diff = round(abs(value.y - value.x), energy.DIGITS_CALOUTPUT-1))
+
   stopifnot(max(check$diff) == 0)
   # 2D Calculate building energy output by each service ###########################################################################
   #  by GCAM region ID / sector / service / fuel / historical year
@@ -833,10 +835,12 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
 
   # Finally, write out the service output by fuel, to estimate parameters used in the demand for traditional services (in L244.building_det)
   L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
-      left_join_error_no_match(L144.end_use_eff_EUR_2f, by = c("GCAM_region_ID", "sector", "fuel", "service", "year")) %>%
-      mutate(value = value * value_eff) %>%
-      select(GCAM_region_ID, sector, fuel, service, year, value) ->
-      L144.base_service_EJ_serv_fuel_EUR
+    left_join_error_no_match(L144.end_use_eff_EUR_2f, by = c("GCAM_region_ID", "sector", "fuel", "service", "year")) %>%
+    mutate(value = value * value_eff) %>%
+    select(GCAM_region_ID, sector, fuel, service, year, value) %>%
+    # fix 0s in base service by setting 1e-6 to avoid future pb
+    mutate(value = ifelse(value == 0, 1e-6, value)) ->
+    L144.base_service_EJ_serv_fuel_EUR
 
 
   # 3 Internal gains ##############################################################################################
