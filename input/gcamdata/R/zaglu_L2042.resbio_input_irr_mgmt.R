@@ -98,7 +98,7 @@ module_aglu_L2042.resbio_input_irr_mgmt <- function(command, ...) {
     add_bio_res_params_For_Mill_Forest <- function(df, residueBiomassProduction = "biomass",
                                             harvestIndex = aglu.FOREST_HARVEST_INDEX, erosCtrl,
                                             massToEnergy = aglu.WOOD_ENERGY_CONTENT_GJKG, waterContent = aglu.WOOD_WATER_CONTENT) {
-      df %>%
+      df %>% filter(GCAM_region_ID == 41) %>%
         mutate(residue.biomass.production = residueBiomassProduction,
                mass.conversion = if_else(grepl("Hardwood",LT),aglu.AVG_WOOD_DENSITY_KGM3_HARDWOOD,aglu.AVG_WOOD_DENSITY_KGM3_SOFTWOOD),
                harvest.index = harvestIndex,
@@ -120,8 +120,8 @@ module_aglu_L2042.resbio_input_irr_mgmt <- function(command, ...) {
         mutate(harvest.index = if_else(year>MODEL_YEARS[1],NA_real_,harvest.index)) %>%
         group_by(GCAM_region_ID) %>%
         arrange(year) %>%
-        mutate(harvest.index= if_else(year==tail(MODEL_FUTURE_YEARS,n=1),aglu.FOREST_HARVEST_INDEX,harvest.index),
-               harvest.index= if_else(is.na(harvest.index), approx_fun(year,harvest.index),harvest.index)) %>%
+        mutate(harvest.index= if_else(year==tail(MODEL_FUTURE_YEARS,n=1),aglu.FOREST_HARVEST_INDEX,harvest.index)) %>%
+        mutate(harvest.index= if_else(is.na(harvest.index), approx_fun(year,harvest.index),harvest.index)) %>%
         ungroup()
     } # end add_bio_res_params_For_Mill_Forest
 

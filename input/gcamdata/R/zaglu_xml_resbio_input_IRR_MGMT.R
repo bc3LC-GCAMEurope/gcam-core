@@ -13,12 +13,12 @@
 module_aglu_resbio_input_IRR_MGMT_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c("L2042.AgResBio_For",
-              "L2042.AgResBioCurve_For",
-              "L2042.GlobalResBio_Mill",
-              "L2042.StubResBioCurve_Mill",
-              "L2042.AgResBio_ag_irr_mgmt",
-              "L2042.AgResBioCurve_ag_irr_mgmt",
-              FILE = "common/GCAM_region_names"))
+             "L2042.AgResBioCurve_For",
+             "L2042.GlobalResBio_Mill",
+             "L2042.StubResBioCurve_Mill",
+             "L2042.AgResBio_ag_irr_mgmt",
+             "L2042.AgResBioCurve_ag_irr_mgmt",
+             FILE = "common/GCAM_region_names"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c(XML = "resbio_input_IRR_MGMT_1.xml",
             XML = "resbio_input_IRR_MGMT_2.xml",
