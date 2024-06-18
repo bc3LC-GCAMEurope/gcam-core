@@ -20,7 +20,10 @@ module_gcameurope_en_distribution_xml <- function(command, ...) {
                      "L226.StubTech_en_EUR",
                      "L226.StubTechCoef_elecownuse_EUR",
                      "L226.StubTechCoef_electd_EUR",
-                     "L226.StubTechCoef_gaspipe_EUR")
+                     "L226.StubTechCoef_gaspipe_EUR",
+                     "L226.TechCoef_electd_EUR",
+                     "L226.TechCost_en_EUR",
+                     "L226.TechShrwt_en_EUR")
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -71,6 +74,9 @@ module_gcameurope_en_distribution_xml <- function(command, ...) {
       add_xml_data(L226.StubTechCoef_elecownuse_EUR, "StubTechCoef") %>%
       add_xml_data(L226.StubTechCoef_electd_EUR, "StubTechCoef") %>%
       add_xml_data(L226.StubTechCoef_gaspipe_EUR, "StubTechCoef") %>%
+      add_xml_data(L226.TechCoef_electd_EUR, "TechCoef") %>%
+      add_xml_data(L226.TechCost_en_EUR, "TechCost") %>%
+      add_xml_data(L226.TechShrwt_en_EUR, "TechShrwt") %>%
       add_precursors(MODULE_INPUTS) ->
       en_distribution_EUR.xml
 
