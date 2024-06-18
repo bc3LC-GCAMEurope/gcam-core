@@ -7,7 +7,7 @@
 		<Value name="GHGInputFileName">../input/magicc/inputs/input_gases.emk</Value>
 		<Value write-output="1" append-scenario-name="0" name="xmldb-location">../output/database_basexdb</Value>
 		<Value write-output="1" append-scenario-name="0" name="restart">./restart/restart</Value>
-		<Value write-output="0" append-scenario-name="1" name="xmlDebugFileName">debug.xml</Value>
+		<Value write-output="1" append-scenario-name="1" name="xmlDebugFileName">debug.xml</Value>
 		<Value write-output="1" append-scenario-name="0" name="climatFileName">gas.emk</Value>
 		<Value write-output="1" append-scenario-name="1" name="costCurvesOutputFileName">cost_curves.xml</Value>
 		<Value write-output="1" append-scenario-name="0" name="batchCSVOutputFile">batch-csv-out.csv</Value>
@@ -36,31 +36,32 @@
 		<Value name = "other_industry">../input/gcamdata/xml/other_industry_EUR.xml</Value>
 		<Value name = "industry_income_elas">../input/gcamdata/xml/other_industry_incelas_gssp2.xml</Value>
  		<Value name = "iron_steel">../input/gcamdata/xml/iron_steel.xml</Value>
- 		<Value name = "iron_steel">../input/gcamdata/xml/iron_steel_EUR.xml</Value>
+		 <Value name = "iron_steel">../input/gcamdata/xml/iron_steel_EUR.xml</Value>
 		<Value name = "iron_steel_income_elas">../input/gcamdata/xml/iron_steel_incelas_gssp2.xml</Value>   
 		<Value name = "iron_steel trade">../input/gcamdata/xml/iron_steel_trade.xml</Value>
  		<Value name = "Off_road">../input/gcamdata/xml/Off_road.xml</Value>
- 		<Value name = "Off_road">../input/gcamdata/xml/Off_road_EUR.xml</Value>
+		 <Value name = "Off_road">../input/gcamdata/xml/Off_road_EUR.xml</Value>
 		<Value name = "Off_road_income_elas">../input/gcamdata/xml/Off_road_incelas_gssp2.xml</Value>  
  		<Value name = "chemical">../input/gcamdata/xml/chemical.xml</Value>
- 		<Value name = "chemical">../input/gcamdata/xml/chemical_EUR.xml</Value>
+		 <Value name = "chemical">../input/gcamdata/xml/chemical_EUR.xml</Value>
 		<Value name = "chemical_income_elas">../input/gcamdata/xml/chemical_incelas_gssp2.xml</Value>   
  		<Value name = "aluminum">../input/gcamdata/xml/aluminum.xml</Value>
- 		<Value name = "aluminum">../input/gcamdata/xml/aluminum_EUR.xml</Value>
+		 <Value name = "aluminum">../input/gcamdata/xml/aluminum_EUR.xml</Value>
 		<Value name = "aluminum_income_elas">../input/gcamdata/xml/aluminum_incelas_gssp2.xml</Value> 
  		<Value name = "paper">../input/gcamdata/xml/paper.xml</Value>
+ 		<Value name = "paper">../input/gcamdata/xml/paper_EUR.xml</Value>
 		<Value name = "paper_income_elas">../input/gcamdata/xml/paper_incelas_gssp2.xml</Value> 
 		<Value name = "food_processing">../input/gcamdata/xml/food_processing.xml</Value> 
 		<Value name = "cement">../input/gcamdata/xml/cement.xml</Value>
 		<Value name = "cement">../input/gcamdata/xml/cement_EUR.xml</Value>
 		<Value name = "cement_income_elas">../input/gcamdata/xml/cement_incelas_gssp2.xml</Value>
-		<Value name = "fertilizer_energy">../input/gcamdata/xml/en_Fert.xml</Value>
 		<Value name = "fertilizer_energy">../input/gcamdata/xml/en_Fert_EUR.xml</Value>
+		<Value name = "fertilizer_energy">../input/gcamdata/xml/en_Fert.xml</Value>
 		<Value name = "hddcdd">../input/gcamdata/xml/HDDCDD_constdd_no_GCM.xml</Value>
 		<Value name = "building">../input/gcamdata/xml/building_det.xml</Value>
 		<Value name = "building">../input/gcamdata/xml/building_det_EUR.xml</Value>
-		<Value name = "transportation">../input/gcamdata/xml/transportation_UCD_CORE_EUR.xml</Value>
 		<Value name = "transportation">../input/gcamdata/xml/transportation_UCD_CORE.xml</Value>
+		<Value name = "transportation">../input/gcamdata/xml/transportation_UCD_CORE_EUR.xml</Value>
 		<Value name = "carbon_content">../input/gcamdata/xml/Ccoef.xml</Value>
 		<Value name = "carbon_storage">../input/gcamdata/xml/Cstorage.xml</Value>
         <Value name = "wind_update">../input/gcamdata/xml/onshore_wind.xml</Value>
@@ -112,8 +113,8 @@
 		<Value name = "primary_ene_water">../input/gcamdata/xml/water_demand_primary_EUR.xml</Value>
 
 		<Value name = "ind_urb_proc">../input/gcamdata/xml/ind_urb_processing_sectors.xml</Value>
-		<Value name = "nonco2_energy">../input/gcamdata/xml/all_energy_emissions.xml</Value>
 		<Value name = "nonco2_energy">../input/gcamdata/xml/all_energy_emissions_EUR.xml</Value>
+		<Value name = "nonco2_energy">../input/gcamdata/xml/all_energy_emissions.xml</Value>
 		<Value name = "nonco2_fgas">../input/gcamdata/xml/all_fgas_emissions.xml</Value>
 		<Value name = "nonco2_fgas">../input/gcamdata/xml/all_fgas_emissions_EUR.xml</Value>
 		<Value name = "nonco2_unmgd">../input/gcamdata/xml/all_unmgd_emissions.xml</Value>
@@ -126,9 +127,7 @@
 		
 		<!-- Global nonCO2 GHG MAC files -->
 		<Value name = "nonco2_energy">../input/gcamdata/xml/all_energy_emissions_MAC.xml</Value>
-		<Value name = "nonco2_energy">../input/gcamdata/xml/all_energy_emissions_MAC_EUR.xml</Value>
 		<Value name = "nonco2_fgas">../input/gcamdata/xml/all_fgas_emissions_MAC.xml</Value>
-		<Value name = "nonco2_fgas">../input/gcamdata/xml/all_fgas_emissions_MAC_EUR.xml</Value>
 		<Value name = "nonco2_aglu">../input/gcamdata/xml/all_aglu_emissions_IRR_MGMT_MAC.xml</Value> 
 		<Value name = "nonco2_proc">../input/gcamdata/xml/ind_urb_processing_sectors_MAC.xml</Value> 
 
@@ -138,7 +137,6 @@
 		<Value name = "bio_elec_w_feed_limit">../input/gcamdata/xml/water_elec_liquids_limits.xml</Value>
 		<Value name = "bio_externality">../input/gcamdata/xml/bio_externality.xml</Value>
         <Value name = "gas_trade">../input/gcamdata/xml/gas_trade.xml</Value>
-        <Value name = "gas_trade">../input/gcamdata/xml/gas_trade_EUR.xml</Value>
 
         <Value name = "prune_ag">../input/gcamdata/xml/prune_empty_ag.xml</Value>
 
@@ -174,7 +172,7 @@
 		<Value name="climateOutputInterval">5</Value>
 		<Value name="parallel-grain-size">50</Value>
 		<Value name="stop-period">-1</Value>
-		<Value name="stop-year">2050</Value>
+		<Value name="stop-year">-1</Value>
 		<Value name="restart-period">-1</Value>
 		<Value name="restart-year">-1</Value>
 		<Value name="max-parallelism">-1</Value>
