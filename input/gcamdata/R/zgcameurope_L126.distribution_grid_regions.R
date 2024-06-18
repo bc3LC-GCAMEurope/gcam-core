@@ -61,7 +61,7 @@ module_gcameurope_L126.distribution_grid_regions <- function(command, ...) {
     # generate IO factors
     L126.IO_R_electd_F_Yh_EUR_grid <- L126.in_EJ_R_electd_F_Yh_EUR_grid %>%
       left_join_error_no_match(L126.out_EJ_R_electd_F_Yh_EUR_grid, by = c("GCAM_region_ID", "sector", "fuel", "year")) %>%
-      mutate(IO = value.x / value.y) %>%
+      mutate(value = value.x / value.y) %>%
       select(-value.x, -value.y)
 
     # OUTPUTS ===================================================

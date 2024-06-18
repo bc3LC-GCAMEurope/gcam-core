@@ -202,8 +202,8 @@ module_gcameurope_L1236.elec_load_segments_solver <- function(command, ...) {
       summarise(generation = round(sum(generation), CHECK_ROUND)) %>%
       ungroup
 
-    FUEL_check <-L1235_gen_R_F_Y %>%
-      left_join_error_no_match(L1236_gen_R_F_Y, by = dplyr::join_by(grid_region, fuel, year)) %>%
+    FUEL_check <- L1235_gen_R_F_Y %>%
+      left_join_error_no_match(L1236_gen_R_F_Y, by = c("grid_region", "fuel", "year")) %>%
       mutate(diff = generation.x - generation.y)
 
     stopifnot(all(abs(FUEL_check$diff) < 0.00001))
@@ -224,7 +224,7 @@ module_gcameurope_L1236.elec_load_segments_solver <- function(command, ...) {
       select(-demand_fraction)
 
     SEG_check <-L1235_gen_R_SEG_Y %>%
-      left_join_error_no_match(L1236_gen_R_SEG_Y, by = dplyr::join_by(grid_region, year, segment)) %>%
+      left_join_error_no_match(L1236_gen_R_SEG_Y, by = c("grid_region", "year", "segment")) %>%
       mutate(diff = generation.x - generation.y)
 
     stopifnot(all(abs(SEG_check$diff) < 0.00001))

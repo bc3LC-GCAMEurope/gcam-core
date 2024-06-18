@@ -20,17 +20,17 @@
 #' @importFrom tidyr replace_na
 #' @author RH February 2024
 module_gcameurope_L131.enduse <- function(command, ...) {
+  MODULE_INPUTS <- c(FILE = "energy/A_regions",
+                     FILE = "gcam-europe/mappings/enduse_sector_aggregation",
+                     FILE = "water/EFW_mapping",
+                     "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
+                     "L122.in_EJ_R_refining_F_Yh_EUR",
+                     "L124.in_EJ_R_heat_F_Yh_EUR",
+                     "L124.out_EJ_R_heat_F_Yh_EUR",
+                     "L124.out_EJ_R_heatfromelec_F_Yh_EUR",
+                     "L126.out_EJ_R_electd_F_Yh_EUR",
+                     "L126.out_EJ_R_electd_F_Yh_EUR_grid")
   if(command == driver.DECLARE_INPUTS) {
-    MODULE_INPUTS <- c(FILE = "energy/A_regions",
-                       FILE = "gcam-europe/mappings/enduse_sector_aggregation",
-                       FILE = "water/EFW_mapping",
-                       "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
-                       "L122.in_EJ_R_refining_F_Yh_EUR",
-                       "L124.in_EJ_R_heat_F_Yh_EUR",
-                       "L124.out_EJ_R_heat_F_Yh_EUR",
-                       "L124.out_EJ_R_heatfromelec_F_Yh_EUR",
-                       "L126.out_EJ_R_electd_F_Yh_EUR",
-                       "L126.out_EJ_R_electd_F_Yh_EUR_grid")
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L131.in_EJ_R_Senduse_F_Yh_EUR",
