@@ -255,7 +255,9 @@ module_aglu_L123.LC_R_MgdPastFor_Yh_GLU <- function(command, ...) {
       # Scale managed forest land based on population in pre-aglu years
       mutate(MgdFor = MgdFor * PopRatio) %>%
       select(-PopRatio) %>%
-      filter(year %in% aglu.LAND_COVER_YEARS) ->
+      filter(year %in% aglu.LAND_COVER_YEARS) %>%
+      # set 0 to negative value (Iceland - Forest)
+      mutate(MgdFor = ifelse(MgdFor < 0, 0, MgdFor)) ->
       L123.LC_bm2_R_MgdFor_Yh_GLU
 
     # Adjust managed forest land: where managed forest is greater than
