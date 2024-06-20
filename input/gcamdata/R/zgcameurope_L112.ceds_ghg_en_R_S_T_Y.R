@@ -54,11 +54,14 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
              "L124.LC_bm2_R_Grass_Yh_GLU_adj",
              "L124.LC_bm2_R_UnMgdFor_Yh_GLU_adj",
              "L154.IEA_histfut_data_times_UCD_shares",
-             "L1326.in_EJ_R_indenergy_F_Yh_EUR",
+             "L1328.in_EJ_R_indenergy_F_Yh_EUR",
              "L1323.in_EJ_R_iron_steel_F_Y_EUR",
              "L1324.in_EJ_R_Off_road_F_Y_EUR",
              "L1325.in_EJ_R_chemical_F_Y_EUR",
              "L1326.in_EJ_R_aluminum_Yh_EUR",
+             "L1327.in_EJ_R_paper_F_Yh_EUR",
+             "L1328.in_EJ_R_food_F_Yh_EUR",
+             "L1328.in_EJ_R_indenergy_infilled_for_food_F_Yh_EUR",
              "L270.nonghg_tg_state_refinery_F_Yb",
              FILE = "emissions/CEDS/ceds_sector_map",
              FILE = "emissions/CEDS/ceds_fuel_map",
@@ -67,6 +70,8 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
              FILE = "emissions/EPA/EPA_2019_raw",
              FILE = "emissions/EPA_CH4N2O_map",
              FILE = "gcam-europe/GCAM_EPA_CH4N2O_energy_map_EUR",
+             "L244.GenericShares_EUR",
+             "L244.ThermalShares_EUR",
              # BC OC assumption files
              FILE = "gcam-usa/emissions/BC_OC_assumptions",
              FILE = "gcam-europe/BCOC_PM25_ratios_EUR"))
@@ -110,10 +115,12 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
 
     #Get CEDS_GFED data
     GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>% filter_regions_europe()
-    L112.CEDS_GCAM_no_intl_shipping <- get_data(all_data, "L102.ceds_GFED_nonco2_tg_R_S_F")
+    L112.CEDS_GCAM_no_intl_shipping <- get_data(all_data, "L102.ceds_GFED_nonco2_tg_R_S_F") %>%
+      filter(year >= min(HISTORICAL_YEARS), year <= max(HISTORICAL_YEARS))
 
     #Get CEDS international shipping data
-    L112.CEDS_intl_shipping <- get_data(all_data, "L102.ceds_int_shipping_nonco2_tg_S_F")
+    L112.CEDS_intl_shipping <- get_data(all_data, "L102.ceds_int_shipping_nonco2_tg_S_F") %>%
+      filter(year >= min(HISTORICAL_YEARS), year <= max(HISTORICAL_YEARS))
     Int_shipping_IEA_EIA <- get_data(all_data, "L154.IEA_histfut_data_times_UCD_shares") %>%
       filter(UCD_category=="trn_international ship") %>%
       filter_regions_europe()
@@ -135,8 +142,8 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
 
     #Process data for international shipping to disaggregate to the GCAM regions
     L112.CEDS_intl_shipping %>%
-      right_join(Int_shipping_IEA_EIA %>% select(iso,year,value) %>% filter(year <= max(HISTORICAL_YEARS)),
-                 by=c("year"), relationship = "many-to-many") %>%
+      right_join(Int_shipping_IEA_EIA %>% select(iso,year,value) %>%
+                   filter(year >= min(HISTORICAL_YEARS), year <= max(HISTORICAL_YEARS)), by=c("year")) %>%
       mutate(emissions=if_else(is.na(emissions),0,emissions)) %>%
       group_by(Non.CO2,year,sector,fuel) %>%
       mutate(share_in_global_ship= value/sum(value)) %>%
@@ -148,7 +155,8 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
       group_by(GCAM_region_ID, Non.CO2, CEDS_agg_sector, CEDS_agg_fuel, year) %>%
       summarise(emissions = sum(emissions)) %>%
       ungroup() %>%
-      na.omit()->CEDS_int_shipping
+      na.omit() ->
+      CEDS_int_shipping
 
     #Combine emissions from all other CEDS sectors with emissions from international shipping
     L112.CEDS_GCAM_no_intl_shipping %>%
@@ -207,11 +215,14 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
     calibrated_techs_bld_det_EUR <- get_data(all_data, "gcam-europe/calibrated_techs_bld_det_EUR")
     L101.in_EJ_R_en_Si_F_Yh_EUR <- get_data(all_data, "L101.in_EJ_R_en_Si_F_Yh_EUR") %>%
       gather_years(value_col = "energy") %>% distinct()
-    L1326.in_EJ_R_indenergy_F_Yh_EUR <- get_data(all_data, "L1326.in_EJ_R_indenergy_F_Yh_EUR")
+    L1328.in_EJ_R_indenergy_F_Yh_EUR <- get_data(all_data, "L1328.in_EJ_R_indenergy_F_Yh_EUR")
     L1323.in_EJ_R_iron_steel_F_Y_EUR <- get_data(all_data, "L1323.in_EJ_R_iron_steel_F_Y_EUR")
     L1324.in_EJ_R_Off_road_F_Y_EUR <- get_data(all_data, "L1324.in_EJ_R_Off_road_F_Y_EUR")
     L1325.in_EJ_R_chemical_F_Y_EUR <- get_data(all_data, "L1325.in_EJ_R_chemical_F_Y_EUR")
     L1326.in_EJ_R_aluminum_Yh_EUR <- get_data(all_data, "L1326.in_EJ_R_aluminum_Yh_EUR")
+    L1327.in_EJ_R_paper_F_Yh_EUR <- get_data(all_data, "L1327.in_EJ_R_paper_F_Yh_EUR")
+    L1328.in_EJ_R_food_F_Yh_EUR <- get_data(all_data, "L1328.in_EJ_R_food_F_Yh_EUR")
+    L1328.in_EJ_R_indenergy_infilled_for_food_F_Yh_EUR <- get_data(all_data, "L1328.in_EJ_R_indenergy_infilled_for_food_F_Yh_EUR")
     CEDS_sector_map <- get_data(all_data, "emissions/CEDS/ceds_sector_map")
     CEDS_fuel_map <- get_data(all_data, "emissions/CEDS/ceds_fuel_map")
 
@@ -526,11 +537,23 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
       mutate(technology = fuel) ->
       L1326.in_EJ_R_aluminum_Yh_EUR
 
-    L1326.in_EJ_R_indenergy_F_Yh_EUR %>% mutate(technology = fuel) %>%
+    L1327.in_EJ_R_paper_F_Yh_EUR %>%
+      mutate(technology = fuel) %>%
+      filter(!technology %in% emissions.ZERO_EM_TECH) ->
+      L1327.in_EJ_R_paper_F_Yh_EUR
+
+    L1328.in_EJ_R_food_F_Yh_EUR %>%
+      mutate(technology = fuel) ->
+      L1328.in_EJ_R_food_F_Yh_EUR
+
+
+    L1328.in_EJ_R_indenergy_F_Yh_EUR %>% mutate(technology = fuel) %>%
       bind_rows(L1323.in_EJ_R_iron_steel_F_Y_EUR,
                 L1324.in_EJ_R_Off_road_F_Y_EUR,
                 L1325.in_EJ_R_chemical_F_Y_EUR,
-                L1326.in_EJ_R_aluminum_Yh_EUR) %>%
+                L1326.in_EJ_R_aluminum_Yh_EUR,
+                L1327.in_EJ_R_paper_F_Yh_EUR,
+                L1328.in_EJ_R_food_F_Yh_EUR) %>%
       complete(nesting(GCAM_region_ID, sector, fuel, technology), year = HISTORICAL_YEARS) %>%
       replace_na(list(value = 0)) %>%
       select(GCAM_region_ID, fuel, technology, sector, year, energy = value) ->
@@ -596,9 +619,68 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
       ungroup() ->
       L112.in_EJ_R_en_S_F_Yh_calib_all
 
+    # We neeed to allocate residential energy to the diferent consumer groups using the computed shares:
+    L244.GenericShares_EUR<- get_data(all_data, "L244.GenericShares_EUR",strip_attributes = TRUE) %>%
+      select(region,gcam.consumer,building.service.input,year,gen_share) %>%
+      rename(supplysector=building.service.input,
+             share=gen_share) %>%
+      filter(grepl("resid",supplysector)) %>%
+      separate(gcam.consumer,c("gcam.consumer","group"),sep = "_") %>%
+      unite(supplysector,c("supplysector","group"),sep = "_") %>%
+      select(-gcam.consumer) %>%
+      complete(nesting(region,supplysector), year = c(year, unique(L112.in_EJ_R_en_S_F_Yh_calib_all$year))) %>%
+      # Interpolate
+      group_by(region,supplysector) %>%
+      mutate(share = approx_fun(year, share, rule = 2))
+
+    L244.ThermalShares_EUR<- get_data(all_data, "L244.ThermalShares_EUR",strip_attributes = TRUE) %>%
+      select(region,gcam.consumer,thermal.building.service.input,year,thermal_share) %>%
+      rename(supplysector=thermal.building.service.input,
+             share=thermal_share)%>%
+      filter(grepl("resid",supplysector)) %>%
+      separate(gcam.consumer,c("gcam.consumer","group"),sep = "_") %>%
+      unite(supplysector,c("supplysector","group"),sep = "_") %>%
+      select(-gcam.consumer)%>%
+      complete(nesting(region,supplysector), year = c(year, unique(L112.in_EJ_R_en_S_F_Yh_calib_all$year))) %>%
+      # Interpolate
+      group_by(region,supplysector) %>%
+      mutate(share = approx_fun(year, share, rule = 2))
+
+    L244.Shares<-bind_rows(L244.GenericShares_EUR,L244.ThermalShares_EUR) %>%
+      left_join_error_no_match(GCAM_region_names, by = "region")
+
+
+    cons.gr.adj<-get_data(all_data, "L244.GenericShares_EUR",strip_attributes = TRUE)  %>%
+      select(gcam.consumer) %>%
+      filter(grepl("resid",gcam.consumer)) %>%
+      distinct() %>%
+      mutate(gcam.consumer = gsub("resid_","",gcam.consumer))
+
+    L112.in_EJ_R_en_S_F_Yh_calib_all_resid<- L112.in_EJ_R_en_S_F_Yh_calib_all %>%
+      filter(grepl("resid",supplysector)) %>%
+      repeat_add_columns(tibble(group=unique(cons.gr.adj$gcam.consumer))) %>%
+      unite(supplysector,c("supplysector","group"),sep = "_") %>%
+      # add shares
+      left_join_error_no_match(L244.Shares, by = c("GCAM_region_ID", "year", "supplysector")) %>%
+      mutate(energy = energy * share) %>%
+      select(-region,-share)
+
+    L112.in_EJ_R_en_S_F_Yh_calib_all<-L112.in_EJ_R_en_S_F_Yh_calib_all %>%
+      filter(!grepl("resid",supplysector)) %>%
+      bind_rows(L112.in_EJ_R_en_S_F_Yh_calib_all_resid)
+
 
     # MATCH ENERGY AND EMISSIONS TO AGGREGATE EMISSIONS TO SPLIT OUT EMISSIONS BY GCAM SECTORS
     # ========================================================================================
+
+    CEDS_sector_tech_adj<-CEDS_sector_tech %>%
+      filter(!grepl("resid",supplysector)) %>%
+      bind_rows(L112.in_EJ_R_en_S_F_Yh_calib_all_resid %>%
+                  select(supplysector,subsector,stub.technology) %>%
+                  distinct() %>%
+                  mutate(CEDS_agg_sector = "bld_resid",
+                         CEDS_agg_fuel = stub.technology,
+                         CEDS_agg_fuel = if_else(CEDS_agg_fuel == "traditional biomass","biomass",stub.technology)))
 
     # Append CEDS sector/fuel combinations to GCAM energy
 
@@ -607,7 +689,7 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
 
       filter(!stub.technology %in% c(emissions.ZERO_EM_TECH),
              !subsector %in% c(emissions.ZERO_EM_TECH, "heat")) %>%
-      left_join_error_no_match(CEDS_sector_tech, by = c("supplysector", "subsector", "stub.technology")) ->
+      left_join_error_no_match(CEDS_sector_tech_adj, by = c("supplysector", "subsector", "stub.technology"))  ->
       L112.in_EJ_R_en_S_F_Yh_calib_all_baseenergy_EUR
 
 
@@ -642,10 +724,55 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
       mutate(enshare = energy/totalenergy) ->
       L112.in_EJ_R_en_S_F_Yh_calib_enshare
 
+    ### ADDITION FOR FOOD PROCESSING ENERGY SECTOR BREAKOUT
+    # Some infilling is performed for regions lacking adequate data on food processing energy use, where energy use for food processing
+    # is estimated and some energy is pulled from other industrial energy use and added to food processing.
+    # For consistency with this energy data infilling, we also need to infill some non-CO2 emissions for food processing by pulling from
+    # other industrial energy use non-CO2 emissions.
+    # We will use the fraction of the remaining other industrial energy use (by fuel) that is removed and reallocated to food processing in the infilling
+    # process to set the fraction of other industrial non-CO2 emissions (by fuel) that are removed and reallocated to food processing here
+    L112.CEDS_GCAM_emissions %>%
+      filter(CEDS_agg_sector == "industry_energy") %>%
+      left_join_error_no_match(L1328.in_EJ_R_indenergy_infilled_for_food_F_Yh_EUR %>%
+                                 select(GCAM_region_ID, CEDS_agg_fuel = fuel, year, CEDS_agg_sector = sector, removed_frac),
+                               by = c("GCAM_region_ID", "CEDS_agg_fuel", "year", "CEDS_agg_sector")) %>%
+      # calculate the emissions that need to be removed from other industry and added to food processing
+      mutate(removed_frac = replace_na(removed_frac, 0),
+             emissions_to_infill = emissions * removed_frac) ->
+      L112.CEDS_GCAM_emissions_to_infill_for_food
+
+    L112.CEDS_GCAM_emissions %>%
+      # not using LJENM here & NAs are replaced later
+      # join emissions to remove (from other industry)
+      left_join(L112.CEDS_GCAM_emissions_to_infill_for_food %>%
+                  select(Non.CO2, GCAM_region_ID, CEDS_agg_sector, CEDS_agg_fuel,
+                         year, emissions_to_remove = emissions_to_infill),
+                by = c("Non.CO2", "GCAM_region_ID", "CEDS_agg_sector", "CEDS_agg_fuel",
+                       "year")) %>%
+      # join emissions to add (for food processing)
+      left_join(L112.CEDS_GCAM_emissions_to_infill_for_food %>%
+                  mutate(CEDS_agg_sector = "food processing") %>%
+                  select(Non.CO2, GCAM_region_ID, CEDS_agg_sector, CEDS_agg_fuel,
+                         year, emissions_to_infill),
+                by = c("Non.CO2", "GCAM_region_ID", "CEDS_agg_sector", "CEDS_agg_fuel",
+                       "year")) %>%
+      mutate(emissions_to_remove = replace_na(emissions_to_remove, 0),
+             emissions_to_infill = replace_na(emissions_to_infill, 0),
+             emissions = emissions - emissions_to_remove + emissions_to_infill) %>%
+      select(Non.CO2, GCAM_region_ID, CEDS_agg_sector, CEDS_agg_fuel, year, emissions) ->
+      L112.CEDS_GCAM_emissions_food_infill
+
+
     # Attach CEDS emissions to those sector fuel combos
     L112.in_EJ_R_en_S_F_Yh_calib_enshare %>%
-      left_join(L112.CEDS_GCAM_emissions,
-                by = c("GCAM_region_ID", "year", "CEDS_agg_sector", "CEDS_agg_fuel")) ->
+      full_join(
+        # using inner join to filter joining columns first
+        L112.CEDS_GCAM_emissions_food_infill %>%
+          inner_join(L112.in_EJ_R_en_S_F_Yh_calib_enshare %>%
+                       distinct(GCAM_region_ID, year, CEDS_agg_sector, CEDS_agg_fuel),
+                     by = c("GCAM_region_ID", "CEDS_agg_sector", "CEDS_agg_fuel", "year")),
+        by = c("GCAM_region_ID", "year", "CEDS_agg_sector", "CEDS_agg_fuel")
+      ) ->
       L112.CEDSGCAM_emissions
 
     L112.CEDSGCAM_emissions %>%
@@ -820,12 +947,27 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
       left_join_error_no_match(L112.nonco2_tgej_R_en_S_F_Yh_thresholds, by = c("year", "Non.CO2", "supplysector", "subsector", "stub.technology")) %>%
       #There are two adjustments here. First, we check if the supply sector is related to fossil fuels (except unconventional oil, since this is done exogenously), in that case, if the emissions factor is above the threshold, we replace with the median of the top producers.
       #If not, we just compare with our threshold of 1000 tg/ej and make the replacements accordingly. These adjustments are structured given that fossil fuel production may increase rapidly in some regions (even though absolute increase may be low).
-      mutate(emfact = if_else(supplysector == "out_resources" & stub.technology != "unconventional oil", if_else(emfact >threshold | is.na(emfact) , medTopEF, emfact),
+      mutate(emfact = if_else(supplysector == "out_resources" & stub.technology != "unconventional oil", if_else(emfact > threshold | is.na(emfact) , medTopEF, emfact),
                               if_else(emfact >  emissions.HIGH_EM_FACTOR_THRESHOLD | is.na(emfact) , medGlobal, emfact))) %>%
       select(GCAM_region_ID, Non.CO2, year, supplysector, subsector, stub.technology, emfact) %>%
       mutate(emfact = if_else(is.infinite(emfact), 1, emfact)) ->
-      L112.nonco2_tgej_R_en_S_F_Yh
+      L112.nonco2_tgej_R_en_S_F_Yh_replace_outliers
 
+    ## Replace outlier EFs with the global median for all sectors except out_resources, which was replaced above based on a different method
+    L112.nonco2_tgej_R_en_S_F_Yh_remainder <- L112.nonco2_tgej_R_en_S_F_Yh_replace_outliers %>%
+      filter(supplysector != "out_resources")
+
+    # list columns to group by (emission factor medians will based on this grouping)
+    to_group <- c( "year", "Non.CO2", "supplysector", "subsector", "stub.technology" )
+    # list columns to keep in final table
+    names <- c( "GCAM_region_ID", "Non.CO2", "year", "supplysector", "subsector", "stub.technology", "emfact")
+    # Name of column containing emission factors
+    ef_col_name <- "emfact"
+    L112.nonco2_tgej_R_en_S_F_Yh_remainder_out <- replace_outlier_EFs(L112.nonco2_tgej_R_en_S_F_Yh_remainder, to_group, names, ef_col_name)
+
+    L112.nonco2_tgej_R_en_S_F_Yh <-  L112.nonco2_tgej_R_en_S_F_Yh_remainder_out %>%
+      bind_rows(L112.nonco2_tgej_R_en_S_F_Yh_replace_outliers %>%
+                  filter(supplysector == "out_resources"))
 
 
     # =======================
@@ -1721,8 +1863,9 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
                      "common/iso_GCAM_regID","energy/mappings/UCD_techs","energy/calibrated_techs","gcam-europe/calibrated_techs_bld_det_EUR",
                      "emissions/mappings/Trn_subsector","gcam-europe/CEDS_sector_tech_combustion_EUR","emissions/mappings/Trn_subsector_revised",
                      "gcam-europe/CEDS_sector_tech_proc_EUR","emissions/mappings/calibrated_outresources","gcam-europe/CEDS_sector_tech_proc_revised_EUR",
-                     "L101.in_EJ_R_en_Si_F_Yh_EUR", "L1326.in_EJ_R_indenergy_F_Yh_EUR", "L1323.in_EJ_R_iron_steel_F_Y_EUR", "L1324.in_EJ_R_Off_road_F_Y_EUR",
+                     "L101.in_EJ_R_en_Si_F_Yh_EUR", "L1328.in_EJ_R_indenergy_F_Yh_EUR", "L1323.in_EJ_R_iron_steel_F_Y_EUR", "L1324.in_EJ_R_Off_road_F_Y_EUR",
                      "L1325.in_EJ_R_chemical_F_Y_EUR", "L1326.in_EJ_R_aluminum_Yh_EUR","gcam-europe/CEDS_sector_tech_combustion_revised_EUR",
+                     "L1327.in_EJ_R_paper_F_Yh_EUR", "L1328.in_EJ_R_food_F_Yh_EUR", "L1328.in_EJ_R_indenergy_infilled_for_food_F_Yh_EUR",
                      "emissions/mappings/UCD_techs_emissions_revised","L154.IEA_histfut_data_times_UCD_shares",
                      "emissions/CEDS/gains_iso_sector_emissions","emissions/CEDS/gains_iso_fuel_emissions",
                      "L270.nonghg_tg_state_refinery_F_Yb", "gcam-usa/emissions/BC_OC_assumptions", "gcam-usa/emissions/BCOC_PM25_ratios") ->
@@ -1745,12 +1888,13 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
       add_precursors("L102.ceds_GFED_nonco2_tg_R_S_F","L102.ceds_int_shipping_nonco2_tg_S_F","emissions/CEDS/ceds_sector_map","emissions/CEDS/ceds_fuel_map", "common/GCAM_region_names",
                      "common/iso_GCAM_regID","energy/mappings/UCD_techs","energy/calibrated_techs","gcam-europe/calibrated_techs_bld_det_EUR",
                      "emissions/mappings/Trn_subsector","gcam-europe/CEDS_sector_tech_combustion_EUR","emissions/mappings/calibrated_outresources",
-                     "L101.in_EJ_R_en_Si_F_Yh_EUR", "L1326.in_EJ_R_indenergy_F_Yh_EUR", "L1323.in_EJ_R_iron_steel_F_Y_EUR", "L1324.in_EJ_R_Off_road_F_Y_EUR",
+                     "L101.in_EJ_R_en_Si_F_Yh_EUR", "L1328.in_EJ_R_indenergy_F_Yh_EUR", "L1323.in_EJ_R_iron_steel_F_Y_EUR", "L1324.in_EJ_R_Off_road_F_Y_EUR",
                      "L1325.in_EJ_R_chemical_F_Y_EUR", "L1326.in_EJ_R_aluminum_Yh_EUR","emissions/mappings/Trn_subsector_revised",
+                     "L1327.in_EJ_R_paper_F_Yh_EUR", "L1328.in_EJ_R_food_F_Yh_EUR", "L1328.in_EJ_R_indenergy_infilled_for_food_F_Yh_EUR",
                      "L101.in_EJ_R_en_Si_F_Yh_EUR", "emissions/mappings/Trn_subsector_revised", "emissions/EPA/EPA_2019_raw", "emissions/EPA_CH4N2O_map",
                      "gcam-europe/CEDS_sector_tech_combustion_revised_EUR","emissions/mappings/UCD_techs_emissions_revised","L154.IEA_histfut_data_times_UCD_shares",
                      "emissions/CEDS/gains_iso_sector_emissions","emissions/CEDS/gains_iso_fuel_emissions",
-                     "L270.nonghg_tg_state_refinery_F_Yb", "gcam-usa/emissions/BC_OC_assumptions", "gcam-usa/emissions/BCOC_PM25_ratios") ->
+                     "L244.GenericShares_EUR","L244.ThermalShares_EUR","L270.nonghg_tg_state_refinery_F_Yb", "gcam-usa/emissions/BC_OC_assumptions", "gcam-usa/emissions/BCOC_PM25_ratios") ->
       L112.ghg_tg_R_en_S_F_Yh_EUR
 
     L112.ghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR %>%
@@ -1773,11 +1917,14 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
                      "emissions/mappings/calibrated_outresources",
                      "emissions/mappings/Trn_subsector_revised",
                      "L101.in_EJ_R_en_Si_F_Yh_EUR",
-                     "L1326.in_EJ_R_indenergy_F_Yh_EUR",
+                     "L1328.in_EJ_R_indenergy_F_Yh_EUR",
                      "L1323.in_EJ_R_iron_steel_F_Y_EUR",
                      "L1324.in_EJ_R_Off_road_F_Y_EUR",
                      "L1325.in_EJ_R_chemical_F_Y_EUR",
                      "L1326.in_EJ_R_aluminum_Yh_EUR",
+                     "L1327.in_EJ_R_paper_F_Yh_EUR",
+                     "L1328.in_EJ_R_food_F_Yh_EUR",
+                     "L1328.in_EJ_R_indenergy_infilled_for_food_F_Yh_EUR",
                      "emissions/EPA/EPA_2019_raw",
                      "emissions/EPA_CH4N2O_map",
                      "L111.Prod_EJ_R_F_Yh",

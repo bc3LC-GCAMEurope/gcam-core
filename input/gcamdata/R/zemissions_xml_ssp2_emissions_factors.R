@@ -14,7 +14,7 @@ module_emissions_ssp2_emissions_factors_xml <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c("L251.ssp2_ef",
              "L251.ssp2_ef_elec",
-              "L251.ssp2_ef_vin",
+             "L251.ssp2_ef_vin",
              "L251.ssp2_ef_residTradBio"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c(XML = "ssp2_emissions_factors.xml",
@@ -44,12 +44,14 @@ module_emissions_ssp2_emissions_factors_xml <- function(command, ...) {
       add_xml_data(L251.ssp2_ef, "InputEmissCoeff") %>%
       add_xml_data(L251.ssp2_ef_elec, "OutputEmissCoeff") %>%
       add_xml_data(L251.ssp2_ef_vin, "ReadInControl") %>%
-      add_precursors("L251.ssp2_ef", "L251.ssp2_ef_elec", "L251.ssp2_ef_vin") ->
+      add_precursors("L251.ssp2_ef", "L251.ssp2_ef_elec", "L251.ssp2_ef_vin") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       ssp2_emissions_factors.xml
 
     create_xml("ssp2_emissions_factors_tradBio.xml") %>%
       add_xml_data(L251.ssp2_ef_residTradBio, "InputEmissCoeff") %>%
-      add_precursors("L251.ssp2_ef_residTradBio") ->
+      add_precursors("L251.ssp2_ef_residTradBio") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       ssp2_emissions_factors_tradBio.xml
 
     return_data(ssp2_emissions_factors.xml, ssp2_emissions_factors_tradBio.xml)

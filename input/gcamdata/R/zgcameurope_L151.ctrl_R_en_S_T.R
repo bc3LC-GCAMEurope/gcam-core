@@ -23,6 +23,7 @@
 module_gcameurope_L151.ctrl_R_en_S_T <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "gcam-europe/A51.min_coeff_EUR",
+             FILE = "socioeconomics/income_shares",
              "L111.nonghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L151.nonghg_ctrl_R_en_S_T_EUR"))
@@ -36,12 +37,25 @@ module_gcameurope_L151.ctrl_R_en_S_T <- function(command, ...) {
     # Load required inputs
     A51.min_coeff_EUR <- get_data(all_data, "gcam-europe/A51.min_coeff_EUR")
     L111.nonghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR <- get_data(all_data, "L111.nonghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR", strip_attributes = TRUE)
+    income_shares<-get_data(all_data, "socioeconomics/income_shares")
+    groups<-income_shares %>% select(category) %>% distinct()
 
     # First, set up min coeff data frame
     A51.min_coeff_EUR %>%
       gather(Non.CO2, value, -supplysector, -subsector, -stub.technology) %>%
       na.omit ->
       L151.min_coeff
+
+    #Adjust the residential sector for multiple consumers:
+    L151.min_coeff_resid<-L151.min_coeff %>%
+      filter(grepl("resid",supplysector)) %>%
+      repeat_add_columns(tibble(group = unique(groups$category))) %>%
+      unite(supplysector, c("supplysector","group"), sep = "_")
+
+    L151.min_coeff<-L151.min_coeff %>%
+      filter(!grepl("resid",supplysector)) %>%
+      bind_rows(L151.min_coeff_resid)
+
 
     # The following code is common to all gases
     # It joins w/ the min coefficient d.f. and then computes max reduction
@@ -73,7 +87,8 @@ module_gcameurope_L151.ctrl_R_en_S_T <- function(command, ...) {
       add_comments("Compute maximum reduction by region and sector for SO2, CO, NOx, NMVOC (all 2005 reference), BC, and OC (2005)") %>%
       add_legacy_name("L151.nonghg_ctrl_R_en_S_T_EUR") %>%
       add_precursors("gcam-europe/A51.min_coeff_EUR",
-                     "L111.nonghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR") ->
+                     "L111.nonghg_tgej_R_en_S_F_Yh_infered_combEF_AP",
+                     "socioeconomics/income_shares") ->
       L151.nonghg_ctrl_R_en_S_T_EUR
 
     return_data(L151.nonghg_ctrl_R_en_S_T_EUR)

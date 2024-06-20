@@ -8,7 +8,7 @@
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
-#' the generated outputs: \code{L201.en_pol_emissions_EUR}, \code{L201.en_ghg_emissions_EUR}, \code{L201.en_bcoc_emissions_EUR}, \code{L201.OutputEmissions_elec_EUR}, \code{L201.nonghg_max_reduction_EUR}, \code{L201.nonghg_steepness_EUR}, \code{L201.nonghg_max_reduction_res_EUR}, \code{L201.nonghg_steepness_res_EUR}, \code{L201.nonghg_res_EUR}, \code{L201.ghg_res_EUR}, \code{L201.ResReadInControl_nonghg_res_EUR}, \code{L201.ResReadInControl_ghg_res_EUR}. The corresponding file in the
+#' the generated outputs: \code{L201.en_pol_emissions_EUR}, \code{L201.en_ghg_emissions_EUR}, \code{L201.en_bcoc_emissions_EUR}, \code{L201.en_iron_and_steel_ef_EUR}, \code{L201.OutputEmissions_elec_EUR}, \code{L201.nonghg_max_reduction_EUR}, \code{L201.nonghg_steepness_EUR}, \code{L201.nonghg_max_reduction_res_EUR}, \code{L201.nonghg_steepness_res_EUR}, \code{L201.nonghg_res_EUR}, \code{L201.ghg_res_EUR}, \code{L201.ResReadInControl_nonghg_res_EUR}, \code{L201.ResReadInControl_ghg_res_EUR}. The corresponding file in the
 #' original data system was \code{L201.en_nonco2.R} (emissions level2).
 #' @details Set up all of the inputs needed for the energy system non-CO2 emissions in GCAM.
 #' This includes historical emissions, drivers (input or output), and pollution controls.
@@ -29,17 +29,21 @@ module_gcameurope_L201.en_nonco2 <- function(command, ...) {
              "L112.ghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR",
              "L114.bcoc_tgej_R_en_S_F_2000_EUR",
              "L151.nonghg_ctrl_R_en_S_T_EUR",
+             "L2323.StubTechProd_iron_steel_EUR",
              FILE = "gcam-europe/A51.steepness_EUR",
              "L244.DeleteThermalService_EUR",
+             "L244.DeleteGenericService_EUR",
              # the following to be able to map in the input.name to
              # use for the input-driver
              FILE = "energy/calibrated_techs",
              FILE = "gcam-europe/calibrated_techs_bld_det_EUR",
+             FILE = "socioeconomics/income_shares",
              FILE = UCD_tech_map_name))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L201.en_pol_emissions_EUR",
              "L201.en_ghg_emissions_EUR",
              "L201.en_bcoc_emissions_EUR",
+             "L201.en_iron_and_steel_ef_EUR",
              "L201.OutputEmissions_elec_EUR",
              "L201.nonghg_max_reduction_EUR",
              "L201.nonghg_steepness_EUR",
@@ -71,8 +75,12 @@ module_gcameurope_L201.en_nonco2 <- function(command, ...) {
     L112.ghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR <- get_data(all_data, "L112.ghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR", strip_attributes = TRUE)
     L114.bcoc_tgej_R_en_S_F_2000_EUR <- get_data(all_data, "L114.bcoc_tgej_R_en_S_F_2000_EUR", strip_attributes = TRUE)
     L151.nonghg_ctrl_R_en_S_T_EUR <- get_data(all_data, "L151.nonghg_ctrl_R_en_S_T_EUR", strip_attributes = TRUE)
+    L2323.StubTechProd_iron_steel_EUR <- get_data(all_data, "L2323.StubTechProd_iron_steel_EUR", strip_attributes = TRUE)
     A51.steepness_EUR <- get_data(all_data, "gcam-europe/A51.steepness_EUR", strip_attributes = TRUE)
     L244.DeleteThermalService_EUR <- get_data(all_data, "L244.DeleteThermalService_EUR", strip_attributes = TRUE)
+    L244.DeleteGenericService_EUR <- get_data(all_data, "L244.DeleteGenericService_EUR", strip_attributes = TRUE)
+    income_shares<-get_data(all_data, "socioeconomics/income_shares")
+    groups<-income_shares %>% select(category) %>% distinct()
 
     # make a complete mapping to be able to look up with sector + subsector + tech the
     # input name to use for an input-driver
@@ -89,6 +97,16 @@ module_gcameurope_L201.en_nonco2 <- function(command, ...) {
       distinct() ->
       EnTechInputNameMap
 
+    # Adjust residential sector for multiple consumer groups
+    EnTechInputNameMap_resid<-EnTechInputNameMap %>%
+      filter(grepl("resid",supplysector)) %>%
+      repeat_add_columns(tibble(group = unique(groups$category))) %>%
+      unite(supplysector, c("supplysector","group"), sep = "_")
+
+    EnTechInputNameMap<-EnTechInputNameMap %>%
+      filter(!grepl("resid",supplysector)) %>%
+      bind_rows(EnTechInputNameMap_resid)
+
 
     # L201.en_pol_emissions_EUR: Pollutant emissions for energy technologies in all regions
     L111.nonghg_tg_R_en_S_F_Yh_EUR %>%
@@ -101,6 +119,24 @@ module_gcameurope_L201.en_nonco2 <- function(command, ...) {
       mutate(input.emissions = signif(input.emissions, emissions.DIGITS_EMISSIONS)) ->
       L201.en_pol_emissions_EUR
 
+    # L201.en_pol_emissions_EUR: Pollutant emissions for energy technologies in all regions
+    L111.nonghg_tg_R_en_S_F_Yh_EUR %>%
+      filter(supplysector != "out_resources",
+             year %in% emissions.MODEL_BASE_YEARS) %>%
+      # add region name and round output
+      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
+      left_join_error_no_match(EnTechInputNameMap,by = c("supplysector", "subsector", "stub.technology")) %>%
+      select(region, supplysector, subsector, stub.technology, year, input.emissions = value, Non.CO2, input.name) %>%
+      mutate(input.emissions = signif(input.emissions, emissions.DIGITS_EMISSIONS)) %>%
+      # Add back in correct subsector name for iron and steel sector
+      left_join(ind_subsector_revised %>% select(supplysector,subsector.original, technology, minicam.energy.input) %>%
+                  rename(stub.technology = technology,
+                         input.name = minicam.energy.input),
+                by = c("supplysector", "stub.technology", "input.name")) %>%
+      mutate(subsector = if_else(!is.na(subsector.original),subsector.original,subsector)) %>%
+      select(-subsector.original) ->
+      L201.en_pol_emissions_remove_IS_EUR
+
     # L201.en_ghg_emissions_EUR: GHG emissions for energy technologies in all regions
     L112.ghg_tg_R_en_S_F_Yh_EUR %>%
       filter(supplysector != "out_resources",
@@ -109,27 +145,48 @@ module_gcameurope_L201.en_nonco2 <- function(command, ...) {
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       left_join_error_no_match(EnTechInputNameMap,by = c("supplysector", "subsector", "stub.technology")) %>%
       select(region, supplysector, subsector, stub.technology, year, input.emissions = value, Non.CO2, input.name) %>%
-      mutate(input.emissions = signif(input.emissions, emissions.DIGITS_EMISSIONS)) ->
-      L201.en_ghg_emissions_EUR
-
-    # Add back in correct subsector name for iron and steel sector
-    L201.en_pol_emissions_EUR %>%
+      mutate(input.emissions = signif(input.emissions, emissions.DIGITS_EMISSIONS)) %>%
+      # Add back in correct subsector name for iron and steel sector
       left_join(ind_subsector_revised %>% select(supplysector,subsector.original, technology, minicam.energy.input) %>%
                   rename(stub.technology = technology,
                          input.name = minicam.energy.input),
                 by = c("supplysector", "stub.technology", "input.name")) %>%
       mutate(subsector = if_else(!is.na(subsector.original),subsector.original,subsector)) %>%
       select(-subsector.original) ->
-      L201.en_pol_emissions_EUR
+      L201.en_ghg_emissions_remove_IS_EUR
 
-    L201.en_ghg_emissions_EUR %>%
-      left_join(ind_subsector_revised %>% select(supplysector,subsector.original, technology, minicam.energy.input) %>%
-                  rename(stub.technology = technology,
-                         input.name = minicam.energy.input),
-                by = c("supplysector", "stub.technology", "input.name")) %>%
-      mutate(subsector = if_else(!is.na(subsector.original),subsector.original,subsector)) %>%
-      select(-subsector.original) ->
-      L201.en_ghg_emissions_EUR
+    # Separate processing for iron and steel. Previously, iron and steel was input driven + input emissions assigned to the
+    # main combustion fuel. This resulted in unexpected behavior, so we are changing them to be output driven EFs, and replacing
+    # outlier EFs with the global median.
+    # Iron and Steel will have their own tables, so we can remove it from the previous tables
+    L201.en_pol_emissions_EUR <- L201.en_pol_emissions_remove_IS_EUR %>%
+      filter(supplysector != "iron and steel")
+
+    L201.en_ghg_emissions_EUR <- L201.en_ghg_emissions_remove_IS_EUR %>%
+      filter(supplysector != "iron and steel")
+
+    # Compute output emissions factor for iron and steel
+    L201.en_iron_and_steel_ef_replace_outliers <- L201.en_pol_emissions_remove_IS_EUR %>%
+      filter(supplysector == "iron and steel") %>%
+      bind_rows(L201.en_ghg_emissions_remove_IS_EUR %>% filter(supplysector == "iron and steel")) %>%
+      # add in the iron and steel output
+      left_join_error_no_match(L2323.StubTechProd_iron_steel_EUR, by = c("region", "supplysector", "subsector", "stub.technology", "year")) %>%
+      # compute emissions factors
+      mutate(emiss.coeff = input.emissions/calOutputValue)
+
+    ## Replace outlier EFs with the global median
+    # list columns to group by (emission factor medians will based on this grouping)
+    to_group <- c( "year", "Non.CO2", "supplysector", "subsector", "stub.technology" )
+    # list columns to keep in final table
+    names <- c( "region", "Non.CO2", "year", "supplysector", "subsector", "stub.technology", "emiss.coeff")
+    # Name of column containing emission factors
+    ef_col_name <- "emiss.coeff"
+    L201.en_iron_and_steel_ef_fixINF <- replace_outlier_EFs(L201.en_iron_and_steel_ef_replace_outliers, to_group, names, ef_col_name)
+
+    # Some entries still have "Inf" for the EF. In these cases, a global median could not be calculated because there was no output
+    # in any region within that year. These EFs can be set to 1.
+    L201.en_iron_and_steel_ef_EUR <- L201.en_iron_and_steel_ef_fixINF %>%
+      mutate(emiss.coeff = if_else(is.infinite(emiss.coeff), 1, emiss.coeff))
 
     EnTechInputNameMap %>%
       left_join(ind_subsector_revised %>% select(supplysector,subsector.original,fuel,technology, minicam.energy.input) %>%
@@ -346,6 +403,7 @@ module_gcameurope_L201.en_nonco2 <- function(command, ...) {
     L201.ResReadInControl_nonghg_res_EUR <- rename_SO2(L201.ResReadInControl_nonghg_res_EUR, A_regions, FALSE)
     L201.nonghg_steepness_res_EUR <- rename_SO2(L201.nonghg_steepness_res_EUR, A_regions, FALSE)
     L201.nonghg_max_reduction_res_EUR <- rename_SO2(L201.nonghg_max_reduction_res_EUR, A_regions, FALSE)
+    L201.en_iron_and_steel_ef_EUR <- rename_SO2(L201.en_iron_and_steel_ef_EUR, A_regions, FALSE)
 
 
     # Remove district heat from regions that do have have it
@@ -365,7 +423,9 @@ module_gcameurope_L201.en_nonco2 <- function(command, ...) {
     delete_nonexistent_sectors <- function(x, L201.delete.sectors) {
       filter(x, ! paste0(region, supplysector) %in% L201.delete.sectors)
     }
-    L201.delete.sectors <- paste0(L244.DeleteThermalService_EUR$region, L244.DeleteThermalService_EUR$supplysector)
+    L244.DeleteService<-bind_rows(L244.DeleteThermalService_EUR %>% select(region,supplysector),L244.DeleteGenericService_EUR %>% select(region,supplysector))
+
+    L201.delete.sectors <- paste0(L244.DeleteService$region, L244.DeleteService$supplysector)
     L201.en_pol_emissions_EUR <- delete_nonexistent_sectors(L201.en_pol_emissions_EUR, L201.delete.sectors)
     L201.en_ghg_emissions_EUR <- delete_nonexistent_sectors(L201.en_ghg_emissions_EUR, L201.delete.sectors)
     L201.en_bcoc_emissions_EUR <- delete_nonexistent_sectors(L201.en_bcoc_emissions_EUR, L201.delete.sectors)
@@ -387,6 +447,7 @@ module_gcameurope_L201.en_nonco2 <- function(command, ...) {
                      UCD_tech_map_name,
                      "L111.nonghg_tg_R_en_S_F_Yh_EUR",
                      "L244.DeleteThermalService_EUR",
+                     "L244.DeleteGenericService_EUR","socioeconomics/income_shares",
                      "emissions/mappings/ind_subsector_revised") ->
       L201.en_pol_emissions_EUR
 
@@ -422,6 +483,22 @@ module_gcameurope_L201.en_nonco2 <- function(command, ...) {
                      "L114.bcoc_tgej_R_en_S_F_2000_EUR",
                      "L244.DeleteThermalService_EUR") ->
       L201.en_bcoc_emissions_EUR
+
+    L201.en_iron_and_steel_ef_EUR %>%
+      add_title("Pollutant and GHG emission factor for iron and steel technologies in all regions") %>%
+      add_units("Tg/Mt") %>%
+      add_comments("Emission factors computed using CEDS emissions and iron and steel output") %>%
+      add_precursors("common/GCAM_region_names",
+                     "energy/A_regions",
+                     "energy/calibrated_techs",
+                     "gcam-europe/calibrated_techs_bld_det_EUR",
+                     UCD_tech_map_name,
+                     "L112.ghg_tg_R_en_S_F_Yh_EUR",
+                     "L244.DeleteThermalService_EUR",
+                     "emissions/mappings/ind_subsector_revised",
+                     "L2323.StubTechProd_iron_steel_EUR") ->
+      L201.en_iron_and_steel_ef_EUR
+
 
     L201.OutputEmissions_elec_EUR %>%
       add_title("GHG and pollutant emissions for the electricity sector") %>%
@@ -516,7 +593,7 @@ module_gcameurope_L201.en_nonco2 <- function(command, ...) {
       same_precursors_as(L201.ghg_res_EUR) ->
       L201.ResReadInControl_ghg_res_EUR
 
-    return_data(L201.en_pol_emissions_EUR, L201.en_ghg_emissions_EUR, L201.en_bcoc_emissions_EUR,
+    return_data(L201.en_pol_emissions_EUR, L201.en_ghg_emissions_EUR, L201.en_bcoc_emissions_EUR,L201.en_iron_and_steel_ef_EUR,
                 L201.OutputEmissions_elec_EUR, L201.nonghg_max_reduction_EUR, L201.nonghg_steepness_EUR,
                 L201.nonghg_max_reduction_res_EUR, L201.nonghg_steepness_res_EUR, L201.nonghg_res_EUR,
                 L201.ghg_res_EUR, L201.ResReadInControl_nonghg_res_EUR, L201.ResReadInControl_ghg_res_EUR)
