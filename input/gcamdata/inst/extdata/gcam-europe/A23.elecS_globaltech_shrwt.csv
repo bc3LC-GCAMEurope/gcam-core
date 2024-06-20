@@ -1,0 +1,13 @@
+# File: A23.elecS_globaltech_shrwt.csv
+# Title: MLS Electricity Sector Technology Shareweights
+# Units: unitless
+# Comments: only adjustments to A23.globaltech_shrwt.csv
+# supplysector set to either segment or "electricity" to apply to all segments not listed
+# Source: None (GCAM assumptions)
+# Column types: ccciiiii 
+# ----------
+supplysector,subsector,technology,1971,2010,2015,2016,2100
+subpeak generation,coal,coal (conv pul),1,1,1,0,0
+peak generation,coal,coal (conv pul),1,1,1,0,0
+electricity,refined liquids,refined liquids (steam/CT),1,1,1,0,0
+peak generation,grid_storage,battery,0,0,0,1,1

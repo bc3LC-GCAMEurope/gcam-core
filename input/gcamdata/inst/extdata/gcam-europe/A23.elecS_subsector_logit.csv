@@ -1,0 +1,19 @@
+# File: A23.elecS_subsector_logit.csv
+# Title: Multiple Load Segments Subsector Logit Exponents
+# Units: unitless
+# Source: None (GCAM assumptions)
+# Comments: if applying to all segments; set supplysector as electricity
+# Column types: ccic 
+# ----------
+supplysector,subsector,logit.exponent,logit.type
+electricity,coal,-3,relative-cost-logit
+electricity,gas,-3,relative-cost-logit
+electricity,refined liquids,-3,relative-cost-logit
+electricity,biomass,-3,relative-cost-logit
+electricity,nuclear,-3,relative-cost-logit
+electricity,wind,-3,relative-cost-logit
+electricity,solar,-3,relative-cost-logit
+electricity,geothermal,-3,relative-cost-logit
+electricity,hydro,-3,relative-cost-logit
+elect_td_bld,rooftop_pv,-3,relative-cost-logit
+peak generation,grid_storage,-3,relative-cost-logit

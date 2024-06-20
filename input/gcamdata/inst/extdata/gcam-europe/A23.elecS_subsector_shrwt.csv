@@ -1,0 +1,29 @@
+# File: A23.elecS_subsector_shrwt.csv
+# Title: Multiple Load Segments Subsector Shareweights
+# Units: unitless
+# Comments: Subsector shareweights at points of inflection (end-points of interpolation function)
+# supplysector set to either segment or "electricity" to apply to all segments not listed
+# Column types: ccci 
+# ----------
+supplysector,subsector,year,share.weight
+electricity,coal,2030,1
+electricity,coal,end-year,1
+electricity,gas,2030,1
+electricity,gas,end-year,1
+electricity,biomass,end-year,1
+electricity,geothermal,end-year,1
+electricity,nuclear,initial-future-year,0
+electricity,nuclear,2025,0
+electricity,nuclear,2030,1
+electricity,nuclear,end-year,1
+base load generation,wind,end-year,1
+electricity,wind,end-year,0
+base load generation,wind,2030,1
+electricity,wind,initial-future-year,0
+electricity,solar,end-year,1
+electricity,solar,2030,1
+elect_td_bld,rooftop_pv,end-year,1
+elect_td_bld,rooftop_pv,2030,1
+peak generation,grid_storage,end-year,1
+electricity,refined liquids,initial-future-year,0
+electricity,refined liquids,end-year,0
