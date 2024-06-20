@@ -1390,13 +1390,17 @@ remove_regions_data_tables <- function(df_list, regions_to_remove){
 #' Helper function to remove regions from an xml object
 #' @param xml xml object that is produced at end of xml chunl
 #' @param regions_to_remove character vector of regions to remove
+#' @param inverse if TRUE, remove all but the specified regions
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr filter left_join rename mutate group_by select summarise_all ungroup
 #' @return xml object without specified regions in each tibble
 #'
-remove_regions_xml <- function(xml, regions_to_remove) {
+remove_regions_xml <- function(xml, regions_to_remove, inverse = FALSE) {
   assert_that(is_data_list(xml))
   assert_that(is.character(regions_to_remove))
+  if (inverse) {
+    regions_to_remove <- setdiff(gcam.COUNTRIES, regions_to_remove)
+  }
 
   xml_data_filtered <- lapply(xml$data_tables, remove_regions_data_tables, regions_to_remove)
   xml$data_tables <- xml_data_filtered

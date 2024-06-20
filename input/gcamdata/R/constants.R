@@ -1185,6 +1185,24 @@ gcamusa.OC_1990_ONROAD_SCALING_FACTOR <- 1/1.4
 gcamusa.DUST <- TRUE
 
 # GCAM-EUR constants ======================================================================
+gcam.COUNTRIES <- c("USA", "Africa_Eastern", "Africa_Northern", "Africa_Southern",
+                    "Africa_Western", "Australia_NZ", "Brazil", "Canada",
+                    "Central America and Caribbean", "Central Asia", "China", "India",
+                    "Indonesia", "Japan", "Mexico", "Middle East",
+                    "Pakistan", "Russia", "South Africa", "South America_Northern",
+                    "South America_Southern", "South Asia", "South Korea", "Southeast Asia",
+                    "Taiwan", "Argentina", "Colombia", "Austria",
+                    "Belgium", "Bulgaria", "Croatia", "Cyprus",
+                    "Czech Republic", "Denmark", "Estonia", "Finland",
+                    "France", "Germany", "Greece", "Hungary",
+                    "Ireland", "Italy", "Latvia", "Lithuania",
+                    "Luxembourg", "Malta", "Netherlands", "Poland",
+                    "Portugal", "Romania", "Slovakia", "Slovenia",
+                    "Spain", "Sweden", "Albania", "Belarus",
+                    "Bosnia and Herzegovina", "Iceland", "Macedonia", "Moldova",
+                    "Norway", "Serbia and Montenegro", "Switzerland", "Turkey",
+                    "UK", "Ukraine")
+
 gcameurope.EUROSTAT_COUNTRIES <- c("Albania", "Austria", "Belgium", "Bosnia and Herzegovina",
                                    "Bulgaria", "Croatia", "Cyprus", "Czech Republic",
                                    "Denmark", "Estonia", "Finland", "France", "Germany",
