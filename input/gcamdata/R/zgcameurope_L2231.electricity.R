@@ -17,7 +17,10 @@
 module_gcameurope_L2231.electricity_grid <- function(command, ...) {
   MODULE_INPUTS <- c(FILE = "gcam-europe/mappings/grid_regions",
                      FILE = "common/GCAM_region_names",
-                     "L223.StubTechProd_elec_EUR",
+                     "L1231.out_EJ_R_elec_F_tech_Yh_EUR",
+                     "L1231.out_EJ_R_elec_F_tech_Yh",
+                     "L123.out_EJ_R_indchp_F_Yh_EUR",
+                     "L123.out_EJ_R_indchp_F_Yh",
                      "L223.StubTechProd_elec")
   MODULE_OUTPUTS <- c("L2231.PassthroughSector_elec_EUR",
                       "L2231.PassthroughTech_elec_grid_EUR",
@@ -47,8 +50,11 @@ module_gcameurope_L2231.electricity_grid <- function(command, ...) {
     elec_gen_names <- "electricity"
 
     # 0. Add in switzerland to eurostat data ---------------------
-    L223.StubTechProd_elec_EUR <- replace_with_eurostat(L223.StubTechProd_elec, L223.StubTechProd_elec_EUR) %>%
-      filter_regions_europe(regions_to_keep_name = grid_regions$region)
+    L1231.out_EJ_R_elec_F_tech_Yh_EUR <- replace_with_eurostat(L1231.out_EJ_R_elec_F_tech_Yh, L1231.out_EJ_R_elec_F_tech_Yh_EUR) %>%
+      filter_regions_europe(regions_to_keep_name = grid_regions$region, region_ID_mapping = GCAM_region_names)
+
+    L123.out_EJ_R_indchp_F_Yh_EUR <- replace_with_eurostat(L123.out_EJ_R_indchp_F_Yh, L123.out_EJ_R_indchp_F_Yh_EUR) %>%
+      filter_regions_europe(regions_to_keep_name = grid_regions$region, region_ID_mapping = GCAM_region_names)
 
     # 1a. grid region sector/subsector ----------------------------
     # L2231.Supplysector_elec_grid_EUR: supplysector for electricity sector in the grid regions,
@@ -132,13 +138,15 @@ module_gcameurope_L2231.electricity_grid <- function(command, ...) {
     # 2. Calibrated production -------------------
     # L2231.Production_elec_grid_EUR: calibrated electricity production in grid region
     #(consuming output of grid subregions)
-    # WHY DOES ALBANIA HAVE NO ELEC PROD?????
-    L223.StubTechProd_elec_EUR %>%
+    L1231.out_EJ_R_elec_F_tech_Yh_EUR %>%
+      bind_rows(L123.out_EJ_R_indchp_F_Yh_EUR) %>%
+      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       filter(year %in% MODEL_BASE_YEARS) %>%
-      mutate(subsector = paste(region, supplysector, sep = " ")) %>%
+      mutate(supplysector = "electricity",
+             subsector = paste(region, supplysector, sep = " ")) %>%
       # This needs to be aggregated to the subsector level
       group_by(supplysector, subsector, year) %>%
-      summarise(calOutputValue = sum(calOutputValue)) %>%
+      summarise(calOutputValue = sum(value)) %>%
       ungroup ->
       L2231.out_EJ_R_elec
 

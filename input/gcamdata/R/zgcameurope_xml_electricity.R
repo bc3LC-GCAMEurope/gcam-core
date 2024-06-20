@@ -107,6 +107,8 @@ module_gcameurope_electricity_xml <- function(command, ...) {
       add_xml_data(L223.StubTechCapFactor_elec_EUR, "StubTechCapFactor") %>%
       add_xml_data(L223.StubTechFixOut_elec_EUR, "StubTechFixOut") %>%
       add_xml_data(L223.StubTechFixOut_hydro_EUR, "StubTechFixOut") %>%
+      add_xml_data(L223.StubTechCalInput_elec_EUR, "StubTechCalInput") %>%
+
       add_xml_data(L223.StubTechProd_elec_EUR, "StubTechProd") %>%
       # add_xml_data(L223.StubTechMarket_elec_EUR, "StubTechMarket") %>%
       # add_xml_data(L223.StubTechMarket_backup_EUR, "StubTechMarket") %>%

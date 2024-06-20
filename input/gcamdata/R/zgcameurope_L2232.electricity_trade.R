@@ -28,7 +28,8 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
                      "L123.out_EJ_R_indchp_F_Yh",
                      "L1232.out_EJ_sR_elec_EUR",
                      "L1261.elec_trade_R_EJ_EUR",
-                     "L223.GlobalIntTechBackup_elec")
+                     "L223.GlobalIntTechBackup_elec",
+                     "L223.StubTechCost_offshore_wind")
   MODULE_OUTPUTS <- c("L2232.Supplysector_EURelec",
                       "L2232.SubsectorShrwtFllt_EURelec",
                       "L2232.SubsectorInterp_EURelec",
@@ -342,7 +343,11 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
       repeat_add_columns(select(grid_regions, region)) %>%
       repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
       left_join_error_no_match(select(grid_regions, electric.sector.market = grid_region, region),
-                               by = c("region")) ->
+                               by = c("region")) %>%
+      filter(!(stub.technology %in% L223.StubTechCost_offshore_wind$stub.technology &
+               !region %in% L223.StubTechCost_offshore_wind$region),
+             !(stub.technology %in% L223.StubTechCost_offshore_wind$stub.technology &
+                 region == "Slovenia")) ->
       L2232.StubTechElecMarket_backup_EUR
 
 

@@ -82,6 +82,8 @@ module_gcameurope_L223.electricity <- function(command, ...) {
     copy_filter_europe(all_data, OUTPUTS_TO_COPY_FILTER,
                        regions_to_keep = union(grid_regions$region, gcameurope.EUROSTAT_COUNTRIES))
 
+    L223.StubTechCost_offshore_wind_EUR <- L223.StubTechCost_offshore_wind_EUR %>% filter(region != "Slovenia")
+
     # 0. Add in switzerland to eurostat data ---------------------
     L1231.in_EJ_R_elec_F_tech_Yh_EUR <- replace_with_eurostat(L1231.in_EJ_R_elec_F_tech_Yh, L1231.in_EJ_R_elec_F_tech_Yh_EUR) %>%
       filter_regions_europe(regions_to_keep_name = union(grid_regions$region, gcameurope.EUROSTAT_COUNTRIES),
