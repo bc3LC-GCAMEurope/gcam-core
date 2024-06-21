@@ -616,6 +616,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       replace_na(list(base.service=0)) %>%
       select(LEVEL2_DATA_NAMES[["ThermalBaseService"]])
 
+
     #------------------------------------------------------
     # L244.HDDCDD: Heating and cooling degree days by scenario
     L244.all_sres_gcm <- unique(L143.HDDCDD_scen_R_Y[c("SRES", "GCM")]) # These HDD/CDD scenarios are pretty old, should be updated eventually
@@ -1657,6 +1658,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     L244.GenericTradBioCoef_EUR<-
       L244.GenericBaseService_EUR %>%
+      filter(str_detect(building.service.input,'TradBio')) %>%
       repeat_add_columns(tibble(group=unique(L144.income_shares$group))) %>%
       mutate(building.service.input = paste0(building.service.input,"_",group)) %>%
       rename(base.TradBio = base.service) %>%
@@ -1665,7 +1667,8 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              y_TradBio = round(y_TradBio, energy.DIGITS_COEFFICIENT),
              base.TradBio = round(base.TradBio, energy.DIGITS_SERVICE)) %>%
       select(LEVEL2_DATA_NAMES[["GenericTradBioCoef"]]) %>%
-      distinct()
+      distinct() %>%
+      filter(!is.na(gcam.consumer))
 
 
     L244.ThermalTradBioCoef_EUR<-L244.tradBio.coef %>%
@@ -2218,7 +2221,6 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       mutate(base.density = base.service / base.building.size) %>%
       replace_na(list(base.density = 0)) %>%
       select(LEVEL2_DATA_NAMES[["ThermalBaseDens"]])
-
 
     #===================================================
     # Produce outputs
