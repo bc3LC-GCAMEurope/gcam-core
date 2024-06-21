@@ -23,7 +23,8 @@ module_gcameurope_L210.water_demand_primary <- function(command, ...) {
              FILE = "energy/A22.globaltech_coef",
              FILE = "energy/A_ff_RegionalTechnology",
              FILE = "energy/A_ff_TradedTechnology",
-             "L110.water_demand_primary_R_S_W_m3_GJ_EUR"))
+             "L110.water_demand_primary_R_S_W_m3_GJ_EUR",
+             "L239.SubsectorAll_reg_EUR"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L210.TechCoef_EUR"))
   } else if(command == driver.MAKE) {
@@ -41,7 +42,7 @@ module_gcameurope_L210.water_demand_primary <- function(command, ...) {
     A_ff_RegionalTechnology <- get_data(all_data, "energy/A_ff_RegionalTechnology")
     A_ff_TradedTechnology <- get_data(all_data, "energy/A_ff_TradedTechnology")
     L110.water_demand_primary_R_S_W_m3_GJ_EUR <- get_data(all_data, "L110.water_demand_primary_R_S_W_m3_GJ_EUR")
-
+    L239.SubsectorAll_reg_EUR <- get_data(all_data, "L239.SubsectorAll_reg_EUR")
 
     A21.globaltech_coef %>%
       select(supplysector,subsector,technology) ->
@@ -78,6 +79,12 @@ module_gcameurope_L210.water_demand_primary <- function(command, ...) {
              technology = if_else(grepl("traded", technology), paste(region, technology), technology),
              region = if_else(grepl("traded", subsector), "USA", region)) ->
       L210.TechCoef_EUR
+
+    # remove domestic subsector if no resource exists
+    L210.TechCoef_EUR <- L210.TechCoef_EUR %>%
+      filter(!grepl("nuclear", supplysector)) %>%
+      semi_join(L239.SubsectorAll_reg_EUR, by = c("region", "supplysector", "subsector")) %>%
+      bind_rows(L210.TechCoef_EUR %>% filter(grepl("nuclear", supplysector)))
 
     # Repeat coefficients across all model years
     tibble(year = MODEL_YEARS, MERGEFIELD = 1) %>%
