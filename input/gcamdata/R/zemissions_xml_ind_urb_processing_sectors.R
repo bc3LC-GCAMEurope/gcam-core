@@ -108,6 +108,13 @@ module_emissions_ind_urb_processing_sectors_xml <- function(command, ...) {
         add_xml_data(L231.SubsectorInterpTo_urb_ind, "SubsectorInterpTo")
     }
 
+    ind_urb_processing_sectors.xml %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
+      ind_urb_processing_sectors.xml
+    ind_urb_processing_sectors_MAC.xml %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
+      ind_urb_processing_sectors_MAC.xml
+
     return_data(ind_urb_processing_sectors.xml,
                 ind_urb_processing_sectors_MAC.xml)
   } else {
