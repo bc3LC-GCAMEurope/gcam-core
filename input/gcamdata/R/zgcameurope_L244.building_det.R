@@ -1194,7 +1194,8 @@ module_gcameurope_L244.building_det <- function(command, ...) {
                                  rename(building.service.input = market) %>%
                                  filter(building.service.input %in% generic_services, year == MODEL_FINAL_BASE_YEAR),
                                by=c("region","year","building.service.input","GCAM_region_ID")) %>%
-      mutate(`satiation-impedance` = (log(2)*((pcGDP_thous90USD*1000/def9075)/price)) / log((satiation.level)/(satiation.level-base_serv_flsp))) %>%
+      mutate(`satiation-impedance` = ifelse((satiation.level)/(satiation.level-base_serv_flsp) == 1, 0,
+                                            (log(2)*((pcGDP_thous90USD*1000/def9075)/price)) / log((satiation.level)/(satiation.level-base_serv_flsp)))) %>%
       # Check with an adder to be 0!!!!
       rename(observed_base_serv_perflsp = base_serv_flsp) %>%
       mutate(thermal_load = 1,
