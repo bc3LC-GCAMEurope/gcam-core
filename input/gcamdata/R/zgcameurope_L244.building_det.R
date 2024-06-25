@@ -313,7 +313,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     # Also need a price exponent on floorspace and naming of internal gains trial markets
     L244.PriceExp_IntGains_EUR <- write_to_all_regions(A44.gcam_consumer, LEVEL2_DATA_NAMES[["PriceExp_IntGains"]],
-                                                   GCAM_region_names = GCAM_region_names)
+                                                       GCAM_region_names = GCAM_region_names)
 
     # ===================================================
     # ===================================================
@@ -542,8 +542,8 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     # First, separate the thermal from the generic services. Generic services will be assumed to produce
     # internal gain energy, so anything in the internal gains assumptions table will be assumed generic
-    generic_services <- unique(A44.internal_gains_EUR$supplysector)
-    thermal_services <- dplyr::setdiff(unique(A44.sector_EUR$supplysector), generic_services)
+    thermal_services <- grep('cooling|heating', unique(A44.sector_EUR$supplysector), value = TRUE)
+    generic_services <- dplyr::setdiff(unique(A44.sector_EUR$supplysector), thermal_services)
 
     # Supplysectors (e.g. heating) need to be differentiated for each consumer group.
     # This makes that the fuel-technology mix for each service can vary across groups.
@@ -760,7 +760,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       filter(year == max(MODEL_BASE_YEARS)) %>%
       select(LEVEL2_DATA_NAMES[["BldNodes"]], building.service.input, service.per.flsp)
 
-    L244.GenericServiceSatiation_EUR<- L244.GenericServiceSatiation_EUR %>%
+    L244.GenericServiceSatiation_EUR2 <- L244.GenericServiceSatiation_EUR %>%
       # not all combinations so use left_join
       left_join(L244.BS, by = c(LEVEL2_DATA_NAMES[["BldNodes"]], "building.service.input")) %>%
       replace_na(list(service.per.flsp=0)) %>%
@@ -778,6 +778,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              satiation.level= if_else(is.na(satiation.level),satiation.level.adj,satiation.level)) %>%
       select(-service.per.flsp,-satiation.level.adj)
 
+    L244.GenericServiceSatiation_EUR <- L244.GenericServiceSatiation_EUR2
 
     # L244.ThermalServiceSatiation_EUR: Satiation levels assumed for thermal building services
     # Write DEU thermal satiation levels to all regions
@@ -1169,7 +1170,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     L244.GenericServiceImpedance_allvars<-L244.GenericServiceSatiation_EUR %>%
       left_join_error_no_match(A_regions %>% select(region,GCAM_region_ID),by = "region") %>%
       # Only modern services use impedance
-      #filter(!grepl("coal",building.service.input),
+      # filter(!grepl("coal",building.service.input),
       #       !grepl("TradBio",building.service.input)) %>%
       # use left_join due to TradBio
       left_join_error_no_match(L144.base_service_EJ_serv_EUR %>%  filter(year==MODEL_FINAL_BASE_YEAR, service %in% generic_services)
@@ -1336,7 +1337,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     #------------------------------------------------------
     # The region-level service is allocated to different consumers using "shares"
     # First, shares are estimated using the corresponding demand functions (either for modern or traditional fuels)
-    # Shares are used to allocate observed regional eergy/service data across subregional consumers
+    # Shares are used to allocate observed regional energy/service data across subregional consumers
     # L244.GenericBaseService_EUR and L244.ThermalBaseService_EUR are adjusted to have service data at consumer level within each region
 
     # L244.GenericBaseService_EUR adjusted
@@ -1656,19 +1657,20 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       left_join_error_no_match(GCAM_region_names, by="GCAM_region_ID")
 
 
-    L244.GenericTradBioCoef_EUR<-
-      L244.GenericBaseService_EUR %>%
-      filter(str_detect(building.service.input,'TradBio')) %>%
+    L244.GenericTradBioCoef_EUR<-L244.tradBio.coef %>%
+      filter(service %in% generic_services) %>%
+      rename(building.service.input = service) %>%
       repeat_add_columns(tibble(group=unique(L144.income_shares$group))) %>%
+      mutate(gcam.consumer = paste0(gcam.consumer,"_",group),
+             year =MODEL_FINAL_BASE_YEAR) %>%
+      left_join_error_no_match(L244.GenericBaseService_EUR, by = c("gcam.consumer", "nodeInput", "building.node.input", "building.service.input", "region","year")) %>%
       mutate(building.service.input = paste0(building.service.input,"_",group)) %>%
       rename(base.TradBio = base.service) %>%
       mutate(x_TradBio = if_else(base.TradBio==0,0,x_TradBio),
              x_TradBio = round(x_TradBio, energy.DIGITS_COEFFICIENT),
              y_TradBio = round(y_TradBio, energy.DIGITS_COEFFICIENT),
              base.TradBio = round(base.TradBio, energy.DIGITS_SERVICE)) %>%
-      select(LEVEL2_DATA_NAMES[["GenericTradBioCoef"]]) %>%
-      distinct() %>%
-      filter(!is.na(gcam.consumer))
+      select(LEVEL2_DATA_NAMES[["GenericTradBioCoef"]])
 
 
     L244.ThermalTradBioCoef_EUR<-L244.tradBio.coef %>%
@@ -1710,14 +1712,12 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     L244.GenericServiceAdder_aggObs_gr<-L244.GenericBaseService_EUR %>%
       filter(year == MODEL_FINAL_BASE_YEAR)
 
-    trad_fuels_oth<-c("resid others coal")
-    modern_fuels_oth<-c("resid others modern")
     Adder.Conv.Year<-2030
     ADJ_MODEL_YEARS<-c(MODEL_BASE_YEARS,MODEL_FUTURE_YEARS[MODEL_FUTURE_YEARS >= Adder.Conv.Year])
 
     L244.GenericServiceAdder_coal_tradbio_pre<-L244.GenericShares_pre %>%
       filter(grepl("resid",building.service.input)) %>%
-      filter(building.service.input %in% trad_fuels_oth) %>%
+      filter(grepl("coal|TradBio", building.service.input)) %>%
       select(region,gcam.consumer,nodeInput,building.node.input,building.service.input,year,afford) %>%
       separate(gcam.consumer,c("gcam.consumer","group"),sep="_",remove = F) %>%
       mutate(gcam.consumer = paste0(gcam.consumer,"_",group),
@@ -1734,7 +1734,8 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       mutate(est = serv) %>%
       separate(building.service.input,c("building.service.input","group"),sep = "_") %>%
       select(region,year,gcam.consumer,building.service.input,est) %>%
-      distinct()
+      distinct() %>%
+      mutate(est = ifelse(is.na(est), 0, est))
 
     L244.GenericServiceAdder_coal_tradbio_pre_agg<-L244.GenericServiceAdder_coal_tradbio_pre %>%
       group_by(region,year,building.service.input) %>%
@@ -1750,7 +1751,8 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       ungroup() %>%
       # adjust zero adder if observed is 0
       mutate(bias.adder = if_else(obs==0,0,bias.adder)) %>%
-      select(region,gcam.consumer,nodeInput,building.node.input,building.service.input,bias.adder)
+      select(region,gcam.consumer,nodeInput,building.node.input,building.service.input,bias.adder) %>%
+      distinct()
 
     L244.GenericServiceAdder_coal_tradbio<-L244.GenericServiceAdder_coal_tradbio_pre %>%
       filter(year == MODEL_FINAL_BASE_YEAR) %>%
@@ -1771,7 +1773,8 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     # Modern
     L244.GenericServiceAdder_modern_pre<-L244.GenericShares_pre %>%
-      filter(building.service.input %in% modern_fuels_oth) %>%
+      filter(grepl("resid",building.service.input)) %>%
+      filter(grepl("modern", building.service.input)) %>%
       mutate(est = serv) %>%
       select(region,year,gcam.consumer,building.service.input,est)
 

@@ -1017,7 +1017,7 @@ module_energy_L244.building_det <- function(command, ...) {
       filter(year == max(MODEL_BASE_YEARS)) %>%
       select(LEVEL2_DATA_NAMES[["BldNodes"]], building.service.input, service.per.flsp)
 
-    L244.GenericServiceSatiation<- L244.GenericServiceSatiation %>%
+    L244.GenericServiceSatiation2 <- L244.GenericServiceSatiation %>%
       # not all combinations so use left_join
       left_join(L244.BS, by = c(LEVEL2_DATA_NAMES[["BldNodes"]], "building.service.input")) %>%
       replace_na(list(service.per.flsp=0)) %>%
@@ -1035,6 +1035,7 @@ module_energy_L244.building_det <- function(command, ...) {
              satiation.level= if_else(is.na(satiation.level),satiation.level.adj,satiation.level)) %>%
       select(-service.per.flsp,-satiation.level.adj)
 
+    L244.GenericServiceSatiation <- L244.GenericServiceSatiation2
     # L244.GenericServiceSatiation_SSPs: Satiation levels assumed for non-thermal building services in the SSPs
     # First, calculate the service output per unit floorspace in the USA region
     L244.ServiceSatiation_USA_SSPs <- L244.ServiceSatiation_USA %>%
@@ -1459,7 +1460,7 @@ module_energy_L244.building_det <- function(command, ...) {
     L244.GenericServiceImpedance_allvars<-L244.GenericServiceSatiation %>%
       left_join_error_no_match(A_regions %>% select(region,GCAM_region_ID),by = "region") %>%
       # Only modern services use impedance
-      #filter(!grepl("coal",building.service.input),
+      # filter(!grepl("coal",building.service.input),
       #       !grepl("TradBio",building.service.input)) %>%
       # use left_join due to TradBio
       left_join_error_no_match(L144.base_service_EJ_serv %>%  filter(year==MODEL_FINAL_BASE_YEAR, service %in% generic_services)
