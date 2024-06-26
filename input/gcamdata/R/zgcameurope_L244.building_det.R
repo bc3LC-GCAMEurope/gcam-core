@@ -2080,6 +2080,20 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              calibrated.value = calibrated.value * share) %>%
       select(LEVEL2_DATA_NAMES[["StubTechCalInput"]])
 
+    # add 0 to the not present items
+    missing_items <- anti_join(L244.StubTechEff_bld_EUR %>%
+                                 select(-'efficiency',-'market.name') %>%
+                                 distinct(),
+                               L244.StubTechCalInput_bld_resid[,1:6]) %>%
+      filter(stub.technology %in% c('electricity','gas','district heat','refined liquids'), year <= MODEL_FINAL_BASE_YEAR)
+
+    L244.StubTechCalInput_bld_resid <- L244.StubTechCalInput_bld_resid %>%
+      bind_rows(missing_items %>%
+                  mutate(share.weight.year = year,
+                         subs.share.weight = 0,
+                         calibrated.value = 0,
+                         tech.share.weight = 0))
+
     L244.StubTechCalInput_bld_EUR<-bind_rows(L244.StubTechCalInput_bld_resid,L244.StubTechCalInput_bld_comm)
 
     # Add consumer group to building.service.input and to thermal.building.service.input
