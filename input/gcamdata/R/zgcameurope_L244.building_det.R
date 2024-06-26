@@ -1194,7 +1194,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
                                  rename(building.service.input = market) %>%
                                  filter(building.service.input %in% generic_services, year == MODEL_FINAL_BASE_YEAR),
                                by=c("region","year","building.service.input","GCAM_region_ID")) %>%
-      mutate(`satiation-impedance` = ifelse((satiation.level)/(satiation.level-base_serv_flsp) == 1, 0,
+      mutate(`satiation-impedance` = ifelse((satiation.level)/(satiation.level-base_serv_flsp) == 1, 1,
                                             (log(2)*((pcGDP_thous90USD*1000/def9075)/price)) / log((satiation.level)/(satiation.level-base_serv_flsp)))) %>%
       # Check with an adder to be 0!!!!
       rename(observed_base_serv_perflsp = base_serv_flsp) %>%
@@ -1542,9 +1542,9 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     k_coal_refit_thermal<-coef(fit_coal_refit_thermal)[2]
 
     L244.coal.coef<-tibble(gcam.consumer = "resid", nodeInput = "resid", building.node.input = "resid_building") %>%
-      repeat_add_columns(tibble(service = c("resid others coal","resid heating coal"))) %>%
-      mutate(A_coal = if_else(service == "resid others coal",A_coal_refit_oth,A_coal_refit_thermal),
-             k_coal = if_else(service == "resid others coal",k_coal_refit_oth,k_coal_refit_thermal)) %>%
+      repeat_add_columns(tibble(service = c("resid others coal","resid heating coal","resid hot water coal","resid cooking coal"))) %>%
+      mutate(A_coal = if_else(service == "resid heating coal",A_coal_refit_thermal,A_coal_refit_oth),
+             k_coal = if_else(service == "resid heating coal",k_coal_refit_thermal,k_coal_refit_oth)) %>%
       repeat_add_columns(tibble(GCAM_region_ID = unique(serv_coal$GCAM_region_ID))) %>%
       left_join_error_no_match(GCAM_region_names, by="GCAM_region_ID")
 
@@ -1557,15 +1557,15 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       mutate(is.no.coal = 1) %>%
       select(-base.service)
 
-    check_coal_oth<-check_coal %>% filter(grepl("others",building.service.input))
+    check_coal_general<-check_coal %>% filter(grepl("others|cooking|hot water",building.service.input))
     check_coal_thermal<-check_coal %>% filter(grepl("heating",building.service.input))
 
-    reg_no_recentCoal_oth<-unique(check_coal_oth$region)
+    reg_no_recentCoal_general<-unique(check_coal_general$region)
     reg_no_recentCoal_thermal<-unique(check_coal_thermal$region)
 
 
     L244.coal.coef<-L244.coal.coef %>%
-      mutate(A_coal = if_else(grepl("others",service) & region %in% reg_no_recentCoal_oth,0,A_coal),
+      mutate(A_coal = if_else(grepl("others|cooking|hot water",service) & region %in% reg_no_recentCoal_general,0,A_coal),
              A_coal = if_else(grepl("heating",service) & region %in% reg_no_recentCoal_thermal,0,A_coal))
 
 
