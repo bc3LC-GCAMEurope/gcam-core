@@ -108,7 +108,6 @@ resid hot water modern,biomass,biomass,resid hot water modern,biomass,biomass,bl
 resid hot water coal,coal,coal,resid hot water coal,coal,coal,bld_resid,coal,coal,bld,dom,bld_resid,coal,,bld_coal
 resid hot water modern,gas,gas,resid hot water modern,gas,gas,bld_resid,gas,gas,bld,dom,bld_resid,gas,,bld_gas
 resid hot water modern,refined liquids,refined liquids,resid hot water modern,refined liquids,refined liquids,bld_resid,refined liquids,refined liquids,bld,dom,bld_resid,refined liquids,,bld_oil
-resid other appliance modern,electricity,electricity,resid other appliance modern,electricity,electricity,bld_resid,electricity,bld_resid,bld,dom,bld_resid,electricity,Electric Power Systems,
 Rice,,,Rice,,,,,,,,,,Rice Cultivation,
 RootTuber,,,RootTuber,,,,,,,,,,Cropland Management,
 SheepGoat,Mixed,FeedCrops,SheepGoat,Mixed,FeedCrops,SheepGoat,all,all,Animals,,SheepGoat,all,Livestock,
