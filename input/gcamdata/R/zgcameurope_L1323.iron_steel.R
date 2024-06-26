@@ -69,7 +69,7 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
       replace(is.na(.), 0) %>%
       mutate(year = as.numeric(year),
              DRI_consumption=`DRI production`- `DRI exports` + `DRI imports`,
-             DRI_consumption=ifelse(DRI_consumption<0,0,DRI_consumption))%>%
+             DRI_consumption=if_else(DRI_consumption<0,0,DRI_consumption))%>%
       select(country_name,year,DRI_consumption)-> DRI_stats
 
     #Calculate EAF-Scrap and EAF-DRI based steel production using DRI consumption data
@@ -78,8 +78,8 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
       replace(is.na(.), 0) %>%
       rename(`EAF with DRI`=DRI_consumption) %>%
       mutate(`EAF with scrap`=EAF-`EAF with DRI`,
-             `EAF with DRI`=ifelse(`EAF with scrap`<=0,EAF,`EAF with DRI`),
-             `EAF with scrap`=ifelse(`EAF with scrap`<0,0,`EAF with scrap`))%>%
+             `EAF with DRI`=if_else(`EAF with scrap`<=0,EAF,`EAF with DRI`),
+             `EAF with scrap`=if_else(`EAF with scrap`<0,0,`EAF with scrap`))%>%
       select(-EAF) %>%
       left_join(iso_GCAM_regID, by = "country_name") %>%
       filter_regions_europe() %>%
