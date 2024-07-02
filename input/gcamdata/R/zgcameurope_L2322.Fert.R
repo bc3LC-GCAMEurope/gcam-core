@@ -87,6 +87,7 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
     # 1a. Supplysector information
     # L2322.Supplysector_Fert_EUR: Supply sector information for fertilizer sector
     A322.sector %>%
+      filter(supplysector != 'traded ammonia') %>%
       write_to_all_regions(c(LEVEL2_DATA_NAMES[["Supplysector"]], LOGIT_TYPE_COLNAME),
                            GCAM_region_names,
                            has_traded = TRUE) ->
@@ -109,6 +110,7 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
     # 2b. Subsector information
     # L2322.SubsectorLogit_Fert_EUR: Subsector logit exponents of fertilizer sector
     A322.subsector_logit %>%
+      filter(supplysector != 'traded ammonia') %>%
       write_to_all_regions(c(LEVEL2_DATA_NAMES[["SubsectorLogit"]], LOGIT_TYPE_COLNAME),
                            GCAM_region_names,
                            has_traded = TRUE) ->
@@ -116,7 +118,7 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
 
     # L2322.SubsectorShrwtFllt_Fert_EUR: Subsector shareweights of fertilizer sector
     A322.subsector_shrwt %>%
-      filter(!is.na(year.fillout)) %>%
+      filter(!is.na(year.fillout), supplysector != 'traded ammonia') %>%
       write_to_all_regions(LEVEL2_DATA_NAMES[["SubsectorShrwtFllt"]],
                            GCAM_region_names,
                            has_traded = TRUE) ->
@@ -124,7 +126,7 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
 
     # L2322.SubsectorInterp_Fert_EUR: Subsector shareweight interpolation of fertilizer sector
     A322.subsector_interp %>%
-      filter(is.na(to.value)) %>%
+      filter(is.na(to.value), supplysector != 'traded ammonia') %>%
       write_to_all_regions(LEVEL2_DATA_NAMES[["SubsectorInterp"]],
                            GCAM_region_names,
                            has_traded = TRUE) ->
@@ -154,7 +156,8 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
       filter(year %in% c(MODEL_BASE_YEARS, MODEL_FUTURE_YEARS)) %>%
       write_to_all_regions(LEVEL2_DATA_NAMES[["TechShrwt"]],
                            GCAM_region_names = GCAM_region_names,
-                           has_traded = TRUE) ->
+                           has_traded = TRUE) %>%
+      mutate(region = gcam.USA_REGION) ->
       L2322.TechShrwt_TradedFert_EUR
 
     # L2322.GlobalTechCoef_Fert: Energy inputs and coefficients of global fertilizer energy use and feedstocks technologies
@@ -187,7 +190,8 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
       write_to_all_regions(LEVEL2_DATA_NAMES[["TechCoef"]],
                            GCAM_region_names = GCAM_region_names,
                            has_traded = TRUE,
-                           set_market = TRUE) ->
+                           set_market = TRUE) %>%
+      mutate(region = gcam.USA_REGION) ->
       L2322.TechCoef_TradedFert_EUR
 
     # Market-names of import technologies are assigned to the USA
@@ -264,7 +268,8 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       left_join_error_no_match(select(calibrated_techs, sector, fuel, supplysector, subsector, technology, minicam.energy.input), by = c("sector", "fuel")) %>%
       mutate(stub.technology = technology, market.name = region) %>%
-      select(LEVEL2_DATA_NAMES[["StubTechCoef"]]) ->
+      select(LEVEL2_DATA_NAMES[["StubTechCoef"]]) %>%
+      mutate(market.name = gcam.USA_REGION) ->
       L2322.StubTechCoef_Fert_EUR
 
     # Ammonia Exports = NetExports where positive

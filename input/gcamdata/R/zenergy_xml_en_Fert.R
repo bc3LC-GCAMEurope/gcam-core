@@ -21,8 +21,10 @@ module_energy_en_Fert_xml <- function(command, ...) {
              "L2322.StubTech_Fert",
              "L2322.GlobalTechShrwt_Fert",
              "L2322.TechShrwt_TradedFert",
+             "L2322.TechShrwt_TradedFert_EUR",
              "L2322.GlobalTechCoef_Fert",
              "L2322.TechCoef_TradedFert",
+             "L2322.TechCoef_TradedFert_EUR",
              "L2322.StubTechMarket_FertImports",
              "L2322.GlobalTechCost_Fert",
              "L2322.GlobalTechCapture_Fert",
@@ -31,6 +33,7 @@ module_energy_en_Fert_xml <- function(command, ...) {
              "L2322.StubTechProd_FertProd",
              "L2322.StubTechCoef_Fert",
              "L2322.Production_FertExport",
+             "L2322.Production_FertExport_EUR",
              "L2322.StubTechProd_FertImport",
              "L2322.StubTechProd_FertDomCons",
              "L2322.StubTechProd_NtoAg"))
@@ -50,7 +53,9 @@ module_energy_en_Fert_xml <- function(command, ...) {
     L2322.StubTech_Fert <- get_data(all_data, "L2322.StubTech_Fert") %>% filter_regions_europe(inverse = TRUE)
     L2322.GlobalTechShrwt_Fert <- get_data(all_data, "L2322.GlobalTechShrwt_Fert") %>% filter_regions_europe(inverse = TRUE)
     L2322.TechShrwt_TradedFert <- get_data(all_data, "L2322.TechShrwt_TradedFert") %>% filter_regions_europe(inverse = TRUE)
+    L2322.TechShrwt_TradedFert_EUR <- get_data(all_data, "L2322.TechShrwt_TradedFert_EUR")
     L2322.GlobalTechCoef_Fert <- get_data(all_data, "L2322.GlobalTechCoef_Fert") %>% filter_regions_europe(inverse = TRUE)
+    L2322.TechCoef_TradedFert_EUR <- get_data(all_data, "L2322.TechCoef_TradedFert_EUR")
     L2322.TechCoef_TradedFert <- get_data(all_data, "L2322.TechCoef_TradedFert") %>% filter_regions_europe(inverse = TRUE)
     L2322.StubTechMarket_FertImports <- get_data(all_data, "L2322.StubTechMarket_FertImports") %>% filter_regions_europe(inverse = TRUE)
     L2322.GlobalTechCost_Fert <- get_data(all_data, "L2322.GlobalTechCost_Fert") %>% filter_regions_europe(inverse = TRUE)
@@ -60,6 +65,7 @@ module_energy_en_Fert_xml <- function(command, ...) {
     L2322.StubTechProd_FertProd <- get_data(all_data, "L2322.StubTechProd_FertProd") %>% filter_regions_europe(inverse = TRUE)
     L2322.StubTechCoef_Fert <- get_data(all_data, "L2322.StubTechCoef_Fert") %>% filter_regions_europe(inverse = TRUE)
     L2322.Production_FertExport <- get_data(all_data, "L2322.Production_FertExport") %>% filter_regions_europe(inverse = TRUE)
+    L2322.Production_FertExport_EUR <- get_data(all_data, "L2322.Production_FertExport_EUR")
     L2322.StubTechProd_FertImport <- get_data(all_data, "L2322.StubTechProd_FertImport") %>% filter_regions_europe(inverse = TRUE)
     L2322.StubTechProd_FertDomCons <- get_data(all_data, "L2322.StubTechProd_FertDomCons") %>% filter_regions_europe(inverse = TRUE)
     L2322.StubTechProd_NtoAg <- get_data(all_data, "L2322.StubTechProd_NtoAg") %>% filter_regions_europe(inverse = TRUE)
@@ -76,8 +82,10 @@ module_energy_en_Fert_xml <- function(command, ...) {
       add_xml_data(L2322.SubsectorInterp_Fert, "SubsectorInterp") %>%
       add_xml_data(L2322.StubTech_Fert, "StubTech") %>%
       add_xml_data(L2322.GlobalTechShrwt_Fert, "GlobalTechShrwt") %>%
+      add_xml_data(L2322.TechShrwt_TradedFert_EUR, "TechShrwt") %>%
       add_xml_data(L2322.TechShrwt_TradedFert, "TechShrwt") %>%
       add_xml_data(L2322.GlobalTechCoef_Fert, "GlobalTechCoef") %>%
+      add_xml_data(L2322.TechCoef_TradedFert_EUR, "TechCoef") %>%
       add_xml_data(L2322.TechCoef_TradedFert, "TechCoef") %>%
       add_xml_data(L2322.StubTechMarket_FertImports, "StubTechMarket") %>%
       add_xml_data(L2322.GlobalTechCost_Fert, "GlobalTechCost") %>%
@@ -87,6 +95,7 @@ module_energy_en_Fert_xml <- function(command, ...) {
       add_xml_data(L2322.StubTechProd_FertProd, "StubTechProd") %>%
       add_xml_data(L2322.StubTechCoef_Fert, "StubTechCoef") %>%
       add_xml_data(L2322.Production_FertExport, "Production") %>%
+      add_xml_data(L2322.Production_FertExport_EUR, "Production") %>%
       add_xml_data(L2322.StubTechProd_FertImport %>% filter_regions_europe(inverse = TRUE), "StubTechProd") %>%
       add_xml_data(L2322.StubTechProd_FertDomCons %>% filter_regions_europe(inverse = TRUE), "StubTechProd") %>%
       add_xml_data(L2322.StubTechProd_NtoAg %>% filter_regions_europe(inverse = TRUE), "StubTechProd") %>%
@@ -99,8 +108,10 @@ module_energy_en_Fert_xml <- function(command, ...) {
                      "L2322.StubTech_Fert",
                      "L2322.GlobalTechShrwt_Fert",
                      "L2322.TechShrwt_TradedFert",
+                     "L2322.TechShrwt_TradedFert_EUR",
                      "L2322.GlobalTechCoef_Fert",
                      "L2322.TechCoef_TradedFert",
+                     "L2322.TechCoef_TradedFert_EUR",
                      "L2322.StubTechMarket_FertImports",
                      "L2322.GlobalTechCost_Fert",
                      "L2322.GlobalTechCapture_Fert",
@@ -109,6 +120,7 @@ module_energy_en_Fert_xml <- function(command, ...) {
                      "L2322.StubTechProd_FertProd",
                      "L2322.StubTechCoef_Fert",
                      "L2322.Production_FertExport",
+                     "L2322.Production_FertExport_EUR",
                      "L2322.StubTechProd_FertImport",
                      "L2322.StubTechProd_FertDomCons",
                      "L2322.StubTechProd_NtoAg") ->

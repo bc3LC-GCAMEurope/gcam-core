@@ -18,12 +18,9 @@ module_gcameurope_en_Fert_xml <- function(command, ...) {
              "L2322.SubsectorShrwtFllt_Fert_EUR",
              "L2322.SubsectorInterp_Fert_EUR",
              "L2322.StubTech_Fert_EUR",
-             "L2322.TechShrwt_TradedFert_EUR",
-             "L2322.TechCoef_TradedFert_EUR",
              "L2322.StubTechMarket_FertImports_EUR",
              "L2322.StubTechProd_FertProd_EUR",
              "L2322.StubTechCoef_Fert_EUR",
-             "L2322.Production_FertExport_EUR",
              "L2322.StubTechProd_FertImport_EUR",
              "L2322.StubTechProd_FertDomCons_EUR",
              "L2322.StubTechProd_NtoAg_EUR"))
@@ -40,12 +37,9 @@ module_gcameurope_en_Fert_xml <- function(command, ...) {
     L2322.SubsectorShrwtFllt_Fert_EUR <- get_data(all_data, "L2322.SubsectorShrwtFllt_Fert_EUR")
     L2322.SubsectorInterp_Fert_EUR <- get_data(all_data, "L2322.SubsectorInterp_Fert_EUR")
     L2322.StubTech_Fert_EUR <- get_data(all_data, "L2322.StubTech_Fert_EUR")
-    L2322.TechShrwt_TradedFert_EUR <- get_data(all_data, "L2322.TechShrwt_TradedFert_EUR")
-    L2322.TechCoef_TradedFert_EUR <- get_data(all_data, "L2322.TechCoef_TradedFert_EUR")
     L2322.StubTechMarket_FertImports_EUR <- get_data(all_data, "L2322.StubTechMarket_FertImports_EUR")
     L2322.StubTechProd_FertProd_EUR <- get_data(all_data, "L2322.StubTechProd_FertProd_EUR")
     L2322.StubTechCoef_Fert_EUR <- get_data(all_data, "L2322.StubTechCoef_Fert_EUR")
-    L2322.Production_FertExport_EUR <- get_data(all_data, "L2322.Production_FertExport_EUR")
     L2322.StubTechProd_FertImport_EUR <- get_data(all_data, "L2322.StubTechProd_FertImport_EUR")
     L2322.StubTechProd_FertDomCons_EUR <- get_data(all_data, "L2322.StubTechProd_FertDomCons_EUR")
     L2322.StubTechProd_NtoAg_EUR <- get_data(all_data, "L2322.StubTechProd_NtoAg_EUR")
@@ -60,12 +54,9 @@ module_gcameurope_en_Fert_xml <- function(command, ...) {
       add_xml_data(L2322.SubsectorShrwtFllt_Fert_EUR, "SubsectorShrwtFllt") %>%
       add_xml_data(L2322.SubsectorInterp_Fert_EUR, "SubsectorInterp") %>%
       add_xml_data(L2322.StubTech_Fert_EUR, "StubTech") %>%
-      add_xml_data(L2322.TechShrwt_TradedFert_EUR, "TechShrwt") %>%
-      add_xml_data(L2322.TechCoef_TradedFert_EUR, "TechCoef") %>%
       add_xml_data(L2322.StubTechMarket_FertImports_EUR, "StubTechMarket") %>%
       add_xml_data(L2322.StubTechProd_FertProd_EUR, "StubTechProd") %>%
       add_xml_data(L2322.StubTechCoef_Fert_EUR, "StubTechCoef") %>%
-      add_xml_data(L2322.Production_FertExport_EUR, "Production") %>%
       add_xml_data(L2322.StubTechProd_FertImport_EUR, "StubTechProd") %>%
       add_xml_data(L2322.StubTechProd_FertDomCons_EUR, "StubTechProd") %>%
       add_xml_data(L2322.StubTechProd_NtoAg_EUR, "StubTechProd") %>%
@@ -75,12 +66,9 @@ module_gcameurope_en_Fert_xml <- function(command, ...) {
                      "L2322.SubsectorShrwtFllt_Fert_EUR",
                      "L2322.SubsectorInterp_Fert_EUR",
                      "L2322.StubTech_Fert_EUR",
-                     "L2322.TechShrwt_TradedFert_EUR",
-                     "L2322.TechCoef_TradedFert_EUR",
                      "L2322.StubTechMarket_FertImports_EUR",
                      "L2322.StubTechProd_FertProd_EUR",
                      "L2322.StubTechCoef_Fert_EUR",
-                     "L2322.Production_FertExport_EUR",
                      "L2322.StubTechProd_FertImport_EUR",
                      "L2322.StubTechProd_FertDomCons_EUR",
                      "L2322.StubTechProd_NtoAg_EUR") ->
