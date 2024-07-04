@@ -21,8 +21,8 @@
 		<Value name = "socioeconomics">../input/gcamdata/xml/socioeconomics_gSSP2.xml</Value>
 		<Value name = "resources">../input/gcamdata/xml/resources.xml</Value>
 		<Value name = "resources">../input/gcamdata/xml/resources_EUR.xml</Value>
-		<Value name = "energy_supply">../input/gcamdata/xml/en_supply.xml</Value>
 		<Value name = "energy_supply">../input/gcamdata/xml/en_supply_EUR.xml</Value>
+		<Value name = "energy_supply">../input/gcamdata/xml/en_supply.xml</Value>
 		<Value name = "energy_transformation">../input/gcamdata/xml/en_transformation.xml</Value>
 		<Value name = "energy_transformation">../input/gcamdata/xml/en_transformation_EUR.xml</Value>
 		<Value name = "elec_water_base">../input/gcamdata/xml/electricity_water.xml</Value>
@@ -142,7 +142,7 @@
 		<Value name = "bio_feedstock_limit">../input/gcamdata/xml/liquids_limits.xml</Value>
 		<Value name = "bio_elec_w_feed_limit">../input/gcamdata/xml/water_elec_liquids_limits.xml</Value>
 		<Value name = "bio_externality">../input/gcamdata/xml/bio_externality.xml</Value>
-        <Value name = "gas_trade">../input/gcamdata/xml/gas_trade.xml</Value>
+        <Value name = "gas_trade">../input/gcamdata/xml/gas_trade_EUR.xml</Value>
 
         <Value name = "prune_ag">../input/gcamdata/xml/prune_empty_ag.xml</Value>
 
@@ -178,7 +178,7 @@
 		<Value name="climateOutputInterval">5</Value>
 		<Value name="parallel-grain-size">50</Value>
 		<Value name="stop-period">-1</Value>
-		<Value name="stop-year">-1</Value>
+		<Value name="stop-year">1990</Value>
 		<Value name="restart-period">-1</Value>
 		<Value name="restart-year">-1</Value>
 		<Value name="max-parallelism">-1</Value>
