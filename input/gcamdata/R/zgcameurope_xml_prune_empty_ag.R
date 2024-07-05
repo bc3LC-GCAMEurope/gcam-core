@@ -1,8 +1,8 @@
 # Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
 
-#' module_aglu_prune_empty_ag_xml
+#' module_gcameurope_prune_empty_ag_xml
 #'
-#' Construct XML data structure for \code{prune_empty_ag.xml}.  Through the
+#' Construct XML data structure for \code{prune_empty_ag_EUR.xml}.  Through the
 #' process of processing the myriad of AgLu data we end up with many combinations
 #' of crop/tech and land node/leaf which have zero production / land allocation
 #' in any historical year.  Given, with the exception of biomass, having no historical
@@ -18,23 +18,23 @@
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
-#' the generated outputs: \code{prune_empty_ag.xml}. (aglu XML).
-module_aglu_prune_empty_ag_xml <- function(command, ...) {
+#' the generated outputs: \code{prune_empty_ag_EUR.xml}. (aglu XML).
+module_gcameurope_prune_empty_ag_xml <- function(command, ...) {
 
   MODULE_INPUTS <-
     c("L2012.AgProduction_ag_irr_mgmt",
       # in case we prune so far that a region no longer has a crop to trade
-      # "L240.TechCoef_tra",
+      "L240.TechCoef_tra",
       "L240.TechCoef_reg",
       "L113.StorageTechAndPassThrough",
       # in case we prune so far that we need to remove feed options (FodderGrass)
-      "L202.StubTech_in",
+      "L202.StubTech_in_EUR",
       "L203.StubTech_demand_nonfood",
       "L2252.LN5_MgdAllocation_crop",
       "L2252.LN5_MgdCarbon_crop")
 
   MODULE_OUTPUTS <-
-    c(XML = "prune_empty_ag.xml")
+    c(XML = "prune_empty_ag_EUR.xml")
 
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -46,7 +46,10 @@ module_aglu_prune_empty_ag_xml <- function(command, ...) {
 
     # Load required inputs ----
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
-
+    for (item in MODULE_INPUTS[MODULE_INPUTS != 'L240.TechCoef_tra']) {
+      assign(item, get(item) %>%
+               filter_regions_europe())
+    }
 
     # ===================================================
 
@@ -96,12 +99,12 @@ module_aglu_prune_empty_ag_xml <- function(command, ...) {
              market.name = region) ->
       prune_agsupply
 
-    # # do not attempt to export a region+crop that is empty
-    # L240.TechCoef_tra %>%
-    #   inner_join(prune_agsupply, by=c("minicam.energy.input", "market.name")) %>%
-    #   select(region, supplysector, subsector) %>%
-    #   distinct() ->
-    #   empty_ag_tra
+    # do not attempt to export a region+crop that is empty
+    L240.TechCoef_tra %>%
+      inner_join(prune_agsupply, by=c("minicam.energy.input", "market.name")) %>%
+      select(region, supplysector, subsector) %>%
+      distinct() ->
+      empty_ag_tra
 
     # do not attempt to get domestic consumption in a region+crop that is empty (imports
     # are left alone, although perhaps checking if those are empty too could lead to further
@@ -125,7 +128,7 @@ module_aglu_prune_empty_ag_xml <- function(command, ...) {
       filter(subsector == "FodderGrass") ->
       prune_fodder_grass
 
-    L202.StubTech_in %>%
+    L202.StubTech_in_EUR %>%
       select(region, supplysector, subsector) %>%
       bind_rows(L203.StubTech_demand_nonfood %>% select(region, supplysector, subsector)) %>%
       inner_join(prune_fodder_grass, by=c("region", "subsector")) %>%
@@ -150,8 +153,8 @@ module_aglu_prune_empty_ag_xml <- function(command, ...) {
       left_join(L2252.LN5_MgdAllocation_crop, by=c("region", "LandAllocatorRoot", LandNode_columns, "LandLeaf", "year")) %>%
       mutate(allocation = if_else(is.na(allocation), 0, allocation)) %>%
       left_join_error_no_match(L2012.AgProduction_ag_irr_mgmt %>%
-                  select(region, AgProductionTechnology, year, calOutputValue),
-                by=c("region", "LandLeaf" = "AgProductionTechnology", "year")) %>%
+                                 select(region, AgProductionTechnology, year, calOutputValue),
+                               by=c("region", "LandLeaf" = "AgProductionTechnology", "year")) %>%
       filter((allocation <= 0 & calOutputValue > 0) | (calOutputValue <= 0 & allocation > 0)) ->
       mismath_double_check
     assertthat::assert_that(nrow(mismath_double_check) == 0)
@@ -258,7 +261,7 @@ module_aglu_prune_empty_ag_xml <- function(command, ...) {
 
 
     # produce output ----
-    create_xml("prune_empty_ag.xml") %>%
+    create_xml("prune_empty_ag_EUR.xml") %>%
       # now call the function to recursively find the empty land node/leaf to prune
       recursive_add_landnode_delete(prune_data, ., LandNode_MaxDepth) %>%
       # add the LandNode rename table
@@ -267,21 +270,21 @@ module_aglu_prune_empty_ag_xml <- function(command, ...) {
       add_xml_data(empty_ag_tech, "AgTechDelete", "AgTech") %>%
       add_xml_data(empty_ag_subsec %>% rename(supplysector = AgSupplySector, subsector = AgSupplySubsector), "DeleteSubsector") %>%
       add_xml_data(empty_ag_sec %>% rename(supplysector = AgSupplySector), "DeleteSupplysector") %>%
-      # add_xml_data(empty_ag_tra, "DeleteSubsector") %>%
+      add_xml_data(empty_ag_tra, "DeleteSubsector") %>%
       add_xml_data(empty_ag_reg, "DeleteSubsector") %>%
       add_xml_data(empty_foddergrass, "DeleteSubsector") %>%
       add_precursors("L2012.AgProduction_ag_irr_mgmt",
-                     # "L240.TechCoef_tra",
+                     "L240.TechCoef_tra",
                      "L240.TechCoef_reg",
-                     "L202.StubTech_in",
+                     "L202.StubTech_in_EUR",
                      "L203.StubTech_demand_nonfood",
                      "L2252.LN5_MgdAllocation_crop",
                      "L2252.LN5_MgdCarbon_crop",
-                     "L113.StorageTechAndPassThrough") %>%
-      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
-      prune_empty_ag.xml
+                     "L113.StorageTechAndPassThrough") ->
+      # remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES, inverse = TRUE) ->
+      prune_empty_ag_EUR.xml
 
-    return_data(prune_empty_ag.xml)
+    return_data(prune_empty_ag_EUR.xml)
   } else {
     stop("Unknown command")
   }

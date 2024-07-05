@@ -35,7 +35,7 @@ module_aglu_an_input_xml <- function(command, ...) {
       "L202.StubTechProd_an",
       "L202.StubTechCoef_an",
       "L202.StubTechCost_an",
-       "L202.StubTechCost_For_proc",
+      "L202.StubTechCost_For_proc",
       "L202.StubTechProd_in_Forest",
       "L202.StubTechProd_in_pulp_energy")
 
@@ -131,9 +131,10 @@ module_aglu_an_input_xml <- function(command, ...) {
                      "L202.StubTechCoef_an",
                      "L202.StubTechCost_an",
                      "L202.StubTechCost_For_proc",
-                    "L202.StubTechProd_in_Forest",
-                    "L202.StubTechProd_in_pulp_energy"
-                     ) ->
+                     "L202.StubTechProd_in_Forest",
+                     "L202.StubTechProd_in_pulp_energy"
+                     ) %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       an_input.xml
 
     return_data(MODULE_OUTPUTS)
