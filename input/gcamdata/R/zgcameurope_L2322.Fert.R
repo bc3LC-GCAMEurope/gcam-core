@@ -269,7 +269,7 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
       left_join_error_no_match(select(calibrated_techs, sector, fuel, supplysector, subsector, technology, minicam.energy.input), by = c("sector", "fuel")) %>%
       mutate(stub.technology = technology, market.name = region) %>%
       select(LEVEL2_DATA_NAMES[["StubTechCoef"]]) %>%
-      mutate(market.name = gcam.USA_REGION) ->
+      mutate(market.name = region) ->
       L2322.StubTechCoef_Fert_EUR
 
     # Ammonia Exports = NetExports where positive
