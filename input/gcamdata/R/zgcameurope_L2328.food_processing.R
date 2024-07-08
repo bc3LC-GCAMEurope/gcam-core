@@ -40,7 +40,8 @@ module_gcameurope_L2328.food_processing <- function(command, ...) {
       FILE = "energy/A328.demand",
       "L1328.in_EJ_R_food_F_Yh_EUR",
       "L1328.out_Pcal_R_food_Yh_EUR",
-      "L1328.IO_EJPcal_R_food_F_Yh_EUR")
+      "L1328.IO_EJPcal_R_food_F_Yh_EUR",
+      "L123.eff_R_indchp_F_Yh_EUR")
 
   MODULE_OUTPUTS <-
     c("L2328.Supplysector_food_EUR",
@@ -54,7 +55,8 @@ module_gcameurope_L2328.food_processing <- function(command, ...) {
       "L2328.StubTechCalInput_food_heat_EUR",
       "L2328.StubTechCoef_food_EUR",
       "L2328.StubCalorieContent_EUR",
-      "L2328.StubCaloriePriceConv_EUR")
+      "L2328.StubCaloriePriceConv_EUR",
+      "L2328.StubTechSecOut_food_EUR")
 
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -327,6 +329,26 @@ module_gcameurope_L2328.food_processing <- function(command, ...) {
       filter(!region %in% aglu.NO_AGLU_REGIONS) ->          # Remove any regions for which agriculture and land use are not modeled
       L2328.StubCaloriePriceConv_EUR
 
+    # L2328.StubTechSecOut_food_EUR
+    L2328.StubTechSecOut_food_EUR <- L123.eff_R_indchp_F_Yh_EUR %>%
+      filter(year %in% MODEL_BASE_YEARS) %>%
+      left_join_error_no_match(L2328.GlobalTechCoef_food %>%
+                                 filter(grepl("cogen", technology)),
+                               by = c("year", "fuel" = "subsector.name")) %>%
+      mutate(output.ratio = value * coefficient,
+             output.ratio = round(output.ratio, energy.DIGITS_COEFFICIENT),
+             fractional.secondary.output = "electricity") %>%
+      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
+      select(region, supplysector = sector.name, subsector = fuel,
+             stub.technology = technology, fractional.secondary.output, year, output.ratio) %>%
+      # NOTE: holding the output ratio constant over time in future periods
+      complete(nesting(region,supplysector, subsector, stub.technology, fractional.secondary.output),
+               year = c(MODEL_YEARS)) %>%
+      group_by(region, supplysector, subsector, stub.technology, fractional.secondary.output) %>%
+      mutate(output.ratio = approx_fun(year, output.ratio, rule = 2)) %>%
+      ungroup %>%
+      select(LEVEL2_DATA_NAMES[["StubTechFractSecOut"]])
+
 
     # =======================================================
     # Produce outputs
@@ -424,6 +446,12 @@ module_gcameurope_L2328.food_processing <- function(command, ...) {
       add_comments("Remove any regions for which agriculture and land use are not modeled") %>%
       add_precursors("common/GCAM_region_names", "energy/A328.demand") ->
       L2328.StubCaloriePriceConv_EUR
+
+    L2328.StubTechSecOut_food_EUR  %>%
+      add_title("European specific sec out ratios for cogen in food processing industry") %>%
+      add_units("Unitless") %>%
+      add_precursors("L123.eff_R_indchp_F_Yh_EUR") ->
+      L2328.StubTechSecOut_food_EUR
 
     return_data(MODULE_OUTPUTS)
 

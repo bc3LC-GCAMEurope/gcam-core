@@ -11,19 +11,21 @@
 #' the generated outputs: \code{food_processing_EUR.xml}. The corresponding file in the
 #' original data system was \code{batch_food_processing_xml.R} (energy XML).
 module_gcameurope_food_processing_xml <- function(command, ...) {
+  MODULE_INPUTS <- c("L2328.Supplysector_food_EUR",
+                     "L2328.FinalEnergyKeyword_food_EUR",
+                     "L2328.SubsectorLogit_food_EUR",
+                     "L2328.SubsectorShrwtFllt_food_EUR",
+                     "L2328.SubsectorInterp_food_EUR",
+                     "L2328.StubTech_food_EUR",
+                     "L2328.StubTechCost_food_EUR",
+                     "L2328.StubTechProd_food_EUR",
+                     "L2328.StubTechCalInput_food_heat_EUR",
+                     "L2328.StubTechCoef_food_EUR",
+                     "L2328.StubCalorieContent_EUR",
+                     "L2328.StubCaloriePriceConv_EUR",
+                     "L2328.StubTechSecOut_food_EUR")
   if(command == driver.DECLARE_INPUTS) {
-    return(c("L2328.Supplysector_food_EUR",
-             "L2328.FinalEnergyKeyword_food_EUR",
-             "L2328.SubsectorLogit_food_EUR",
-             "L2328.SubsectorShrwtFllt_food_EUR",
-             "L2328.SubsectorInterp_food_EUR",
-             "L2328.StubTech_food_EUR",
-             "L2328.StubTechCost_food_EUR",
-             "L2328.StubTechProd_food_EUR",
-             "L2328.StubTechCalInput_food_heat_EUR",
-             "L2328.StubTechCoef_food_EUR",
-             "L2328.StubCalorieContent_EUR",
-             "L2328.StubCaloriePriceConv_EUR"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c(XML = "food_processing_EUR.xml"))
   } else if(command == driver.MAKE) {
@@ -31,18 +33,7 @@ module_gcameurope_food_processing_xml <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    L2328.Supplysector_food_EUR <- get_data(all_data, "L2328.Supplysector_food_EUR")
-    L2328.FinalEnergyKeyword_food_EUR <- get_data(all_data, "L2328.FinalEnergyKeyword_food_EUR")
-    L2328.SubsectorLogit_food_EUR <- get_data(all_data, "L2328.SubsectorLogit_food_EUR")
-    L2328.SubsectorShrwtFllt_food_EUR <- get_data(all_data, "L2328.SubsectorShrwtFllt_food_EUR")
-    L2328.SubsectorInterp_food_EUR <- get_data(all_data, "L2328.SubsectorInterp_food_EUR")
-    L2328.StubTech_food_EUR <- get_data(all_data, "L2328.StubTech_food_EUR")
-    L2328.StubTechCost_food_EUR <- get_data(all_data, "L2328.StubTechCost_food_EUR")
-    L2328.StubTechProd_food_EUR <- get_data(all_data, "L2328.StubTechProd_food_EUR")
-    L2328.StubTechCalInput_food_heat_EUR <- get_data(all_data, "L2328.StubTechCalInput_food_heat_EUR")
-    L2328.StubTechCoef_food_EUR <- get_data(all_data, "L2328.StubTechCoef_food_EUR")
-    L2328.StubCalorieContent_EUR <- get_data(all_data, "L2328.StubCalorieContent_EUR")
-    L2328.StubCaloriePriceConv_EUR <- get_data(all_data, "L2328.StubCaloriePriceConv_EUR")
+    get_data_list(all_data, MODULE_INPUTS)
 
     # ===================================================
 
@@ -59,12 +50,10 @@ module_gcameurope_food_processing_xml <- function(command, ...) {
       add_xml_data(L2328.StubTechProd_food_EUR, "StubTechProd") %>%
       add_xml_data(L2328.StubTechCalInput_food_heat_EUR, "StubTechCalInput") %>%
       add_xml_data(L2328.StubTechCoef_food_EUR, "StubTechCoef") %>%
+      add_xml_data(L2328.StubTechSecOut_food_EUR, "StubTechFractSecOut") %>%
       add_xml_data_generate_levels(L2328.StubCalorieContent_EUR, "StubCalorieContent", "subsector","nesting-subsector",1,FALSE) %>%
       add_xml_data_generate_levels(L2328.StubCaloriePriceConv_EUR, "StubCaloriePriceConv", "subsector","nesting-subsector",1,FALSE) %>%
-      add_precursors("L2328.Supplysector_food_EUR", "L2328.FinalEnergyKeyword_food_EUR", "L2328.SubsectorLogit_food_EUR",
-                     "L2328.SubsectorShrwtFllt_food_EUR", "L2328.SubsectorInterp_food_EUR", "L2328.StubTech_food_EUR",
-                     "L2328.StubTechCost_food_EUR", "L2328.StubTechProd_food_EUR", "L2328.StubTechCalInput_food_heat_EUR",
-                     "L2328.StubTechCoef_food_EUR", "L2328.StubCalorieContent_EUR", "L2328.StubCaloriePriceConv_EUR") ->
+      add_precursors(MODULE_INPUTS) ->
       food_processing_EUR.xml
 
     return_data(food_processing_EUR.xml)

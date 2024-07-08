@@ -19,72 +19,58 @@
 #' @importFrom tidyr gather spread
 #' @author MMC July 2022
 module_gcameurope_L2327.paper <- function(command, ...) {
-
+  MODULE_INPUTS <- c(FILE = "common/GCAM_region_names",
+                     FILE = "energy/calibrated_techs",
+                     FILE = "energy/A_regions",
+                     FILE = "energy/A327.sector",
+                     FILE = "energy/A23.chp_elecratio",
+                     FILE = "energy/A327.subsector_interp",
+                     FILE = "energy/A327.subsector_logit",
+                     FILE = "energy/A327.subsector_shrwt",
+                     FILE = "energy/A327.globaltech_coef",
+                     FILE = "energy/A327.globaltech_co2capture",
+                     FILE = "energy/A327.globaltech_cost",
+                     FILE = "energy/A327.globaltech_shrwt",
+                     FILE = "energy/A327.globaltech_retirement",
+                     FILE = "energy/A327.demand",
+                     FILE = "energy/A327.subsector_interp_adj_future_years",
+                     FILE = "energy/A327.subsector_shrwt_adj_future_years",
+                     "L1327.in_EJ_R_paper_F_Yh_EUR",
+                     "L1327.out_Mt_R_paper_Yh_EUR",
+                     "L1327.IO_GJkg_R_paper_F_Yh_EUR",
+                     "L1327.elec_noheat_adj_shwt_R_EUR",
+                     "L203.Supplysector_demand",
+                     "L203.PerCapitaBased",
+                     "L123.eff_R_indchp_F_Yh_EUR")
+  MODULE_OUTPUTS <- c("L2327.Supplysector_paper_EUR",
+                      "L2327.FinalEnergyKeyword_paper_EUR",
+                      "L2327.SubsectorLogit_paper_EUR",
+                      "L2327.SubsectorShrwtFllt_paper_EUR",
+                      "L2327.SubsectorInterp_paper_EUR",
+                      "L2327.StubTech_paper_EUR",
+                      "L2327.StubTechProd_paper_EUR",
+                      "L2327.StubTechCalInput_paper_heat_EUR",
+                      "L2327.StubTechCoef_paper_EUR",
+                      "L2327.PerCapitaBased_paper_EUR",
+                      "L2327.BaseService_paper_EUR",
+                      "L2327.PriceElasticity_paper_EUR",
+                      "L2327.DeleteSupplysector_PaperAgDemand_EUR",
+                      "L2327.DeleteFinalDemand_PaperAgDemand_EUR",
+                      "L2327.StubTechSecOut_paper_EUR")
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "common/GCAM_region_names",
-             FILE = "energy/calibrated_techs",
-             FILE = "energy/A_regions",
-             FILE = "energy/A327.sector",
-             FILE = "energy/A23.chp_elecratio",
-             FILE = "energy/A327.subsector_interp",
-             FILE = "energy/A327.subsector_logit",
-             FILE = "energy/A327.subsector_shrwt",
-             FILE = "energy/A327.globaltech_coef",
-             FILE = "energy/A327.globaltech_co2capture",
-             FILE = "energy/A327.globaltech_cost",
-             FILE = "energy/A327.globaltech_shrwt",
-             FILE = "energy/A327.globaltech_retirement",
-             FILE = "energy/A327.demand",
-             FILE = "energy/A327.subsector_interp_adj_future_years",
-             FILE = "energy/A327.subsector_shrwt_adj_future_years",
-             "L1327.in_EJ_R_paper_F_Yh_EUR",
-             "L1327.out_Mt_R_paper_Yh_EUR",
-             "L1327.IO_GJkg_R_paper_F_Yh_EUR",
-             "L1327.elec_noheat_adj_shwt_R_EUR",
-             "L203.Supplysector_demand",
-             "L203.PerCapitaBased"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L2327.Supplysector_paper_EUR",
-             "L2327.FinalEnergyKeyword_paper_EUR",
-             "L2327.SubsectorLogit_paper_EUR",
-             "L2327.SubsectorShrwtFllt_paper_EUR",
-             "L2327.SubsectorInterp_paper_EUR",
-             "L2327.StubTech_paper_EUR",
-             "L2327.StubTechProd_paper_EUR",
-             "L2327.StubTechCalInput_paper_heat_EUR",
-             "L2327.StubTechCoef_paper_EUR",
-             "L2327.PerCapitaBased_paper_EUR",
-             "L2327.BaseService_paper_EUR",
-             "L2327.PriceElasticity_paper_EUR",
-             "L2327.DeleteSupplysector_PaperAgDemand_EUR",
-             "L2327.DeleteFinalDemand_PaperAgDemand_EUR"))
+    return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names", strip_attributes = TRUE) %>% filter_regions_europe()
-    calibrated_techs <- get_data(all_data, "energy/calibrated_techs", strip_attributes = TRUE)
-    A_regions <- get_data(all_data, "energy/A_regions", strip_attributes = TRUE) %>% filter_regions_europe()
-    A327.sector <- get_data(all_data, "energy/A327.sector", strip_attributes = TRUE)
-    A327.subsector_interp <- get_data(all_data, "energy/A327.subsector_interp", strip_attributes = TRUE)
-    A327.subsector_logit <- get_data(all_data, "energy/A327.subsector_logit", strip_attributes = TRUE)
-    A327.subsector_shrwt <- get_data(all_data, "energy/A327.subsector_shrwt", strip_attributes = TRUE)
-    A327.globaltech_coef <- get_data(all_data, "energy/A327.globaltech_coef", strip_attributes = TRUE)
-    A327.globaltech_co2capture <- get_data(all_data, "energy/A327.globaltech_co2capture", strip_attributes = TRUE)
-    A327.globaltech_retirement <- get_data(all_data, "energy/A327.globaltech_retirement", strip_attributes = TRUE)
-    A327.globaltech_cost <- get_data(all_data, "energy/A327.globaltech_cost", strip_attributes = TRUE)
-    A327.globaltech_shrwt <- get_data(all_data, "energy/A327.globaltech_shrwt", strip_attributes = TRUE)
-    A327.demand <- get_data(all_data, "energy/A327.demand", strip_attributes = TRUE)
-    A23.chp_elecratio  <- get_data(all_data, "energy/A23.chp_elecratio", strip_attributes = TRUE)
-    L1327.in_EJ_R_paper_F_Yh_EUR <- get_data(all_data, "L1327.in_EJ_R_paper_F_Yh_EUR", strip_attributes = TRUE)
-    L1327.out_Mt_R_paper_Yh_EUR <- get_data(all_data, "L1327.out_Mt_R_paper_Yh_EUR", strip_attributes = TRUE)
-    L1327.IO_GJkg_R_paper_F_Yh_EUR <- get_data(all_data, "L1327.IO_GJkg_R_paper_F_Yh_EUR", strip_attributes = TRUE)
-    L1327.elec_noheat_adj_shwt_R_EUR <- get_data(all_data, "L1327.elec_noheat_adj_shwt_R_EUR", strip_attributes = TRUE)
-    A327.subsector_interp_adj_future_years <- get_data(all_data, "energy/A327.subsector_interp_adj_future_years", strip_attributes = TRUE)
-    A327.subsector_shrwt_adj_future_years <- get_data(all_data, "energy/A327.subsector_shrwt_adj_future_years", strip_attributes = TRUE)
-    L203.Supplysector_demand <- get_data(all_data, "L203.Supplysector_demand", strip_attributes = TRUE) %>% filter_regions_europe()
-    L203.PerCapitaBased <- get_data(all_data, "L203.PerCapitaBased", strip_attributes = TRUE) %>% filter_regions_europe()
+    get_data_list(all_data, MODULE_INPUTS, strip_attributes = T)
+    GCAM_region_names <- GCAM_region_names %>% filter_regions_europe()
+    A_regions <- A_regions%>% filter_regions_europe()
+    L203.Supplysector_demand <- L203.Supplysector_demand %>% filter_regions_europe()
+    L203.PerCapitaBased <- L203.PerCapitaBased %>% filter_regions_europe()
 
     # ===================================================
     # 0. Give binding for variable names used in pipeline
@@ -404,6 +390,26 @@ module_gcameurope_L2327.paper <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["DeleteFinalDemand"]]) ->
       L2327.DeleteFinalDemand_PaperAgDemand_EUR
 
+    # L2327.StubTechSecOut_paper_EUR
+    L2327.StubTechSecOut_paper_EUR <- L123.eff_R_indchp_F_Yh_EUR %>%
+      filter(year %in% MODEL_BASE_YEARS) %>%
+      left_join_error_no_match(L2327.GlobalTechCoef_paper %>%
+                                 filter(grepl("cogen", technology)),
+                               by = c("year", "fuel" = "subsector.name")) %>%
+      mutate(output.ratio = value * coefficient,
+             output.ratio = round(output.ratio, energy.DIGITS_COEFFICIENT),
+             fractional.secondary.output = "electricity") %>%
+      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
+      select(region, supplysector = sector.name, subsector = fuel,
+             stub.technology = technology, fractional.secondary.output, year, output.ratio) %>%
+      # NOTE: holding the output ratio constant over time in future periods
+      complete(nesting(region,supplysector, subsector, stub.technology, fractional.secondary.output),
+               year = c(MODEL_YEARS)) %>%
+      group_by(region, supplysector, subsector, stub.technology, fractional.secondary.output) %>%
+      mutate(output.ratio = approx_fun(year, output.ratio, rule = 2)) %>%
+      ungroup %>%
+      select(LEVEL2_DATA_NAMES[["StubTechFractSecOut"]])
+
     # =======================================================
     # Produce outputs
     L2327.Supplysector_paper_EUR %>%
@@ -520,14 +526,15 @@ module_gcameurope_L2327.paper <- function(command, ...) {
       add_precursors("L203.PerCapitaBased") ->
       L2327.DeleteFinalDemand_PaperAgDemand_EUR
 
+    L2327.StubTechSecOut_paper_EUR  %>%
+      add_title("European specific sec out ratios for cogen in paper industry") %>%
+      add_units("Unitless") %>%
+      add_precursors("L123.eff_R_indchp_F_Yh_EUR") ->
+      L2327.StubTechSecOut_paper_EUR
 
-    return_data(L2327.Supplysector_paper_EUR, L2327.FinalEnergyKeyword_paper_EUR, L2327.SubsectorLogit_paper_EUR, L2327.SubsectorShrwtFllt_paper_EUR,
-                L2327.SubsectorInterp_paper_EUR, L2327.StubTech_paper_EUR, L2327.StubTechProd_paper_EUR,
-                L2327.StubTechCalInput_paper_heat_EUR, L2327.StubTechCoef_paper_EUR, L2327.PerCapitaBased_paper_EUR,
-                L2327.BaseService_paper_EUR, L2327.PriceElasticity_paper_EUR,
-                L2327.DeleteSupplysector_PaperAgDemand_EUR, L2327.DeleteFinalDemand_PaperAgDemand_EUR)
+    return_data(MODULE_OUTPUTS)
 
-  } else {#TODO revisar el coeff de L2327.StubTechCoef_paper_EUR
+  } else {
     stop("Unknown command")
   }
 }

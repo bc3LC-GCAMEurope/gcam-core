@@ -11,19 +11,21 @@
 #' the generated outputs: \code{paper_EUR.xml}. The corresponding file in the
 #' original data system was \code{batch_paper_xml.R} (energy XML).
 module_gcameurope_paper_xml <- function(command, ...) {
+  MODULE_INPUTS <- c("L2327.Supplysector_paper_EUR",
+                     "L2327.FinalEnergyKeyword_paper_EUR",
+                     "L2327.SubsectorLogit_paper_EUR",
+                     "L2327.SubsectorShrwtFllt_paper_EUR",
+                     "L2327.SubsectorInterp_paper_EUR",
+                     "L2327.StubTech_paper_EUR",
+                     "L2327.StubTechProd_paper_EUR",
+                     "L2327.StubTechCalInput_paper_heat_EUR",
+                     "L2327.StubTechCoef_paper_EUR",
+                     "L2327.PerCapitaBased_paper_EUR",
+                     "L2327.BaseService_paper_EUR",
+                     "L2327.PriceElasticity_paper_EUR",
+                     "L2327.StubTechSecOut_paper_EUR")
   if(command == driver.DECLARE_INPUTS) {
-    return(c("L2327.Supplysector_paper_EUR",
-             "L2327.FinalEnergyKeyword_paper_EUR",
-             "L2327.SubsectorLogit_paper_EUR",
-             "L2327.SubsectorShrwtFllt_paper_EUR",
-             "L2327.SubsectorInterp_paper_EUR",
-             "L2327.StubTech_paper_EUR",
-             "L2327.StubTechProd_paper_EUR",
-             "L2327.StubTechCalInput_paper_heat_EUR",
-             "L2327.StubTechCoef_paper_EUR",
-             "L2327.PerCapitaBased_paper_EUR",
-             "L2327.BaseService_paper_EUR",
-             "L2327.PriceElasticity_paper_EUR"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c(XML = "paper_EUR.xml"))
   } else if(command == driver.MAKE) {
@@ -31,19 +33,7 @@ module_gcameurope_paper_xml <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    L2327.Supplysector_paper_EUR <- get_data(all_data, "L2327.Supplysector_paper_EUR")
-    L2327.FinalEnergyKeyword_paper_EUR <- get_data(all_data, "L2327.FinalEnergyKeyword_paper_EUR")
-    L2327.SubsectorLogit_paper_EUR <- get_data(all_data, "L2327.SubsectorLogit_paper_EUR")
-    L2327.SubsectorShrwtFllt_paper_EUR <- get_data(all_data, "L2327.SubsectorShrwtFllt_paper_EUR")
-    L2327.SubsectorInterp_paper_EUR <- get_data(all_data, "L2327.SubsectorInterp_paper_EUR")
-    L2327.StubTech_paper_EUR <- get_data(all_data, "L2327.StubTech_paper_EUR")
-    L2327.StubTechProd_paper_EUR <- get_data(all_data, "L2327.StubTechProd_paper_EUR")
-    L2327.StubTechCalInput_paper_heat_EUR <- get_data(all_data, "L2327.StubTechCalInput_paper_heat_EUR")
-    L2327.StubTechCoef_paper_EUR <- get_data(all_data, "L2327.StubTechCoef_paper_EUR")
-    L2327.PerCapitaBased_paper_EUR <- get_data(all_data, "L2327.PerCapitaBased_paper_EUR")
-    L2327.BaseService_paper_EUR <- get_data(all_data, "L2327.BaseService_paper_EUR")
-    L2327.PriceElasticity_paper_EUR <- get_data(all_data, "L2327.PriceElasticity_paper_EUR")
-
+    get_data_list(all_data, MODULE_INPUTS)
     # ===================================================
 
     # Produce outputs
@@ -58,13 +48,11 @@ module_gcameurope_paper_xml <- function(command, ...) {
       add_xml_data(L2327.StubTechProd_paper_EUR, "StubTechProd") %>%
       add_xml_data(L2327.StubTechCalInput_paper_heat_EUR, "StubTechCalInput") %>%
       add_xml_data(L2327.StubTechCoef_paper_EUR, "StubTechCoef") %>%
+      add_xml_data(L2327.StubTechSecOut_paper_EUR, "StubTechFractSecOut") %>%
       add_xml_data(L2327.PerCapitaBased_paper_EUR, "PerCapitaBased") %>%
       add_xml_data(L2327.BaseService_paper_EUR, "BaseService") %>%
       add_xml_data(L2327.PriceElasticity_paper_EUR, "PriceElasticity") %>%
-      add_precursors("L2327.Supplysector_paper_EUR", "L2327.FinalEnergyKeyword_paper_EUR", "L2327.SubsectorLogit_paper_EUR",
-                     "L2327.SubsectorShrwtFllt_paper_EUR", "L2327.SubsectorInterp_paper_EUR", "L2327.StubTech_paper_EUR",
-                     "L2327.StubTechProd_paper_EUR", "L2327.StubTechCalInput_paper_heat_EUR", "L2327.StubTechCoef_paper_EUR",
-                     "L2327.PerCapitaBased_paper_EUR", "L2327.BaseService_paper_EUR", "L2327.PriceElasticity_paper_EUR") ->
+      add_precursors(MODULE_INPUTS) ->
       paper_EUR.xml
 
     return_data(paper_EUR.xml)
