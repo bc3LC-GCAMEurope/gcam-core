@@ -345,6 +345,17 @@ module_aglu_L100.FAO_SUA_connection <- function(command, ...) {
       filter(GCAM_commodity %in% COMM_CROP) %>%
       transmute(GCAM_region_ID, GCAM_commodity, year, value = Mt)
 
+    # Moldova creates problems because of 0s in fibercrop in 2005
+    # We are just manually filling in with values similar to 2010 to avoid errors
+    MOLDOVA_ID <- GCAM_region_names %>%
+      filter(region == "Moldova") %>%
+      pull(GCAM_region_ID)
+
+    L101.ag_Food_Mt_R_C_Y <- L101.ag_Food_Mt_R_C_Y %>%
+      mutate(value = if_else(GCAM_region_ID == MOLDOVA_ID & GCAM_commodity == "FiberCrop" & year == 2005,
+                             2e-6,
+                             value))
+
     ##* L101.an_Food_Mt_R_C_Y ----
     L101.an_Food_Mt_R_C_Y <-
       DF_Macronutrient_FoodItem4 %>%
@@ -355,6 +366,11 @@ module_aglu_L100.FAO_SUA_connection <- function(command, ...) {
     L101.CropMeat_Food_Pcal_R_C_Y <-
       DF_Macronutrient_FoodItem4 %>%
       transmute(GCAM_region_ID, GCAM_commodity, year, value = MKcal/1000)
+
+    L101.CropMeat_Food_Pcal_R_C_Y <- L101.CropMeat_Food_Pcal_R_C_Y %>%
+      mutate(value = if_else(GCAM_region_ID == MOLDOVA_ID & GCAM_commodity == "FiberCrop" & year == 2005,
+                             6,
+                             value))
 
     rm(list = ls(pattern = "DF_Macronutrient_FoodItem*"))
 
@@ -373,6 +389,19 @@ module_aglu_L100.FAO_SUA_connection <- function(command, ...) {
       L100.FAO_SUA_APE_balance %>% filter(element %in% c("Export", "Import")) %>%
       spread(element, value) %>%
       rename(GrossExp_Mt = Export, GrossImp_Mt = Import)
+
+    # Also need to adjust luxembourg because it has net exports of fibercrop in 2010 despite no production/storage
+    LUX_ID <- GCAM_region_names %>%
+      filter(region == "Luxembourg") %>%
+      pull(GCAM_region_ID)
+
+    L101.GrossTrade_Mt_R_C_Y <- L101.GrossTrade_Mt_R_C_Y %>%
+      mutate(GrossExp_Mt = if_else(GCAM_region_ID == MOLDOVA_ID & GCAM_commodity == "FiberCrop" & year == 2005,
+                             1e-6,
+                             GrossExp_Mt),
+             GrossExp_Mt = if_else(GCAM_region_ID == LUX_ID & GCAM_commodity == "FiberCrop" & year == 2010,
+                                   1e-6,
+                                   GrossExp_Mt))
 
     # 5. Ag post-harvest storage loss rate and Ag storage ----
 
