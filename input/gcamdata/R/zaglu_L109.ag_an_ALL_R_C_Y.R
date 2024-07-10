@@ -502,10 +502,24 @@ module_aglu_L109.ag_an_ALL_R_C_Y <- function(command, ...) {
     L109.ag_ALL_Mt_R_C_Y %>%
       # reduce import and export both by the same (GrossExp_Mt - Prod_Mt)
       mutate(GrossImp_Mt = if_else(GrossExp_Mt > Prod_Mt,
-                                   GrossImp_Mt - (GrossExp_Mt - Prod_Mt),GrossImp_Mt),
+                                   GrossImp_Mt - (GrossExp_Mt - Prod_Mt),
+                                   GrossImp_Mt),
              GrossExp_Mt = if_else(GrossExp_Mt > Prod_Mt,
                                    Prod_Mt, GrossExp_Mt)) ->
       L109.ag_ALL_Mt_R_C_Y
+
+    # don't allow imports to be less than 0
+    # then need to recalculate netexports, supply, otheruses
+    L109.ag_ALL_Mt_R_C_Y_ADJ_IMP_NEG <- L109.ag_ALL_Mt_R_C_Y %>%
+      filter(GrossImp_Mt < 0) %>%
+      mutate(GrossImp_Mt = 0,
+             NetExp_Mt = GrossExp_Mt - GrossImp_Mt,
+             Supply_Mt = `Opening stocks` + Prod_Mt - NetExp_Mt,
+             OtherUses_Mt = Supply_Mt - Food_Mt - Feed_Mt - Biofuels_Mt - `Closing stocks`)
+
+    L109.ag_ALL_Mt_R_C_Y <- L109.ag_ALL_Mt_R_C_Y %>%
+      anti_join(L109.ag_ALL_Mt_R_C_Y_ADJ_IMP_NEG, by = c("GCAM_commodity", "year", "GCAM_region_ID")) %>%
+      bind_rows(L109.ag_ALL_Mt_R_C_Y_ADJ_IMP_NEG)
 
     L109.an_ALL_Mt_R_C_Y %>%
       # reduce import and export both by the same (GrossExp_Mt - Prod_Mt)
