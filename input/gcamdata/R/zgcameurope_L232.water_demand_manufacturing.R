@@ -87,10 +87,15 @@ module_gcameurope_L232.water_demand_manufacturing <- function(command, ...) {
              # Calculate water consumption in paper industry - use constant ratio in mfg_water_ratios.csv
              consumption = withdrawals * mfg_water_ratios$`cons-to-with-ratio`) %>%
       select(GCAM_region_ID, sector, year, prod, `water withdrawals` = withdrawals, `water consumption` = consumption) %>%
-      gather(c(`water withdrawals`, `water consumption`), key = "water_type", value = water_km3) %>%
-      mutate(coefficient = water_km3 / prod) %>%
-      select(-prod) ->
+      gather(c(`water withdrawals`, `water consumption`), key = "water_type", value = water_km3)  ->
       L1327.water_km3_R_ind_Yh_paper
+
+    # If more water use in paper than available water, scale down water use
+    L1327.water_km3_R_ind_Yh_paper <- L1327.water_km3_R_ind_Yh_paper %>%
+      left_join_error_no_match(L132.water_km3_R_ind_Yh_EUR, by = c("GCAM_region_ID", "year", "water_type")) %>%
+      mutate(water_km3 = if_else(water_km3.x > water_km3.y, water_km3.y * 0.67, water_km3.x),
+             coefficient = water_km3 / prod) %>%
+      select(-water_km3.x, -water_km3.y)
 
     # Subtract paper industry water use from total industry
     L132.water_km3_R_ind_Yh_EUR %>%
@@ -98,9 +103,14 @@ module_gcameurope_L232.water_demand_manufacturing <- function(command, ...) {
       left_join(L1327.water_km3_R_ind_Yh_paper %>% select(GCAM_region_ID, year, water_type, paper_water=water_km3),
                 by = c("GCAM_region_ID", "year", "water_type")) %>%
       mutate(paper_water = replace_na(paper_water, 0),
-             water_km3 = if_else(industry_water - paper_water < 0, 0, industry_water - paper_water)) %>%
+             water_km3 = industry_water - paper_water) %>%
       select(GCAM_region_ID, year, water_type, water_km3) ->
       L1327.water_km3_R_ind_Yh
+
+
+    # If more water use in paper than available water, scale down water use
+    L1327.water_km3_R_ind_Yh %>%
+      filter(water_km3 < 0)
 
 
     # Food processing water withdrawals
