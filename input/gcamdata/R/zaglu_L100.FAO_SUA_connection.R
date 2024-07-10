@@ -395,11 +395,24 @@ module_aglu_L100.FAO_SUA_connection <- function(command, ...) {
       filter(region == "Luxembourg") %>%
       pull(GCAM_region_ID)
 
+    # Also need to adjust Iceland because it has net exports of fibercrop and oilpalm in 2015 despite no production/storage
+    ICE_ID <- GCAM_region_names %>%
+      filter(region == "Iceland") %>%
+      pull(GCAM_region_ID)
+
     L101.GrossTrade_Mt_R_C_Y <- L101.GrossTrade_Mt_R_C_Y %>%
       mutate(GrossExp_Mt = if_else(GCAM_region_ID == MOLDOVA_ID & GCAM_commodity == "FiberCrop" & year == 2005,
                              1e-6,
                              GrossExp_Mt),
              GrossExp_Mt = if_else(GCAM_region_ID == LUX_ID & GCAM_commodity == "FiberCrop" & year == 2010,
+                                   1e-6,
+                                   GrossExp_Mt))
+
+    L101.GrossTrade_Mt_R_C_Y <- L101.GrossTrade_Mt_R_C_Y %>%
+      mutate(GrossExp_Mt = if_else(GCAM_region_ID == ICE_ID & GCAM_commodity == "FiberCrop" & year == 2015,
+                                   1e-6,
+                                   GrossExp_Mt),
+             GrossExp_Mt = if_else(GCAM_region_ID == ICE_ID & GCAM_commodity == "OilPalm" & year == 2015,
                                    1e-6,
                                    GrossExp_Mt))
 
