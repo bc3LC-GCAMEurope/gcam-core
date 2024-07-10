@@ -361,6 +361,18 @@ module_aglu_L2012.ag_For_Past_bio_input_irr_mgmt <- function(command, ...) {
       select(-GLU_name) ->
       L201.AgYield_bio_grass
 
+    # Iceland and Malta are dropped here, ensure that all AgSupplySubsector in L2012.AgYield_bio_ref
+    # are present in L201.AgYield_bio_grass
+    L201.AgYield_bio_grass <- L2012.AgYield_bio_ref %>%
+      filter(grepl("biomassGrass", AgSupplySubsector)) %>%
+      distinct(region, AgSupplySubsector, year, yield) %>%
+      anti_join(L201.AgYield_bio_grass, by = c("region", "AgSupplySubsector")) %>%
+      mutate(AgSupplySector = "biomass",
+             AgProductionTechnology = AgSupplySubsector) %>%
+      bind_rows(L201.AgYield_bio_grass)
+
+
+
     # Write out the all years and CO2 object for Pasture AgProductionTechnologies
     L2012.AgProduction_For_Past %>%
       filter(AgSupplySector %in% L123.ag_Prod_Mt_R_Past_Y_GLU$GCAM_commodity) %>%

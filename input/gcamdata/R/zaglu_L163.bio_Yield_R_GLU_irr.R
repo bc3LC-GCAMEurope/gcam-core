@@ -203,7 +203,27 @@ module_aglu_L163.bio_Yield_R_GLU_irr <- function(command, ...) {
       select(-Irr_Rfd) ->
       L163.ag_rfdBioYield_GJm2_R_GLU
 
+    # Add in missing RFD bioYield for Malta and Iceland
+    MALTA_ID <- iso_GCAM_regID %>% filter(country_name == "Malta") %>% pull(GCAM_region_ID)
+    ICELAND_ID <- iso_GCAM_regID %>% filter(country_name == "Iceland") %>% pull(GCAM_region_ID)
+    # Give Iceland same yield as Norway
+    rfdBioYield_Iceland <- L101.ag_HA_bm2_R_C_Y_GLU %>%
+      filter(GCAM_region_ID == ICELAND_ID) %>%
+      distinct(GCAM_region_ID, GLU) %>%
+      mutate(Yield_GJm2 = L163.ag_rfdBioYield_GJm2_R_GLU %>%
+               filter(GLU == "GLU008") %>% pull(Yield_GJm2))
 
+    # Give Malta average yield of its GLU
+    rfdBioYield_Malta <- L101.ag_HA_bm2_R_C_Y_GLU %>%
+      filter(GCAM_region_ID == MALTA_ID) %>%
+      distinct(GCAM_region_ID, GLU)
+
+    rfdBioYield_Malta <- rfdBioYield_Malta %>%
+      mutate(Yield_GJm2 = L163.ag_rfdBioYield_GJm2_R_GLU %>%
+               filter(GLU == rfdBioYield_Malta$GLU) %>% pull(Yield_GJm2) %>% mean())
+
+    L163.ag_rfdBioYield_GJm2_R_GLU <- L163.ag_rfdBioYield_GJm2_R_GLU %>%
+      bind_rows(rfdBioYield_Iceland, rfdBioYield_Malta)
       # Produce outputs
     L113.ag_bioYield_GJm2_R_GLU %>%
       add_title("Base year bioenergy yields by GCAM region and GLU") %>%
