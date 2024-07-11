@@ -449,7 +449,7 @@ aglu.MGMT_DELIMITER       <- "_"  # delimiter between appended tech name and man
 aglu.DIGITS_AGPRODCHANGE  <- 4 # rate of change in yield values
 aglu.DIGITS_C_DENSITY     <- 1
 aglu.DIGITS_C_DENSITY_CROP <- 3 # cropland vegetative soil carbon content
-aglu.DIGITS_CALOUTPUT     <- 7 # for production values
+aglu.DIGITS_CALOUTPUT     <- 9 # for production values
 aglu.DIGITS_CALPRICE      <- 4 # prices and costs values
 aglu.DIGITS_EROS_CTRL     <- 2
 aglu.DIGITS_GHOSTSHARE    <- 3
