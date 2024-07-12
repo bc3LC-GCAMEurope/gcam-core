@@ -18,7 +18,8 @@
 module_gcameurope_L1233.elec_water_grid <- function(command, ...) {
   MODULE_INPUTS <- c(FILE = "gcam-europe/mappings/grid_regions",
                      FILE = "common/GCAM_region_names",
-                     FILE = "gcam-europe/A23.elecS_tech_mapping_cool",
+                     FILE = "water/elec_tech_water_map",
+                     FILE = "gcam-europe/A23.elecS_naming",
                      "L1233.out_EJ_R_elec_F_tech_Yh_cool_EUR",
                      "L1233.out_EJ_R_elec_F_tech_Yh_cool",
                      "L1239.R_elec_supply")
@@ -34,11 +35,6 @@ module_gcameurope_L1233.elec_water_grid <- function(command, ...) {
     get_data_list(all_data, MODULE_INPUTS)
 
     # ===================================================
-    # For now, not going to use gcamusa's coal vintaging structure
-    # Instead, default to use of exogenous shutdown decider
-    A23.elecS_tech_mapping_cool <- A23.elecS_tech_mapping_cool %>%
-      filter(!grepl("(1|2)[0-9]{3}$", Electric.sector.technology ))
-
     # Add in solar techs
     L1239.R_elec_supply <- L1239.R_elec_supply %>%
       left_join(distinct(L1233.out_EJ_R_elec_F_tech_Yh_cool, fuel_new = fuel) %>% filter(grepl("solar", fuel_new)) %>%
@@ -49,6 +45,10 @@ module_gcameurope_L1233.elec_water_grid <- function(command, ...) {
       complete(nesting(GCAM_region_ID, segment, year), fuel) %>%
       tidyr::replace_na(list(fraction = 0))
 
+    # fix solar names here too
+    elec_tech_water_map <- elec_tech_water_map %>%
+      mutate(from.subsector = if_else(from.subsector == "solar", fuel, from.subsector))
+
     # combine EUR data with non-EUR regions
     # to ensure switzerland, etc added to grids
     L1233.out_EJ_R_elec_F_tech_Yh_cool_EUR <- replace_with_eurostat(L1233.out_EJ_R_elec_F_tech_Yh_cool, L1233.out_EJ_R_elec_F_tech_Yh_cool_EUR) %>%
@@ -56,17 +56,16 @@ module_gcameurope_L1233.elec_water_grid <- function(command, ...) {
 
     # add in segment options to cooling techs
     L1233.out_EJ_R_elecS_F_tech_cool_EUR <- L1233.out_EJ_R_elec_F_tech_Yh_cool_EUR %>%
-      filter(year %in% L1239.R_elec_supply$year) %>%
-      left_join(A23.elecS_tech_mapping_cool, by = c("technology", "cooling_system", "water_type", "plant_type")) %>%
-      left_join_error_no_match(L1239.R_elec_supply, by = c("GCAM_region_ID", "fuel", "year", "Electric.sector" = "segment")) %>%
-      mutate(value = value * fraction) %>%
-      select(-sector) %>%
-      select(GCAM_region_ID, fuel, sector = Electric.sector,
-             subsector = Electric.sector.technology, technology, cooling_system, water_type, year, value)
-
+      left_join_error_no_match(elec_tech_water_map %>% select(from.subsector, from.technology, cooling_system, water_type, to.technology),
+                by = c("fuel" = "from.subsector", "technology" = "from.technology", "cooling_system", "water_type")) %>%
+      # filter to years and IDs from L1239.R_elec_supply, while adding in segments
+      inner_join(L1239.R_elec_supply, by = c("GCAM_region_ID", "fuel", "year")) %>%
+      left_join_error_no_match(A23.elecS_naming, by = c("segment" = "supplysector")) %>%
+      mutate(value = value * fraction,
+             subsector = paste(technology, name_adder, sep = "_")) %>%
+      select(GCAM_region_ID, fuel, supplysector = segment, subsector, technology = to.technology, year, value)
 
     # Produce outputs ===================================================
-
     L1233.out_EJ_R_elecS_F_tech_cool_EUR %>%
       add_title("Electricity output by state / fuel / technology / cooling system / water type") %>%
       add_units("EJ") %>%

@@ -1397,4 +1397,42 @@ replace_with_eurostat <- function(global_df, eur_df){
 
 }
 
+#' expand_to_segments
+#'
+#' Helper function to replace normal electricity sector with segments
+#' @param df
+#' @param sector sector name to match
+#' @param group_by_cols columns to group by for each segment
+#' @param segments names of segments
+#' @importFrom assertthat assert_that
+#' @importFrom dplyr filter left_join rename mutate group_by select summarise_all ungroup
+#' @return new tibble
+#'
+expand_to_segments <- function(df, sector = "supplysector", group_by_cols, segments){
+  expansion_df <- tibble(!!sector := "electricity", segment = segments)
+  df %>%
+    left_join(expansion_df, by = sector) %>%
+    group_by(across(group_by_cols)) %>%
+    mutate(!!sector := if_else(!is.na(segment) & !segment %in% unique(get(sector)), segment, get(sector))) %>%
+    ungroup %>%
+    filter(get(sector) == segment | is.na(segment)) %>%
+    select(-segment)
+}
 
+#' tech_name_expansion
+#'
+#' Helper function to replace normal electricity techs with segment names
+#' @param df
+#' @param sector sector name to match
+#' @param tech column to add prefix
+#' @param mapping segment name mapping data
+#' @importFrom assertthat assert_that
+#' @importFrom dplyr filter left_join rename mutate group_by select summarise_all ungroup
+#' @return new tibble
+#'
+tech_name_expansion <- function(df, sector = "supplysector", tech = "technology", mapping){
+  df %>%
+    left_join(mapping %>%  rename(!!sector := supplysector), by = sector) %>%
+    mutate(!!tech := if_else(!is.na(name_adder), paste(get(tech), name_adder, sep = "_"), get(tech))) %>%
+    select(-name_adder)
+}

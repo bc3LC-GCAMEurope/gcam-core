@@ -60,7 +60,6 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
                       "L2234.SubsectorShrwtFllt_elecS_grid_EUR",
                       "L2234.SubsectorShrwtInterp_elecS_grid_EUR",
                       "L2234.GlobalTechShrwt_elecS_EUR",
-                      "L2234.GlobalIntTechShrwt_elecS_EUR",
                       "L2234.PrimaryRenewKeyword_elecS_EUR",
                       "L2234.PrimaryRenewKeywordInt_elecS_EUR",
                       "L2234.AvgFossilEffKeyword_elecS_EUR",
@@ -116,37 +115,19 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
 
     # 0. functions -------------------
     # Want to expand electricity supplysector to all segments, except for any present for same subsector/tech
-    expand_to_segments <- function(df, sector = "supplysector", group_by_cols){
-      expansion_df <- tibble(!!sector := "electricity", segment = L2234.load_segments)
-      df %>%
-        left_join(expansion_df, by = sector) %>%
-        group_by(across(group_by_cols)) %>%
-        mutate(!!sector := if_else(!is.na(segment) & !segment %in% unique(get(sector)), segment, get(sector))) %>%
-        ungroup %>%
-        filter(get(sector) == segment | is.na(segment)) %>%
-        select(-segment)
-    }
-
-    tech_name_expansion <- function(df, sector = "supplysector", tech = "technology"){
-      df %>%
-        left_join(A23.elecS_naming %>%  rename(!!sector := supplysector), by = sector) %>%
-        mutate(!!tech := if_else(!is.na(name_adder), paste(get(tech), name_adder, sep = "_"), get(tech))) %>%
-        select(-name_adder)
-    }
-
     expand_globaldb <- function(df){
       if("technology" %in% names(df)){
-        expand_to_segments(df, sector = "sector.name", group_by_cols = c("subsector.name", "technology")) %>%
-          tech_name_expansion(sector = "sector.name")
+        expand_to_segments(df, sector = "sector.name", group_by_cols = c("subsector.name", "technology"), segments = L2234.load_segments) %>%
+          tech_name_expansion(sector = "sector.name", mapping = A23.elecS_naming)
       } else if ("intermittent.technology" %in% names(df)){
-        expand_to_segments(df, sector = "sector.name", group_by_cols = c("subsector.name", "intermittent.technology")) %>%
-          tech_name_expansion(sector = "sector.name", tech = "intermittent.technology")
+        expand_to_segments(df, sector = "sector.name", group_by_cols = c("subsector.name", "intermittent.technology"), segments = L2234.load_segments) %>%
+          tech_name_expansion(sector = "sector.name", tech = "intermittent.technology", mapping = A23.elecS_naming)
       } else {  warning("No technology column found") }
     }
 
     expand_stubtech <- function(df){
-      expand_to_segments(df, group_by_cols = c("subsector", "stub.technology")) %>%
-          tech_name_expansion(tech = "stub.technology")
+      expand_to_segments(df, group_by_cols = c("subsector", "stub.technology"), segments = L2234.load_segments) %>%
+          tech_name_expansion(tech = "stub.technology", mapping = A23.elecS_naming)
     }
 
     # 1. Supplysector information    -----------------------------------------------------------------------------
@@ -168,22 +149,22 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
 
     # 2. Subsector information  -----------------------------------------------------------------------------
     # Filter out hydro since it is dealt with separately in the fixed output tables
-    L2234.SubsectorLogit_elecS_EUR <- expand_to_segments(A23.elecS_subsector_logit, group_by_cols = "subsector") %>%
+    L2234.SubsectorLogit_elecS_EUR <- expand_to_segments(A23.elecS_subsector_logit, group_by_cols = "subsector", segments = L2234.load_segments) %>%
       write_to_all_states(c("region", "supplysector", "subsector", "logit.year.fillout", "logit.exponent" , "logit.type"),
                           region_list = grid_regions$region)
 
     # Note that the subsector share-weights are updated after processing calibration year output values.
-    L2234.SubsectorShrwt_elecS_EUR_preadj <- expand_to_segments(A23.elecS_subsector_shrwt, group_by_cols = "subsector") %>%
+    L2234.SubsectorShrwt_elecS_EUR_preadj <- expand_to_segments(A23.elecS_subsector_shrwt, group_by_cols = "subsector", segments = L2234.load_segments) %>%
       write_to_all_states(c("region", "supplysector","subsector","year", "share.weight"),
                           region_list = grid_regions$region) %>%
       filter(subsector != "hydro")
 
-    L2234.SubsectorShrwtInterp_elecS_EUR <- expand_to_segments(A23.elecS_subsector_shrwt_interp, group_by_cols = "subsector") %>%
+    L2234.SubsectorShrwtInterp_elecS_EUR <- expand_to_segments(A23.elecS_subsector_shrwt_interp, group_by_cols = "subsector", segments = L2234.load_segments) %>%
       write_to_all_states( c("region", "supplysector","subsector","apply.to", "from.year","to.year", "interpolation.function"),
                            region_list = grid_regions$region) %>%
         filter(subsector != "hydro")
 
-    L2234.SubsectorShrwtInterpTo_elecS_EUR_preadj  <- expand_to_segments(A23.elecS_subsector_shrwt_interpto, group_by_cols = "subsector") %>%
+    L2234.SubsectorShrwtInterpTo_elecS_EUR_preadj  <- expand_to_segments(A23.elecS_subsector_shrwt_interpto, group_by_cols = "subsector", segments = L2234.load_segments) %>%
       write_to_all_states(c("region", "supplysector","subsector", "apply.to", "from.year","to.year","to.value", "interpolation.function"),
                           region_list = grid_regions$region) %>%
       filter(subsector != "hydro")
@@ -194,7 +175,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
     L2234.GlobalTechShrwt_elecS_EUR <- A23.globaltech_shrwt %>%
       anti_join(A23.elecS_globaltech_shrwt, by = c("supplysector", "subsector", "technology")) %>%
       bind_rows(A23.elecS_globaltech_shrwt) %>%
-      expand_to_segments(group_by_cols = c("subsector", "technology")) %>%
+      expand_to_segments(group_by_cols = c("subsector", "technology"), segments = L2234.load_segments) %>%
       gather_years("share.weight") %>%
       complete(nesting(supplysector, subsector, technology), year = c(year, MODEL_BASE_YEARS,MODEL_FUTURE_YEARS)) %>%
       arrange(supplysector, subsector, technology, year) %>%
@@ -202,18 +183,8 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       mutate(share.weight = approx_fun(year, share.weight)) %>%
       ungroup() %>%
       filter(year %in% MODEL_YEARS) %>%
-      tech_name_expansion %>%
+      tech_name_expansion(mapping = A23.elecS_naming) %>%
       select(sector.name = supplysector, subsector.name = subsector, technology, year, share.weight)
-
-    L2234.GlobalIntTechShrwt_elecS_EUR <- A23.elecS_globalinttech_shrwt %>%
-      gather_years("share.weight") %>%
-      complete(nesting(supplysector, subsector, technology), year = c(year, MODEL_BASE_YEARS, MODEL_FUTURE_YEARS)) %>%
-      arrange(supplysector, subsector, technology, year) %>%
-      group_by(supplysector, subsector, technology) %>%
-      mutate(share.weight = approx_fun(year, share.weight)) %>%
-      ungroup() %>%
-      filter(year %in% MODEL_YEARS) %>%
-      select(sector.name = supplysector, subsector.name = subsector, intermittent.technology = technology, year, share.weight)
 
     # 3b. Capacity factors ----------------------------
     # Read in lower capacity factors for non-baseload technologies. The fractions are based on the
@@ -605,14 +576,6 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       add_comments("Electricity load segment technology shareweight assumptions") %>%
       add_precursors("gcam-europe/A23.elecS_globaltech_shrwt") ->
       L2234.GlobalTechShrwt_elecS_EUR
-
-    L2234.GlobalIntTechShrwt_elecS_EUR %>%
-      add_title("Electricity Load Segments Intermittent Technology Shareweights") %>%
-      add_units("unitless") %>%
-      add_comments("Electricity load segment intermittent technology shareweight assumptions") %>%
-      add_precursors("gcam-europe/A23.elecS_tech_availability",
-                     "gcam-europe/A23.elecS_globalinttech_shrwt") ->
-      L2234.GlobalIntTechShrwt_elecS_EUR
 
     L2234.GlobalTechCapFac_elecS_EUR %>%
       add_title("Global Capacity Factors for Electricity Load Segments Technologies") %>%
