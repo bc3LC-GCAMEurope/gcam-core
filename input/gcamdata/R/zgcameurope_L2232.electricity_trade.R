@@ -222,7 +222,6 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
 
     # 2a: GRID REGIONS sector/subsector ----------------------------------------------
     # Some of the information read in about these regions is in the primary electricity_EUR code file
-
     # Create the grid region structure tibble
     A232.structure %>%
       filter(region == "grid_region") %>%

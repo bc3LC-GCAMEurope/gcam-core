@@ -19,6 +19,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
   MODULE_INPUTS <- c(FILE = "water/elec_tech_water_map",
                      FILE = "gcam-europe/A23.elecS_naming",
                      FILE = "common/GCAM_region_names",
+                     FILE = "gcam-europe/mappings/grid_regions",
                      "L1233.out_EJ_R_elecS_F_tech_cool_EUR",
                      "L2233.GlobalTechEff_elec_cool",
                      "L2233.GlobalTechShrwt_elec_cool",
@@ -77,14 +78,17 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
                       "L2235.GlobalIntTechCoef_elecS_cool_EUR",
                       "L2235.PrimaryRenewKeyword_elecS_cool_EUR",
                       "L2235.PrimaryRenewKeywordInt_elecS_cool_EUR",
+                      "L2235.StubTech_elecS_cool_EUR",
                       "L2235.StubTechEff_elecS_cool_EUR",
-                      "L2235.StubTechCoef_elecS_cool_EUR",
+                      # "L2235.StubTechCoef_elecS_cool_EUR",
+                      "L2235.StubTechCalInput_elecS_cool_EUR",
                       "L2235.StubTechProd_elecS_cool_EUR",
                       "L2235.StubTechFixOut_elecS_cool_EUR",
                       "L2235.StubTechFixOut_hydro_elecS_cool_EUR",
                       "L2235.StubTechShrwt_elecS_cool_EUR",
                       "L2235.StubTechInterp_elecS_cool_EUR",
                       "L2235.StubTechCost_offshore_wind_elecS_cool_EUR",
+                      "L2235.StubTechCapFactor_elecS_cool_EUR",
                       "L2235.SubsectorLogit_elecS_EUR",
                       "L2235.SubsectorLogit_elecS_cool_EUR",
                       "L2235.SubsectorShrwt_elecS_EUR",
@@ -216,8 +220,16 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       rename(intermittent.technology = technology)
 
     # 2a. StubTech data ---------------------
+    # All techs, except for seawater in landlocked countries
+    L2235.StubTech_elecS_cool_EUR <- L2235.GlobalTechShrwt_elecS_cool_EUR %>%
+      distinct(supplysector = sector.name, subsector0 = subsector.name0,
+               subsector = subsector.name, stub.technology = technology) %>%
+      repeat_add_columns(grid_regions %>% distinct(region)) %>%
+      filter(!(grepl("seawater", stub.technology) & !region %in% seawater_countries))
+
     # Efficiencies do not change with the addition of cooling techs
-    L2235.StubTechEff_elecS_cool_EUR <- add_global_cooling_techs(L2234.StubTechEff_elecS_EUR)
+    L2235.StubTechEff_elecS_cool_EUR <- add_global_cooling_techs(L2234.StubTechEff_elecS_EUR) %>%
+      semi_join(L2235.StubTech_elecS_cool_EUR, by = c("region", "supplysector", "subsector", "stub.technology", "subsector0"))
 
     # Get shares of each cooling tech within subsector
     L1233.out_EJ_R_elecS_F_tech_cool_EUR_share <- L1233.out_EJ_R_elecS_F_tech_cool_EUR %>%
@@ -232,7 +244,8 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
     # Apply shares to renewable production
     L2235.StubTechProd_elecS_cool_EUR <- add_global_cooling_techs(L2234.StubTechProd_elecS_EUR) %>%
       left_join(L1233.out_EJ_R_elecS_F_tech_cool_EUR_share,
-                by = c("region", "supplysector", "subsector", "year", "subsector0", "stub.technology" = "technology"))
+                by = c("region", "supplysector", "subsector", "year", "subsector0", "stub.technology" = "technology")) %>%
+      filter(!(!region %in% seawater_countries & grepl("seawater", stub.technology) & is.na(share)))
 
     stopifnot(nrow(filter(L2235.StubTechProd_elecS_cool_EUR, is.na(share) & calOutputValue > 0) ) == 0)
 
@@ -246,7 +259,8 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
     # Apply shares to fuel inputs
     L2235.StubTechCalInput_elecS_cool_EUR <- add_global_cooling_techs(L2234.StubTechCalInput_elecS_EUR) %>%
       left_join(L1233.out_EJ_R_elecS_F_tech_cool_EUR_share,
-                by = c("region", "supplysector", "subsector", "year", "subsector0", "stub.technology" = "technology"))
+                by = c("region", "supplysector", "subsector", "year", "subsector0", "stub.technology" = "technology")) %>%
+      filter(!(!region %in% seawater_countries & grepl("seawater", stub.technology) & is.na(share)))
 
     stopifnot(nrow(filter(L2235.StubTechCalInput_elecS_cool_EUR, is.na(share) & calibrated.value > 0) ) == 0)
 
@@ -261,30 +275,26 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
     L2235.StubTechFixOut_elecS_cool_EUR <- add_global_cooling_techs(L2234.StubTechFixOut_elecS_EUR)
     L2235.StubTechFixOut_hydro_elecS_cool_EUR <-  add_global_cooling_techs(L2234.StubTechFixOut_hydro_elecS_EUR)
     L2235.StubTechCost_offshore_wind_elecS_cool_EUR <-  add_global_cooling_techs(L2234.StubTechCost_offshore_wind_elecS_EUR)
-
+    L2235.StubTechCapFactor_elecS_cool_EUR <-  add_global_cooling_techs(L2234.StubTechCapFactor_elecS_EUR)
     # 2b. Logits -----------------------------------
     L2235.SubsectorLogit_elecS_EUR <- L2234.SubsectorLogit_elecS_EUR %>% rename(subsector0 = subsector)
 
-    L2235.SubsectorLogit_elecS_cool_EUR <- L2235.StubTechEff_elecS_cool_EUR %>%
-      select(region, supplysector, subsector0, subsector)%>%
-      # need to add logit info for batteries
-      bind_rows(L2234.GlobalTechShrwt_elecS_EUR %>% filter(subsector.name == "grid_storage") %>%
-                  select(supplysector = sector.name, subsector0 = subsector.name, subsector = technology) %>%
-                  distinct() %>%
-                  repeat_add_columns(distinct(L2235.StubTechEff_elecS_cool_EUR, region))) %>%
+    L2235.SubsectorLogit_elecS_cool_EUR <- L2235.StubTech_elecS_cool_EUR %>%
+      distinct(region, supplysector, subsector0, subsector) %>%
       left_join_error_no_match(L2235.SubsectorLogit_elecS_EUR, by = c("region", "supplysector", "subsector0"))
-
     #
     # 2c. Coefs -------------
-    L2235.StubTechCoef_elecS_cool_EUR <- L2235.StubTechEff_elecS_cool_EUR %>%
-      distinct(region, supplysector, subsector0, subsector) %>%
-      # select which load segment fuel + power plant exist in each state
-      left_join(L2235.GlobalTechCoef_elecS_cool_EUR,
-                ## LJ used as coefficients are added for all historical years for only the
-                ## load segement, fuel, and power plants that exist. This increases data set size,
-                ## requiring LJ.
-                by = c("supplysector" = "sector.name", "subsector0" = "subsector.name0", "subsector" = "subsector.name")) %>%
-      filter(!(minicam.energy.input == gcamusa.WATER_TYPE_SEAWATER & !region %in% seawater_countries))
+    # L2235.StubTechCoef_elecS_cool_EUR <- L2235.StubTechEff_elecS_cool_EUR %>%
+    #   distinct(region, supplysector, subsector0, subsector) %>%
+    #   # select which load segment fuel + power plant exist in each state
+    #   left_join(L2235.GlobalTechCoef_elecS_cool_EUR,
+    #             ## LJ used as coefficients are added for all historical years for only the
+    #             ## load segement, fuel, and power plants that exist. This increases data set size,
+    #             ## requiring LJ.
+    #             by = c("supplysector" = "sector.name", "subsector0" = "subsector.name0", "subsector" = "subsector.name")) %>%
+    #   filter(!(minicam.energy.input == gcamusa.WATER_TYPE_SEAWATER & !region %in% seawater_countries)) %>%
+    #   rename(stub.technology = technology) %>%
+    #   mutate(market.name = region)
 
     # 2d. Subsector Shareweights ----------------
     L2235.SubsectorShrwt_elecS_EUR <- L2234.SubsectorShrwt_elecS_EUR %>%
@@ -435,7 +445,9 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
              to.value = share.weight,
              apply.to = gcamusa.INTERP_APPLY_TO) %>%
       select(region, supplysector, subsector0, subsector, stub.technology, apply.to,
-             from.year, to.year, to.value, interpolation.function)
+             from.year, to.year, to.value, interpolation.function) %>%
+      # remove techs not in L2235.StubTech_elecS_cool_EUR (seawater techs in landlocked countries)
+      semi_join(L2235.StubTech_elecS_cool_EUR, by = c("region", "supplysector", "subsector0", "subsector", "stub.technology"))
 
 
     # Combine all "InterpTo" cases which specify a particular future shareweight value
@@ -644,12 +656,12 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
                      "L2241.StubTechEff_elec_coalret_EUR") ->
       L2235.StubTechEff_elecS_cool_EUR
 
-    L2235.StubTechCoef_elecS_cool_EUR %>%
-      add_title("Water demand coefficients at state level for Electricity Load Segments") %>%
-      add_units("none") %>%
-      add_comments("Water demand coefficients at state level for Electricity Load Segments") %>%
-      add_precursors("L2233.GlobalTechCoef_elec_cool") ->
-      L2235.StubTechCoef_elecS_cool_EUR
+    # L2235.StubTechCoef_elecS_cool_EUR %>%
+    #   add_title("Water demand coefficients at state level for Electricity Load Segments") %>%
+    #   add_units("none") %>%
+    #   add_comments("Water demand coefficients at state level for Electricity Load Segments") %>%
+    #   add_precursors("L2233.GlobalTechCoef_elec_cool") ->
+    #   L2235.StubTechCoef_elecS_cool_EUR
 
     L2235.StubTechProd_elecS_cool_EUR %>%
       add_title("Electricity Load Segments and Cooling Technology Calibration Outputs") %>%
@@ -668,7 +680,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       add_precursors("L2234.StubTechFixOut_elecS_EUR") ->
       L2235.StubTechFixOut_elecS_cool_EUR
 
-    L2235.StubTechFixOut_hydro_elecS_EUR %>%
+    L2235.StubTechFixOut_hydro_elecS_cool_EUR %>%
       add_title("Electricity Load Segments Hydro Fixed Outputs") %>%
       add_units("none") %>%
       add_comments("Electricity Load Segments Hydro Fixed Outputs") %>%
@@ -696,6 +708,12 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       add_comments("Electricity Load Segments Cooling Technology Stub Tech Shareweights") %>%
       same_precursors_as(L2235.StubTechInterp_elecS_cool_EUR) ->
       L2235.StubTechShrwt_elecS_cool_EUR
+
+    L2235.StubTechCapFactor_elecS_cool_EUR %>%
+      add_title("Electricity Load Segments Cooling Technology Stub Tech Cap Factos") %>%
+      add_units("none") %>%
+      same_precursors_as(L2235.StubTechInterp_elecS_cool_EUR) ->
+      L2235.StubTechCapFactor_elecS_cool_EUR
 
     L2235.SubsectorLogit_elecS_EUR %>%
       add_title("Nested Subsector Information for Horizontal Electricity Load Segments",overwrite=TRUE) %>%

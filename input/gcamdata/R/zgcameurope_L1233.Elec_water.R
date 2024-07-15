@@ -17,6 +17,7 @@
 #' @author RH Feb 2024
 module_gcameurope_L1233.Elec_water <- function(command, ...) {
   MODULE_INPUTS <- c(FILE = "common/iso_GCAM_regID",
+                     FILE = "common/GCAM_region_names",
                      FILE = "energy/calibrated_techs",
                      FILE = "energy/mappings/enduse_fuel_aggregation",
                      "L101.en_bal_EJ_R_Si_Fi_Yh_EUR",
@@ -25,7 +26,8 @@ module_gcameurope_L1233.Elec_water <- function(command, ...) {
                      "L1231.out_EJ_R_elec_F_tech_Yh_EUR",
                      FILE = "water/A23.CoolingSystemShares_RG3",
                      FILE = "water/elec_tech_water_map",
-                     FILE = "water/Macknick_elec_water_m3MWh")
+                     FILE = "water/Macknick_elec_water_m3MWh",
+                     "L223.StubTechCost_offshore_wind_EUR")
   MODULE_OUTPUTS <- c("L1233.out_EJ_R_elec_F_tech_Yh_cool_EUR",
                       "L1233.in_EJ_R_elec_F_tech_Yh_cool_EUR",
                       "L1233.wdraw_km3_R_elec_EUR",
@@ -48,6 +50,10 @@ module_gcameurope_L1233.Elec_water <- function(command, ...) {
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
+
+    # Define countries that have access to offshore wind as allowing for seawater cooling
+    seawater_countries <- distinct(L223.StubTechCost_offshore_wind_EUR, region) %>%
+      left_join_error_no_match(GCAM_region_names, by = "region")
 
     ## STEP 1. DOWNSCALE WATER COOLING SYSTEM SHARES FROM GCAM3 REGIONS to GCAM_EUROPE COUNTRIES ----
     # RENAME INTERMEDIATE FUELS AND AGGREGATE BY UPDATED FUEL TYPE
@@ -96,8 +102,14 @@ module_gcameurope_L1233.Elec_water <- function(command, ...) {
       # ^^ non-restrictive join required as A23 lacks data for "no cooling" plant type
       complete(nesting(sector, fuel, technology, cooling_system, water_type, plant_type, GCAM_region_ID, region_GCAM3),
                year = HISTORICAL_YEARS) %>%  # << Fill out all years for "no cooling" plant type
-      filter(year %in% HISTORICAL_YEARS) %>%
+      filter(year %in% HISTORICAL_YEARS,
+             # remove seawater from landlocked countries
+             !(water_type == "seawater" & !GCAM_region_ID %in% seawater_countries$GCAM_region_ID)) %>%
       mutate(value = if_else(plant_type == "no cooling", 1, value)) %>%
+      # reset shares for if we filtered out seawater
+      group_by(sector, fuel, technology, GCAM_region_ID, year) %>%
+      mutate(value = value / sum(value)) %>%
+      ungroup %>%
       # ^^ Set cooling system share to 1 for technologies with no cooling
       rename(share = value) -> L1233.weights_R_elec_F_Yh_cool_EUR
 
