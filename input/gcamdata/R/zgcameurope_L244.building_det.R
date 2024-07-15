@@ -2080,7 +2080,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
                    'L244.SubsectorShrwt_bld_EUR','L244.SubsectorShrwtFllt_bld_EUR',
                    'L244.SubsectorInterp_bld_EUR','L244.SubsectorInterpTo_bld_EUR')
     for (item in to_ammend) {
-      if(exists(item) & nrow(get(item)) > 1) {
+      if(exists(item) && nrow(get(item)) > 1) {
         tmp <- get(item) %>%
           mutate(id = paste(region, supplysector, subsector, sep = '-')) %>%
           semi_join(L244.StubTechCalInput_bld_EUR %>%
