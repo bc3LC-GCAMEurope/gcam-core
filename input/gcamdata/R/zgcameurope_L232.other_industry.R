@@ -47,6 +47,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
                      FILE = "energy/A32.fuelprefElasticity",
                      FILE = "energy/A32.globaltech_retirement",
                      FILE = "energy/A32.demand",
+                     FILE = "gcam-europe/mappings/grid_regions",
                      "L123.in_EJ_R_indchp_F_Yh_EUR",
                      "L123.eff_R_indchp_F_Yh_EUR",
                      "L1326.in_EJ_R_indenergy_F_Yh_EUR",
@@ -321,7 +322,9 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
       group_by(region, supplysector, subsector, stub.technology, fractional.secondary.output) %>%
       mutate(output.ratio = approx_fun(year, output.ratio, rule = 2)) %>%
       ungroup %>%
-      select(LEVEL2_DATA_NAMES[["StubTechFractSecOut"]])
+      left_join(grid_regions, by = "region") %>%
+      mutate(market.name = if_else(is.na(grid_region), region, grid_region)) %>%
+      select(LEVEL2_DATA_NAMES[["StubTechFractSecOutMarket"]])
 
     # L232.FuelPrefElast_indenergy_EUR: fuel preference elasticities of industrial energy use
     # First, calculate the fuel shares allocated to each fuel

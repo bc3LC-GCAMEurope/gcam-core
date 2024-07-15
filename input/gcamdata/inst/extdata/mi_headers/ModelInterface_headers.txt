@@ -455,6 +455,8 @@ StubTechCapital, world/+{name}region, region/+{name}supplysector, supplysector/+
 
 StubTechFractSecOut, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}stub-technology, stub-technology/+{year}period, period/+{name}fractional-secondary-output, fractional-secondary-output/+output-ratio, scenario, scenario/world
 
+StubTechFractSecOutMarket, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}stub-technology, stub-technology/+{year}period, period/+{name}fractional-secondary-output, fractional-secondary-output/+output-ratio, fractional-secondary-output/+market-name, scenario, scenario/world
+
 StubTechFractProd, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}stub-technology, stub-technology/+{year}period, period/+{name}fractional-secondary-output, fractional-secondary-output/+{price}fraction-produced, fractional-secondary-output/+fraction-produced, scenario, scenario/world
 
 StubTechFractCalPrice,world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}stub-technology, stub-technology/+{year}period, period/+{name}fractional-secondary-output, fractional-secondary-output/+calPrice, scenario, scenario/world
