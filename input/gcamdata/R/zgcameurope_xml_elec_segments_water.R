@@ -79,11 +79,6 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
                      "L2235.SubsectorShrwtInterpTo_elecS_EUR",
                      "L2235.Supplysector_elecS_cool_EUR",
 
-                     "L2234.ElecReserve_elecS_grid_vertical_EUR",
-                     "L2234.SubsectorShrwtFllt_elecS_grid_vertical_EUR",
-                     "L2234.SubsectorShrwtInterp_elecS_grid_vertical_EUR",
-                     "L2234.TechShrwt_elecS_grid_vertical_EUR",
-                     "L2234.TechCoef_elecS_grid_vertical_EUR",
                      "L2234.ElecReserve_elecS_EUR",
                      "L2234.SubsectorShrwtFllt_elecS_grid_EUR",
                      "L2234.SubsectorShrwtInterp_elecS_grid_EUR",
@@ -96,6 +91,12 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
                      "L2231.InterestRate_grid_EUR",
                      "L2231.Pop_grid_EUR",
                      "L2231.GDP_grid_EUR",
+
+                     "L2232.ElecReserve_elecS_grid_vertical_EUR",
+                     "L2232.SubsectorShrwtFllt_elecS_grid_vertical_EUR",
+                     "L2232.SubsectorShrwtInterp_elecS_grid_vertical_EUR",
+                     "L2232.TechShrwt_elecS_grid_vertical_EUR",
+                     "L2232.TechCoef_elecS_grid_vertical_EUR",
                      "L2232.Supplysector_EURelec",
                      "L2232.SubsectorShrwtFllt_EURelec",
                      "L2232.SubsectorInterp_EURelec",
@@ -215,14 +216,15 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
       add_xml_data(L2231.InterestRate_grid_EUR, "InterestRate") %>%
       add_xml_data(L2231.Pop_grid_EUR, "Pop") %>%
       add_xml_data(L2231.GDP_grid_EUR, "GDP") %>%
-      add_xml_data(L2234.ElecReserve_elecS_grid_vertical_EUR, "ElecReserve") %>%
-      add_xml_data(L2234.SubsectorShrwtFllt_elecS_grid_vertical_EUR, "SubsectorShrwtFllt") %>%
-      add_xml_data(L2234.SubsectorShrwtInterp_elecS_grid_vertical_EUR, "SubsectorInterp") %>%
-      add_xml_data(L2234.TechShrwt_elecS_grid_vertical_EUR, "TechShrwt") %>%
-      add_xml_data(L2234.TechCoef_elecS_grid_vertical_EUR, "TechCoef") %>%
+
 
       add_logit_tables_xml(L2232.Supplysector_EURelec, "Supplysector") %>%
       add_logit_tables_xml(L2232.SubsectorLogit_EURelec, "SubsectorLogit") %>%
+      add_xml_data(L2232.ElecReserve_elecS_grid_vertical_EUR, "ElecReserve") %>%
+      add_xml_data(L2232.SubsectorShrwtFllt_elecS_grid_vertical_EUR, "SubsectorShrwtFllt") %>%
+      add_xml_data(L2232.SubsectorShrwtInterp_elecS_grid_vertical_EUR, "SubsectorInterp") %>%
+      add_xml_data(L2232.TechShrwt_elecS_grid_vertical_EUR, "TechShrwt") %>%
+      add_xml_data(L2232.TechCoef_elecS_grid_vertical_EUR, "TechCoef") %>%
       add_xml_data(L2232.SubsectorShrwtFllt_EURelec, "SubsectorShrwtFllt") %>%
       add_xml_data(L2232.SubsectorInterp_EURelec, "SubsectorInterp") %>%
       add_xml_data(L2232.TechShrwt_EURelec, "TechShrwt") %>%

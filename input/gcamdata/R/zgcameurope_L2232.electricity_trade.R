@@ -19,6 +19,7 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
                      FILE = "common/GCAM_region_names",
                      FILE = "energy/A23.sector",
                      FILE = "gcam-europe/A232.structure",
+                     FILE = "gcam-europe/elecS_horizontal_to_vertical_map",
                      "L126.in_EJ_R_elecownuse_F_Yh_EUR",
                      "L1261.out_EJ_R_elecownuse_F_Yh_EUR",
                      "L126.in_EJ_R_elecownuse_F_Yh",
@@ -27,10 +28,17 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
                      "L123.out_EJ_R_indchp_F_Yh_EUR",
                      "L123.out_EJ_R_indchp_F_Yh",
                      "L1232.out_EJ_sR_elec_EUR",
+                     "L1235.elecS_demand_fraction_EUR",
+                     "L1235.elecS_horizontal_vertical_GCAM_coeff_EUR",
                      "L1261.elec_trade_R_EJ_EUR",
                      "L223.GlobalIntTechBackup_elec",
                      "L223.StubTechCost_offshore_wind")
-  MODULE_OUTPUTS <- c("L2232.Supplysector_EURelec",
+  MODULE_OUTPUTS <- c("L2232.ElecReserve_elecS_grid_vertical_EUR",
+                      "L2232.SubsectorShrwtFllt_elecS_grid_vertical_EUR",
+                      "L2232.SubsectorShrwtInterp_elecS_grid_vertical_EUR",
+                      "L2232.TechShrwt_elecS_grid_vertical_EUR",
+                      "L2232.TechCoef_elecS_grid_vertical_EUR",
+                      "L2232.Supplysector_EURelec",
                       "L2232.SubsectorShrwtFllt_EURelec",
                       "L2232.SubsectorInterp_EURelec",
                       "L2232.SubsectorLogit_EURelec",
@@ -73,7 +81,63 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
     L123.out_EJ_R_indchp_F_Yh_EUR <- replace_with_eurostat(L123.out_EJ_R_indchp_F_Yh, L123.out_EJ_R_indchp_F_Yh_EUR) %>%
       filter_regions_europe(regions_to_keep_name = grid_regions$region, region_ID_mapping = GCAM_region_names)
 
-    # 1a: Trade region -----------------------------------------------------------
+    # 1a. Vertical sector info --------------
+    # Elec reserve margin and average.grid.capacity.factor
+    L2232.ElecReserve_elecS_grid_vertical_EUR <- A23.sector %>%
+      filter(supplysector == "electricity") %>%
+      repeat_add_columns(distinct(grid_regions, grid_region))
+
+    L2232.ElecReserve_elecS_grid_vertical_EUR <- L2232.ElecReserve_elecS_grid_vertical_EUR %>%
+      repeat_add_columns(elecS_horizontal_to_vertical_map %>%  distinct(vertical_segment)) %>%
+      mutate(supplysector = vertical_segment) %>%
+      bind_rows(L2232.ElecReserve_elecS_grid_vertical_EUR) %>%
+      select(region = grid_region, supplysector, electricity.reserve.margin, average.grid.capacity.factor)
+
+    # Subsector Shareweight Fillout
+    L2232.SubsectorShrwtFllt_elecS_grid_vertical_EUR <- L2232.ElecReserve_elecS_grid_vertical_EUR %>%
+      distinct(region, supplysector) %>%
+      mutate(subsector = supplysector,
+             year.fillout = min(MODEL_BASE_YEARS),
+             share.weight = 1)
+
+    # Subsector Shareweight Interp
+    L2232.SubsectorShrwtInterp_elecS_grid_vertical_EUR <- L2232.SubsectorShrwtFllt_elecS_grid_vertical_EUR %>%
+      distinct(region, supplysector, subsector) %>%
+      mutate(apply.to = "share-weight",
+             from.year = max(MODEL_BASE_YEARS),
+             to.year = max(MODEL_FUTURE_YEARS),
+             interpolation.function = "fixed")
+
+    # Tech sharweight
+    L2232.TechShrwt_elecS_grid_vertical_EUR <- L2232.SubsectorShrwtFllt_elecS_grid_vertical_EUR %>%
+      distinct(region, supplysector, subsector, share.weight) %>%
+      repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
+      mutate(technology = subsector) %>%
+      select(region, supplysector, subsector, technology, year, share.weight)
+
+    # Tech coef
+    L2232.TechCoefMap <- L1235.elecS_demand_fraction_EUR %>%
+      mutate(supplysector = "electricity",
+             subsector = supplysector,
+             technology = supplysector) %>%
+      rename(minicam.energy.input = vertical_segment,
+             coefficient = demand_fraction) %>%
+      bind_rows(L1235.elecS_horizontal_vertical_GCAM_coeff_EUR) %>%
+      rename(region = grid_region)
+
+    L2232.TechCoef_elecS_grid_vertical_EUR <- L2232.TechShrwt_elecS_grid_vertical_EUR %>%
+      distinct(region, supplysector, subsector, technology, year) %>%
+      mutate(market.name = region) %>%
+      left_join(L2232.TechCoefMap, by = c("region", "supplysector", "subsector", "technology"))
+
+    L2232.ElecReserve_elecS_grid_vertical_EUR %>%
+      distinct(region, supplysector) %>%
+      mutate(subsector = supplysector,
+             logit.year.fillout = min(MODEL_BASE_YEARS),
+             logit.exponent = gcamusa.DEFAULT_LOGITEXP,
+             logit.type = gcamusa.GRID_REGION_LOGIT_TYPE) -> L2232.SubsectorLogit_elecS_grid_vertical_EUR
+
+    # 1b: Trade region -----------------------------------------------------------
     # L2232.Supplysector_EURelec: supplysector for electricity trade sector
     # including logit exponent between grid regions
     # All of the supplysector information is the same as before, except the logit exponent
@@ -84,6 +148,12 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
              logit.type = subsector.logit.type) %>%
       select(c(LEVEL2_DATA_NAMES[["Supplysector"]], LOGIT_TYPE_COLNAME)) ->
       L2232.Supplysector_EURelec
+
+    # Append vertical segments to the supplysector and subsector logit tables
+    L2232.Supplysector_EURelec <- L2232.ElecReserve_elecS_grid_vertical_EUR %>%
+      distinct(region, supplysector) %>%
+      repeat_add_columns(L2235.Supplysector_elec_USA %>%  select(-region, -supplysector) %>%  distinct) %>%
+      bind_rows(L2232.Supplysector_EURelec)
 
     # L2232.SubsectorShrwtFllt_EURelec: subsector (grid region) share-weights in EUR electricity trade
     # No need to read in subsector logit exponents, which are applied to the technology competition
@@ -116,6 +186,7 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
                        logit.exponent = technology.logit,
                        logit.type = technology.logit.type),
                 by = "region") %>%
+      bind_rows(L2232.SubsectorLogit_elecS_grid_vertical_EUR) %>%
       select(c(LEVEL2_DATA_NAMES[["SubsectorLogit"]], LOGIT_TYPE_COLNAME)) ->
       L2232.SubsectorLogit_EURelec
 
@@ -138,7 +209,7 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["TechCoef"]]) ->
       L2232.TechCoef_EURelec
 
-    # 1b: Trade volumes ------------------------
+    # 1c: Trade volumes ------------------------
     # Compile flows of electricity in each grid region:
     # generation, cogeneration, ownuse, and consumption by all sectors
     # to calculate exports, imports, and net supply
@@ -351,6 +422,36 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
 
 
     # Produce outputs -----------------------------------------------
+    L2232.ElecReserve_elecS_grid_vertical_EUR  %>%
+      add_title("Vertical load segments GCAM_Europe") %>%
+      add_units("unitless") %>%
+      add_precursors("energy/A23.sector", "gcam-europe/elecS_horizontal_to_vertical_map") ->
+      L2232.ElecReserve_elecS_grid_vertical_EUR
+
+    L2232.SubsectorShrwtFllt_elecS_grid_vertical_EUR  %>%
+      add_title("Vertical load segments GCAM_Europe") %>%
+      add_units("unitless") %>%
+      same_precursors_as(L2232.ElecReserve_elecS_grid_vertical_EUR) ->
+      L2232.SubsectorShrwtFllt_elecS_grid_vertical_EUR
+
+    L2232.SubsectorShrwtInterp_elecS_grid_vertical_EUR  %>%
+      add_title("Vertical load segments GCAM_Europe") %>%
+      add_units("unitless") %>%
+      same_precursors_as(L2232.ElecReserve_elecS_grid_vertical_EUR) ->
+      L2232.SubsectorShrwtInterp_elecS_grid_vertical_EUR
+
+    L2232.TechShrwt_elecS_grid_vertical_EUR  %>%
+      add_title("Vertical load segments GCAM_Europe") %>%
+      add_units("unitless") %>%
+      same_precursors_as(L2232.ElecReserve_elecS_grid_vertical_EUR) ->
+      L2232.TechShrwt_elecS_grid_vertical_EUR
+
+    L2232.TechCoef_elecS_grid_vertical_EUR  %>%
+      add_title("Vertical load segments GCAM_Europe") %>%
+      add_units("unitless") %>%
+      same_precursors_as(L2232.ElecReserve_elecS_grid_vertical_EUR) ->
+      L2232.TechCoef_elecS_grid_vertical_EUR
+
     L2232.Supplysector_EURelec %>%
       add_title("Supplysector for electricity sector in the EUR regions") %>%
       add_units("Unitless") %>%
