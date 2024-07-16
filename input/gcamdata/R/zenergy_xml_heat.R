@@ -73,7 +73,7 @@ module_energy_heat_xml <- function(command, ...) {
                      "L224.StubTechCalInput_heat",
                      "L224.StubTechSecOut_elec",
                      "L224.StubTechCost_elec") %>%
-      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
+      remove_regions_xml(c(gcameurope.EUROSTAT_COUNTRIES, "Switzerland")) ->
       heat.xml
 
     return_data(heat.xml)

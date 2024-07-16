@@ -52,6 +52,9 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
                      "L123.eff_R_indchp_F_Yh_EUR",
                      "L1326.in_EJ_R_indenergy_F_Yh_EUR",
                      "L1324.in_EJ_R_indfeed_F_Yh_EUR",
+                     "L123.in_EJ_R_indchp_F_Yh",
+                     "L1326.in_EJ_R_indenergy_F_Yh",
+                     "L1324.in_EJ_R_indfeed_F_Yh",
                      FILE = "socioeconomics/A32.inc_elas_output",
                      "L101.Pop_thous_GCAM3_R_Y",
                      "L102.pcgdp_thous90USD_GCAM3_R_Y",
@@ -62,40 +65,49 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
                                  paste0("gSSP", 1:5),
                                  paste0("SSP", 1:5))
 
+  MODULE_OUTPUTS <- c("L232.Supplysector_ind_EUR",
+                      "L232.SubsectorLogit_ind_EUR",
+                      "L232.FinalEnergyKeyword_ind_EUR",
+                      "L232.SubsectorShrwtFllt_ind_EUR",
+                      "L232.SubsectorInterp_ind_EUR",
+                      "L232.StubTech_ind_EUR",
+                      "L232.StubTechInterp_ind_EUR",
+                      "L232.StubTechCalInput_indenergy_EUR",
+                      "L232.StubTechCalInput_indfeed_EUR",
+                      "L232.StubTechProd_industry_EUR",
+                      "L232.StubTechCoef_industry_EUR",
+                      "L232.StubTechSecOut_ind_EUR",
+                      "L232.FuelPrefElast_indenergy_EUR",
+                      "L232.PerCapitaBased_ind_EUR",
+                      "L232.PriceElasticity_ind_EUR",
+                      "L232.BaseService_ind_EUR",
+                      paste("L232.IncomeElasticity_ind_EUR", tolower(INCOME_ELASTICITY_OUTPUTS), sep = "_"))
+
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L232.Supplysector_ind_EUR",
-             "L232.SubsectorLogit_ind_EUR",
-             "L232.FinalEnergyKeyword_ind_EUR",
-             "L232.SubsectorShrwtFllt_ind_EUR",
-             "L232.SubsectorInterp_ind_EUR",
-             "L232.StubTech_ind_EUR",
-             "L232.StubTechInterp_ind_EUR",
-             "L232.StubTechCalInput_indenergy_EUR",
-             "L232.StubTechCalInput_indfeed_EUR",
-             "L232.StubTechProd_industry_EUR",
-             "L232.StubTechCoef_industry_EUR",
-             "L232.StubTechSecOut_ind_EUR",
-             "L232.FuelPrefElast_indenergy_EUR",
-             "L232.PerCapitaBased_ind_EUR",
-             "L232.PriceElasticity_ind_EUR",
-             "L232.BaseService_ind_EUR",
-             paste("L232.IncomeElasticity_ind_EUR", tolower(INCOME_ELASTICITY_OUTPUTS), sep = "_")))
+    return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
-    GCAM_region_names <- GCAM_region_names %>% filter_regions_europe()
-    gcameurope.EUROSTAT_GCAMREGIONID <- GCAM_region_names %>%
-      filter(region %in% gcameurope.EUROSTAT_COUNTRIES) %>%
-      distinct()
-    A_regions <- A_regions %>% filter_regions_europe()
-    L101.Pop_thous_GCAM3_R_Y <- L101.Pop_thous_GCAM3_R_Y %>% filter_regions_europe(region_ID_mapping = gcameurope.EUROSTAT_GCAMREGIONID)
-    L102.pcgdp_thous90USD_GCAM3_R_Y <- L102.pcgdp_thous90USD_GCAM3_R_Y %>% filter_regions_europe(region_ID_mapping = gcameurope.EUROSTAT_GCAMREGIONID)
-    L102.pcgdp_thous90USD_Scen_R_Y <- L102.pcgdp_thous90USD_Scen_R_Y %>% filter_regions_europe(region_ID_mapping = gcameurope.EUROSTAT_GCAMREGIONID)
+    GCAM_region_names <- GCAM_region_names %>% filter_regions_europe(regions_to_keep_name = unique(c(grid_regions$region, gcameurope.EUROSTAT_COUNTRIES)))
+    A_regions <- A_regions %>% filter_regions_europe(regions_to_keep_name = unique(c(grid_regions$region, gcameurope.EUROSTAT_COUNTRIES)))
+    L101.Pop_thous_GCAM3_R_Y <- L101.Pop_thous_GCAM3_R_Y %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
+    L102.pcgdp_thous90USD_GCAM3_R_Y <- L102.pcgdp_thous90USD_GCAM3_R_Y %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
+    L102.pcgdp_thous90USD_Scen_R_Y <- L102.pcgdp_thous90USD_Scen_R_Y %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
+
+    # Add in segment regions not in Eurostat
+    L123.in_EJ_R_indchp_F_Yh_EUR <- replace_with_eurostat(L123.in_EJ_R_indchp_F_Yh, L123.in_EJ_R_indchp_F_Yh_EUR) %>%
+      filter_regions_europe(regions_to_keep_name = GCAM_region_names$region, region_ID_mapping = GCAM_region_names)
+
+    L1326.in_EJ_R_indenergy_F_Yh_EUR <- replace_with_eurostat(L1326.in_EJ_R_indenergy_F_Yh, L1326.in_EJ_R_indenergy_F_Yh_EUR) %>%
+      filter_regions_europe(regions_to_keep_name = GCAM_region_names$region, region_ID_mapping = GCAM_region_names)
+
+    L1324.in_EJ_R_indfeed_F_Yh_EUR <- replace_with_eurostat(L1324.in_EJ_R_indfeed_F_Yh, L1324.in_EJ_R_indfeed_F_Yh_EUR) %>%
+      filter_regions_europe(regions_to_keep_name = GCAM_region_names$region, region_ID_mapping = GCAM_region_names)
 
     # ===================================================
     # 0. Give binding for variable names used in pipeline
@@ -636,18 +648,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
       add_precursors("L123.eff_R_indchp_F_Yh_EUR", "L232.GlobalTechEff_ind", "common/GCAM_region_names") ->
       L232.StubTechSecOut_ind_EUR
 
-    return_data(L232.Supplysector_ind_EUR, L232.SubsectorLogit_ind_EUR, L232.FinalEnergyKeyword_ind_EUR,
-                L232.SubsectorShrwtFllt_ind_EUR, L232.SubsectorInterp_ind_EUR,
-                L232.StubTech_ind_EUR, L232.StubTechInterp_ind_EUR,
-                L232.StubTechCalInput_indenergy_EUR, L232.StubTechCalInput_indfeed_EUR, L232.StubTechProd_industry_EUR,
-                L232.StubTechCoef_industry_EUR, L232.FuelPrefElast_indenergy_EUR, L232.PerCapitaBased_ind_EUR,
-                L232.PriceElasticity_ind_EUR, L232.BaseService_ind_EUR,
-                L232.IncomeElasticity_ind_EUR_gcam3, L232.IncomeElasticity_ind_EUR_gssp1,
-                L232.IncomeElasticity_ind_EUR_gssp2, L232.IncomeElasticity_ind_EUR_gssp3,
-                L232.IncomeElasticity_ind_EUR_gssp4, L232.IncomeElasticity_ind_EUR_gssp5,
-                L232.IncomeElasticity_ind_EUR_ssp1, L232.IncomeElasticity_ind_EUR_ssp2,
-                L232.IncomeElasticity_ind_EUR_ssp3, L232.IncomeElasticity_ind_EUR_ssp4,
-                L232.IncomeElasticity_ind_EUR_ssp5, L232.StubTechSecOut_ind_EUR)
+    return_data(MODULE_OUTPUTS)
   } else {
     stop("Unknown command")
   }

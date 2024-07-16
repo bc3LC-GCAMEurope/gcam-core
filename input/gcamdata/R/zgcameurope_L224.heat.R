@@ -34,6 +34,9 @@ module_gcameurope_L224.heat <- function(command, ...) {
                      "L1231.eff_R_elec_F_tech_Yh_EUR",
                      "L124.in_EJ_R_heat_F_Yh_EUR",
                      "L124.heatoutratio_R_elec_F_tech_Yh_EUR",
+                     "L1231.eff_R_elec_F_tech_Yh",
+                     "L124.in_EJ_R_heat_F_Yh",
+                     "L124.heatoutratio_R_elec_F_tech_Yh",
                      "L2235.StubTech_elecS_cool_EUR",
                      OUTPUTS_TO_COPY_FILTER)
 
@@ -60,18 +63,27 @@ module_gcameurope_L224.heat <- function(command, ...) {
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
-    GCAM_region_names <- L101.GCAM_EUR_regions %>%
+
+    # regional adjustments -------------------
+    GCAM_region_names_Eurostat <- L101.GCAM_EUR_regions %>%
       distinct(GCAM_region_ID, region = GCAMEU_region)
 
+    # add any regions in segments, but not in Eurostat (Switzerland)
+    GCAM_region_names <- L2235.StubTech_elecS_cool_EUR %>%
+      anti_join(GCAM_region_names_Eurostat, by = "region") %>%
+      distinct(region) %>%
+      left_join_error_no_match(A_regions %>% distinct(GCAM_region_ID, region), by = "region") %>%
+      bind_rows(GCAM_region_names_Eurostat)
+
     # Create outputs that are simply copied from main scripts and filtered to Eurostat regions
-    copy_filter_europe(all_data, OUTPUTS_TO_COPY_FILTER)
+    copy_filter_europe(all_data, OUTPUTS_TO_COPY_FILTER, regions_to_keep = GCAM_region_names$region)
 
     # Some regions missing, add them in here
     for (df_nm in paste0(OUTPUTS_TO_COPY_FILTER, "_EUR")){
       df <- get(df_nm)
       if ("region" %in% names(df)){
-        missing_regions <- L101.GCAM_EUR_regions %>%
-          distinct(region = GCAMEU_region) %>%
+        missing_regions <- GCAM_region_names %>%
+          distinct(region) %>%
           anti_join(df, by = "region")
 
         df_no_region <- df %>%
@@ -83,6 +95,15 @@ module_gcameurope_L224.heat <- function(command, ...) {
       }
     }
 
+    # Add in segment regions not in Eurostat
+    L1231.eff_R_elec_F_tech_Yh_EUR <- replace_with_eurostat(L1231.eff_R_elec_F_tech_Yh, L1231.eff_R_elec_F_tech_Yh_EUR) %>%
+      filter_regions_europe(regions_to_keep_name = GCAM_region_names$region, region_ID_mapping = GCAM_region_names)
+
+    L124.in_EJ_R_heat_F_Yh_EUR <- replace_with_eurostat(L124.in_EJ_R_heat_F_Yh, L124.in_EJ_R_heat_F_Yh_EUR) %>%
+      filter_regions_europe(regions_to_keep_name = GCAM_region_names$region, region_ID_mapping = GCAM_region_names)
+
+    L124.heatoutratio_R_elec_F_tech_Yh_EUR <- replace_with_eurostat(L124.heatoutratio_R_elec_F_tech_Yh, L124.heatoutratio_R_elec_F_tech_Yh_EUR) %>%
+      filter_regions_europe(regions_to_keep_name = GCAM_region_names$region, region_ID_mapping = GCAM_region_names)
 
     # L224.StubTechCalInput_heat_EUR ------------
     L124.in_EJ_R_heat_F_Yh_EUR %>%
