@@ -1150,8 +1150,9 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       # filter(!grepl("coal",building.service.input),
       #       !grepl("TradBio",building.service.input)) %>%
       # use left_join due to TradBio
-      left_join_error_no_match(L144.base_service_EJ_serv_EUR %>%  filter(year==MODEL_FINAL_BASE_YEAR, service %in% generic_services)
-                               %>% rename(building.service.input = service),
+      left_join_error_no_match(L144.base_service_EJ_serv_EUR %>%
+                                 filter(year==MODEL_FINAL_BASE_YEAR, service %in% generic_services) %>%
+                                 rename(building.service.input = service),
                                by=c("GCAM_region_ID","building.service.input")) %>%
       rename(base_service_EJ = value) %>%
       left_join_error_no_match(L244.Floorspace_EUR %>%

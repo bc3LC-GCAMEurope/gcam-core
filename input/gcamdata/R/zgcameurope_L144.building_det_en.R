@@ -37,7 +37,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
              "L142.in_EJ_R_bld_F_Yh_EUR",
              "L143.HDDCDD_scen_RG3_Y",
              "L143.HDDCDD_scen_ctry_Y",
-             FILE = "energy/A44.CalPrice_bld"))
+             FILE = "gcam-europe/A44.CalPrice_bld_EUR"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L144.end_use_eff_EUR",
              "L144.shell_eff_R_Y_EUR",
@@ -63,7 +63,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     A44.USA_TechChange_EUR <- get_data(all_data, "gcam-europe/A44.USA_TechChange_EUR")
     A44.globaltech_eff_EUR <- get_data(all_data, "gcam-europe/A44.globaltech_eff_EUR")
     A44.globaltech_cost_EUR <- get_data(all_data, "gcam-europe/A44.globaltech_cost_EUR")
-    A44.Calprice_bld <- get_data(all_data, "energy/A44.CalPrice_bld") %>% filter_regions_europe()
+    A44.CalPrice_bld_EUR <- get_data(all_data, "gcam-europe/A44.CalPrice_bld_EUR") %>% filter_regions_europe()
     enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
     EUR_hhEnergyConsum <- get_data(all_data, "gcam-europe/estat_nrg_d_hhq_filtered_en")
     nrgbal_to_service_map <- get_data(all_data, "gcam-europe/mappings/nrgbal_to_service_map")
@@ -871,30 +871,34 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     select(GCAM_region_ID, region_GCAM3, supplysector, subsector, technology, year, value) ->
     L144.internal_gains_EUR # This is a final output table.
 
-  # Create L144.prices_bld to calibrate satiation impedance (mu) at region level within the DS
-  L144.prices_bld_EUR <- GCAM_region_names %>%
-    repeat_add_columns(tibble(market = unique(L144.base_service_EJ_serv_EUR$service))) %>%
-    repeat_add_columns(tibble(year = MODEL_BASE_YEARS)) %>%
-    mutate(value = 1) %>%
+  # Create L144.prices_bld_EUR to calibrate satiation impedance (mu) at region level within the DS
+  # L144.prices_bld_EUR <- GCAM_region_names %>%
+  #   repeat_add_columns(tibble(market = unique(L144.base_service_EJ_serv_EUR$service))) %>%
+  #   repeat_add_columns(tibble(year = MODEL_BASE_YEARS)) %>%
+  #   mutate(value = 1) %>%
+  #   rename(price = value) %>%
+  #   # select historical years
+  #   filter(year <= max(MODEL_BASE_YEARS))
+
+  L144.prices_bld_EUR <- A44.CalPrice_bld_EUR %>%
+    left_join_error_no_match(GCAM_region_names,by="region") %>%
+    gather_years() %>%
+    # Add 1975 and extrapolate prices using rule 2
+    group_by(region,GCAM_region_ID,market) %>%
+    complete(nesting(year = MODEL_BASE_YEARS)) %>%
+    mutate(value = if_else(is.na(value),approx_fun(year, value, rule = 2),value)) %>%
+    # Add all historical years and linerly extrapolate (rule 1)
+    complete(nesting(year = HISTORICAL_YEARS)) %>%
+    mutate(value = if_else(is.na(value),approx_fun(year, value, rule = 2),value)) %>%
+    ungroup() %>%
     rename(price = value) %>%
     # select historical years
-    filter(year <= max(MODEL_BASE_YEARS))
+    filter(year <= max(MODEL_BASE_YEARS)) %>%
+    # filter EUR regions and add manually Iceland & Turkey for missing markets
+    filter_regions_europe() %>%
+    complete(nesting(region, GCAM_region_ID), market = unique(L144.base_service_EJ_serv_EUR$service),
+             year = MODEL_BASE_YEARS, fill = list(price = 1))
 
-
-  #L144.prices_bld<-A44.Calprice_bld %>%
-  #  left_join_error_no_match(GCAM_region_names,by="region") %>%
-  # gather_years() %>%
-  # # Add 1975 and extrapolate prices using rule 2
-  # group_by(region,GCAM_region_ID,market) %>%
-  # complete(nesting(year = MODEL_BASE_YEARS)) %>%
-  # mutate(value = if_else(is.na(value),approx_fun(year, value, rule = 2),value)) %>%
-  # Add all historical years and linerly extrapolate (rule 1)
-  # complete(nesting(year = HISTORICAL_YEARS)) %>%
-  # mutate(value = if_else(is.na(value),approx_fun(year, value, rule = 2),value)) %>%
-  # ungroup() %>%
-  # rename(price = value) %>%
-  # select historical years
-  # filter(year <= max(MODEL_BASE_YEARS))
 
   # OUTPUTS ===================================================
 
@@ -966,8 +970,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       add_title("Residential average service prices by GCAM region ID / historical year") %>%
       add_units("$1975/unit") %>%
       add_comments("Weighted by fuel prices") %>%
-      add_legacy_name("L144.prices_bld") %>%
-      add_precursors("energy/A44.CalPrice_bld", "gcam-europe/calibrated_techs_bld_det_EUR",
+      add_legacy_name("L144.prices_bld_EUR") %>%
+      add_precursors("gcam-europe/A44.CalPrice_bld_EUR", "gcam-europe/calibrated_techs_bld_det_EUR",
                      "L101.in_EJ_ctry_bld_Fi_Yh_EUR", "common/GCAM_region_names") ->
       L144.prices_bld_EUR
 
@@ -978,3 +982,4 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     stop("Unknown command")
   }
 }
+
