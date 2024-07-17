@@ -20,60 +20,52 @@
 #' @importFrom tidyr gather spread
 #' @author Yang Liu Dec 2019
 module_gcameurope_L2325.chemical <- function(command, ...) {
+  MODULE_INPUTS <- c(FILE = "common/GCAM_region_names",
+                     FILE = "energy/calibrated_techs",
+                     FILE = "energy/A_regions",
+                     FILE = "energy/A325.sector",
+                     FILE = "energy/A23.chp_elecratio",
+                     FILE = "energy/A325.subsector_interp",
+                     FILE = "energy/A325.nonenergy_Cseq",
+                     FILE = "energy/A325.subsector_logit",
+                     FILE = "energy/A325.subsector_shrwt",
+                     FILE = "energy/A325.globaltech_coef",
+                     FILE = "energy/A325.globaltech_eff",
+                     FILE = "energy/A325.globaltech_co2capture",
+                     FILE = "energy/A325.globaltech_cost",
+                     FILE = "energy/A325.globaltech_retirement",
+                     FILE = "energy/A325.globaltech_shrwt",
+                     FILE = "energy/A325.demand",
+                     FILE = "gcam-europe/mappings/grid_regions",
+                     "L1325.in_EJ_R_chemical_F_Y",
+                     "L1325.in_EJ_R_chemical_F_Y_EUR")
+  MODULE_OUTPUTS <- c("L2325.Supplysector_chemical_EUR",
+                      "L2325.FinalEnergyKeyword_chemical_EUR",
+                      "L2325.SubsectorLogit_chemical_EUR",
+                      "L2325.SubsectorShrwtFllt_chemical_EUR",
+                      "L2325.SubsectorInterp_chemical_EUR",
+                      "L2325.StubTech_chemical_EUR",
+                      "L2325.StubTechProd_chemical_EUR",
+                      "L2325.StubTechCalInput_chemical_EUR",
+                      "L2325.StubTechCoef_chemical_EUR",
+                      "L2325.StubTechSecMarket_chemical_EUR",
+                      "L2325.PerCapitaBased_chemical_EUR",
+                      "L2325.BaseService_chemical_EUR",
+                      "L2325.PriceElasticity_chemical_EUR")
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "common/GCAM_region_names",
-             FILE = "energy/calibrated_techs",
-             FILE = "energy/A_regions",
-             FILE = "energy/A325.sector",
-             FILE = "energy/A23.chp_elecratio",
-             FILE = "energy/A325.subsector_interp",
-             FILE = "energy/A325.nonenergy_Cseq",
-             FILE = "energy/A325.subsector_logit",
-             FILE = "energy/A325.subsector_shrwt",
-             FILE = "energy/A325.globaltech_coef",
-             FILE = "energy/A325.globaltech_eff",
-             FILE = "energy/A325.globaltech_co2capture",
-             FILE = "energy/A325.globaltech_cost",
-             FILE = "energy/A325.globaltech_retirement",
-             FILE = "energy/A325.globaltech_shrwt",
-             FILE = "energy/A325.demand",
-             "L1325.in_EJ_R_chemical_F_Y_EUR"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L2325.Supplysector_chemical_EUR",
-             "L2325.FinalEnergyKeyword_chemical_EUR",
-             "L2325.SubsectorLogit_chemical_EUR",
-             "L2325.SubsectorShrwtFllt_chemical_EUR",
-             "L2325.SubsectorInterp_chemical_EUR",
-             "L2325.StubTech_chemical_EUR",
-             "L2325.StubTechProd_chemical_EUR",
-             "L2325.StubTechCalInput_chemical_EUR",
-             "L2325.StubTechCoef_chemical_EUR",
-             "L2325.PerCapitaBased_chemical_EUR",
-             "L2325.BaseService_chemical_EUR",
-             "L2325.PriceElasticity_chemical_EUR"))
+    return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names")
-    GCAM_region_names <- filter_regions_europe(GCAM_region_names, region_ID_mapping = GCAM_region_names)
-    calibrated_techs <- get_data(all_data, "energy/calibrated_techs")
-    A_regions <- get_data(all_data, "energy/A_regions")
-    A325.sector <- get_data(all_data, "energy/A325.sector", strip_attributes = TRUE)
-    A325.subsector_interp <- get_data(all_data, "energy/A325.subsector_interp", strip_attributes = TRUE)
-    A325.subsector_logit <- get_data(all_data, "energy/A325.subsector_logit", strip_attributes = TRUE)
-    A325.subsector_shrwt <- get_data(all_data, "energy/A325.subsector_shrwt", strip_attributes = TRUE)
-    A325.globaltech_coef <- get_data(all_data, "energy/A325.globaltech_coef", strip_attributes = TRUE)
-    A325.globaltech_eff <- get_data(all_data, "energy/A325.globaltech_eff", strip_attributes = TRUE)
-    A325.globaltech_co2capture <- get_data(all_data, "energy/A325.globaltech_co2capture", strip_attributes = TRUE)
-    A325.globaltech_cost <- get_data(all_data, "energy/A325.globaltech_cost", strip_attributes = TRUE)
-    A325.globaltech_retirement <- get_data(all_data, "energy/A325.globaltech_retirement", strip_attributes = TRUE)
-    A325.nonenergy_Cseq <- get_data(all_data, "energy/A325.nonenergy_Cseq", strip_attributes = TRUE)
-    A325.globaltech_shrwt <- get_data(all_data, "energy/A325.globaltech_shrwt", strip_attributes = TRUE)
-    A325.demand <- get_data(all_data, "energy/A325.demand", strip_attributes = TRUE)
-    A23.chp_elecratio  <- get_data(all_data, "energy/A23.chp_elecratio", strip_attributes = TRUE)
-    L1325.in_EJ_R_chemical_F_Y_EUR <- get_data(all_data, "L1325.in_EJ_R_chemical_F_Y_EUR")
+    get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
+    GCAM_region_names <- GCAM_region_names %>%  filter_regions_europe(unique(c(grid_regions$region, gcameurope.EUROSTAT_COUNTRIES)))
+
+    L1325.in_EJ_R_chemical_F_Y_EUR <- replace_with_eurostat(L1325.in_EJ_R_chemical_F_Y, L1325.in_EJ_R_chemical_F_Y_EUR) %>%
+      filter_regions_europe(GCAM_region_names$region, region_ID_mapping = GCAM_region_names)
     # ===================================================
     # 0. Give binding for variable names used in pipeline
     has_district_heat <- year <- value <- GCAM_region_ID <- sector <- fuel <- year.fillout <- to.value <-
@@ -293,6 +285,15 @@ module_gcameurope_L2325.chemical <- function(command, ...) {
       filter(year %in% MODEL_YEARS) ->   # drop the terminal coef year if it's outside of the model years
       L2325.StubTechCoef_chemical_EUR
 
+    # 2d. stubtech market ====================================================
+    L2325.StubTechSecMarket_chemical_EUR  <- L2325.StubTech_chemical_EUR %>%
+      filter(grepl("cogen", stub.technology)) %>%
+      repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
+      left_join(grid_regions, by = "region") %>%
+      mutate(market.name = if_else(is.na(grid_region), region, grid_region),
+             secondary.output = "electricity") %>%
+      select(LEVEL2_DATA_NAMES[["StubTechSecMarket"]])
+
     # 3. Demand ====================================================
     # L2325.PerCapitaBased_chemical_EUR: per-capita based flag for chemical exports final demand
     A325.demand %>%
@@ -409,6 +410,12 @@ module_gcameurope_L2325.chemical <- function(command, ...) {
       add_precursors("energy/calibrated_techs", "common/GCAM_region_names","energy/A325.globaltech_coef") ->
       L2325.StubTechCoef_chemical_EUR
 
+    L2325.StubTechSecMarket_chemical_EUR  %>%
+      add_title("Market name for secondary output") %>%
+      add_units("unitless") %>%
+      add_precursors("gcam-europe/mappings/grid_regions") ->
+      L2325.StubTechSecMarket_chemical_EUR
+
     L2325.PerCapitaBased_chemical_EUR %>%
       add_title("per-capita based flag for chemical exports final demand") %>%
       add_units("NA") %>%
@@ -433,13 +440,7 @@ module_gcameurope_L2325.chemical <- function(command, ...) {
       add_precursors("energy/A325.demand", "common/GCAM_region_names") ->
       L2325.PriceElasticity_chemical_EUR
 
-    return_data(L2325.Supplysector_chemical_EUR, L2325.FinalEnergyKeyword_chemical_EUR, L2325.SubsectorLogit_chemical_EUR,
-                L2325.SubsectorShrwtFllt_chemical_EUR, L2325.SubsectorInterp_chemical_EUR,
-                L2325.StubTech_chemical_EUR,
-                L2325.StubTechCalInput_chemical_EUR,L2325.StubTechCoef_chemical_EUR,L2325.StubTechProd_chemical_EUR,
-                L2325.PerCapitaBased_chemical_EUR, L2325.BaseService_chemical_EUR,
-                L2325.PriceElasticity_chemical_EUR)
-
+    return_data(MODULE_OUTPUTS)
 
   } else {
     stop("Unknown command")

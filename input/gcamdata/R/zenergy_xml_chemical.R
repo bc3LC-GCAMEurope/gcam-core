@@ -101,7 +101,7 @@ module_energy_chemical_xml <- function(command, ...) {
                      "L2325.PerCapitaBased_chemical", "L2325.BaseService_chemical",
                      "L2325.PriceElasticity_chemical","L2325.GlobalTechSecOut_chemical",
                      "L2325.GlobalTechTrackCapital_chemical") %>%
-      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
+      remove_regions_xml(c(gcameurope.EUROSTAT_COUNTRIES, "Switzerland")) ->
       chemical.xml
 
     return_data(chemical.xml)

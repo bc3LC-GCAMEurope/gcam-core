@@ -11,19 +11,21 @@
 #' the generated outputs: \code{chemical_EUR.xml}. The corresponding file in the
 #' original data system was \code{batch_chemical_xml.R} (energy XML).
 module_gcameurope_chemical_xml <- function(command, ...) {
+  MODULE_INPUTS <- c("L2325.Supplysector_chemical_EUR",
+                     "L2325.FinalEnergyKeyword_chemical_EUR",
+                     "L2325.SubsectorLogit_chemical_EUR",
+                     "L2325.SubsectorShrwtFllt_chemical_EUR",
+                     "L2325.SubsectorInterp_chemical_EUR",
+                     "L2325.StubTech_chemical_EUR",
+                     "L2325.StubTechProd_chemical_EUR",
+                     "L2325.StubTechCalInput_chemical_EUR",
+                     "L2325.StubTechCoef_chemical_EUR",
+                     "L2325.StubTechSecMarket_chemical_EUR",
+                     "L2325.PerCapitaBased_chemical_EUR",
+                     "L2325.BaseService_chemical_EUR",
+                     "L2325.PriceElasticity_chemical_EUR")
   if(command == driver.DECLARE_INPUTS) {
-    return(c("L2325.Supplysector_chemical_EUR",
-             "L2325.FinalEnergyKeyword_chemical_EUR",
-             "L2325.SubsectorLogit_chemical_EUR",
-             "L2325.SubsectorShrwtFllt_chemical_EUR",
-             "L2325.SubsectorInterp_chemical_EUR",
-             "L2325.StubTech_chemical_EUR",
-             "L2325.StubTechProd_chemical_EUR",
-             "L2325.StubTechCalInput_chemical_EUR",
-             "L2325.StubTechCoef_chemical_EUR",
-             "L2325.PerCapitaBased_chemical_EUR",
-             "L2325.BaseService_chemical_EUR",
-             "L2325.PriceElasticity_chemical_EUR"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c(XML = "chemical_EUR.xml"))
   } else if(command == driver.MAKE) {
@@ -31,18 +33,7 @@ module_gcameurope_chemical_xml <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    L2325.Supplysector_chemical_EUR <- get_data(all_data, "L2325.Supplysector_chemical_EUR")
-    L2325.FinalEnergyKeyword_chemical_EUR <- get_data(all_data, "L2325.FinalEnergyKeyword_chemical_EUR")
-    L2325.SubsectorLogit_chemical_EUR <- get_data(all_data, "L2325.SubsectorLogit_chemical_EUR")
-    L2325.SubsectorShrwtFllt_chemical_EUR <- get_data(all_data, "L2325.SubsectorShrwtFllt_chemical_EUR")
-    L2325.SubsectorInterp_chemical_EUR <- get_data(all_data, "L2325.SubsectorInterp_chemical_EUR")
-    L2325.StubTech_chemical_EUR <- get_data(all_data, "L2325.StubTech_chemical_EUR")
-    L2325.StubTechProd_chemical_EUR <- get_data(all_data, "L2325.StubTechProd_chemical_EUR")
-    L2325.StubTechCalInput_chemical_EUR <- get_data(all_data, "L2325.StubTechCalInput_chemical_EUR")
-    L2325.StubTechCoef_chemical_EUR <- get_data(all_data, "L2325.StubTechCoef_chemical_EUR")
-    L2325.PerCapitaBased_chemical_EUR <- get_data(all_data, "L2325.PerCapitaBased_chemical_EUR")
-    L2325.BaseService_chemical_EUR <- get_data(all_data, "L2325.BaseService_chemical_EUR")
-    L2325.PriceElasticity_chemical_EUR <- get_data(all_data, "L2325.PriceElasticity_chemical_EUR")
+    get_data_list(all_data, MODULE_INPUTS)
 
     # ===================================================
 
@@ -58,14 +49,11 @@ module_gcameurope_chemical_xml <- function(command, ...) {
       add_xml_data(L2325.StubTechProd_chemical_EUR, "StubTechProd") %>%
       add_xml_data(L2325.StubTechCalInput_chemical_EUR, "StubTechCalInput") %>%
       add_xml_data(L2325.StubTechCoef_chemical_EUR, "StubTechCoef") %>%
+      add_xml_data(L2325.StubTechSecMarket_chemical_EUR, "StubTechSecMarket") %>%
       add_xml_data(L2325.PerCapitaBased_chemical_EUR, "PerCapitaBased") %>%
       add_xml_data(L2325.BaseService_chemical_EUR, "BaseService") %>%
       add_xml_data(L2325.PriceElasticity_chemical_EUR, "PriceElasticity") %>%
-      add_precursors("L2325.Supplysector_chemical_EUR", "L2325.FinalEnergyKeyword_chemical_EUR", "L2325.SubsectorLogit_chemical_EUR",
-                     "L2325.SubsectorShrwtFllt_chemical_EUR","L2325.SubsectorInterp_chemical_EUR","L2325.StubTechProd_chemical_EUR",
-                     "L2325.StubTech_chemical_EUR","L2325.StubTechCoef_chemical_EUR","L2325.StubTechCalInput_chemical_EUR",
-                     "L2325.PerCapitaBased_chemical_EUR", "L2325.BaseService_chemical_EUR",
-                     "L2325.PriceElasticity_chemical_EUR") ->
+      add_precursors(MODULE_INPUTS) ->
       chemical_EUR.xml
 
     return_data(chemical_EUR.xml)

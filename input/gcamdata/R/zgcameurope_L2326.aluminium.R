@@ -24,59 +24,61 @@ module_gcameurope_L2326.aluminum <- function(command, ...) {
                                  paste0("gSSP", 1:5),
                                  paste0("SSP", 1:5))
 
+  MODULE_INPUTS <- c(FILE = "common/GCAM_region_names",
+                     FILE = "energy/calibrated_techs",
+                     FILE = "energy/A_regions",
+                     FILE = "energy/A326.sector",
+                     FILE = "energy/A23.chp_elecratio",
+                     FILE = "energy/A326.subsector_interp",
+                     FILE = "energy/A326.subsector_logit",
+                     FILE = "energy/A326.subsector_shrwt",
+                     FILE = "energy/A326.globaltech_coef",
+                     FILE = "energy/A326.globaltech_co2capture",
+                     FILE = "energy/A326.globaltech_cost",
+                     FILE = "energy/A326.globaltech_shrwt",
+                     FILE = "energy/A326.globaltech_retirement",
+                     FILE = "energy/A326.demand",
+                     FILE = "gcam-europe/mappings/grid_regions",
+                     "L1326.in_EJ_R_aluminum_Yh",
+                     "L1326.out_Mt_R_aluminum_Yh",
+                     "L1326.IO_GJkg_R_aluminum_F_Yh",
+                     "L1326.in_EJ_R_aluminum_Yh_EUR",
+                     "L1326.out_Mt_R_aluminum_Yh_EUR",
+                     "L1326.IO_GJkg_R_aluminum_F_Yh_EUR")
+  MODULE_OUTPUTS <- c("L2326.Supplysector_aluminum_EUR",
+                      "L2326.FinalEnergyKeyword_aluminum_EUR",
+                      "L2326.SubsectorLogit_aluminum_EUR",
+                      "L2326.SubsectorShrwtFllt_aluminum_EUR",
+                      "L2326.SubsectorInterp_aluminum_EUR",
+                      "L2326.StubTech_aluminum_EUR",
+                      "L2326.StubTechProd_aluminum_EUR",
+                      "L2326.StubTechCalInput_aluminum_EUR",
+                      "L2326.StubTechCoef_aluminum_EUR",
+                      "L2326.StubTechSecMarket_aluminum_EUR",
+                      "L2326.PerCapitaBased_aluminum_EUR",
+                      "L2326.BaseService_aluminum_EUR",
+                      "L2326.PriceElasticity_aluminum_EUR")
+
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "common/GCAM_region_names",
-             FILE = "energy/calibrated_techs",
-             FILE = "energy/A_regions",
-             FILE = "energy/A326.sector",
-             FILE = "energy/A23.chp_elecratio",
-             FILE = "energy/A326.subsector_interp",
-             FILE = "energy/A326.subsector_logit",
-             FILE = "energy/A326.subsector_shrwt",
-             FILE = "energy/A326.globaltech_coef",
-             FILE = "energy/A326.globaltech_co2capture",
-             FILE = "energy/A326.globaltech_cost",
-             FILE = "energy/A326.globaltech_shrwt",
-             FILE = "energy/A326.globaltech_retirement",
-             FILE = "energy/A326.demand",
-             "L1326.in_EJ_R_aluminum_Yh_EUR",
-             "L1326.out_Mt_R_aluminum_Yh_EUR",
-             "L1326.IO_GJkg_R_aluminum_F_Yh_EUR"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L2326.Supplysector_aluminum_EUR",
-             "L2326.FinalEnergyKeyword_aluminum_EUR",
-             "L2326.SubsectorLogit_aluminum_EUR",
-             "L2326.SubsectorShrwtFllt_aluminum_EUR",
-             "L2326.SubsectorInterp_aluminum_EUR",
-             "L2326.StubTech_aluminum_EUR",
-             "L2326.StubTechProd_aluminum_EUR",
-             "L2326.StubTechCalInput_aluminum_EUR",
-             "L2326.StubTechCoef_aluminum_EUR",
-             "L2326.PerCapitaBased_aluminum_EUR",
-             "L2326.BaseService_aluminum_EUR",
-             "L2326.PriceElasticity_aluminum_EUR"))
+    return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>% filter_regions_europe()
-    calibrated_techs <- get_data(all_data, "energy/calibrated_techs")
-    A_regions <- get_data(all_data, "energy/A_regions") %>% filter_regions_europe()
-    A326.sector <- get_data(all_data, "energy/A326.sector", strip_attributes = TRUE)
-    A326.subsector_interp <- get_data(all_data, "energy/A326.subsector_interp", strip_attributes = TRUE)
-    A326.subsector_logit <- get_data(all_data, "energy/A326.subsector_logit", strip_attributes = TRUE)
-    A326.subsector_shrwt <- get_data(all_data, "energy/A326.subsector_shrwt", strip_attributes = TRUE)
-    A326.globaltech_coef <- get_data(all_data, "energy/A326.globaltech_coef", strip_attributes = TRUE)
-    A326.globaltech_co2capture <- get_data(all_data, "energy/A326.globaltech_co2capture", strip_attributes = TRUE)
-    A326.globaltech_retirement <- get_data(all_data, "energy/A326.globaltech_retirement", strip_attributes = TRUE)
-    A326.globaltech_cost <- get_data(all_data, "energy/A326.globaltech_cost", strip_attributes = TRUE)
-    A326.globaltech_shrwt <- get_data(all_data, "energy/A326.globaltech_shrwt", strip_attributes = TRUE)
-    A326.demand <- get_data(all_data, "energy/A326.demand", strip_attributes = TRUE)
-    A23.chp_elecratio  <- get_data(all_data, "energy/A23.chp_elecratio", strip_attributes = TRUE)
-    L1326.in_EJ_R_aluminum_Yh_EUR <- get_data(all_data, "L1326.in_EJ_R_aluminum_Yh_EUR")
-    L1326.out_Mt_R_aluminum_Yh_EUR <- get_data(all_data, "L1326.out_Mt_R_aluminum_Yh_EUR")
-    L1326.IO_GJkg_R_aluminum_F_Yh_EUR<- get_data(all_data, "L1326.IO_GJkg_R_aluminum_F_Yh_EUR")
+    get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
+    GCAM_region_names <- GCAM_region_names %>%  filter_regions_europe(unique(c(grid_regions$region, gcameurope.EUROSTAT_COUNTRIES)))
+
+    A_regions <- get_data(all_data, "energy/A_regions") %>% filter_regions_europe(GCAM_region_names$region)
+
+    L1326.in_EJ_R_aluminum_Yh_EUR <- replace_with_eurostat(L1326.in_EJ_R_aluminum_Yh, L1326.in_EJ_R_aluminum_Yh_EUR) %>%
+      filter_regions_europe(GCAM_region_names$region, region_ID_mapping = GCAM_region_names)
+    L1326.out_Mt_R_aluminum_Yh_EUR <- replace_with_eurostat(L1326.out_Mt_R_aluminum_Yh, L1326.out_Mt_R_aluminum_Yh_EUR) %>%
+      filter_regions_europe(GCAM_region_names$region, region_ID_mapping = GCAM_region_names)
+    L1326.IO_GJkg_R_aluminum_F_Yh_EUR <- replace_with_eurostat(L1326.IO_GJkg_R_aluminum_F_Yh, L1326.IO_GJkg_R_aluminum_F_Yh_EUR) %>%
+      filter_regions_europe(GCAM_region_names$region, region_ID_mapping = GCAM_region_names)
     # ===================================================
     # 0. Give binding for variable names used in pipeline
     has_district_heat <- year <- value <- GCAM_region_ID <- sector <- fuel <- year.fillout <- to.value <-
@@ -304,6 +306,14 @@ module_gcameurope_L2326.aluminum <- function(command, ...) {
       filter(year %in% MODEL_YEARS) ->   # drop the terminal coef year if it's outside of the model years
       L2326.StubTechCoef_aluminum_EUR
 
+    # stubtech market with grid regions
+    L2326.StubTechSecMarket_aluminum_EUR  <- L2326.StubTech_aluminum_EUR %>%
+      filter(grepl("cogen", stub.technology)) %>%
+      repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
+      left_join(grid_regions, by = "region") %>%
+      mutate(market.name = if_else(is.na(grid_region), region, grid_region),
+             secondary.output = "electricity") %>%
+      select(LEVEL2_DATA_NAMES[["StubTechSecMarket"]])
 
     # Calibration and region-specific data
     # L2326.StubTechProd_aluminum_EUR: calibrated aluminum output
@@ -446,6 +456,12 @@ module_gcameurope_L2326.aluminum <- function(command, ...) {
       add_precursors("energy/calibrated_techs", "common/GCAM_region_names","energy/A326.globaltech_coef", "L1326.out_Mt_R_aluminum_Yh_EUR", "L1326.IO_GJkg_R_aluminum_F_Yh_EUR") ->
       L2326.StubTechCoef_aluminum_EUR
 
+    L2326.StubTechSecMarket_aluminum_EUR  %>%
+      add_title("Market name for secondary output") %>%
+      add_units("unitless") %>%
+      add_precursors("gcam-europe/mappings/grid_regions") ->
+      L2326.StubTechSecMarket_aluminum_EUR
+
     L2326.PerCapitaBased_aluminum_EUR %>%
       add_title("per-capita based flag for aluminum exports final demand") %>%
       add_units("NA") %>%
@@ -470,11 +486,7 @@ module_gcameurope_L2326.aluminum <- function(command, ...) {
       add_precursors("energy/A326.demand", "common/GCAM_region_names") ->
       L2326.PriceElasticity_aluminum_EUR
 
-    return_data(L2326.Supplysector_aluminum_EUR, L2326.FinalEnergyKeyword_aluminum_EUR, L2326.SubsectorLogit_aluminum_EUR,
-                L2326.SubsectorShrwtFllt_aluminum_EUR, L2326.SubsectorInterp_aluminum_EUR,
-                L2326.StubTech_aluminum_EUR, L2326.StubTechCalInput_aluminum_EUR,L2326.StubTechCoef_aluminum_EUR,
-                L2326.PerCapitaBased_aluminum_EUR, L2326.BaseService_aluminum_EUR,L2326.StubTechProd_aluminum_EUR,
-                L2326.PriceElasticity_aluminum_EUR)
+    return_data(MODULE_OUTPUTS)
 
 
   } else {
