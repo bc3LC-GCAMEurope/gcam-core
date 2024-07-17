@@ -11,23 +11,25 @@
 #' the generated outputs: \code{industry.xml}. The corresponding file in the
 #' original data system was \code{batch_industry_xml.R} (energy XML).
 module_gcameurope_other_industry_xml <- function(command, ...) {
+  MODULE_INPUTS <- c("L232.SubsectorLogit_ind_EUR",
+                     "L232.FinalEnergyKeyword_ind_EUR",
+                     "L232.SubsectorInterp_ind_EUR",
+                     "L232.StubTech_ind_EUR",
+                     "L232.StubTechInterp_ind_EUR",
+                     "L232.StubTechCalInput_indenergy_EUR",
+                     "L232.StubTechCalInput_indfeed_EUR",
+                     "L232.StubTechProd_industry_EUR",
+                     "L232.StubTechCoef_industry_EUR",
+                     "L232.FuelPrefElast_indenergy_EUR",
+                     "L232.PerCapitaBased_ind_EUR",
+                     "L232.PriceElasticity_ind_EUR",
+                     "L232.BaseService_ind_EUR",
+                     "L232.SubsectorShrwtFllt_ind_EUR",
+                     "L232.Supplysector_ind_EUR",
+                     "L232.StubTechSecOut_ind_EUR",
+                     "L232.StubTechSecMarket_ind_EUR")
   if(command == driver.DECLARE_INPUTS) {
-    return(c("L232.SubsectorLogit_ind_EUR",
-             "L232.FinalEnergyKeyword_ind_EUR",
-             "L232.SubsectorInterp_ind_EUR",
-             "L232.StubTech_ind_EUR",
-             "L232.StubTechInterp_ind_EUR",
-             "L232.StubTechCalInput_indenergy_EUR",
-             "L232.StubTechCalInput_indfeed_EUR",
-             "L232.StubTechProd_industry_EUR",
-             "L232.StubTechCoef_industry_EUR",
-             "L232.FuelPrefElast_indenergy_EUR",
-             "L232.PerCapitaBased_ind_EUR",
-             "L232.PriceElasticity_ind_EUR",
-             "L232.BaseService_ind_EUR",
-             "L232.SubsectorShrwtFllt_ind_EUR",
-             "L232.Supplysector_ind_EUR",
-             "L232.StubTechSecOut_ind_EUR"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c(XML = "other_industry_EUR.xml"))
   } else if(command == driver.MAKE) {
@@ -35,22 +37,7 @@ module_gcameurope_other_industry_xml <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    L232.SubsectorLogit_ind_EUR <- get_data(all_data, "L232.SubsectorLogit_ind_EUR")
-    L232.FinalEnergyKeyword_ind_EUR <- get_data(all_data, "L232.FinalEnergyKeyword_ind_EUR")
-    L232.SubsectorInterp_ind_EUR <- get_data(all_data, "L232.SubsectorInterp_ind_EUR")
-    L232.StubTech_ind_EUR <- get_data(all_data, "L232.StubTech_ind_EUR")
-    L232.StubTechInterp_ind_EUR <- get_data(all_data, "L232.StubTechInterp_ind_EUR")
-    L232.StubTechCalInput_indenergy_EUR <- get_data(all_data, "L232.StubTechCalInput_indenergy_EUR")
-    L232.StubTechCalInput_indfeed_EUR <- get_data(all_data, "L232.StubTechCalInput_indfeed_EUR")
-    L232.StubTechProd_industry_EUR <- get_data(all_data, "L232.StubTechProd_industry_EUR")
-    L232.StubTechCoef_industry_EUR <- get_data(all_data, "L232.StubTechCoef_industry_EUR")
-    L232.FuelPrefElast_indenergy_EUR <- get_data(all_data, "L232.FuelPrefElast_indenergy_EUR")
-    L232.PerCapitaBased_ind_EUR <- get_data(all_data, "L232.PerCapitaBased_ind_EUR")
-    L232.PriceElasticity_ind_EUR <- get_data(all_data, "L232.PriceElasticity_ind_EUR")
-    L232.BaseService_ind_EUR <- get_data(all_data, "L232.BaseService_ind_EUR")
-    L232.SubsectorShrwtFllt_ind_EUR <- get_data(all_data, "L232.SubsectorShrwtFllt_ind_EUR")
-    L232.Supplysector_ind_EUR <- get_data(all_data, "L232.Supplysector_ind_EUR")
-    L232.StubTechSecOut_ind_EUR <- get_data(all_data, "L232.StubTechSecOut_ind_EUR")
+    get_data_list(all_data, MODULE_INPUTS)
     # ===================================================
 
     # Produce outputs
@@ -67,18 +54,13 @@ module_gcameurope_other_industry_xml <- function(command, ...) {
       add_xml_data(L232.StubTechCalInput_indfeed_EUR, "StubTechCalInput") %>%
       add_xml_data(L232.StubTechProd_industry_EUR, "StubTechProd") %>%
       add_xml_data(L232.StubTechCoef_industry_EUR, "StubTechCoef") %>%
-      add_xml_data(L232.StubTechSecOut_ind_EUR, "StubTechFractSecOutMarket") %>%
+      add_xml_data(L232.StubTechSecOut_ind_EUR, "StubTechSecOutMarket") %>%
+      add_xml_data(L232.StubTechSecMarket_ind_EUR, "StubTechSecMarket") %>%
       add_xml_data(L232.FuelPrefElast_indenergy_EUR, "FuelPrefElast") %>%
       add_xml_data(L232.PerCapitaBased_ind_EUR, "PerCapitaBased") %>%
       add_xml_data(L232.PriceElasticity_ind_EUR, "PriceElasticity") %>%
       add_xml_data(L232.BaseService_ind_EUR, "BaseService") %>%
-      add_precursors("L232.SubsectorLogit_ind_EUR", "L232.FinalEnergyKeyword_ind_EUR",
-                     "L232.SubsectorInterp_ind_EUR", "L232.StubTech_ind_EUR", "L232.StubTechInterp_ind_EUR",
-                     "L232.StubTechCalInput_indenergy_EUR", "L232.StubTechCalInput_indfeed_EUR",
-                     "L232.StubTechProd_industry_EUR", "L232.StubTechCoef_industry_EUR", "L232.FuelPrefElast_indenergy_EUR",
-                     "L232.PerCapitaBased_ind_EUR", "L232.PriceElasticity_ind_EUR", "L232.BaseService_ind_EUR",
-                     "L232.SubsectorShrwtFllt_ind_EUR", "L232.Supplysector_ind_EUR",
-                     "L232.StubTechSecOut_ind_EUR") ->
+      add_precursors(MODULE_INPUTS) ->
       other_industry_EUR.xml
 
     return_data(other_industry_EUR.xml)

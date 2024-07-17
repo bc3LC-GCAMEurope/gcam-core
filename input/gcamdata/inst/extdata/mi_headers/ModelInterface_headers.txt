@@ -441,6 +441,8 @@ StubTechCapFactor, world/+{name}region, region/+{name}supplysector, supplysector
 
 StubTechSecOut, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}stub-technology, stub-technology/+{year}period, period/+{name}secondary-output, secondary-output/+output-ratio, scenario, scenario/world
 
+StubTechSecOutMarket, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}stub-technology, stub-technology/+{year}period, period/+{name}secondary-output, secondary-output/+output-ratio, secondary-output/+market-name, scenario, scenario/world
+
 StubTechSecMarket, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}stub-technology, stub-technology/+{year}period, period/+{name}secondary-output, secondary-output/+market-name, scenario, scenario/world
 
 StubTechSecPmult, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}stub-technology, stub-technology/+{year}period, period/+{name}secondary-output, secondary-output/+pMultiplier, scenario, scenario/world

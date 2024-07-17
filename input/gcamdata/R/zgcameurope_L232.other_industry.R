@@ -77,6 +77,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
                       "L232.StubTechProd_industry_EUR",
                       "L232.StubTechCoef_industry_EUR",
                       "L232.StubTechSecOut_ind_EUR",
+                      "L232.StubTechSecMarket_ind_EUR",
                       "L232.FuelPrefElast_indenergy_EUR",
                       "L232.PerCapitaBased_ind_EUR",
                       "L232.PriceElasticity_ind_EUR",
@@ -324,19 +325,30 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
                                by = c("year", "fuel" = "subsector.name")) %>%
       mutate(output.ratio = value / efficiency,
              output.ratio = round(output.ratio, energy.DIGITS_COEFFICIENT),
-             fractional.secondary.output = "electricity") %>%
+             secondary.output = "electricity") %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       select(region, supplysector = sector.name, subsector = fuel,
-             stub.technology = technology, fractional.secondary.output, year, output.ratio) %>%
+             stub.technology = technology, secondary.output, year, output.ratio) %>%
       # NOTE: holding the output ratio constant over time in future periods
-      complete(nesting(region,supplysector, subsector, stub.technology, fractional.secondary.output),
+      complete(nesting(region,supplysector, subsector, stub.technology, secondary.output),
                year = c(MODEL_YEARS)) %>%
-      group_by(region, supplysector, subsector, stub.technology, fractional.secondary.output) %>%
+      group_by(region, supplysector, subsector, stub.technology, secondary.output) %>%
       mutate(output.ratio = approx_fun(year, output.ratio, rule = 2)) %>%
       ungroup %>%
       left_join(grid_regions, by = "region") %>%
       mutate(market.name = if_else(is.na(grid_region), region, grid_region)) %>%
-      select(LEVEL2_DATA_NAMES[["StubTechFractSecOutMarket"]])
+      select(LEVEL2_DATA_NAMES[["StubTechSecOutMarket"]])
+
+    # Any missing stubtechs, add market here (e.g. H2 cogen)
+    L232.StubTechSecMarket_ind_EUR <- L232.StubTech_ind_EUR %>%
+      filter(grepl("cogen", stub.technology)) %>%
+      anti_join(L232.StubTechSecOut_ind_EUR, by = c("region", "supplysector", "subsector", "stub.technology")) %>%
+      repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
+      left_join(grid_regions, by = "region") %>%
+      mutate(market.name = if_else(is.na(grid_region), region, grid_region),
+             secondary.output = "electricity") %>%
+      select(LEVEL2_DATA_NAMES[["StubTechSecMarket"]])
+
 
     # L232.FuelPrefElast_indenergy_EUR: fuel preference elasticities of industrial energy use
     # First, calculate the fuel shares allocated to each fuel
