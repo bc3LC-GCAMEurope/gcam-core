@@ -88,6 +88,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
                       "L2234.StubTechFixOut_elecS_EUR",
                       "L2234.StubTechFixOut_hydro_elecS_EUR",
                       "L2234.StubTechCost_offshore_wind_elecS_EUR",
+                      "L2234.StubTechElecMarket_backup_elecS_EUR",
                       "L2234.TechShrwt_elecS_grid_EUR",
                       "L2234.TechCoef_elecS_grid_EUR",
                       "L2234.TechProd_elecS_grid_EUR")
@@ -309,6 +310,11 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       select(-capacity.factor) %>%
       left_join_error_no_match(L223.StubTechCost_offshore_wind_EUR %>% select(-supplysector, -stub.technology),
                                by = c("region", "subsector", "year"))
+
+    # 4f. Backup markets --------------
+    L2234.StubTechElecMarket_backup_elecS_EUR <- L2234.StubTechCapFactor_elecS_EUR %>%
+      select(-capacity.factor) %>%
+      left_join_error_no_match(grid_regions %>% rename(electric.sector.market = grid_region), by = "region")
 
     # 5. Inputs for any new technologies such as battery -----------------------
     # and append them with corresponding tables
@@ -624,6 +630,12 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       add_comments("State-specific non-energy cost adder for offshore wind grid connection cost") %>%
       add_precursors("L223.StubTechCost_offshore_wind_EUR") ->
       L2234.StubTechCost_offshore_wind_elecS_EUR
+
+    L2234.StubTechElecMarket_backup_elecS_EUR %>%
+      add_title("Electricity Load Segments Sector Name for Backup Markets") %>%
+      add_units("NA") %>%
+      add_precursors("L223.GlobalIntTechBackup_elec") ->
+      L2234.StubTechElecMarket_backup_elecS_EUR
 
     L2234.TechShrwt_elecS_grid_EUR %>%
       add_title("Electricity Load Segments Grid Technology Shareweights") %>%

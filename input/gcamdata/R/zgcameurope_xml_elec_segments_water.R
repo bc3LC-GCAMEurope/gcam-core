@@ -71,6 +71,7 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
                      "L2235.StubTechInterp_elecS_cool_EUR",
                      "L2235.StubTechCost_offshore_wind_elecS_cool_EUR",
                      "L2235.StubTechCapFactor_elecS_cool_EUR",
+                     "L2235.StubTechElecMarket_backup_elecS_cool_EUR",
                      "L2235.SubsectorLogit_elecS_EUR",
                      "L2235.SubsectorLogit_elecS_cool_EUR",
                      "L2235.SubsectorShrwt_elecS_EUR",
@@ -177,8 +178,8 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
       #                              "StubTechMarket","subsector","nesting-subsector",1,FALSE) %>%
       # add_xml_data_generate_levels(L2235.StubTechMarket_backup_elecS_cool_EUR,
       #                              "StubTechMarket","subsector","nesting-subsector",1,FALSE) %>%
-      # add_xml_data_generate_levels(L2235.StubTechElecMarket_backup_elecS_cool_EUR,
-      #                              "StubTechElecMarket","subsector","nesting-subsector",1,FALSE) %>%
+      add_xml_data_generate_levels(L2235.StubTechElecMarket_backup_elecS_cool_EUR,
+                                   "StubTechElecMarket","subsector","nesting-subsector",1,FALSE) %>%
       add_xml_data_generate_levels(L2235.StubTech_elecS_cool_EUR,
                                  "StubTech","subsector","nesting-subsector",1,FALSE) %>%
       add_xml_data_generate_levels(L2235.StubTechCalInput_elecS_cool_EUR,
