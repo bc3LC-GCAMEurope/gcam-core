@@ -250,7 +250,10 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
     L2234.StubTechCalInput_elecS_EUR <- L2234.StubTechCalInput_NA %>%
       tidyr::replace_na(list(fraction = 0)) %>%
       mutate(calibrated.value = calibrated.value * fraction) %>%
-      mutate(tech.share.weight = if_else(calibrated.value > 0, 1, 0))
+      mutate(tech.share.weight = if_else(calibrated.value > 0, 1, 0)) %>%
+      group_by(region, supplysector, subsector, year) %>%
+      mutate(subs.share.weight = if_else(any(calibrated.value > 0), 1, 0)) %>%
+      ungroup
 
     # 4c. Subsector shareweight update -----------------------------------
     # Update nuclear subsector share-weights - use zero  shareweights if there is no calibration year value.

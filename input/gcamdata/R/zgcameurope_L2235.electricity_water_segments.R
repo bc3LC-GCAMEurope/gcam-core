@@ -306,6 +306,9 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       bind_rows(L2234.StubTechProd_elecS_EUR %>%
                   select(region, supplysector, subsector, year, subs.share.weight) %>%
                   rename(share.weight = subs.share.weight, subsector0 = subsector),
+                L2234.StubTechCalInput_elecS_EUR %>%
+                  select(region, supplysector, subsector, year, subs.share.weight) %>%
+                  rename(share.weight = subs.share.weight, subsector0 = subsector),
                 L2234.StubTechFixOut_elecS_EUR %>%
                   select(region, supplysector, subsector, year, subs.share.weight) %>%
                   rename(share.weight = subs.share.weight, subsector0 = subsector))
