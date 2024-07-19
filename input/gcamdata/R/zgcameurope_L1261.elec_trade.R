@@ -16,6 +16,7 @@
 #' @author RH June 2024
 module_gcameurope_L1261.elec_trade <- function(command, ...) {
   MODULE_INPUTS <- c(FILE = "common/GCAM32_to_EU",
+                     FILE = "common/GCAM_region_names",
                      FILE = "gcam-europe/mappings/grid_regions",
                      FILE = "gcam-europe/eurostat_elec_exports",
                      FILE = "gcam-europe/eurostat_elec_imports",
@@ -57,20 +58,25 @@ module_gcameurope_L1261.elec_trade <- function(command, ...) {
                        code = c("AD", "LI"),
                        region = c("Andorra", "Liechtenstein")))
 
+    L126.in_EJ_R_elecownuse_F_Yh_EUR_grid <- L126.in_EJ_R_elecownuse_F_Yh_EUR %>%
+      filter_regions_europe(regions_to_keep_name = grid_regions$region, region_ID_mapping = GCAM_region_names)
+    L126.out_EJ_R_elecownuse_F_Yh_EUR_grid <- L126.out_EJ_R_elecownuse_F_Yh_EUR %>%
+      filter_regions_europe(regions_to_keep_name = grid_regions$region, region_ID_mapping = GCAM_region_names)
+
     # 1a. L126 Net exports outside of grid regions -------------------------
     # check difference between total generation and total demand
     # This difference should be equivalent to net exports to countries outside of european grid regions
     # Difference will need to be taken up by ownuse - we will use the net exports in the eurostat trade balances
     # to decide which countries to adjust
-    total_gen <- L126.in_EJ_R_elecownuse_F_Yh_EUR %>%
+    total_gen <- L126.in_EJ_R_elecownuse_F_Yh_EUR_grid %>%
       group_by(year) %>%
       summarise(gen = sum(value)) %>%
       ungroup
 
     total_demand <- L126.in_EJ_R_electd_F_Yh_EUR_grid %>%
       # Demand includes ownuse, calculating here the net ownuse consumption as in - out
-      bind_rows(L126.in_EJ_R_elecownuse_F_Yh_EUR,
-                L126.out_EJ_R_elecownuse_F_Yh_EUR %>%  mutate(value = -1 * value)) %>%
+      bind_rows(L126.in_EJ_R_elecownuse_F_Yh_EUR_grid,
+                L126.out_EJ_R_elecownuse_F_Yh_EUR_grid %>%  mutate(value = -1 * value)) %>%
       group_by(year) %>%
       summarise(demand = sum(value)) %>%
       ungroup
@@ -138,7 +144,7 @@ module_gcameurope_L1261.elec_trade <- function(command, ...) {
       left_join_error_no_match(distinct(GCAM32_to_EU, country_name, GCAM_region_ID) , by = c("region" = "country_name")) %>%
       select(year, GCAM_region_ID, ownuse_adj)
 
-    L1261.out_EJ_R_elecownuse_F_Yh_EUR <- L126.out_EJ_R_elecownuse_F_Yh_EUR %>%
+    L1261.out_EJ_R_elecownuse_F_Yh_EUR <- L126.out_EJ_R_elecownuse_F_Yh_EUR_grid %>%
       left_join(L1261.ownuse_adjustments, by = c("GCAM_region_ID", "year")) %>%
       tidyr::replace_na(list(ownuse_adj = 0)) %>%
       mutate(value = value - ownuse_adj) %>%
@@ -147,7 +153,7 @@ module_gcameurope_L1261.elec_trade <- function(command, ...) {
     # 1d Check that net_exports outside of grids are now 0 ---------------
     total_demand_ownuse_adj <- L126.in_EJ_R_electd_F_Yh_EUR_grid %>%
       # Demand includes ownuse, calculating here the net ownuse consumption as in - out
-      bind_rows(L126.in_EJ_R_elecownuse_F_Yh_EUR,
+      bind_rows(L126.in_EJ_R_elecownuse_F_Yh_EUR_grid,
                 L1261.out_EJ_R_elecownuse_F_Yh_EUR %>%  mutate(value = -1 * value)) %>%
       group_by(year) %>%
       summarise(demand = sum(value)) %>%
@@ -160,7 +166,7 @@ module_gcameurope_L1261.elec_trade <- function(command, ...) {
     stopifnot(all(round(excess_gen_ownuse_adj$net_export, energy.DIGITS_CALOUTPUT) == 0))
 
     # 1e Adjust IO ---------------------------
-    L1261.IO_R_elecownuse_F_Yh_EUR <- L126.in_EJ_R_elecownuse_F_Yh_EUR %>%
+    L1261.IO_R_elecownuse_F_Yh_EUR <- L126.in_EJ_R_elecownuse_F_Yh_EUR_grid %>%
       left_join_error_no_match(L1261.out_EJ_R_elecownuse_F_Yh_EUR, by = c("GCAM_region_ID", "sector", "fuel", "year")) %>%
       mutate(value = value.x / value.y) %>%
       select(-value.x, -value.y)
@@ -192,7 +198,7 @@ module_gcameurope_L1261.elec_trade <- function(command, ...) {
       left_join_error_no_match(L1261.elec_imports_R_EJ_EUR, by = c("grid_region", "year")) %>%
       mutate(net_exports = exports - imports) %>%
       # need to fill in 1971-1989, using 1990 values, but don't want to interpolate other missing values, just set to 0
-      complete(grid_region, year = L126.in_EJ_R_elecownuse_F_Yh_EUR$year, fill = list(exports = 0, imports = 0, net_exports = 0)) %>%
+      complete(grid_region, year = L126.in_EJ_R_elecownuse_F_Yh_EUR_grid$year, fill = list(exports = 0, imports = 0, net_exports = 0)) %>%
       group_by(grid_region) %>%
       mutate(net_exports = if_else(year < min(L1261.elec_trade_R_EJ_EUR_pre$year), net_exports[year == min(L1261.elec_trade_R_EJ_EUR_pre$year)], net_exports),
              exports = if_else(year < min(L1261.elec_trade_R_EJ_EUR_pre$year), exports[year == min(L1261.elec_trade_R_EJ_EUR_pre$year)], exports),

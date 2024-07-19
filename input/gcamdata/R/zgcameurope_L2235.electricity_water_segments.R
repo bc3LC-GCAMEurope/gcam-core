@@ -124,7 +124,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
                                           paste(technology, name_adder, sep = "_")))) %>%
       select(subsector.name, technology, to.technology) %>%
       # add in battery
-      bind_rows(L2234.GlobalTechOMfixed_elecS_EUR %>%  filter(technology == "battery") %>%
+      bind_rows(L2234.GlobalTechOMfixed_elecS_EUR %>%  filter(grepl("battery", technology)) %>%
                   distinct(subsector.name, technology) %>% mutate(to.technology = technology)) %>%
       distinct()
 
@@ -273,21 +273,21 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       mutate(subs.share.weight = if_else(sum(calibrated.value) > 0, 1, 0)) %>%
       ungroup()
 
-    # Hydro fixed output
+    # 2b. StubTech simply add cooling tech -------------------
     L2235.StubTechFixOut_elecS_cool_EUR <- add_global_cooling_techs(L2234.StubTechFixOut_elecS_EUR)
     L2235.StubTechFixOut_hydro_elecS_cool_EUR <-  add_global_cooling_techs(L2234.StubTechFixOut_hydro_elecS_EUR)
     L2235.StubTechCost_offshore_wind_elecS_cool_EUR <-  add_global_cooling_techs(L2234.StubTechCost_offshore_wind_elecS_EUR)
     L2235.StubTechCapFactor_elecS_cool_EUR <-  add_global_cooling_techs(L2234.StubTechCapFactor_elecS_EUR)
     L2235.StubTechElecMarket_backup_elecS_cool_EUR <-  add_global_cooling_techs(L2234.StubTechElecMarket_backup_elecS_EUR)
 
-    # 2b. Logits -----------------------------------
+    # 2c. Logits -----------------------------------
     L2235.SubsectorLogit_elecS_EUR <- L2234.SubsectorLogit_elecS_EUR %>% rename(subsector0 = subsector)
 
     L2235.SubsectorLogit_elecS_cool_EUR <- L2235.StubTech_elecS_cool_EUR %>%
       distinct(region, supplysector, subsector0, subsector) %>%
       left_join_error_no_match(L2235.SubsectorLogit_elecS_EUR, by = c("region", "supplysector", "subsector0"))
     #
-    # 2c. Coefs -------------
+    # 2d. Coefs -------------
     # L2235.StubTechCoef_elecS_cool_EUR <- L2235.StubTechEff_elecS_cool_EUR %>%
     #   distinct(region, supplysector, subsector0, subsector) %>%
     #   # select which load segment fuel + power plant exist in each state
@@ -300,7 +300,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
     #   rename(stub.technology = technology) %>%
     #   mutate(market.name = region)
 
-    # 2d. Subsector Shareweights ----------------
+    # 2e. Subsector Shareweights ----------------
     L2235.SubsectorShrwt_elecS_EUR <- L2234.SubsectorShrwt_elecS_EUR %>%
       rename(subsector0 = subsector) %>%
       bind_rows(L2234.StubTechProd_elecS_EUR %>%
@@ -344,7 +344,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
     L2235.SubsectorShrwt_elecS_cool_EUR <- bind_rows(L2235.SubsectorShrwt_elecS_cool_EUR_hist,
                                                      L2235.SubsectorShrwt_elecS_cool_EUR_fut)
 
-    # 2e. Technology Shareweights ----------------------
+    # 2f. Technology Shareweights ----------------------
 
     # Prepare interpolation rules for all power plant + cooling system combinations
     # First, we assume that if the generation technology exists in the historical period

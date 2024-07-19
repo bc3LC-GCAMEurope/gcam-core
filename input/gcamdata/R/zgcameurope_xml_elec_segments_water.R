@@ -88,6 +88,7 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
                      "L2234.TechShrwt_elecS_grid_EUR",
                      "L2234.TechCoef_elecS_grid_EUR",
                      "L2234.TechProd_elecS_grid_EUR",
+                     "L2234.TechFixSegOut_elecS_grid_EUR",
 
                      "L2231.InterestRate_grid_EUR",
                      "L2231.Pop_grid_EUR",
@@ -212,6 +213,7 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
       add_xml_data(L2234.TechShrwt_elecS_grid_EUR, "TechShrwt") %>%
       add_xml_data(L2234.TechCoef_elecS_grid_EUR, "TechCoef") %>%
       add_xml_data(L2234.TechProd_elecS_grid_EUR, "Production") %>%
+      add_xml_data(L2234.TechFixSegOut_elecS_grid_EUR, "TechFixOutSW") %>%
       add_xml_data(L2234.SubsectorShrwtFllt_elecS_grid_EUR, "SubsectorShrwtFllt") %>%
       add_xml_data(L2234.SubsectorShrwtInterp_elecS_grid_EUR, "SubsectorInterp") %>%
       add_xml_data(L2231.InterestRate_grid_EUR, "InterestRate") %>%

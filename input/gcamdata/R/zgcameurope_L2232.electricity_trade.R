@@ -152,7 +152,7 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
     # Append vertical segments to the supplysector and subsector logit tables
     L2232.Supplysector_EURelec <- L2232.ElecReserve_elecS_grid_vertical_EUR %>%
       distinct(region, supplysector) %>%
-      repeat_add_columns(L2235.Supplysector_elec_USA %>%  select(-region, -supplysector) %>%  distinct) %>%
+      repeat_add_columns(L2232.Supplysector_EURelec %>%  select(-region, -supplysector) %>%  distinct) %>%
       bind_rows(L2232.Supplysector_EURelec)
 
     # L2232.SubsectorShrwtFllt_EURelec: subsector (grid region) share-weights in EUR electricity trade

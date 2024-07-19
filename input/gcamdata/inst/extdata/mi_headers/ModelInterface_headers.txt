@@ -256,6 +256,8 @@ CarbonCapture, world/+{name}region, region/+{name}supplysector, supplysector/+{n
 
 TechFixOut, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}technology, technology/+{year}period, period/+fixedOutput, scenario, scenario/world, period/{name=CO2}CO2
 
+TechFixOutSW, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}technology, technology/+{year}period, period/+fixedOutput, subsector/+{year}share-weight, subsector/+share-weight, period/+share-weight, scenario, scenario/world, period/{name=CO2}CO2
+
 CalorieContent, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}technology, technology/+{year}period, period/+{name}minicam-energy-input, minicam-energy-input/+efficiency, scenario, scenario/world, period/{name=CO2}CO2
 
 TechCapital, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}technology, technology/+{year}period, period/+{name}input-capital, input-capital/+capital-overnight, input-capital/+fixed-charge-rate, input-capital/+capacity-factor, scenario, scenario/world

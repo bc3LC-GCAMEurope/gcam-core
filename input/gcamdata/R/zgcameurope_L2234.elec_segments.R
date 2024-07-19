@@ -91,7 +91,8 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
                       "L2234.StubTechElecMarket_backup_elecS_EUR",
                       "L2234.TechShrwt_elecS_grid_EUR",
                       "L2234.TechCoef_elecS_grid_EUR",
-                      "L2234.TechProd_elecS_grid_EUR")
+                      "L2234.TechProd_elecS_grid_EUR",
+                      "L2234.TechFixSegOut_elecS_grid_EUR")
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -318,33 +319,45 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
 
     # 5. Inputs for any new technologies such as battery -----------------------
     # and append them with corresponding tables
-    L2234.GlobalTechCapFac_elecS_EUR <- L113.elecS_globaltech_capital_battery_ATB %>%
+    grid_storage_elecS <- A23.elecS_globaltech_shrwt %>%
+      filter(subsector == "grid_storage") %>%
+      left_join_error_no_match(A23.elecS_naming, by = "supplysector") %>%
+      mutate(technology = paste(technology, name_adder, sep = "_")) %>%
+      distinct(supplysector,subsector, elecS_tech = technology)
+
+
+    L2234.elecS_globaltech_capital_battery_ATB <- L113.elecS_globaltech_capital_battery_ATB %>%
+      left_join_error_no_match(grid_storage_elecS, by = c("supplysector", "subsector")) %>%
+      select(-technology) %>%
+      rename(technology = elecS_tech)
+
+    L2234.GlobalTechCapFac_elecS_EUR <- L2234.elecS_globaltech_capital_battery_ATB %>%
       select(sector.name = supplysector, subsector.name = subsector, technology, year = period, capacity.factor) %>%
       bind_rows(L2234.GlobalTechCapFac_elecS_EUR)
 
-    L2234.GlobalTechCapital_elecS_EUR <- L113.elecS_globaltech_capital_battery_ATB %>%
+    L2234.GlobalTechCapital_elecS_EUR <- L2234.elecS_globaltech_capital_battery_ATB %>%
       mutate(input.capital = "capital") %>%
       select(sector.name = supplysector, subsector.name = subsector, technology, year = period, input.capital,
              capital.overnight = capital.cost, fixed.charge.rate = fcr)  %>%
       bind_rows(L2234.GlobalTechCapital_elecS_EUR)
 
-    L2234.GlobalTechOMfixed_elecS_EUR <-  L113.elecS_globaltech_capital_battery_ATB %>%
+    L2234.GlobalTechOMfixed_elecS_EUR <-  L2234.elecS_globaltech_capital_battery_ATB %>%
       mutate(input.OM.fixed = "OM-fixed") %>%
       select(sector.name = supplysector, subsector.name = subsector, technology, year = period,
              input.OM.fixed, OM.fixed = fixed.om) %>%
       bind_rows(L2234.GlobalTechOMfixed_elecS_EUR)
 
-    L2234.GlobalTechOMvar_elecS_EUR <- L113.elecS_globaltech_capital_battery_ATB %>%
+    L2234.GlobalTechOMvar_elecS_EUR <- L2234.elecS_globaltech_capital_battery_ATB %>%
       mutate(input.OM.var = "OM-var") %>%
       select(sector.name = supplysector, subsector.name = subsector, technology, year = period,
              input.OM.var, OM.var = variable.om)  %>%
       bind_rows(L2234.GlobalTechOMvar_elecS_EUR)
 
-    L2234.GlobalTechLifetime_elecS_EUR <- L113.elecS_globaltech_capital_battery_ATB %>%
+    L2234.GlobalTechLifetime_elecS_EUR <- L2234.elecS_globaltech_capital_battery_ATB %>%
       select(sector.name = supplysector, subsector.name = subsector, technology, year = period, lifetime) %>%
       bind_rows(L2234.GlobalTechLifetime_elecS_EUR)
 
-    L2234.GlobalTechSCurve_elecS_EUR <-  L113.elecS_globaltech_capital_battery_ATB %>%
+    L2234.GlobalTechSCurve_elecS_EUR <-  L2234.elecS_globaltech_capital_battery_ATB %>%
       select(sector.name = supplysector, subsector.name = subsector, technology, year = period, lifetime, steepness, half.life) %>%
       bind_rows(L2234.GlobalTechSCurve_elecS_EUR)
 
@@ -462,7 +475,32 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       rename(region = grid_region)
 
     # 6d. Pass through sectors
-    # 6d. PassThrough tables ------------------
+    # 6d. Fixed Segment Output ---------------------------
+
+    # if there is a year/segment that only has output of hydro, need to add a fixed output to the grid region
+    # For example, in Albania, all base load generation comes from hydro. Since it is a fixed output, this means
+    # that all the subsector shareweights for baseload gen are zero. This creates problems when the grid then tries
+    # to use Albania baseload generation. So the fix here is to have a fixed output in the grid with a zero subsector shareweight
+    L2234.TechFixSegOut_elecS_grid_EUR <- bind_rows(L2234.StubTechProd_elecS_EUR %>% rename(prod = calOutputValue),
+                                                        L2234.StubTechCalInput_elecS_EUR %>% rename(prod = calibrated.value),
+                                                        L2234.StubTechFixOut_elecS_EUR %>% rename(prod = fixedOutput)) %>%
+      filter(prod > 0) %>%
+      group_by(region, supplysector, year) %>%
+      filter(dplyr::n() == 1 & subsector == "hydro") %>%
+      ungroup %>%
+      mutate(subsector = paste(region, supplysector, sep = " "),
+             technology = subsector) %>%
+      select(supplysector, subsector, technology, year, fixedOutput = prod) %>%
+      left_join_error_no_match(L2234.TechProd_elecS_grid_EUR, by = c("supplysector", "subsector", "technology", "year")) %>%
+      mutate(subs.share.weight = 0,
+             tech.share.weight = 0) %>%
+      select(LEVEL2_DATA_NAMES[["TechFixOutSW"]])
+
+    # need to remove from L2234.TechProd_elecS_grid_EUR
+    L2234.TechProd_elecS_grid_EUR <- L2234.TechProd_elecS_grid_EUR %>%
+      anti_join(L2234.TechFixSegOut_elecS_grid_EUR, by = c("region", "supplysector", "subsector", "technology", "year"))
+
+    # 6e. PassThrough tables ------------------
     # The marginal revenue sector is the region's electricity sector whereas the marginal revenue market is the grid region.
     L2234.PassThroughSector_elecS_EUR <- L2234.Supplysector_elecS_EUR %>%
       inner_join(grid_regions, by = c("region")) %>%
