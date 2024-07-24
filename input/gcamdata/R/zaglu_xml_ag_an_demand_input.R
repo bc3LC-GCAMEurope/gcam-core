@@ -31,19 +31,26 @@ module_aglu_ag_an_demand_input_xml <- function(command, ...) {
       "L203.IncomeElasticity",
       "L203.PriceElasticity",
       "L203.SubregionalShares",
+      "L203.SubregionalShares_ConsumerGroups",
       "L203.DemandFunction_food",
+      "L203.DemandFunction_food_ConsumerGroups",
       "L203.DemandStapleParams",
       "L203.DemandNonStapleParams",
+      "L203.DemandStapleParams_ConsumerGroups",
+      "L203.DemandNonStapleParams_ConsumerGroups",
       "L203.DemandStapleRegBias",
       "L203.DemandNonStapleRegBias",
       "L203.StapleBaseService",
       "L203.NonStapleBaseService",
-      "L203.GlobalTechInterp_demand")
+      "L203.GlobalTechInterp_demand",
+      "L203.StapleBaseService_ConsumerGroups",
+      "L203.NonStapleBaseService_ConsumerGroups")
 
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c(XML = "ag_an_demand_input.xml"))
+    return(c(XML = "ag_an_demand_input.xml",
+             XML = "ag_an_demand_input_multiple_consumers.xml"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -94,11 +101,47 @@ module_aglu_ag_an_demand_input_xml <- function(command, ...) {
                      "L203.StapleBaseService", "L203.NonStapleBaseService") ->
       ag_an_demand_input.xml
 
-    return_data("ag_an_demand_input.xml")
+    create_xml("ag_an_demand_input_multiple_consumers.xml") %>%
+      add_logit_tables_xml(L203.Supplysector_demand, "Supplysector") %>%
+      add_logit_tables_xml_generate_levels(L203.SubsectorAll_demand_food,
+                                           "SubsectorLogit","subsector","nesting-subsector",1,FALSE) %>%
+      add_xml_data_generate_levels(L203.StubTech_demand_food, "StubTech","subsector","nesting-subsector",1,FALSE) %>%
+      add_xml_data_generate_levels(L203.StubTechProd_food, "StubTechProd", "subsector","nesting-subsector",1,FALSE) %>%
+      add_xml_data_generate_levels(L203.StubCalorieContent, "StubCalorieContent", "subsector","nesting-subsector",1,FALSE) %>%
+      add_node_equiv_xml("subsector") %>%
+      add_logit_tables_xml(L203.NestingSubsectorAll_demand_food, "SubsectorAll", "SubsectorLogit") %>%
+      add_logit_tables_xml(L203.SubsectorAll_demand_nonfood, "SubsectorAll", "SubsectorLogit") %>%
+      add_xml_data(L203.StubTech_demand_nonfood, "StubTech") %>%
+      add_xml_data(L203.GlobalTechCoef_demand, "GlobalTechCoef") %>%
+      add_xml_data(L203.GlobalTechShrwt_demand, "GlobalTechShrwt") %>%
+      add_xml_data(L203.GlobalTechInterp_demand, "GlobalTechInterp") %>%
+      add_xml_data(L203.StubTechProd_nonfood_crop, "StubTechProd") %>%
+      add_xml_data(L203.StubTechProd_nonfood_meat, "StubTechProd") %>%
+      add_xml_data(L203.StubTechProd_For, "StubTechProd") %>%
+      add_xml_data(L203.PerCapitaBased, "PerCapitaBased") %>%
+      add_xml_data(L203.BaseService, "BaseService") %>%
+      add_xml_data(L203.IncomeElasticity, "IncomeElasticity") %>%
+      add_xml_data(L203.PriceElasticity, "PriceElasticity") %>%
+      add_xml_data(L203.SubregionalShares_ConsumerGroups, "SubregionalShares_Year") %>%
+      add_xml_data(L203.DemandFunction_food_ConsumerGroups, "DemandFunction_food") %>%
+      add_xml_data(L203.DemandStapleParams_ConsumerGroups, "DemandStapleParams") %>%
+      add_xml_data(L203.DemandNonStapleParams_ConsumerGroups, "DemandNonStapleParams") %>%
+      add_xml_data(L203.DemandStapleRegBias, "DemandStapleRegBias") %>%
+      add_xml_data(L203.DemandNonStapleRegBias, "DemandNonStapleRegBias") %>%
+      add_xml_data(L203.StapleBaseService_ConsumerGroups, "StapleBaseService") %>%
+      add_xml_data(L203.NonStapleBaseService_ConsumerGroups, "NonStapleBaseService") %>%
+      add_precursors("L203.Supplysector_demand", "L203.SubsectorAll_demand", "L203.StubTech_demand",
+                     "L203.GlobalTechCoef_demand", "L203.GlobalTechShrwt_demand", "L203.StubTechProd_food",
+                     "L203.StubTechProd_nonfood_crop", "L203.StubTechProd_nonfood_meat",
+                     "L203.StubTechProd_For", "L203.StubCalorieContent", "L203.PerCapitaBased",
+                     "L203.BaseService", "L203.IncomeElasticity", "L203.PriceElasticity",
+                     "L203.SubregionalShares_ConsumerGroups", "L203.DemandFunction_food_ConsumerGroups", "L203.DemandStapleParams_ConsumerGroups",
+                     "L203.DemandNonStapleParams_ConsumerGroups", "L203.DemandStapleRegBias", "L203.DemandNonStapleRegBias",
+                     "L203.StapleBaseService_ConsumerGroups", "L203.NonStapleBaseService_ConsumerGroups") ->
+      ag_an_demand_input_multiple_consumers.xml
+
+    return_data(ag_an_demand_input.xml, ag_an_demand_input_multiple_consumers.xml)
   } else {
     stop("Unknown command")
   }
 }
-
-
-

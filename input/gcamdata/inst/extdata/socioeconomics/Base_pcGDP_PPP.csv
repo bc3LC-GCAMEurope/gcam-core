@@ -1,0 +1,337 @@
+# File: Base_pcGDP_PPP.csv
+# Title: Base Year per capita GDP PPP
+# Units: Thous90US$/per
+# Source: Base Year per capita GDP PPPn
+# Column types: ccnn 
+# ----------
+Units,region,year,value
+Thous90US$/per,Africa_Eastern,1975,0.600376
+Thous90US$/per,Africa_Eastern,1990,0.614396
+Thous90US$/per,Africa_Eastern,2005,0.736522
+Thous90US$/per,Africa_Eastern,2010,0.892908
+Thous90US$/per,Africa_Eastern,2015,0.989957
+Thous90US$/per,Africa_Northern,1975,2.2468
+Thous90US$/per,Africa_Northern,1990,3.42475
+Thous90US$/per,Africa_Northern,2005,4.30266
+Thous90US$/per,Africa_Northern,2010,4.95512
+Thous90US$/per,Africa_Northern,2015,4.8673
+Thous90US$/per,Africa_Southern,1975,0.835221
+Thous90US$/per,Africa_Southern,1990,0.798656
+Thous90US$/per,Africa_Southern,2005,1.01411
+Thous90US$/per,Africa_Southern,2010,1.34213
+Thous90US$/per,Africa_Southern,2015,1.5058
+Thous90US$/per,Africa_Western,1975,1.0941
+Thous90US$/per,Africa_Western,1990,0.890946
+Thous90US$/per,Africa_Western,2005,1.03451
+Thous90US$/per,Africa_Western,2010,1.20611
+Thous90US$/per,Africa_Western,2015,1.33145
+Thous90US$/per,Albania,1975,3.30911
+Thous90US$/per,Albania,1990,5.08462
+Thous90US$/per,Albania,2005,6.98958
+Thous90US$/per,Albania,2010,7.77664
+Thous90US$/per,Albania,2015,9.91668
+Thous90US$/per,Argentina,1975,9.08996
+Thous90US$/per,Argentina,1990,6.7952
+Thous90US$/per,Argentina,2005,9.77973
+Thous90US$/per,Argentina,2010,11.8101
+Thous90US$/per,Argentina,2015,12.0644
+Thous90US$/per,Australia_NZ,1975,13.3871
+Thous90US$/per,Australia_NZ,1990,17.8406
+Thous90US$/per,Australia_NZ,2005,24.288
+Thous90US$/per,Australia_NZ,2010,25.4297
+Thous90US$/per,Australia_NZ,2015,27.1342
+Thous90US$/per,Austria,1975,11.7659
+Thous90US$/per,Austria,1990,17.4541
+Thous90US$/per,Austria,2005,22.4657
+Thous90US$/per,Austria,2010,22.7218
+Thous90US$/per,Austria,2015,23.4664
+Thous90US$/per,Belarus,1975,4.99674
+Thous90US$/per,Belarus,1990,7.03917
+Thous90US$/per,Belarus,2005,5.40722
+Thous90US$/per,Belarus,2010,6.3023
+Thous90US$/per,Belarus,2015,6.07163
+Thous90US$/per,Belgium,1975,11.7659
+Thous90US$/per,Belgium,1990,17.4541
+Thous90US$/per,Belgium,2005,22.4657
+Thous90US$/per,Belgium,2010,22.7218
+Thous90US$/per,Belgium,2015,23.4664
+Thous90US$/per,Bosnia and Herzegovina,1975,3.30911
+Thous90US$/per,Bosnia and Herzegovina,1990,5.08462
+Thous90US$/per,Bosnia and Herzegovina,2005,6.98958
+Thous90US$/per,Bosnia and Herzegovina,2010,7.77664
+Thous90US$/per,Bosnia and Herzegovina,2015,9.91668
+Thous90US$/per,Brazil,1975,4.84564
+Thous90US$/per,Brazil,1990,5.72588
+Thous90US$/per,Brazil,2005,6.82043
+Thous90US$/per,Brazil,2010,8.0724
+Thous90US$/per,Brazil,2015,8.17829
+Thous90US$/per,Bulgaria,1975,5.13968
+Thous90US$/per,Bulgaria,1990,7.18449
+Thous90US$/per,Bulgaria,2005,10.2917
+Thous90US$/per,Bulgaria,2010,12.1015
+Thous90US$/per,Bulgaria,2015,13.8407
+Thous90US$/per,Canada,1975,15.3134
+Thous90US$/per,Canada,1990,20.0976
+Thous90US$/per,Canada,2005,25.872
+Thous90US$/per,Canada,2010,25.7906
+Thous90US$/per,Canada,2015,27.3094
+Thous90US$/per,Central America and Caribbean,1975,2.60773
+Thous90US$/per,Central America and Caribbean,1990,2.89624
+Thous90US$/per,Central America and Caribbean,2005,3.59856
+Thous90US$/per,Central America and Caribbean,2010,4.12776
+Thous90US$/per,Central America and Caribbean,2015,4.64517
+Thous90US$/per,Central Asia,1975,2.63031
+Thous90US$/per,Central Asia,1990,3.04375
+Thous90US$/per,Central Asia,2005,2.89608
+Thous90US$/per,Central Asia,2010,4.02464
+Thous90US$/per,Central Asia,2015,4.8518
+Thous90US$/per,China,1975,0.334082
+Thous90US$/per,China,1990,0.893343
+Thous90US$/per,China,2005,3.16819
+Thous90US$/per,China,2010,5.18691
+Thous90US$/per,China,2015,7.30658
+Thous90US$/per,Colombia,1975,3.30618
+Thous90US$/per,Colombia,1990,4.44118
+Thous90US$/per,Colombia,2005,5.35404
+Thous90US$/per,Colombia,2010,6.3026
+Thous90US$/per,Colombia,2015,7.50469
+Thous90US$/per,Croatia,1975,3.30911
+Thous90US$/per,Croatia,1990,5.08462
+Thous90US$/per,Croatia,2005,6.98958
+Thous90US$/per,Croatia,2010,7.77664
+Thous90US$/per,Croatia,2015,9.91668
+Thous90US$/per,Cyprus,1975,5.13968
+Thous90US$/per,Cyprus,1990,7.18449
+Thous90US$/per,Cyprus,2005,10.2917
+Thous90US$/per,Cyprus,2010,12.1015
+Thous90US$/per,Cyprus,2015,13.8407
+Thous90US$/per,Czech Republic,1975,5.13968
+Thous90US$/per,Czech Republic,1990,7.18449
+Thous90US$/per,Czech Republic,2005,10.2917
+Thous90US$/per,Czech Republic,2010,12.1015
+Thous90US$/per,Czech Republic,2015,13.8407
+Thous90US$/per,Denmark,1975,11.7659
+Thous90US$/per,Denmark,1990,17.4541
+Thous90US$/per,Denmark,2005,22.4657
+Thous90US$/per,Denmark,2010,22.7218
+Thous90US$/per,Denmark,2015,23.4664
+Thous90US$/per,Estonia,1975,5.13968
+Thous90US$/per,Estonia,1990,7.18449
+Thous90US$/per,Estonia,2005,10.2917
+Thous90US$/per,Estonia,2010,12.1015
+Thous90US$/per,Estonia,2015,13.8407
+Thous90US$/per,Finland,1975,11.7659
+Thous90US$/per,Finland,1990,17.4541
+Thous90US$/per,Finland,2005,22.4657
+Thous90US$/per,Finland,2010,22.7218
+Thous90US$/per,Finland,2015,23.4664
+Thous90US$/per,France,1975,11.7659
+Thous90US$/per,France,1990,17.4541
+Thous90US$/per,France,2005,22.4657
+Thous90US$/per,France,2010,22.7218
+Thous90US$/per,France,2015,23.4664
+Thous90US$/per,Germany,1975,11.7659
+Thous90US$/per,Germany,1990,17.4541
+Thous90US$/per,Germany,2005,22.4657
+Thous90US$/per,Germany,2010,22.7218
+Thous90US$/per,Germany,2015,23.4664
+Thous90US$/per,Greece,1975,11.7659
+Thous90US$/per,Greece,1990,17.4541
+Thous90US$/per,Greece,2005,22.4657
+Thous90US$/per,Greece,2010,22.7218
+Thous90US$/per,Greece,2015,23.4664
+Thous90US$/per,Hungary,1975,5.13968
+Thous90US$/per,Hungary,1990,7.18449
+Thous90US$/per,Hungary,2005,10.2917
+Thous90US$/per,Hungary,2010,12.1015
+Thous90US$/per,Hungary,2015,13.8407
+Thous90US$/per,Iceland,1975,17.0813
+Thous90US$/per,Iceland,1990,23.9682
+Thous90US$/per,Iceland,2005,29.5173
+Thous90US$/per,Iceland,2010,30.3018
+Thous90US$/per,Iceland,2015,31.0284
+Thous90US$/per,India,1975,0.603045
+Thous90US$/per,India,1990,0.838523
+Thous90US$/per,India,2005,1.51975
+Thous90US$/per,India,2010,2.10664
+Thous90US$/per,India,2015,2.75825
+Thous90US$/per,Indonesia,1975,0.735685
+Thous90US$/per,Indonesia,1990,1.58362
+Thous90US$/per,Indonesia,2005,2.34066
+Thous90US$/per,Indonesia,2010,2.89532
+Thous90US$/per,Indonesia,2015,3.5462
+Thous90US$/per,Ireland,1975,11.7659
+Thous90US$/per,Ireland,1990,17.4541
+Thous90US$/per,Ireland,2005,22.4657
+Thous90US$/per,Ireland,2010,22.7218
+Thous90US$/per,Ireland,2015,23.4664
+Thous90US$/per,Italy,1975,11.7659
+Thous90US$/per,Italy,1990,17.4541
+Thous90US$/per,Italy,2005,22.4657
+Thous90US$/per,Italy,2010,22.7218
+Thous90US$/per,Italy,2015,23.4664
+Thous90US$/per,Japan,1975,10.382
+Thous90US$/per,Japan,1990,18.8898
+Thous90US$/per,Japan,2005,22.1005
+Thous90US$/per,Japan,2010,22.1713
+Thous90US$/per,Japan,2015,23.4259
+Thous90US$/per,Latvia,1975,5.13968
+Thous90US$/per,Latvia,1990,7.18449
+Thous90US$/per,Latvia,2005,10.2917
+Thous90US$/per,Latvia,2010,12.1015
+Thous90US$/per,Latvia,2015,13.8407
+Thous90US$/per,Lithuania,1975,5.13968
+Thous90US$/per,Lithuania,1990,7.18449
+Thous90US$/per,Lithuania,2005,10.2917
+Thous90US$/per,Lithuania,2010,12.1015
+Thous90US$/per,Lithuania,2015,13.8407
+Thous90US$/per,Luxembourg,1975,11.7659
+Thous90US$/per,Luxembourg,1990,17.4541
+Thous90US$/per,Luxembourg,2005,22.4657
+Thous90US$/per,Luxembourg,2010,22.7218
+Thous90US$/per,Luxembourg,2015,23.4664
+Thous90US$/per,Macedonia,1975,3.30911
+Thous90US$/per,Macedonia,1990,5.08462
+Thous90US$/per,Macedonia,2005,6.98958
+Thous90US$/per,Macedonia,2010,7.77664
+Thous90US$/per,Macedonia,2015,9.91668
+Thous90US$/per,Malta,1975,5.13968
+Thous90US$/per,Malta,1990,7.18449
+Thous90US$/per,Malta,2005,10.2917
+Thous90US$/per,Malta,2010,12.1015
+Thous90US$/per,Malta,2015,13.8407
+Thous90US$/per,Mexico,1975,6.09143
+Thous90US$/per,Mexico,1990,6.02778
+Thous90US$/per,Mexico,2005,9.15992
+Thous90US$/per,Mexico,2010,9.16083
+Thous90US$/per,Mexico,2015,9.91997
+Thous90US$/per,Middle East,1975,7.05299
+Thous90US$/per,Middle East,1990,6.70071
+Thous90US$/per,Middle East,2005,8.49458
+Thous90US$/per,Middle East,2010,9.16731
+Thous90US$/per,Middle East,2015,9.67603
+Thous90US$/per,Moldova,1975,4.99674
+Thous90US$/per,Moldova,1990,7.03917
+Thous90US$/per,Moldova,2005,5.40722
+Thous90US$/per,Moldova,2010,6.3023
+Thous90US$/per,Moldova,2015,6.07163
+Thous90US$/per,Netherlands,1975,11.7659
+Thous90US$/per,Netherlands,1990,17.4541
+Thous90US$/per,Netherlands,2005,22.4657
+Thous90US$/per,Netherlands,2010,22.7218
+Thous90US$/per,Netherlands,2015,23.4664
+Thous90US$/per,Norway,1975,17.0813
+Thous90US$/per,Norway,1990,23.9682
+Thous90US$/per,Norway,2005,29.5173
+Thous90US$/per,Norway,2010,30.3018
+Thous90US$/per,Norway,2015,31.0284
+Thous90US$/per,Pakistan,1975,0.800587
+Thous90US$/per,Pakistan,1990,1.21588
+Thous90US$/per,Pakistan,2005,1.53321
+Thous90US$/per,Pakistan,2010,1.62021
+Thous90US$/per,Pakistan,2015,1.77425
+Thous90US$/per,Poland,1975,5.13968
+Thous90US$/per,Poland,1990,7.18449
+Thous90US$/per,Poland,2005,10.2917
+Thous90US$/per,Poland,2010,12.1015
+Thous90US$/per,Poland,2015,13.8407
+Thous90US$/per,Portugal,1975,11.7659
+Thous90US$/per,Portugal,1990,17.4541
+Thous90US$/per,Portugal,2005,22.4657
+Thous90US$/per,Portugal,2010,22.7218
+Thous90US$/per,Portugal,2015,23.4664
+Thous90US$/per,Romania,1975,5.13968
+Thous90US$/per,Romania,1990,7.18449
+Thous90US$/per,Romania,2005,10.2917
+Thous90US$/per,Romania,2010,12.1015
+Thous90US$/per,Romania,2015,13.8407
+Thous90US$/per,Russia,1975,7.90877
+Thous90US$/per,Russia,1990,10.2564
+Thous90US$/per,Russia,2005,9.54516
+Thous90US$/per,Russia,2010,11.375
+Thous90US$/per,Russia,2015,12.2403
+Thous90US$/per,Serbia and Montenegro,1975,3.30911
+Thous90US$/per,Serbia and Montenegro,1990,5.08462
+Thous90US$/per,Serbia and Montenegro,2005,6.98958
+Thous90US$/per,Serbia and Montenegro,2010,7.77664
+Thous90US$/per,Serbia and Montenegro,2015,9.91668
+Thous90US$/per,Slovakia,1975,5.13968
+Thous90US$/per,Slovakia,1990,7.18449
+Thous90US$/per,Slovakia,2005,10.2917
+Thous90US$/per,Slovakia,2010,12.1015
+Thous90US$/per,Slovakia,2015,13.8407
+Thous90US$/per,Slovenia,1975,5.13968
+Thous90US$/per,Slovenia,1990,7.18449
+Thous90US$/per,Slovenia,2005,10.2917
+Thous90US$/per,Slovenia,2010,12.1015
+Thous90US$/per,Slovenia,2015,13.8407
+Thous90US$/per,South Africa,1975,6.24022
+Thous90US$/per,South Africa,1990,5.98591
+Thous90US$/per,South Africa,2005,6.65014
+Thous90US$/per,South Africa,2010,7.24171
+Thous90US$/per,South Africa,2015,7.47346
+Thous90US$/per,South America_Northern,1975,12.671
+Thous90US$/per,South America_Northern,1990,7.92399
+Thous90US$/per,South America_Northern,2005,8.29559
+Thous90US$/per,South America_Northern,2010,9.26863
+Thous90US$/per,South America_Northern,2015,8.87732
+Thous90US$/per,South America_Southern,1975,3.4632
+Thous90US$/per,South America_Southern,1990,3.70392
+Thous90US$/per,South America_Southern,2005,5.45139
+Thous90US$/per,South America_Southern,2010,6.50682
+Thous90US$/per,South America_Southern,2015,7.56886
+Thous90US$/per,South Asia,1975,0.469357
+Thous90US$/per,South Asia,1990,0.682659
+Thous90US$/per,South Asia,2005,0.993189
+Thous90US$/per,South Asia,2010,1.26668
+Thous90US$/per,South Asia,2015,1.59543
+Thous90US$/per,South Korea,1975,2.58864
+Thous90US$/per,South Korea,1990,7.72815
+Thous90US$/per,South Korea,2005,16.7927
+Thous90US$/per,South Korea,2010,20.1923
+Thous90US$/per,South Korea,2015,22.819
+Thous90US$/per,Southeast Asia,1975,1.0747
+Thous90US$/per,Southeast Asia,1990,1.72528
+Thous90US$/per,Southeast Asia,2005,2.94155
+Thous90US$/per,Southeast Asia,2010,3.56013
+Thous90US$/per,Southeast Asia,2015,4.23384
+Thous90US$/per,Spain,1975,11.7659
+Thous90US$/per,Spain,1990,17.4541
+Thous90US$/per,Spain,2005,22.4657
+Thous90US$/per,Spain,2010,22.7218
+Thous90US$/per,Spain,2015,23.4664
+Thous90US$/per,Sweden,1975,11.7659
+Thous90US$/per,Sweden,1990,17.4541
+Thous90US$/per,Sweden,2005,22.4657
+Thous90US$/per,Sweden,2010,22.7218
+Thous90US$/per,Sweden,2015,23.4664
+Thous90US$/per,Switzerland,1975,17.0813
+Thous90US$/per,Switzerland,1990,23.9682
+Thous90US$/per,Switzerland,2005,29.5173
+Thous90US$/per,Switzerland,2010,30.3018
+Thous90US$/per,Switzerland,2015,31.0284
+Thous90US$/per,Taiwan,1975,3.51208
+Thous90US$/per,Taiwan,1990,9.65468
+Thous90US$/per,Taiwan,2005,20.2991
+Thous90US$/per,Taiwan,2010,24.5229
+Thous90US$/per,Taiwan,2015,27.4047
+Thous90US$/per,Turkey,1975,3.30911
+Thous90US$/per,Turkey,1990,5.08462
+Thous90US$/per,Turkey,2005,6.98958
+Thous90US$/per,Turkey,2010,7.77664
+Thous90US$/per,Turkey,2015,9.91668
+Thous90US$/per,UK,1975,11.7659
+Thous90US$/per,UK,1990,17.4541
+Thous90US$/per,UK,2005,22.4657
+Thous90US$/per,UK,2010,22.7218
+Thous90US$/per,UK,2015,23.4664
+Thous90US$/per,USA,1975,15.8809
+Thous90US$/per,USA,1990,22.9398
+Thous90US$/per,USA,2005,31.2208
+Thous90US$/per,USA,2010,30.9548
+Thous90US$/per,USA,2015,33.2208
+Thous90US$/per,Ukraine,1975,4.99674
+Thous90US$/per,Ukraine,1990,7.03917
+Thous90US$/per,Ukraine,2005,5.40722
+Thous90US$/per,Ukraine,2010,6.3023
+Thous90US$/per,Ukraine,2015,6.07163
