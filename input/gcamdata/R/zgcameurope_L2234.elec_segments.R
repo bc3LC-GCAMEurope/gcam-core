@@ -225,7 +225,20 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
 
     # 4. Calibration Year Outputs ---------------------------------
     # 4a. L2234.StubTechProd_elecS_EUR ----------------------------
+    # Need to explicitly add zero elect_td_bld production
+    elect_td_bld_StubTech <- L223.PrimaryRenewKeywordInt_elec %>%
+      filter(sector.name == "elect_td_bld",
+             year %in% L223.StubTechProd_elec_EUR$year) %>%
+      select(supplysector = sector.name, subsector = subsector.name, stub.technology = intermittent.technology, year) %>%
+      repeat_add_columns(L223.StubTechProd_elec_EUR %>% distinct(region)) %>%
+      anti_join(L223.StubTechProd_elec_EUR, by = c("supplysector", "subsector", "stub.technology", "year", "region")) %>%
+      mutate(calOutputValue  = 0,
+             share.weight.year = year,
+             subs.share.weight = 0,
+             share.weight = 0)
+
     L2234.StubTechProd_NA <- L223.StubTechProd_elec_EUR %>%
+      bind_rows(elect_td_bld_StubTech) %>%
       expand_stubtech %>%
       # using left_join because there are some zeros in L223.StubTechProd_elec_EUR but not in L1239.R_elec_supply
       # below we confirm that all NAs are associated with a 0 calOutputValue
@@ -235,7 +248,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
 
     L2234.StubTechProd_elecS_EUR <- L2234.StubTechProd_NA %>%
       tidyr::replace_na(list(fraction = 0)) %>%
-      mutate(calOutputValue = calOutputValue * fraction) %>%
+      mutate(calOutputValue = round(calOutputValue * fraction, energy.DIGITS_CALPRODUCTION)) %>%
       mutate(share.weight = if_else(calOutputValue > 0, 1, 0))
 
     # 4b. L2234.StubTechCalInput_elecS_EUR ----------------------------
@@ -249,7 +262,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
 
     L2234.StubTechCalInput_elecS_EUR <- L2234.StubTechCalInput_NA %>%
       tidyr::replace_na(list(fraction = 0)) %>%
-      mutate(calibrated.value = calibrated.value * fraction) %>%
+      mutate(calibrated.value = round(calibrated.value * fraction, energy.DIGITS_CALPRODUCTION)) %>%
       mutate(tech.share.weight = if_else(calibrated.value > 0, 1, 0)) %>%
       group_by(region, supplysector, subsector, year) %>%
       mutate(subs.share.weight = if_else(any(calibrated.value > 0), 1, 0)) %>%
