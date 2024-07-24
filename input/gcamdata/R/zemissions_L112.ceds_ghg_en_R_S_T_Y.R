@@ -72,6 +72,7 @@ module_emissions_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
              FILE = "emissions/GCAM_EPA_CH4N2O_energy_map",
              "L244.GenericShares",
              "L244.ThermalShares",
+             "L244.TrnShares",
              # BC OC assumption files
              FILE = "gcam-usa/emissions/BC_OC_assumptions",
              FILE = "gcam-usa/emissions/BCOC_PM25_ratios"))
@@ -296,7 +297,7 @@ module_emissions_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
       select(iso,UCD_sector,year,value,GCAM_region_ID) %>%
       distinct() %>%
       repeat_add_columns(tibble(Non.co2 = unique(GAINS_sector$Non.co2))) %>%
-      left_join(GAINS_sector %>% gather("UCD_sector","em_fact","Freight":"Passenger"),by=c("iso","year","Non.co2","UCD_sector")) %>%
+      left_join(GAINS_sector %>% tidyr::gather("UCD_sector","em_fact","Freight":"Passenger"),by=c("iso","year","Non.co2","UCD_sector")) %>%
       na.omit() %>%
       filter(UCD_sector != "Motorcycle") %>%
       group_by(Non.co2,GCAM_region_ID,year,UCD_sector) %>%
@@ -398,6 +399,16 @@ module_emissions_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
       mutate(value=if_else(is.na(value),0,0.001*value),energy=if_else(is.na(energy),0,energy)) %>%
       left_join_keep_first_only(UCD_techs %>% select(-fuel) %>% rename(stub.technology=UCD_technology,subsector=tranSubsector),by=c("mode","size.class","UCD_sector","stub.technology")) %>%
       select(GCAM_region_ID,Non.CO2,supplysector,stub.technology,year,value,subsector,energy)->GAINS_NG_em_factors
+
+    # Adjust GAINS_NG_em_factors for multiple consumers:
+    GAINS_NG_em_factors_adj<- GAINS_NG_em_factors %>%
+      filter(!grepl("trn_freight", supplysector)) %>%
+      repeat_add_columns(tibble(group = unique(get_data(all_data, "L244.TrnShares")$group))) %>%
+      unite(supplysector, c("supplysector", "group"), sep = "_") %>%
+      bind_rows(GAINS_NG_em_factors %>%
+                  filter(grepl("trn_freight", supplysector)))
+
+    GAINS_NG_em_factors <- GAINS_NG_em_factors_adj
 
     # ===========================
     #Part 2:Combustion Energy Emissions#
@@ -615,7 +626,7 @@ module_emissions_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
       ungroup() ->
       L112.in_EJ_R_en_S_F_Yh_calib_all
 
-    # We neeed to allocate residential energy to the diferent consumer groups using the computed shares:
+    # We neeed to allocate residential energy to the different consumer groups using the computed shares:
     L244.GenericShares<- get_data(all_data, "L244.GenericShares",strip_attributes = TRUE) %>%
       select(region,gcam.consumer,building.service.input,year,gen_share) %>%
       rename(supplysector=building.service.input,
@@ -642,7 +653,35 @@ module_emissions_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
       group_by(region,supplysector) %>%
       mutate(share = approx_fun(year, share, rule = 2))
 
-    L244.Shares<-bind_rows(L244.GenericShares,L244.ThermalShares) %>%
+
+    # We neeed to allocate transport to the different consumer groups using the computed shares:
+    L244.TrnShares <- get_data(all_data, "L244.TrnShares", strip_attributes = TRUE) %>%
+      filter(scenario == "CORE") %>%
+      select(region, supplysector = energy.final.demand, year, group, share = serv.share) %>%
+      unite(supplysector, c("supplysector","group"), sep = "_") %>%
+      select(-year) %>%
+      repeat_add_columns(tibble(year = unique(L112.in_EJ_R_en_S_F_Yh_calib_all$year)))
+
+    # Adjustment to expand trn_pass shares to all trn_pass suplysectors:
+    L244.TrnShares_av <- L244.TrnShares %>% filter(grepl("trn_aviation_intl", supplysector))
+
+    trn_pass_sectors_df <- L112.in_EJ_R_en_S_F_Yh_calib_all %>% filter(grepl("trn_pass", supplysector))
+    trn_pass_sectors <- unique(trn_pass_sectors_df$supplysector)
+
+    L244.TrnShares <- L244.TrnShares %>%
+      filter(!grepl("trn_aviation_intl", supplysector)) %>%
+      separate(supplysector, c("adj1", "adj2", "group"), sep = "_") %>%
+      unite(supplysector, c("adj1", "adj2")) %>%
+      select(-supplysector) %>%
+      repeat_add_columns(tibble(supplysector = trn_pass_sectors)) %>%
+      unite(supplysector, c("supplysector", "group")) %>%
+      bind_rows(L244.TrnShares_av) %>%
+      select(region, supplysector, year, share) %>%
+      left_join_error_no_match(GCAM_region_names, by = "region")
+
+
+    # Add all shares into one df
+    L244.Shares_resid<-bind_rows(L244.GenericShares,L244.ThermalShares) %>%
       left_join_error_no_match(GCAM_region_names, by = "region")
 
 
@@ -654,29 +693,57 @@ module_emissions_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
 
     L112.in_EJ_R_en_S_F_Yh_calib_all_resid<- L112.in_EJ_R_en_S_F_Yh_calib_all %>%
       filter(grepl("resid",supplysector)) %>%
-      repeat_add_columns(tibble(group=unique(cons.gr.adj$gcam.consumer))) %>%
+      repeat_add_columns(tibble(group = unique(cons.gr.adj$gcam.consumer))) %>%
       unite(supplysector,c("supplysector","group"),sep = "_") %>%
       # add shares
-      left_join_error_no_match(L244.Shares, by = c("GCAM_region_ID", "year", "supplysector")) %>%
+      left_join_error_no_match(L244.Shares_resid, by = c("GCAM_region_ID", "year", "supplysector")) %>%
       mutate(energy = energy * share) %>%
       select(-region,-share)
 
+    L112.in_EJ_R_en_S_F_Yh_calib_all_trn_pass<- L112.in_EJ_R_en_S_F_Yh_calib_all %>%
+      filter(grepl("trn_aviation_intl",supplysector) | grepl("trn_pass",supplysector)) %>%
+      repeat_add_columns(tibble(group = unique(cons.gr.adj$gcam.consumer))) %>%
+      unite(supplysector,c("supplysector","group"),sep = "_") %>%
+      # add shares
+      left_join_error_no_match(L244.TrnShares, by = c("GCAM_region_ID", "year", "supplysector")) %>%
+      mutate(energy = energy * share) %>%
+      select(-region, -share)
+
     L112.in_EJ_R_en_S_F_Yh_calib_all<-L112.in_EJ_R_en_S_F_Yh_calib_all %>%
       filter(!grepl("resid",supplysector)) %>%
-      bind_rows(L112.in_EJ_R_en_S_F_Yh_calib_all_resid)
+      bind_rows(L112.in_EJ_R_en_S_F_Yh_calib_all_resid) %>%
+      filter(!grepl("trn_aviation_intl",supplysector)) %>%
+      filter(!grepl("trn_pass",supplysector)) %>%
+      bind_rows(L112.in_EJ_R_en_S_F_Yh_calib_all_trn_pass)
 
 
     # MATCH ENERGY AND EMISSIONS TO AGGREGATE EMISSIONS TO SPLIT OUT EMISSIONS BY GCAM SECTORS
     # ========================================================================================
 
-    CEDS_sector_tech_adj<-CEDS_sector_tech %>%
+    # First, adjust the CEDS_sector_tech fo trn -> create auxiliary df
+    CEDS_sector_tech_trn_pass<- L112.in_EJ_R_en_S_F_Yh_calib_all_trn_pass %>%
+      select(supplysector,subsector,stub.technology) %>%
+      distinct() %>%
+      #ToCheck
+      mutate(supplysector = sub("_([^_]*)$", "_split_\\1", supplysector)) %>%
+      tidyr::separate(supplysector, into = c("supplysector", "group"), sep = "_split_", extra = "merge", fill = "right") %>%
+      left_join(CEDS_sector_tech, by = c("supplysector", "subsector", "stub.technology")) %>%
+      filter(complete.cases(.)) %>%
+      unite(supplysector, c("supplysector", "group"), sep = "_")
+
+
+
+    CEDS_sector_tech_adj <- CEDS_sector_tech %>%
       filter(!grepl("resid",supplysector)) %>%
+      filter(!grepl("trn_aviation_intl",supplysector)) %>%
+      filter(!grepl("trn_pass",supplysector)) %>%
       bind_rows(L112.in_EJ_R_en_S_F_Yh_calib_all_resid %>%
                   select(supplysector,subsector,stub.technology) %>%
                   distinct() %>%
                   mutate(CEDS_agg_sector = "bld_resid",
                          CEDS_agg_fuel = stub.technology,
-                         CEDS_agg_fuel = if_else(CEDS_agg_fuel == "traditional biomass","biomass",stub.technology)))
+                         CEDS_agg_fuel = if_else(CEDS_agg_fuel == "traditional biomass","biomass",stub.technology))) %>%
+      bind_rows(CEDS_sector_tech_trn_pass)
 
     # Append CEDS sector/fuel combinations to GCAM energy
 
@@ -1869,11 +1936,11 @@ module_emissions_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
                      "common/iso_GCAM_regID","energy/mappings/UCD_techs","energy/calibrated_techs","energy/calibrated_techs_bld_det",
                      "emissions/mappings/Trn_subsector","emissions/CEDS/CEDS_sector_tech_combustion","emissions/mappings/Trn_subsector_revised",
                      "emissions/mappings/CEDS_sector_tech_proc","emissions/mappings/calibrated_outresources","emissions/mappings/CEDS_sector_tech_proc_revised",
-                     "L101.in_EJ_R_en_Si_F_Yh", "L1328.in_EJ_R_indenergy_F_Yh", "L1323.in_EJ_R_iron_steel_F_Y", "L1324.in_EJ_R_Off_road_F_Y",
-                     "L1325.in_EJ_R_chemical_F_Y", "L1326.in_EJ_R_aluminum_Yh", "L1327.in_EJ_R_paper_F_Yh", "L1328.in_EJ_R_food_F_Yh", "L1328.in_EJ_R_indenergy_infilled_for_food_F_Yh", "emissions/CEDS/CEDS_sector_tech_combustion_revised",
+                     "L101.in_EJ_R_en_Si_F_Yh", "L1326.in_EJ_R_indenergy_F_Yh", "L1323.in_EJ_R_iron_steel_F_Y", "L1324.in_EJ_R_Off_road_F_Y",
+                     "L1325.in_EJ_R_chemical_F_Y", "L1326.in_EJ_R_aluminum_Yh","emissions/CEDS/CEDS_sector_tech_combustion_revised",
                      "emissions/mappings/UCD_techs_emissions_revised","L154.IEA_histfut_data_times_UCD_shares",
                      "emissions/CEDS/gains_iso_sector_emissions","emissions/CEDS/gains_iso_fuel_emissions","L244.GenericShares","L244.ThermalShares",
-                     "L270.nonghg_tg_state_refinery_F_Yb", "gcam-usa/emissions/BC_OC_assumptions", "gcam-usa/emissions/BCOC_PM25_ratios") ->
+                     "L270.nonghg_tg_state_refinery_F_Yb", "gcam-usa/emissions/BC_OC_assumptions", "gcam-usa/emissions/BCOC_PM25_ratios", "L244.TrnShares") ->
       L111.nonghg_tg_R_en_S_F_Yh
 
     L111.nonghg_tgej_R_en_S_F_Yh_infered_combEF_AP %>%

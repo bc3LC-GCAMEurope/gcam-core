@@ -216,7 +216,7 @@ module_emissions_L102.nonco2_ceds_R_S_Y <- function(command, ...) {
           add_precursors("emissions/CEDS/BC_total_CEDS_emissions","emissions/CEDS/OC_total_CEDS_emissions","emissions/CEDS/CO_total_CEDS_emissions",
                          "emissions/CEDS/NH3_total_CEDS_emissions","emissions/CEDS/NMVOC_total_CEDS_emissions","emissions/CEDS/NOx_total_CEDS_emissions",
                          "emissions/CEDS/SO2_total_CEDS_emissions","emissions/CEDS/ceds_sector_map","emissions/CEDS/ceds_fuel_map",
-                         "emissions/CEDS/CH4_total_CEDS_emissions") ->
+                         "emissions/CEDS/CH4_total_CEDS_emissions","emissions/CEDS/CO2_total_CEDS_emissions") ->
           L102.ceds_int_shipping_nonco2_tg_S_F
 
         # verify the calculated data matches the prebuilt version if not a warning

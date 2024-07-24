@@ -68,7 +68,6 @@ module_gcamusa_L171.nonghg_trn <- function(command, ...) {
     MOVES_vmt_dist <- get_data(all_data, "gcam-usa/emissions/MOVES_VMT_dist")
     MOVES_vmt_dist_missing_mapping <- get_data(all_data, "gcam-usa/emissions/MOVES_VMT_dist_missing_mapping")
     MARKAL_LDV_EFs_gpm <- get_data(all_data, "gcam-usa/emissions/MARKAL_LDV_EFs_gpm")
-    L254.StubTranTechLoadFactor <- get_data(all_data, "L254.StubTranTechLoadFactor")
     trnMARKAL_UCD_mapping <- get_data(all_data, "gcam-usa/emissions/trnMARKAL_UCD_mapping")
     MARKAL_fuel_name_code <- get_data(all_data, "gcam-usa/emissions/MARKAL_fuel_name_code")
     GREET2014_LDV_CNG_EFs_tgEJ <- get_data(all_data, "gcam-usa/emissions/GREET2014_LDV_CNG_EFs_tgEJ")
@@ -80,6 +79,16 @@ module_gcamusa_L171.nonghg_trn <- function(command, ...) {
     NEI_pollutant_mapping <- get_data(all_data, "gcam-usa/emissions/NEI_pollutant_mapping")
     MARKAL_GCAM_mapping <- get_data(all_data, "gcam-usa/emissions/MARKAL_GCAM_mapping")
     MOVES_motorcycle_data <- get_data(all_data, "gcam-usa/emissions/MOVES_motorcycle_data")
+
+    L254.StubTranTechLoadFactor <- get_data(all_data, "L254.StubTranTechLoadFactor") %>%
+      # Needs to be adjusted with multiple consumers:
+      mutate(supplysector = gsub("d10", "dx", supplysector)) %>%
+      mutate(agg.supplysector = gsub('.{3}$', '', supplysector)) %>%
+      mutate(supplysector = agg.supplysector) %>%
+      select(-agg.supplysector) %>%
+      distinct()
+
+
     # -----------------------------------------------------------------------------
 
     # Perform computations
@@ -427,7 +436,7 @@ module_gcamusa_L171.nonghg_trn <- function(command, ...) {
       ###MISSING VALUES: ELC Minivans in 2005 and all vehicles using E85 in 2005. Fill with 2010 data for now
       # Also fill in any zeroes in 2005 with 2010 data
       mutate(`2005` = if_else(is.na(`2005`),`2010`,
-                            if_else(`2005` == 0, `2010`, `2005`))) %>%
+                              if_else(`2005` == 0, `2010`, `2005`))) %>%
       #MISSING VALUES: Filter out the following Mini car fuels: DSL, E10, E15 because they are not included in input emissions due to lack of load factor
       filter(!(Class == "Mini car" & Fuel %in% gcamusa.MARKAL_MINICAR_FILTER_OUT_FUELS)) %>%
       select(-Fuel_name) %>%
@@ -508,7 +517,7 @@ module_gcamusa_L171.nonghg_trn <- function(command, ...) {
       select(-Vintage)
 
     # Make a table with the base and future year emission factors
-     MARKAL_HDV_EFs_gpm_Y.long <- bind_rows(MARKAL_HDV_EFs_gpm_Yb.avg, MARKAL_HDV_EFs_gpm_Yf)
+    MARKAL_HDV_EFs_gpm_Y.long <- bind_rows(MARKAL_HDV_EFs_gpm_Yb.avg, MARKAL_HDV_EFs_gpm_Yf)
 
     # Convert to output-based EFs
     # Use MARKAL vehicle load factors to convert to Tg/million pass-km
@@ -586,17 +595,17 @@ module_gcamusa_L171.nonghg_trn <- function(command, ...) {
     # TODO: Make this more robust
     # For each of the historical years, calculate a distance-weighted EF
     # for all of the vehicles that exist in that year.
-      # All vehicles existing in 1990 will be given the year 1990
+    # All vehicles existing in 1990 will be given the year 1990
     motorcycle_gpm.long_1990 <- motorcycle_gpm.long %>%
       filter( year == 2010 & Vintage <= 1990 ) %>%
       mutate( year = 1990 )
 
-      # All vehicles existing in 2005 will be given the year 2005
+    # All vehicles existing in 2005 will be given the year 2005
     motorcycle_gpm.long_2005 <- motorcycle_gpm.long %>%
       filter( year == 2010 & Vintage <= 2005 ) %>%
       mutate( year = 2005 )
 
-      # bind the tables back together to calculate distance-weighted EFs
+    # bind the tables back together to calculate distance-weighted EFs
     motorcycle_gpm.long_Yb <- motorcycle_gpm.long %>%
       bind_rows( motorcycle_gpm.long_1990, motorcycle_gpm.long_2005 ) %>%
       # filter for GCAM historical years
@@ -637,8 +646,8 @@ module_gcamusa_L171.nonghg_trn <- function(command, ...) {
       #adding class column
       #we will give it class "Motorcycle" which will later be mapped to UCD class 2W and 3W
       mutate( Class = "Motorcycle",
-      #adding fuel column
-            Fuel = "GSL" ) %>%
+              #adding fuel column
+              Fuel = "GSL" ) %>%
       #add the EFs to every "division" for consistency with MARKAL format, later to be apportioned to states
       repeat_add_columns( tibble::tibble( region = unique( states_subregions$DIVISION ) ) )
 

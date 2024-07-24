@@ -103,10 +103,18 @@ module_emissions_L201.en_nonco2 <- function(command, ...) {
       repeat_add_columns(tibble(group = unique(groups$category))) %>%
       unite(supplysector, c("supplysector","group"), sep = "_")
 
-    EnTechInputNameMap<-EnTechInputNameMap %>%
-      filter(!grepl("resid",supplysector)) %>%
-      bind_rows(EnTechInputNameMap_resid)
+    # Adjust transport sector for multiple consumer groups
+    EnTechInputNameMap_trn<-EnTechInputNameMap %>%
+      filter(grepl("trn_pass",supplysector) | grepl("trn_aviation_intl",supplysector)) %>%
+      repeat_add_columns(tibble(group = unique(groups$category))) %>%
+      unite(supplysector, c("supplysector","group"), sep = "_")
 
+    EnTechInputNameMap<-EnTechInputNameMap %>%
+      filter(!grepl("resid",supplysector),
+             !grepl("trn_pass",supplysector),
+             !grepl("trn_aviation_intl",supplysector)) %>%
+      bind_rows(EnTechInputNameMap_resid) %>%
+      bind_rows(EnTechInputNameMap_trn)
 
 
     # L201.en_pol_emissions: Pollutant emissions for energy technologies in all regions
