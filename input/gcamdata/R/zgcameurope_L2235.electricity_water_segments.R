@@ -198,10 +198,10 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
     # CAPITAL
     L2235.GlobalTechCapital_elecS_cool_EUR <- replace_cool_data(data = L2235.GlobalTechCapital_elecS_cool_EUR,
                                                                                  cols = c("input.capital", "capital.overnight", "fixed.charge.rate"),
-                                                                                 data_replace = bind_rows(L2233.GlobalTechCapital_elec_cool,
-                                                                                                          L2233.GlobalTechCapital_elecPassthru)) %>%
+                                                                                 data_replace = bind_rows(L2233.GlobalTechCapital_elec_cool )) %>%
       filter(!subsector.name0 == "grid_storage") %>%
-      bind_rows(filter(L2235.GlobalTechCapital_elecS_cool_EUR, subsector.name0 == "grid_storage"))
+      na.omit() %>%
+      bind_rows(L2235.GlobalTechCapital_elecS_cool_EUR)
 
     # WATER COEFFICIENTS
     # Different method required here since we are starting with water techs rather than segment techs
