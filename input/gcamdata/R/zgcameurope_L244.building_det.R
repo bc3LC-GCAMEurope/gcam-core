@@ -96,6 +96,9 @@ module_gcameurope_L244.building_det <- function(command, ...) {
                       "L244.HDDCDD_B1_CCSM3x_EUR",
                       "L244.HDDCDD_B1_HadCM3_EUR",
                       "L244.HDDCDD_constdd_no_GCM_EUR",
+                      "L244.GlobalTechShrwt_bld_EUR",
+                      "L244.GlobalTechCost_bld_EUR",
+                      "L244.GlobalTechTrackCapital_bld_EUR",
                       "L244.GompFnParam_EUR",
                       "L244.Satiation_impedance_EUR",
                       "L244.GenericServiceImpedance_EUR",
@@ -945,8 +948,8 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              market.name = region) %>%
       select(LEVEL2_DATA_NAMES[["StubTechEff"]])
 
-    # L244.GlobalTechShrwt_bld: Default shareweights for global building technologies
-    L244.GlobalTechShrwt_bld <- A44.globaltech_shrwt_EUR %>%
+    # L244.GlobalTechShrwt_bld_EUR: Default shareweights for global building technologies
+    L244.GlobalTechShrwt_bld_EUR <- A44.globaltech_shrwt_EUR %>%
       # Repeat for all model years
       complete(nesting(supplysector, subsector, technology), year = c(year, MODEL_YEARS)) %>%
       # Interpolate
@@ -958,8 +961,8 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              subsector.name = subsector) %>%
       select(LEVEL2_DATA_NAMES[["GlobalTechYr"]], share.weight)
 
-    # L244.GlobalTechCost_bld: Non-fuel costs of global building technologies
-    L244.GlobalTechCost_bld <- add.cg(L144.NEcost_75USDGJ_EUR) %>%
+    # L244.GlobalTechCost_bld_EUR: Non-fuel costs of global building technologies
+    L244.GlobalTechCost_bld_EUR <- add.cg(L144.NEcost_75USDGJ_EUR) %>%
       mutate(input.cost = round(NEcostPerService, energy.DIGITS_COST)) %>%
       repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
       rename(sector.name = supplysector,
@@ -969,14 +972,14 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     FCR <- (socioeconomics.DEFAULT_INTEREST_RATE * (1+socioeconomics.DEFAULT_INTEREST_RATE)^socioeconomics.BUILDINGS_CAP_PAYMENTS) /
       ((1+socioeconomics.DEFAULT_INTEREST_RATE)^socioeconomics.BUILDINGS_CAP_PAYMENTS -1)
-    L244.GlobalTechCost_bld %>%
+    L244.GlobalTechCost_bld_EUR %>%
       mutate(capital.coef = socioeconomics.BUILDINGS_CAPITAL_RATIO / FCR,
              # note consumer ACs, etc are technically not investment but rather "consumer durable"
              tracking.market = if_else(grepl('resid', sector.name),
                                        socioeconomics.EN_DURABLE_MARKET_NAME, socioeconomics.EN_CAPITAL_MARKET_NAME),
              depreciation.rate = socioeconomics.BUILDINGS_DEPRECIATION_RATE) %>%
       select(LEVEL2_DATA_NAMES[['GlobalTechTrackCapital']]) ->
-      L244.GlobalTechTrackCapital_bld
+      L244.GlobalTechTrackCapital_bld_EUR
 
     # L244.StubTechIntGainOutputRatio_EUR: Output ratios of internal gain energy from non-thermal building services
     L244.StubTechIntGainOutputRatio_pre <- L144.internal_gains_EUR %>%
@@ -2544,6 +2547,30 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_precursors("L144.internal_gains_EUR", "common/GCAM_region_names",
                      "gcam-europe/calibrated_techs_bld_det_EUR", "energy/A44.gcam_consumer") ->
       L244.StubTechIntGainOutputRatio_EUR
+
+    L244.GlobalTechShrwt_bld_EUR %>%
+      add_title("Default shareweights for global building technologies") %>%
+      add_units("Unitless") %>%
+      add_comments("Values interpolated from A44.globaltech_shrwt") %>%
+      add_legacy_name("L244.GlobalTechShrwt_bld_EUR") %>%
+      add_precursors("gcam-europe/A44.globaltech_shrwt_EUR") ->
+      L244.GlobalTechShrwt_bld_EUR
+
+    L244.GlobalTechCost_bld_EUR %>%
+      add_title("Non-fuel costs of global building technologies") %>%
+      add_units("1975$/GJ-service") %>%
+      add_comments("Costs from L144.NEcost_75USDGJ expanded to model years") %>%
+      add_legacy_name("L244.GlobalTechCost_bld_EUR") %>%
+      add_precursors("L144.NEcost_75USDGJ_EUR") ->
+      L244.GlobalTechCost_bld_EUR
+
+    L244.GenericCoalCoef_EUR %>%
+      add_title("Coefficients for the estimation of coal: generic services") %>%
+      add_units("Unitless") %>%
+      add_comments("Calculated using pc_thous") %>%
+      add_legacy_name("L244.GenericCoalCoef_EUR") %>%
+      add_precursors("common/GCAM_region_names","L144.base_service_EJ_serv_fuel_EUR") ->
+      L244.GenericCoalCoef_EUR
 
     L244.GenericCoalCoef_EUR %>%
       add_title("Coefficients for the estimation of coal: generic services") %>%

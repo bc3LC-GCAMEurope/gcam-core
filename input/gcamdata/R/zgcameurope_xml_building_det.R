@@ -45,6 +45,9 @@ module_gcameurope_building_det_xml <- function(command, ...) {
                      "L244.ThermalServiceAdder_EUR",
                      "L244.GenericServiceCoef_EUR",
                      "L244.ThermalServiceCoef_EUR",
+                     "L244.GlobalTechShrwt_bld_EUR",
+                     "L244.GlobalTechCost_bld_EUR",
+                     "L244.GlobalTechTrackCapital_bld_EUR",
                      "L244.GompFnParam_EUR",
                      "L244.GenericCoalCoef_EUR",
                      "L244.ThermalCoalCoef_EUR",
@@ -108,7 +111,10 @@ module_gcameurope_building_det_xml <- function(command, ...) {
       add_xml_data(L244.StubTechEff_bld_EUR, "StubTechEff") %>%
       add_xml_data(L244.StubTechCalInput_bld_EUR, "StubTechCalInput") %>%
       add_xml_data(L244.StubTechIntGainOutputRatio_EUR, "StubTechIntGainOutputRatio") %>%
+      add_xml_data(L244.GlobalTechShrwt_bld_EUR, "GlobalTechShrwt") %>%
       add_node_equiv_xml("input") %>%
+      add_xml_data(L244.GlobalTechTrackCapital_bld_EUR, "GlobalTechTrackCapital") %>%
+      add_xml_data(L244.GlobalTechCost_bld_EUR, "GlobalTechCost") %>%
       add_precursors(MODULE_INPUTS) ->
       building_det_EUR.xml
 
