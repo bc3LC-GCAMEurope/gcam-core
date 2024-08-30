@@ -27,7 +27,14 @@ module_gcameurope_other_industry_xml <- function(command, ...) {
                      "L232.SubsectorShrwtFllt_ind_EUR",
                      "L232.Supplysector_ind_EUR",
                      "L232.StubTechSecOut_ind_EUR",
-                     "L232.StubTechSecMarket_ind_EUR")
+                     "L232.StubTechSecMarket_ind_EUR",
+                     "L232.GlobalTechEff_ind_EUR",
+                     "L232.GlobalTechShrwt_ind_EUR",
+                     "L232.GlobalTechCost_ind_EUR",
+                     "L232.GlobalTechTrackCapital_ind_EUR",
+                     "L232.GlobalTechSecOut_ind_EUR",
+                     "L232.GlobalTechSCurve_en_EUR",
+                     "L232.GlobalTechProfitShutdown_en_EUR")
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -60,6 +67,14 @@ module_gcameurope_other_industry_xml <- function(command, ...) {
       add_xml_data(L232.PerCapitaBased_ind_EUR, "PerCapitaBased") %>%
       add_xml_data(L232.PriceElasticity_ind_EUR, "PriceElasticity") %>%
       add_xml_data(L232.BaseService_ind_EUR, "BaseService") %>%
+      add_xml_data(L232.GlobalTechShrwt_ind_EUR, "GlobalTechShrwt") %>%
+      add_node_equiv_xml("input") %>%
+      add_xml_data(L232.GlobalTechSCurve_en_EUR, "GlobalTechSCurve") %>%
+      add_xml_data(L232.GlobalTechProfitShutdown_en_EUR, "GlobalTechProfitShutdown") %>%
+      add_xml_data(L232.GlobalTechEff_ind_EUR, "GlobalTechEff") %>%
+      add_xml_data(L232.GlobalTechTrackCapital_ind_EUR, "GlobalTechTrackCapital") %>%
+      add_xml_data(L232.GlobalTechCost_ind_EUR, "GlobalTechCost") %>%
+      add_xml_data(L232.GlobalTechSecOut_ind_EUR, "GlobalTechSecOut") %>%
       add_precursors(MODULE_INPUTS) ->
       other_industry_EUR.xml
 

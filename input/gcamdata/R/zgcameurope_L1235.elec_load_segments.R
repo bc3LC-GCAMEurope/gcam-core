@@ -48,6 +48,10 @@ module_gcameurope_L1235.elec_load_segments <- function(command, ...) {
              time_sec = paste0(section, ".time"),
              demand_sec = paste0(section, ".demand"))
 
+    # Don't want any cogen here
+    L1234.out_EJ_grid_elec_F_EUR <- L1234.out_EJ_grid_elec_F_EUR %>%
+      filter(sector != "chp_elec")
+
     # Computing the fraction of vertical segment supplied by each horizontal segment. ---------------------
     # These fractions will be used to calculate horizontal segment demands to check if supplies
     # match demands in calibration years.

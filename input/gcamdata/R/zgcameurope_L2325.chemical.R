@@ -20,6 +20,19 @@
 #' @importFrom tidyr gather spread
 #' @author Yang Liu Dec 2019
 module_gcameurope_L2325.chemical <- function(command, ...) {
+  GLOBAL_TECH_COGEN <- c("L2325.GlobalTechShrwt_chemical",
+                         "L2325.GlobalTechCoef_chemical",
+                         "L2325.GlobalTechEff_chemical",
+                         "L2325.GlobalTechCost_chemical",
+                         "L2325.GlobalTechTrackCapital_chemical",
+                         "L2325.GlobalTechCapture_chemical",
+                         "L2325.GlobalTechCSeq_ind",
+                         "L2325.GlobalTechShutdown_chemical",
+                         "L2325.GlobalTechSCurve_chemical",
+                         "L2325.GlobalTechLifetime_chemical",
+                         "L2325.GlobalTechProfitShutdown_chemical",
+                         "L2325.GlobalTechSecOut_chemical")
+
   MODULE_INPUTS <- c(FILE = "common/GCAM_region_names",
                      FILE = "energy/calibrated_techs",
                      FILE = "energy/A_regions",
@@ -38,7 +51,8 @@ module_gcameurope_L2325.chemical <- function(command, ...) {
                      FILE = "energy/A325.demand",
                      FILE = "gcam-europe/mappings/grid_regions",
                      "L1325.in_EJ_R_chemical_F_Y",
-                     "L1325.in_EJ_R_chemical_F_Y_EUR")
+                     "L1325.in_EJ_R_chemical_F_Y_EUR",
+                     GLOBAL_TECH_COGEN)
   MODULE_OUTPUTS <- c("L2325.Supplysector_chemical_EUR",
                       "L2325.FinalEnergyKeyword_chemical_EUR",
                       "L2325.SubsectorLogit_chemical_EUR",
@@ -51,7 +65,8 @@ module_gcameurope_L2325.chemical <- function(command, ...) {
                       "L2325.StubTechSecMarket_chemical_EUR",
                       "L2325.PerCapitaBased_chemical_EUR",
                       "L2325.BaseService_chemical_EUR",
-                      "L2325.PriceElasticity_chemical_EUR")
+                      "L2325.PriceElasticity_chemical_EUR",
+                      paste0(GLOBAL_TECH_COGEN, "_EUR"))
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -337,6 +352,18 @@ module_gcameurope_L2325.chemical <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["PriceElasticity"]]) ->
       L2325.PriceElasticity_chemical_EUR
 
+    # COGEN RENAMING ---------------------
+    # Create global tech for grid region specific cogen
+    env_module <- rlang::current_env()
+
+    lapply(GLOBAL_TECH_COGEN, cogen_global_tech, env = env_module)
+    L2325.GlobalTechSecOut_chemical <- L2325.GlobalTechSecOut_chemical %>%
+      mutate(secondary.output = "base load generation")
+
+    env_module <- rlang::current_env()
+
+    lapply(MODULE_OUTPUTS, cogen_stubtech_rename, env = env_module,
+           grid_region_df = grid_regions)
     # Produce outputs ===================================================
     L2325.Supplysector_chemical_EUR %>%
       add_title("Supply sector information for chemical sector") %>%

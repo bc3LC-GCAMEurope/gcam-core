@@ -17,12 +17,13 @@
 #' @importFrom dplyr distinct filter mutate pull select
 #' @author RLH June 2024
 module_gcameurope_L1236.elec_load_segments_solver <- function(command, ...) {
+  MODULE_INPUTS <- c(FILE = "gcam-europe/elecS_horizontal_to_vertical_map",
+                     "L1234.out_EJ_grid_elec_F_EUR",
+                     "L1235.grid_elec_supply_EUR",
+                     "L1235.elecS_demand_fraction_EUR",
+                     "L1235.elecS_horizontal_vertical_EUR")
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "gcam-europe/elecS_horizontal_to_vertical_map",
-             "L1234.out_EJ_grid_elec_F_EUR",
-             "L1235.grid_elec_supply_EUR",
-             "L1235.elecS_demand_fraction_EUR",
-             "L1235.elecS_horizontal_vertical_EUR"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L1236.grid_elec_supply_EUR"))
   } else if(command == driver.MAKE) {
@@ -30,11 +31,7 @@ module_gcameurope_L1236.elec_load_segments_solver <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    elecS_horizontal_to_vertical_map <- get_data(all_data, "gcam-europe/elecS_horizontal_to_vertical_map")
-    L1234.out_EJ_grid_elec_F_EUR <- get_data(all_data, "L1234.out_EJ_grid_elec_F_EUR")
-    L1235.grid_elec_supply_EUR <- get_data(all_data, "L1235.grid_elec_supply_EUR", strip_attributes = TRUE)
-    L1235.elecS_demand_fraction_EUR <- get_data(all_data, "L1235.elecS_demand_fraction_EUR")
-    L1235.elecS_horizontal_vertical_EUR <- get_data(all_data, "L1235.elecS_horizontal_vertical_EUR", strip_attributes = TRUE)
+    get_data_list(all_data, MODULE_INPUTS)
 
     # Idea: balance horizontal segment production while minimizing change to demand fraction
     library(nloptr)
@@ -125,9 +122,17 @@ module_gcameurope_L1236.elec_load_segments_solver <- function(command, ...) {
           horizontal_segment_shares_tmp <- horizontal_segment_shares %>%
             filter(horizontal_segment == SEG)
           supply_tmp <-  supply %>% filter(segment == SEG)
+          chp <- L1234.out_EJ_grid_elec_F_EUR %>%
+            filter(sector == "chp_elec",
+                   grid_region == REGION, year == YEAR) %>%
+            pull(generation) %>%  sum()
 
           # Calculate the needed supply in this segment for the equality constraint
-          supply_segment <- sum(supply_tmp$tot_generation) * horizontal_segment_shares_tmp$demand_fraction
+          supply_segment <- (sum(supply_tmp$tot_generation) + chp) * horizontal_segment_shares_tmp$demand_fraction
+          # If base load, subtract the chp from needed supply
+          if (seg_num == 1){
+            supply_segment <- supply_segment - chp
+          }
 
           # Upper limit is either 1 (if first segment) or 1 - cumulative sum of  fractions in previous segments
           if (seg_num == 1){
@@ -191,6 +196,7 @@ module_gcameurope_L1236.elec_load_segments_solver <- function(command, ...) {
     }
 
     # Check that supply by fuel and by segment is correct ------------------------------
+    # First check that fuel total in grid region matches L1235
     CHECK_ROUND <- 6
     L1236_gen_R_F_Y <- L1236.grid_elec_supply_EUR %>%
       group_by(grid_region, fuel, year) %>%
@@ -208,13 +214,21 @@ module_gcameurope_L1236.elec_load_segments_solver <- function(command, ...) {
 
     stopifnot(all(abs(FUEL_check$diff) < 0.00001))
 
+    # Next check that segment total is same as L1234
     CHECK_ROUND <- 6
+    chp_base <- L1234.out_EJ_grid_elec_F_EUR %>%
+      filter(sector == "chp_elec") %>%
+      group_by(grid_region, year) %>%
+      summarise(generation = sum(generation)) %>%
+      ungroup %>%
+      mutate(segment = elecS_horizontal_to_vertical_map$horizontal_segment[1])
     L1236_gen_R_SEG_Y <- L1236.grid_elec_supply_EUR %>%
+      bind_rows(chp_base) %>%
       group_by(grid_region, segment, year) %>%
       summarise(generation = round(sum(generation), CHECK_ROUND)) %>%
       ungroup %>%
       arrange()
-    L1235_gen_R_SEG_Y <- L1235.grid_elec_supply_EUR %>%
+    L1234_gen_R_SEG_Y <- L1234.out_EJ_grid_elec_F_EUR %>%
       filter(year %in% MODEL_BASE_YEARS, generation != 0) %>%
       group_by(grid_region, year) %>%
       summarise(generation = round(sum(generation), CHECK_ROUND)) %>%
@@ -223,7 +237,7 @@ module_gcameurope_L1236.elec_load_segments_solver <- function(command, ...) {
       mutate(generation =  round(generation * demand_fraction, CHECK_ROUND)) %>%
       select(-demand_fraction)
 
-    SEG_check <-L1235_gen_R_SEG_Y %>%
+    SEG_check <-L1234_gen_R_SEG_Y %>%
       left_join_error_no_match(L1236_gen_R_SEG_Y, by = c("grid_region", "year", "segment")) %>%
       mutate(diff = generation.x - generation.y)
 

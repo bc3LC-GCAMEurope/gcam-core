@@ -23,7 +23,19 @@ module_gcameurope_chemical_xml <- function(command, ...) {
                      "L2325.StubTechSecMarket_chemical_EUR",
                      "L2325.PerCapitaBased_chemical_EUR",
                      "L2325.BaseService_chemical_EUR",
-                     "L2325.PriceElasticity_chemical_EUR")
+                     "L2325.PriceElasticity_chemical_EUR",
+                     "L2325.GlobalTechShrwt_chemical_EUR",
+                     "L2325.GlobalTechCoef_chemical_EUR",
+                     "L2325.GlobalTechEff_chemical_EUR",
+                     "L2325.GlobalTechCost_chemical_EUR",
+                     "L2325.GlobalTechTrackCapital_chemical_EUR",
+                     "L2325.GlobalTechCapture_chemical_EUR",
+                     "L2325.GlobalTechCSeq_ind_EUR",
+                     "L2325.GlobalTechShutdown_chemical_EUR",
+                     "L2325.GlobalTechSCurve_chemical_EUR",
+                     "L2325.GlobalTechLifetime_chemical_EUR",
+                     "L2325.GlobalTechProfitShutdown_chemical_EUR",
+                     "L2325.GlobalTechSecOut_chemical_EUR")
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -53,6 +65,17 @@ module_gcameurope_chemical_xml <- function(command, ...) {
       add_xml_data(L2325.PerCapitaBased_chemical_EUR, "PerCapitaBased") %>%
       add_xml_data(L2325.BaseService_chemical_EUR, "BaseService") %>%
       add_xml_data(L2325.PriceElasticity_chemical_EUR, "PriceElasticity") %>%
+      add_xml_data(L2325.GlobalTechShrwt_chemical_EUR, "GlobalTechShrwt") %>%
+      add_node_equiv_xml("input") %>%
+      add_xml_data(L2325.GlobalTechEff_chemical_EUR, "GlobalTechEff") %>%
+      add_xml_data(L2325.GlobalTechCoef_chemical_EUR, "GlobalTechCoef") %>%
+      add_xml_data(L2325.GlobalTechTrackCapital_chemical_EUR, "GlobalTechTrackCapital") %>%
+      add_xml_data(L2325.GlobalTechCost_chemical_EUR, "GlobalTechCost") %>%
+      add_xml_data(L2325.GlobalTechSCurve_chemical_EUR, "GlobalTechSCurve") %>%
+      add_xml_data(L2325.GlobalTechProfitShutdown_chemical_EUR, "GlobalTechProfitShutdown") %>%
+      add_xml_data(L2325.GlobalTechCSeq_ind_EUR, "GlobalTechCSeq") %>%
+      add_xml_data(L2325.GlobalTechCapture_chemical_EUR, "GlobalTechCapture") %>%
+      add_xml_data(L2325.GlobalTechSecOut_chemical_EUR, "GlobalTechSecOut") %>%
       add_precursors(MODULE_INPUTS) ->
       chemical_EUR.xml
 

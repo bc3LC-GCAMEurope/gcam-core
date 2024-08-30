@@ -1436,3 +1436,60 @@ tech_name_expansion <- function(df, sector = "supplysector", tech = "technology"
     mutate(!!tech := if_else(!is.na(name_adder), paste(get(tech), name_adder, sep = "_"), get(tech))) %>%
     select(-name_adder)
 }
+
+#' cogen_global_tech
+#'
+#' Helper function to rename cogen techs in global tech db
+#' @param df_name String name of tibble
+#' @importFrom dplyr filter mutate group_by
+#' @return assignment of new db
+#'
+cogen_global_tech <- function(df_name, env){
+  df <- get(df_name, envir = env)
+  if (is.null(df)){
+    assign(paste0(df_name, "_EUR"),
+           missing_data(),
+           envir = env)
+    return(0)
+  } else {
+    if ("technology" %in% names(df)){
+      assign(paste0(df_name, "_EUR"),
+             df %>%
+               filter(grepl("cogen", technology)) %>%
+               mutate(technology = paste0(technology, "_grid")),
+             envir = env)
+      return(0)
+    } else {
+      assign(paste0(df_name, "_EUR"),
+             df,
+             envir = env)
+      return(0)
+    }
+  }
+}
+
+#' cogen_stubtech_rename
+#'
+#' Helper function to rename cogen techs in global tech db
+#' @param df_name String name of tibble
+#' @importFrom dplyr filter mutate group_by
+#' @return assignment of new db
+cogen_stubtech_rename <- function(df_name, env, grid_region_df = grid_regions){
+  df <- get(df_name, envir = env)
+  if (is.null(df)){
+    return(0)
+  }
+  if ("stub.technology" %in% names(df)){
+      assign(df_name,
+             df %>%
+               mutate(stub.technology = if_else(grepl("cogen$", stub.technology) &
+                                                  region %in% grid_region_df$region,
+                                                paste0(stub.technology, "_grid"),
+                                                stub.technology)),
+             envir = env)
+      return(0)
+  }
+
+  return(0)
+
+}

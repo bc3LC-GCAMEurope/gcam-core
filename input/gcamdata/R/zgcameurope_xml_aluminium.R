@@ -23,7 +23,17 @@ module_gcameurope_aluminum_xml <- function(command, ...) {
                      "L2326.StubTechSecMarket_aluminum_EUR",
                      "L2326.PerCapitaBased_aluminum_EUR",
                      "L2326.BaseService_aluminum_EUR",
-                     "L2326.PriceElasticity_aluminum_EUR")
+                     "L2326.PriceElasticity_aluminum_EUR",
+                     "L2326.GlobalTechShrwt_aluminum_EUR",
+                     "L2326.GlobalTechCoef_aluminum_EUR",
+                     "L2326.GlobalTechCost_aluminum_EUR",
+                     "L2326.GlobalTechTrackCapital_aluminum_EUR",
+                     "L2326.GlobalTechCapture_aluminum_EUR",
+                     "L2326.GlobalTechShutdown_aluminum_EUR",
+                     "L2326.GlobalTechSCurve_aluminum_EUR",
+                     "L2326.GlobalTechLifetime_aluminum_EUR",
+                     "L2326.GlobalTechProfitShutdown_aluminum_EUR",
+                     "L2326.GlobalTechSecOut_aluminum_EUR")
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -53,6 +63,14 @@ module_gcameurope_aluminum_xml <- function(command, ...) {
       add_xml_data(L2326.PerCapitaBased_aluminum_EUR, "PerCapitaBased") %>%
       add_xml_data(L2326.BaseService_aluminum_EUR, "BaseService") %>%
       add_xml_data(L2326.PriceElasticity_aluminum_EUR, "PriceElasticity") %>%
+      add_xml_data(L2326.GlobalTechShrwt_aluminum_EUR, "GlobalTechShrwt") %>%
+      add_node_equiv_xml("input") %>%
+      add_xml_data(L2326.GlobalTechCoef_aluminum_EUR, "GlobalTechCoef") %>%
+      add_xml_data(L2326.GlobalTechTrackCapital_aluminum_EUR, "GlobalTechTrackCapital") %>%
+      add_xml_data(L2326.GlobalTechCost_aluminum_EUR, "GlobalTechCost") %>%
+      add_xml_data(L2326.GlobalTechSCurve_aluminum_EUR, "GlobalTechSCurve") %>%
+      add_xml_data(L2326.GlobalTechProfitShutdown_aluminum_EUR, "GlobalTechProfitShutdown") %>%
+      add_xml_data(L2326.GlobalTechCapture_aluminum_EUR, "GlobalTechCapture") %>%
       add_precursors(MODULE_INPUTS) ->
       aluminum_EUR.xml
 

@@ -8,28 +8,21 @@
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
-#' the generated outputs: \code{L232.SectorLogitTables[[ curr_table ]]$data},
-#' \code{L232.Supplysector_ind_EUR}, \code{L232.SubsectorLogitTables[[ curr_table ]]$data},
-#' \code{L232.SubsectorLogit_ind_EUR}, \code{L232.FinalEnergyKeyword_ind_EUR},
-#' \code{L232.SubsectorShrwtFllt_ind_EUR}, \code{L232.SubsectorInterp_ind_EUR},
-#' \code{L232.StubTech_ind_EUR}, \code{L232.StubTechInterp_ind_EUR},
-#' \code{L232.StubTechCalInput_indenergy_EUR}, \code{L232.StubTechCalInput_indfeed_EUR},
-#' \code{L232.StubTechProd_industry_EUR}, \code{L232.StubTechCoef_industry_EUR},
-#' \code{L232.FuelPrefElast_indenergy_EUR}, \code{L232.PerCapitaBased_ind_EUR},
-#' \code{L232.PriceElasticity_ind_EUR}, \code{L232.BaseService_ind_EUR},
-#' \code{L232.IncomeElasticity_ind_EUR_gcam3}, \code{L232.IncomeElasticity_ind_EUR_gssp1},
-#' \code{L232.IncomeElasticity_ind_EUR_gssp2}, \code{L232.IncomeElasticity_ind_EUR_gssp3},
-#' \code{L232.IncomeElasticity_ind_EUR_gssp4}, \code{L232.IncomeElasticity_ind_EUR_gssp5},
-#' \code{L232.IncomeElasticity_ind_EUR_ssp1}, \code{L232.IncomeElasticity_ind_EUR_ssp2},
-#' \code{L232.IncomeElasticity_ind_EUR_ssp3}, \code{L232.IncomeElasticity_ind_EUR_ssp4},
-#' \code{L232.IncomeElasticity_ind_EUR_ssp5}, \code{object}. The corresponding file in the
-#' original data system was \code{L232.industry.R} (energy level2).
+#' the generated outputs.
 #' @details The chunk provides final energy keyword, supplysector/subsector information, supplysector/subsector interpolation information, supplysector/subsector share weights, global technology share weight, global technology efficiency, global technology coefficients, global technology cost, price elasticity, stub technology information, stub technology interpolation information, stub technology calibrated inputs, and etc.
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr anti_join arrange bind_rows distinct filter if_else group_by lag left_join mutate right_join select summarise
 #' @importFrom tidyr complete nesting
 #' @author LF October 2017
 module_gcameurope_L232.other_industry <- function(command, ...) {
+  GLOBAL_TECH_COGEN <- c("L232.GlobalTechEff_ind",
+                         "L232.GlobalTechShrwt_ind",
+                         "L232.GlobalTechCost_ind",
+                         "L232.GlobalTechTrackCapital_ind",
+                         "L232.GlobalTechSecOut_ind",
+                         "L232.GlobalTechSCurve_en",
+                         "L232.GlobalTechProfitShutdown_en")
+
   MODULE_INPUTS <- c(FILE = "common/GCAM_region_names",
                      FILE = "energy/calibrated_techs",
                      FILE = "energy/A_regions",
@@ -59,7 +52,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
                      "L101.Pop_thous_GCAM3_R_Y",
                      "L102.pcgdp_thous90USD_GCAM3_R_Y",
                      "L102.pcgdp_thous90USD_Scen_R_Y",
-                     "L232.GlobalTechEff_ind")
+                     GLOBAL_TECH_COGEN)
 
   INCOME_ELASTICITY_OUTPUTS <- c("GCAM3",
                                  paste0("gSSP", 1:5),
@@ -82,6 +75,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
                       "L232.PerCapitaBased_ind_EUR",
                       "L232.PriceElasticity_ind_EUR",
                       "L232.BaseService_ind_EUR",
+                      paste0(GLOBAL_TECH_COGEN, "_EUR"),
                       paste("L232.IncomeElasticity_ind_EUR", tolower(INCOME_ELASTICITY_OUTPUTS), sep = "_"))
 
   if(command == driver.DECLARE_INPUTS) {
@@ -324,9 +318,10 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
                                  filter(grepl("cogen", technology)),
                                by = c("year", "fuel" = "subsector.name")) %>%
       mutate(output.ratio = value / efficiency,
-             output.ratio = round(output.ratio, energy.DIGITS_COEFFICIENT),
-             secondary.output = "electricity") %>%
+             output.ratio = round(output.ratio, energy.DIGITS_COEFFICIENT)) %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
+      # If in grid regions, want to output to base load, otherwise to generic electricity
+      mutate(secondary.output = if_else(region %in% grid_regions$region, "base load generation", "electricity")) %>%
       select(region, supplysector = sector.name, subsector = fuel,
              stub.technology = technology, secondary.output, year, output.ratio) %>%
       # NOTE: holding the output ratio constant over time in future periods
@@ -346,9 +341,8 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
       repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
       left_join(grid_regions, by = "region") %>%
       mutate(market.name = if_else(is.na(grid_region), region, grid_region),
-             secondary.output = "electricity") %>%
+             secondary.output = if_else(region %in% grid_regions$region, "base load generation", "electricity")) %>%
       select(LEVEL2_DATA_NAMES[["StubTechSecMarket"]])
-
 
     # L232.FuelPrefElast_indenergy_EUR: fuel preference elasticities of industrial energy use
     # First, calculate the fuel shares allocated to each fuel
@@ -514,9 +508,21 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
       bind_rows(filter(L232.IncomeElasticity_ind_EUR, scenario != "SSP1")) ->
       L232.IncomeElasticity_ind_EUR
 
+    # COGEN RENAMING ---------------------
+    # Create global tech for grid region specific cogen
+    env_module <- rlang::current_env()
+
+    lapply(GLOBAL_TECH_COGEN, cogen_global_tech, env = env_module)
+    L232.GlobalTechSecOut_ind_EUR <- L232.GlobalTechSecOut_ind_EUR %>%
+      mutate(secondary.output = "base load generation")
+
+    env_module <- rlang::current_env()
+
+    lapply(MODULE_OUTPUTS, cogen_stubtech_rename, env = env_module,
+           grid_region_df = grid_regions)
+
     # ===================================================
     # Produce outputs
-
     # Extract GCAM3, SSP, and gSSP data and assign to separate tables
     for(ieo in INCOME_ELASTICITY_OUTPUTS) {
       L232.IncomeElasticity_ind_EUR %>%
@@ -659,6 +665,54 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
       add_units("EJ / EJ") %>%
       add_precursors("L123.eff_R_indchp_F_Yh_EUR", "L232.GlobalTechEff_ind", "common/GCAM_region_names") ->
       L232.StubTechSecOut_ind_EUR
+
+    L232.StubTechSecMarket_ind_EUR %>%
+      add_title("Market for elec from cogen") %>%
+      add_units("NA") %>%
+      add_precursors("L123.eff_R_indchp_F_Yh_EUR", "L232.GlobalTechEff_ind", "common/GCAM_region_names") ->
+      L232.StubTechSecMarket_ind_EUR
+
+    L232.GlobalTechEff_ind_EUR %>%
+      add_title("Global tech parameters for grid region cogen") %>%
+      add_units("EJ / EJ") %>%
+      add_precursors("L232.GlobalTechEff_ind") ->
+      L232.GlobalTechEff_ind_EUR
+
+    L232.GlobalTechShrwt_ind_EUR %>%
+      add_title("Global tech parameters for grid region cogen") %>%
+      add_units("NA") %>%
+      add_precursors("L232.GlobalTechShrwt_ind") ->
+      L232.GlobalTechShrwt_ind_EUR
+
+    L232.GlobalTechCost_ind_EUR %>%
+      add_title("Global tech parameters for grid region cogen") %>%
+      add_units("1975$/GJ") %>%
+      add_precursors("L232.GlobalTechCost_ind") ->
+      L232.GlobalTechCost_ind_EUR
+
+    L232.GlobalTechTrackCapital_ind_EUR %>%
+      add_title("Global tech parameters for grid region cogen") %>%
+      add_units("NA") %>%
+      add_precursors("L232.GlobalTechTrackCapital_ind") ->
+      L232.GlobalTechTrackCapital_ind_EUR
+
+    L232.GlobalTechSecOut_ind_EUR %>%
+      add_title("Global tech parameters for grid region cogen") %>%
+      add_units("NA") %>%
+      add_precursors("L232.GlobalTechSecOut_ind") ->
+      L232.GlobalTechSecOut_ind_EUR
+
+    L232.GlobalTechSCurve_en_EUR %>%
+      add_title("Global tech parameters for grid region cogen") %>%
+      add_units("NA") %>%
+      add_precursors("L232.GlobalTechSCurve_en") ->
+      L232.GlobalTechSCurve_en_EUR
+
+    L232.GlobalTechProfitShutdown_en_EUR %>%
+      add_title("Global tech parameters for grid region cogen") %>%
+      add_units("NA") %>%
+      add_precursors("L232.GlobalTechProfitShutdown_en") ->
+      L232.GlobalTechProfitShutdown_en_EUR
 
     return_data(MODULE_OUTPUTS)
   } else {
