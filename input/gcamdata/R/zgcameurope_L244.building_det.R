@@ -1596,15 +1596,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     formula.TradBio_refit_oth<- "base.service~x/(afford+y)"
     start.value.TradBio_refit_oth<-c(x = 10,y = 10)
 
-    x_TradBio_refit_oth<-0
-    y_TradBio_refit_oth<-0
-    tryCatch({
-      fit_TradBio_refit_oth<-nls(formula.TradBio_refit_oth, serv_TradBio_refit_oth, start.value.TradBio_refit_oth)
-      x_TradBio_refit_oth<-coef(fit_TradBio_refit_oth)[1]
-      y_TradBio_refit_oth<-coef(fit_TradBio_refit_oth)[2]
-    }, error = function(e) {
-      warning("fit_TradBio_refit_oth did not fit")
-    })
+    fit_TradBio_refit_oth<-nls(formula.TradBio_refit_oth, serv_TradBio_refit_oth, start.value.TradBio_refit_oth)
 
     # Thermal services
     serv_TradBio_refit_thermal<-L244.ThermalBaseService_EUR %>%
@@ -1618,18 +1610,15 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       filter(complete.cases(.)) %>%
       filter(base.service != 0)
 
-    formula.TradBio_refit_thermal<- "base.service~x/(afford+y)"
-    start.value.TradBio_refit_thermal<-c(x = 10,y = 10)
+    fm0 <- nls(log(base.service) ~ log(x/(afford+y)), serv_TradBio_refit_thermal, start = c(x = 1, y = 1))
 
-    x_TradBio_refit_thermal<-0
-    y_TradBio_refit_thermal<-0
-    tryCatch({
-      fit_TradBio_refit_thermal<-nls(formula.TradBio_refit_thermal, serv_TradBio_refit_thermal, start.value.TradBio_refit_thermal)
-      x_TradBio_refit_thermal<-coef(fit_TradBio_refit_thermal)[1]
-      y_TradBio_refit_thermal<-coef(fit_TradBio_refit_thermal)[2]
-    }, error = function(e) {
-      warning("fit_TradBio_refit_thermal did not fit")
-    })
+    formula.TradBio_refit_thermal<- "base.service~x/(afford+y)"
+    start.value.TradBio_refit_thermal <- coef(fm0)
+
+    fit_TradBio_refit_thermal<-minpack.lm::nlsLM(formula.TradBio_refit_thermal, serv_TradBio_refit_thermal, start.value.TradBio_refit_thermal)
+    x_TradBio_refit_thermal<-coef(fit_TradBio_refit_thermal)[1]
+    y_TradBio_refit_thermal<-coef(fit_TradBio_refit_thermal)[2]
+
 
     L244.tradBio.coef<-tibble(gcam.consumer = "resid", nodeInput = "resid", building.node.input = "resid_building") %>%
       repeat_add_columns(tibble(service = c("resid cooking TradBio","resid heating TradBio"))) %>%
