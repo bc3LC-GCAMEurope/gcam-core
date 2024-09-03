@@ -9,8 +9,7 @@
 supplysector,subsector,apply.to,from.year,to.year,to.value,interpolation.function
 electricity,coal,share-weight,final-calibration-year,2030,1,linear
 electricity,coal,share-weight,2030,end-year,1,fixed
-electricity,gas,share-weight,final-calibration-year,2030,1,linear
-electricity,gas,share-weight,2030,end-year,1,fixed
+electricity,gas,share-weight,final-calibration-year,2300,1,s-curve
 electricity,biomass,share-weight,final-calibration-year,end-year,1,linear
 electricity,geothermal,share-weight,final-calibration-year,end-year,1,linear
 electricity,nuclear,share-weight,final-calibration-year,initial-future-year,0,linear
@@ -18,9 +17,8 @@ electricity,nuclear,share-weight,initial-future-year,2025,0,fixed
 electricity,nuclear,share-weight,2025,2030,1,linear
 electricity,nuclear,share-weight,2030,end-year,1,fixed
 base load generation,wind,share-weight,final-calibration-year,2030,1,linear
-electricity,wind,share-weight,final-calibration-year,initial-future-year,0,linear
 base load generation,wind,share-weight,2030,end-year,1,fixed
-electricity,wind,share-weight,initial-future-year,end-year,0,fixed
+electricity,wind,share-weight,final-calibration-year,end-year,1,fixed
 electricity,solar,share-weight,final-calibration-year,2030,1,linear
 electricity,solar,share-weight,2030,end-year,1,fixed
 elect_td_bld,rooftop_pv,share-weight,final-calibration-year,2030,1,linear
@@ -28,3 +26,5 @@ elect_td_bld,rooftop_pv,share-weight,2030,end-year,1,fixed
 peak generation,grid_storage,share-weight,final-calibration-year,end-year,1,linear
 electricity,refined liquids,share-weight,final-calibration-year,initial-future-year,0,linear
 electricity,refined liquids,share-weight,initial-future-year,end-year,0,fixed
+peak generation,geothermal,share-weight,initial-future-year,end-year,0,fixed
+subpeak generation,geothermal,share-weight,initial-future-year,end-year,0,fixed

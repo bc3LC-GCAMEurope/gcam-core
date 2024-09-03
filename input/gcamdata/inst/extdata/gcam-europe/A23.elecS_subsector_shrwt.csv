@@ -8,8 +8,7 @@
 supplysector,subsector,year,share.weight
 electricity,coal,2030,1
 electricity,coal,end-year,1
-electricity,gas,2030,1
-electricity,gas,end-year,1
+electricity,gas,2300,1
 electricity,biomass,end-year,1
 electricity,geothermal,end-year,1
 electricity,nuclear,initial-future-year,0
@@ -19,7 +18,6 @@ electricity,nuclear,end-year,1
 base load generation,wind,end-year,1
 electricity,wind,end-year,0
 base load generation,wind,2030,1
-electricity,wind,initial-future-year,0
 electricity,solar,end-year,1
 electricity,solar,2030,1
 elect_td_bld,rooftop_pv,end-year,1
@@ -27,3 +25,5 @@ elect_td_bld,rooftop_pv,2030,1
 peak generation,grid_storage,end-year,1
 electricity,refined liquids,initial-future-year,0
 electricity,refined liquids,end-year,0
+peak generation,geothermal,initial-future-year,0
+subpeak generation,geothermal,initial-future-year,0

@@ -13,7 +13,5 @@ electricity,refined liquids,refined liquids (steam/CT),1,1,1,0,0
 peak generation,grid_storage,battery,0,0,0,1,1
 subpeak generation,geothermal,geothermal,0,0,0,0,0
 peak generation,geothermal,geothermal,0,0,0,0,0
-subpeak generation,solar,PV,0,0,0,0,0
 peak generation,solar,PV,0,0,0,0,0
-subpeak generation,solar,CSP,0,0,0,0,0
 peak generation,solar,CSP,0,0,0,0,0
