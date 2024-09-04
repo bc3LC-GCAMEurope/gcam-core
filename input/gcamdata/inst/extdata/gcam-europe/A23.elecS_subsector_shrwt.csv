@@ -8,7 +8,6 @@
 supplysector,subsector,year,share.weight
 electricity,coal,2030,1
 electricity,coal,end-year,1
-electricity,gas,2300,1
 electricity,biomass,end-year,1
 electricity,geothermal,end-year,1
 electricity,nuclear,initial-future-year,0
