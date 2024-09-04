@@ -47,9 +47,9 @@ module_energy_L144.building_det_en <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names")
-    iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID")
-    A_regions <- get_data(all_data, "energy/A_regions")
+    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>% filter_regions_europe(inverse = T)
+    iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID") %>% filter_regions_europe(inverse = T)
+    A_regions <- get_data(all_data, "energy/A_regions") %>% filter_regions_europe(inverse = T)
     calibrated_techs_bld_det <- get_data(all_data, "energy/calibrated_techs_bld_det")
     A44.cost_efficiency <- get_data(all_data, "energy/A44.cost_efficiency", strip_attributes = TRUE)
     A44.internal_gains <- get_data(all_data, "energy/A44.internal_gains")
@@ -57,11 +57,12 @@ module_energy_L144.building_det_en <- function(command, ...) {
     A44.shell_eff_mult_RG3 <- get_data(all_data, "energy/A44.shell_eff_mult_RG3")
     A44.tech_eff_mult_RG3 <- get_data(all_data, "energy/A44.tech_eff_mult_RG3")
     A44.USA_TechChange <- get_data(all_data, "energy/A44.USA_TechChange")
-    A44.Calprice_bld <- get_data(all_data, "energy/A44.CalPrice_bld")
-    L101.in_EJ_ctry_bld_Fi_Yh <- get_data(all_data, "L101.in_EJ_ctry_bld_Fi_Yh")
-    L142.in_EJ_R_bld_F_Yh <- get_data(all_data, "L142.in_EJ_R_bld_F_Yh")
+    A44.Calprice_bld <- get_data(all_data, "energy/A44.CalPrice_bld") %>% filter_regions_europe(inverse = T)
+    L101.in_EJ_ctry_bld_Fi_Yh <- get_data(all_data, "L101.in_EJ_ctry_bld_Fi_Yh") %>% filter_regions_europe(inverse = T)
+    L142.in_EJ_R_bld_F_Yh <- get_data(all_data, "L142.in_EJ_R_bld_F_Yh") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names,
+                                                                                                   inverse = T)
     L143.HDDCDD_scen_RG3_Y <- get_data(all_data, "L143.HDDCDD_scen_RG3_Y")
-    L143.HDDCDD_scen_ctry_Y <- get_data(all_data, "L143.HDDCDD_scen_ctry_Y")
+    L143.HDDCDD_scen_ctry_Y <- get_data(all_data, "L143.HDDCDD_scen_ctry_Y") %>% filter_regions_europe(inverse = T)
 
     # ===================================================
 
@@ -568,18 +569,23 @@ module_energy_L144.building_det_en <- function(command, ...) {
 
     L144.prices_bld<-A44.Calprice_bld %>%
      left_join_error_no_match(GCAM_region_names,by="region") %>%
-    gather_years() %>%
-    # Add 1975 and extrapolate prices using rule 2
-    group_by(region,GCAM_region_ID,market) %>%
-    complete(nesting(year = MODEL_BASE_YEARS)) %>%
-    mutate(value = if_else(is.na(value),approx_fun(year, value, rule = 2),value)) %>%
-    # Add all historical years and linerly extrapolate (rule 1)
-    complete(nesting(year = HISTORICAL_YEARS)) %>%
-    mutate(value = if_else(is.na(value),approx_fun(year, value, rule = 2),value)) %>%
-    ungroup() %>%
-    rename(price = value) %>%
-    # select historical years
-    filter(year <= max(MODEL_BASE_YEARS))
+      gather_years() %>%
+      # Add 1975 and extrapolate prices using rule 2
+      group_by(region,GCAM_region_ID,market) %>%
+      complete(nesting(year = MODEL_BASE_YEARS)) %>%
+      mutate(value = if_else(is.na(value),approx_fun(year, value, rule = 2),value)) %>%
+      # Add all historical years and linerly extrapolate (rule 1)
+      complete(nesting(year = HISTORICAL_YEARS)) %>%
+      mutate(value = if_else(is.na(value),approx_fun(year, value, rule = 2),value)) %>%
+      ungroup() %>%
+      rename(price = value) %>%
+      # # Add missing markets and extrapolate prices using rule 2
+      # group_by(region,GCAM_region_ID,year) %>%
+      # complete(nesting(market = unique(A44.Calprice_bld$market))) %>%
+      # ungroup() %>%
+      # mutate(price = if_else(is.na(price),approx_fun(year, price, rule = 2),price)) %>%
+      # select historical years
+      filter(year <= max(MODEL_BASE_YEARS))
 
 
     # ===================================================

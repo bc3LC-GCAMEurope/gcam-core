@@ -445,6 +445,7 @@ module_emissions_L142.pfc_R_S_T_Y <- function(command, ...) {
         filter(grepl("resid",supplysector)) %>%
         repeat_add_columns(tibble(group=unique(cons.gr.adj$category))) %>%
         unite(supplysector,c("supplysector","group"),sep = "_") %>%
+        filter_regions_europe(region_ID_mapping = GCAM_region_names, inverse = T) %>%
         # add shares
         left_join_error_no_match(L244.Shares, by = c("GCAM_region_ID", "year", "supplysector")) %>%
         mutate(value = value * share) %>%

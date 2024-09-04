@@ -195,9 +195,9 @@ module_energy_L244.building_det <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names")
+    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>% filter_regions_europe(inverse = T)
     calibrated_techs_bld_det <- get_data(all_data, "energy/calibrated_techs_bld_det")
-    A_regions <- get_data(all_data, "energy/A_regions")
+    A_regions <- get_data(all_data, "energy/A_regions") %>% filter_regions_europe(inverse = T)
     A44.sector <- get_data(all_data, "energy/A44.sector", strip_attributes = TRUE)
     A44.subsector_interp <- get_data(all_data, "energy/A44.subsector_interp", strip_attributes = TRUE)
     A44.subsector_logit <- get_data(all_data, "energy/A44.subsector_logit", strip_attributes = TRUE)
@@ -213,21 +213,22 @@ module_energy_L244.building_det <- function(command, ...) {
     A44.satiation_flsp_SSPs <- get_data(all_data, "energy/A44.satiation_flsp_SSPs")
     A44.demand_satiation_mult <- get_data(all_data, "energy/A44.demand_satiation_mult")
     A44.demand_satiation_mult_SSPs <- get_data(all_data, "energy/A44.demand_satiation_mult_SSPs")
-    L144.flsp_bm2_R_res_Yh <- get_data(all_data, "L144.flsp_bm2_R_res_Yh", strip_attributes = TRUE)
-    L144.flsp_bm2_R_comm_Yh <- get_data(all_data, "L144.flsp_bm2_R_comm_Yh", strip_attributes = TRUE)
-    L144.base_service_EJ_serv <- get_data(all_data, "L144.base_service_EJ_serv", strip_attributes = TRUE)
-    L144.base_service_EJ_serv_fuel <- get_data(all_data, "L144.base_service_EJ_serv_fuel", strip_attributes = TRUE)
-    L144.in_EJ_R_bld_serv_F_Yh <- get_data(all_data, "L144.in_EJ_R_bld_serv_F_Yh")
-    L144.end_use_eff <- get_data(all_data, "L144.end_use_eff", strip_attributes = TRUE)
-    L144.shell_eff_R_Y <- get_data(all_data, "L144.shell_eff_R_Y", strip_attributes = TRUE)
+    L144.flsp_bm2_R_res_Yh <- get_data(all_data, "L144.flsp_bm2_R_res_Yh", strip_attributes = TRUE) %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
+    L144.flsp_bm2_R_comm_Yh <- get_data(all_data, "L144.flsp_bm2_R_comm_Yh", strip_attributes = TRUE) %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
+    L144.base_service_EJ_serv <- get_data(all_data, "L144.base_service_EJ_serv", strip_attributes = TRUE) %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
+    L144.base_service_EJ_serv_fuel <- get_data(all_data, "L144.base_service_EJ_serv_fuel", strip_attributes = TRUE) %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
+    L144.in_EJ_R_bld_serv_F_Yh <- get_data(all_data, "L144.in_EJ_R_bld_serv_F_Yh") %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
+    L144.end_use_eff <- get_data(all_data, "L144.end_use_eff", strip_attributes = TRUE) %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
+    L144.shell_eff_R_Y <- get_data(all_data, "L144.shell_eff_R_Y", strip_attributes = TRUE) %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
     L144.NEcost_75USDGJ <- get_data(all_data, "L144.NEcost_75USDGJ", strip_attributes = TRUE)
-    L144.internal_gains <- get_data(all_data, "L144.internal_gains", strip_attributes = TRUE)
-    L143.HDDCDD_scen_R_Y <- get_data(all_data, "L143.HDDCDD_scen_R_Y")
-    L101.Pop_thous_R_Yh <- get_data(all_data, "L101.Pop_thous_R_Yh")
-    L102.pcgdp_thous90USD_Scen_R_Y <- get_data(all_data, "L102.pcgdp_thous90USD_Scen_R_Y") # year comes in as double
-    L144.flsp_param <- get_data(all_data, "L144.flsp_param", strip_attributes = TRUE)
-    L144.prices_bld<-get_data(all_data, "L144.prices_bld", strip_attributes = TRUE)
-    income_shares<-get_data(all_data, "socioeconomics/income_shares")
+    L144.internal_gains <- get_data(all_data, "L144.internal_gains", strip_attributes = TRUE) %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
+    L143.HDDCDD_scen_R_Y <- get_data(all_data, "L143.HDDCDD_scen_R_Y") %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
+    L101.Pop_thous_R_Yh <- get_data(all_data, "L101.Pop_thous_R_Yh") %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
+    L102.pcgdp_thous90USD_Scen_R_Y <- get_data(all_data, "L102.pcgdp_thous90USD_Scen_R_Y") %>% # year comes in as double
+      filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
+    L144.flsp_param <- get_data(all_data, "L144.flsp_param", strip_attributes = TRUE) %>% filter_regions_europe(inverse = T)
+    L144.prices_bld<-get_data(all_data, "L144.prices_bld", strip_attributes = TRUE) %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
+    income_shares<-get_data(all_data, "socioeconomics/income_shares") %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
     n_groups<-nrow(unique(get_data(all_data, "socioeconomics/income_shares") %>%
                             select(category)))
 
@@ -540,7 +541,7 @@ module_energy_L244.building_det <- function(command, ...) {
 
     # Extend the analysis to SSP assumptions
     L244.Satiation_flsp_class_SSPs <- A44.satiation_flsp_SSPs %>%
-      gather(sector, value, comm) %>%
+      tidyr::gather(sector, value, comm) %>%
       mutate(satiation.level = value * CONV_THOUS_BIL)
 
 

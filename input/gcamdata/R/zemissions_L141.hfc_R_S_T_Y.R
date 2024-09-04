@@ -351,6 +351,7 @@ module_emissions_L141.hfc_R_S_T_Y <- function(command, ...) {
     # Compute final cooling HFC emissions factors
     L141.EPA_HFC_R_S_T_Yh_adj %>%
       filter(grepl("cooling",supplysector), year %in% HISTORICAL_YEARS) %>%
+      filter_regions_europe(region_ID_mapping = GCAM_region_names, inverse = T) %>%
       left_join_error_no_match(L141.R_cooling_T_Yh.long %>% select(GCAM_region_ID, year, service, energy = value),
                                by = c("GCAM_region_ID", "year", "supplysector" = "service")) %>%
       mutate(em_fact = value / energy) %>%
@@ -401,6 +402,7 @@ module_emissions_L141.hfc_R_S_T_Y <- function(command, ...) {
       filter(grepl("resid",supplysector)) %>%
       repeat_add_columns(tibble(group=unique(cons.gr.adj$category))) %>%
       unite(supplysector,c("supplysector","group"),sep = "_") %>%
+      filter_regions_europe(region_ID_mapping = GCAM_region_names, inverse = T) %>%
       # add shares
       left_join_error_no_match(L244.Shares, by = c("GCAM_region_ID", "year", "supplysector")) %>%
       mutate(value = value * share) %>%
