@@ -215,12 +215,13 @@ module_energy_L244.building_det <- function(command, ...) {
     L144.end_use_eff <- get_data(all_data, "L144.end_use_eff", strip_attributes = TRUE) %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
     L144.shell_eff_R_Y <- get_data(all_data, "L144.shell_eff_R_Y", strip_attributes = TRUE) %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
     L144.NEcost_75USDGJ <- get_data(all_data, "L144.NEcost_75USDGJ", strip_attributes = TRUE)
-    L144.internal_gains <- get_data(all_data, "L144.internal_gains", strip_attributes = TRUE)
-    L143.HDDCDD_scen_R_Y <- get_data(all_data, "L143.HDDCDD_scen_R_Y")
-    L101.Pop_thous_R_Yh <- get_data(all_data, "L101.Pop_thous_R_Yh")
-    L102.pcgdp_thous90USD_Scen_R_Y <- get_data(all_data, "L102.pcgdp_thous90USD_Scen_R_Y") # year comes in as double
-    L144.flsp_param <- get_data(all_data, "L144.flsp_param", strip_attributes = TRUE)
-    L144.prices_bld<-get_data(all_data, "L144.prices_bld", strip_attributes = TRUE)
+    L144.internal_gains <- get_data(all_data, "L144.internal_gains", strip_attributes = TRUE) %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
+    L143.HDDCDD_scen_R_Y <- get_data(all_data, "L143.HDDCDD_scen_R_Y") %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
+    L101.Pop_thous_R_Yh <- get_data(all_data, "L101.Pop_thous_R_Yh") %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
+    L102.pcgdp_thous90USD_Scen_R_Y <- get_data(all_data, "L102.pcgdp_thous90USD_Scen_R_Y") %>% # year comes in as double
+      filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
+    L144.flsp_param <- get_data(all_data, "L144.flsp_param", strip_attributes = TRUE) %>% filter_regions_europe(inverse = T)
+    L144.prices_bld <- get_data(all_data, "L144.prices_bld", strip_attributes = TRUE) %>% filter_regions_europe(inverse = T)
     L106.income_shares <- get_data(all_data, "L106.income_distributions", strip_attributes = TRUE)
     n_groups<-nrow(unique(L106.income_shares %>%
                             select(gcam.consumer)))
@@ -437,7 +438,7 @@ module_energy_L244.building_det <- function(command, ...) {
     # Commercial floorspace uses the satiation demand function, so the following code estimates the satiation level, impedance, and adder, required for the satiation function.
     # Different satiation levels assumed for different regions, classified in "region classes"
     L244.Satiation_flsp_class <- A44.satiation_flsp %>%
-      gather(sector, value, resid, comm) %>%
+      tidyr::gather(sector, value, resid, comm) %>%
       # Converting from square meters per capita to million square meters per capita
       mutate(satiation.level = value * CONV_THOUS_BIL) %>%
       select(-value)
