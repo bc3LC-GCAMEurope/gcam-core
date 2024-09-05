@@ -455,7 +455,7 @@ module_energy_L244.building_det <- function(command, ...) {
 
     # Extend the analysis to SSP assumptions
     L244.Satiation_flsp_class_SSPs <- A44.satiation_flsp_SSPs %>%
-      tidyr::gather(sector, value, resid, comm) %>%
+      tidyr::gather(sector, value, comm) %>%
       mutate(satiation.level = value * CONV_THOUS_BIL)
 
 
@@ -1395,6 +1395,7 @@ module_energy_L244.building_det <- function(command, ...) {
                                by=c("year","GCAM_region_ID")) %>%
       rename(pcGDP_thous90USD = value) %>%
       # Add service prices: At this point, we read the calibrated prices from GCAM v5.4 (L144.prices_bld)
+      filter(year==MODEL_FINAL_BASE_YEAR) %>%
       left_join_error_no_match(L144.prices_bld  %>%
                                  rename(building.service.input = market) %>%
                                  filter(building.service.input %in% generic_services, year == MODEL_FINAL_BASE_YEAR),

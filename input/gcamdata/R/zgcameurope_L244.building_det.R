@@ -61,7 +61,10 @@ module_gcameurope_L244.building_det <- function(command, ...) {
                      "L106.income_distributions",
                      "L144.flsp_param_EUR",
                      "L144.hab_land_flsp_fin_EUR",
-                     "L144.prices_bld_EUR")
+                     "L144.prices_bld_EUR",
+                     "L244.GlobalTechShrwt_bld",
+                     "L244.GlobalTechCost_bld",
+                     "L244.GlobalTechTrackCapital_bld")
   MODULE_OUTPUTS <- c("L244.SubregionalShares_EUR",
                       "L244.PriceExp_IntGains_EUR",
                       "L244.Floorspace_EUR",
@@ -930,6 +933,40 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              depreciation.rate = socioeconomics.BUILDINGS_DEPRECIATION_RATE) %>%
       select(LEVEL2_DATA_NAMES[['GlobalTechTrackCapital']]) ->
       L244.GlobalTechTrackCapital_bld_EUR
+
+    # gather all the global tech db items in the EUR xml. If an item is present in the core and in the EUR version, choose the core values
+    L244.GlobalTechShrwt_bld_EUR_combined <- full_join(
+      L244.GlobalTechShrwt_bld,
+      L244.GlobalTechShrwt_bld_EUR,
+      by = c("sector.name","subsector.name","technology","year"), suffix = c("_core", "_EUR"))
+    L244.GlobalTechShrwt_bld_EUR <- L244.GlobalTechShrwt_bld_EUR_combined %>%
+      mutate(share.weight = dplyr::coalesce(share.weight_core, share.weight_EUR)) %>%
+      select(sector.name, subsector.name, technology, year, share.weight)
+
+    L244.GlobalTechCost_bld_EUR_combined <- full_join(
+      L244.GlobalTechCost_bld,
+      L244.GlobalTechCost_bld_EUR,
+      by = c("sector.name","subsector.name","technology","year","minicam.non.energy.input"),
+      suffix = c("_core", "_EUR"))
+    L244.GlobalTechCost_bld_EUR <- L244.GlobalTechCost_bld_EUR_combined %>%
+      mutate(input.cost = dplyr::coalesce(input.cost_core, input.cost_EUR)) %>%
+      select(sector.name, subsector.name, technology, year, minicam.non.energy.input, input.cost)
+
+    L244.GlobalTechTrackCapital_bld_EUR_combined <- full_join(
+      L244.GlobalTechTrackCapital_bld,
+      L244.GlobalTechTrackCapital_bld_EUR,
+      by = c("sector.name","subsector.name","technology","year","minicam.non.energy.input","tracking.market"),
+      suffix = c("_core", "_EUR"))
+    L244.GlobalTechTrackCapital_bld_EUR <- L244.GlobalTechTrackCapital_bld_EUR_combined %>%
+      mutate(capital.coef = dplyr::coalesce(capital.coef_core, capital.coef_EUR),
+             depreciation.rate = dplyr::coalesce(depreciation.rate_core, depreciation.rate_EUR)) %>%
+      select(sector.name, subsector.name, technology, year, minicam.non.energy.input,
+             capital.coef, tracking.market, depreciation.rate)
+
+    # # avoid duplicated items between the "core" and the "EUR" xml
+    # L244.GlobalTechShrwt_bld_EUR <- anti_join(L244.GlobalTechShrwt_bld_EUR, L244.GlobalTechShrwt_bld)
+    # L244.GlobalTechCost_bld_EUR <- anti_join(L244.GlobalTechCost_bld_EUR, L244.GlobalTechShrwt_bld)
+    # L244.GlobalTechTrackCapital_bld_EUR <- anti_join(L244.GlobalTechTrackCapital_bld_EUR, L244.GlobalTechShrwt_bld)
 
     # L244.StubTechIntGainOutputRatio_EUR: Output ratios of internal gain energy from non-thermal building services
     L244.StubTechIntGainOutputRatio_pre <- L144.internal_gains_EUR %>%
