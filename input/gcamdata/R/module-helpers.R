@@ -1442,10 +1442,17 @@ filter_regions_europe <- function(df,
         df <- df %>% filter(market.name %in% regions_to_keep_name)
       }
       if (!is.null(region_ID_mapping) && "GCAM_region_ID" %in% names(df)){
-        ids_to_keep = region_ID_mapping %>%
-          filter(region %in% regions_to_keep_name) %>%
-          distinct() %>%
-          pull(GCAM_region_ID)
+        if ("region" %in% names(region_ID_mapping)) {
+          ids_to_keep <- region_ID_mapping %>%
+            filter(region %in% regions_to_keep_name) %>%
+            distinct() %>%
+            pull(GCAM_region_ID)
+        } else if ("iso" %in% names(region_ID_mapping)) {
+          ids_to_keep <- region_ID_mapping %>%
+            filter(iso %in% regions_to_keep_iso) %>%
+            distinct() %>%
+            pull(GCAM_region_ID)
+        }
         df <- df %>% filter(GCAM_region_ID %in% ids_to_keep)
       }
     }
@@ -1461,10 +1468,17 @@ filter_regions_europe <- function(df,
         df <- df %>% filter(!market.name %in% regions_to_keep_name)
       }
       if (!is.null(region_ID_mapping) && "GCAM_region_ID" %in% names(df)){
-        ids_to_keep = region_ID_mapping %>%
-          filter(!region %in% regions_to_keep_name) %>%
-          distinct() %>%
-          pull(GCAM_region_ID)
+        if ("region" %in% names(region_ID_mapping)) {
+          ids_to_keep = region_ID_mapping %>%
+            filter(!region %in% regions_to_keep_name) %>%
+            distinct() %>%
+            pull(GCAM_region_ID)
+        } else if ("iso" %in% names(region_ID_mapping)) {
+          ids_to_keep = region_ID_mapping %>%
+            filter(!iso %in% regions_to_keep_iso) %>%
+            distinct() %>%
+            pull(GCAM_region_ID)
+        }
         df <- df %>% filter(GCAM_region_ID %in% ids_to_keep)
       }
     }

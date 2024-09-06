@@ -17,7 +17,8 @@ require(minpack.lm)
 #' \code{L244.SubsectorInterpTo_bld_EUR}, \code{L244.SubsectorLogit_bld_EUR}, \code{L244.FuelPrefElast_bld_EUR}, \code{L244.StubTech_bld_EUR}, \code{L244.StubTechEff_bld_EUR},
 #' \code{L244.StubTechCalInput_bld_EUR}, \code{L244.StubTechIntGainOutputRatio_EUR}, \code{L244.DeleteGenericService_EUR}, \code{L244.DeleteThermalService_EUR},
 #' \code{L244.GompFnParam_EUR}, \code{L244.Satiation_impedance_EUR},
-#' \code{L244.GenericServiceImpedance_EUR},
+#' \code{L244.HDDCDD_A2_CCSM3x_EUR}, \code{L244.HDDCDD_A2_HadCM3_EUR}, \code{L244.HDDCDD_B1_CCSM3x_EUR}, \code{L244.HDDCDD_B1_HadCM3_EUR},
+#' \code{L244.HDDCDD_constdd_no_GCM_EUR}\code{L244.GenericServiceImpedance_EUR},
 #' \code{L244.GenericServiceAdder_EUR}, \code{L244.ThermalServiceImpedance_EUR}, \code{L244.ThermalServiceAdder_EUR}
 #' \code{L244.GenericServiceCoef_EUR},\code{L244.ThermalServiceCoef_EUR},
 #' \code{L244.ThermalCoalCoef_EUR}, \code{L244.GenericCoalCoef_EUR},\code{L244.ThermalTradBioCoef_EUR}, \code{L244.GenericTradBioCoef_EUR},
@@ -55,7 +56,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
                      "L144.shell_eff_R_Y_EUR",
                      "L144.NEcost_75USDGJ_EUR",
                      "L144.internal_gains_EUR",
-                     "L143.HDDCDD_scen_R_Y",
+                     "L143.HDDCDD_scen_R_Y_EUR",
                      "L101.Pop_thous_R_Yh",
                      "L102.pcgdp_thous90USD_Scen_R_Y",
                      "L106.income_distributions",
@@ -93,6 +94,11 @@ module_gcameurope_L244.building_det <- function(command, ...) {
                       "L244.StubTechIntGainOutputRatio_EUR",
                       "L244.DeleteGenericService_EUR",
                       "L244.DeleteThermalService_EUR",
+                      "L244.HDDCDD_A2_CCSM3x_EUR",
+                      "L244.HDDCDD_A2_HadCM3_EUR",
+                      "L244.HDDCDD_B1_CCSM3x_EUR",
+                      "L244.HDDCDD_B1_HadCM3_EUR",
+                      "L244.HDDCDD_constdd_no_GCM_EUR",
                       "L244.GlobalTechShrwt_bld_EUR",
                       "L244.GlobalTechCost_bld_EUR",
                       "L244.GlobalTechTrackCapital_bld_EUR",
@@ -127,7 +133,8 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       satiation.level <- scalar_mult <- sector <- service <- service.per.flsp <- share.weight <- shell.conductance <-
       subs.share.weight <- subsector <- supplysector <- technology <- thermal.building.service.input <- to.value <-
       value <- year <- year.fillout <- GCM <- NEcostPerService <- SRES <- base.building.size <-
-      base.service <- building.node.input <- . <- GCAM_region_ID <- scenario <- NULL
+      base.service <- building.node.input <- . <- GCAM_region_ID <- scenario <- L244.HDDCDD_A2_CCSM3x_EUR <-
+      L244.HDDCDD_A2_HadCM3_EUR <- L244.HDDCDD_B1_CCSM3x_EUR <- L244.HDDCDD_B1_HadCM3_EUR <- L244.HDDCDD_constdd_no_GCM_EUR <- NULL
 
 
     all_data <- list(...)[[1]]
@@ -137,7 +144,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     GCAM_region_names <- filter_regions_europe(GCAM_region_names)
     A_regions <- filter_regions_europe(A_regions)
     A44.globaltech_shrwt_EUR <- gather_years(A44.globaltech_shrwt_EUR)
-    L143.HDDCDD_scen_R_Y <-filter_regions_europe(L143.HDDCDD_scen_R_Y, region_ID_mapping = GCAM_region_names)
+    L143.HDDCDD_scen_R_Y_EUR <-filter_regions_europe(L143.HDDCDD_scen_R_Y_EUR, region_ID_mapping = GCAM_region_names)
     L101.Pop_thous_R_Yh <- filter_regions_europe(L101.Pop_thous_R_Yh, region_ID_mapping = GCAM_region_names)
     L102.pcgdp_thous90USD_Scen_R_Y <- filter_regions_europe(L102.pcgdp_thous90USD_Scen_R_Y, region_ID_mapping = GCAM_region_names)
     L106.income_shares <- L106.income_distributions %>% filter_regions_europe()
@@ -553,9 +560,9 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     #------------------------------------------------------
     # L244.HDDCDD: Heating and cooling degree days by scenario
-    L244.all_sres_gcm <- unique(L143.HDDCDD_scen_R_Y[c("SRES", "GCM")]) # These HDD/CDD scenarios are pretty old, should be updated eventually
+    L244.all_sres_gcm <- unique(L143.HDDCDD_scen_R_Y_EUR[c("SRES", "GCM")]) # These HDD/CDD scenarios are pretty old, should be updated eventually
 
-    L244.HDDCDD_scen_R_Y <- L143.HDDCDD_scen_R_Y %>%
+    L244.HDDCDD_scen_R_Y <- L143.HDDCDD_scen_R_Y_EUR %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID")
 
     # Let's make a climate normal (average climate conditions) for each region, using a selected interval of years
@@ -622,17 +629,17 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       lapply(function(df) {
         select(df, -scenario) %>%
           add_units("Fahrenheit Degree Days") %>%
-          add_comments("Degree days are from L143.HDDCDD_scen_R_Y") %>%
-          add_precursors("L143.HDDCDD_scen_R_Y", "common/GCAM_region_names",
+          add_comments("Degree days are from L143.HDDCDD_scen_R_Y_EUR") %>%
+          add_precursors("L143.HDDCDD_scen_R_Y_EUR", "common/GCAM_region_names",
                          "gcam-europe/A44.internal_gains_EUR", "gcam-europe/A44.sector_EUR", "L144.base_service_EJ_serv_EUR",
                          "gcam-europe/calibrated_techs_bld_det_EUR")
       })
 
     # Assign each tibble in list
     for(i in names(L244.HDDCDD)) {
-      assign(paste0("L244.HDDCDD_", i), L244.HDDCDD[[i]] %>%
+      assign(paste0("L244.HDDCDD_", i, "_EUR"), L244.HDDCDD[[i]] %>%
                add_title(paste0("Heating and cooling degree days: ", i)) %>%
-               add_legacy_name(paste0("L244.HDDCDD_", i)))
+               add_legacy_name(paste0("L244.HDDCDD_", i, "_EUR")))
     }
 
     #------------------------------------------------------
@@ -1877,7 +1884,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       mutate(bias.adder = if_else(obs==0,0,bias.adder)) %>%
       select(region,gcam.consumer,nodeInput,building.node.input,thermal.building.service.input,bias.adder)
 
-    reg_exception = c('Poland','Serbia and Montenegro')
+    # reg_exception = c('Poland','Serbia and Montenegro')
     L244.ThermalServiceAdder_modern<-L244.ThermalServiceAdder_modern_pre %>%
       filter(year== MODEL_FINAL_BASE_YEAR) %>%
       left_join_error_no_match(L244.ThermalServiceAdder_aggObs_gr, by = c("region", "year", "gcam.consumer", "thermal.building.service.input")) %>%
@@ -1894,32 +1901,32 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       group_by(region,gcam.consumer, nodeInput,building.node.input,thermal.building.service.input) %>%
       mutate(bias.adder = approx_fun(year, bias.adder, rule = 1)) %>%
       ungroup() %>%
-      select(LEVEL2_DATA_NAMES[["ThermalServiceAdder"]]) %>%
-      filter(!(region %in% reg_exception & thermal.building.service.input == 'resid heating modern'))
+      select(LEVEL2_DATA_NAMES[["ThermalServiceAdder"]]) #%>%
+      # filter(!(region %in% reg_exception & thermal.building.service.input == 'resid heating modern'))
 
-    L244.ThermalServiceAdder_modern_exception<-L244.ThermalServiceAdder_modern_pre %>%
-      filter(year== MODEL_FINAL_BASE_YEAR) %>%
-      left_join_error_no_match(L244.ThermalServiceAdder_aggObs_gr, by = c("region", "year", "gcam.consumer", "thermal.building.service.input")) %>%
-      left_join_error_no_match(L244.Floorspace_EUR, by = c("region", "year", "gcam.consumer", "nodeInput", "building.node.input")) %>%
-      mutate(bias.adder.share = (base.service - est)/base.building.size,
-             bias.adder.share = if_else(base.service==0,0,bias.adder.share)) %>%
-      filter(complete.cases(.)) %>%
-      left_join_error_no_match(L244.ThermalServiceAdder_modern_pre_agg, by = c("region", "gcam.consumer", "thermal.building.service.input", "nodeInput", "building.node.input")) %>%
-      mutate(bias.adder = if_else(base.service==0,0,bias.adder)) %>%
-      select(region,gcam.consumer,nodeInput,building.node.input,thermal.building.service.input,bias.adder.share,bias.adder.eq=bias.adder) %>%
-      repeat_add_columns(tibble(year=ADJ_MODEL_YEARS_EXCEPTION)) %>%
-      mutate(bias.adder = if_else(year!= MODEL_FINAL_BASE_YEAR,bias.adder.eq,bias.adder.share)) %>%
-      complete(nesting(region,gcam.consumer, nodeInput,building.node.input,thermal.building.service.input), year = c(year, MODEL_YEARS)) %>%
-      group_by(region,gcam.consumer, nodeInput,building.node.input,thermal.building.service.input) %>%
-      mutate(bias.adder = 0) %>% #approx_fun(year, bias.adder, rule = 1)) %>%
-      ungroup() %>%
-      select(LEVEL2_DATA_NAMES[["ThermalServiceAdder"]]) %>%
-      filter((region %in% reg_exception & thermal.building.service.input == 'resid heating modern'))
+    # L244.ThermalServiceAdder_modern_exception<-L244.ThermalServiceAdder_modern_pre %>%
+    #   filter(year== MODEL_FINAL_BASE_YEAR) %>%
+    #   left_join_error_no_match(L244.ThermalServiceAdder_aggObs_gr, by = c("region", "year", "gcam.consumer", "thermal.building.service.input")) %>%
+    #   left_join_error_no_match(L244.Floorspace_EUR, by = c("region", "year", "gcam.consumer", "nodeInput", "building.node.input")) %>%
+    #   mutate(bias.adder.share = (base.service - est)/base.building.size,
+    #          bias.adder.share = if_else(base.service==0,0,bias.adder.share)) %>%
+    #   filter(complete.cases(.)) %>%
+    #   left_join_error_no_match(L244.ThermalServiceAdder_modern_pre_agg, by = c("region", "gcam.consumer", "thermal.building.service.input", "nodeInput", "building.node.input")) %>%
+    #   mutate(bias.adder = if_else(base.service==0,0,bias.adder)) %>%
+    #   select(region,gcam.consumer,nodeInput,building.node.input,thermal.building.service.input,bias.adder.share,bias.adder.eq=bias.adder) %>%
+    #   repeat_add_columns(tibble(year=ADJ_MODEL_YEARS_EXCEPTION)) %>%
+    #   mutate(bias.adder = if_else(year!= MODEL_FINAL_BASE_YEAR,bias.adder.eq,bias.adder.share)) %>%
+    #   complete(nesting(region,gcam.consumer, nodeInput,building.node.input,thermal.building.service.input), year = c(year, MODEL_YEARS)) %>%
+    #   group_by(region,gcam.consumer, nodeInput,building.node.input,thermal.building.service.input) %>%
+    #   mutate(bias.adder = 0) %>% #approx_fun(year, bias.adder, rule = 1)) %>%
+    #   ungroup() %>%
+    #   select(LEVEL2_DATA_NAMES[["ThermalServiceAdder"]]) %>%
+    #   filter((region %in% reg_exception & thermal.building.service.input == 'resid heating modern'))
 
 
     L244.ThermalServiceAdder_EUR<-bind_rows(L244.ThermalServiceAdder_coal_tradbio,
-                                            L244.ThermalServiceAdder_modern,
-                                            L244.ThermalServiceAdder_modern_exception) %>%
+                                            # L244.ThermalServiceAdder_modern_exception,
+                                            L244.ThermalServiceAdder_modern) %>%
       # add commercial
       bind_rows(L244.ThermalShares_pre %>%
                   filter(year== MODEL_FINAL_BASE_YEAR) %>%
@@ -2343,7 +2350,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_comments("then we make sure that no satiation level is below base year service per floorspace") %>%
       add_precursors("L144.base_service_EJ_serv_EUR", "gcam-europe/calibrated_techs_bld_det_EUR", "common/GCAM_region_names",
                      "L144.flsp_bm2_R_res_Yh_EUR", "L144.flsp_bm2_R_comm_Yh_EUR", "gcam-europe/A44.demand_satiation_mult_EUR",
-                     "L143.HDDCDD_scen_R_Y", "gcam-europe/A44.internal_gains_EUR", "gcam-europe/A44.sector_EUR", "energy/A44.gcam_consumer") ->
+                     "L143.HDDCDD_scen_R_Y_EUR", "gcam-europe/A44.internal_gains_EUR", "gcam-europe/A44.sector_EUR", "energy/A44.gcam_consumer") ->
       L244.ThermalServiceSatiation_EUR
 
     L244.GenericServiceSatiation_EUR %>%
@@ -2371,7 +2378,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_precursors("L144.base_service_EJ_serv_EUR", "gcam-europe/calibrated_techs_bld_det_EUR", "common/GCAM_region_names",
                      "L144.flsp_bm2_R_res_Yh_EUR", "L144.flsp_bm2_R_comm_Yh_EUR", "gcam-europe/A44.demand_satiation_mult_EUR",
                      "L102.pcgdp_thous90USD_Scen_R_Y", "L101.Pop_thous_R_Yh","L144.prices_bld_EUR","L106.income_distributions",
-                     "L143.HDDCDD_scen_R_Y","L144.shell_eff_R_Y_EUR", "L144.internal_gains_EUR") ->
+                     "L143.HDDCDD_scen_R_Y_EUR","L144.shell_eff_R_Y_EUR", "L144.internal_gains_EUR") ->
       L244.ThermalServiceImpedance_EUR
 
     L244.GenericServiceAdder_EUR %>%
@@ -2390,7 +2397,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_precursors("L144.base_service_EJ_serv_EUR", "gcam-europe/calibrated_techs_bld_det_EUR", "common/GCAM_region_names",
                      "L144.flsp_bm2_R_res_Yh_EUR", "L144.flsp_bm2_R_comm_Yh_EUR", "gcam-europe/A44.demand_satiation_mult_EUR",
                      "L102.pcgdp_thous90USD_Scen_R_Y", "L101.Pop_thous_R_Yh","L144.prices_bld_EUR","L106.income_distributions",
-                     "L143.HDDCDD_scen_R_Y","L144.shell_eff_R_Y_EUR", "L144.internal_gains_EUR") ->
+                     "L143.HDDCDD_scen_R_Y_EUR","L144.shell_eff_R_Y_EUR", "L144.internal_gains_EUR") ->
       L244.ThermalServiceAdder_EUR
 
     L244.GenericServiceCoef_EUR %>%
@@ -2399,7 +2406,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_units("Unitless") %>%
       add_precursors("L144.base_service_EJ_serv_EUR", "L144.flsp_bm2_R_res_Yh_EUR", "L144.flsp_bm2_R_comm_Yh_EUR", "gcam-europe/A44.demand_satiation_mult_EUR",
                      "L102.pcgdp_thous90USD_Scen_R_Y", "L101.Pop_thous_R_Yh","L144.prices_bld_EUR",
-                     "L144.shell_eff_R_Y_EUR","L144.internal_gains_EUR", "L143.HDDCDD_scen_R_Y") ->
+                     "L144.shell_eff_R_Y_EUR","L144.internal_gains_EUR", "L143.HDDCDD_scen_R_Y_EUR") ->
       L244.GenericServiceCoef_EUR
 
     L244.ThermalServiceCoef_EUR %>%
@@ -2408,7 +2415,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_units("Unitless") %>%
       add_precursors("L144.base_service_EJ_serv_EUR", "L144.flsp_bm2_R_res_Yh_EUR", "L144.flsp_bm2_R_comm_Yh_EUR", "gcam-europe/A44.demand_satiation_mult_EUR",
                      "L102.pcgdp_thous90USD_Scen_R_Y", "L101.Pop_thous_R_Yh","L144.prices_bld_EUR",
-                     "L144.shell_eff_R_Y_EUR","L144.internal_gains_EUR", "L143.HDDCDD_scen_R_Y") ->
+                     "L144.shell_eff_R_Y_EUR","L144.internal_gains_EUR", "L143.HDDCDD_scen_R_Y_EUR") ->
       L244.ThermalServiceCoef_EUR
 
     L244.Intgains_scalar_EUR %>%

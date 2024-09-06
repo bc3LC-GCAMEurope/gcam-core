@@ -41,27 +41,32 @@ module_energy_HDDCDD_xml <- function(command, ...) {
       # Produce outputs
     create_xml("HDDCDD_A2_CCSM3x.xml") %>%
       add_xml_data(L244.HDDCDD_A2_CCSM3x, "HDDCDD") %>%
-      add_precursors("L244.HDDCDD_A2_CCSM3x") ->
+      add_precursors("L244.HDDCDD_A2_CCSM3x") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       HDDCDD_A2_CCSM3x.xml
 
     create_xml("HDDCDD_A2_HadCM3.xml") %>%
       add_xml_data(L244.HDDCDD_A2_HadCM3, "HDDCDD") %>%
-      add_precursors("L244.HDDCDD_A2_HadCM3") ->
+      add_precursors("L244.HDDCDD_A2_HadCM3") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       HDDCDD_A2_HadCM3.xml
 
     create_xml("HDDCDD_B1_CCSM3x.xml") %>%
       add_xml_data(L244.HDDCDD_B1_CCSM3x, "HDDCDD") %>%
-      add_precursors("L244.HDDCDD_B1_CCSM3x") ->
+      add_precursors("L244.HDDCDD_B1_CCSM3x") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       HDDCDD_B1_CCSM3x.xml
 
     create_xml("HDDCDD_B1_HadCM3.xml") %>%
       add_xml_data(L244.HDDCDD_B1_HadCM3, "HDDCDD") %>%
-      add_precursors("L244.HDDCDD_B1_HadCM3") ->
+      add_precursors("L244.HDDCDD_B1_HadCM3") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       HDDCDD_B1_HadCM3.xml
 
     create_xml("HDDCDD_constdd_no_GCM.xml") %>%
       add_xml_data(L244.HDDCDD_constdd_no_GCM, "HDDCDD") %>%
-      add_precursors("L244.HDDCDD_constdd_no_GCM") ->
+      add_precursors("L244.HDDCDD_constdd_no_GCM") %>%
+      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
       HDDCDD_constdd_no_GCM.xml
 
     return_data(HDDCDD_A2_CCSM3x.xml, HDDCDD_A2_HadCM3.xml, HDDCDD_B1_CCSM3x.xml, HDDCDD_B1_HadCM3.xml,
