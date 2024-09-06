@@ -48,6 +48,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
                      "L2234.AvgFossilEffKeyword_elecS_EUR",
                      "L2234.StubTechCapFactor_elecS_EUR",
                      "L2234.StubTechEff_elecS_EUR",
+                     "L2234.StubTechEff_battery_elecS_EUR",
                      "L2234.StubTechCalInput_elecS_EUR",
                      "L2234.StubTechFixOut_elecS_EUR",
                      "L2234.StubTechFixOut_hydro_elecS_EUR",
@@ -114,6 +115,14 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
     # Define countries that have access to offshore wind as allowing for seawater cooling
     seawater_countries <- unique(L2234.StubTechCost_offshore_wind_elecS_EUR$region)
 
+    battery_mapping <- L2234.GlobalTechOMfixed_elecS_EUR %>%  filter(grepl("battery", technology)) %>%
+      distinct(subsector.name, technology) %>%
+      mutate(to.technology = technology)
+
+    battery_mapping <- battery_mapping %>%
+      mutate(technology = "battery") %>%
+      bind_rows(battery_mapping)
+
     elec_cool_expansion <- distinct(elec_tech_water_map, subsector.name = from.subsector,
                                     technology = to.subsector, to.technology, from.technology) %>%
       repeat_add_columns(distinct(A23.elecS_naming, name_adder)) %>%
@@ -126,8 +135,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
                                           paste(technology, name_adder, sep = "_")))) %>%
       select(subsector.name, technology, to.technology) %>%
       # add in battery
-      bind_rows(L2234.GlobalTechOMfixed_elecS_EUR %>%  filter(grepl("battery", technology)) %>%
-                  distinct(subsector.name, technology) %>% mutate(to.technology = technology)) %>%
+      bind_rows(battery_mapping) %>%
       distinct()
 
     # 0b. Define several filtering and renaming fuctions  -------------------------
@@ -233,7 +241,8 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
 
     # Efficiencies do not change with the addition of cooling techs
     L2235.StubTechEff_elecS_cool_EUR <- add_global_cooling_techs(L2234.StubTechEff_elecS_EUR) %>%
-      semi_join(L2235.StubTech_elecS_cool_EUR, by = c("region", "supplysector", "subsector", "stub.technology", "subsector0"))
+      semi_join(L2235.StubTech_elecS_cool_EUR, by = c("region", "supplysector", "subsector", "stub.technology", "subsector0")) %>%
+      bind_rows(add_global_cooling_techs(L2234.StubTechEff_battery_elecS_EUR))
 
     # Get shares of each cooling tech within subsector
     L1233.out_EJ_R_elecS_F_tech_cool_EUR_share <- L1233.out_EJ_R_elecS_F_tech_cool_EUR %>%
