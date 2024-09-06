@@ -5,725 +5,725 @@
 # Column types: ccnnnn
 # ----------
 region,market,1990,2005,2010,2015
-Africa_Eastern,comm cooling,9.99842,8.7511,10.8806,11.1298
-Africa_Eastern,comm heating,6.60407,6.36388,10.1669,10.8189
-Africa_Eastern,comm others,12.3496,12.3833,16.1333,17.4539
-Africa_Eastern,resid cooling modern,10.9154,9.62068,11.8311,12.0898
-Africa_Eastern,resid heating TradBio,2.22698,2.26281,2.26223,2.2555
-Africa_Eastern,resid heating modern,9.15133,8.73673,9.92458,10.4519
+Africa_Eastern,comm cooling,10.9409,9.69364,11.8231,12.0724
+Africa_Eastern,comm heating,7.72877,7.48672,11.2899,11.9422
+Africa_Eastern,comm others,14.4581,14.4603,18.1851,19.4869
+Africa_Eastern,resid cooling modern,15.3393,14.0446,16.2551,16.5139
+Africa_Eastern,resid heating TradBio,2.40808,2.44391,2.44333,2.4366
+Africa_Eastern,resid heating modern,9.81747,9.42048,10.6129,11.1415
 Africa_Eastern,resid others TradBio,2.75158,2.78741,2.78683,2.7801
-Africa_Eastern,resid others coal,3.17307,2.89608,3.2928,3.4233
-Africa_Eastern,resid others modern,12.942,12.2998,15.6364,16.8557
-Africa_Northern,comm cooling,7.90791,6.78035,7.74594,7.61877
-Africa_Northern,comm heating,6.48312,6.50563,10.3787,11.021
-Africa_Northern,comm others,13.0832,13.8794,16.5949,16.676
-Africa_Northern,resid cooling modern,8.74544,7.575,8.57731,8.4453
-Africa_Northern,resid heating TradBio,2.23798,2.34557,2.24956,2.18657
-Africa_Northern,resid heating modern,9.18853,9.39829,12.7059,13.0248
+Africa_Eastern,resid others coal,4.57927,4.30228,4.699,4.8295
+Africa_Eastern,resid others modern,15.0288,14.3797,17.6948,18.8929
+Africa_Northern,comm cooling,8.85051,7.72295,8.68854,8.56139
+Africa_Northern,comm heating,7.60782,7.63032,11.5033,12.1457
+Africa_Northern,comm others,15.0542,15.7249,18.4308,18.4889
+Africa_Northern,resid cooling modern,13.1694,11.999,13.0013,12.8693
+Africa_Northern,resid heating TradBio,2.41908,2.52667,2.43066,2.36767
+Africa_Northern,resid heating modern,10.2803,10.4306,13.7364,14.0188
 Africa_Northern,resid others TradBio,2.76258,2.87017,2.77416,2.71117
-Africa_Northern,resid others coal,3.21188,3.00014,3.32805,3.44176
-Africa_Northern,resid others modern,10.449,10.2077,13.915,13.6637
-Africa_Southern,comm cooling,8.15411,7.64729,10.2795,9.72268
-Africa_Southern,comm heating,4.89196,5.91291,9.50352,10.8732
-Africa_Southern,comm others,11.6319,13.5476,17.6494,18.5467
-Africa_Southern,resid cooling modern,9.00099,8.4749,11.2072,10.6292
-Africa_Southern,resid heating TradBio,2.28163,2.31369,2.25583,2.2555
-Africa_Southern,resid heating modern,10.2743,10.3543,13.5731,14.1984
+Africa_Northern,resid others coal,4.61808,4.40634,4.73425,4.84796
+Africa_Northern,resid others modern,12.5266,12.2218,15.9245,15.6379
+Africa_Southern,comm cooling,9.09671,8.58989,11.2221,10.6653
+Africa_Southern,comm heating,5.86022,6.98807,10.5896,11.997
+Africa_Southern,comm others,13.5543,15.4932,19.6492,20.5503
+Africa_Southern,resid cooling modern,13.425,12.8989,15.6312,15.0532
+Africa_Southern,resid heating TradBio,2.46273,2.49479,2.43693,2.4366
+Africa_Southern,resid heating modern,11.0027,11.0776,14.3257,14.9541
 Africa_Southern,resid others TradBio,2.80623,2.83829,2.78043,2.7801
-Africa_Southern,resid others coal,2.75864,2.49467,2.83111,2.99219
-Africa_Southern,resid others modern,13.0453,13.1395,17.2997,17.8398
-Africa_Western,comm cooling,7.86426,7.15477,8.67049,7.93109
-Africa_Western,comm heating,6.45291,6.48019,10.2005,10.9911
-Africa_Western,comm others,12.3486,11.8916,15.0639,14.8495
-Africa_Western,resid cooling modern,8.70012,7.96365,9.53701,8.76949
-Africa_Western,resid heating TradBio,2.22638,2.26181,2.25759,2.2555
-Africa_Western,resid heating modern,9.80316,9.38691,10.2844,9.71714
+Africa_Southern,resid others coal,4.16484,3.90087,4.23731,4.39839
+Africa_Southern,resid others modern,15.0845,15.152,19.2984,19.8087
+Africa_Western,comm cooling,8.80686,8.09737,9.61309,8.87369
+Africa_Western,comm heating,7.57761,7.60471,11.3251,12.1157
+Africa_Western,comm others,14.4266,13.936,17.1203,16.9083
+Africa_Western,resid cooling modern,13.1241,12.3877,13.961,13.1935
+Africa_Western,resid heating TradBio,2.40748,2.44291,2.43869,2.4366
+Africa_Western,resid heating modern,10.4973,10.0586,10.9485,10.3691
 Africa_Western,resid others TradBio,2.75098,2.78641,2.78219,2.7801
-Africa_Western,resid others coal,3.05464,2.80911,3.22128,3.38548
-Africa_Western,resid others modern,10.9406,11.3726,14.4177,14.008
-Albania,comm cooling,10.5354,8.90279,82.9035,2.31902
-Albania,comm heating,1.99181,8.5359,96.8361,6.58251
-Albania,comm others,11.323,23.5912,316.749,5.34611
+Africa_Western,resid others coal,4.46084,4.21531,4.62748,4.79168
+Africa_Western,resid others modern,13.0632,13.4615,16.4857,16.0716
+Albania,comm cooling,11.5116,9.84539,83.8461,3.26164
+Albania,comm heating,2.66709,9.53853,97.7453,7.52759
+Albania,comm others,12.9172,25.4738,318.536,7.21611
 Albania,resid cooking TradBio,0.515538,0.480379,0.47069,0.46239
-Albania,resid cooking modern,22.2912,35.8117,374.72,11.9337
-Albania,resid cooling modern,9.96838,8.50237,72.2319,2.81447
-Albania,resid heating TradBio,0.401499,0.361935,0.351006,0.341546
-Albania,resid heating modern,16.8036,25.7228,283.701,5.34625
-Albania,resid hot water modern,23.2079,31.4173,331.921,7.33518
-Albania,resid other appliance modern,3.60338,3.19829,32.2545,0.626849
-Albania,resid others modern,22.1748,32.6447,363.831,3.85852
-Argentina,comm cooling,6.46814,5.8436,7.07082,7.04895
-Argentina,comm heating,5.43767,7.03951,9.86214,10.1114
-Argentina,comm others,10.3892,11.8497,15.4674,15.7263
-Argentina,resid cooling modern,8.22458,6.69986,7.97724,7.94278
-Argentina,resid heating TradBio,1.91196,1.77578,1.68608,1.74824
-Argentina,resid heating modern,5.77422,5.64906,8.08627,8.18495
+Albania,resid cooking modern,22.2912,35.8117,374.72,11.9338
+Albania,resid cooling modern,14.3926,12.9264,76.6559,7.23853
+Albania,resid heating TradBio,0.582599,0.543035,0.532106,0.522646
+Albania,resid heating modern,17.8751,26.6709,284.644,6.31326
+Albania,resid hot water modern,23.2079,31.4173,331.921,7.33525
+Albania,resid other appliance modern,3.60338,3.19829,32.2545,0.626854
+Albania,resid others modern,24.0031,34.3403,365.527,5.55421
+Argentina,comm cooling,8.35692,7.00266,8.1908,8.14839
+Argentina,comm heating,6.47684,8.02421,10.8558,11.0835
+Argentina,comm others,12.3049,13.6424,17.2522,17.5064
+Argentina,resid cooling modern,12.6486,11.1239,12.4012,12.3668
+Argentina,resid heating TradBio,2.09306,1.95688,1.86718,1.92934
+Argentina,resid heating modern,6.85165,6.6424,9.10215,9.18014
 Argentina,resid others TradBio,2.43656,2.30038,2.21068,2.27284
-Argentina,resid others modern,9.06604,8.63924,11.0733,11.4249
-Australia_NZ,comm cooling,5.97495,5.57219,5.67317,5.56581
-Australia_NZ,comm heating,5.20874,5.89914,6.94633,6.88298
-Australia_NZ,comm others,11.3899,11.3566,12.209,12.151
-Australia_NZ,resid cooling modern,6.73897,6.3209,6.42572,6.31428
-Australia_NZ,resid heating TradBio,1.78789,1.70914,1.67982,1.64743
-Australia_NZ,resid heating modern,5.20182,5.3658,6.265,6.11704
+Argentina,resid others modern,10.9759,10.5256,12.9541,13.2938
+Australia_NZ,comm cooling,6.91755,6.51479,6.61577,6.50841
+Australia_NZ,comm heating,6.20175,6.88144,7.92819,7.8682
+Australia_NZ,comm others,13.179,13.1349,13.9888,13.9358
+Australia_NZ,resid cooling modern,11.163,10.7449,10.8497,10.7383
+Australia_NZ,resid heating TradBio,1.96899,1.89024,1.86092,1.82853
+Australia_NZ,resid heating modern,6.12813,6.28211,7.18306,7.03435
 Australia_NZ,resid others TradBio,2.31249,2.23374,2.20442,2.17203
-Australia_NZ,resid others coal,2.24619,2.0802,2.35983,2.47999
-Australia_NZ,resid others modern,11.845,11.3827,11.9925,11.8051
-Austria,comm cooling,4.24986,4.17351,4.36497,4.6018
-Austria,comm heating,4.54529,4.90874,5.88209,6.21712
-Austria,comm others,9.10839,8.61431,10.7966,12.3793
+Australia_NZ,resid others coal,3.65239,3.4864,3.76603,3.88619
+Australia_NZ,resid others modern,13.5868,13.1202,13.7311,13.5477
+Austria,comm cooling,5.19722,5.12747,5.31608,5.55287
+Austria,comm heating,5.31723,5.67335,6.55595,6.89558
+Austria,comm others,10.9791,10.506,12.6001,14.1668
 Austria,resid cooking TradBio,0.462456,0.458264,0.467263,0.463576
 Austria,resid cooking coal,2.18753,2.07655,2.35701,2.47631
-Austria,resid cooking modern,16.8955,17.4638,19.3356,22.1929
-Austria,resid cooling modern,4.49797,4.43094,4.59475,4.71697
-Austria,resid heating TradBio,0.347883,0.339931,0.347612,0.342715
-Austria,resid heating coal,2.18753,2.07655,2.35701,2.47631
-Austria,resid heating modern,4.87269,4.9624,6.63834,6.87821
+Austria,resid cooking modern,16.8955,17.4638,19.3355,22.1929
+Austria,resid cooling modern,8.92475,8.85691,9.02051,9.14285
+Austria,resid heating TradBio,0.528983,0.521031,0.528712,0.523815
+Austria,resid heating coal,2.80813,2.69715,2.97761,3.09691
+Austria,resid heating modern,5.91215,5.93026,7.58118,7.78193
 Austria,resid hot water coal,2.18753,2.07655,2.35701,2.47631
 Austria,resid hot water modern,9.5555,9.49529,11.1642,11.8416
 Austria,resid other appliance modern,1.35021,1.39114,1.48952,1.29647
-Austria,resid others modern,11.6668,11.8202,12.834,14.6297
-Belarus,comm cooling,8.11231,6.80283,7.08993,6.63625
-Belarus,comm heating,5.08057,4.56615,5.83496,5.78012
-Belarus,comm others,9.73495,11.3485,13.791,13.8664
-Belarus,resid cooling modern,8.9576,7.59834,7.89635,7.42542
-Belarus,resid heating TradBio,1.94946,2.16392,2.06703,1.91761
-Belarus,resid heating modern,5.08832,4.56708,5.77217,5.67791
+Austria,resid others modern,13.3624,13.5158,14.5296,16.3253
+Belarus,comm cooling,9.05491,7.74543,8.03253,7.57885
+Belarus,comm heating,5.60307,5.00225,6.26261,6.20538
+Belarus,comm others,11.5924,12.9016,15.3908,15.4951
+Belarus,resid cooling modern,13.3816,12.0223,12.3204,11.8494
+Belarus,resid heating TradBio,2.13056,2.34502,2.24813,2.09871
+Belarus,resid heating modern,5.60089,5.10965,6.34033,6.25796
 Belarus,resid others TradBio,2.47406,2.68852,2.59163,2.44221
-Belarus,resid others coal,2.94071,2.41607,2.69061,3.11773
-Belarus,resid others modern,9.516,9.62863,11.4152,10.8678
-Belgium,comm cooling,4.81574,4.4433,4.53623,4.50279
-Belgium,comm heating,4.77354,4.98033,5.91238,5.96555
-Belgium,comm others,7.26635,8.44121,9.76845,9.77546
-Belgium,resid cooking modern,17.7477,15.3413,16.786,16.6266
-Belgium,resid cooling modern,4.99028,4.66273,4.73881,4.63198
-Belgium,resid heating TradBio,0.324168,0.317284,0.350477,0.339732
-Belgium,resid heating coal,2.22658,2.07665,2.35713,2.47633
-Belgium,resid heating modern,4.74304,4.73136,6.42613,6.67714
+Belarus,resid others coal,4.34691,3.82227,4.09681,4.52393
+Belarus,resid others modern,10.7737,10.9653,12.8295,12.2971
+Belgium,comm cooling,5.79252,5.40594,5.50063,5.47326
+Belgium,comm heating,5.79082,5.96928,6.89339,6.95148
+Belgium,comm others,9.29568,10.3899,11.6925,11.7172
+Belgium,resid cooking modern,17.7477,15.3413,16.7859,16.6266
+Belgium,resid cooling modern,9.41453,9.087,9.16304,9.05628
+Belgium,resid heating TradBio,0.505268,0.498384,0.531576,0.520832
+Belgium,resid heating coal,2.84718,2.69725,2.97773,3.09693
+Belgium,resid heating modern,5.82801,5.79643,7.46795,7.72728
 Belgium,resid hot water coal,2.22658,2.07665,2.35713,2.47633
 Belgium,resid hot water modern,9.86587,8.81925,10.1318,10.1751
-Belgium,resid other appliance modern,1.55377,1.49475,1.55591,1.26722
-Belgium,resid others modern,12.3552,11.331,12.6047,12.9904
-Bosnia and Herzegovina,comm cooling,5.60087,5.22617,4.7195,4.3376
-Bosnia and Herzegovina,comm heating,1.61963,3.69076,7.61128,4.75648
-Bosnia and Herzegovina,comm others,10.2546,11.0347,12.1027,12.0554
+Belgium,resid other appliance modern,1.55377,1.49475,1.5559,1.26722
+Belgium,resid others modern,14.1471,13.1342,14.3858,14.7869
+Bosnia and Herzegovina,comm cooling,6.54347,6.17107,5.66662,5.28524
+Bosnia and Herzegovina,comm heating,2.26281,4.50433,8.53755,5.49843
+Bosnia and Herzegovina,comm others,11.8163,12.8995,13.9626,13.8225
 Bosnia and Herzegovina,resid cooking TradBio,0.464818,0.457024,0.45169,0.45945
 Bosnia and Herzegovina,resid cooking coal,0,0,2.2264,2.33075
 Bosnia and Herzegovina,resid cooking modern,23.1907,24.4268,21.9495,18.8009
-Bosnia and Herzegovina,resid cooling modern,5.65885,5.33652,4.89899,4.49478
-Bosnia and Herzegovina,resid heating TradBio,0.350269,0.338697,0.332195,0.33865
-Bosnia and Herzegovina,resid heating coal,0,0,2.2264,2.33075
-Bosnia and Herzegovina,resid heating modern,5.56992,5.86412,4.93968,6.64918
+Bosnia and Herzegovina,resid cooling modern,10.083,9.76064,9.32308,8.91886
+Bosnia and Herzegovina,resid heating TradBio,0.531369,0.519797,0.513295,0.51975
+Bosnia and Herzegovina,resid heating coal,0,0,2.847,2.95135
+Bosnia and Herzegovina,resid heating modern,6.70146,6.76222,5.48026,7.40721
 Bosnia and Herzegovina,resid hot water coal,0,0,2.2264,2.33075
 Bosnia and Herzegovina,resid hot water modern,18.6465,18.3049,16.4911,15.5223
 Bosnia and Herzegovina,resid other appliance modern,1.82904,1.79373,1.62884,1.21896
-Bosnia and Herzegovina,resid others modern,17.3523,16.4595,14.4234,13.383
-Brazil,comm cooling,8.30566,6.78598,7.29562,6.8587
-Brazil,comm heating,9.42526,10.0807,13.3228,13.6844
-Brazil,comm others,16.3996,14.6109,16.9428,16.1945
-Brazil,resid cooling modern,9.17037,7.5929,8.11659,7.65869
-Brazil,resid heating TradBio,1.88655,1.8414,1.79485,1.74985
-Brazil,resid heating modern,7.33238,7.35019,10.4532,11.0037
+Bosnia and Herzegovina,resid others modern,19.0479,18.1551,16.119,15.0786
+Brazil,comm cooling,9.25716,7.74572,8.25022,7.80671
+Brazil,comm heating,10.4185,11.0431,14.2432,14.5865
+Brazil,comm others,18.2574,16.4087,18.7135,17.9519
+Brazil,resid cooling modern,13.5944,12.0169,12.5406,12.0827
+Brazil,resid heating TradBio,2.06765,2.0225,1.97595,1.93095
+Brazil,resid heating modern,8.45515,8.47786,11.5781,12.1259
 Brazil,resid others TradBio,2.41115,2.366,2.31945,2.27445
-Brazil,resid others modern,13.9276,12.9797,15.9004,15.5758
-Bulgaria,comm cooling,5.81663,5.19921,5.08486,4.83246
-Bulgaria,comm heating,6.05555,5.63508,6.82754,6.73548
-Bulgaria,comm others,10.8629,15.3949,15.2946,14.9725
+Brazil,resid others modern,15.8793,14.8724,17.7679,17.4245
+Bulgaria,comm cooling,6.7615,6.14411,6.03042,5.77842
+Bulgaria,comm heating,7.0106,6.29966,7.58619,7.49659
+Bulgaria,comm others,12.8289,17.1257,17.0372,16.7153
 Bulgaria,resid cooking TradBio,0.468637,0.489589,0.491505,0.486153
 Bulgaria,resid cooking coal,2.26386,2.04512,2.29023,2.32185
-Bulgaria,resid cooking modern,23.7741,24.1553,24.7898,24.5688
-Bulgaria,resid cooling modern,5.84554,5.31319,5.21406,4.90731
-Bulgaria,resid heating TradBio,0.354127,0.3711,0.371614,0.364956
-Bulgaria,resid heating coal,2.26386,2.04512,2.29023,2.32185
-Bulgaria,resid heating modern,8.0326,7.26834,8.72586,8.82124
+Bulgaria,resid cooking modern,23.7741,24.1553,24.7899,24.5688
+Bulgaria,resid cooling modern,10.2697,9.7373,9.63815,9.33139
+Bulgaria,resid heating TradBio,0.535227,0.5522,0.552714,0.546056
+Bulgaria,resid heating coal,2.88446,2.66572,2.91083,2.94245
+Bulgaria,resid heating modern,8.5889,7.84256,9.36023,9.46677
 Bulgaria,resid hot water coal,2.26386,2.04512,2.29023,2.32185
 Bulgaria,resid hot water modern,13.1508,12.3783,14.0466,14.1343
 Bulgaria,resid other appliance modern,1.90592,1.78338,1.77214,1.36434
-Bulgaria,resid others modern,18.2651,16.3402,16.0583,15.7214
-Canada,comm cooling,6.18841,5.78446,6.03091,6.02893
-Canada,comm heating,6.8089,6.83093,8.78239,8.62866
-Canada,comm others,11.2068,10.855,12.2087,12.0809
-Canada,resid cooling modern,7.12678,6.64007,6.8533,6.86859
-Canada,resid heating TradBio,1.83191,1.71649,1.71513,1.68305
-Canada,resid heating modern,6.47068,6.72218,7.9657,8.29732
+Bulgaria,resid others modern,19.9607,18.0358,17.7539,17.417
+Canada,comm cooling,7.33009,6.91437,7.12476,7.15907
+Canada,comm heating,7.80553,7.83436,9.7571,9.61536
+Canada,comm others,13.0424,12.693,14.022,13.9107
+Canada,resid cooling modern,11.5508,11.0641,11.2773,11.2926
+Canada,resid heating TradBio,2.01301,1.89759,1.89623,1.86415
+Canada,resid heating modern,7.437,7.65863,8.89694,9.21122
 Canada,resid others TradBio,2.35651,2.24109,2.23973,2.20765
-Canada,resid others coal,2.22838,2.06675,2.34582,2.47788
-Canada,resid others modern,11.8975,11.493,12.4743,12.7966
-Central America and Caribbean,comm cooling,8.0836,6.95074,8.95413,8.34268
-Central America and Caribbean,comm heating,7.40381,7.35268,10.6031,10.8909
-Central America and Caribbean,comm others,12.4683,12.389,17.652,17.4504
-Central America and Caribbean,resid cooling modern,8.93884,7.75839,9.83379,9.19849
-Central America and Caribbean,resid heating TradBio,1.98428,1.95942,2.00666,2.00516
-Central America and Caribbean,resid heating modern,8.34675,8.63479,13.3242,13.3255
+Canada,resid others coal,3.63458,3.47295,3.75202,3.88408
+Canada,resid others modern,13.6682,13.2566,14.2334,14.5473
+Central America and Caribbean,comm cooling,9.03483,7.90155,9.89869,9.28704
+Central America and Caribbean,comm heating,8.48188,8.37238,11.6271,11.8793
+Central America and Caribbean,comm others,14.515,14.3475,19.5934,19.3719
+Central America and Caribbean,resid cooling modern,13.3629,12.1824,14.2578,13.6225
+Central America and Caribbean,resid heating TradBio,2.16538,2.14052,2.18776,2.18626
+Central America and Caribbean,resid heating modern,9.48831,9.71486,14.3586,14.3649
 Central America and Caribbean,resid others TradBio,2.50888,2.48402,2.53126,2.52976
-Central America and Caribbean,resid others coal,2.92981,2.71407,3.01259,3.12726
-Central America and Caribbean,resid others modern,12.6338,12.5751,18.3591,17.8024
-Central Asia,comm cooling,7.54725,7.14431,7.67813,7.41863
-Central Asia,comm heating,4.43519,4.78993,5.68333,5.59419
-Central Asia,comm others,7.9972,8.72533,10.5429,12.2735
-Central Asia,resid cooling modern,8.37106,7.9528,8.50691,8.23754
-Central Asia,resid heating TradBio,2.017,1.94203,1.94189,1.96592
-Central Asia,resid heating coal,1.83494,1.6424,1.89028,1.98043
-Central Asia,resid heating modern,4.72508,4.95839,5.91667,5.99371
+Central America and Caribbean,resid others coal,4.33601,4.12027,4.41879,4.53346
+Central America and Caribbean,resid others modern,14.6588,14.5108,20.2451,19.6879
+Central Asia,comm cooling,8.48985,8.08691,8.62073,8.36123
+Central Asia,comm heating,5.44471,5.79969,6.68987,6.60326
+Central Asia,comm others,10.0433,10.7819,12.4845,14.2548
+Central Asia,resid cooling modern,12.7951,12.3768,12.9309,12.6615
+Central Asia,resid heating TradBio,2.1981,2.12313,2.12299,2.14702
+Central Asia,resid heating coal,2.45554,2.263,2.51088,2.60103
+Central Asia,resid heating modern,5.62809,5.86188,6.82,6.8961
 Central Asia,resid others TradBio,2.5416,2.46663,2.46649,2.49052
-Central Asia,resid others coal,2.6197,2.37903,2.68888,2.80156
-Central Asia,resid others modern,9.90069,9.61619,11.4682,12.5456
-China,comm cooling,7.7287,6.82672,6.4441,6.20827
-China,comm heating,3.30923,4.20467,5.85744,6.12775
-China,comm others,8.76498,11.7483,12.6283,12.825
-China,resid cooling modern,8.55941,7.62313,7.22596,6.98116
-China,resid heating TradBio,2.36964,2.16378,1.98437,1.85458
-China,resid heating coal,1.89788,1.67687,1.91885,1.99853
-China,resid heating modern,4.98538,5.80372,7.17767,6.91217
+Central Asia,resid others coal,4.0259,3.78523,4.09508,4.20776
+Central Asia,resid others modern,11.8175,11.5207,13.3777,14.4471
+China,comm cooling,8.6713,7.76932,7.3867,7.15087
+China,comm heating,4.07906,5.00976,6.67019,6.94001
+China,comm others,10.4109,13.4562,14.3475,14.5475
+China,resid cooling modern,12.9834,12.0471,11.65,11.4052
+China,resid heating TradBio,2.55074,2.34488,2.16547,2.03568
+China,resid heating coal,2.51848,2.29747,2.53945,2.61913
+China,resid heating modern,5.66483,6.49852,7.91081,7.65317
 China,resid others TradBio,2.89424,2.68838,2.50897,2.37918
-China,resid others coal,2.69837,2.42212,2.72459,2.82419
-China,resid others modern,12.906,13.3042,13.9698,13.7748
-Colombia,comm cooling,7.1012,6.05159,6.60048,6.59735
-Colombia,comm heating,7.11936,8.22325,10.3168,9.76993
-Colombia,comm others,13.2064,12.5305,14.2829,13.6374
-Colombia,resid cooling modern,7.92309,6.85626,7.43303,7.44222
-Colombia,resid heating TradBio,2.10449,1.79325,1.80315,1.9288
-Colombia,resid heating modern,7.24136,6.786,9.27932,10.5498
+China,resid others coal,4.10457,3.82832,4.13079,4.23039
+China,resid others modern,14.737,15.1002,15.7548,15.5664
+Colombia,comm cooling,8.05952,7.06663,7.64567,7.78489
+Colombia,comm heating,8.20408,9.20533,11.3135,10.8425
+Colombia,comm others,15.104,14.3274,16.095,15.5742
+Colombia,resid cooling modern,12.3471,11.2803,11.857,11.8662
+Colombia,resid heating TradBio,2.28559,1.97435,1.98425,2.1099
+Colombia,resid heating modern,8.35777,7.75853,10.2349,11.5808
 Colombia,resid others TradBio,2.62909,2.31785,2.32775,2.4534
-Colombia,resid others coal,2.47758,2.27126,2.57644,2.69716
-Colombia,resid others modern,13.7219,11.197,13.5461,13.953
-Croatia,comm cooling,5.64486,5.0541,4.8377,4.90481
-Croatia,comm heating,4.98574,5.64724,6.97577,6.76041
-Croatia,comm others,9.8701,11.3166,12.0167,12.2207
-Croatia,resid cooking TradBio,0.500361,0.506641,0.500264,0.493152
+Colombia,resid others coal,3.88378,3.67746,3.98264,4.10336
+Colombia,resid others modern,15.5532,13.0308,15.3577,15.744
+Croatia,comm cooling,6.6158,6.01353,5.79573,5.87006
+Croatia,comm heating,5.70151,6.51131,7.81667,7.60497
+Croatia,comm others,11.6843,13.1593,13.8301,14.0449
+Croatia,resid cooking TradBio,0.500361,0.506642,0.500264,0.493152
 Croatia,resid cooking modern,14.2166,14.2565,17.9714,18.8822
-Croatia,resid cooling modern,5.708,5.19057,4.99978,4.96748
-Croatia,resid heating TradBio,0.38617,0.388066,0.380286,0.371851
-Croatia,resid heating coal,2.4887,2.31113,2.59806,2.69966
-Croatia,resid heating modern,4.84746,4.71779,6.03744,5.92853
+Croatia,resid cooling modern,10.1321,9.61461,9.42381,9.39153
+Croatia,resid heating TradBio,0.56727,0.569168,0.561386,0.552951
+Croatia,resid heating coal,3.1093,2.93173,3.21866,3.32026
+Croatia,resid heating modern,5.72314,5.60877,6.90492,6.78336
 Croatia,resid hot water coal,2.4887,2.31113,2.59806,2.69966
 Croatia,resid hot water modern,11.0643,10.1388,10.8553,11.081
 Croatia,resid other appliance modern,1.84931,1.72901,1.67471,1.38556
-Croatia,resid others modern,17.5929,15.7136,14.9467,16.0627
-Cyprus,comm cooling,5.07149,4.78305,6.07267,6.14418
-Cyprus,comm heating,6.74486,6.62592,9.39596,9.98021
-Cyprus,comm others,14.7388,13.9808,15.5068,16.5459
-Cyprus,resid cooking modern,12.3111,13.0766,20.3365,21.2885
-Cyprus,resid cooling modern,5.20283,4.95442,6.06512,5.99985
-Cyprus,resid heating TradBio,0,0,0.316397,0.330817
-Cyprus,resid heating modern,5.61076,5.91717,9.69642,10.1736
+Croatia,resid others modern,19.2885,17.4092,16.6423,17.7583
+Cyprus,comm cooling,6.01409,5.72565,7.01529,7.08681
+Cyprus,comm heating,7.57387,7.45504,10.2804,10.8591
+Cyprus,comm others,16.4858,15.7356,17.4138,18.4536
+Cyprus,resid cooking modern,12.3111,13.0765,20.3364,21.2885
+Cyprus,resid cooling modern,9.62696,9.37846,10.4891,10.4239
+Cyprus,resid heating TradBio,0,0,0.497497,0.511917
+Cyprus,resid heating modern,6.7963,7.09333,10.8552,11.3374
 Cyprus,resid hot water modern,12.7561,13.3278,19.8181,20.8651
 Cyprus,resid other appliance modern,1.64135,1.62426,2.15922,1.74933
-Cyprus,resid others modern,15.1237,14.5065,20.4746,21.9141
-Czech Republic,comm cooling,5.28997,4.88202,4.84684,4.69851
-Czech Republic,comm heating,3.57512,4.76445,5.72288,6.17371
-Czech Republic,comm others,8.92383,11.4885,12.1831,12.6574
+Cyprus,resid others modern,16.8193,16.2021,22.1701,23.6097
+Czech Republic,comm cooling,6.30167,5.85627,5.81542,5.66412
+Czech Republic,comm heating,4.36897,5.54752,6.5219,6.9765
+Czech Republic,comm others,10.7871,13.2886,13.977,14.4449
 Czech Republic,resid cooking TradBio,0.483754,0.47842,0.481033,0.481602
 Czech Republic,resid cooking coal,2.08495,1.86694,2.16298,2.39942
 Czech Republic,resid cooking modern,17.6679,17.1645,18.2767,19.5276
-Czech Republic,resid cooling modern,5.40964,5.04154,5.00384,4.79042
-Czech Republic,resid heating TradBio,0.369396,0.359986,0.361245,0.360472
-Czech Republic,resid heating coal,2.08495,1.86694,2.16298,2.39942
-Czech Republic,resid heating modern,4.65556,5.1313,5.97946,6.59999
+Czech Republic,resid cooling modern,9.83406,9.46575,9.42803,9.21461
+Czech Republic,resid heating TradBio,0.550496,0.541086,0.542345,0.541572
+Czech Republic,resid heating coal,2.70555,2.48754,2.78358,3.02002
+Czech Republic,resid heating modern,5.35607,5.89614,6.7399,7.36108
 Czech Republic,resid hot water coal,2.08495,1.86694,2.16298,2.39942
-Czech Republic,resid hot water modern,6.94738,7.98819,8.76097,9.57709
-Czech Republic,resid other appliance modern,1.72638,1.66282,1.67646,1.32309
-Czech Republic,resid others modern,16.1333,14.9509,14.9667,15.0578
-Denmark,comm cooling,4.60025,4.03415,4.14152,4.27941
-Denmark,comm heating,4.57003,5.10391,5.65519,5.60958
-Denmark,comm others,7.87205,8.28663,9.21667,9.85578
+Czech Republic,resid hot water modern,6.94738,7.9882,8.76097,9.57709
+Czech Republic,resid other appliance modern,1.72638,1.66283,1.67646,1.32309
+Czech Republic,resid others modern,17.8289,16.6466,16.6623,16.7534
+Denmark,comm cooling,5.55094,4.98399,5.09052,5.22861
+Denmark,comm heating,5.12516,5.65438,6.18581,6.13577
+Denmark,comm others,9.62271,9.96438,10.8522,11.4885
 Denmark,resid cooking coal,2.24925,0,2.35704,0
-Denmark,resid cooking modern,18.5749,16.1216,17.369,19.4144
-Denmark,resid cooling modern,5.10193,4.71828,4.89522,4.9244
-Denmark,resid heating TradBio,0.326191,0.337237,0.34692,0.344691
-Denmark,resid heating coal,2.24925,0,2.35704,0
-Denmark,resid heating modern,4.50033,4.81248,5.66892,5.59866
+Denmark,resid cooking modern,18.5749,16.1216,17.3691,19.4144
+Denmark,resid cooling modern,9.96296,9.55749,9.72737,9.72477
+Denmark,resid heating TradBio,0.507291,0.518337,0.52802,0.525791
+Denmark,resid heating coal,2.86985,0,2.97764,0
+Denmark,resid heating modern,5.32418,5.54561,6.36155,6.26787
 Denmark,resid hot water coal,2.24925,0,2.35704,0
-Denmark,resid hot water modern,6.42343,6.16598,6.98615,6.67647
-Denmark,resid other appliance modern,1.475,1.338,1.40218,1.20184
-Denmark,resid others coal,2.65555,0,2.76334,0
-Denmark,resid others modern,5.10515,5.51172,8.0974,9.04819
-Estonia,comm cooling,5.33161,4.92372,4.88907,4.7836
-Estonia,comm heating,4.74964,5.17724,5.96466,6.0439
-Estonia,comm others,12.3076,12.5349,13.9036,13.8071
+Denmark,resid hot water modern,6.42341,6.16598,6.98608,6.67647
+Denmark,resid other appliance modern,1.475,1.338,1.40219,1.20184
+Denmark,resid others coal,4.06175,0,4.16954,0
+Denmark,resid others modern,7.29031,7.66622,10.2344,11.1556
+Estonia,comm cooling,6.32223,6.08537,5.92902,5.98771
+Estonia,comm heating,5.19394,5.77309,6.51135,6.6946
+Estonia,comm others,14.0632,14.3372,15.658,15.5832
 Estonia,resid cooking TradBio,0.492318,0.506546,0.517728,0.502002
 Estonia,resid cooking coal,2.22676,1.97269,2.28571,2.40615
-Estonia,resid cooking modern,15.6881,20.1293,21.5583,21.4117
-Estonia,resid cooling modern,5.76785,5.48346,5.54426,5.34189
-Estonia,resid heating TradBio,0.378046,0.387972,0.397575,0.380569
-Estonia,resid heating coal,2.22676,1.97269,2.28571,2.40615
-Estonia,resid heating modern,4.96934,5.65846,6.70177,6.68117
+Estonia,resid cooking modern,15.6881,20.1293,21.5582,21.4117
+Estonia,resid cooling modern,10.6289,10.3227,10.3764,10.1423
+Estonia,resid heating TradBio,0.559146,0.569072,0.578675,0.561669
+Estonia,resid heating coal,2.84736,2.59329,2.90631,3.02675
+Estonia,resid heating modern,5.50327,6.18493,7.2502,7.23152
 Estonia,resid hot water coal,2.22676,1.97269,2.28571,2.40615
-Estonia,resid hot water modern,5.17658,5.76888,6.81304,6.83551
+Estonia,resid hot water modern,5.17658,5.76888,6.81299,6.83551
 Estonia,resid other appliance modern,1.73763,1.67919,1.6855,1.33481
-Estonia,resid others modern,16.2669,15.1395,15.0699,15.2464
-Finland,comm cooling,4.74583,4.45714,4.30514,4.29489
-Finland,comm heating,4.9551,5.21674,6.16746,6.42604
-Finland,comm others,12.8857,10.4899,11.2596,11.9333
-Finland,resid cooking modern,16.3781,18.7864,17.62,20.6711
-Finland,resid cooling modern,4.92255,4.67396,4.5429,4.4599
-Finland,resid heating TradBio,0.343027,0.34207,0.350486,0.339272
-Finland,resid heating coal,2.1145,1.90293,2.25608,2.39248
-Finland,resid heating modern,6.12497,7.08175,8.20228,8.56203
+Estonia,resid others modern,17.9625,16.8351,16.7654,16.942
+Finland,comm cooling,5.68843,5.40058,5.24838,5.23819
+Finland,comm heating,5.49473,5.88142,6.79045,7.06605
+Finland,comm others,14.5498,12.3071,13.0335,13.7101
+Finland,resid cooking modern,16.3782,18.7864,17.6198,20.6711
+Finland,resid cooling modern,9.34685,9.09816,8.96705,8.88407
+Finland,resid heating TradBio,0.524127,0.52317,0.531586,0.520372
+Finland,resid heating coal,2.7351,2.52353,2.87668,3.01308
+Finland,resid heating modern,7.03339,7.82066,8.91424,9.25167
 Finland,resid hot water coal,2.1145,1.90293,2.25608,2.39248
-Finland,resid hot water modern,7.76654,7.73079,8.74742,8.92455
-Finland,resid other appliance modern,1.52588,1.49975,1.46684,1.20663
-Finland,resid others modern,6.28004,8.50763,10.3742,11.3728
-France,comm cooling,4.97056,4.67785,4.75005,4.58636
-France,comm heating,5.36275,5.52438,6.43633,6.53426
-France,comm others,9.2672,9.59109,10.6858,11.197
+Finland,resid hot water modern,7.76656,7.73079,8.74734,8.92455
+Finland,resid other appliance modern,1.52589,1.49975,1.46683,1.20663
+Finland,resid others modern,8.40576,10.4969,12.3171,13.2789
+France,comm cooling,5.95892,5.6685,5.74449,5.57355
+France,comm heating,6.25716,6.38645,7.34807,7.43836
+France,comm others,11.166,11.4497,12.5591,13.0515
 France,resid cooking modern,13.6813,14.4327,17.5875,18.5341
-France,resid cooling modern,5.1284,4.8688,4.9203,4.7008
-France,resid heating TradBio,0.353779,0.337523,0.337814,0.330433
-France,resid heating coal,2.09295,2.07663,2.3571,2.47634
-France,resid heating modern,5.78677,6.07829,7.59337,7.98568
+France,resid cooling modern,9.55241,9.29281,9.34431,9.12481
+France,resid heating TradBio,0.534879,0.518623,0.518914,0.511533
+France,resid heating coal,2.71355,2.69723,2.9777,3.09694
+France,resid heating modern,6.8248,7.07516,8.55307,8.92959
 France,resid hot water coal,2.09295,2.07663,2.3571,2.47634
 France,resid hot water modern,11.2802,11.384,12.421,12.9603
 France,resid other appliance modern,1.6107,1.58627,1.63857,1.2916
-France,resid others modern,14.7598,14.0688,14.5345,14.5513
-Germany,comm cooling,4.678,4.38406,4.43471,4.39322
-Germany,comm heating,3.79176,4.76928,5.91002,6.36461
-Germany,comm others,7.60239,8.51895,9.86433,10.3934
-Germany,resid cooking modern,20.1853,19.2142,19.9604,20.9512
-Germany,resid cooling modern,4.86813,4.61126,4.65019,4.53717
-Germany,resid heating TradBio,0.324542,0.332556,0.345713,0.336796
-Germany,resid heating coal,1.87596,1.8044,2.12827,2.26877
-Germany,resid heating modern,4.35573,4.49286,6.12798,6.55476
-Germany,resid hot water modern,8.20328,7.82196,9.42632,10.0587
-Germany,resid other appliance modern,1.50356,1.47202,1.51572,1.23394
-Germany,resid others modern,13.3829,12.6704,13.0865,13.5859
-Greece,comm cooling,4.76332,4.33193,4.5304,4.54287
-Greece,comm heating,5.97982,5.69256,6.57223,7.03346
-Greece,comm others,10.1982,9.93414,11.7993,11.811
+France,resid others modern,16.4554,15.7644,16.2301,16.2469
+Germany,comm cooling,5.64109,5.34383,5.39358,5.35392
+Germany,comm heating,4.69295,5.64407,6.75172,7.27174
+Germany,comm others,9.58449,10.4546,11.7826,12.3118
+Germany,resid cooking modern,20.1853,19.2142,19.9603,20.9512
+Germany,resid cooling modern,9.29214,9.03527,9.0742,8.96118
+Germany,resid heating TradBio,0.505642,0.513656,0.526813,0.517896
+Germany,resid heating coal,2.49656,2.425,2.74887,2.88937
+Germany,resid heating modern,5.30631,5.44885,7.07647,7.4977
+Germany,resid hot water modern,8.20328,7.82196,9.4263,10.0587
+Germany,resid other appliance modern,1.50356,1.47202,1.51571,1.23394
+Germany,resid others modern,15.0847,14.3715,14.7865,15.2852
+Greece,comm cooling,5.70618,5.2758,5.47516,5.48879
+Greece,comm heating,6.91108,6.6133,7.47828,7.95913
+Greece,comm others,12.1167,11.817,13.6392,13.6963
 Greece,resid cooking TradBio,0.464601,0.460123,0.450437,0.46123
 Greece,resid cooking modern,19.3548,17.8988,18.9823,19.9662
-Greece,resid cooling modern,4.93751,4.5659,4.73649,4.66601
-Greece,resid heating TradBio,0.35005,0.34178,0.330954,0.340403
-Greece,resid heating coal,1.89639,1.71271,2.00246,2.09113
-Greece,resid heating modern,5.38211,5.3575,8.05477,8.41871
+Greece,resid cooling modern,9.36152,8.98991,9.1605,9.09002
+Greece,resid heating TradBio,0.53115,0.52288,0.512054,0.521503
+Greece,resid heating coal,2.51699,2.33331,2.62306,2.71173
+Greece,resid heating modern,6.57455,6.54697,9.20951,9.54889
 Greece,resid hot water modern,13.6596,12.7411,14.9914,15.8314
 Greece,resid other appliance modern,1.53212,1.45189,1.55497,1.27934
-Greece,resid others modern,13.8267,12.5203,13.5806,14.3541
-Hungary,comm cooling,5.71772,5.04723,5.15005,4.98736
-Hungary,comm heating,4.52901,4.63524,5.51646,5.51221
-Hungary,comm others,8.86661,8.10918,10.0284,9.11582
+Greece,resid others modern,15.5223,14.2159,15.2762,16.0497
+Hungary,comm cooling,6.73429,6.09623,6.15873,6.02654
+Hungary,comm heating,5.28183,5.54291,6.40011,6.4167
+Hungary,comm others,10.7527,10.0276,11.9114,11.0278
 Hungary,resid cooking TradBio,0.474036,0.475298,0.4875,0.487392
 Hungary,resid cooking modern,11.5533,10.6906,13.9364,13.5667
-Hungary,resid cooling modern,5.78917,5.19545,5.26625,5.0377
-Hungary,resid heating TradBio,0.35958,0.356879,0.367648,0.366176
-Hungary,resid heating coal,2.23209,2.06094,2.34693,2.42771
-Hungary,resid heating modern,3.95354,4.0902,4.89264,4.85374
+Hungary,resid cooling modern,10.2136,9.61969,9.69048,9.46199
+Hungary,resid heating TradBio,0.54068,0.537979,0.548748,0.547276
+Hungary,resid heating coal,2.85269,2.68154,2.96753,3.04831
+Hungary,resid heating modern,4.72918,4.92506,5.72763,5.69889
 Hungary,resid hot water modern,8.61105,8.42667,10.0159,9.94133
 Hungary,resid other appliance modern,1.88266,1.7311,1.79581,1.4102
-Hungary,resid others modern,17.9889,15.7377,16.3284,16.4591
-Iceland,comm heating,6.61005,6.82119,7.77719,7.86255
-Iceland,comm others,14.3717,14.4339,16.2098,15.9243
-Iceland,resid heating modern,12.1245,13.4883,16.0094,16.0811
-Iceland,resid others modern,10.3596,12.5731,15.5316,15.3951
-India,comm cooling,8.95361,8.15658,8.07631,7.60743
-India,comm heating,20.3023,19.4957,13.2945,11.9982
-India,comm others,9.15926,12.2346,13.2103,14.4721
-India,resid cooling modern,9.83089,9.00356,8.92024,8.43353
-India,resid heating TradBio,2.3954,2.32989,2.3076,2.19091
-India,resid heating modern,8.71196,8.70518,8.88188,9.38944
+Hungary,resid others modern,19.6845,17.4333,18.024,18.1547
+Iceland,comm heating,7.45355,7.65919,8.61509,8.71889
+Iceland,comm others,16.0994,16.1611,17.928,17.6671
+Iceland,resid heating modern,13.0447,14.363,16.8579,16.9469
+Iceland,resid others modern,12.2678,14.3676,17.2572,17.1386
+India,comm cooling,9.89621,9.09918,9.01891,8.5809
+India,comm heating,21.1458,20.3392,14.2179,12.9768
+India,comm others,10.8359,14.0574,14.9979,16.303
+India,resid cooling modern,14.2549,13.4276,13.3442,12.8896
+India,resid heating TradBio,2.5765,2.51099,2.4887,2.37201
+India,resid heating modern,9.34051,9.34524,9.52728,10.0673
 India,resid others TradBio,2.92,2.85449,2.8322,2.71551
-India,resid others coal,2.829,2.59134,2.97533,3.09508
-India,resid others modern,12.7003,13.5945,17.316,17.3967
-Indonesia,comm cooling,7.99879,6.94738,7.59878,6.7349
-Indonesia,comm others,11.2941,11.8111,16.2914,15.2726
-Indonesia,resid cooling modern,8.83976,7.74838,8.42455,7.52782
+India,resid others coal,4.2352,3.99754,4.38153,4.50139
+India,resid others modern,14.7643,15.5972,19.279,19.3696
+Indonesia,comm cooling,8.94139,7.88998,8.54138,7.6775
+Indonesia,comm others,13.3695,13.8163,18.1967,17.1546
+Indonesia,resid cooling modern,13.2638,12.1724,12.8485,11.9518
 Indonesia,resid others TradBio,2.69651,2.69047,2.64382,2.63525
-Indonesia,resid others coal,0,2.38784,2.69758,0
-Indonesia,resid others modern,9.63112,10.3259,15.3925,15.3432
-Ireland,comm cooling,4.41736,4.05964,4.03319,3.89558
-Ireland,comm heating,4.91847,4.78458,5.59564,5.6494
-Ireland,comm others,6.93201,8.73826,9.7773,9.87043
+Indonesia,resid others coal,0,3.79404,4.10378,0
+Indonesia,resid others modern,11.7895,12.422,17.4098,17.3353
+Ireland,comm cooling,5.36885,5.01213,4.9846,4.84707
+Ireland,comm heating,5.94383,5.73876,6.54086,6.59366
+Ireland,comm others,8.98618,10.6258,11.6274,11.7166
 Ireland,resid cooking modern,17.7349,15.5173,16.1254,16.3726
-Ireland,resid cooling modern,4.95683,4.75454,4.83273,4.63054
-Ireland,resid heating TradBio,0.362446,0.32019,0.329863,0.334928
-Ireland,resid heating coal,2.09649,1.95625,2.16856,2.36671
-Ireland,resid heating modern,5.17801,4.9249,7.08118,7.35305
+Ireland,resid cooling modern,9.81786,9.59375,9.66487,9.4309
+Ireland,resid heating TradBio,0.543546,0.50129,0.510963,0.516028
+Ireland,resid heating coal,2.71709,2.57685,2.78916,2.98731
+Ireland,resid heating modern,6.29807,6.04553,8.19657,8.45596
 Ireland,resid hot water coal,2.09649,1.95625,2.16856,2.36671
 Ireland,resid hot water modern,9.60309,8.41299,10.675,10.8693
 Ireland,resid other appliance modern,1.41012,1.34758,1.35925,1.08886
-Ireland,resid others modern,12.3781,11.3182,11.3476,11.2901
-Italy,comm cooling,4.55466,4.06838,4.37263,4.43833
-Italy,comm heating,4.1666,4.38722,5.23802,5.60605
-Italy,comm others,7.27799,7.01307,8.2618,9.53142
+Ireland,resid others modern,14.0737,13.0138,13.0432,12.9857
+Italy,comm cooling,5.5417,5.04969,5.35243,5.40856
+Italy,comm heating,5.15112,5.3657,6.21228,6.54378
+Italy,comm others,9.21351,8.94039,10.178,11.4163
 Italy,resid cooking TradBio,0.427781,0.446158,0.466493,0.459535
 Italy,resid cooking coal,2.24183,2.07523,2.35527,0
-Italy,resid cooking modern,9.83585,9.71581,12.319,13.0093
-Italy,resid cooling modern,4.7664,4.33734,4.59478,4.57657
-Italy,resid heating TradBio,0.312861,0.327885,0.34685,0.338734
-Italy,resid heating coal,2.24183,2.07523,2.35527,0
-Italy,resid heating modern,4.06384,4.08262,5.08402,5.20637
+Italy,resid cooking modern,9.83585,9.7158,12.319,13.0093
+Italy,resid cooling modern,9.1904,8.76134,9.01878,9.00057
+Italy,resid heating TradBio,0.493961,0.508985,0.52795,0.519834
+Italy,resid heating coal,2.86243,2.69583,2.97587,0
+Italy,resid heating modern,5.10868,5.05452,6.03382,6.12777
 Italy,resid hot water coal,2.24183,2.07523,2.35527,0
 Italy,resid hot water modern,7.16642,6.56919,7.81108,8.02045
 Italy,resid other appliance modern,1.46167,1.35049,1.49051,1.24782
-Italy,resid others coal,2.64813,2.48153,2.76157,0
-Italy,resid others modern,12.9903,11.3518,12.8453,13.8471
-Japan,comm cooling,6.05004,5.61958,5.83663,5.63834
-Japan,comm heating,5.27156,5.64554,7.7325,7.90458
-Japan,comm others,10.0588,10.4697,12.1488,11.916
-Japan,resid cooling modern,6.81692,6.3701,6.5954,6.38957
-Japan,resid heating modern,5.86372,6.15111,8.59341,8.87915
-Japan,resid others coal,2.52949,2.39124,0,0
-Japan,resid others modern,10.7224,10.5983,12.0809,11.8444
-Latvia,comm cooling,5.64182,4.85252,4.92885,4.98455
-Latvia,comm heating,4.49911,4.92245,5.72774,6.22311
-Latvia,comm others,7.99556,10.7243,12.4391,13.4221
+Italy,resid others coal,4.05433,3.88773,4.16777,0
+Italy,resid others modern,14.6859,13.0474,14.5409,15.5427
+Japan,comm cooling,6.99264,6.56218,6.77923,6.58094
+Japan,comm heating,6.37051,6.69677,8.75037,8.9184
+Japan,comm others,12.0123,12.3508,13.9875,13.7559
+Japan,resid cooling modern,11.2409,10.7941,11.0194,10.8136
+Japan,resid heating modern,6.97772,7.25587,9.68396,9.96218
+Japan,resid others coal,3.93569,3.79744,0,0
+Japan,resid others modern,12.5579,12.4161,13.88,13.6408
+Latvia,comm cooling,7.26236,6.35243,6.31456,6.3029
+Latvia,comm heating,5.00885,5.56068,6.39824,6.87435
+Latvia,comm others,9.90197,12.5296,14.2165,15.2366
 Latvia,resid cooking TradBio,0.513191,0.524467,0.503822,0.486478
 Latvia,resid cooking coal,2.66503,2.43065,2.73589,2.84608
 Latvia,resid cooking modern,12.0624,12.1246,15.5836,16.9763
-Latvia,resid cooling modern,7.72633,8.02851,8.88562,9.46841
-Latvia,resid heating TradBio,0.399128,0.405803,0.383807,0.365276
-Latvia,resid heating coal,2.66503,2.43065,2.73589,2.84608
-Latvia,resid heating modern,4.25895,4.66922,5.7571,6.3754
+Latvia,resid cooling modern,15.1357,15.4379,16.295,16.8778
+Latvia,resid heating TradBio,0.580228,0.586903,0.564907,0.546376
+Latvia,resid heating coal,3.28563,3.05125,3.35649,3.46668
+Latvia,resid heating modern,4.79874,5.20183,6.31459,6.93922
 Latvia,resid hot water coal,2.66503,2.43065,2.73589,2.84608
-Latvia,resid hot water modern,5.39013,6.05985,7.68901,8.37336
-Latvia,resid other appliance modern,1.94372,1.64534,1.65846,1.37556
-Latvia,resid others modern,13.5811,13.5691,14.0832,15.0236
-Lithuania,comm cooling,5.39105,5.4407,5.72787,5.48132
-Lithuania,comm heating,4.56489,5.206,5.76427,5.99793
-Lithuania,comm others,9.27887,15.6673,13.9981,14.2967
-Lithuania,resid cooking TradBio,0.498224,0.524069,0.51859,0.502809
+Latvia,resid hot water modern,5.39013,6.05985,7.68897,8.37336
+Latvia,resid other appliance modern,1.94372,1.64534,1.65848,1.37556
+Latvia,resid others modern,15.4767,15.3312,15.8349,16.7849
+Lithuania,comm cooling,6.99286,6.50591,7.17935,7.00714
+Lithuania,comm heating,5.17293,5.78738,6.34972,6.61146
+Lithuania,comm others,11.1403,17.3733,15.6645,16.0112
+Lithuania,resid cooking TradBio,0.498224,0.524069,0.51859,0.50281
 Lithuania,resid cooking coal,2.69828,2.39722,2.72676,2.8133
 Lithuania,resid cooking modern,13.2057,15.343,17.4894,18.1302
-Lithuania,resid cooling modern,7.72517,7.98427,8.84919,8.85803
-Lithuania,resid heating TradBio,0.384011,0.405407,0.398429,0.381364
-Lithuania,resid heating coal,2.69828,2.39722,2.72676,2.8133
-Lithuania,resid heating modern,4.39773,4.92065,5.60615,5.96666
+Lithuania,resid cooling modern,15.1346,15.3937,16.2586,16.2674
+Lithuania,resid heating TradBio,0.565111,0.586507,0.579529,0.562464
+Lithuania,resid heating coal,3.31888,3.01782,3.34736,3.4339
+Lithuania,resid heating modern,4.95324,5.48129,6.17222,6.5386
 Lithuania,resid hot water coal,2.69828,2.39722,2.72676,2.8133
-Lithuania,resid hot water modern,5.95609,6.98029,6.81374,7.23917
+Lithuania,resid hot water modern,5.95609,6.98029,6.81376,7.23917
 Lithuania,resid other appliance modern,1.82749,1.88439,2.02598,1.5683
-Lithuania,resid others modern,17.3339,17.5041,18.9544,19.0022
-Luxembourg,comm cooling,5.67089,3.74832,4.1525,5.06993
-Luxembourg,comm heating,8.11797,4.44598,5.53518,6.30849
-Luxembourg,comm others,17.6637,7.11854,8.71164,9.91179
-Luxembourg,resid cooking modern,11.5895,11.0525,13.2378,15.3416
-Luxembourg,resid cooling modern,5.72184,4.0618,4.40659,5.1116
-Luxembourg,resid heating TradBio,0,0.333841,0.335073,0.341568
-Luxembourg,resid heating coal,2.24925,2.07658,2.35704,2.47632
-Luxembourg,resid heating modern,4.4626,4.51034,6.16937,6.40206
-Luxembourg,resid hot water modern,7.09739,6.72124,8.4213,8.58512
-Luxembourg,resid other appliance modern,1.85387,1.22753,1.40404,1.43561
-Luxembourg,resid others modern,17.6471,9.9348,11.8588,16.8678
-Macedonia,comm cooling,4.9646,5.02315,4.80796,4.86496
-Macedonia,comm heating,5.29584,6.13483,8.54826,8.41661
-Macedonia,comm others,14.3777,11.4273,13.2298,13.8723
+Lithuania,resid others modern,19.0295,19.1997,20.65,20.6978
+Luxembourg,comm cooling,6.61347,4.71371,5.12261,6.05341
+Luxembourg,comm heating,8.96145,5.43214,6.5223,7.31794
+Luxembourg,comm others,19.3913,9.05023,10.6399,11.9137
+Luxembourg,resid cooking modern,11.5895,11.0525,13.2377,15.3416
+Luxembourg,resid cooling modern,10.1522,8.48732,8.8321,9.5377
+Luxembourg,resid heating TradBio,0,0.514941,0.516173,0.522668
+Luxembourg,resid heating coal,2.86985,2.69718,2.97764,3.09692
+Luxembourg,resid heating modern,5.58157,5.57914,7.21528,7.44483
+Luxembourg,resid hot water modern,7.09739,6.72124,8.42129,8.58512
+Luxembourg,resid other appliance modern,1.85386,1.22753,1.40403,1.43561
+Luxembourg,resid others modern,19.3426,11.6304,13.5542,18.5634
+Macedonia,comm cooling,5.9072,5.96717,5.75112,5.80978
+Macedonia,comm heating,5.93145,7.10146,9.49772,9.35601
+Macedonia,comm others,16.0873,13.3297,15.063,15.7053
 Macedonia,resid cooking TradBio,0,0.499602,0.489739,0.493493
-Macedonia,resid cooking modern,14.3537,19.5488,21.7257,24.3418
-Macedonia,resid cooling modern,5.11081,5.1615,4.97594,4.93444
-Macedonia,resid heating TradBio,0,0.381063,0.369865,0.372187
-Macedonia,resid heating coal,2.1284,1.9206,2.2051,2.31953
-Macedonia,resid heating modern,8.98132,10.4031,11.5376,11.686
+Macedonia,resid cooking modern,14.3537,19.5488,21.7258,24.3418
+Macedonia,resid cooling modern,9.53504,9.58566,9.40009,9.35861
+Macedonia,resid heating TradBio,0,0.562163,0.550965,0.553287
+Macedonia,resid heating coal,2.749,2.5412,2.8257,2.94013
+Macedonia,resid heating modern,9.96432,11.168,12.3398,12.413
 Macedonia,resid hot water modern,16.5438,17.9655,17.3058,18.582
 Macedonia,resid other appliance modern,1.60345,1.71607,1.66381,1.37386
-Macedonia,resid others modern,14.6737,15.5645,14.8224,15.8745
-Malta,comm cooling,6.57838,5.20836,8.66186,389.576
-Malta,comm heating,9.86794,7.31115,13.6416,492.035
-Malta,comm others,21.4841,13.5503,24.364,888.413
+Macedonia,resid others modern,16.3693,17.2601,16.5181,17.5701
+Malta,comm cooling,7.52098,6.15096,9.60445,390.519
+Malta,comm heating,10.7114,8.20796,14.5539,493.002
+Malta,comm others,23.2118,15.396,26.2399,890.385
 Malta,resid cooking modern,10.2758,11.6665,20.6676,209.683
-Malta,resid cooling modern,6.50045,5.3207,8.29475,325.315
-Malta,resid heating TradBio,0,0,0.300863,0.297115
-Malta,resid heating modern,14.2795,14.7004,29.6976,1468.9
-Malta,resid hot water modern,23.7668,18.8578,36.363,2041.68
+Malta,resid cooling modern,10.9248,9.74484,12.7189,329.739
+Malta,resid heating TradBio,0,0,0.509935,0.479126
+Malta,resid heating modern,15.2803,15.6035,30.5926,1469.84
+Malta,resid hot water modern,23.7668,18.8578,36.3629,2041.68
 Malta,resid other appliance modern,2.17563,1.78675,3.17345,114.281
-Malta,resid others modern,21.4675,16.379,32.0459,1832.04
-Mexico,comm cooling,7.68107,6.67681,7.25959,6.56622
-Mexico,comm heating,8.66281,7.48227,11.0603,11.6568
-Mexico,comm others,16.375,13.8509,16.474,15.2451
-Mexico,resid cooling modern,8.50997,7.49114,8.09337,7.36326
-Mexico,resid heating TradBio,2.10514,2.03452,1.99496,1.95719
-Mexico,resid heating modern,6.23591,6.69043,10.4821,11.2377
+Malta,resid others modern,23.1631,18.0746,33.7415,1833.73
+Mexico,comm cooling,8.62367,7.65323,8.23664,7.53575
+Mexico,comm heating,9.71487,8.55531,12.1243,12.7037
+Mexico,comm others,18.1658,15.6804,18.2893,17.0386
+Mexico,resid cooling modern,12.934,11.9151,12.5174,11.7873
+Mexico,resid heating TradBio,2.28624,2.21562,2.17606,2.13829
+Mexico,resid heating modern,7.43098,7.87592,11.6637,12.4134
 Mexico,resid others TradBio,2.62974,2.55912,2.51956,2.48179
-Mexico,resid others modern,11.4975,12.4258,15.5804,14.8564
-Middle East,comm cooling,6.71351,6.40775,7.81179,7.70282
-Middle East,comm heating,5.6772,5.69832,8.14169,7.64226
-Middle East,comm others,11.0938,11.7575,16.3881,16.6819
-Middle East,resid cooling modern,7.6142,7.35388,8.78999,8.69993
-Middle East,resid heating TradBio,1.87389,2.04993,2.01428,1.93413
-Middle East,resid heating modern,5.82544,5.53649,7.82984,7.68024
+Mexico,resid others modern,13.4819,14.3179,17.455,16.7078
+Middle East,comm cooling,7.80713,7.56629,9.00793,8.91509
+Middle East,comm heating,6.79649,6.80856,9.23363,8.71135
+Middle East,comm others,13.0824,13.6826,18.2523,18.5138
+Middle East,resid cooling modern,12.1832,12.2332,13.6311,13.4999
+Middle East,resid heating TradBio,2.05499,2.23103,2.19538,2.11523
+Middle East,resid heating modern,7.02255,6.65985,8.92239,8.73895
 Middle East,resid others TradBio,2.39849,2.57453,2.53888,2.45873
-Middle East,resid others coal,0,2.66689,2.97911,3.10583
-Middle East,resid others modern,10.4551,9.80193,13.3168,13.6966
-Moldova,comm cooling,5.44392,5.30989,5.88119,5.57544
-Moldova,comm heating,5.07382,4.61447,5.56001,5.48886
-Moldova,comm others,6.17828,12.4997,7.96753,8.78983
+Middle East,resid others coal,0,4.07309,4.38531,4.51204
+Middle East,resid others modern,12.4525,11.7426,15.2222,15.5729
+Moldova,comm cooling,6.42791,6.69439,9.18309,8.70542
+Moldova,comm heating,5.89546,5.33194,6.3524,6.26808
+Moldova,comm others,8.29075,14.2112,9.77159,10.537
 Moldova,resid cooking TradBio,0,0.468374,0.499932,0.50328
 Moldova,resid cooking coal,0,2.44745,2.74592,2.8461
 Moldova,resid cooking modern,12.6347,11.7013,13.4496,15.1392
-Moldova,resid cooling modern,5.53428,5.46924,6.11384,5.82794
-Moldova,resid heating TradBio,0,0.34999,0.379956,0.381828
-Moldova,resid heating coal,0,2.44745,2.74592,2.8461
-Moldova,resid heating modern,3.37378,4.25827,5.13899,5.13969
+Moldova,resid cooling modern,9.95976,9.89622,10.5546,10.2706
+Moldova,resid heating TradBio,0,0.53109,0.561056,0.562928
+Moldova,resid heating coal,0,3.06805,3.36652,3.4667
+Moldova,resid heating modern,3.90762,4.97826,5.84688,5.83432
 Moldova,resid hot water coal,0,2.44745,2.74592,2.8461
-Moldova,resid hot water modern,6.4959,8.40367,7.89981,8.86641
-Moldova,resid other appliance modern,1.77737,1.85153,2.17412,1.68172
-Moldova,resid others modern,16.7387,17.1255,20.6446,20.8266
-Netherlands,comm cooling,4.08786,3.99229,3.95866,3.89449
-Netherlands,comm heating,3.82311,4.22836,5.03071,5.13601
-Netherlands,comm others,6.48723,7.49111,8.12216,8.61077
+Moldova,resid hot water modern,6.4959,8.40367,7.89985,8.86641
+Moldova,resid other appliance modern,1.77737,1.85153,2.17409,1.68172
+Moldova,resid others modern,18.4343,18.8211,22.3398,22.5222
+Netherlands,comm cooling,5.08373,4.96638,4.92853,4.86103
+Netherlands,comm heating,4.80411,5.15425,5.94253,6.07397
+Netherlands,comm others,8.41726,9.37729,9.9961,10.4739
 Netherlands,resid cooking modern,8.8476,9.95561,11.1864,11.948
-Netherlands,resid cooling modern,4.36132,4.27341,4.23845,4.12254
-Netherlands,resid heating TradBio,0.347986,0.348312,0.349544,0.345388
-Netherlands,resid heating coal,2.24925,2.07659,2.35705,2.47632
-Netherlands,resid heating modern,3.37925,3.64576,4.42906,4.54986
+Netherlands,resid cooling modern,8.78547,8.69752,8.66253,8.54662
+Netherlands,resid heating TradBio,0.529086,0.529412,0.530644,0.526488
+Netherlands,resid heating coal,2.86985,2.69719,2.97765,3.09692
+Netherlands,resid heating modern,4.29272,4.54194,5.32154,5.44003
 Netherlands,resid hot water modern,4.13278,4.54984,5.50067,5.64331
 Netherlands,resid other appliance modern,1.29486,1.32209,1.3284,1.08779
-Netherlands,resid others modern,11.0096,11.0245,10.9957,11.273
-Norway,comm cooling,5.12163,4.13114,3.83613,3.90937
-Norway,comm heating,6.68169,5.39635,5.74438,5.9015
-Norway,comm others,13.7962,10.7523,9.99377,10.9018
+Netherlands,resid others modern,12.7052,12.7201,12.6913,12.9686
+Norway,comm cooling,6.06423,5.07405,4.77911,4.8524
+Norway,comm heating,7.53863,6.19309,6.5198,6.64869
+Norway,comm others,15.5909,12.5335,11.7832,12.671
 Norway,resid cooking coal,2.15591,1.68473,0,0
-Norway,resid cooking modern,23.2627,17.9409,15.692,17.4079
-Norway,resid cooling modern,5.24617,4.39324,4.13914,4.13896
-Norway,resid heating TradBio,0.347139,0.35058,0.350526,0.330403
-Norway,resid heating coal,2.15591,1.68473,0,0
-Norway,resid heating modern,12.7222,10.6659,9.96452,11.0773
+Norway,resid cooking modern,23.2627,17.9409,15.6914,17.4079
+Norway,resid cooling modern,9.67048,8.81752,8.56334,8.56317
+Norway,resid heating TradBio,0.528239,0.53168,0.531598,0.511503
+Norway,resid heating coal,2.77651,2.30533,0,0
+Norway,resid heating modern,13.6424,11.5521,10.8429,11.9334
 Norway,resid hot water coal,2.15591,1.68473,0,0
-Norway,resid hot water modern,17.1355,13.5727,12.3323,13.3745
-Norway,resid other appliance modern,1.65913,1.37518,1.28312,1.09352
-Norway,resid others coal,2.56221,2.09103,0,0
-Norway,resid others modern,15.3348,11.6363,10.4792,11.3652
-Pakistan,comm cooling,7.88479,7.07766,9.34657,8.82802
-Pakistan,comm heating,5.2618,5.38019,7.36482,8.76526
-Pakistan,comm others,11.9987,11.3143,15.6271,15.4574
-Pakistan,resid cooling modern,8.72143,7.88361,10.2388,9.70052
-Pakistan,resid heating TradBio,2.11466,2.13488,2.12102,2.11203
-Pakistan,resid heating modern,5.73905,5.07029,6.25477,6.52278
+Norway,resid hot water modern,17.1355,13.5727,12.3319,13.3745
+Norway,resid other appliance modern,1.65913,1.37518,1.28309,1.09352
+Norway,resid others coal,3.96841,3.49723,0,0
+Norway,resid others modern,17.0304,13.3319,12.1744,13.0608
+Pakistan,comm cooling,8.82739,8.02026,10.2892,9.77375
+Pakistan,comm heating,6.32889,6.44292,8.42276,9.84972
+Pakistan,comm others,13.9341,13.2504,17.5595,17.4413
+Pakistan,resid cooling modern,13.1454,12.3076,14.6628,14.1278
+Pakistan,resid heating TradBio,2.29576,2.31598,2.30212,2.29313
+Pakistan,resid heating modern,6.85876,6.05935,7.20786,7.48585
 Pakistan,resid others TradBio,2.63926,2.65948,2.64562,2.63663
-Pakistan,resid others coal,2.85966,0,0,0
-Pakistan,resid others modern,10.7606,11.1324,14.4757,14.1879
-Poland,comm cooling,5.22445,4.7368,4.7112,4.53989
-Poland,comm heating,3.1469,4.49345,5.29743,5.42726
-Poland,comm others,13.3114,11.9571,12.1599,12.5071
+Pakistan,resid others coal,4.26586,0,0,0
+Pakistan,resid others modern,12.6571,12.9879,16.3388,16.0509
+Poland,comm cooling,6.17479,5.69681,5.67095,5.49741
+Poland,comm heating,3.79852,5.27571,6.0822,6.21914
+Poland,comm others,15.0444,13.7356,13.9409,14.2796
 Poland,resid cooking TradBio,0,0.472779,0.470365,0.46406
 Poland,resid cooking coal,2.08497,1.86697,2.16709,2.62851
 Poland,resid cooking modern,12.1939,12.3229,15.7162,16.2192
-Poland,resid cooling modern,7.46523,7.76117,8.6202,8.59343
-Poland,resid heating TradBio,0,0.354373,0.350683,0.343191
-Poland,resid heating coal,2.08497,1.86697,2.16709,2.62851
-Poland,resid heating modern,3.63352,3.75982,4.20436,4.36406
+Poland,resid cooling modern,14.8746,15.1706,16.0296,16.0028
+Poland,resid heating TradBio,0,0.535473,0.531783,0.524291
+Poland,resid heating coal,2.70557,2.48757,2.78769,3.24911
+Poland,resid heating modern,4.22742,4.38323,4.82483,4.99578
 Poland,resid hot water coal,2.08497,1.86697,2.16709,2.62851
 Poland,resid hot water modern,4.57662,4.83999,5.27002,5.52023
 Poland,resid other appliance modern,1.69633,1.60675,1.62427,1.27784
-Poland,resid others modern,15.7765,14.3047,14.3713,14.33
-Portugal,comm cooling,4.78581,4.26514,4.62904,4.67026
-Portugal,comm heating,5.93889,5.53969,6.67809,6.96944
-Portugal,comm others,10.2509,8.57664,12.0588,13.0128
+Poland,resid others modern,17.4721,16.0003,16.0669,16.0256
+Portugal,comm cooling,5.72903,5.21049,5.57467,5.61635
+Portugal,comm heating,6.88162,6.51044,7.59221,7.87206
+Portugal,comm others,12.1665,10.5333,13.8961,14.8346
 Portugal,resid cooking TradBio,0.476045,0.472009,0.449998,0.450219
 Portugal,resid cooking coal,2.23268,0,0,0
-Portugal,resid cooking modern,14.2181,14.5194,19.1706,21.0197
-Portugal,resid cooling modern,4.95692,4.50816,4.82131,4.77205
-Portugal,resid heating TradBio,0.361609,0.353607,0.330519,0.329556
-Portugal,resid heating coal,2.23268,0,0,0
-Portugal,resid heating modern,6.38167,6.82771,9.55064,10.5888
+Portugal,resid cooking modern,14.2181,14.5194,19.1705,21.0197
+Portugal,resid cooling modern,9.38103,8.93221,9.24534,9.1961
+Portugal,resid heating TradBio,0.542709,0.534707,0.511619,0.510656
+Portugal,resid heating coal,2.85328,0,0,0
+Portugal,resid heating modern,7.5208,7.92573,10.627,11.6418
 Portugal,resid hot water coal,2.23268,0,0,0
-Portugal,resid hot water modern,8.26412,7.10417,8.38461,8.41127
-Portugal,resid other appliance modern,1.54007,1.42625,1.59353,1.31669
-Portugal,resid others coal,2.63898,0,0,0
-Portugal,resid others modern,13.9211,12.2248,14.0206,14.9549
-Romania,comm cooling,6.01818,4.91653,4.99096,4.91804
-Romania,comm heating,4.55506,4.90541,5.88827,6.19665
-Romania,comm others,12.1348,7.29777,9.98794,11.2375
+Portugal,resid hot water modern,8.26447,7.10417,8.38461,8.41127
+Portugal,resid other appliance modern,1.54007,1.42625,1.59352,1.31669
+Portugal,resid others coal,4.04518,0,0,0
+Portugal,resid others modern,15.6167,13.9204,15.7161,16.6505
+Romania,comm cooling,6.96078,5.96449,5.99122,5.90006
+Romania,comm heating,5.46263,5.75877,6.71513,7.04052
+Romania,comm others,14.0644,9.25936,11.8669,13.0977
 Romania,resid cooking TradBio,0.466169,0.493576,0.500869,0.485704
 Romania,resid cooking coal,2.24485,2.01403,2.24044,2.37436
 Romania,resid cooking modern,9.16421,10.1482,12.5252,12.6797
-Romania,resid cooling modern,6.0182,5.08134,5.12885,4.98092
-Romania,resid heating TradBio,0.351634,0.375067,0.380884,0.364513
-Romania,resid heating coal,2.24485,2.01403,2.24044,2.37436
-Romania,resid heating modern,3.3493,3.7216,4.82555,4.66156
+Romania,resid cooling modern,10.4424,9.50541,9.55291,9.40497
+Romania,resid heating TradBio,0.532734,0.556167,0.561984,0.545613
+Romania,resid heating coal,2.86545,2.63463,2.86104,2.99496
+Romania,resid heating modern,3.8695,4.37369,5.49851,5.38042
 Romania,resid hot water coal,2.24485,2.01403,2.24044,2.37436
 Romania,resid hot water modern,5.37624,6.26674,7.00493,6.85505
 Romania,resid other appliance modern,1.97701,1.68054,1.7334,1.3903
-Romania,resid others modern,19.1092,15.155,15.6164,16.1389
-Russia,comm cooling,7.9269,7.13078,7.21455,6.94454
-Russia,comm heating,3.97432,4.4511,5.74624,5.6813
-Russia,comm others,6.39201,13.368,15.2375,15.0183
-Russia,resid cooling modern,8.76515,7.93875,8.02571,7.74543
-Russia,resid heating TradBio,2.28757,1.85509,1.80421,1.76986
-Russia,resid heating modern,4.71253,4.409,5.5301,5.53279
+Romania,resid others modern,20.8048,16.8506,17.312,17.8345
+Russia,comm cooling,8.8695,8.07338,8.15714,7.88714
+Russia,comm heating,4.4088,4.96545,6.25695,6.15648
+Russia,comm others,7.84563,15.0184,16.9344,16.7297
+Russia,resid cooling modern,13.1891,12.3628,12.4497,12.1694
+Russia,resid heating TradBio,2.46867,2.03619,1.98531,1.95096
+Russia,resid heating modern,5.61693,5.0112,6.137,6.15391
 Russia,resid others TradBio,2.81217,2.37969,2.32881,2.29446
-Russia,resid others coal,2.63273,2.379,2.68887,2.86637
-Russia,resid others modern,10.7983,10.1883,11.8838,12.1679
-Serbia and Montenegro,comm cooling,5.03279,4.85499,4.82277,4.50627
-Serbia and Montenegro,comm heating,4.61684,4.4833,4.88339,5.87009
-Serbia and Montenegro,comm others,7.22199,12.8945,12.3465,11.8614
+Russia,resid others coal,4.03893,3.7852,4.09507,4.27257
+Russia,resid others modern,12.7324,11.8074,13.4901,13.8404
+Serbia and Montenegro,comm cooling,6.1024,5.79759,5.77291,5.45967
+Serbia and Montenegro,comm heating,5.62347,5.21979,5.6238,6.62731
+Serbia and Montenegro,comm others,9.18513,14.6655,14.1281,13.6601
 Serbia and Montenegro,resid cooking TradBio,0.493775,0.480405,0.483535,0.475184
 Serbia and Montenegro,resid cooking coal,2.08882,1.90318,2.19634,2.30167
 Serbia and Montenegro,resid cooking modern,21.7202,22.0934,22.7951,22.0353
-Serbia and Montenegro,resid cooling modern,5.19623,5.01643,4.98762,4.63491
-Serbia and Montenegro,resid heating TradBio,0.379517,0.361961,0.363723,0.35415
-Serbia and Montenegro,resid heating coal,2.08882,1.90318,2.19634,2.30167
-Serbia and Montenegro,resid heating modern,6.12035,6.68353,7.85362,7.8023
+Serbia and Montenegro,resid cooling modern,9.62034,9.44049,9.41169,9.05897
+Serbia and Montenegro,resid heating TradBio,0.560617,0.543061,0.544823,0.53525
+Serbia and Montenegro,resid heating coal,2.70942,2.52378,2.81694,2.92227
+Serbia and Montenegro,resid heating modern,6.70745,7.37478,8.5636,8.50166
 Serbia and Montenegro,resid hot water coal,2.08882,1.90318,2.19634,2.30167
 Serbia and Montenegro,resid hot water modern,16.5935,16.7382,17.0165,16.3853
 Serbia and Montenegro,resid other appliance modern,1.6386,1.65174,1.66916,1.26836
-Serbia and Montenegro,resid others modern,14.1006,14.2395,14.4208,13.7002
-Slovakia,comm cooling,5.60721,5.07393,5.27538,5.15065
-Slovakia,comm heating,3.14784,5.07892,5.2817,5.83193
-Slovakia,comm others,6.47007,11.1178,12.4685,13.4917
+Serbia and Montenegro,resid others modern,15.8483,15.9673,16.1524,15.4431
+Slovakia,comm cooling,6.81528,6.06509,6.25792,6.12628
+Slovakia,comm heating,3.94069,5.92924,6.08725,6.7311
+Slovakia,comm others,8.37963,12.9522,14.2841,15.3086
 Slovakia,resid cooking TradBio,0,0.450611,0.446476,0.440162
 Slovakia,resid cooking coal,2.46335,2.24401,2.5292,2.63532
 Slovakia,resid cooking modern,11.9821,12.9938,14.5033,15.6655
-Slovakia,resid cooling modern,5.75993,5.20763,5.3742,5.17135
-Slovakia,resid heating TradBio,0,0.332315,0.327032,0.319649
-Slovakia,resid heating coal,2.46335,2.24401,2.5292,2.63532
-Slovakia,resid heating modern,4.52777,4.93268,5.74548,6.00133
+Slovakia,resid cooling modern,10.1847,9.63205,9.79873,9.59579
+Slovakia,resid heating TradBio,0,0.513415,0.508132,0.500749
+Slovakia,resid heating coal,3.08395,2.86461,3.1498,3.25592
+Slovakia,resid heating modern,5.32559,5.70015,6.53141,6.77482
 Slovakia,resid hot water coal,2.46335,2.24401,2.5292,2.63532
 Slovakia,resid hot water modern,7.18033,7.49173,8.37263,9.0327
-Slovakia,resid other appliance modern,1.87053,1.73641,1.84474,1.45722
-Slovakia,resid others modern,17.8449,15.7989,16.8867,17.2154
-Slovenia,comm cooling,5.51323,4.91406,4.82207,4.66041
-Slovenia,comm heating,4.32416,5.97084,8.187,7.5361
-Slovenia,comm others,9.78661,11.9555,13.2633,13.489
+Slovakia,resid other appliance modern,1.87053,1.73642,1.84474,1.45722
+Slovakia,resid others modern,19.5405,17.4945,18.5823,18.911
+Slovenia,comm cooling,6.52624,5.86094,5.76738,5.60909
+Slovenia,comm heating,5.05171,6.96239,9.13746,8.40206
+Slovenia,comm others,11.6512,13.8172,15.0822,15.2748
 Slovenia,resid cooking TradBio,0.472379,0.505574,0.498599,0.489876
 Slovenia,resid cooking modern,16.3858,15.5695,19.9967,20.9103
-Slovenia,resid cooling modern,5.60624,5.06768,4.98755,4.76346
-Slovenia,resid heating TradBio,0.357907,0.387005,0.378636,0.368623
-Slovenia,resid heating coal,2.15348,0,2.24159,0
-Slovenia,resid heating modern,5.71306,5.50853,7.78174,7.76748
+Slovenia,resid cooling modern,10.0305,9.49185,9.41168,9.18761
+Slovenia,resid heating TradBio,0.539007,0.568105,0.559736,0.549723
+Slovenia,resid heating coal,2.77408,0,2.86219,0
+Slovenia,resid heating modern,6.7461,6.51075,8.75498,8.68848
 Slovenia,resid hot water coal,2.15348,0,2.24159,0
 Slovenia,resid hot water modern,12.3666,11.1509,13.0872,13.2279
-Slovenia,resid other appliance modern,1.80738,1.67444,1.66909,1.31361
-Slovenia,resid others modern,17.095,15.0848,14.8826,14.9054
-South Africa,comm cooling,7.66847,6.93863,6.95896,6.74493
-South Africa,comm heating,1.95216,2.41556,7.12846,8.19391
-South Africa,comm others,15.5458,13.886,14.5075,13.8774
-South Africa,resid cooling modern,8.49689,7.7393,7.7604,7.53823
-South Africa,resid heating TradBio,2.36999,2.13291,2.07674,2.03532
-South Africa,resid heating modern,13.7797,13.5492,14.5923,14.5526
+Slovenia,resid other appliance modern,1.80738,1.67444,1.66909,1.31362
+Slovenia,resid others modern,18.7906,16.7804,16.5782,16.6011
+South Africa,comm cooling,8.61107,7.88123,7.90156,7.68753
+South Africa,comm heating,2.60366,3.11367,8.01643,9.10339
+South Africa,comm others,17.23,15.5655,16.2282,15.6059
+South Africa,resid cooling modern,12.9209,12.1633,12.1844,11.9622
+South Africa,resid heating TradBio,2.55109,2.31401,2.25784,2.21642
+South Africa,resid heating modern,14.6443,14.4262,15.4496,15.4099
 South Africa,resid others TradBio,2.89459,2.65751,2.60134,2.55992
-South Africa,resid others coal,2.74635,2.4947,2.83113,2.96063
-South Africa,resid others modern,16.3132,15.3283,16.4812,16.2978
-South America_Northern,comm cooling,6.59951,7.14516,9.48713,10.3953
-South America_Northern,comm heating,7.5036,10.3732,14.1676,16.9454
-South America_Northern,comm others,11.0909,14.6044,20.2235,23.1586
-South America_Northern,resid cooling modern,7.50012,8.02022,10.4646,11.3991
-South America_Northern,resid heating TradBio,1.96279,1.95559,2.01936,1.93145
-South America_Northern,resid heating modern,6.62645,7.07927,12.0806,12.9419
+South Africa,resid others coal,4.15255,3.9009,4.23733,4.36683
+South Africa,resid others modern,18.1285,17.1254,18.2478,18.0614
+South America_Northern,comm cooling,7.67954,8.16319,10.4873,11.3792
+South America_Northern,comm heating,8.48101,11.2612,15.0835,17.8586
+South America_Northern,comm others,13.0307,16.4151,22.0808,24.996
+South America_Northern,resid cooling modern,11.9241,12.4442,14.8886,15.8231
+South America_Northern,resid heating TradBio,2.14389,2.13669,2.20046,2.11255
+South America_Northern,resid heating modern,7.80622,8.21378,13.1764,14.0294
 South America_Northern,resid others TradBio,2.48739,2.48019,2.54396,2.45605
-South America_Northern,resid others coal,2.47759,2.27128,2.57647,3.03406
-South America_Northern,resid others modern,10.9482,12.0677,18.9074,21.1201
-South America_Southern,comm cooling,7.28825,6.27462,7.35584,6.80196
-South America_Southern,comm heating,7.29469,8.07007,11.3876,11.6811
-South America_Southern,comm others,14.1136,13.3466,16.9489,15.9262
-South America_Southern,resid cooling modern,8.11723,7.05554,8.18006,7.60285
-South America_Southern,resid heating TradBio,2.08594,2.0221,2.03104,1.89292
-South America_Southern,resid heating modern,6.97225,7.07345,10.3018,10.7516
+South America_Northern,resid others coal,3.88379,3.67748,3.98267,4.44026
+South America_Northern,resid others modern,12.932,13.9858,20.7625,22.9621
+South America_Southern,comm cooling,8.24612,7.22663,8.30986,7.75669
+South America_Southern,comm heating,8.27225,9.10478,12.4193,12.6958
+South America_Southern,comm others,15.9703,15.1445,18.7453,17.7079
+South America_Southern,resid cooling modern,12.5412,11.4795,12.6041,12.0269
+South America_Southern,resid heating TradBio,2.26704,2.2032,2.21214,2.07402
+South America_Southern,resid heating modern,8.10269,8.18867,11.4158,11.8621
 South America_Southern,resid others TradBio,2.61054,2.5467,2.55564,2.41752
-South America_Southern,resid others coal,2.67717,2.6783,0,0
-South America_Southern,resid others modern,14.8562,13.2595,16.6538,15.5999
-South Asia,comm cooling,7.41052,6.77718,7.77126,7.43087
-South Asia,comm heating,5.71009,5.75619,8.34011,8.89919
-South Asia,comm others,9.87853,11.2485,14.4263,14.0218
-South Asia,resid cooling modern,8.22913,7.57171,8.60359,8.25025
-South Asia,resid heating TradBio,2.17943,2.1762,2.15101,2.11202
-South Asia,resid heating modern,6.25366,6.05332,8.65948,8.49332
-South Asia,resid others TradBio,2.70403,2.7008,2.67561,2.63662
-South Asia,resid others coal,0,2.71716,2.92931,3.15342
-South Asia,resid others modern,10.2221,10.3691,12.6318,12.292
-South Korea,comm cooling,6.83219,5.94356,6.00126,5.82951
-South Korea,comm heating,5.36761,5.91619,8.30139,8.45343
-South Korea,comm others,10.201,12.2067,13.2041,12.9697
-South Korea,resid cooling modern,7.7176,6.81426,6.79466,6.60635
-South Korea,resid heating TradBio,1.93299,1.57557,1.54482,1.59253
-South Korea,resid heating coal,1.82729,1.7619,1.98943,2.08102
-South Korea,resid heating modern,6.60467,5.58161,6.97606,7.216
+South America_Southern,resid others coal,4.08337,4.0845,0,0
+South America_Southern,resid others modern,16.6414,15.0247,18.4205,17.3588
+South Asia,comm cooling,8.35312,7.71978,8.71386,8.37347
+South Asia,comm heating,6.80439,6.84913,9.42739,9.99
+South Asia,comm others,11.9258,13.2245,16.3835,15.8765
+South Asia,resid cooling modern,12.6531,11.9957,13.0276,12.6743
+South Asia,resid heating TradBio,2.36053,2.3573,2.33211,2.29313
+South Asia,resid heating modern,7.4518,7.2155,9.78317,9.58049
+South Asia,resid others TradBio,2.70403,2.7008,2.67561,2.63663
+South Asia,resid others coal,0,4.12336,4.33551,4.55962
+South Asia,resid others modern,12.2499,12.3064,14.5448,14.1868
+South Korea,comm cooling,7.89572,7.16916,7.18805,7.01451
+South Korea,comm heating,6.48576,6.98525,9.33632,9.45245
+South Korea,comm others,12.2371,14.029,14.991,14.7508
+South Korea,resid cooling modern,12.1416,11.2383,11.2187,11.0304
+South Korea,resid heating TradBio,2.11409,1.75667,1.72592,1.77363
+South Korea,resid heating coal,2.44789,2.3825,2.61003,2.70162
+South Korea,resid heating modern,7.70836,6.55522,7.94013,8.18246
 South Korea,resid others TradBio,2.45759,2.10017,2.06942,2.11713
-South Korea,resid others coal,2.61014,2.52841,2.81282,2.92729
-South Korea,resid others modern,12.8131,10.8526,12.033,12.0646
-Southeast Asia,comm cooling,7.89577,6.16691,6.59528,6.2619
-Southeast Asia,comm heating,2.91592,2.85677,3.83132,5.02885
-Southeast Asia,comm others,13.465,12.1796,14.6086,14.4639
-Southeast Asia,resid cooling modern,8.73283,6.93823,7.38289,7.03684
-Southeast Asia,resid heating TradBio,2.25825,2.19053,2.15087,2.01307
-Southeast Asia,resid heating coal,1.88665,1.67726,1.987,2.20438
-Southeast Asia,resid heating modern,7.28803,6.62424,8.37833,8.81428
+South Korea,resid others coal,4.01634,3.93461,4.21902,4.33349
+South Korea,resid others modern,14.6634,12.6985,13.8602,13.884
+Southeast Asia,comm cooling,8.83837,7.1095,7.53788,7.20378
+Southeast Asia,comm heating,3.57354,3.52134,4.50672,5.71979
+Southeast Asia,comm others,15.3139,14.0096,16.4557,16.3154
+Southeast Asia,resid cooling modern,13.1568,11.3622,11.8069,11.4601
+Southeast Asia,resid heating TradBio,2.43935,2.37163,2.33197,2.19417
+Southeast Asia,resid heating coal,2.50725,2.29786,2.6076,2.82496
+Southeast Asia,resid heating modern,8.09575,7.54111,9.28547,9.72324
 Southeast Asia,resid others TradBio,2.78285,2.71513,2.67547,2.53767
-Southeast Asia,resid others coal,2.68434,2.42259,2.80977,3.0815
-Southeast Asia,resid others modern,12.2097,11.6115,14.0119,13.9934
-Spain,comm cooling,4.85056,4.39725,4.62574,4.73399
-Spain,comm heating,5.79263,5.60287,6.30737,6.71086
-Spain,comm others,10.1891,9.98508,11.6633,12.6215
+Southeast Asia,resid others coal,4.09054,3.82879,4.21597,4.48767
+Southeast Asia,resid others modern,14.2348,13.5381,15.913,15.8592
+Spain,comm cooling,5.79574,5.34311,5.57451,5.68336
+Spain,comm heating,6.74078,6.53543,7.23164,7.63604
+Spain,comm others,12.1094,11.8691,13.5046,14.462
 Spain,resid cooking TradBio,0.467454,0.461872,0.468642,0.467873
 Spain,resid cooking coal,2.0086,1.95994,2.19984,2.45604
 Spain,resid cooking modern,15.3562,14.6539,17.4643,19.3829
-Spain,resid cooling modern,5.01308,4.62201,4.8179,4.82514
-Spain,resid heating TradBio,0.352932,0.34352,0.348978,0.346948
-Spain,resid heating coal,2.0086,1.95994,2.19984,2.45604
-Spain,resid heating modern,5.31453,5.41114,7.44512,8.15871
+Spain,resid cooling modern,9.4371,9.04602,9.24191,9.24915
+Spain,resid heating TradBio,0.534032,0.52462,0.530078,0.528048
+Spain,resid heating coal,2.6292,2.58054,2.82044,3.07664
+Spain,resid heating modern,6.48089,6.51232,8.5061,9.22765
 Spain,resid hot water coal,2.0086,1.95994,2.19984,2.45604
 Spain,resid hot water modern,9.52263,7.8306,8.89107,9.58393
 Spain,resid other appliance modern,1.56323,1.47678,1.592,1.33541
-Spain,resid others modern,9.06398,9.64676,12.1415,13.2863
-Sweden,comm cooling,4.99323,4.72024,4.69446,4.43466
-Sweden,comm heating,5.60398,6.1037,6.68868,6.61931
-Sweden,comm others,11.0506,12.6094,13.04,13.1334
+Spain,resid others modern,11.0402,11.5504,13.989,15.1322
+Sweden,comm cooling,5.93627,5.66366,5.63801,5.37797
+Sweden,comm heating,6.35656,6.73255,7.27852,7.24555
+Sweden,comm others,12.9401,14.3876,14.8067,14.8831
 Sweden,resid cooking coal,0,0,0,0
 Sweden,resid cooking modern,22.0643,21.7885,21.8552,21.7155
-Sweden,resid cooling modern,7.059,7.6815,8.7442,9.60854
-Sweden,resid heating TradBio,0.337087,0.329095,0.325807,0.335581
+Sweden,resid cooling modern,14.4684,15.0909,16.1536,17.0179
+Sweden,resid heating TradBio,0.518187,0.510195,0.506907,0.516681
 Sweden,resid heating coal,0,0,0,0
-Sweden,resid heating modern,7.90742,8.73903,9.01711,9.77195
+Sweden,resid heating modern,8.79142,9.48896,9.67131,10.4614
 Sweden,resid hot water coal,0,0,0,0
-Sweden,resid hot water modern,10.2521,10.2874,9.98395,10.9156
+Sweden,resid hot water modern,10.252,10.2874,9.9838,10.9156
 Sweden,resid other appliance modern,1.61365,1.60027,1.61928,1.24759
 Sweden,resid others coal,0,0,0,0
-Sweden,resid others modern,14.7948,14.2301,14.3144,13.8434
-Switzerland,comm cooling,7.08428,6.61204,6.54739,6.58797
-Switzerland,comm heating,6.34171,6.31927,8.02391,8.46789
-Switzerland,comm others,11.3666,11.4023,13.2872,13.9242
-Switzerland,resid cooling modern,7.89049,7.40029,7.33318,7.3753
-Switzerland,resid heating TradBio,0,1.71837,1.80789,1.77675
-Switzerland,resid heating modern,7.86869,7.76664,9.40752,9.99716
+Sweden,resid others modern,16.4904,15.9257,16.01,15.539
+Switzerland,comm cooling,8.0269,7.55464,7.48996,7.53057
+Switzerland,comm heating,7.2454,7.28662,8.97981,9.42463
+Switzerland,comm others,13.3225,13.336,15.1951,15.8051
+Switzerland,resid cooling modern,12.3145,11.8243,11.7572,11.7993
+Switzerland,resid heating TradBio,0,1.89947,1.98899,1.95785
+Switzerland,resid heating modern,8.89067,8.76026,10.3833,10.9522
 Switzerland,resid others TradBio,0,2.24297,2.33249,2.30135
-Switzerland,resid others coal,2.65555,2.48288,2.76334,2.88262
-Switzerland,resid others modern,9.50683,9.78015,12.6027,13.395
-Taiwan,comm cooling,7.9461,6.71947,6.77379,6.44664
-Taiwan,comm heating,6.40179,6.41409,9.23105,9.24943
-Taiwan,comm others,15.0122,14.4922,15.4015,14.7185
-Taiwan,resid cooling modern,8.78507,7.51181,7.56819,7.2286
-Taiwan,resid heating modern,6.3748,6.50006,9.4322,9.82221
+Switzerland,resid others coal,4.06175,3.88908,4.16954,4.28882
+Switzerland,resid others modern,11.542,11.7889,14.5817,15.3345
+Taiwan,comm cooling,8.8887,7.66207,7.71639,7.38924
+Taiwan,comm heating,7.52038,7.5207,10.3303,10.3397
+Taiwan,comm others,16.9027,16.2909,17.195,16.512
+Taiwan,resid cooling modern,13.2091,11.9358,11.9922,11.6526
+Taiwan,resid heating modern,7.54337,7.65206,10.5773,10.9678
 Taiwan,resid others coal,0,0,0,0
-Taiwan,resid others modern,16.3197,14.7631,15.315,14.6848
-Turkey,comm cooling,4.56604,4.07679,4.2774,4.19057
-Turkey,comm heating,3.60273,4.53306,3.34416,4.06561
-Turkey,comm others,11.5036,8.41549,8.89886,9.11824
-Turkey,resid cooling modern,4.76831,4.3698,4.53927,4.40627
-Turkey,resid heating TradBio,0.356617,0.335985,0.327398,0.314291
-Turkey,resid heating coal,1.96692,1.89284,2.15263,2.33509
-Turkey,resid heating modern,6.97112,5.69467,7.1453,6.40465
-Turkey,resid others coal,2.37322,2.29914,2.55893,2.74139
-Turkey,resid others modern,6.14978,6.65242,8.92221,8.55546
-UK,comm cooling,4.63855,4.1386,4.24971,4.28568
-UK,comm heating,4.15364,4.26945,5.16758,5.4915
-UK,comm others,7.25583,7.48247,8.43493,8.9753
+Taiwan,resid others modern,18.0794,16.4935,17.0441,16.4109
+Turkey,comm cooling,5.50868,5.03547,5.22856,5.14462
+Turkey,comm heating,4.34783,5.4624,4.11962,4.88942
+Turkey,comm others,13.1863,10.2588,10.6289,10.92
+Turkey,resid cooling modern,9.19323,8.8173,8.98082,8.85668
+Turkey,resid heating TradBio,0.537717,0.517085,0.508498,0.495391
+Turkey,resid heating coal,2.58752,2.51344,2.77323,2.95569
+Turkey,resid heating modern,8.07805,6.63584,8.05945,7.30292
+Turkey,resid others coal,3.77942,3.70534,3.96513,4.14759
+Turkey,resid others modern,8.27738,8.64984,10.8325,10.4175
+UK,comm cooling,5.77266,5.24181,5.33759,5.37561
+UK,comm heating,5.1349,5.19766,6.08367,6.41771
+UK,comm others,9.21334,9.36797,10.3044,10.858
 UK,resid cooking modern,13.7817,12.9566,14.2065,15.5865
-UK,resid cooling modern,5.17006,4.79393,4.9688,4.91989
-UK,resid heating TradBio,0.313368,0.307595,0.327053,0.338708
-UK,resid heating coal,1.91619,1.95721,2.22681,2.39837
-UK,resid heating modern,4.12783,4.34857,5.39351,5.60337
+UK,resid cooling modern,10.0311,9.63314,9.80094,9.72025
+UK,resid heating TradBio,0.494468,0.488695,0.508153,0.519808
+UK,resid heating coal,2.53679,2.57781,2.84741,3.01897
+UK,resid heating modern,5.05874,5.2768,6.32396,6.52358
 UK,resid hot water coal,1.91619,1.95721,2.22681,2.39837
 UK,resid hot water modern,5.1701,5.46235,6.72005,6.92421
 UK,resid other appliance modern,1.50687,1.37746,1.42965,1.19638
-UK,resid others modern,13.527,11.6625,12.1509,13.0197
-USA,comm cooling,6.12382,5.51447,5.57289,5.45223
-USA,comm heating,4.69632,4.94383,6.27041,6.25696
-USA,comm others,10.6181,10.7247,11.2221,11.0858
-USA,resid cooling modern,6.94161,6.27816,6.33073,6.20451
-USA,resid heating TradBio,0,1.69304,1.71428,1.65012
-USA,resid heating coal,1.48266,0,0,0
-USA,resid heating modern,4.86865,5.27779,6.38733,6.33365
+UK,resid others modern,15.2226,13.3581,13.8465,14.7153
+USA,comm cooling,7.12649,6.49353,6.55127,6.43006
+USA,comm heating,5.70147,5.97042,7.29515,7.27309
+USA,comm others,12.4219,12.5131,13.0107,12.8747
+USA,resid cooling modern,11.3656,10.7022,10.7547,10.6285
+USA,resid heating TradBio,0,1.87414,1.89538,1.83122
+USA,resid heating coal,2.10326,0,0,0
+USA,resid heating modern,5.8327,6.23692,7.3324,7.2683
 USA,resid others TradBio,0,2.21764,2.23888,2.17472
-USA,resid others coal,2.17936,0,0,0
-USA,resid others modern,11.3776,10.8458,11.412,11.2406
-Ukraine,comm cooling,4.58978,5.38337,5.34811,5.09261
-Ukraine,comm heating,4.35878,5.20353,5.25224,5.3443
-Ukraine,comm others,3.07148,16.4604,14.9261,15.7949
+USA,resid others coal,3.58556,0,0,0
+USA,resid others modern,13.1476,12.6001,13.1607,12.9885
+Ukraine,comm cooling,8.64268,6.58545,6.4613,6.13646
+Ukraine,comm heating,5.30998,6.12205,5.74982,5.88636
+Ukraine,comm others,4.61966,18.2169,16.6069,17.5155
 Ukraine,resid cooking coal,2.21333,1.98767,2.35753,2.56386
 Ukraine,resid cooking modern,10.6129,10.288,12.2373,12.435
-Ukraine,resid cooling modern,5.56228,5.50562,5.41716,5.12106
-Ukraine,resid heating TradBio,0,0,0.367409,0.365425
-Ukraine,resid heating coal,2.21333,1.98767,2.35753,2.56386
-Ukraine,resid heating modern,3.66458,4.19162,5.18905,5.08785
+Ukraine,resid cooling modern,9.98632,9.92965,9.84119,9.54508
+Ukraine,resid heating TradBio,0,0,0.548509,0.546525
+Ukraine,resid heating coal,2.83393,2.60827,2.97813,3.18446
+Ukraine,resid heating modern,4.25707,4.93013,5.96929,5.89771
 Ukraine,resid hot water coal,2.21333,1.98767,2.35753,2.56386
 Ukraine,resid hot water modern,4.25592,5.41945,7.11908,8.06348
 Ukraine,resid other appliance modern,1.78932,1.86878,1.86455,1.43969
-Ukraine,resid others modern,16.8806,17.3243,17.1127,16.9334
+Ukraine,resid others modern,18.5762,19.0199,18.8083,18.629
