@@ -59,6 +59,7 @@
 		<Value name = "fertilizer_energy">../input/gcamdata/xml/en_Fert_EUR.xml</Value>
 		<Value name = "fertilizer_energy">../input/gcamdata/xml/en_Fert.xml</Value>
 		<Value name = "hddcdd">../input/gcamdata/xml/HDDCDD_constdd_no_GCM.xml</Value>
+		<Value name = "hddcdd">../input/gcamdata/xml/HDDCDD_constdd_no_GCM_EUR.xml</Value>
 		<Value name = "building">../input/gcamdata/xml/building_det.xml</Value>
 		<Value name = "building">../input/gcamdata/xml/building_det_EUR.xml</Value>
 		<Value name = "transportation">../input/gcamdata/xml/transportation_UCD_CORE.xml</Value>
