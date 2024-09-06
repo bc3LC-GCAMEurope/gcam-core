@@ -76,6 +76,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
                       "L2234.GlobalIntTechLifetime_elecS_EUR",
                       "L2234.GlobalTechProfitShutdown_elecS_EUR",
                       "L2234.GlobalTechSCurve_elecS_EUR",
+                      "L2234.GlobalIntTechSCurve_elecS_EUR",
                       "L2234.GlobalTechCapture_elecS_EUR",
                       "L2234.GlobalIntTechBackup_elecS_EUR",
                       "L2234.PassThroughSector_elecS_EUR",
@@ -376,6 +377,15 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
     L2234.GlobalTechSCurve_elecS_EUR <-  L2234.elecS_globaltech_capital_battery_ATB %>%
       select(sector.name = supplysector, subsector.name = subsector, technology, year = period, lifetime, steepness, half.life) %>%
       bind_rows(L2234.GlobalTechSCurve_elecS_EUR)
+
+    # Adding an scurve behavior for renewables in 2015 so they don't all retire at once
+    L2234.GlobalIntTechSCurve_elecS_EUR <- L2234.GlobalIntTechLifetime_elecS_EUR %>%
+      filter(subsector.name %in% c("solar", "wind"),
+             year == MODEL_FINAL_BASE_YEAR) %>%
+      # extend lifetime since we are adding s-curve
+      mutate(lifetime = lifetime + 10,
+             steepness = 0.1,
+             half.life = (lifetime / 2) + 5)
 
     # Energy Inputs for additional technologies such as battery
     L2234.StubTechEff_battery_elecS_EUR <- write_to_all_states(A23.elecS_stubtech_energy_inputs,

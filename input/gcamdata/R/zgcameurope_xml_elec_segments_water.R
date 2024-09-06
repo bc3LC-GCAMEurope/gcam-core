@@ -58,6 +58,7 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
                      "L2235.GlobalIntTechOMfixed_elecS_cool_EUR",
                      "L2235.GlobalIntTechOMvar_elecS_cool_EUR",
                      "L2235.GlobalIntTechCoef_elecS_cool_EUR",
+                     "L2235.GlobalIntTechSCurve_elecS_cool_EUR",
                      "L2235.PrimaryRenewKeyword_elecS_cool_EUR",
                      "L2235.PrimaryRenewKeywordInt_elecS_cool_EUR",
                      "L2235.StubTech_elecS_cool_EUR",
@@ -165,6 +166,7 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
       add_xml_data(L2235.GlobalIntTechLifetime_elecS_cool_EUR, "GlobalIntTechLifetime") %>%
       add_xml_data(L2235.GlobalTechProfitShutdown_elecS_cool_EUR, "GlobalTechProfitShutdown") %>%
       add_xml_data(L2235.GlobalTechSCurve_elecS_cool_EUR, "GlobalTechSCurve") %>%
+      add_xml_data(L2235.GlobalIntTechSCurve_elecS_cool_EUR, "GlobalIntTechSCurve") %>%
       add_xml_data(L2235.GlobalTechCapture_elecS_cool_EUR, "GlobalTechCapture") %>%
       add_xml_data(L2235.GlobalTechLifetime_elecS_cool_EUR, "GlobalTechLifetime") %>%
       add_xml_data(L2235.GlobalIntTechBackup_elecS_cool_EUR, "GlobalIntTechBackup") %>%

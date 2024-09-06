@@ -9,7 +9,7 @@
 supplysector,subsector,apply.to,from.year,to.year,to.value,interpolation.function
 electricity,coal,share-weight,final-calibration-year,2030,1,linear
 electricity,coal,share-weight,2030,end-year,1,fixed
-electricity,gas,share-weight,final-calibration-year,2060,1,s-curve
+electricity,gas,share-weight,final-calibration-year,2100,1,s-curve
 electricity,biomass,share-weight,final-calibration-year,end-year,1,linear
 electricity,geothermal,share-weight,final-calibration-year,end-year,1,linear
 electricity,nuclear,share-weight,final-calibration-year,initial-future-year,0,linear
