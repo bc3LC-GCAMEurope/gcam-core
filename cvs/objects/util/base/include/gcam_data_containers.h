@@ -153,6 +153,7 @@
 #include "sectors/include/subsector_add_techcosts.h"
 #include "sectors/include/supply_sector.h"
 #include "sectors/include/tran_subsector.h"
+#include "sectors/include/trn_final_demand.h"
 #include "solution/util/include/solution_info_param_parser.h"
 #include "technologies/include/global_technology_database.h"
 #include "technologies/include/ag_production_technology.h"

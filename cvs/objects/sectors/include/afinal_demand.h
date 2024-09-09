@@ -56,6 +56,7 @@ class Tabs;
 
 // Need to forward declare the subclasses as well.
 class EnergyFinalDemand;
+class TrnFinalDemand;
 class FixedFinalDemand;
 
 /*! 
@@ -145,7 +146,7 @@ protected:
         /* Declare all subclasses of AFinalDemand to allow automatic traversal of the
          * hierarchy under introspection.
          */
-        DEFINE_SUBCLASS_FAMILY( AFinalDemand, EnergyFinalDemand, FixedFinalDemand )
+        DEFINE_SUBCLASS_FAMILY( AFinalDemand, EnergyFinalDemand, TrnFinalDemand, FixedFinalDemand )
     )
 };
 

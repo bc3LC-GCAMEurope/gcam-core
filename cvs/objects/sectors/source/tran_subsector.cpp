@@ -113,6 +113,7 @@ void TranSubsector::toDebugXMLDerived( const int period, ostream& out, Tabs* tab
     XMLWriteElement( mPopDenseElasticity[ period ], "popDenseElasticity", out, tabs );
     XMLWriteElement( mSpeed[ period ], "speed", out, tabs );
     XMLWriteElement( mTimeValueMult[ period ], "time-value-multiplier", out, tabs );
+    XMLWriteElement( mSubregionalIncomeTrn[ period ], "subregional-income-trn", out, tabs);
 }
 
 /*! \brief Perform any initializations needed for each period.
@@ -192,7 +193,7 @@ double TranSubsector::getTimeValue( const int aPeriod ) const {
     const double HOURS_PER_WEEK = 40;
 
     // proxy for income and hourly wage
-    double GDPperCapita = SectorUtils::getGDPPerCap( mRegionName, aPeriod );
+    double GDPperCapita = mSubregionalIncomeTrn[ aPeriod ];
     return GDPperCapita * 1000 * mTimeValueMult[ aPeriod ] / ( HOURS_PER_WEEK * WEEKS_PER_YEAR ) / mSpeed[ aPeriod ];
 }
 

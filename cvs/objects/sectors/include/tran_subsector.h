@@ -98,6 +98,9 @@ protected:
         //! Time value multiplier
         DEFINE_VARIABLE( ARRAY, "time-value-multiplier", mTimeValueMult, objects::PeriodVector<Value> ),
 
+        //! Subregional income
+        DEFINE_VARIABLE(ARRAY, "subregional-income-trn", mSubregionalIncomeTrn, objects::PeriodVector<Value>),
+
         //! add value of time to price term
         DEFINE_VARIABLE( SIMPLE, "addTimeValue", mAddTimeValue, bool )
     )
