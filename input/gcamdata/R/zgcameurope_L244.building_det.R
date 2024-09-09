@@ -1884,7 +1884,6 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       mutate(bias.adder = if_else(obs==0,0,bias.adder)) %>%
       select(region,gcam.consumer,nodeInput,building.node.input,thermal.building.service.input,bias.adder)
 
-    # reg_exception = c('Poland','Serbia and Montenegro')
     L244.ThermalServiceAdder_modern<-L244.ThermalServiceAdder_modern_pre %>%
       filter(year== MODEL_FINAL_BASE_YEAR) %>%
       left_join_error_no_match(L244.ThermalServiceAdder_aggObs_gr, by = c("region", "year", "gcam.consumer", "thermal.building.service.input")) %>%
@@ -1901,27 +1900,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       group_by(region,gcam.consumer, nodeInput,building.node.input,thermal.building.service.input) %>%
       mutate(bias.adder = approx_fun(year, bias.adder, rule = 1)) %>%
       ungroup() %>%
-      select(LEVEL2_DATA_NAMES[["ThermalServiceAdder"]]) #%>%
-      # filter(!(region %in% reg_exception & thermal.building.service.input == 'resid heating modern'))
-
-    # L244.ThermalServiceAdder_modern_exception<-L244.ThermalServiceAdder_modern_pre %>%
-    #   filter(year== MODEL_FINAL_BASE_YEAR) %>%
-    #   left_join_error_no_match(L244.ThermalServiceAdder_aggObs_gr, by = c("region", "year", "gcam.consumer", "thermal.building.service.input")) %>%
-    #   left_join_error_no_match(L244.Floorspace_EUR, by = c("region", "year", "gcam.consumer", "nodeInput", "building.node.input")) %>%
-    #   mutate(bias.adder.share = (base.service - est)/base.building.size,
-    #          bias.adder.share = if_else(base.service==0,0,bias.adder.share)) %>%
-    #   filter(complete.cases(.)) %>%
-    #   left_join_error_no_match(L244.ThermalServiceAdder_modern_pre_agg, by = c("region", "gcam.consumer", "thermal.building.service.input", "nodeInput", "building.node.input")) %>%
-    #   mutate(bias.adder = if_else(base.service==0,0,bias.adder)) %>%
-    #   select(region,gcam.consumer,nodeInput,building.node.input,thermal.building.service.input,bias.adder.share,bias.adder.eq=bias.adder) %>%
-    #   repeat_add_columns(tibble(year=ADJ_MODEL_YEARS_EXCEPTION)) %>%
-    #   mutate(bias.adder = if_else(year!= MODEL_FINAL_BASE_YEAR,bias.adder.eq,bias.adder.share)) %>%
-    #   complete(nesting(region,gcam.consumer, nodeInput,building.node.input,thermal.building.service.input), year = c(year, MODEL_YEARS)) %>%
-    #   group_by(region,gcam.consumer, nodeInput,building.node.input,thermal.building.service.input) %>%
-    #   mutate(bias.adder = 0) %>% #approx_fun(year, bias.adder, rule = 1)) %>%
-    #   ungroup() %>%
-    #   select(LEVEL2_DATA_NAMES[["ThermalServiceAdder"]]) %>%
-    #   filter((region %in% reg_exception & thermal.building.service.input == 'resid heating modern'))
+      select(LEVEL2_DATA_NAMES[["ThermalServiceAdder"]])
 
 
     L244.ThermalServiceAdder_EUR<-bind_rows(L244.ThermalServiceAdder_coal_tradbio,
