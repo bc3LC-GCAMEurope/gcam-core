@@ -37,7 +37,7 @@ module_emissions_L201.en_nonco2 <- function(command, ...) {
              # use for the input-driver
              FILE = "energy/calibrated_techs",
              FILE = "energy/calibrated_techs_bld_det",
-             FILE = "socioeconomics/income_shares",
+             "L106.income_distributions",
              FILE = UCD_tech_map_name))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L201.en_pol_emissions",
@@ -79,8 +79,8 @@ module_emissions_L201.en_nonco2 <- function(command, ...) {
     A51.steepness <- get_data(all_data, "emissions/A51.steepness", strip_attributes = TRUE)
     L244.DeleteThermalService <- get_data(all_data, "L244.DeleteThermalService", strip_attributes = TRUE)
     L244.DeleteGenericService <- get_data(all_data, "L244.DeleteGenericService", strip_attributes = TRUE)
-    income_shares<-get_data(all_data, "socioeconomics/income_shares")
-    groups<-income_shares %>% select(category) %>% distinct()
+    L106.income_shares<-get_data(all_data, "L106.income_distributions")
+    groups<-L106.income_shares %>% select(gcam.consumer) %>% distinct()
 
     # make a complete mapping to be able to look up with sector + subsector + tech the
     # input name to use for an input-driver
@@ -100,7 +100,7 @@ module_emissions_L201.en_nonco2 <- function(command, ...) {
     # Adjust residential sector for multiple consumer groups
     EnTechInputNameMap_resid<-EnTechInputNameMap %>%
       filter(grepl("resid",supplysector)) %>%
-      repeat_add_columns(tibble(group = unique(groups$category))) %>%
+      repeat_add_columns(tibble(group = unique(groups$gcam.consumer))) %>%
       unite(supplysector, c("supplysector","group"), sep = "_")
 
     EnTechInputNameMap<-EnTechInputNameMap %>%
@@ -448,7 +448,7 @@ module_emissions_L201.en_nonco2 <- function(command, ...) {
                      "energy/calibrated_techs_bld_det",
                      UCD_tech_map_name,
                      "L111.nonghg_tg_R_en_S_F_Yh",
-                     "L244.DeleteThermalService","L244.DeleteGenericService","socioeconomics/income_shares",
+                     "L244.DeleteThermalService","L244.DeleteGenericService","L106.income_distributions",
                      "emissions/mappings/ind_subsector_revised") ->
       L201.en_pol_emissions
 

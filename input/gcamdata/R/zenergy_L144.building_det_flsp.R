@@ -31,7 +31,7 @@ module_energy_L144.building_det_flsp <- function(command, ...) {
              FILE = "energy/Other_pcflsp_m2_ctry_Yh",
              FILE = "energy/IEA_PCResFloorspace",
              FILE = "energy/Odyssee_ResFloorspacePerHouse",
-             FILE = "socioeconomics/income_shares",
+             "L106.income_distributions",
              "L100.Pop_thous_ctry_Yh",
              "L102.gdp_mil90usd_GCAM3_R_Y",
              "L102.pcgdp_thous90USD_Scen_R_Y",
@@ -63,9 +63,9 @@ module_energy_L144.building_det_flsp <- function(command, ...) {
     L102.pcgdp_thous90USD_Scen_R_Y <- get_data(all_data, "L102.pcgdp_thous90USD_Scen_R_Y")
     L221.LN0_Land<-get_data(all_data, "L221.LN0_Land", strip_attributes = TRUE)
     L221.LN1_UnmgdAllocation<-get_data(all_data, "L221.LN1_UnmgdAllocation", strip_attributes = TRUE)
-    income_shares<-get_data(all_data, "socioeconomics/income_shares")
-    n_groups<-nrow(unique(get_data(all_data, "socioeconomics/income_shares") %>%
-                            select(category)))
+    L106.income_shares<-get_data(all_data, "L106.income_distributions")
+    n_groups<-nrow(unique(get_data(all_data, "L106.income_distributions") %>%
+                            select(gcam.consumer)))
 
     # ===================================================
 
@@ -422,9 +422,11 @@ module_energy_L144.building_det_flsp <- function(command, ...) {
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       left_join_error_no_match(L144.flsp_param, by = "region") %>%
       #add multiple consumers
-      repeat_add_columns(tibble(category= unique(income_shares$category))) %>%
-      left_join_error_no_match(income_shares, by = c("GCAM_region_ID", "year","category")) %>%
-      mutate(gdp_gr = gdp * shares,
+      repeat_add_columns(tibble(gcam.consumer= unique(L106.income_shares$gcam.consumer))) %>%
+      left_join_error_no_match(L106.income_shares %>%
+                                 left_join_error_no_match(GCAM_region_names, by = 'region'),
+                               by = c("GCAM_region_ID", "year", "gcam.consumer")) %>%
+      mutate(gdp_gr = gdp * subregional.income.share,
              pop_gr = pop/n_groups,
              pc_gdp_thous_gr = (gdp_gr/pop_gr)/1E3) %>%
       mutate(flsp_pc_est=(`unadjust.satiation` +(-`land.density.param`*log(tot_dens)))*exp(-`b.param`
@@ -577,7 +579,7 @@ module_energy_L144.building_det_flsp <- function(command, ...) {
       add_precursors("common/iso_GCAM_regID","common/GCAM_region_names", "energy/A44.pcflsp_default",
                      "energy/A44.HouseholdSize", "energy/CEDB_ResFloorspace_chn", "energy/Other_pcflsp_m2_ctry_Yh",
                      "energy/IEA_PCResFloorspace", "energy/Odyssee_ResFloorspacePerHouse",
-                     "L100.Pop_thous_ctry_Yh", "energy/RECS_ResFloorspace_usa","L102.pcgdp_thous90USD_Scen_R_Y","socioeconomics/income_shares") ->
+                     "L100.Pop_thous_ctry_Yh", "energy/RECS_ResFloorspace_usa","L102.pcgdp_thous90USD_Scen_R_Y","L106.income_distributions") ->
       L144.flsp_bm2_R_res_Yh
 
     L144.flsp_bm2_R_comm_Yh %>%

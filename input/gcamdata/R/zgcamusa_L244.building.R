@@ -54,8 +54,8 @@ module_gcamusa_L244.building <- function(command, ...) {
              FILE = "gcam-usa/A44.globaltech_interp",
              FILE = "gcam-usa/A44.demand_satiation_mult",
              FILE = "gcam-usa/A44.hab_land_flsp_usa",
-             FILE = "socioeconomics/income_shares",
              FILE = "gcam-usa/A44.CalPrice_service_gcamusa",
+             "L106.income_distributions",
              "L244.Supplysector_bld",
              "L144.flsp_param",
              "L144.flsp_bm2_state_res",
@@ -169,7 +169,7 @@ module_gcamusa_L244.building <- function(command, ...) {
     L144.flsp_param <- get_data(all_data, "L144.flsp_param", strip_attributes = TRUE)
     L144.prices_bld_gcamusa <- get_data(all_data, "gcam-usa/A44.CalPrice_service_gcamusa", strip_attributes = TRUE) %>%
       gather_years()
-    income_shares<-get_data(all_data, "socioeconomics/income_shares")
+    L106.income_shares<-get_data(all_data, "L106.income_distributions")
     L244.Supplysector_bld<-get_data(all_data, "L244.Supplysector_bld") %>% filter(region == gcam.USA_REGION)
 
     # Add a deflator for harmonizing GDPpc with prices
@@ -194,7 +194,7 @@ module_gcamusa_L244.building <- function(command, ...) {
     # For gcam-consumers: the core version  uses multiple consumers, so this needs to be considered:
     L244.DeleteConsumer_USAbld <- tibble(region = gcam.USA_REGION, gcam.consumer = A44.gcam_consumer_en$gcam.consumer) %>%
       filter(gcam.consumer == "resid") %>%
-      repeat_add_columns(tibble(group=unique(income_shares$category))) %>%
+      repeat_add_columns(tibble(group=unique(L106.income_shares$gcam.consumer))) %>%
       unite(gcam.consumer, c(gcam.consumer,group),sep="_") %>%
       bind_rows(tibble(region = gcam.USA_REGION, gcam.consumer = A44.gcam_consumer_en$gcam.consumer)
                 %>% filter(gcam.consumer == "comm"))
@@ -903,7 +903,7 @@ module_gcamusa_L244.building <- function(command, ...) {
       add_units("NA") %>%
       add_comments("gcam.consumer column from A44.gcam_consumer") %>%
       add_legacy_name("L244.DeleteConsumer_USAbld") %>%
-      add_precursors("energy/A44.gcam_consumer","L244.Supplysector_bld","socioeconomics/income_shares") ->
+      add_precursors("energy/A44.gcam_consumer","L244.Supplysector_bld","L106.income_distributions") ->
       L244.DeleteConsumer_USAbld
 
     L244.DeleteSupplysector_USAbld %>%
@@ -911,7 +911,7 @@ module_gcamusa_L244.building <- function(command, ...) {
       add_units("NA") %>%
       add_comments("supplysector column from A44.sector") %>%
       add_legacy_name("L244.DeleteSupplysector_USAbld") %>%
-      add_precursors("energy/A44.sector","L244.Supplysector_bld","socioeconomics/income_shares") ->
+      add_precursors("energy/A44.sector","L244.Supplysector_bld","L106.income_distributions") ->
       L244.DeleteSupplysector_USAbld
 
     L244.SubregionalShares_gcamusa %>%
