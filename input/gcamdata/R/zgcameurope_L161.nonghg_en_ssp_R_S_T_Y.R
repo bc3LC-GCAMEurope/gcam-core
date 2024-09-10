@@ -28,7 +28,7 @@ module_gcameurope_L161.nonghg_en_ssp_R_S_T_Y <- function(command, ...) {
              "L111.nonghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR",
              "L114.bcoc_tgej_R_en_S_F_2000_EUR",
              FILE = "emissions/A61_emfact_rules",
-             FILE = "socioeconomics/income_shares",
+             "L106.income_distributions",
              "L244.DeleteGenericService_EUR",
              "L244.DeleteThermalService_EUR"))
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -71,7 +71,7 @@ module_gcameurope_L161.nonghg_en_ssp_R_S_T_Y <- function(command, ...) {
       gather(year, value, `2000`) %>%
       mutate(year = as.integer(year))
     A61_emfact_rules <- get_data(all_data, "emissions/A61_emfact_rules")
-    income_shares<-get_data(all_data, "socioeconomics/income_shares") %>% filter_regions_europe(region_ID_mapping = A_regions)
+    L106.income_shares<-get_data(all_data, "L106.income_distributions") %>% filter_regions_europe(region_ID_mapping = A_regions)
     L244.DeleteGenericService_EUR<-get_data(all_data, "L244.DeleteGenericService_EUR")
     L244.DeleteThermalService_EUR<-get_data(all_data, "L244.DeleteThermalService_EUR")
 
@@ -80,7 +80,7 @@ module_gcameurope_L161.nonghg_en_ssp_R_S_T_Y <- function(command, ...) {
     # Adjust the mapping sectors with the new residential sector (mult consumers)
     GCAM_sector_tech_resid<-GCAM_sector_tech_EUR %>%
       filter(grepl("resid",supplysector)) %>%
-      repeat_add_columns(tibble(group=unique(income_shares$category))) %>%
+      repeat_add_columns(tibble(group=unique(L106.income_shares$gcam.consumer))) %>%
       mutate(sector = paste(sector,group,sep = "_"),
              supplysector = paste(supplysector,group,sep = "_")) %>%
       select(-group)
@@ -292,7 +292,7 @@ module_gcameurope_L161.nonghg_en_ssp_R_S_T_Y <- function(command, ...) {
                      "L111.nonghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR",
                      "L114.bcoc_tgej_R_en_S_F_2000_EUR",
                      "emissions/A61_emfact_rules",
-                     "socioeconomics/income_shares",
+                     "L106.income_distributions",
                      "L244.DeleteGenericService_EUR",
                      "L244.DeleteThermalService_EUR") ->
       L161.SSP15_EF_EUR
@@ -312,7 +312,7 @@ module_gcameurope_L161.nonghg_en_ssp_R_S_T_Y <- function(command, ...) {
                      "L111.nonghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR",
                      "L114.bcoc_tgej_R_en_S_F_2000_EUR",
                      "emissions/A61_emfact_rules",
-                     "socioeconomics/income_shares",
+                     "L106.income_distributions",
                      "L244.DeleteGenericService_EUR",
                      "L244.DeleteThermalService_EUR") ->
       L161.SSP2_EF_EUR
@@ -332,7 +332,7 @@ module_gcameurope_L161.nonghg_en_ssp_R_S_T_Y <- function(command, ...) {
                      "L111.nonghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR",
                      "L114.bcoc_tgej_R_en_S_F_2000_EUR",
                      "emissions/A61_emfact_rules",
-                     "socioeconomics/income_shares",
+                     "L106.income_distributions",
                      "L244.DeleteGenericService_EUR",
                      "L244.DeleteThermalService_EUR") ->
       L161.SSP34_EF_EUR

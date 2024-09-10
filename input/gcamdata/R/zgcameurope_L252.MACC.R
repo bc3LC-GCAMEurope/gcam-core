@@ -34,7 +34,7 @@ module_gcameurope_L252.MACC <- function(command, ...) {
              "L232.nonco2_prc_EUR",
              "L241.hfc_all_EUR",
              "L241.pfc_all_EUR",
-             FILE = "socioeconomics/income_shares"))
+             "L106.income_distributions"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L252.ResMAC_fos_EUR",
              "L252.AgMAC_EUR",
@@ -85,13 +85,13 @@ module_gcameurope_L252.MACC <- function(command, ...) {
     L241.hfc_all_EUR <- get_data(all_data, "L241.hfc_all_EUR", strip_attributes = TRUE)
     L241.pfc_all_EUR <- get_data(all_data, "L241.pfc_all_EUR", strip_attributes = TRUE)
     EPA_MACC_PhaseInTime <- get_data(all_data, "emissions/EPA_MACC_PhaseInTime")
-    income_shares<-get_data(all_data, "socioeconomics/income_shares") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
-    groups<-income_shares %>% select(category) %>% distinct()
+    L106.income_shares<-get_data(all_data, "L106.income_distributions") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
+    groups<-L106.income_shares %>% select(gcam.consumer) %>% distinct()
 
     # First, adjust GCAM_sector_tech to include consumer-group data
     GCAM_sector_tech_resid<- GCAM_sector_tech %>%
       filter(grepl("resid",sector)) %>%
-      repeat_add_columns(tibble(group = unique(income_shares$category))) %>%
+      repeat_add_columns(tibble(group = unique(L106.income_shares$gcam.consumer))) %>%
       unite(sector,c("sector","group"),sep = "_", remove = F) %>%
       unite(supplysector,c("supplysector","group"),sep = "_", remove = T)
 
@@ -665,7 +665,7 @@ module_gcameurope_L252.MACC <- function(command, ...) {
       add_legacy_name("L252.MAC_higwp_EUR") %>%
       add_precursors("emissions/A_regions", "gcam-europe/CEDS_sector_tech_proc_EUR", "gcam-europe/CEDS_sector_tech_proc_revised_EUR",
                      "L152.MAC_pct_R_S_Proc_EPA", "L241.hfc_all_EUR", "L241.pfc_all_EUR", "common/GCAM_region_names",
-                     "socioeconomics/income_shares", "emissions/A_MACC_TechChange_omit") ->
+                     "L106.income_distributions", "emissions/A_MACC_TechChange_omit") ->
       L252.MAC_higwp_EUR
 
     L252.MAC_higwp_phaseInTime_EUR %>%

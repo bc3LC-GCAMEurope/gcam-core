@@ -40,7 +40,7 @@ module_gcameurope_L142.pfc_R_S_T_Y <- function(command, ...) {
              FILE = "emissions/EPA_fgas_sector_map",
              FILE = "emissions/EPA_GWPs",
              FILE = "emissions/EPA_country_map",
-             FILE = "socioeconomics/income_shares",
+             "L106.income_distributions",
              "L244.GenericShares_EUR",
              "L244.ThermalShares_EUR"))
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -435,8 +435,8 @@ module_gcameurope_L142.pfc_R_S_T_Y <- function(command, ...) {
       left_join_error_no_match(GCAM_region_names, by = "region")
 
     # Save subregional categories
-    cons.gr.adj<-get_data(all_data, "socioeconomics/income_shares",strip_attributes = TRUE)  %>%
-      select(category) %>%
+    cons.gr.adj<-get_data(all_data, "L106.income_distributions",strip_attributes = TRUE)  %>%
+      select(gcam.consumer) %>%
       distinct()
 
     # Adjust L142.pfc_R_S_T_Yh_EUR  for the multiple consumers
@@ -444,7 +444,7 @@ module_gcameurope_L142.pfc_R_S_T_Y <- function(command, ...) {
     # L142.pfc_R_S_T_Yh_EUR: Represents emissions, value needs to be multiplied by the share to allocate across multiple consumers
     L142.pfc_R_S_T_Yh_resid<- L142.pfc_R_S_T_Yh_EUR %>%
       filter(grepl("resid",supplysector)) %>%
-      repeat_add_columns(tibble(group=unique(cons.gr.adj$category))) %>%
+      repeat_add_columns(tibble(group=unique(cons.gr.adj$gcam.consumer))) %>%
       unite(supplysector,c("supplysector","group"),sep = "_") %>%
       # add shares
       left_join_error_no_match(L244.Shares, by = c("GCAM_region_ID", "year", "supplysector")) %>%
@@ -488,7 +488,7 @@ module_gcameurope_L142.pfc_R_S_T_Y <- function(command, ...) {
                      "emissions/EPA_fgas_sector_map",
                      "emissions/EPA_GWPs",
                      "emissions/EPA_country_map",
-                     "socioeconomics/income_shares",
+                     "L106.income_distributions",
                      "L244.GenericShares_EUR",
                      "L244.ThermalShares_EUR") ->
       L142.pfc_R_S_T_Yh_EUR

@@ -32,7 +32,7 @@ module_emissions_L251.en_ssp_nonco2 <- function(command, ...) {
              "L161.SSP34_EF",
              "L201.nonghg_steepness",
              "L223.GlobalTechEff_elec",
-             FILE = "socioeconomics/income_shares"))
+             "L106.income_distributions"))
 
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L251.ctrl.delete",
@@ -68,7 +68,7 @@ module_emissions_L251.en_ssp_nonco2 <- function(command, ...) {
     get_data(all_data, "L201.nonghg_steepness") -> L201.nonghg_steepness
     L223.GlobalTechEff_elec <- get_data(all_data, "L223.GlobalTechEff_elec")
 
-    income_shares<-get_data(all_data, "socioeconomics/income_shares")
+    L106.income_shares<-get_data(all_data, "L106.income_distributions")
 
 
     # make a complete mapping to be able to look up with sector + subsector + tech the
@@ -86,7 +86,7 @@ module_emissions_L251.en_ssp_nonco2 <- function(command, ...) {
     # Adjust the mapping sectors with the new residential sector (mult consumers)
     EnTechInputNameMap_resid<-EnTechInputNameMap %>%
       filter(grepl("resid",supplysector)) %>%
-      repeat_add_columns(tibble(group=unique(income_shares$category))) %>%
+      repeat_add_columns(tibble(group=unique(L106.income_shares$gcam.consumer))) %>%
       unite(supplysector,c("supplysector","group"),sep = "_")
 
     EnTechInputNameMap<-EnTechInputNameMap %>%
@@ -309,7 +309,7 @@ module_emissions_L251.en_ssp_nonco2 <- function(command, ...) {
                      "emissions/A_regions",
                      "energy/calibrated_techs",
                      "energy/calibrated_techs_bld_det",
-                     "socioeconomics/income_shares",
+                     "L106.income_distributions",
                      UCD_tech_map_name) ->
       L251.ssp15_ef
     L251.ssp2_ef %>%
@@ -322,7 +322,7 @@ module_emissions_L251.en_ssp_nonco2 <- function(command, ...) {
                      "emissions/A_regions",
                      "energy/calibrated_techs",
                      "energy/calibrated_techs_bld_det",
-                     "socioeconomics/income_shares",
+                     "L106.income_distributions",
                      UCD_tech_map_name) ->
       L251.ssp2_ef
 
@@ -336,7 +336,7 @@ module_emissions_L251.en_ssp_nonco2 <- function(command, ...) {
                      "emissions/A_regions",
                      "energy/calibrated_techs",
                      "energy/calibrated_techs_bld_det",
-                     "socioeconomics/income_shares",
+                     "L106.income_distributions",
                      UCD_tech_map_name) ->
       L251.ssp2_ef_residTradBio
 
@@ -362,7 +362,7 @@ module_emissions_L251.en_ssp_nonco2 <- function(command, ...) {
       add_comments("technology choice which is implemented with pass-through sector/tech") %>%
       add_precursors("L161.SSP15_EF",
                      "emissions/A_regions",
-                     "socioeconomics/income_shares",
+                     "L106.income_distributions",
                      "L223.GlobalTechEff_elec") ->
       L251.ssp15_ef_elec
     L251.ssp2_ef_elec %>%

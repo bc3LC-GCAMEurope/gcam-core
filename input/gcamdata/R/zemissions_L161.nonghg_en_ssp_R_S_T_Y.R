@@ -28,7 +28,7 @@ module_emissions_L161.nonghg_en_ssp_R_S_T_Y <- function(command, ...) {
              "L111.nonghg_tgej_R_en_S_F_Yh_infered_combEF_AP",
              "L114.bcoc_tgej_R_en_S_F_2000",
              FILE = "emissions/A61_emfact_rules",
-             FILE = "socioeconomics/income_shares",
+             "L106.income_distributions",
              "L244.DeleteGenericService",
              "L244.DeleteThermalService"))
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -72,7 +72,7 @@ module_emissions_L161.nonghg_en_ssp_R_S_T_Y <- function(command, ...) {
       gather(year, value, `2000`) %>%
       mutate(year = as.integer(year))
     A61_emfact_rules <- get_data(all_data, "emissions/A61_emfact_rules")
-    income_shares<-get_data(all_data, "socioeconomics/income_shares")
+    L106.income_shares<-get_data(all_data, "L106.income_distributions")
     L244.DeleteGenericService<-get_data(all_data, "L244.DeleteGenericService")
     L244.DeleteThermalService<-get_data(all_data, "L244.DeleteThermalService")
 
@@ -81,7 +81,7 @@ module_emissions_L161.nonghg_en_ssp_R_S_T_Y <- function(command, ...) {
     # Adjust the mapping sectors with the new residential sector (mult consumers)
     GCAM_sector_tech_resid<-GCAM_sector_tech %>%
       filter(grepl("resid",supplysector)) %>%
-      repeat_add_columns(tibble(group=unique(income_shares$category))) %>%
+      repeat_add_columns(tibble(group=unique(L106.income_shares$gcam.consumer))) %>%
       mutate(sector = paste(sector,group,sep = "_"),
              supplysector = paste(supplysector,group,sep = "_")) %>%
       select(-group)
@@ -293,7 +293,7 @@ module_emissions_L161.nonghg_en_ssp_R_S_T_Y <- function(command, ...) {
                      "L111.nonghg_tgej_R_en_S_F_Yh_infered_combEF_AP",
                      "L114.bcoc_tgej_R_en_S_F_2000",
                      "emissions/A61_emfact_rules",
-                     "socioeconomics/income_shares",
+                     "L106.income_distributions",
                      "L244.DeleteGenericService",
                      "L244.DeleteThermalService") ->
       L161.SSP15_EF
@@ -313,7 +313,7 @@ module_emissions_L161.nonghg_en_ssp_R_S_T_Y <- function(command, ...) {
                      "L111.nonghg_tgej_R_en_S_F_Yh_infered_combEF_AP",
                      "L114.bcoc_tgej_R_en_S_F_2000",
                      "emissions/A61_emfact_rules",
-                     "socioeconomics/income_shares",
+                     "L106.income_distributions",
                      "L244.DeleteGenericService",
                      "L244.DeleteThermalService") ->
       L161.SSP2_EF
@@ -333,7 +333,7 @@ module_emissions_L161.nonghg_en_ssp_R_S_T_Y <- function(command, ...) {
                      "L111.nonghg_tgej_R_en_S_F_Yh_infered_combEF_AP",
                      "L114.bcoc_tgej_R_en_S_F_2000",
                      "emissions/A61_emfact_rules",
-                     "socioeconomics/income_shares",
+                     "L106.income_distributions",
                      "L244.DeleteGenericService",
                      "L244.DeleteThermalService") ->
       L161.SSP34_EF

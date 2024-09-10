@@ -28,7 +28,7 @@ module_emissions_L114.bcoc_en_R_S_T_Y <- function(command, ...) {
              "L104.bcoc_tgej_USA_en_T_1990",
              FILE = "emissions/RCP_BC_2000",
              FILE = "emissions/RCP_OC_2000",
-             FILE = "socioeconomics/income_shares"
+             "L106.income_distributions"
              ))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L114.bcoc_tgej_R_en_S_F_2000"))
@@ -56,8 +56,8 @@ module_emissions_L114.bcoc_en_R_S_T_Y <- function(command, ...) {
     L104.bcoc_tgej_USA_en_T_1990 <- get_data(all_data, "L104.bcoc_tgej_USA_en_T_1990")
     RCP_BC_2000 <- get_data(all_data, "emissions/RCP_BC_2000")
     RCP_OC_2000 <- get_data(all_data, "emissions/RCP_OC_2000")
-    income_shares<-get_data(all_data, "socioeconomics/income_shares")
-    groups<-income_shares %>% select(category) %>% distinct()
+    L106.income_shares<-get_data(all_data, "L106.income_distributions")
+    groups<-L106.income_shares %>% select(gcam.consumer) %>% distinct()
 
     # Compile the driver data (energy consumption by sector and fuel, around the year 2000)
     BCOC_drivers <- L101.in_EJ_R_en_Si_F_Yh %>%
@@ -148,13 +148,13 @@ module_emissions_L114.bcoc_en_R_S_T_Y <- function(command, ...) {
     # Adjust for multiple consumers in the residential sector
     L114.bcoc_tgej_R_en_S_F_2000_resid<-L114.bcoc_tgej_R_en_S_F_2000 %>%
       filter(grepl("resid",supplysector)) %>%
-      repeat_add_columns(tibble(group = unique(groups$category))) %>%
+      repeat_add_columns(tibble(group = unique(groups$gcam.consumer))) %>%
       unite(supplysector, c("supplysector","group"), sep = "_")
 
     # Adjust for multiple consumers in the trn sector
     L114.bcoc_tgej_R_en_S_F_2000_trn <- L114.bcoc_tgej_R_en_S_F_2000 %>%
       filter(grepl("trn_pass",supplysector) | grepl("trn_aviation_intl",supplysector)) %>%
-      repeat_add_columns(tibble(group = unique(groups$category))) %>%
+      repeat_add_columns(tibble(group = unique(groups$gcam.consumer))) %>%
       unite(supplysector, c("supplysector","group"), sep = "_")
 
     # Add the adjusted sectors to the  output dataset
@@ -180,7 +180,7 @@ module_emissions_L114.bcoc_en_R_S_T_Y <- function(command, ...) {
                      "L104.bcoc_tgej_USA_en_T_1990",
                      "emissions/RCP_BC_2000",
                      "emissions/RCP_OC_2000",
-                     "socioeconomics/income_shares") ->
+                     "L106.income_distributions") ->
       L114.bcoc_tgej_R_en_S_F_2000
 
     return_data(L114.bcoc_tgej_R_en_S_F_2000)

@@ -23,7 +23,7 @@ module_socio_L281.macro_account_tracking <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/GCAM_region_names",
              FILE = "energy/A54.sector",
-             FILE = "socioeconomics/income_shares",
+             "L106.income_distributions",
              # Final energy tracking
              "L232.GlobalTechEff_ind",
              "L2321.GlobalTechCoef_cement",
@@ -66,8 +66,8 @@ module_socio_L281.macro_account_tracking <- function(command, ...) {
     GCAM_region_names <- get_data(all_data, "common/GCAM_region_names", strip_attributes = TRUE)
     A54.sector <- get_data(all_data, "energy/A54.sector", strip_attributes = TRUE)
 
-    income_shares<- get_data(all_data, "socioeconomics/income_shares")
-    income_groups <- unique(income_shares$category)
+    L106.income_shares<- get_data(all_data, "L106.income_distributions")
+    income_groups <- unique(L106.income_shares$gcam.consumer)
 
     # Adjust A54.sector to multiple consumers
 
@@ -275,7 +275,7 @@ module_socio_L281.macro_account_tracking <- function(command, ...) {
       add_units("NA") %>%
       add_comments("Sets up a sector mapping to make sure we calculate the base price") %>%
       add_comments("of the correct sector when pass-through sectors are involved") %>%
-      add_precursors("energy/A54.sector", "socioeconomics/income_shares") ->
+      add_precursors("energy/A54.sector", "L106.income_distributions") ->
       L281.BasePriceSectorMapping
 
     fd_accounting %>%

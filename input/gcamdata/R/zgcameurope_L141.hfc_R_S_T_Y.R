@@ -46,7 +46,7 @@ module_gcameurope_L141.hfc_R_S_T_Y <- function(command, ...) {
              FILE = "emissions/EDGAR/EDGAR_HFC32",
              FILE = "emissions/EDGAR/EDGAR_HFC365mfc",
              FILE = "emissions/EDGAR/EDGAR_HFC43",
-             FILE = "socioeconomics/income_shares",
+             "L106.income_distributions",
              "L244.GenericShares_EUR",
              "L244.ThermalShares_EUR"))
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -395,8 +395,8 @@ module_gcameurope_L141.hfc_R_S_T_Y <- function(command, ...) {
       left_join_error_no_match(GCAM_region_names, by = "region")
 
     # Save subregional categories
-    cons.gr.adj<-get_data(all_data, "socioeconomics/income_shares",strip_attributes = TRUE)  %>%
-      select(category) %>%
+    cons.gr.adj<-get_data(all_data, "L106.income_distributions",strip_attributes = TRUE)  %>%
+      select(gcam.consumer) %>%
       distinct()
 
     # Adjust L141.hfc_R_S_T_Yh_EUR and L141.hfc_ef_R_cooling_Yh_EUR for the multiple consumers
@@ -404,7 +404,7 @@ module_gcameurope_L141.hfc_R_S_T_Y <- function(command, ...) {
     # L141.hfc_R_S_T_Yh_EUR: Represents emissions, value needs to be multiplied by the share to allocate across multiple consumers
     L141.hfc_R_S_T_Yh_resid<- L141.hfc_R_S_T_Yh_EUR %>%
       filter(grepl("resid",supplysector)) %>%
-      repeat_add_columns(tibble(group=unique(cons.gr.adj$category))) %>%
+      repeat_add_columns(tibble(group=unique(cons.gr.adj$gcam.consumer))) %>%
       unite(supplysector,c("supplysector","group"),sep = "_") %>%
       # add shares
       left_join_error_no_match(L244.Shares, by = c("GCAM_region_ID", "year", "supplysector")) %>%
@@ -418,7 +418,7 @@ module_gcameurope_L141.hfc_R_S_T_Y <- function(command, ...) {
     #L141.hfc_ef_R_cooling_Yh_EUR: Represents emission factors, so they just need to be extended to multiple consumers
     L141.hfc_ef_R_cooling_Yh_resid<-L141.hfc_ef_R_cooling_Yh_EUR %>%
       filter(grepl("resid",supplysector)) %>%
-      repeat_add_columns(tibble(group=unique(cons.gr.adj$category))) %>%
+      repeat_add_columns(tibble(group=unique(cons.gr.adj$gcam.consumer))) %>%
       unite(supplysector,c("supplysector","group"),sep = "_")
 
     L141.hfc_ef_R_cooling_Yh_EUR<-L141.hfc_ef_R_cooling_Yh_EUR %>%
@@ -460,7 +460,7 @@ module_gcameurope_L141.hfc_R_S_T_Y <- function(command, ...) {
                      "emissions/EDGAR/EDGAR_HFC32",
                      "emissions/EDGAR/EDGAR_HFC365mfc",
                      "emissions/EDGAR/EDGAR_HFC43",
-                     "socioeconomics/income_shares",
+                     "L106.income_distributions",
                      "L244.GenericShares_EUR",
                      "L244.ThermalShares_EUR") ->
       L141.hfc_R_S_T_Yh_EUR
@@ -499,7 +499,7 @@ module_gcameurope_L141.hfc_R_S_T_Y <- function(command, ...) {
                      "emissions/EDGAR/EDGAR_HFC32",
                      "emissions/EDGAR/EDGAR_HFC365mfc",
                      "emissions/EDGAR/EDGAR_HFC43",
-                     "socioeconomics/income_shares",
+                     "L106.income_distributions",
                      "L244.GenericShares_EUR",
                      "L244.ThermalShares_EUR") ->
       L141.hfc_ef_R_cooling_Yh_EUR

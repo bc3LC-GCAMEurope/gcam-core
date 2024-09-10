@@ -1904,7 +1904,6 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
 
     L244.ThermalServiceAdder_EUR<-bind_rows(L244.ThermalServiceAdder_coal_tradbio,
-                                            # L244.ThermalServiceAdder_modern_exception,
                                             L244.ThermalServiceAdder_modern) %>%
       # add commercial
       bind_rows(L244.ThermalShares_pre %>%
