@@ -129,6 +129,7 @@ module_gcameurope_L2323.iron_steel <- function(command, ...) {
         # calculate mean costs by country for EAF and BF-BOF
         group_by({{agg_region}},subsector,year)%>%
         summarize(value=mean(value)) %>%
+        ungroup() %>%
         mutate(subsector=if_else(subsector=="EAF","EAF with scrap","BLASTFUR")) -> all_steel_production_costs
 
       return(all_steel_production_costs)

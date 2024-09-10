@@ -144,14 +144,25 @@ module_gcameurope_L114.bcoc_en_R_S_T_Y <- function(command, ...) {
       select(GCAM_region_ID, Non.CO2, supplysector, subsector, stub.technology, year, emissions.factor) %>%
       spread(year, emissions.factor)
 
+    # Adjust for multiple consumers in the residential sector
     L114.bcoc_tgej_R_en_S_F_2000_resid<-L114.bcoc_tgej_R_en_S_F_2000_EUR %>%
       filter(grepl("resid",supplysector)) %>%
       repeat_add_columns(tibble(group = unique(groups$gcam.consumer))) %>%
       unite(supplysector, c("supplysector","group"), sep = "_")
 
+    # Adjust for multiple consumers in the trn sector
+    L114.bcoc_tgej_R_en_S_F_2000_trn <- L114.bcoc_tgej_R_en_S_F_2000_EUR %>%
+      filter(grepl("trn_pass",supplysector) | grepl("trn_aviation_intl",supplysector)) %>%
+      repeat_add_columns(tibble(group = unique(groups$gcam.consumer))) %>%
+      unite(supplysector, c("supplysector","group"), sep = "_")
+
+    # Add the adjusted sectors to the  output dataset
     L114.bcoc_tgej_R_en_S_F_2000_EUR<-L114.bcoc_tgej_R_en_S_F_2000_EUR %>%
       filter(!grepl("resid",supplysector)) %>%
-      bind_rows(L114.bcoc_tgej_R_en_S_F_2000_resid)
+      filter(!grepl("trn_pass",supplysector)) %>%
+      filter(!grepl("trn_aviation_intl",supplysector)) %>%
+      bind_rows(L114.bcoc_tgej_R_en_S_F_2000_resid) %>%
+      bind_rows(L114.bcoc_tgej_R_en_S_F_2000_trn)
 
 
     # Document for output
