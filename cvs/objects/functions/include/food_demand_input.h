@@ -372,6 +372,9 @@ protected:
         //! The name of this input
         DEFINE_VARIABLE( SIMPLE, "name", mName, std::string ),
 
+        //! The name of the sector
+        DEFINE_VARIABLE(SIMPLE, "sector-name", mSectorName, std::string),  
+       
         //! Food demand in Pcal/year
         DEFINE_VARIABLE( ARRAY | STATE, "base-service", mFoodDemandQuantity, objects::PeriodVector<Value> ),
 
