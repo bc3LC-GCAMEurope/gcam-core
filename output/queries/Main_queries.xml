@@ -4947,6 +4947,26 @@ A user can adjust the query to search for any of:
             <xPath buildList="true" dataName="subregional-percapita-income" group="false" sumAll="false">gcam-consumer/subregional-percapita-income/node()</xPath>
             <comments/>
         </demographicsQuery>
+        <demographicsQuery title = "subregional population food">
+            <axis1 name = "region">region</axis1>
+            <axis2 name = "Year">subregional-population</axis2>
+            <xPath
+                buildList = "true"
+                dataName = "subregional-population"
+                group = "false"
+                sumAll = "false">gcam-consumer[contains(@name,'FoodDemand')]/subregional-population/node()</xPath>
+            <comments/>
+        </demographicsQuery>
+        <demographicsQuery title = "subregional income food">
+            <axis1 name = "region">region</axis1>
+            <axis2 name = "Year">subregional-percapita-income</axis2>
+            <xPath
+                buildList = "true"
+                dataName = "subregional-percapita-income"
+                group = "false"
+                sumAll = "false">gcam-consumer[contains(@name,'FoodDemand')]/subregional-percapita-income/node()</xPath>
+            <comments/>
+        </demographicsQuery>
         <query title="National Account">
             <axis1 name="Account">account[@name]</axis1>
             <axis2 name="Year">nationalAccount[@year]</axis2>
