@@ -193,7 +193,21 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
     L154.speed_kmhr_R_trn_m_sz_tech_F_Y <- get_data(all_data, "L154.speed_kmhr_R_trn_m_sz_tech_F_Y_EUR",strip_attributes = TRUE)
     L154.out_mpkm_R_trn_nonmotor_Yh <- get_data(all_data, "L154.out_mpkm_R_trn_nonmotor_Yh",strip_attributes = TRUE)
 
-    A54.CalPrice_trn <- get_data(all_data, "energy/A54.CalPrice_trn",strip_attributes = TRUE) %>% filter_regions_europe()
+    A54.CalPrice_trn <- get_data(all_data, "energy/A54.CalPrice_trn",strip_attributes = TRUE) %>%
+      # if deciles present, consider the median price by region, sector, and year so that
+      # each consumer demands the same if they reach the same wealth level
+      filter(str_detect(sector, "^trn_aviation_intl(_d[1-9]|_d10)?$") |
+               str_detect(sector, "^trn_pass(_d[1-9]|_d10)?$")) %>%
+      mutate(sector = sub("_([^_]*)$", "_split_\\1", sector)) %>%
+      tidyr::separate(sector, into = c("sector", "group"), sep = "_split_", extra = "merge", fill = "right") %>%
+      group_by(region, sector) %>%
+      summarise(`1990` = median(`1990`),
+                `2005` = median(`2005`),
+                `2010` = median(`2010`),
+                `2015` = median(`2015`)) %>%
+      ungroup() %>%
+      bind_rows(get_data(all_data, "energy/A54.CalPrice_trn",strip_attributes = TRUE) %>%
+                  filter(sector %in% c("trn_freight","trn_shipping_intl")))
     A54.SharesModeTech_trn <- get_data(all_data, "energy/A54.SharesModeTech_trn",strip_attributes = TRUE) %>% filter_regions_europe()
 
     # Check if pop is needed: Otherwise delete it!!!
@@ -290,7 +304,8 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       # filter final calibration year
       filter(year == MODEL_FINAL_BASE_YEAR) %>%
       rename(trn.final.demand = energy.final.demand) %>%
-      select(LEVEL2_DATA_NAMES[["CalPrice_trn"]])
+      select(LEVEL2_DATA_NAMES[["CalPrice_trn"]]) %>%
+      filter_regions_europe()
 
 
     # ===================================================
@@ -1094,13 +1109,26 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
 
     fit_pass_fn <- function(df) {
 
-      formula <- "base.service ~ a * pcGDP_thous75USD * ((price / lag_price) ^ price.elasticity) * pop"
-      start.value <- c(a = 1)
+      # check if lag_price is 0 to avoid breaking the formula
+      df_non0 <- df %>%
+        filter(lag_price != 0)
+      df_0 <- df %>%
+        filter(lag_price == 0)
 
-      fit_pass_df <- nls(formula, df, start.value)
+      fit_pass_df <- 0
+      if (nrow(df_non0) > 0) {
+        formula <- "base.service ~ a * pcGDP_thous75USD * ((price / lag_price) ^ price.elasticity) * pop"
+        start.value <- c(a = 1)
 
-      df <- df %>%
-        mutate(coef_trn = coef(fit_pass_df))
+        fit_pass_df <- nls(formula, df_non0, start.value)
+      } else {
+        fit_pass_df$coef = 0
+      }
+
+      df <- df_non0 %>%
+        mutate(coef_trn = coef(fit_pass_df)) %>%
+        bind_rows(df_0 %>%
+                    mutate(coef_trn = 0))
 
       return(invisible(df))
 
@@ -1117,7 +1145,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
 
 
     # Get the bias adder parameter
-    # Calculate decile-specific adders and transition to the cmmon adder in 2030
+    # Calculate decile-specific adders and transition to the common adder in 2050
 
     adder.trans.year <- 2050
 
@@ -1160,7 +1188,9 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       ungroup() %>%
       distinct() %>%
       mutate(sce = "CORE") %>%
-      select(LEVEL2_DATA_NAMES[["Trn_bias_adder"]], sce)
+      select(LEVEL2_DATA_NAMES[["Trn_bias_adder"]], sce) %>%
+      # set 0 to some special cases
+      mutate(bias.adder = ifelse(region %in% c('Albania','Ukraine') & grepl('trn_aviation_intl', trn.final.demand), 0, bias.adder))
 
 
     #--------------------

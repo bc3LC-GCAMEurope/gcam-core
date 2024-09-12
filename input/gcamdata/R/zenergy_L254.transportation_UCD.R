@@ -176,20 +176,20 @@ module_energy_L254.transportation_UCD <- function(command, ...) {
       A54.globaltranTech_shrwt <- get_data(all_data, "energy/A54.globaltranTech_shrwt_revised",strip_attributes = TRUE)
       A54.globaltranTech_interp <- get_data(all_data, "energy/A54.globaltranTech_interp_revised",strip_attributes = TRUE)
       A54.globaltech_passthru <- get_data(all_data, "energy/A54.globaltech_passthru_revised",strip_attributes = TRUE)
-    }
-    else {A54.tranSubsector_logit <- get_data(all_data, "energy/A54.tranSubsector_logit",strip_attributes = TRUE)
-    A54.tranSubsector_shrwt <- get_data(all_data, "energy/A54.tranSubsector_shrwt",strip_attributes = TRUE)
-    A54.tranSubsector_interp <- get_data(all_data, "energy/A54.tranSubsector_interp",strip_attributes = TRUE)
-    A54.tranSubsector_VOTT <- get_data(all_data, "energy/A54.tranSubsector_VOTT",strip_attributes = TRUE)
+    } else {
+      A54.tranSubsector_logit <- get_data(all_data, "energy/A54.tranSubsector_logit",strip_attributes = TRUE)
+      A54.tranSubsector_shrwt <- get_data(all_data, "energy/A54.tranSubsector_shrwt",strip_attributes = TRUE)
+      A54.tranSubsector_interp <- get_data(all_data, "energy/A54.tranSubsector_interp",strip_attributes = TRUE)
+      A54.tranSubsector_VOTT <- get_data(all_data, "energy/A54.tranSubsector_VOTT",strip_attributes = TRUE)
 
-    A54.tranSubsector_VOTT <- get_data(all_data, "energy/A54.tranSubsector_VOTT",strip_attributes = TRUE)
-    A54.tranSubsector_VOTT_SSP1 <- get_data(all_data, "energy/A54.tranSubsector_VOTT_ssp1",strip_attributes = TRUE) %>% mutate(sce=paste0("SSP1"))
-    A54.tranSubsector_VOTT<- bind_rows(A54.tranSubsector_VOTT,A54.tranSubsector_VOTT_SSP1)
+      A54.tranSubsector_VOTT <- get_data(all_data, "energy/A54.tranSubsector_VOTT",strip_attributes = TRUE)
+      A54.tranSubsector_VOTT_SSP1 <- get_data(all_data, "energy/A54.tranSubsector_VOTT_ssp1",strip_attributes = TRUE) %>% mutate(sce=paste0("SSP1"))
+      A54.tranSubsector_VOTT<- bind_rows(A54.tranSubsector_VOTT,A54.tranSubsector_VOTT_SSP1)
 
-    A54.globaltranTech_retire <- get_data(all_data, "energy/A54.globaltranTech_retire",strip_attributes = TRUE)
-    A54.globaltranTech_shrwt <- get_data(all_data, "energy/A54.globaltranTech_shrwt",strip_attributes = TRUE)
-    A54.globaltranTech_interp <- get_data(all_data, "energy/A54.globaltranTech_interp",strip_attributes = TRUE)
-    A54.globaltech_passthru <- get_data(all_data, "energy/A54.globaltech_passthru",strip_attributes = TRUE)
+      A54.globaltranTech_retire <- get_data(all_data, "energy/A54.globaltranTech_retire",strip_attributes = TRUE)
+      A54.globaltranTech_shrwt <- get_data(all_data, "energy/A54.globaltranTech_shrwt",strip_attributes = TRUE)
+      A54.globaltranTech_interp <- get_data(all_data, "energy/A54.globaltranTech_interp",strip_attributes = TRUE)
+      A54.globaltech_passthru <- get_data(all_data, "energy/A54.globaltech_passthru",strip_attributes = TRUE)
     }
 
 
@@ -206,7 +206,21 @@ module_energy_L254.transportation_UCD <- function(command, ...) {
     L154.speed_kmhr_R_trn_m_sz_tech_F_Y <- get_data(all_data, "L154.speed_kmhr_R_trn_m_sz_tech_F_Y",strip_attributes = TRUE)
     L154.out_mpkm_R_trn_nonmotor_Yh <- get_data(all_data, "L154.out_mpkm_R_trn_nonmotor_Yh",strip_attributes = TRUE)
 
-    A54.CalPrice_trn <- get_data(all_data, "energy/A54.CalPrice_trn",strip_attributes = TRUE)
+    A54.CalPrice_trn <- get_data(all_data, "energy/A54.CalPrice_trn",strip_attributes = TRUE) %>%
+      # if deciles present, consider the median price by region, sector, and year so that
+      # each consumer demands the same if they reach the same wealth level
+      filter(str_detect(sector, "^trn_aviation_intl(_d[1-9]|_d10)?$") |
+             str_detect(sector, "^trn_pass(_d[1-9]|_d10)?$")) %>%
+      mutate(sector = sub("_([^_]*)$", "_split_\\1", sector)) %>%
+      tidyr::separate(sector, into = c("sector", "group"), sep = "_split_", extra = "merge", fill = "right") %>%
+      group_by(region, sector) %>%
+      summarise(`1990` = median(`1990`),
+                `2005` = median(`2005`),
+                `2010` = median(`2010`),
+                `2015` = median(`2015`)) %>%
+      ungroup() %>%
+      bind_rows(get_data(all_data, "energy/A54.CalPrice_trn",strip_attributes = TRUE) %>%
+                  filter(sector %in% c("trn_freight","trn_shipping_intl")))
     A54.SharesModeTech_trn <- get_data(all_data, "energy/A54.SharesModeTech_trn",strip_attributes = TRUE)
 
     # Check if pop is needed: Otherwise delete it!!!
@@ -1105,7 +1119,7 @@ module_energy_L254.transportation_UCD <- function(command, ...) {
       repeat_add_columns(tibble(group = income_groups)) %>%
       left_join_error_no_match(L154.trn_serv_shares_subsector %>%
                                  filter(scenario == "CORE") %>%
-                                 select(-year, -scenario) %>%
+                                 select(-scenario) %>%
                                  rename(tranSubsector = subsector), by = c("region", "supplysector", "tranSubsector", "group")) %>%
       # Add equal shares to nonMotor
       mutate(share = 1/length(income_groups)) %>%
@@ -1220,13 +1234,26 @@ module_energy_L254.transportation_UCD <- function(command, ...) {
 
     fit_pass_fn <- function(df) {
 
-      formula <- "base.service ~ a * pcGDP_thous75USD * ((price / lag_price) ^ price.elasticity) * pop"
-      start.value <- c(a = 1)
+      # check if lag_price is 0 to avoid breaking the formula
+      df_non0 <- df %>%
+        filter(lag_price != 0)
+      df_0 <- df %>%
+        filter(lag_price == 0)
 
-      fit_pass_df <- nls(formula, df, start.value)
+      fit_pass_df <- 0
+      if (nrow(df_non0) > 0) {
+        formula <- "base.service ~ a * pcGDP_thous75USD * ((price / lag_price) ^ price.elasticity) * pop"
+        start.value <- c(a = 1)
 
-      df <- df %>%
-        mutate(coef_trn = coef(fit_pass_df))
+        fit_pass_df <- nls(formula, df_non0, start.value)
+      } else {
+        fit_pass_df$coef = 0
+      }
+
+      df <- df_non0 %>%
+        mutate(coef_trn = coef(fit_pass_df)) %>%
+        bind_rows(df_0 %>%
+                    mutate(coef_trn = 0))
 
       return(invisible(df))
 
@@ -1286,7 +1313,10 @@ module_energy_L254.transportation_UCD <- function(command, ...) {
       ungroup() %>%
       distinct() %>%
       mutate(sce = "CORE") %>%
-      select(LEVEL2_DATA_NAMES[["Trn_bias_adder"]], sce)
+      select(LEVEL2_DATA_NAMES[["Trn_bias_adder"]], sce) %>%
+      # set 0 to some special cases
+      mutate(bias.adder = ifelse(region %in% c('Africa_Southern') & trn.final.demand == 'trn_aviation_intl_d1', 0, bias.adder))
+
 
 
     #--------------------
