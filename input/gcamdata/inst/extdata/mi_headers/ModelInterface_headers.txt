@@ -521,6 +521,8 @@ DeleteFinalDemand, world/+{name}region,region/+{name; delete=1}energy-final-dema
 
 SubregionalShares, world/+{name}region, region/+{name}gcam-consumer, gcam-consumer/+{year;fillout=1}subregional-population-share, gcam-consumer/+{year;fillout=1}subregional-income-share, gcam-consumer/+subregional-population-share, gcam-consumer/+subregional-income-share, scenario, scenario/world
 
+SubregionalShares_Year, world/+{name}region, region/+{name}gcam-consumer, gcam-consumer/+{year}subregional-population-share, gcam-consumer/+{year}subregional-income-share, gcam-consumer/+subregional-population-share, gcam-consumer/+subregional-income-share, scenario, scenario/world
+
 PriceExp_IntGains, world/+{name}region, region/+{name}gcam-consumer, gcam-consumer/+{name}nodeInput, nodeInput/+{name}building-node-input, building-node-input/+{year;fillout=1}price-exponent, building-node-input/+price-exponent, building-node-input/+internal-gains-market-name, building-node-input/+internal-gains-unit, scenario, scenario/world
 
 DemandFunction_food, world/+{name}region, region/+{name}gcam-consumer, gcam-consumer/+{name}nodeInput, nodeInput/+prodDmdFnType, scenario, scenario/world
