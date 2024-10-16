@@ -26,9 +26,12 @@ module_gcameurope_L2011.ff_ALL_R_C_Y <- function(command, ...) {
                      "L1011.ff_GrossTrade_EJ_R_C_Y",
                      "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
                      "L121.in_EJ_R_TPES_crude_Yh_EUR",
-                     "L111.Prod_EJ_R_F_Yh_EUR")
+                     "L111.Prod_EJ_R_F_Yh_EUR",
+                     "L1011.ff_trade_Europe_EJ_R_Y",
+                     "Europe_Single_Market_Regions")
   MODULE_OUTPUTS <- c("L2011.ff_ALL_EJ_R_C_Y_EUR",
-                      "L2011.ff_GrossTrade_EJ_R_C_Y_EUR")
+                      "L2011.ff_GrossTrade_EJ_R_C_Y_EUR",
+                      "L2011.ff_GrossTrade_EJ_R_C_Y_singleMarket")
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -44,6 +47,8 @@ module_gcameurope_L2011.ff_ALL_R_C_Y <- function(command, ...) {
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
+
+    SINGLE_MARKET_NAME <- unique(L1011.ff_trade_Europe_EJ_R_Y$region_importer[L1011.ff_trade_Europe_EJ_R_Y$region_importer != "Global"])
 
     # Part 0: Replace IEA data with Eurostat data wherever available ----------------------------
     L1012.en_bal_EJ_R_Si_Fi_Yh <- L1012.en_bal_EJ_R_Si_Fi_Yh %>%
@@ -98,7 +103,7 @@ module_gcameurope_L2011.ff_ALL_R_C_Y <- function(command, ...) {
       distinct()->
       ff_production
 
-    #Part 3: Calculate net-trade by subtracting consumption from production by region and year ----------------------------
+    # Part 3: Calculate net-trade by subtracting consumption from production by region and year ----------------------------
     ff_production %>%
       left_join_error_no_match(ff_consumption, by = c("GCAM_region_ID", "fuel", "year")) %>%
       mutate(net_trade = production - consumption) %>%
@@ -106,14 +111,71 @@ module_gcameurope_L2011.ff_ALL_R_C_Y <- function(command, ...) {
       select(region, fuel, year, production, consumption, net_trade) ->
       L2011.ff_ALL_EJ_R_C_Y_EUR
 
-    #Part 4: Adjust Comtrade's trade to match GCAM's calibrated data ----------------------------
+    # Part 4a: Prepare eurostat data for global market ----------------------------
+    # Assign the single market a regionID of 0
+    GCAM_region_names <- GCAM_region_names %>%
+      bind_rows(tibble(GCAM_region_ID = 0, region = SINGLE_MARKET_NAME))
 
+    # We need to create the European_Single_Market and add in EUrostat trade data
+    L2011.ff_ALL_EJ_R_C_Y_EUR_SingleMarket <- L2011.ff_ALL_EJ_R_C_Y_EUR %>%
+      mutate(region = if_else(region %in% Europe_Single_Market_Regions$GCAMEU_region, SINGLE_MARKET_NAME, region)) %>%
+      group_by(region, fuel, year) %>%
+      summarise(production = sum(production),
+                consumption = sum(consumption),
+                net_trade = sum(net_trade)) %>%
+      ungroup
+
+    # We want to calculate trade between european market and globe
+    # Since we only have Swiss data reported by other regions, we are going to subtract
+    # reported EU trade from eurostat from the gross exports and imports reported in comstat
+    SWISS_ID <- GCAM_region_names %>% filter(region == "Switzerland") %>%  pull(GCAM_region_ID)
+
+    # Swiss trade with other single market countries (eurostat)
+    intraEU_Swiss_trade <- L1011.ff_trade_Europe_EJ_R_Y %>%
+      filter(fuel %in% L1011.ff_GrossTrade_EJ_R_C_Y$GCAM_Commodity,
+             import_ctry == "Switzerland" | export_ctry == "Switzerland",
+             region_importer == SINGLE_MARKET_NAME & region_exporter == SINGLE_MARKET_NAME) %>%
+      mutate(flow = if_else(import_ctry == "Switzerland", "GrossImp_EJ", "GrossExp_EJ")) %>%
+      group_by(GCAM_Commodity = fuel, year, flow) %>%
+      summarise(value_intraEU = sum(value)) %>%
+      ungroup
+
+    # total swiss trade from comstat
+    extraEU_Swiss_trade <- L1011.ff_GrossTrade_EJ_R_C_Y %>%
+      filter(GCAM_region_ID == SWISS_ID) %>%
+      select(-net_trade) %>%
+      tidyr::pivot_longer(cols = c("GrossExp_EJ", "GrossImp_EJ"), names_to = "flow") %>%
+      # match in eurostat data
+      left_join(intraEU_Swiss_trade, by = c("GCAM_Commodity", "year", "flow")) %>%
+      mutate(value = if_else(is.na(value_intraEU), value, value - value_intraEU)) %>%
+      select(fuel = GCAM_Commodity, year, flow, value)
+
+    # The european trade in Comtrade includes intra-european trade
+    # So we need to replace it with the external trade from the eurostat data
+    L1011.EUR_SingleMarket_Global_Trade <- L1011.ff_trade_Europe_EJ_R_Y %>%
+      filter(fuel %in% L1011.ff_GrossTrade_EJ_R_C_Y$GCAM_Commodity,
+             region_importer != region_exporter,
+             !(import_ctry == "Switzerland" | export_ctry == "Switzerland")) %>%
+      mutate(flow = if_else(region_importer == SINGLE_MARKET_NAME, "GrossImp_EJ", "GrossExp_EJ")) %>%
+      bind_rows(extraEU_Swiss_trade) %>%
+      group_by(GCAM_Commodity = fuel, year, flow) %>%
+      summarise(value = sum(value)) %>%
+      ungroup %>%
+      tidyr::pivot_wider(names_from = flow, values_from = value) %>%
+      mutate(net_trade = GrossExp_EJ - GrossImp_EJ,
+             region = SINGLE_MARKET_NAME) %>%
+      left_join_error_no_match(GCAM_region_names, by = "region")
+
+    # Part 4b: Adjust Comtrade and Eurostat trade to match GCAM's calibrated data (GLOBAL trade)----------------------------
     L1011.ff_GrossTrade_EJ_R_C_Y %>%
-      filter(year == MODEL_FINAL_BASE_YEAR) %>%
-      complete(GCAM_Commodity = unique(L2011.ff_ALL_EJ_R_C_Y_EUR$fuel),
-               nesting(GCAM_region_ID, year)) %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
-      left_join_error_no_match(L2011.ff_ALL_EJ_R_C_Y_EUR %>% select(region, fuel, year, GCAM_net_trade = net_trade),
+      # replace european data
+      filter(!region %in% Europe_Single_Market_Regions$GCAMEU_region) %>%
+      bind_rows(L1011.EUR_SingleMarket_Global_Trade) %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
+      complete(GCAM_Commodity = unique(L2011.ff_ALL_EJ_R_C_Y_EUR_SingleMarket$fuel),
+               nesting(GCAM_region_ID, region, year)) %>%
+      left_join_error_no_match(L2011.ff_ALL_EJ_R_C_Y_EUR_SingleMarket %>% select(region, fuel, year, GCAM_net_trade = net_trade),
                                by = c("region", "GCAM_Commodity" = "fuel", "year")) %>%
       mutate(net_trade = if_else(is.na(net_trade), GCAM_net_trade, net_trade),
              GrossExp_EJ = if_else(is.na(GrossExp_EJ), if_else(GCAM_net_trade>0, GCAM_net_trade, 0), GrossExp_EJ ),
@@ -136,7 +198,7 @@ module_gcameurope_L2011.ff_ALL_R_C_Y <- function(command, ...) {
     # Exports and Imports for any region where GrossExp is greater than production
     L2011.ff_GrossTrade_EJ_R_C_Final_Cal_Year %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
-      left_join_error_no_match(L2011.ff_ALL_EJ_R_C_Y_EUR %>% select(region, fuel, year, production),
+      left_join_error_no_match(L2011.ff_ALL_EJ_R_C_Y_EUR_SingleMarket %>% select(region, fuel, year, production),
                                by = c("region", "GCAM_Commodity" = "fuel", "year")) %>%
       mutate(GrossImp_EJ = if_else(GrossExp_EJ>production, GrossImp_EJ - (GrossExp_EJ-production), if_else(GrossExp_EJ==production, GrossImp_EJ - (GrossExp_EJ-0.95*production),GrossImp_EJ)),
              GrossExp_EJ = if_else(GrossExp_EJ>production, production, if_else(GrossExp_EJ==production, 0.95*production,GrossExp_EJ))) %>%
@@ -148,7 +210,7 @@ module_gcameurope_L2011.ff_ALL_R_C_Y <- function(command, ...) {
 
     #Only the final calibration period's calibration matters, so for earlier periods simply assume that
     # each region is solely an importer or an exporter.
-    L2011.ff_ALL_EJ_R_C_Y_EUR %>%
+    L2011.ff_ALL_EJ_R_C_Y_EUR_SingleMarket %>%
       left_join_error_no_match(GCAM_region_names, by = "region") %>%
       filter(! year %in% L2011.ff_GrossTrade_EJ_R_C_Final_Cal_Year_adj$year) %>%
       mutate(GrossExp_EJ = if_else(net_trade<=0, 0, net_trade),
@@ -157,6 +219,76 @@ module_gcameurope_L2011.ff_ALL_R_C_Y <- function(command, ...) {
       select(names(L2011.ff_GrossTrade_EJ_R_C_Final_Cal_Year_adj)) %>%
       bind_rows(L2011.ff_GrossTrade_EJ_R_C_Final_Cal_Year_adj)->
       L2011.ff_GrossTrade_EJ_R_C_Y_EUR
+
+    # Part 4c: European Single Market Trade ----------------------------
+    # Get gross exports, imports and net trade for each country in single market
+    # Want all trade (both within market and outside) since we need to match net trade of single market region
+    L2011.ff_trade_EJ_R_Y_singleMarket <- L1011.ff_trade_Europe_EJ_R_Y %>%
+      filter(fuel %in% L1011.ff_GrossTrade_EJ_R_C_Y$GCAM_Commodity) %>%
+      select(-region_importer, -region_exporter) %>%
+      mutate(ID = row_number()) %>%
+      tidyr::pivot_longer(cols = c("import_ctry", "export_ctry"), names_to = "flow", values_to = "region") %>%
+      group_by(GCAM_Commodity = fuel, region, flow, year) %>%
+      summarise(value = sum(value)) %>%
+      ungroup %>%
+      filter(region %in% Europe_Single_Market_Regions$GCAMEU_region) %>%
+      mutate(flow = if_else(flow == "import_ctry", "GrossImp_EJ", "GrossExp_EJ")) %>%
+      tidyr::pivot_wider(names_from = flow, values_fill = 0) %>%
+      mutate(net_trade = GrossExp_EJ - GrossImp_EJ) %>%
+      # need to use comstat for switzerland
+      filter(region != "Switzerland") %>%
+      bind_rows(L1011.ff_GrossTrade_EJ_R_C_Y %>%  filter(GCAM_region_ID == SWISS_ID) %>%
+                  select(-GCAM_region_ID) %>% mutate(region = "Switzerland"))
+
+    # Adjust eurostat net trade based on GCAM implied net trade
+    L2011.ff_GrossTrade_EJ_R_C_Final_Cal_Year_singleMarket <-  L2011.ff_trade_EJ_R_Y_singleMarket %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
+      complete(GCAM_Commodity = unique(L2011.ff_ALL_EJ_R_C_Y_EUR_SingleMarket$fuel),
+               nesting(region, year)) %>%
+      left_join_error_no_match(L2011.ff_ALL_EJ_R_C_Y_EUR %>% select(region, fuel, year, GCAM_net_trade = net_trade),
+                               by = c("region", "GCAM_Commodity" = "fuel", "year")) %>%
+      mutate(net_trade = if_else(is.na(net_trade), GCAM_net_trade, net_trade),
+             GrossExp_EJ = if_else(is.na(GrossExp_EJ), if_else(GCAM_net_trade > 0, GCAM_net_trade, 0), GrossExp_EJ ),
+             GrossImp_EJ = if_else(is.na(GrossImp_EJ), if_else(GCAM_net_trade <= 0, -1 * GCAM_net_trade, 0), GrossImp_EJ )) %>%
+      #We will maintain GCAM's calibration values and harmonize net_trade by scaling eurostat's imports and exports by the ratio between GCAM's net trade and comtrade's
+      mutate(GrossExp_EJ = if_else(!is.na(GrossExp_EJ * GCAM_net_trade/net_trade) & !is.infinite(GrossExp_EJ * GCAM_net_trade/net_trade), GrossExp_EJ * GCAM_net_trade/net_trade, GrossExp_EJ),
+             GrossImp_EJ = if_else(!is.na(GrossImp_EJ * GCAM_net_trade/net_trade) & !is.infinite(GrossImp_EJ * GCAM_net_trade/net_trade), GrossImp_EJ * GCAM_net_trade/net_trade, GrossImp_EJ),
+             net_trade = GrossExp_EJ - GrossImp_EJ) %>%
+      #There are a few rows where eurostat says a region is an importer and GCAM says they're an exporter
+      #This discrepency makes the gross imports and exports negative which cannot happen.
+      #We turn the values positive and flip imports and exports to maintain GCAM's values
+      mutate(GrossExp_EJ_old = GrossExp_EJ,
+             GrossExp_EJ = if_else(GrossExp_EJ < 0, -1 * GrossImp_EJ, GrossExp_EJ),
+             GrossImp_EJ = if_else(GrossImp_EJ < 0, -1 * GrossExp_EJ_old, GrossImp_EJ),
+             net_trade = GrossExp_EJ - GrossImp_EJ) %>%
+      # sometimes eurostat has no trade, but GCAM has a bit, so we add the GCAM trade to imports/exports
+      mutate(GrossExp_EJ = if_else(net_trade == 0 & GCAM_net_trade > 0, GCAM_net_trade, GrossExp_EJ),
+             GrossImp_EJ = if_else(net_trade == 0 & GCAM_net_trade < 0, -1 * GCAM_net_trade, GrossImp_EJ),
+             net_trade = GrossExp_EJ - GrossImp_EJ) %>%
+      select(names(L2011.ff_trade_Europe_EJ_R_Y))
+
+    # This structure does not allow regions to trade more product than they produce, so decrease
+    # Exports and Imports for any region where GrossExp is greater than production
+    L2011.ff_GrossTrade_EJ_R_C_Final_Cal_Year_adj_singleMarket <- L2011.ff_GrossTrade_EJ_R_C_Final_Cal_Year_singleMarket %>%
+      left_join_error_no_match(L2011.ff_ALL_EJ_R_C_Y_EUR %>% select(region, fuel, year, production),
+                               by = c("region", "GCAM_Commodity" = "fuel", "year")) %>%
+      mutate(GrossImp_EJ = if_else(GrossExp_EJ>production, GrossImp_EJ - (GrossExp_EJ-production), if_else(GrossExp_EJ==production, GrossImp_EJ - (GrossExp_EJ-0.95*production),GrossImp_EJ)),
+             GrossExp_EJ = if_else(GrossExp_EJ>production, production, if_else(GrossExp_EJ==production, 0.95*production,GrossExp_EJ))) %>%
+      mutate(GrossImp_EJ = if_else(GrossExp_EJ==production, GrossImp_EJ - (GrossExp_EJ-0.95*production),GrossImp_EJ),
+             GrossExp_EJ = if_else(GrossExp_EJ==production, 0.95*production,GrossExp_EJ)) %>%
+      select(names(L2011.ff_trade_Europe_EJ_R_Y))
+
+    #Only the final calibration period's calibration matters, so for earlier periods simply assume that
+    # each region is solely an importer or an exporter.
+    L2011.ff_GrossTrade_EJ_R_C_Y_singleMarket <- L2011.ff_ALL_EJ_R_C_Y_EUR %>%
+      filter(region %in% Europe_Single_Market_Regions$GCAMEU_region,
+             ! year %in% L2011.ff_GrossTrade_EJ_R_C_Final_Cal_Year_adj_singleMarket$year) %>%
+      mutate(GrossExp_EJ = if_else(net_trade <= 0, 0, net_trade),
+             GrossImp_EJ = if_else(net_trade < 0, -1 * net_trade, 0),
+             GCAM_Commodity = fuel) %>%
+      select(names(L2011.ff_GrossTrade_EJ_R_C_Final_Cal_Year_adj_singleMarket)) %>%
+      bind_rows(L2011.ff_GrossTrade_EJ_R_C_Final_Cal_Year_adj_singleMarket)
+
 
     # Produce outputs ----------------------------
     L2011.ff_ALL_EJ_R_C_Y_EUR %>%
@@ -174,11 +306,18 @@ module_gcameurope_L2011.ff_ALL_R_C_Y <- function(command, ...) {
       L2011.ff_ALL_EJ_R_C_Y_EUR
 
     L2011.ff_GrossTrade_EJ_R_C_Y_EUR %>%
-      add_title("L2011.ff_GrossTrade_EJ_R_C_Y_EUR") %>%
+      add_title("Global Fossil Trade - with Europe as one market") %>%
       add_units("EJ") %>%
       add_comments("Adjust Comtrade fossil fuel net trade to match GCAM's calibrated values by GCAM region, commodity and year") %>%
       add_precursors(MODULE_INPUTS) ->
       L2011.ff_GrossTrade_EJ_R_C_Y_EUR
+
+    L2011.ff_GrossTrade_EJ_R_C_Y_singleMarket  %>%
+      add_title("European Single Market Trade") %>%
+      add_units("EJ") %>%
+      add_precursors(MODULE_INPUTS) ->
+      L2011.ff_GrossTrade_EJ_R_C_Y_singleMarket
+
 
     return_data(MODULE_OUTPUTS)
   } else {
