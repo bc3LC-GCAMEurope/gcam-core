@@ -232,6 +232,7 @@ module_gcameurope_L2011.ff_ALL_R_C_Y <- function(command, ...) {
       summarise(value = sum(value)) %>%
       ungroup %>%
       filter(region %in% Europe_Single_Market_Regions$GCAMEU_region) %>%
+      complete(nesting(GCAM_Commodity, flow, year), region, fill = list(value = 0)) %>%
       mutate(flow = if_else(flow == "import_ctry", "GrossImp_EJ", "GrossExp_EJ")) %>%
       tidyr::pivot_wider(names_from = flow, values_fill = 0) %>%
       mutate(net_trade = GrossExp_EJ - GrossImp_EJ) %>%
@@ -265,7 +266,7 @@ module_gcameurope_L2011.ff_ALL_R_C_Y <- function(command, ...) {
       mutate(GrossExp_EJ = if_else(net_trade == 0 & GCAM_net_trade > 0, GCAM_net_trade, GrossExp_EJ),
              GrossImp_EJ = if_else(net_trade == 0 & GCAM_net_trade < 0, -1 * GCAM_net_trade, GrossImp_EJ),
              net_trade = GrossExp_EJ - GrossImp_EJ) %>%
-      select(names(L2011.ff_trade_Europe_EJ_R_Y))
+      select(names(L2011.ff_trade_EJ_R_Y_singleMarket))
 
     # This structure does not allow regions to trade more product than they produce, so decrease
     # Exports and Imports for any region where GrossExp is greater than production
@@ -276,7 +277,7 @@ module_gcameurope_L2011.ff_ALL_R_C_Y <- function(command, ...) {
              GrossExp_EJ = if_else(GrossExp_EJ>production, production, if_else(GrossExp_EJ==production, 0.95*production,GrossExp_EJ))) %>%
       mutate(GrossImp_EJ = if_else(GrossExp_EJ==production, GrossImp_EJ - (GrossExp_EJ-0.95*production),GrossImp_EJ),
              GrossExp_EJ = if_else(GrossExp_EJ==production, 0.95*production,GrossExp_EJ)) %>%
-      select(names(L2011.ff_trade_Europe_EJ_R_Y))
+      select(names(L2011.ff_trade_EJ_R_Y_singleMarket))
 
     #Only the final calibration period's calibration matters, so for earlier periods simply assume that
     # each region is solely an importer or an exporter.
