@@ -40,6 +40,8 @@ module_socio_L281.macro_account_tracking <- function(command, ...) {
              "L239.TechCoef_tra",
              "L243.TechCoef_TradedBio",
              "L239.TechCoef_reg",
+             "L239.TechCoef_tra_EUR",
+             "L239.TechCoef_reg_EUR",
              "L243.GlobalTechCoef_TotBio",
              "L2392.TechCoef_tra_NG",
              "L2392.TechCoef_reg_NG"))
