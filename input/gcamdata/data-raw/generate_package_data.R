@@ -367,15 +367,12 @@ generate_level2_data_names <- function() {
   level2_data_names[["StapleBaseService"]] <- c("region", "gcam.consumer", "nodeInput", "staples.food.demand.input", "year", "base.service")
   level2_data_names[["NonStapleBaseService"]] <- c("region", "gcam.consumer", "nodeInput", "non.staples.food.demand.input", "year", "base.service")
   level2_data_names[["GompFnParam"]] <- c("region","gcam.consumer","nodeInput","building.node.input","base.pcFlsp","unadjust.satiation","land.density.param","b.param","income.param","bias.adjust.param","tot_dens")
-  level2_data_names[["GenericCoalCoef"]] <- c("region","gcam.consumer", "nodeInput", "building.node.input", "building.service.input","A_coal","k_coal","base.coal")
-  level2_data_names[["ThermalCoalCoef"]] <- c("region","gcam.consumer", "nodeInput", "building.node.input", "thermal.building.service.input","A_coal","k_coal","base.coal")
-  level2_data_names[["GenericTradBioCoef"]] <- c("region","gcam.consumer", "nodeInput", "building.node.input", "building.service.input","x_TradBio","y_TradBio","base.TradBio")
-  level2_data_names[["ThermalTradBioCoef"]] <- c("region","gcam.consumer", "nodeInput", "building.node.input", "thermal.building.service.input","x_TradBio","y_TradBio","base.TradBio")
   level2_data_names[["GenericServicePrice"]] <- c("region","gcam.consumer","nodeInput","building.node.input","building.service.input","price")
   level2_data_names[["ThermalServicePrice"]] <- c("region","gcam.consumer","nodeInput","building.node.input","thermal.building.service.input","price")
   level2_data_names[["GenericBaseDens"]] <- c("region", "gcam.consumer", "nodeInput", "building.node.input", "building.service.input", "base.density")
   level2_data_names[["ThermalBaseDens"]] <- c("region", "gcam.consumer", "nodeInput", "building.node.input", "thermal.building.service.input", "base.density")
-
+  level2_data_names[["GenericTradFuelParams"]] <- c("region","gcam.consumer","nodeInput","building.node.input","building.service.input", "prelast","b1","b2","b3")
+  level2_data_names[["ThermalTradFuelParams"]] <- c("region","gcam.consumer","nodeInput","building.node.input","thermal.building.service.input", "prelast","b1","b2","b3")
 
     # Land types
   level2_data_names[["LN0_Land"]] <- c("region", "LandAllocatorRoot", "year.fillout", "landAllocation")

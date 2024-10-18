@@ -49,14 +49,12 @@ module_energy_building_det_xml <- function(command, ...) {
              "L244.GenericServiceCoef",
              "L244.ThermalServiceCoef",
              "L244.GompFnParam",
-             "L244.GenericCoalCoef",
-             "L244.ThermalCoalCoef",
-             "L244.GenericTradBioCoef",
-             "L244.ThermalTradBioCoef",
              "L244.GenericServicePrice",
              "L244.ThermalServicePrice",
              "L244.GenericBaseDens",
              "L244.ThermalBaseDens",
+             "L244.GenericTradFuelParams",
+             "L244.ThermalTradFuelParams",
              "L244.DeleteGenericService"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c(XML = "building_det.xml"))
@@ -103,10 +101,8 @@ module_energy_building_det_xml <- function(command, ...) {
     L244.GenericServiceCoef<-get_data(all_data, "L244.GenericServiceCoef")
     L244.ThermalServiceCoef<-get_data(all_data, "L244.ThermalServiceCoef")
     L244.GompFnParam <- get_data(all_data, "L244.GompFnParam")
-    L244.GenericCoalCoef <- get_data(all_data, "L244.GenericCoalCoef")
-    L244.ThermalCoalCoef <- get_data(all_data, "L244.ThermalCoalCoef")
-    L244.GenericTradBioCoef <- get_data(all_data, "L244.GenericTradBioCoef")
-    L244.ThermalTradBioCoef <- get_data(all_data, "L244.ThermalTradBioCoef")
+    L244.GenericTradFuelParams <- get_data(all_data, "L244.GenericTradFuelParams")
+    L244.ThermalTradFuelParams <- get_data(all_data, "L244.ThermalTradFuelParams")
     L244.GenericServicePrice <- get_data(all_data, "L244.GenericServicePrice")
     L244.ThermalServicePrice <- get_data(all_data, "L244.ThermalServicePrice")
     L244.GenericBaseDens <- get_data(all_data, "L244.GenericBaseDens")
@@ -134,10 +130,8 @@ module_energy_building_det_xml <- function(command, ...) {
       add_xml_data(L244.Satiation_flsp, "Satiation_flsp") %>%
       add_xml_data(L244.Satiation_impedance, "SatiationImpedance") %>%
       add_xml_data(L244.GompFnParam, "GompFnParam") %>%
-      add_xml_data(L244.GenericCoalCoef, "GenericCoalCoef") %>%
-      add_xml_data(L244.ThermalCoalCoef, "ThermalCoalCoef") %>%
-      add_xml_data(L244.GenericTradBioCoef, "GenericTradBioCoef") %>%
-      add_xml_data(L244.ThermalTradBioCoef, "ThermalTradBioCoef") %>%
+      add_xml_data(L244.GenericTradFuelParams, "GenericTradFuelParams") %>%
+      add_xml_data(L244.ThermalTradFuelParams, "ThermalTradFuelParams") %>%
       add_xml_data(L244.GenericServicePrice, "GenericServicePrice") %>%
       add_xml_data(L244.ThermalServicePrice, "ThermalServicePrice") %>%
       add_xml_data(L244.GenericBaseDens, "GenericBaseDens") %>%
@@ -176,6 +170,7 @@ module_energy_building_det_xml <- function(command, ...) {
                      "L244.GenericServicePrice","L244.ThermalServicePrice",
                      "L244.GenericBaseDens", "L244.ThermalBaseDens",
                      "L244.GenericServiceCoef","L244.ThermalServiceCoef",
+                     "L244.GenericTradFuelParams", "L244.ThermalTradFuelParams",
                      "L244.GlobalTechTrackCapital_bld") ->   building_det.xml
 
     # Some data inputs may not actually contain data. If so, do not add_xml_data.
