@@ -350,8 +350,12 @@ module_energy_L244.building_det <- function(command, ...) {
       rename(gdp_pc = pcGDP_thous90USD) %>%
       left_join_error_no_match(L101.Pop_thous_R_Yh_gr, by=c("GCAM_region_ID","year","gcam.consumer","region")) %>%
       mutate(flsp_pc_est = (`unadjust.satiation` + (-`land.density.param`*log(tot_dens))) * exp(-`b.param`
-                                                                                                * exp(-`income.param` * log(gdp_pc)))) %>%
-      mutate(flsp_est = flsp_pc_est * 1E-9 * pop_thous * 1E3)
+                                                                                        * exp(-`income.param` * log(gdp_pc)))) %>%
+      mutate(flsp_est = flsp_pc_est * 1E-9 * pop_thous * 1E3) %>%
+      # Manually adjust South Africa (error in data)
+      mutate(flsp_est = if_else(region == "South Africa" & gcam.consumer == "resid_d1" & year == 1990, 0.024192971, flsp_est),
+             flsp_pc_est = if_else(region == "South Africa" & gcam.consumer == "resid_d1" & year == 1990, 6.733353, flsp_pc_est))
+
 
     # Calculate the regional bias adder as the difference between observed (L144.flsp_bm2_R_res_Yh) and estimated (L244.Floorspace_resid_est) data
     # Allocate the adder equally across multiple consumers
