@@ -455,7 +455,7 @@ module_energy_L244.building_det <- function(command, ...) {
 
     # Extend the analysis to SSP assumptions
     L244.Satiation_flsp_class_SSPs <- A44.satiation_flsp_SSPs %>%
-      tidyr::gather(sector, value, comm) %>%
+      tidyr::gather(sector, value, resid, comm) %>%
       mutate(satiation.level = value * CONV_THOUS_BIL)
 
 
@@ -1320,33 +1320,49 @@ module_energy_L244.building_det <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["DeleteGenericService"]])
 
     #------------------------------------------------------
-    # The demand for traditional fuels (coal and TradBio) is an inverse function (service demand as inverse of service affordability)
-    # The parameters to define the functional form are estimated in the following lines:
+    # The demand for traditional fuels (coal and TradBio) decreases as income raises -> Need to use a different functional form
+    # From historical data we fit a function that includes:
+    # - Negative income effect
+    # - Positive quadratic income effect (represents an horizontal asymptot): Note that for coal this effect is not significant with the used data (b3 = 0)
+    # - For price, the data does not show a clear trend, so negative price elasticities are taken from literature (could be easily changed by the user):
+    #   -0.4 for TradBio and -0.5 for coal. Given the fitted logarithmic model, they can be directly set as elasticieties n the regression.
+
+    prelast_tradBio <- -0.4
+    prelast_coal <- -0.5
 
     # First, estimate the parameters for the function to estimate coal demand:
     serv_coal<-L144.base_service_EJ_serv_fuel %>%
       rename(en_EJ = value) %>%
       filter(grepl("resid",service),
              fuel == "coal") %>%
+      filter(en_EJ != 0) %>%
       gcamdata::left_join_error_no_match(L102.pcgdp_thous90USD_Scen_R_Y %>% filter(scenario == socioeconomics.BASE_GDP_SCENARIO)
                                          , by = c("GCAM_region_ID", "year")) %>%
       rename(pcgdp_thous = value) %>%
       select(GCAM_region_ID,fuel,service,year,pcgdp_thous,en_EJ) %>%
       arrange(en_EJ) %>%
-      left_join(L144.prices_bld %>% rename(service = market) %>% select(-region), by = c("GCAM_region_ID", "year","service")) %>%
-      replace_na(list(price = 1)) %>%
-      mutate(afford=(pcgdp_thous*1000/def9075) / price)
+      left_join_error_no_match(L144.prices_bld %>% rename(service = market) %>% select(-region), by = c("GCAM_region_ID", "year","service")) %>%
+      filter(price != 0) %>%
+      left_join_error_no_match(L144.flsp_bm2_R_res_Yh, by = dplyr::join_by(GCAM_region_ID, year)) %>%
+      rename(flsp = value) %>%
+      mutate(en_EJ_flsp = en_EJ / flsp) %>%
+      mutate(log_en_EJ_flsp = log(en_EJ_flsp),
+             log_pcgdp_thous = log(pcgdp_thous),
+             log_price = log(price),
+             log_sq_pcgdp_thous = log_pcgdp_thous^2,
+             GCAM_region_ID = as.character(GCAM_region_ID))
 
-    formula.coal<- "en_EJ~A/(afford+k)"
-    start.value.coal<-c(A = 1,k = 0.5)
+    fit_coal <- lm(log_en_EJ_flsp ~ log_pcgdp_thous  + GCAM_region_ID,
+                   data = serv_coal)
 
-    fit_coal<-nls(formula.coal, serv_coal, start.value.coal)
-    A_coal<-coef(fit_coal)[1]
-    k_coal<-coef(fit_coal)[2]
+    b1_coal <- as.numeric(fit_coal$coefficients[1])
+    b2_coal <- as.numeric(fit_coal$coefficients[2])
+    b3_coal <- 0 # Non-significant
 
     # Same for traditional biomass:
     serv_TradBio<-L144.base_service_EJ_serv_fuel %>%
       rename(en_EJ = value) %>%
+      filter(en_EJ != 0) %>%
       filter(grepl("resid",service),
              fuel == "traditional biomass") %>%
       gcamdata::left_join_error_no_match(L102.pcgdp_thous90USD_Scen_R_Y %>% filter(scenario == socioeconomics.BASE_GDP_SCENARIO)
@@ -1354,17 +1370,23 @@ module_energy_L244.building_det <- function(command, ...) {
       rename(pcgdp_thous = value) %>%
       select(GCAM_region_ID,fuel,service,year,pcgdp_thous,en_EJ) %>%
       arrange(en_EJ) %>%
-      left_join(L144.prices_bld %>% rename(service = market) %>% select(-region), by = c("GCAM_region_ID", "year","service")) %>%
-      replace_na(list(price = 1)) %>%
-      mutate(afford=(pcgdp_thous*1000/def9075) / price)
+      left_join(L144.prices_bld %>% rename(service = market) %>% select(-region), by = c("GCAM_region_ID", "year","service"))  %>%
+      filter(price != 0) %>%
+      left_join_error_no_match(L144.flsp_bm2_R_res_Yh, by = dplyr::join_by(GCAM_region_ID, year)) %>%
+      rename(flsp = value) %>%
+      mutate(en_EJ_flsp = en_EJ / flsp) %>%
+      mutate(log_en_EJ_flsp = log(en_EJ_flsp),
+             log_pcgdp_thous = log(pcgdp_thous),
+             log_price = log(price),
+             log_sq_pcgdp_thous = log_pcgdp_thous^2,
+             GCAM_region_ID = as.character(GCAM_region_ID))
 
+    fit_tradBio = lm(log_en_EJ_flsp ~ log_pcgdp_thous + log_sq_pcgdp_thous + GCAM_region_ID,
+                     data = serv_TradBio)
 
-    formula.tradBio<- "en_EJ~x/(afford+y)"
-    start.value.tradBio<-c(x = 10,y = 10)
-
-    fit_tradBio<-nls(formula.tradBio, serv_TradBio, start.value.tradBio)
-    x_TradBio<-coef(fit_tradBio)[1]
-    y_TradBio<-coef(fit_tradBio)[2]
+    b1_tradBio <- as.numeric(fit_tradBio$coefficients[1])
+    b2_tradBio <- as.numeric(fit_tradBio$coefficients[2])
+    b3_tradBio <- as.numeric(fit_tradBio$coefficients[3])
 
     #------------------------------------------------------
     # In order to make the function flexible to the implementation of multiple consumers, the satiation impedance (mu) and the calibration coefficent (k)
@@ -1372,7 +1394,7 @@ module_energy_L244.building_det <- function(command, ...) {
     # Here we create L244.ThermalServiceImpedance and L244.GenericServiceImpedance, L244.GenericServiceCoef, and L244.ThermalServiceCoef (+ SSP-specific assumptions)
 
     # 1-L244.GenericServiceImpedance
-    L244.GenericServiceImpedance_allvars<-L244.GenericServiceSatiation %>%
+    L244.GenericServiceImpedance_allvars <- L244.GenericServiceSatiation %>%
       left_join_error_no_match(A_regions %>% select(region,GCAM_region_ID),by = "region") %>%
       # Only modern services use impedance
       # filter(!grepl("coal",building.service.input),
@@ -1690,10 +1712,13 @@ module_energy_L244.building_det <- function(command, ...) {
                                by = c("region", "gcam.consumer", "nodeInput", "building.node.input", "year")) %>%
       mutate(serv=(satiation.level * (1-exp((-log(2)/`satiation-impedance`)*afford))) * base.building.size) %>%
       # Adjust coal and TradBio
-      mutate(serv = if_else(grepl("coal",building.service.input),coef(fit_coal)[1] / (afford +coef(fit_coal)[2]),serv),
-             serv = if_else(grepl("TradBio",building.service.input),coef(fit_tradBio)[1] / (afford + coef(fit_tradBio)[2]),serv)) %>%
+      mutate(serv = if_else(grepl("coal",building.service.input),
+                            exp(b1_coal + b2_coal * log(pcGDP_thous90USD_gr) + b3_coal * (log(pcGDP_thous90USD_gr)^2) + prelast_coal * log(price)) * base.building.size,
+                            serv)) %>%
+      mutate(serv = if_else(grepl("TradBio",building.service.input),
+                            exp(b1_tradBio + b2_tradBio * log(pcGDP_thous90USD_gr) + b3_tradBio * (log(pcGDP_thous90USD_gr)^2) + prelast_tradBio * log(price)) * base.building.size,
+                            serv)) %>%
       mutate(serv = if_else(afford == 0, 0, serv))
-
 
     # Calculate subtotals (for shares)
     L244.GenericShares_pre_subt<-L244.GenericShares_pre %>%
@@ -1769,11 +1794,15 @@ module_energy_L244.building_det <- function(command, ...) {
              afford = if_else(is.infinite(afford),0,afford)) %>%
       left_join_error_no_match(bind_rows(L244.Floorspace_resid,L244.Floorspace_comm),
                                by = c("region", "gcam.consumer", "nodeInput", "building.node.input", "year")) %>%
-      mutate(serv=(satiation.level * (1-exp((-log(2)/`satiation-impedance`)*afford))) * base.building.size,
-             # Adjust coal and TradBio
-             serv = if_else(grepl("coal",thermal.building.service.input),coef(fit_coal)[1]/(afford +coef(fit_coal)[2]),serv),
-             serv = if_else(grepl("TradBio",thermal.building.service.input),coef(fit_tradBio)[1]/(afford + coef(fit_tradBio)[2]),serv),
-             serv = if_else(afford == 0, 0, serv))
+      mutate(serv=(satiation.level * (1-exp((-log(2)/`satiation-impedance`)*afford))) * base.building.size) %>%
+      # Adjust coal and TradBio
+      mutate(serv = if_else(grepl("coal",thermal.building.service.input),
+                                   exp(b1_coal + b2_coal * log(pcGDP_thous90USD_gr) + b3_coal * (log(pcGDP_thous90USD_gr)^2) + prelast_coal * log(price)) * base.building.size,
+                                   serv)) %>%
+      mutate(serv = if_else(grepl("TradBio",thermal.building.service.input),
+                                     exp(b1_tradBio + b2_tradBio * log(pcGDP_thous90USD_gr) + b3_tradBio * (log(pcGDP_thous90USD_gr)^2) + prelast_tradBio * log(price)) * base.building.size,
+                                     serv)) %>%
+      mutate(serv = if_else(afford == 0, 0, serv))
 
     # Calculate subtotals (for shares)
     L244.ThermalShares_pre_subt<-L244.ThermalShares_pre %>%
