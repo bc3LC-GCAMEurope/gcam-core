@@ -94,13 +94,17 @@ double BuildingServiceFunction::calcDemand( InputSet& input, double consumption,
             
             if (regex_search(buildingServiceInput->getName(), coalPattern)) {
 
-                demand = calcServiceCoal(buildingServiceInput,  income, basePrice, regionName, period);
+                double CoalserviceDensity = calcServiceDensCoal(buildingServiceInput,  income, basePrice, regionName, period);
+
+                demand = floorSpace * CoalserviceDensity;
 
                
             }
             else if (regex_search(buildingServiceInput->getName(), TradBioPattern)) {
 
-                demand = calcServiceTradBio(buildingServiceInput, income, basePrice, regionName, period);
+                double TradBioserviceDensity = calcServiceDensTradBio(buildingServiceInput, income, basePrice, regionName, period);
+
+                demand = floorSpace * TradBioserviceDensity;
 
 
             }
@@ -193,16 +197,17 @@ double BuildingServiceFunction::calcServiceDensity( BuildingServiceInput* aBuild
 
 }
 
-double BuildingServiceFunction::calcServiceCoal(BuildingServiceInput* aBuildingServiceInput,
+double BuildingServiceFunction::calcServiceDensCoal(BuildingServiceInput* aBuildingServiceInput,
                                                         const double aIncome,
                                                         const double aBasePrice,
                                                         const string& aRegionName,
                                                         const int aPeriod) const
 {
 
-    double CoalA = aBuildingServiceInput->getCoalA();
-    double CoalK = aBuildingServiceInput->getCoalK();
-    double CoalBase = aBuildingServiceInput->getCoalBase();
+    double Prelast = aBuildingServiceInput->getTradFuelPrelast();
+    double Beta_1 = aBuildingServiceInput->getTradFuelb1();
+    double Beta_2 = aBuildingServiceInput->getTradFuelb2();
+    double Beta_3 = aBuildingServiceInput->getTradFuelb3();
 
     double biasadder = aBuildingServiceInput->getBiasAdder(aPeriod);
 
@@ -214,32 +219,40 @@ double BuildingServiceFunction::calcServiceCoal(BuildingServiceInput* aBuildingS
 
     const double cappedPrice = max(servicePriceFin, SectorUtils::getDemandPriceThreshold());
 
-    const double serviceAffordability = aIncome / cappedPrice;
+    const double income_thous = aIncome / 1E3;
+    const double log_income_thous = log(income_thous);
+    const double sq_log_income_thous = pow(log_income_thous, 2);
+    const double log_price = cappedPrice;
 
-    double demand = (CoalA / (serviceAffordability + CoalK)) + biasadder;
+
+    double serviceDensity = (exp(Beta_1 + Beta_2 * log_income_thous + Beta_3 * sq_log_income_thous + Prelast * log_price)) + biasadder;
+
 
     // May need to make an adjustment in case of negative demand.
-    if (demand < 0) {
-        demand = 0;
+    if (serviceDensity < 0) {
+        serviceDensity = 0;
     }
 
     // Also we need to adjust the demand to avoid problems when gdp per capita decreases (or income shares create problems).
-    demand = min(demand, CoalBase);
+    const double BaseDens = aBuildingServiceInput->getServBaseDens();
 
-    return demand;
+    serviceDensity = min(serviceDensity, BaseDens);
+
+    return serviceDensity;
 
 }
 
-double BuildingServiceFunction::calcServiceTradBio(BuildingServiceInput* aBuildingServiceInput,
+double BuildingServiceFunction::calcServiceDensTradBio(BuildingServiceInput* aBuildingServiceInput,
                                                           const double aIncome,
                                                           const double aBasePrice,
                                                           const string& aRegionName,
                                                           const int aPeriod) const
 {
 
-    double TradBioX = aBuildingServiceInput->getTradBioX();
-    double TradBioY = aBuildingServiceInput->getTradBioY();
-    double TradBioBase = aBuildingServiceInput->getTradBioBase();
+    double Prelast = aBuildingServiceInput->getTradFuelPrelast();
+    double Beta_1 = aBuildingServiceInput->getTradFuelb1();
+    double Beta_2 = aBuildingServiceInput->getTradFuelb2();
+    double Beta_3 = aBuildingServiceInput->getTradFuelb3();
 
     double biasadder = aBuildingServiceInput->getBiasAdder(aPeriod);
 
@@ -250,22 +263,26 @@ double BuildingServiceFunction::calcServiceTradBio(BuildingServiceInput* aBuildi
 
     const double cappedPrice = max(servicePriceFin, SectorUtils::getDemandPriceThreshold());
 
-    const double serviceAffordability = aIncome / cappedPrice;
+    const double income_thous = aIncome / 1E3;
+    const double log_income_thous = log(income_thous);
+    const double sq_log_income_thous = pow(log_income_thous, 2);
+    const double log_price = cappedPrice;
 
-    double demand = (TradBioX / (serviceAffordability + TradBioY)) + biasadder;
+    double serviceDensity = (exp(Beta_1 + Beta_2 * log_income_thous + Beta_3 * sq_log_income_thous + Prelast * log_price)) + biasadder;
 
    
     // May need to make an adjustment in case of negative demand.
-    if (demand < 0) {
-        demand = 0;
+    if (serviceDensity < 0) {
+        serviceDensity = 0;
     }
  
 
     // Also we need to adjust the demand to avoid problems when gdp per capita decreases (or income shares create problems).
-    demand = min(demand, TradBioBase);
+    const double BaseDens = aBuildingServiceInput->getServBaseDens();
 
+    serviceDensity = min(serviceDensity, BaseDens);
 
-    return demand;
+    return serviceDensity;
 
 }
 

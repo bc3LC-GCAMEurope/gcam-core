@@ -129,20 +129,17 @@ protected:
         //! Demand function coefficients to capture base year thermal characteristics.
         DEFINE_VARIABLE( SIMPLE | STATE, "coef", mCoef, Value ),
 
-        //! Demand function coefficients to capture base year thermal characteristics.
-        DEFINE_VARIABLE(SIMPLE | STATE, "A-coal", mCoalA, Value),
+        //! Demand function coefficients to capture base year  characteristics.
+        DEFINE_VARIABLE(SIMPLE | STATE, "b1", mB1TradFuel, Value),
 
-        //! Demand function coefficients to capture base year thermal characteristics.
-        DEFINE_VARIABLE(SIMPLE | STATE, "k-coal", mCoalK, Value),
+        //! Demand function coefficients to capture base year  characteristics.
+        DEFINE_VARIABLE(SIMPLE | STATE, "b2", mB2TradFuel, Value),
 
-        //! Demand function coefficients to capture base year thermal characteristics.
-        DEFINE_VARIABLE(SIMPLE | STATE, "base-coal", mCoalBase, Value),
+        //! Demand function coefficients to capture base year  characteristics.
+        DEFINE_VARIABLE(SIMPLE | STATE, "b3", mB3TradFuel, Value),
 
-        //! Demand function coefficients to capture base year thermal characteristics.
-        DEFINE_VARIABLE(SIMPLE | STATE, "x-TradBio", mTradBioX, Value),
-
-        //! Demand function coefficients to capture base year thermal characteristics.
-        DEFINE_VARIABLE(SIMPLE | STATE, "y-TradBio", mTradBioY, Value),
+        //! Demand function coefficients to capture base year  characteristics.
+        DEFINE_VARIABLE(SIMPLE | STATE, "prelast", mPrelastTradFuel, Value),
 
         //! Demand function coefficients to capture base year thermal characteristics.
         DEFINE_VARIABLE(SIMPLE | STATE, "base-TradBio", mTradBioBase, Value),

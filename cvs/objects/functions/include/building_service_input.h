@@ -194,18 +194,14 @@ public:
 
 	virtual double getCoef() const;
 
-    virtual double getCoalA() const;
+    virtual double getTradFuelPrelast() const;
+
+    virtual double getTradFuelb1() const;
+
+    virtual double getTradFuelb2() const;
+
+    virtual double getTradFuelb3() const;
     
-    virtual double getCoalK() const;
-
-    virtual double getCoalBase() const;
-
-    virtual double getTradBioX() const;
-
-    virtual double getTradBioY() const;
-
-    virtual double getTradBioBase() const;
-
     virtual double getServPriceBase() const;
 
     virtual double getServBaseDens() const;    
@@ -332,24 +328,18 @@ protected:
 		DEFINE_VARIABLE(ARRAY | STATE, "bias-adder", mBiasAdderEn, objects::PeriodVector<Value>),
 
         //! Demand function coefficients to capture base year  characteristics.
-        DEFINE_VARIABLE(SIMPLE | STATE, "A-coal", mCoalA, Value),
+        DEFINE_VARIABLE(SIMPLE | STATE, "b1", mB1TradFuel, Value),
 
         //! Demand function coefficients to capture base year  characteristics.
-        DEFINE_VARIABLE(SIMPLE | STATE, "k-coal", mCoalK, Value),
+        DEFINE_VARIABLE(SIMPLE | STATE, "b2", mB2TradFuel, Value),
 
         //! Demand function coefficients to capture base year  characteristics.
-        DEFINE_VARIABLE(SIMPLE | STATE, "base-coal", mCoalBase, Value),
+        DEFINE_VARIABLE(SIMPLE | STATE, "b3", mB3TradFuel, Value),
 
         //! Demand function coefficients to capture base year  characteristics.
-        DEFINE_VARIABLE(SIMPLE | STATE, "x-TradBio", mTradBioX, Value),
+        DEFINE_VARIABLE(SIMPLE | STATE, "prelast", mPrelastTradFuel, Value),
 
-        //! Demand function coefficients to capture base year  characteristics.
-        DEFINE_VARIABLE(SIMPLE | STATE, "y-TradBio", mTradBioY, Value),
-
-        //! Demand function coefficients to capture base year  characteristics.
-        DEFINE_VARIABLE(SIMPLE | STATE, "base-TradBio", mTradBioBase, Value),
-
-        //! Demand function coefficients to capture base year thermal characteristics.
+                //! Demand function coefficients to capture base year thermal characteristics.
         DEFINE_VARIABLE(SIMPLE | STATE, "price", mServPriceBase, Value),
 
         //! Demand function coefficients to capture base year thermal characteristics.
