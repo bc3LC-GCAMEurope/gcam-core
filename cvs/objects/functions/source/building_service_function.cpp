@@ -222,7 +222,7 @@ double BuildingServiceFunction::calcServiceDensCoal(BuildingServiceInput* aBuild
     const double income_thous = aIncome / 1E3;
     const double log_income_thous = log(income_thous);
     const double sq_log_income_thous = pow(log_income_thous, 2);
-    const double log_price = cappedPrice;
+    const double log_price = log(cappedPrice);
 
 
     double serviceDensity = (exp(Beta_1 + Beta_2 * log_income_thous + Beta_3 * sq_log_income_thous + Prelast * log_price)) + biasadder;
@@ -266,7 +266,7 @@ double BuildingServiceFunction::calcServiceDensTradBio(BuildingServiceInput* aBu
     const double income_thous = aIncome / 1E3;
     const double log_income_thous = log(income_thous);
     const double sq_log_income_thous = pow(log_income_thous, 2);
-    const double log_price = cappedPrice;
+    const double log_price = log(cappedPrice);
 
     double serviceDensity = (exp(Beta_1 + Beta_2 * log_income_thous + Beta_3 * sq_log_income_thous + Prelast * log_price)) + biasadder;
 
