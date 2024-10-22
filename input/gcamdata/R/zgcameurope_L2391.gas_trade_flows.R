@@ -25,7 +25,9 @@ module_gcameurope_L2391.gas_trade_flows <- function(command, ...) {
                      "L239.Production_tra",
                      "L239.Production_reg_imp",
                      "L239.Production_tra_EUR",
-                     "L239.Production_reg_imp_EUR")
+                     "L239.Production_reg_imp_EUR",
+                     "L1011.ff_trade_Europe_EJ_R_Y",
+                     "Europe_Single_Market_Regions")
   MODULE_OUTPUTS <- c("L2391.NG_export_calOutput_LNG_EUR",
                       "L2391.NG_export_calOutput_pipeline_EUR",
                       "L2391.NG_import_calOutput_LNG_EUR",
@@ -47,6 +49,8 @@ module_gcameurope_L2391.gas_trade_flows <- function(command, ...) {
 
     # Load required inputs ----------------------------------------
     get_data_list(all_data, MODULE_INPUTS)
+
+    SINGLE_MARKET_NAME <- unique(L1011.ff_trade_Europe_EJ_R_Y$region_importer[L1011.ff_trade_Europe_EJ_R_Y$region_importer != "Global"])
 
     # Replace IEA data with Eurostat data
     L239.Production_tra <- L239.Production_tra %>%
@@ -92,13 +96,34 @@ module_gcameurope_L2391.gas_trade_flows <- function(command, ...) {
       ungroup() %>%
       select(-value) -> L2391.NG_pipeline_import_shares
 
+    # STEP 2: Eurostat processing -----------------------------
+    # EU country level split between pipeline and LNG
+    L1011.ff_GrossTrade_Eurostat <- L1011.ff_trade_Europe_EJ_R_Y %>%
+      filter(fuel %in% L1011.ff_GrossTrade_EJ_R_Y_LNG$GCAM_Commodity_traded |
+               fuel %in% L1011.ff_GrossTrade_EJ_R_Y_LNG$GCAM_Commodity) %>%
+      tidyr::pivot_longer(cols = c(import_ctry, export_ctry), values_to = "region", names_to = "flow") %>%
+      filter(region %in% Europe_Single_Market_Regions$GCAMEU_region,
+             region != "Switzerland") %>%
+      group_by(region, fuel, flow, year) %>%
+      summarise(value = sum(value)) %>%
+      ungroup %>%
+      tidyr::pivot_wider(names_from = fuel, values_from = value, values_fill = 0) %>%
+      mutate(`gas pipeline` = `natural gas` - LNG ) %>%
+      select(-`natural gas`) %>%
+      tidyr::pivot_longer(cols = c("LNG", "gas pipeline"), names_to = "GCAM_Commodity_traded") %>%
+      tidyr::pivot_wider(names_from = flow, values_from = value, values_fill = 0) %>%
+      rename(GrossExp_EJ = export_ctry, GrossImp_EJ = import_ctry) %>%
+      mutate(net_trade = GrossExp_EJ - GrossImp_EJ,
+             GCAM_Commodity = "natural gas")
 
-    # STEP 2:  Import shares -----------------
+    # STEP 3:  Import shares-global market -----------------
     # Start with share between pipeline and LNG
     # Combine pipeline & LNG imports, calculate shares
     L1011.ff_GrossTrade_EJ_R_Y_LNG %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       bind_rows(L1011.ff_GrossTrade_EJ_R_Y_NG_pipe) %>%
+      filter(!region %in% L1011.ff_GrossTrade_Eurostat$region) %>%
+      bind_rows(L1011.ff_GrossTrade_Eurostat) %>%
       group_by(region, year, GCAM_Commodity, GCAM_Commodity_traded) %>%
       summarise(GrossImp_EJ = sum(GrossImp_EJ)) %>%
       ungroup() %>%
@@ -114,8 +139,9 @@ module_gcameurope_L2391.gas_trade_flows <- function(command, ...) {
       select(-GrossImp_EJ) %>%
       filter(year %in% MODEL_BASE_YEARS) %>%
       complete(nesting(GCAM_Commodity, GCAM_Commodity_traded, year), region = unique(GCAM_region_names$region)) %>%
-      replace_na(list(share = 0)) -> L2391.NG_import_shares
-
+      replace_na(list(share = 0)) -> L2391.NG_import_shares # %>%
+      # # add in European_Single_Market
+      # bind_rows(L1011.SingleMarket_shares %>% rename(share = import_share)  %>% select(-export_share))-> L2391.NG_import_shares
 
     # Partition calibrated imports by region between pipeline & LNG
     # Join calibrated gross NG trade and shares, calculate calibrated value by trade vehicle
@@ -164,12 +190,14 @@ module_gcameurope_L2391.gas_trade_flows <- function(command, ...) {
       ungroup() -> L2391.NG_import_calOutput_pipeline_EUR_network
 
 
-    # STEP 3:  Export shares ---------------------
+    # STEP 4:  Export shares ---------------------
     # Start with share between pipeline and LNG
     # Combine pipeline & LNG exports, calculate shares
     L2391.NG_export_shares <- L1011.ff_GrossTrade_EJ_R_Y_LNG %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       bind_rows(L1011.ff_GrossTrade_EJ_R_Y_NG_pipe) %>%
+      filter(!region %in% L1011.ff_GrossTrade_Eurostat$region) %>%
+      bind_rows(L1011.ff_GrossTrade_Eurostat) %>%
       group_by(region, year, GCAM_Commodity, GCAM_Commodity_traded) %>%
       summarise(GrossExp_EJ = sum(GrossExp_EJ)) %>%
       ungroup() %>%
@@ -184,7 +212,6 @@ module_gcameurope_L2391.gas_trade_flows <- function(command, ...) {
       ungroup() %>%
       select(-GrossExp_EJ) %>%
       filter(year %in% MODEL_BASE_YEARS)
-
 
     L2391.NG_export_shares_withData <- L2391.NG_export_shares %>%
       filter(complete.cases(.))
@@ -250,7 +277,7 @@ module_gcameurope_L2391.gas_trade_flows <- function(command, ...) {
       L2391.NG_export_calOutput_pipeline_EUR
 
 
-    # STEP 4:  Check trade balances (across scales) and make final adjustments ---------------------
+    # STEP 5:  Check trade balances (across scales) and make final adjustments ---------------------
     # Combine flows with a single market (LNG imports and exports, pipeline exports)
     L2391.NG_export_calOutput_pipeline_EUR %>%
       select(region, year, pipeline.market, calExport_pipe = calOutputValue) %>%

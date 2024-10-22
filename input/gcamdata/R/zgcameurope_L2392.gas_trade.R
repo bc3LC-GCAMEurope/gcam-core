@@ -35,7 +35,8 @@ module_gcameurope_L2392.gas_trade <- function(command, ...) {
                      FILE = "energy/A_ff_RegionalTechnologyCost_NG",
                      FILE = "energy/A_ff_TradedTechnologyCost_NG",
                      "L202.CarbonCoef",
-                     "L239.Supplysector_tra",
+                     "L239.Supplysector_tra_EUR",
+                     "L239.Supplysector_reg_EUR",
                      "L239.Supplysector_reg",
                      "L2391.NG_export_calOutput_LNG_EUR",
                      "L2391.NG_export_calOutput_pipeline_EUR",
@@ -44,7 +45,10 @@ module_gcameurope_L2392.gas_trade <- function(command, ...) {
                      "L2391.NG_import_calOutput_statdiff_EUR",
                      "L2391.NG_export_calOutput_statdiff_EUR",
                      "L239.Production_reg_dom",
-                     "L239.Production_reg_dom_EUR")
+                     "L239.Production_reg_dom_EUR",
+                     FILE = "gcam-europe/A_ff_RegionalTechnology_NG_EUR",
+                     "L1011.ff_trade_Europe_EJ_R_Y",
+                     "Europe_Single_Market_Regions")
   MODULE_OUTPUTS <- c("L2392.PrimaryConsKeyword_en_NG_EUR",
                       "L2392.CarbonCoef_NG_EUR",
                       "L2392.Supplysector_tra_NG_EUR",
@@ -82,9 +86,21 @@ module_gcameurope_L2392.gas_trade <- function(command, ...) {
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
 
+    SINGLE_MARKET_NAME <- unique(A_ff_RegionalTechnology_NG_EUR$market.name)
+
+    # Function ----------------
+    copy_LNG_for_EUR <- function(df){
+      if ("region" %in% names(df)){
+        filter(df, if_any(where(is.character), ~ grepl("LNG", .))) %>%
+          mutate(region = SINGLE_MARKET_NAME) %>%
+          bind_rows(df)
+      } else { df }
+    }
+
+
     # 0. Cleanup -------------------
     # Delete natural gas from regional and traded supplysectors
-    L2392.Delete_Supplysector_tra_NG_EUR <- L239.Supplysector_tra %>%
+    L2392.Delete_Supplysector_tra_NG_EUR <- L239.Supplysector_tra_EUR %>%
       filter(supplysector == "traded natural gas")
 
     L2392.Delete_Supplysector_reg_NG_EUR <- L239.Supplysector_reg %>%
@@ -135,12 +151,13 @@ module_gcameurope_L2392.gas_trade <- function(command, ...) {
       left_join(A_ff_TradedTechnology_NG, by = c("PrimaryFuelCO2Coef.name" = "minicam.energy.input")) %>%
       select(region, PrimaryFuelCO2Coef.name = supplysector, PrimaryFuelCO2Coef, -PrimaryFuelCO2Coef.name) %>%
       # use anti_join to remove entries already in L202.CarbonCoef
-      anti_join(L202.CarbonCoef, by = c("region", "PrimaryFuelCO2Coef.name", "PrimaryFuelCO2Coef")) -> L2392.CarbonCoef_NG_EUR
+      anti_join(L202.CarbonCoef, by = c("region", "PrimaryFuelCO2Coef.name", "PrimaryFuelCO2Coef")) %>%
+      copy_LNG_for_EUR -> L2392.CarbonCoef_NG_EUR
 
     # 1a. TRADED SECTOR -------------------------------------------
     # L2392.Supplysector_tra: generic supplysector info for traded natural gas commodities
     # By convention, traded commodity information is contained within the USA region (could be within any)
-    A_ff_TradedSector_NG$region <- gcam.USA_REGION
+    A_ff_TradedSector_NG <- A_ff_TradedSector_NG %>%  mutate(region = gcam.USA_REGION) %>% copy_LNG_for_EUR
 
     # L2392.Supplysector_tra_NG_EUR: generic supplysector info for traded natural gas commodities
     L2392.Supplysector_tra_NG_EUR <- mutate(A_ff_TradedSector_NG, logit.year.fillout = min(MODEL_BASE_YEARS)) %>%
@@ -151,14 +168,24 @@ module_gcameurope_L2392.gas_trade <- function(command, ...) {
       mutate(use.trial.market = 1)
 
     # 1b. TRADED SUBSECTOR -------------------------------------------
+    GCAM_region_names_LNG <- GCAM_region_names %>% dplyr::add_row(GCAM_region_ID = 0, region = SINGLE_MARKET_NAME)
+
     # L2392.SubsectorAll_tra_NG_EUR: generic subsector info for traded natural gas commodities
     # Traded commodities have the region set to USA and the subsector gets the region name pre-pended
     # process LNG which is mapped to all regions
     L2392.SubsectorAll_tra_LNG <- A_ff_TradedSubsector_NG %>%
       filter(stringr::str_detect(subsector, "traded LNG")) %>%
+      # only write to global trade regions
       write_to_all_regions(c(LEVEL2_DATA_NAMES[["SubsectorAllTo"]], "logit.type"),
-                           GCAM_region_names,
-                           has_traded = TRUE)
+                           GCAM_region_names_LNG %>%  filter(! region %in% Europe_Single_Market_Regions$GCAMEU_region),
+                           has_traded = TRUE) %>%
+      bind_rows(A_ff_TradedSubsector_NG %>%
+                  filter(stringr::str_detect(subsector, "traded LNG")) %>%
+                  # only write to euro trade regions
+                  write_to_all_regions(c(LEVEL2_DATA_NAMES[["SubsectorAllTo"]], "logit.type"),
+                                       GCAM_region_names_LNG %>%  filter(region %in% Europe_Single_Market_Regions$GCAMEU_region) %>%
+                                         dplyr::add_row(GCAM_region_ID = -1, region = "global"),
+                                       has_traded = TRUE) %>% mutate(region = SINGLE_MARKET_NAME))
 
     # process pipeline gas; each region is mapped to a specific pipeline only
     L2392.SubsectorAll_tra_pipeline <- A_ff_TradedSubsector_NG %>%
@@ -194,7 +221,6 @@ module_gcameurope_L2392.gas_trade <- function(command, ...) {
                            has_traded = FALSE) %>%
       mutate(year.fillout = min(MODEL_FUTURE_YEARS))
 
-
     # bind all natural gas tables together
     L2392.SubsectorAll_tra_NG_EUR <- bind_rows(L2392.SubsectorAll_tra_LNG,
                                            L2392.SubsectorAll_tra_pipeline,
@@ -204,14 +230,13 @@ module_gcameurope_L2392.gas_trade <- function(command, ...) {
     # 1c. TRADED TECHNOLOGY -------------------------------------------
     # Base technology-level table for several tables to be written out")
     # process LNG which is mapped to all regions
-    A_ff_TradedTechnology_R_Y_LNG <- repeat_add_columns(A_ff_TradedTechnology_NG,
-                                                        tibble(year = MODEL_YEARS)) %>%
-      filter(subsector == "traded LNG") %>%
-      repeat_add_columns(GCAM_region_names) %>%
-      mutate(subsector = paste(region, subsector, sep = " "),
-             technology = subsector,
-             market.name = region,
-             region = gcam.USA_REGION)
+    A_ff_TradedTechnology_R_Y_LNG <- L2392.SubsectorAll_tra_LNG %>%
+      select(region, supplysector, subsector) %>%
+      left_join_error_no_match(A_ff_TradedTechnology_NG %>%  select(-supplysector, -technology), by = c("supplysector" = "subsector")) %>%
+      mutate(technology = subsector,
+             market.name = stringr::str_extract(subsector, ".*(?= traded)"),
+             market.name = stringr::str_replace(market.name, "global", gcam.USA_REGION)) %>%
+      repeat_add_columns(tibble(year = MODEL_YEARS))
 
     # process pipeline gas, each region is mapped to a specific pipeline only
     A_ff_TradedTechnology_R_Y_pipeline <- repeat_add_columns(A_ff_TradedTechnology_NG,
@@ -326,7 +351,9 @@ module_gcameurope_L2392.gas_trade <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["TechCost"]])
 
     # L2392.TechCoef_tra_NG_EUR: Coefficient and market name of traded technologies
-    L2392.TechCoef_tra_NG_EUR <- select(A_ff_TradedTechnology_R_Y_NG, LEVEL2_DATA_NAMES[["TechCoef"]])
+    L2392.TechCoef_tra_NG_EUR <- select(A_ff_TradedTechnology_R_Y_NG, LEVEL2_DATA_NAMES[["TechCoef"]]) %>%
+      mutate(minicam.energy.input = if_else((region == gcam.USA_REGION & market.name == SINGLE_MARKET_NAME) |
+                                              (region == SINGLE_MARKET_NAME & market.name == gcam.USA_REGION), "traded LNG", minicam.energy.input))
 
     # L2392.TechLifetime_tra_NG_EUR: Lifetime of traded technologies
     L2392.TechLifetime_tra_NG_EUR <- A_ff_TradedTechnology_R_Y_NG %>%
@@ -344,12 +371,96 @@ module_gcameurope_L2392.gas_trade <- function(command, ...) {
     L2392.ProfitShutdown_tra_NG_EUR <- select(A_ff_TradedTechnology_R_Y_NG, LEVEL2_DATA_NAMES[["TechProfitShutdown"]]) %>%
       filter(!(stringr::str_detect(technology, "statistical differences")))
 
-    # 1d. TRADED CAL OUTPUT --------------------------------------
+    # 1d. Eurostat net trade ----------------
+    # We want to calculate trade between european market and globe
+    # Since we only have Swiss data reported by other regions, we are going to subtract
+    # reported EU trade from eurostat from the gross exports and imports reported in comstat
+    SWISS_ID <- GCAM_region_names %>% filter(region == "Switzerland") %>%  pull(GCAM_region_ID)
+
+    # Swiss trade with other single market countries (eurostat)
+    intraEU_Swiss_trade <- L1011.ff_trade_Europe_EJ_R_Y %>%
+      filter(fuel %in% L1011.ff_GrossTrade_EJ_R_Y_LNG$GCAM_Commodity_traded |
+               fuel %in% L1011.ff_GrossTrade_EJ_R_Y_LNG$GCAM_Commodity,
+             import_ctry == "Switzerland" | export_ctry == "Switzerland",
+             region_importer == SINGLE_MARKET_NAME & region_exporter == SINGLE_MARKET_NAME) %>%
+      mutate(flow = if_else(import_ctry == "Switzerland", "GrossImp_EJ", "GrossExp_EJ")) %>%
+      group_by(GCAM_Commodity = fuel, year, flow) %>%
+      summarise(value_intraEU = sum(value)) %>%
+      ungroup
+
+    # total swiss trade from comstat
+    extraEU_Swiss_trade <- L1011.ff_GrossTrade_EJ_R_Y_LNG %>%
+      filter(GCAM_region_ID == SWISS_ID,
+             year %in% MODEL_BASE_YEARS) %>%
+      select(-net_trade) %>%
+      tidyr::pivot_longer(cols = c("GrossExp_EJ", "GrossImp_EJ"), names_to = "flow") %>%
+      # match in eurostat data
+      left_join(intraEU_Swiss_trade, by = c("GCAM_Commodity", "year", "flow")) %>%
+      mutate(value = if_else(is.na(value_intraEU), value, value - value_intraEU)) %>%
+      select(fuel = GCAM_Commodity_traded, year, flow, value)
+
+    # The european trade in Comtrade includes intra-european trade
+    # So we need to replace it with the external trade from the eurostat data
+    L1011.EUR_SingleMarket_Global_Trade_LNG <- L1011.ff_trade_Europe_EJ_R_Y %>%
+      filter(fuel %in% L1011.ff_GrossTrade_EJ_R_Y_LNG$GCAM_Commodity_traded,
+             region_importer != region_exporter,
+             !(import_ctry == "Switzerland" | export_ctry == "Switzerland"),
+             year %in% MODEL_BASE_YEARS) %>%
+      mutate(flow = if_else(region_importer == SINGLE_MARKET_NAME, "GrossImp_EJ", "GrossExp_EJ")) %>%
+      bind_rows(extraEU_Swiss_trade) %>%
+      group_by(GCAM_Commodity_traded = fuel, year, flow) %>%
+      summarise(value = sum(value)) %>%
+      ungroup %>%
+      tidyr::pivot_wider(names_from = flow, values_from = value, values_fill = 0) %>%
+      mutate(net_trade = GrossExp_EJ - GrossImp_EJ,
+             region = SINGLE_MARKET_NAME,
+             GCAM_Commodity = "natural gas") %>%
+      complete(nesting(GCAM_Commodity, GCAM_Commodity_traded, region), year = MODEL_BASE_YEARS) %>%
+      mutate(GrossImp_EJ = approx_fun(year, GrossImp_EJ, rule = 2),
+             GrossExp_EJ = approx_fun(year, GrossExp_EJ, rule = 2),
+             net_trade = approx_fun(year, net_trade, rule = 2))
+
+    # 1e. European Single Market output------------------
+    # calculate net trade needed for global-european trade
+    # Europe will just be importer until final base year, when we will calibrate imports and exports
+    global_europe_net_trade <- L2391.NG_export_calOutput_LNG_EUR %>%
+      rename(export = calOutputValue) %>%
+      left_join_error_no_match(L2391.NG_import_calOutput_LNG_EUR %>% rename(import = calOutputValue),
+                               by = c("region", "GCAM_Commodity", "GCAM_Commodity_traded", "year")) %>%
+      mutate(net_trade = export - import) %>%
+      filter(region %in% Europe_Single_Market_Regions$GCAMEU_region) %>%
+      group_by(year) %>%
+      summarise(net_trade_GCAM = sum(net_trade)) %>%
+      ungroup %>%
+      left_join_error_no_match(L1011.EUR_SingleMarket_Global_Trade_LNG, by = "year") %>%
+      mutate(GrossImp_EJ = if_else(net_trade_GCAM < 0 & year < MODEL_FINAL_BASE_YEAR, -net_trade_GCAM, GrossImp_EJ * net_trade_GCAM / net_trade),
+             GrossExp_EJ = if_else(net_trade_GCAM < 0 & year < MODEL_FINAL_BASE_YEAR, 0, GrossExp_EJ * net_trade_GCAM / net_trade)
+             )
+
+    global_LNG_to_Europe <- global_europe_net_trade %>%
+      mutate(calOutputValue = GrossImp_EJ ,
+             region = SINGLE_MARKET_NAME,
+             market.name = gcam.USA_REGION) %>%
+      select(-net_trade, -GrossImp_EJ, -GrossExp_EJ, -net_trade_GCAM)
+
+    Europe_LNG_to_global <- global_europe_net_trade %>%
+      mutate(calOutputValue = GrossExp_EJ ,
+             region = gcam.USA_REGION,
+             market.name = SINGLE_MARKET_NAME) %>%
+      select(-net_trade, -GrossImp_EJ, -GrossExp_EJ, -net_trade_GCAM)
+
+    #
+    # 1f. TRADED CAL OUTPUT --------------------------------------
     # L2392.Production_tra: Output (gross exports) of traded technologies
     # LNG
+    L2391.NG_export_calOutput_LNG_EUR_adj <- L2391.NG_export_calOutput_LNG_EUR %>%
+      mutate(market.name = region,
+             region = if_else(market.name %in% Europe_Single_Market_Regions$GCAMEU_region, SINGLE_MARKET_NAME, gcam.USA_REGION)) %>%
+      bind_rows(global_LNG_to_Europe, Europe_LNG_to_global)
+
     L2392.Production_tra_LNG <- filter(A_ff_TradedTechnology_R_Y_LNG, year %in% MODEL_BASE_YEARS) %>%
-      left_join_error_no_match(L2391.NG_export_calOutput_LNG_EUR,
-                               by = c(market.name = "region", minicam.energy.input = "GCAM_Commodity", "year")) %>%
+      left_join_error_no_match(L2391.NG_export_calOutput_LNG_EUR_adj,
+                               by = c("market.name", "region", minicam.energy.input = "GCAM_Commodity", "year")) %>%
       mutate(calOutputValue = round(calOutputValue, energy.DIGITS_CALOUTPUT),
              share.weight.year = year,
              subs.share.weight = if_else(calOutputValue > 0, 1, 0),
@@ -422,7 +533,10 @@ module_gcameurope_L2392.gas_trade <- function(command, ...) {
       filter(subsector %in% c("domestic natural gas", "imported LNG")) %>%
       repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
       repeat_add_columns(GCAM_region_names["region"]) %>%
-      mutate(market.name = if_else(market.name == "regional", region, market.name)) %>%
+      mutate(market.name = if_else(market.name == "regional", region,
+                                   if_else(grepl("imported", technology) & region %in% Europe_Single_Market_Regions$GCAMEU_region,
+                                           SINGLE_MARKET_NAME,
+                                           market.name))) %>%
       set_years() %>%
       # set from.year to 2020 for island regions that have no gas imports in calibration
       mutate(from.year = if_else(region %in% No_IMPORT_REGIONS & subsector == "imported LNG", min(MODEL_FUTURE_YEARS), from.year))

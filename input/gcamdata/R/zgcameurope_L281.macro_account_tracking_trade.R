@@ -46,6 +46,16 @@ module_gcameurope_L281.macro_account_tracking <- function(command, ...) {
       mutate(region = if_else(is.na(region.y), region.x, region.y)) %>%
       select(names(L281.TechAccountOutput_entrade))
 
+    lng_trade_regions <- L281.TechAccountOutput_entrade_EUR %>%
+      filter(supplysector %in% L239.TechCoef_tra_EUR$supplysector) %>%
+      distinct(region_lng = region, market.name)
+
+    L281.TechAccountOutput_entrade_EUR  <- L281.TechAccountOutput_entrade_EUR %>%
+      left_join(lng_trade_regions, by = c("market.name")) %>%
+      mutate(region = if_else(supplysector == "traded LNG", region_lng, region)) %>%
+      select(-region_lng)
+
+    L281.TechAccountOutput_entrade_EUR %>%  filter(year == 2015, market.name == "Spain")
     # ===================================================
 
     # Produce outputs

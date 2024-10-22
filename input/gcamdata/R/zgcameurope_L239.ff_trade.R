@@ -201,6 +201,7 @@ module_gcameurope_L239.ff_trade <- function(command, ...) {
              subsector = paste0("global ", supplysector),
              technology = subsector,
              calOutputValue = if_else(year == MODEL_FINAL_BASE_YEAR, GrossImp_EJ,-net_trade),
+             calOutputValue = round(calOutputValue, energy.DIGITS_CALOUTPUT),
              share.weight.year = year,
              subs.share.weight = if_else(calOutputValue > 0, 1, 0),
              tech.share.weight = subs.share.weight) %>%
