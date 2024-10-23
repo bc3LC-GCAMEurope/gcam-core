@@ -24,7 +24,8 @@ module_gcameurope_L281.macro_account_tracking <- function(command, ...) {
                      "L281.TechAccountInput_NG_entrade",
                      "L281.GlobalTechAccountInput_entrade",
                      "L239.TechCoef_tra_EUR",
-                     "L239.TechCoef_reg_EUR")
+                     "L239.TechCoef_reg_EUR",
+                     "L243.TechCoef_TradedBio_EUR")
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -42,7 +43,7 @@ module_gcameurope_L281.macro_account_tracking <- function(command, ...) {
 
     # 2. Adjust markets for europe single market --------------------------------------------------
     L281.TechAccountOutput_entrade_EUR <- L281.TechAccountOutput_entrade %>%
-      left_join(L239.TechCoef_tra_EUR, by = c("supplysector", "subsector", "technology", "year", "market.name")) %>%
+      left_join(bind_rows(L239.TechCoef_tra_EUR, L243.TechCoef_TradedBio_EUR), by = c("supplysector", "subsector", "technology", "year", "market.name")) %>%
       mutate(region = if_else(is.na(region.y), region.x, region.y)) %>%
       select(names(L281.TechAccountOutput_entrade))
 
