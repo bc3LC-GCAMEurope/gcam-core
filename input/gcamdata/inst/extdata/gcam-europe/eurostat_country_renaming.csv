@@ -1,0 +1,37 @@
+# File: eurostat_country_renaming.csv
+# Title: Remapping eurostat country names
+# Units: NA
+# Source: NA
+# Column types: cc
+# ----------
+GCAM_country,Eurostat_country
+United States of America,United States of America (the)
+Libyan Arab Jamahiriya,Libya
+Cote dIvoire,Côte d'Ivoire
+"Congo, the Democratic Republic of the",Congo (the Democratic Republic of the)
+Congo,Congo (the)
+Bahamas,Bahamas (the)
+United Arab Emirates,United Arab Emirates (the)
+"Iran, Islamic Republic of",Iran (Islamic Republic of)
+Syrian Arab Republic,Syrian Arab Republic (the)
+Russian Federation,Russian Federation (the)
+Venezuela,Venezuela (Bolivarian Republic of)
+"Korea, Republic of",Korea (the Republic of)
+"Korea, Democratic Peoples Republic of",Korea (the Democratic People's Republic of)
+Taiwan,Taiwan (Province of China)
+Czech Republic,Czechia
+Netherlands,Netherlands (the)
+"Macedonia, the former Yugoslav Republic of",North Macedonia
+"Moldova, Republic of",Moldova (the Republic of)
+Bolivia,Bolivia (Plurinational State of)
+Cape Verde,Cabo Verde
+Curacao,Curaçao
+Dominican Republic,Dominican Republic (the)
+Lao Peoples Democratic Republic,Lao People's Democratic Republic (the)
+Marshall Islands,Marshall Islands (the)
+Niger,Niger (the)
+Philippines,Philippines (the)
+Sudan,Sudan (the)
+Timor Leste,Timor-Leste
+"Tanzania, United Republic of","Tanzania, the United Republic of"
+"Virgin Islands, British",Virgin Islands (British)

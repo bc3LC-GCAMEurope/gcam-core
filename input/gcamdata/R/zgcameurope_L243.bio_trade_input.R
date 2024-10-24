@@ -26,6 +26,9 @@ module_gcameurope_L243.bio_trade_input <- function(command, ...) {
                         "L243.TechCoef_TradedBio",
                         "L243.TechShrwt_TradedBio")
   MODULE_INPUTS <- c(FILE = "common/GCAM_region_names",
+                     FILE = "common/GCAM32_to_EU",
+                     FILE = "gcam-europe/trade_balances/estat_nrg_ti_bio",
+                     FILE = "gcam-europe/eurostat_country_renaming",
                      "L239.Pop_europeSingleMarket",
                      "Europe_Single_Market_Regions",
                      OUTPUTS_TO_ADJUST)
@@ -111,27 +114,47 @@ module_gcameurope_L243.bio_trade_input <- function(command, ...) {
     L243.TechCoef_TradedBio_EUR <- change_region_to_EUR(L243.TechCoef_TradedBio)
     L243.TechShrwt_TradedBio_EUR <- change_region_to_EUR(L243.TechShrwt_TradedBio)
 
+    # Adjust country mapping-------------
+    GCAM32_to_EU_adj <- GCAM32_to_EU %>%
+      distinct(country_name, GCAMEU_region) %>%
+      left_join(eurostat_country_renaming, by = c("country_name" = "GCAM_country")) %>%
+      mutate(country_name = if_else(is.na(Eurostat_country), country_name, Eurostat_country)) %>%
+      select(-Eurostat_country)
+
+    #
     # Subsector Shareweights---------------
-    # shareweights are based on cropland area
-    # for european market, just keep same shareweights, so relative shareweight between countries is the same
-    L243.SubsectorShrwtFllt_TradedBio_EUR <- L243.SubsectorShrwtFllt_TradedBio %>%
+    L243.SubsectorShrwtFllt_TradedBio_EUR_unadj <- L243.SubsectorShrwtFllt_TradedBio %>%
       select(-share.weight) %>%
       change_region_to_EUR() %>%
       left_join(L243.SubsectorShrwtFllt_TradedBio %>%  select(-region), by = c("supplysector", "subsector", "year.fillout"))
 
-    # For european exports to global market, sum european shareweights
-    europe_to_global_shrwt <- L243.SubsectorShrwtFllt_TradedBio_EUR %>%
+    # original shareweights are based on cropland area
+    # For european exports to global market, sum original european shareweights
+    europe_to_global_shrwt <- L243.SubsectorShrwtFllt_TradedBio_EUR_unadj %>%
       filter(region == SINGLE_MARKET_NAME) %>%
       summarise(share.weight = sum(share.weight, na.rm = T)) %>%  pull
 
-    # For global exports to european market, give same as sum of european shareweights
-    # equal shareweight to domestic and foreign biomass
-    global_to_europe_shrwt <- europe_to_global_shrwt
+    # for european market, base global and country shareweights on import shares in 2015
+    L243.eur_shareweights_calculated <- estat_nrg_ti_bio %>%
+      gather_years() %>%
+      mutate(value = as.numeric(value)) %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
+      left_join_error_no_match(GCAM32_to_EU_adj %>% rename(region_import = GCAMEU_region), by = c("import_ctry" = "country_name")) %>%
+      filter(region_import %in% Europe_Single_Market_Regions$GCAMEU_region) %>%
+      left_join_error_no_match(GCAM32_to_EU_adj %>% rename(region_export = GCAMEU_region), by = c("export_ctry" = "country_name"))  %>%
+      mutate(region_export = if_else(region_export %in% Europe_Single_Market_Regions$GCAMEU_region, region_export, "global")) %>%
+      group_by(region_export) %>%
+      summarise(value = sum(value)) %>%
+      ungroup %>%
+      mutate(share.weight = value / max(value)) %>%
+      select(-value)
 
-    L243.SubsectorShrwtFllt_TradedBio_EUR <- L243.SubsectorShrwtFllt_TradedBio_EUR %>%
-      mutate(share.weight = if_else(subsector == paste("global", supplysector), global_to_europe_shrwt, share.weight),
-             share.weight = if_else(subsector == paste(SINGLE_MARKET_NAME, supplysector), europe_to_global_shrwt, share.weight))
-
+    L243.SubsectorShrwtFllt_TradedBio_EUR <- L243.SubsectorShrwtFllt_TradedBio_EUR_unadj %>%
+      mutate(region_export = stringr::str_extract(subsector, ".*(?= traded)")) %>%
+      left_join(L243.eur_shareweights_calculated, by = "region_export") %>%
+      mutate(share.weight = if_else(is.na(share.weight.y), share.weight.x, share.weight.y),
+             share.weight = if_else(region_export == SINGLE_MARKET_NAME, europe_to_global_shrwt, share.weight)) %>%
+      select(names(L243.SubsectorShrwtFllt_TradedBio))
 
     return_data(MODULE_OUTPUTS)
   } else {
