@@ -19,7 +19,6 @@
 #' @importFrom tidyr gather
 #' @author RH Feb 2024
 module_gcameurope_L221.en_supply <- function(command, ...) {
-
   MODULE_INPUTS <-
     c(FILE = "common/GCAM_region_names",
       FILE = "aglu/A_agStorageSector",

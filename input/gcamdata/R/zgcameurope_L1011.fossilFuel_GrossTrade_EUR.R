@@ -27,6 +27,7 @@ module_gcameurope_L1011.ff_GrossTrade_EUR <- function(command, ...) {
                      FILE = "emissions/A_PrimaryFuelCCoef",
                      FILE = "energy/fuel_carbon_content",
                      FILE = "gcam-europe/mappings/siec_to_fuel_map",
+                     FILE = "gcam-europe/eurostat_country_renaming",
                      BALANCE_INPUTS)
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -39,6 +40,20 @@ module_gcameurope_L1011.ff_GrossTrade_EUR <- function(command, ...) {
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
+
+    GCAM32_to_EU_EurostatCountries <- GCAM32_to_EU %>%
+      left_join(eurostat_country_renaming, by = c("country_name" = "GCAM_country")) %>%
+      mutate(country_name = if_else(is.na(Eurostat_country), country_name, Eurostat_country)) %>%
+      distinct(country_name, GCAMEU_region, GCAM32_region)
+
+    Europe_Single_Market_Regions <- GCAM32_to_EU_EurostatCountries %>%
+      mutate( GCAM32_region = case_when(
+        GCAMEU_region == "UK" ~ "UK",
+        country_name == "Croatia" ~ "EU-12",
+        .default = GCAM32_region
+      )) %>%
+      filter(GCAM32_region %in% c("EU-15", "EU-12", "European Free Trade Association")) %>%
+      distinct(GCAMEU_region)
 
     # ISSUE: Switzerland does not report trade - 75% of oil comes from refined liquids imports from EU, 25% from crude oil imported from outside of EU
     # most coal imports come from abroad
@@ -92,41 +107,6 @@ module_gcameurope_L1011.ff_GrossTrade_EUR <- function(command, ...) {
       select(-Ccontent, -PrimaryFuelCO2Coef, -traded)
 
     # 2. Calculate intra and inter EU flows ------------------------
-    # some names need to be changed to match the Eurostat country names
-    GCAM32_to_EU_adj <- GCAM32_to_EU %>%
-      mutate(country_name = case_when(
-        country_name == "Czech Republic" ~ "Czechia",
-        country_name == "Korea, Democratic Peoples Republic of" ~ "Korea (the Democratic People's Republic of)",
-        country_name == "Moldova, Republic of" ~ "Moldova (the Republic of)",
-        country_name == "Netherlands" ~ "Netherlands (the)",
-        country_name == "Macedonia, the former Yugoslav Republic of" ~ "North Macedonia",
-        country_name == "Russian Federation" ~ "Russian Federation (the)",
-        country_name == "Taiwan" ~ "Taiwan (Province of China)",
-        country_name == "United Arab Emirates" ~ "United Arab Emirates (the)",
-        country_name == "United States of America" ~ "United States of America (the)",
-        country_name == "Korea, Republic of" ~ "Korea (the Republic of)",
-        country_name == "Venezuela" ~ "Venezuela (Bolivarian Republic of)",
-        country_name == "Iran, Islamic Republic of" ~ "Iran (Islamic Republic of)",
-        country_name == "Libyan Arab Jamahiriya" ~ "Libya",
-        country_name == "Syrian Arab Republic" ~ "Syrian Arab Republic (the)",
-        country_name == "Congo" ~ "Congo (the)",
-        country_name == "Congo, the Democratic Republic of the" ~ "Congo (the Democratic Republic of the)",
-        country_name == "Cote dIvoire" ~ "Côte d'Ivoire",
-        country_name == "Bahamas" ~ "Bahamas (the)",
-        .default = country_name
-      ),
-      # make some adjustments to account for all EEA countries
-      GCAM32_region = case_when(
-        GCAMEU_region == "UK" ~ "UK",
-        country_name == "Croatia" ~ "EU-12",
-        .default = GCAM32_region
-      )) %>%
-      select(country_name, GCAMEU_region, GCAM32_region) %>%  distinct()
-
-    Europe_Single_Market_Regions <- GCAM32_to_EU_adj %>%
-      filter(GCAM32_region %in% c("EU-15", "EU-12", "European Free Trade Association")) %>%
-      distinct(GCAMEU_region)
-
     L1011.ff_trade_Europe_EJ_R_Y <-  eurostat_ff_trade %>%
       mutate(import_ctry = case_when(
         import_ctry == "Czechia" ~"Czech Republic",
