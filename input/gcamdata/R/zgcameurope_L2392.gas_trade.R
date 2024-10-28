@@ -47,6 +47,7 @@ module_gcameurope_L2392.gas_trade <- function(command, ...) {
                      "L239.Production_reg_dom",
                      "L239.Production_reg_dom_EUR",
                      FILE = "gcam-europe/A_ff_RegionalTechnology_NG_EUR",
+                     "L1011.ff_GrossTrade_EJ_R_Y_LNG",
                      "L1011.ff_trade_Europe_EJ_R_Y",
                      "Europe_Single_Market_Regions")
   MODULE_OUTPUTS <- c("L2392.PrimaryConsKeyword_en_NG_EUR",
