@@ -1345,7 +1345,7 @@ module_energy_L244.building_det <- function(command, ...) {
       arrange(en_EJ) %>%
       left_join_error_no_match(L144.prices_bld %>% rename(service = market) %>% select(-region), by = c("GCAM_region_ID", "year","service")) %>%
       filter(price != 0) %>%
-      left_join_error_no_match(L144.flsp_bm2_R_res_Yh, by = dplyr::join_by(GCAM_region_ID, year)) %>%
+      left_join_error_no_match(L144.flsp_bm2_R_res_Yh, by = c("GCAM_region_ID", "year")) %>%
       rename(flsp = value) %>%
       mutate(en_EJ_flsp = en_EJ / flsp) %>%
       mutate(log_en_EJ_flsp = log(en_EJ_flsp),
@@ -1388,7 +1388,7 @@ module_energy_L244.building_det <- function(command, ...) {
       arrange(en_EJ) %>%
       left_join(L144.prices_bld %>% rename(service = market) %>% select(-region), by = c("GCAM_region_ID", "year","service"))  %>%
       filter(price != 0) %>%
-      left_join_error_no_match(L144.flsp_bm2_R_res_Yh, by = dplyr::join_by(GCAM_region_ID, year)) %>%
+      left_join_error_no_match(L144.flsp_bm2_R_res_Yh, by = c("GCAM_region_ID", "year")) %>%
       rename(flsp = value) %>%
       mutate(en_EJ_flsp = en_EJ / flsp) %>%
       mutate(log_en_EJ_flsp = log(en_EJ_flsp),

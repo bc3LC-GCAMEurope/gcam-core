@@ -165,8 +165,6 @@ module_energy_building_det_xml <- function(command, ...) {
                      "L244.GlobalTechCost_bld", "L244.DeleteThermalService", "L244.DeleteGenericService",
                      "L244.PriceExp_IntGains","L244.GenericServiceImpedance","L244.ThermalServiceImpedance",
                      "L244.GenericServiceAdder","L244.ThermalServiceAdder",
-                     "L244.GenericTradBioCoef","L244.ThermalTradBioCoef",
-                     "L244.GenericCoalCoef","L244.ThermalCoalCoef",
                      "L244.GenericServicePrice","L244.ThermalServicePrice",
                      "L244.GenericBaseDens", "L244.ThermalBaseDens",
                      "L244.GenericServiceCoef","L244.ThermalServiceCoef",
