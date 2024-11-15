@@ -274,7 +274,8 @@ module_gcameurope_L2327.paper <- function(command, ...) {
 
     L1327.IO_GJkg_R_paper_F_Yh_EUR %>%
       filter(year %in% HISTORICAL_YEARS[HISTORICAL_YEARS %in% c(MODEL_BASE_YEARS, MODEL_FUTURE_YEARS)]) %>%
-      mutate(coefficient = round(value, energy.DIGITS_COEFFICIENT)) %>%
+      # need to increase coefficient because of countries with small numbers
+      mutate(coefficient = round(value, (energy.DIGITS_COEFFICIENT + 2))) %>%
       rename(supplysector = sector) %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       left_join_error_no_match(calibrated_techs_export, by = c("supplysector", "fuel")) %>%

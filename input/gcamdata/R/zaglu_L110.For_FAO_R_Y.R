@@ -43,6 +43,10 @@ module_aglu_L110.For_FAO_R_Y <- function(command, ...) {
     # Load required inputs ----
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
 
+    ZERO_PAPER_PRODUCTION_R <- c("Cyprus", "Malta", "Iceland")
+    ZERO_PAPER_PRODUCTION_ID <- iso_GCAM_regID %>%
+      filter(country_name %in% ZERO_PAPER_PRODUCTION_R) %>%
+      pull(GCAM_region_ID)
 
     # indicate flow on each tibble - flow is a directional quantity indicating net export or production
     # Old comment: Indicate the flow on each table and combine (rbind). Multiply imports by -1 and call both imports and exports the same flow
@@ -97,6 +101,11 @@ module_aglu_L110.For_FAO_R_Y <- function(command, ...) {
       #
       mutate(Prod_bm3= if_else(is.na(Prod_bm3),0,Prod_bm3),
              NetExp_bm3= if_else(is.na(NetExp_bm3),0,NetExp_bm3),
+             NetExp_bm3= if_else(NetExp_bm3 > Prod_bm3, Prod_bm3, NetExp_bm3),
+             NetExp_bm3= if_else(GCAM_commodity == "woodpulp" &
+                                   GCAM_region_ID %in% ZERO_PAPER_PRODUCTION_ID &
+                                   Prod_bm3 == 0,
+                                 0, NetExp_bm3),
              Cons_bm3 = Prod_bm3 - NetExp_bm3) %>%                                     # form a new variable, consumption Cons = Prod-NetExp
       select(GCAM_region_ID, GCAM_commodity, year, Prod_bm3, NetExp_bm3, Cons_bm3) ->  # reorder columns
       L110.For_ALL_bm3_R_Y                                                             # save it in the region year R_Y tibble
@@ -170,8 +179,9 @@ module_aglu_L110.For_FAO_R_Y <- function(command, ...) {
       filter(GCAM_commodity==aglu.FOREST_SUPPLY_SECTOR) %>%
       left_join_error_no_match(L110.IO_Coefs_pulp %>% select(GCAM_region_ID,year,roundwood_cons), by = c("GCAM_region_ID","year")) %>%
       mutate(diff=roundwood_cons-Cons_bm3,
-             Prod_bm3= Prod_bm3+diff,
-             Cons_bm3=roundwood_cons) %>%
+             Cons_bm3 =  if_else(Prod_bm3 + diff < 0, Cons_bm3 - Prod_bm3, roundwood_cons),
+             Prod_bm3 = if_else(Prod_bm3 + diff < 0, 0, Prod_bm3 + diff),
+             NetExp_bm3 = Prod_bm3 - Cons_bm3) %>%
       select(colnames(L110.For_ALL_bm3_R_Y))->L110.For_ALL_bm3_R_Y_Primary
 
     L110.For_ALL_bm3_R_Y %>%
@@ -200,9 +210,9 @@ module_aglu_L110.For_FAO_R_Y <- function(command, ...) {
           spread(flow, value),
         by = c("GCAM_region_ID", "GCAM_commodity", "year")) %>%
       replace_na(list(GrossExp = 0)) %>%
-      mutate(GrossImp_Mt = if_else(GrossExp - NetExp_bm3 > 0, GrossExp - NetExp_bm3, 0),
-             GrossExp_Mt = if_else(GrossExp - NetExp_bm3 > 0, GrossExp, NetExp_bm3),
-             GrossExp_Mt = if_else(GrossExp_Mt > Prod_bm3, Prod_bm3, GrossExp_Mt)) %>%
+      mutate(GrossExp_Mt = if_else(GrossExp > Prod_bm3, Prod_bm3, GrossExp),
+             GrossImp_Mt = if_else(GrossExp_Mt - NetExp_bm3 > 0, GrossExp_Mt - NetExp_bm3, 0),
+             GrossExp_Mt = if_else(GrossExp_Mt - NetExp_bm3 > 0, GrossExp_Mt, NetExp_bm3)) %>%
       select(-GrossExp) ->
       L110.For_ALL_bm3_R_Y
 
