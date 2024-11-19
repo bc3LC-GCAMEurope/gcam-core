@@ -1099,7 +1099,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     # Heating:
     fit_coal_heat <- lm(log_en_EJ_flsp ~ log_pcgdp_thous  + GCAM_region_ID,
-                        data = serv_coal)
+                        data = serv_coal_heat)
 
     b1_coal_heat <- as.numeric(fit_coal_heat$coefficients[1])
     b2_coal_heat <- as.numeric(fit_coal_heat$coefficients[2])
@@ -1111,7 +1111,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     b1_coal_cooking <- as.numeric(fit_coal_cooking$coefficients[1])
     b2_coal_cooking <- as.numeric(fit_coal_cooking$coefficients[2])
-    b3_coal_cooking <- as.numeric(fit_coal_cooking$coefficients[3]) #TODO 0??
+    b3_coal_cooking <- 0 # Non-significant
 
     # Non-thermal services (hot water)
     fit_coal_hotwater <- lm(log_en_EJ_flsp ~ log_pcgdp_thous  + GCAM_region_ID,
@@ -1119,7 +1119,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     b1_coal_hotwater <- as.numeric(fit_coal_hotwater$coefficients[1])
     b2_coal_hotwater <- as.numeric(fit_coal_hotwater$coefficients[2])
-    b3_coal_hotwater <- as.numeric(fit_coal_hotwater$coefficients[3]) #TODO 0??
+    b3_coal_hotwater <- 0 # Non-significant
 
     # Non-thermal services (other)
     fit_coal_oth <- lm(log_en_EJ_flsp ~ log_pcgdp_thous  + GCAM_region_ID,
@@ -1916,7 +1916,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     L244.StubTechCalInput_bld_comm<- L244.StubTechCalInput_bld_pre %>%
       filter(grepl("comm",supplysector))
 
-    L244.StubTechCalInput_bld_resid<-add.cg(L244.StubTechCalInput_bld_pre) %>%
+    L244.StubTechCalInput_bld_resid2<-add.cg(L244.StubTechCalInput_bld_pre) %>%
       filter(grepl("resid",supplysector)) %>%
       separate(supplysector,c("adj_sector","group"),sep = "_",remove = F) %>%
       # use left_join due to lack of heating in Indonesia
@@ -1924,6 +1924,15 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       mutate(share = dplyr::if_else(is.na(share),0,share)) %>%
       mutate(calibrated.value = calibrated.value * share) %>%
       select(LEVEL2_DATA_NAMES[["StubTechCalInput"]])
+
+    # complete with 0s the missing StubTechs using L244.StubTechEff_bld_EUR
+    L244.StubTechCalInput_bld_resid <- L244.StubTechEff_bld_EUR %>%
+      filter(year %in% MODEL_BASE_YEARS) %>%
+      left_join(L244.StubTechCalInput_bld_resid2, by = c('region','supplysector','subsector','stub.technology','year','minicam.energy.input')) %>%
+      mutate(calibrated.value = dplyr::if_else(is.na(calibrated.value), 0, calibrated.value)) %>%
+      mutate(share.weight.year = dplyr::if_else(is.na(share.weight.year), year, share.weight.year)) %>%
+      mutate(subs.share.weight = dplyr::if_else(is.na(subs.share.weight), 0, subs.share.weight)) %>%
+      mutate(tech.share.weight = dplyr::if_else(is.na(tech.share.weight), 0, tech.share.weight))
 
     L244.StubTechCalInput_bld_EUR<-bind_rows(L244.StubTechCalInput_bld_resid,L244.StubTechCalInput_bld_comm)
 
