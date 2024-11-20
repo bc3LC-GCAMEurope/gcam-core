@@ -1317,7 +1317,12 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       mutate(serv_density = dplyr::if_else(grepl("TradBio",thermal.building.service.input),observed_base_serv_perflsp,serv_density)) %>%
       mutate(coef = observed_base_serv_perflsp / (serv_density*thermal_load)) %>%
       mutate(est_base_serv_perflsp = coef * thermal_load * serv_density) %>%
-      mutate(bias.adder = round(est_base_serv_perflsp-observed_base_serv_perflsp,energy.DIGITS_BIAS_ADDER))
+      mutate(bias.adder = round(est_base_serv_perflsp-observed_base_serv_perflsp,energy.DIGITS_BIAS_ADDER)) %>%
+      # Remove NaN/Inf values (Iceland - cooling)
+      mutate(`satiation-impedance` = dplyr::if_else(`satiation-impedance` %in% c(Inf, NaN), 0, `satiation-impedance`),
+             est_base_serv_perflsp = dplyr::if_else(est_base_serv_perflsp %in% c(Inf, NaN), 0, est_base_serv_perflsp),
+             bias.adder = dplyr::if_else(bias.adder %in% c(Inf, NaN), 0, bias.adder),
+             coef = dplyr::if_else(coef %in% c(Inf, NaN), 0, coef))
 
     L244.ThermalServiceImpedance_EUR<-L244.ThermalServiceImpedance_allvars %>%
       select(LEVEL2_DATA_NAMES[["ThermalServiceImpedance"]]) %>%
