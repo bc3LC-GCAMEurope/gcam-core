@@ -7,7 +7,7 @@
 		<Value name="GHGInputFileName">../input/magicc/inputs/input_gases.emk</Value>
 		<Value write-output="1" append-scenario-name="0" name="xmldb-location">../output/database_basexdb</Value>
 		<Value write-output="1" append-scenario-name="0" name="restart">./restart/restart</Value>
-		<Value write-output="1" append-scenario-name="1" name="xmlDebugFileName">debug.xml</Value>
+		<Value write-output="0" append-scenario-name="1" name="xmlDebugFileName">debug.xml</Value>
 		<Value write-output="1" append-scenario-name="0" name="climatFileName">gas.emk</Value>
 		<Value write-output="1" append-scenario-name="1" name="costCurvesOutputFileName">cost_curves.xml</Value>
 		<Value write-output="1" append-scenario-name="0" name="batchCSVOutputFile">batch-csv-out.csv</Value>
@@ -38,7 +38,7 @@
  		<Value name = "iron_steel">../input/gcamdata/xml/iron_steel.xml</Value>
 		 <Value name = "iron_steel">../input/gcamdata/xml/iron_steel_EUR.xml</Value>
 		<Value name = "iron_steel_income_elas">../input/gcamdata/xml/iron_steel_incelas_gssp2.xml</Value>   
-		<Value name = "iron_steel trade">../input/gcamdata/xml/iron_steel_trade.xml</Value>
+		<Value name = "iron_steel trade">../input/gcamdata/xml/iron_steel_trade_EUR.xml</Value>
  		<Value name = "Off_road">../input/gcamdata/xml/Off_road.xml</Value>
 		 <Value name = "Off_road">../input/gcamdata/xml/Off_road_EUR.xml</Value>
 		<Value name = "Off_road_income_elas">../input/gcamdata/xml/Off_road_incelas_gssp2.xml</Value>  
@@ -57,7 +57,7 @@
 		<Value name = "cement">../input/gcamdata/xml/cement_EUR.xml</Value>
 		<Value name = "cement_income_elas">../input/gcamdata/xml/cement_incelas_gssp2.xml</Value>
 		<Value name = "fertilizer_energy">../input/gcamdata/xml/en_Fert_EUR.xml</Value>
-		<Value name = "fertilizer_energy">../input/gcamdata/xml/en_Fert.xml</Value>
+		<!--Value name = "fertilizer_energy">../input/gcamdata/xml/en_Fert.xml</Value-->
 		<Value name = "hddcdd">../input/gcamdata/xml/HDDCDD_constdd_no_GCM.xml</Value>
 		<Value name = "hddcdd">../input/gcamdata/xml/HDDCDD_constdd_no_GCM_EUR.xml</Value>
 		<Value name = "building">../input/gcamdata/xml/building_det.xml</Value>
@@ -87,8 +87,10 @@
 		<Value name = "protected_land3">../input/gcamdata/xml/protected_land_input_3.xml</Value>
 		<Value name = "demand">../input/gcamdata/xml/ag_an_demand_input.xml</Value>
 		<Value name = "demand_paper">../input/gcamdata/xml/paper_delete_ag_demand.xml</Value>
-		<Value name = "bio_trade">../input/gcamdata/xml/bio_trade.xml</Value>
-		<Value name = "ag_trade">../input/gcamdata/xml/ag_trade.xml</Value>
+		<!--Value name = "bio_trade">../input/gcamdata/xml/bio_trade.xml</Value-->
+		<Value name = "bio_trade_EUR">../input/gcamdata/xml/bio_trade_EUR.xml</Value>
+		<!--Value name = "ag_trade">../input/gcamdata/xml/ag_trade.xml</Value-->
+		<Value name = "ag_trade_EUR">../input/gcamdata/xml/ag_trade_EUR.xml</Value>
 		<Value name = "ag_storage">../input/gcamdata/xml/ag_storage.xml</Value>
 
 		<Value name = "unlim_supply_water">../input/gcamdata/xml/unlimited_water_supply.xml</Value>
