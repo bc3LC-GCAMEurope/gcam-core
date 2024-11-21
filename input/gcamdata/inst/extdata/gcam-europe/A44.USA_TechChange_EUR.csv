@@ -10,7 +10,6 @@ resid heating coal,coal,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.
 resid heating modern,electricity,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 resid heating modern,gas,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002
 resid heating modern,refined liquids,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
-resid heating TradBio,traditional biomass,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 resid heating modern,district heat,0,0,0,0,0,0,0,0,0,0
 resid cooling modern,electricity,0.006,0.006,0.006,0.006,0.006,0.006,0.006,0.006,0.006,0.006
 resid cooling modern,gas,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002
@@ -20,7 +19,6 @@ resid cooking modern,electricity,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 resid cooking modern,gas,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002
 resid cooking modern,refined liquids,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 resid cooking modern,district heat,0,0,0,0,0,0,0,0,0,0
-resid cooking TradBio,traditional biomass,0,0,0,0,0,0,0,0,0,0
 resid hot water modern,biomass,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 resid hot water coal,coal,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 resid hot water modern,electricity,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001

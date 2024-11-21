@@ -13,7 +13,6 @@
 #' \code{L210.RsrcCalProd_EUR}, \code{L210.ReserveCalReserve_EUR}, \code{L210.RsrcCurves_fos_EUR}, \code{L210.RsrcCurves_U_EUR}, \code{L210.SmthRenewRsrcCurves_MSW_EUR},
 #' \code{L210.SmthRenewRsrcCurves_wind_EUR}, \code{L210.SmthRenewRsrcCurves_offshore_wind_EUR}, \code{L210.SmthRenewRsrcCurvesGdpElast_roofPV_EUR},
 #' \code{L210.GrdRenewRsrcCurves_geo_EUR}, \code{L210.GrdRenewRsrcMax_geo_EUR}, \code{L210.GrdRenewRsrcCurves_EGS_EUR}, \code{L210.GrdRenewRsrcMax_EGS_EUR},
-#' \code{L210.GrdRenewRsrcCurves_tradbio_EUR}, \code{L210.GrdRenewRsrcMax_tradbio_EUR},
 #' \code{L210.ResSubresourceProdLifetime_EUR}, \code{L210.ResReserveTechLifetime_EUR}, \code{L210.ResReserveTechDeclinePhase_EUR}, \code{L210.ResReserveTechProfitShutdown_EUR},
 #' \code{L210.ResTechShrwt_EUR}, \code{L210.ResTechShrwt_EGS_EUR}.
 #' @details Resource market information, prices, TechChange parameters, supply curves, and environmental costs.
@@ -69,7 +68,6 @@ module_gcameurope_L210.resources <- function(command, ...) {
                     "L115.RsrcCurves_EJ_R_roofPV",
                     "L116.RsrcCurves_EJ_R_geo",
                     "L116.RsrcCurves_EJ_R_EGS",
-                    "L117.RsrcCurves_EJ_R_tradbio_EUR",
                     "L120.RsrcCurves_EJ_R_offshore_wind",
                     "L120.TechChange_offshore_wind",
                     "L102.pcgdp_thous90USD_Scen_R_Y",
@@ -79,8 +77,6 @@ module_gcameurope_L210.resources <- function(command, ...) {
                     OUTPUTS_TO_COPY_FILTER)
   MODULE_OUTPUTS <- c("L210.RenewRsrc_EUR",
                       "L210.RenewRsrcPrice_EUR",
-                      "L210.GrdRenewRsrcCurves_tradbio_EUR",
-                      "L210.GrdRenewRsrcMax_tradbio_EUR",
                       "L210.ResTechShrwt_EUR",
                       "L210.RsrcCurves_fos_EUR",
                       "L210.ReserveCalReserve_EUR",
@@ -145,21 +141,6 @@ module_gcameurope_L210.resources <- function(command, ...) {
       filter_regions_europe() %>%
       anti_join(L210.RenewRsrcPrice_tradbio_EUR, by = c("region", "renewresource", "year", "price")) %>%
       bind_rows(L210.RenewRsrcPrice_tradbio_EUR)
-
-    # 1B. Tradbio: Resource supply curves -----------
-    # L210.GrdRenewRsrcCurves_tradbio: graded supply curves of traditional biomass resources
-    L210.GrdRenewRsrcCurves_tradbio_EUR <- L117.RsrcCurves_EJ_R_tradbio_EUR %>%
-      # Add region name
-      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
-      mutate(available = round(available, energy.DIGITS_MAX_SUB_RESOURCE)) %>%
-      select(region, renewresource = resource, sub.renewable.resource = subresource, grade, available, extractioncost)
-
-    # L210.GrdRenewRsrcMax_tradbio: default max sub resource of tradbio resources
-    L210.GrdRenewRsrcMax_tradbio_EUR <- L210.GrdRenewRsrcCurves_tradbio_EUR %>%
-      filter(grade == "grade 1") %>%
-      mutate(year.fillout = min(MODEL_BASE_YEARS),
-             maxSubResource = 1) %>%
-      select(LEVEL2_DATA_NAMES[["maxSubResource"]])
 
     # 2A. Fossil: RESOURCE RESERVE ADDITIONS functions ----------------------------------
     # Check for calibrated resource prices for final historical model year.
@@ -406,20 +387,6 @@ module_gcameurope_L210.resources <- function(command, ...) {
       add_comments("Data from L111.RsrcCurves_EJ_R_Ffos_EUR") %>%
       add_precursors("L111.RsrcCurves_EJ_R_Ffos_EUR", "L111.Prod_EJ_R_F_Yh_EUR", "gcam-europe/A10.ResSubresourceProdLifetime", "common/GCAM_region_names") ->
       L210.RsrcCurves_fos_EUR
-
-    L210.GrdRenewRsrcCurves_tradbio_EUR %>%
-      add_title("Graded supply curves of traditional biomass resources") %>%
-      add_units("available: EJ; extractioncost: 1975$/GJ") %>%
-      add_comments("Data from L117.RsrcCurves_EJ_R_tradbio_EUR") %>%
-      add_precursors("L117.RsrcCurves_EJ_R_tradbio_EUR", "common/GCAM_region_names") ->
-      L210.GrdRenewRsrcCurves_tradbio_EUR
-
-    L210.GrdRenewRsrcMax_tradbio_EUR %>%
-      add_title("Default max sub resource of traditional biomass resources") %>%
-      add_units("Unitless") %>%
-      add_comments("maxSubResource assumed to be 1 for all regions") %>%
-      same_precursors_as(L210.GrdRenewRsrcCurves_tradbio_EUR) ->
-      L210.GrdRenewRsrcMax_tradbio_EUR
 
     L210.ResTechShrwt_EUR %>%
       add_title("Share weights for technologies in resources") %>%

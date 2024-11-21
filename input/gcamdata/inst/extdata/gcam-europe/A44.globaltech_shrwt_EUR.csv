@@ -9,7 +9,6 @@ resid heating coal,coal,coal,1,1,1,1,1
 resid heating modern,electricity,electricity,1,1,1,1,1
 resid heating modern,gas,gas,1,1,1,1,1
 resid heating modern,refined liquids,refined liquids,1,1,1,1,1
-resid heating TradBio,traditional biomass,traditional biomass,1,1,1,1,1
 resid heating modern,district heat,district heat,1,1,1,1,1
 resid cooling modern,electricity,electricity,1,1,1,1,1
 resid cooling modern,gas,gas,1,1,1,1,1
@@ -18,7 +17,6 @@ resid cooking coal,coal,coal,1,1,1,1,1
 resid cooking modern,electricity,electricity,1,1,1,1,1
 resid cooking modern,gas,gas,1,1,1,1,1
 resid cooking modern,refined liquids,refined liquids,1,1,1,1,1
-resid cooking TradBio,traditional biomass,traditional biomass,1,1,1,1,1
 resid other appliance modern,electricity,electricity,1,1,1,1,1
 resid hot water modern,biomass,biomass,1,1,1,1,1
 resid hot water coal,coal,coal,1,1,1,1,1

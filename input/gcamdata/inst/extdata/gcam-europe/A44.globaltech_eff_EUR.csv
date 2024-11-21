@@ -13,7 +13,6 @@ resid heating modern,gas,hydrogen,hydrogen furnace,delivered gas,0.8,0.8,0.8,0.8
 resid heating modern,electricity,electricity,electric furnace,elect_td_bld,0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99
 resid heating modern,refined liquids,refined liquids,fuel furnace,refined liquids enduse,0.8,0.8,0.83,0.83,0.83,0.83,0.83,0.83,0.83
 resid heating modern,refined liquids,refined liquids,fuel furnace hi-eff,refined liquids enduse,0.97,0.97,0.97,0.97,0.97,0.97,0.97,0.97,0.97
-resid heating TradBio,traditional biomass,traditional biomass,traditional biomass furnace,traditional biomass,0.9714305,1.0100451,1.0151055,1.0201911,1.0253023,1.0304391,1.0356016,1.04079,1.105116
 resid heating modern,district heat,district heat,district heat furnace,district heat,1,1,1,1,1,1,1,1,1
 resid cooling modern,electricity,electricity,air conditioning,elect_td_bld,3.043,3.043,3.81,3.81,3.81,3.81,3.81,3.81,3.81
 resid cooling modern,electricity,electricity,air conditioning hi-eff,elect_td_bld,7.03,7.03,7.03,7.03,7.03,7.03,7.03,7.03,7.03
@@ -37,7 +36,6 @@ resid cooking modern,gas,gas,gas oven,delivered gas,0.399,0.399,0.399,0.399,0.39
 resid cooking modern,gas,gas,gas oven hi-eff,delivered gas,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42
 resid cooking modern,refined liquids,refined liquids,lpg oven,refined liquids enduse,0.399,0.399,0.399,0.399,0.399,0.399,0.399,0.399,0.399
 resid cooking modern,refined liquids,refined liquids,lpg oven hi-eff,refined liquids enduse,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42
-resid cooking TradBio,traditional biomass,traditional biomass,traditional biomass,traditional biomass,0.9714305,1.0100451,1.0151055,1.0201911,1.0253023,1.0304391,1.0356016,1.04079,1.105116
 resid others modern,biomass,biomass,biomass,delivered biomass,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4
 resid others coal,coal,coal,coal,delivered coal,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4
 resid others modern,gas,gas,gas,delivered gas,1,1,1,1,1,1,1,1,1

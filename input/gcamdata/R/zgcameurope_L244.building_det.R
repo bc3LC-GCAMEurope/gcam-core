@@ -60,7 +60,10 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              "L106.income_distributions",
              "L144.flsp_param_EUR",
              "L144.hab_land_flsp_fin_EUR",
-             "L144.prices_bld_EUR")
+             "L144.prices_bld_EUR",
+             "L244.GlobalTechShrwt_bld",
+             "L244.GlobalTechCost_bld",
+             "L244.GlobalTechTrackCapital_bld")
   MODULE_OUTPUTS <- c(
              "L244.SubregionalShares_EUR",
              "L244.PriceExp_IntGains_EUR",
@@ -643,13 +646,6 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     # First, calculate the service output per unit floorspace in the DEU region
     L244.ServiceSatiation_DEU_pre <- L144.base_service_EJ_serv_EUR %>%
       filter(GCAM_region_ID == gcam.DEU_CODE) %>%
-      # Add tradBio which is not consumed in DEU
-      bind_rows(L144.base_service_EJ_serv_EUR %>%
-                  filter(grepl("TradBio",service)) %>%
-                  select(-GCAM_region_ID,-value) %>%
-                  distinct() %>%
-                  mutate(GCAM_region_ID = gcam.DEU_CODE,
-                         value = 0)) %>%
       # Using left_join_keep_first_only b/c there are repeats and we only need to keep generic columns
       left_join_keep_first_only(calibrated_techs_bld_det_EUR, by = c("sector", "service")) %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
@@ -713,7 +709,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
                   # not all combinations so use left_join
                   left_join(L244.BS, by = c(LEVEL2_DATA_NAMES[["BldNodes"]], "building.service.input")) %>%
                   replace_na(list(service.per.flsp=0)) %>%
-                  filter(grepl("coal",building.service.input) | grepl("TradBio",building.service.input))%>%
+                  filter(grepl("coal",building.service.input))%>%
                   filter(service.per.flsp != 0)) %>%
       mutate(satiation.level = pmax(satiation.level, service.per.flsp * 1.0001)) %>%
       # extend the satiation to non existing sectors:
@@ -770,7 +766,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
                   left_join(L244.tmp, by = c(LEVEL2_DATA_NAMES[["BldNodes"]], "thermal.building.service.input")) %>%
                   mutate(satiation.level = round(pmax(satiation.level, service.per.flsp * 1.0001),
                                                  digits = energy.DIGITS_CALOUTPUT)) %>%
-                  filter(grepl("coal",thermal.building.service.input) | grepl("TradBio",thermal.building.service.input)) %>%
+                  filter(grepl("coal",thermal.building.service.input)) %>%
                   filter(service.per.flsp != 0)) %>%
       select(LEVEL2_DATA_NAMES[["ThermalServiceSatiation"]])
 
@@ -802,7 +798,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       na.omit()
 
     # Subsector information
-    ## Not all subsectors exist in all regions; tradbio and heat are only modeled in selected regions
+    ## Not all subsectors exist in all regions; heat is only modeled in selected regions
     ## The level1 end-use tech efficiency file has all of the combinations that exist
     L244.Tech_bld <- add.cg(L144.end_use_eff_EUR) %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
@@ -945,6 +941,37 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[['GlobalTechTrackCapital']]) ->
       L244.GlobalTechTrackCapital_bld_EUR
 
+
+    # gather all the global tech db items in the EUR xml. If an item is present in the core and in the EUR version, choose the core values
+    L244.GlobalTechShrwt_bld_EUR_combined <- full_join(
+      L244.GlobalTechShrwt_bld,
+      L244.GlobalTechShrwt_bld_EUR,
+      by = c("sector.name","subsector.name","technology","year"), suffix = c("_core", "_EUR"))
+    L244.GlobalTechShrwt_bld_EUR <- L244.GlobalTechShrwt_bld_EUR_combined %>%
+      mutate(share.weight = dplyr::coalesce(share.weight_core, share.weight_EUR)) %>%
+      select(sector.name, subsector.name, technology, year, share.weight)
+
+    L244.GlobalTechCost_bld_EUR_combined <- full_join(
+      L244.GlobalTechCost_bld,
+      L244.GlobalTechCost_bld_EUR,
+      by = c("sector.name","subsector.name","technology","year","minicam.non.energy.input"),
+      suffix = c("_core", "_EUR"))
+    L244.GlobalTechCost_bld_EUR <- L244.GlobalTechCost_bld_EUR_combined %>%
+      mutate(input.cost = dplyr::coalesce(input.cost_core, input.cost_EUR)) %>%
+      select(sector.name, subsector.name, technology, year, minicam.non.energy.input, input.cost)
+
+    L244.GlobalTechTrackCapital_bld_EUR_combined <- full_join(
+      L244.GlobalTechTrackCapital_bld,
+      L244.GlobalTechTrackCapital_bld_EUR,
+      by = c("sector.name","subsector.name","technology","year","minicam.non.energy.input","tracking.market"),
+      suffix = c("_core", "_EUR"))
+    L244.GlobalTechTrackCapital_bld_EUR <- L244.GlobalTechTrackCapital_bld_EUR_combined %>%
+      mutate(capital.coef = dplyr::coalesce(capital.coef_core, capital.coef_EUR),
+             depreciation.rate = dplyr::coalesce(depreciation.rate_core, depreciation.rate_EUR)) %>%
+      select(sector.name, subsector.name, technology, year, minicam.non.energy.input,
+             capital.coef, tracking.market, depreciation.rate)
+
+
     # L244.StubTechIntGainOutputRatio_EUR: Output ratios of internal gain energy from non-thermal building services
     L244.StubTechIntGainOutputRatio_pre <- L144.internal_gains_EUR %>%
       filter(year %in% MODEL_YEARS) %>%
@@ -1059,14 +1086,13 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["DeleteGenericService"]])
 
     #------------------------------------------------------
-    # The demand for traditional fuels (coal and TradBio) decreases as income raises -> Need to use a different functional form
+    # The demand for traditional fuels (coal) decreases as income raises -> Need to use a different functional form
     # From historical data we fit a function that includes:
     # - Negative income effect
     # - Positive quadratic income effect (represents an horizontal asymptot): Note that for coal this effect is not significant with the used data (b3 = 0)
     # - For price, the data does not show a clear trend, so negative price elasticities are taken from literature (could be easily changed by the user):
-    #   -0.4 for TradBio and -0.5 for coal. Given the fitted logarithmic model, they can be directly set as elasticieties n the regression.
+    #  -0.5 for coal. Given the fitted logarithmic model, they can be directly set as elasticieties n the regression.
 
-    prelast_tradBio <- -0.4
     prelast_coal <- -0.5
 
     # First, estimate the parameters for the function to estimate coal demand:
@@ -1129,49 +1155,6 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     b2_coal_oth <- as.numeric(fit_coal_oth$coefficients[2])
     b3_coal_oth <- 0 # Non-significant
 
-
-    # Same for traditional biomass:
-    serv_TradBio<-L144.base_service_EJ_serv_fuel_EUR %>%
-      rename(en_EJ = value) %>%
-      filter(en_EJ != 0) %>%
-      filter(grepl("resid",service),
-             fuel == "traditional biomass") %>%
-      gcamdata::left_join_error_no_match(L102.pcgdp_thous90USD_Scen_R_Y_EUR %>% filter(scenario == socioeconomics.BASE_GDP_SCENARIO)
-                                         , by = c("GCAM_region_ID", "year")) %>%
-      rename(pcgdp_thous = value) %>%
-      select(GCAM_region_ID,fuel,service,year,pcgdp_thous,en_EJ) %>%
-      arrange(en_EJ) %>%
-      left_join(L144.prices_bld_EUR %>% rename(service = market) %>% select(-region), by = c("GCAM_region_ID", "year","service"))  %>%
-      filter(price != 0) %>%
-      left_join_error_no_match(L144.flsp_bm2_R_res_Yh_EUR, by = c("GCAM_region_ID", "year")) %>%
-      rename(flsp = value) %>%
-      mutate(en_EJ_flsp = en_EJ / flsp) %>%
-      mutate(log_en_EJ_flsp = log(en_EJ_flsp),
-             log_pcgdp_thous = log(pcgdp_thous),
-             log_price = log(price),
-             log_sq_pcgdp_thous = log_pcgdp_thous^2,
-             GCAM_region_ID = as.character(GCAM_region_ID))
-
-    serv_tradBio_heat <- serv_TradBio %>% filter(grepl("heating", service))
-    serv_tradBio_cooking <- serv_TradBio %>% filter(grepl("cooking", service))
-
-
-    # Heating
-    fit_tradBio_heat = lm(log_en_EJ_flsp ~ log_pcgdp_thous + log_sq_pcgdp_thous + GCAM_region_ID,
-                          data = serv_tradBio_heat)
-
-    b1_tradBio_heat <- as.numeric(fit_tradBio_heat$coefficients[1])
-    b2_tradBio_heat <- as.numeric(fit_tradBio_heat$coefficients[2])
-    b3_tradBio_heat <- as.numeric(fit_tradBio_heat$coefficients[3])
-
-    # Non-thermal (cooking)
-    fit_tradBio_cooking = lm(log_en_EJ_flsp ~ log_pcgdp_thous + log_sq_pcgdp_thous + GCAM_region_ID,
-                         data = serv_tradBio_cooking)
-
-    b1_tradBio_cooking <- as.numeric(fit_tradBio_cooking$coefficients[1])
-    b2_tradBio_cooking <- as.numeric(fit_tradBio_cooking$coefficients[2])
-    b3_tradBio_cooking <- as.numeric(fit_tradBio_cooking$coefficients[3])
-
     #------------------------------------------------------
     # In order to make the function flexible to the implementation of multiple consumers, the satiation impedance (mu) and the calibration coefficent (k)
     # are calibrated in the DS per region.
@@ -1181,9 +1164,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     L244.GenericServiceImpedance_allvars <- L244.GenericServiceSatiation_EUR %>%
       left_join_error_no_match(A_regions %>% select(region,GCAM_region_ID),by = "region") %>%
       # Only modern services use impedance
-      # filter(!grepl("coal",building.service.input),
-      #       !grepl("TradBio",building.service.input)) %>%
-      # use left_join due to TradBio
+      # filter(!grepl("coal",building.service.input)) %>%
       left_join_error_no_match(L144.base_service_EJ_serv_EUR %>%  filter(year==MODEL_FINAL_BASE_YEAR, service %in% generic_services)
                                %>% rename(building.service.input = service),
                                by=c("GCAM_region_ID","building.service.input")) %>%
@@ -1213,11 +1194,16 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       mutate(afford=(pcGDP_thous90USD*1000/def9075) / price) %>%
       mutate(serv_density=satiation.level * (1-exp((-log(2)/`satiation-impedance`) * afford))) %>%
       mutate(serv_density = dplyr::if_else(grepl("coal",building.service.input),observed_base_serv_perflsp,serv_density)) %>%
-      mutate(serv_density = dplyr::if_else(grepl("TradBio",building.service.input),observed_base_serv_perflsp,serv_density)) %>%
       mutate(serv_density2 = serv_density) %>%
       mutate(coef = observed_base_serv_perflsp / serv_density*thermal_load) %>%
       mutate(est_base_serv_perflsp = coef * thermal_load * serv_density) %>%
-      mutate(bias.adder = round(est_base_serv_perflsp-observed_base_serv_perflsp,energy.DIGITS_BIAS_ADDER))
+      mutate(bias.adder = round(est_base_serv_perflsp-observed_base_serv_perflsp,energy.DIGITS_BIAS_ADDER)) %>%
+      # Remove NaN/Inf values (Iceland/Turkey...)
+      mutate(`satiation-impedance` = dplyr::if_else(`satiation-impedance` %in% c(Inf, NaN), 0, `satiation-impedance`),
+             est_base_serv_perflsp = dplyr::if_else(est_base_serv_perflsp %in% c(Inf, NaN), 0, est_base_serv_perflsp),
+             bias.adder = dplyr::if_else(bias.adder %in% c(Inf, NaN), 0, bias.adder),
+             coef = dplyr::if_else(coef %in% c(Inf, NaN), 0, coef))
+
 
 
     L244.GenericServiceImpedance_EUR<-L244.GenericServiceImpedance_allvars %>%
@@ -1314,7 +1300,6 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       mutate(afford = (pcGDP_thous90USD*1000/def9075) / price) %>%
       mutate(serv_density=satiation.level * (1-exp((-log(2)/`satiation-impedance`)*afford))) %>%
       mutate(serv_density = dplyr::if_else(grepl("coal",thermal.building.service.input),observed_base_serv_perflsp,serv_density)) %>%
-      mutate(serv_density = dplyr::if_else(grepl("TradBio",thermal.building.service.input),observed_base_serv_perflsp,serv_density)) %>%
       mutate(coef = observed_base_serv_perflsp / (serv_density*thermal_load)) %>%
       mutate(est_base_serv_perflsp = coef * thermal_load * serv_density) %>%
       mutate(bias.adder = round(est_base_serv_perflsp-observed_base_serv_perflsp,energy.DIGITS_BIAS_ADDER)) %>%
@@ -1344,9 +1329,8 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       bind_rows(L244.ThermalServiceImpedance_allvars %>%
                   select(LEVEL2_DATA_NAMES[["ThermalServiceCoef"]]) %>%
                   filter(grepl("comm",gcam.consumer))) %>%
-      # adjust coal and tradbio
-      mutate(coef = dplyr::if_else(grepl("coal",thermal.building.service.input),1,coef),
-             coef = dplyr::if_else(grepl("TradBio",thermal.building.service.input),1,coef)) %>%
+      # adjust coal
+      mutate(coef = dplyr::if_else(grepl("coal",thermal.building.service.input),1,coef)) %>%
       mutate(coef = round(coef,energy.DIGITS_COEFFICIENT))
 
 
@@ -1391,7 +1375,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       left_join_error_no_match(bind_rows(L244.Floorspace_resid,L244.Floorspace_comm),
                                by = c("region", "gcam.consumer", "nodeInput", "building.node.input", "year")) %>%
       mutate(serv=(satiation.level * (1-exp((-log(2)/`satiation-impedance`)*afford))) * base.building.size) %>%
-      # Adjust coal and TradBio
+      # Adjust coal
       mutate(serv = dplyr::if_else(grepl("heating coal",building.service.input),
                             exp(b1_coal_heat + b2_coal_heat * log(pcGDP_thous90USD_gr) + b3_coal_heat * (log(pcGDP_thous90USD_gr)^2) + prelast_coal * log(price)) * base.building.size,
                             serv)) %>%
@@ -1403,12 +1387,6 @@ module_gcameurope_L244.building_det <- function(command, ...) {
                             serv)) %>%
       mutate(serv = dplyr::if_else(grepl("others coal",building.service.input),
                             exp(b1_coal_oth + b2_coal_oth * log(pcGDP_thous90USD_gr) + b3_coal_oth * (log(pcGDP_thous90USD_gr)^2) + prelast_coal * log(price)) * base.building.size,
-                            serv)) %>%
-      mutate(serv = dplyr::if_else(grepl("heating TradBio",building.service.input),
-                            exp(b1_tradBio_heat + b2_tradBio_heat * log(pcGDP_thous90USD_gr) + b3_tradBio_heat * (log(pcGDP_thous90USD_gr)^2) + prelast_tradBio * log(price)) * base.building.size,
-                            serv)) %>%
-      mutate(serv = dplyr::if_else(grepl("cooking TradBio",building.service.input),
-                            exp(b1_tradBio_cooking + b2_tradBio_cooking * log(pcGDP_thous90USD_gr) + b3_tradBio_cooking * (log(pcGDP_thous90USD_gr)^2) + prelast_tradBio * log(price)) * base.building.size,
                             serv)) %>%
       mutate(serv = dplyr::if_else(afford == 0, 0, serv))
 
@@ -1487,7 +1465,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       left_join_error_no_match(bind_rows(L244.Floorspace_resid,L244.Floorspace_comm),
                                by = c("region", "gcam.consumer", "nodeInput", "building.node.input", "year")) %>%
       mutate(serv=(satiation.level * (1-exp((-log(2)/`satiation-impedance`)*afford))) * base.building.size) %>%
-      # Adjust coal and TradBio
+      # Adjust coal
       mutate(serv = dplyr::if_else(grepl("heating coal",thermal.building.service.input),
                             exp(b1_coal_heat + b2_coal_heat * log(pcGDP_thous90USD_gr) + b3_coal_heat * (log(pcGDP_thous90USD_gr)^2) + prelast_coal * log(price)) * base.building.size,
                             serv)) %>%
@@ -1499,12 +1477,6 @@ module_gcameurope_L244.building_det <- function(command, ...) {
                             serv)) %>%
       mutate(serv = dplyr::if_else(grepl("others coal",thermal.building.service.input),
                             exp(b1_coal_oth + b2_coal_oth * log(pcGDP_thous90USD_gr) + b3_coal_oth * (log(pcGDP_thous90USD_gr)^2) + prelast_coal * log(price)) * base.building.size,
-                            serv)) %>%
-      mutate(serv = dplyr::if_else(grepl("heating TradBio",thermal.building.service.input),
-                            exp(b1_tradBio_heat + b2_tradBio_heat * log(pcGDP_thous90USD_gr) + b3_tradBio_heat * (log(pcGDP_thous90USD_gr)^2) + prelast_tradBio * log(price)) * base.building.size,
-                            serv)) %>%
-      mutate(serv = dplyr::if_else(grepl("cooking TradBio",thermal.building.service.input),
-                            exp(b1_tradBio_cooking + b2_tradBio_cooking * log(pcGDP_thous90USD_gr) + b3_tradBio_cooking * (log(pcGDP_thous90USD_gr)^2) + prelast_tradBio * log(price)) * base.building.size,
                             serv)) %>%
       mutate(serv = dplyr::if_else(afford == 0, 0, serv))
 
@@ -1549,14 +1521,14 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       filter(grepl("resid", nodeInput),
              !grepl("modern", building.service.input)) %>%
       select(-base.service) %>%
-      mutate(b1 = dplyr::if_else(grepl("coal", building.service.input), b1_coal_oth, b1_tradBio_cooking),
-             b2 = dplyr::if_else(grepl("coal", building.service.input), b2_coal_oth, b2_tradBio_cooking),
-             b3 = dplyr::if_else(grepl("coal", building.service.input), b3_coal_oth, b3_tradBio_cooking)) %>%
+      mutate(b1 = b1_coal_oth,
+             b2 = b2_coal_oth,
+             b3 = b3_coal_oth) %>%
       separate(gcam.consumer, c("gcam.consumer", "group")) %>%
       mutate(gcam.consumer = paste0(gcam.consumer, "_", group),
              building.service.input = paste0(building.service.input, "_", group)) %>%
       select(-group) %>%
-      mutate(prelast = dplyr::if_else(grepl("coal",building.service.input), prelast_coal, prelast_tradBio)) %>%
+      mutate(prelast = prelast_coal) %>%
       select(LEVEL2_DATA_NAMES[["GenericTradFuelParams"]])
 
 
@@ -1564,14 +1536,14 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       filter(grepl("resid", nodeInput),
              !grepl("modern", thermal.building.service.input)) %>%
       select(-base.service) %>%
-      mutate(b1 = dplyr::if_else(grepl("coal", thermal.building.service.input), b1_coal_heat, b1_tradBio_heat),
-             b2 = dplyr::if_else(grepl("coal", thermal.building.service.input), b2_coal_heat, b2_tradBio_heat),
-             b3 = dplyr::if_else(grepl("coal", thermal.building.service.input), b3_coal_heat, b3_tradBio_heat)) %>%
+      mutate(b1 = b1_coal_heat,
+             b2 = b2_coal_heat,
+             b3 = b3_coal_heat) %>%
       separate(gcam.consumer, c("gcam.consumer", "group")) %>%
       mutate(gcam.consumer = paste0(gcam.consumer, "_", group),
              thermal.building.service.input = paste0(thermal.building.service.input, "_", group)) %>%
       select(-group) %>%
-      mutate(prelast = dplyr::if_else(grepl("coal",thermal.building.service.input), prelast_coal, prelast_tradBio)) %>%
+      mutate(prelast = prelast_coal) %>%
       select(LEVEL2_DATA_NAMES[["ThermalTradFuelParams"]])
 
 
@@ -1584,7 +1556,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     # This transition in three periods avoids drastic jumps from final calibration year to first model period.
 
     # 1- Generic services
-    trad_fuels_oth<-c("resid cooking coal", "resid hot water coal", "resid others coal","resid cooking TradBio")
+    trad_fuels_oth<-c("resid cooking coal", "resid hot water coal", "resid others coal")
     modern_fuels_oth<-c("resid cooking modern", "resid hot water modern", "resid other appliance modern", "resid others modern")
     Adder.Conv.Year<-2030
     ADJ_MODEL_YEARS<-c(MODEL_BASE_YEARS,MODEL_FUTURE_YEARS[MODEL_FUTURE_YEARS >= Adder.Conv.Year])
@@ -1602,7 +1574,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     L244.GenericServiceAdder_aggObs_gr<-L244.GenericBaseService_EUR %>%
       filter(year == MODEL_FINAL_BASE_YEAR)
 
-    # Coal and TradBio
+    # Coal
     L244.GenericServiceAdder_trad_pre<-L244.GenericShares_pre %>%
       filter(building.service.input %in% trad_fuels_oth) %>%
       mutate(est = serv) %>%
@@ -1693,7 +1665,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     # 2- Thermal services
 
-    trad_fuels_thermal<-c("resid cooling coal","resid heating coal","resid cooling TradBio","resid heating TradBio")
+    trad_fuels_thermal<-c("resid cooling coal","resid heating coal")
     modern_fuels_thermal<-c("resid cooling modern","resid heating modern")
 
     L244.ThermalServiceAdder_aggObs<-L144.base_service_EJ_serv_EUR %>%
@@ -1709,7 +1681,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     L244.ThermalServiceAdder_aggObs_gr<-L244.ThermalBaseService_EUR %>%
       filter(year== MODEL_FINAL_BASE_YEAR)
 
-    # Coal and TradBio
+    # Coal
     L244.ThermalServiceAdder_trad_pre<-L244.ThermalShares_pre %>%
       filter(thermal.building.service.input %in% trad_fuels_thermal) %>%
       mutate(est = serv) %>%

@@ -6,11 +6,9 @@
 supplysector,output.unit,input.unit,price.unit,logit.exponent,final.energy,logit.type
 resid heating modern,EJ,EJ,1975$/GJ,-3,building,
 resid heating coal,EJ,EJ,1975$/GJ,-3,building,
-resid heating TradBio,EJ,EJ,1975$/GJ,-3,building,
 resid cooling modern,EJ,EJ,1975$/GJ,-3,building,
 resid cooking modern,EJ,EJ,1975$/GJ,-3,building,
 resid cooking coal,EJ,EJ,1975$/GJ,-3,building,
-resid cooking TradBio,EJ,EJ,1975$/GJ,-3,building,
 resid hot water modern,EJ,EJ,1975$/GJ,-3,building,
 resid hot water coal,EJ,EJ,1975$/GJ,-3,building,
 resid other appliance modern,EJ,EJ,1975$/GJ,-3,building,

@@ -6,11 +6,9 @@
 supplysector,agg.service,multiplier
 resid heating modern,resid heating,1.1
 resid heating coal,resid heating,1.1
-resid heating TradBio,resid heating,1.1
 resid cooling modern,resid cooling,1.1
 resid cooking modern,resid cooking,1.1
 resid cooking coal,resid cooking,1.1
-resid cooking TradBio,resid cooking,1.1
 resid other appliance modern,resid other appliance,1.1
 resid hot water modern,resid hot water,1.1
 resid hot water coal,resid hot water,1.1

@@ -9,7 +9,6 @@ resid heating coal,coal,-0.7
 resid heating modern,electricity,0
 resid heating modern,gas,0
 resid heating modern,refined liquids,0
-resid heating TradBio,traditional biomass,-2
 resid heating modern,district heat,-0.5
 resid cooling modern,electricity,0
 resid cooling modern,gas,-1
@@ -18,7 +17,6 @@ resid cooking coal,coal,-0.7
 resid cooking modern,electricity,0
 resid cooking modern,gas,0
 resid cooking modern,refined liquids,-0.5
-resid cooking TradBio,traditional biomass,-0.5
 resid other appliance modern,electricity,0
 resid hot water modern,biomass,-1
 resid hot water coal,coal,-0.7

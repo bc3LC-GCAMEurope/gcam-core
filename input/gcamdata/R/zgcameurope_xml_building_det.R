@@ -40,6 +40,9 @@ module_gcameurope_building_det_xml <- function(command, ...) {
              "L244.GlobalTechShrwt_bld_EUR",
              "L244.GlobalTechCost_bld_EUR",
              "L244.GlobalTechTrackCapital_bld_EUR",
+             "L244.GlobalTechShrwt_bld",
+             "L244.GlobalTechCost_bld",
+             "L244.GlobalTechTrackCapital_bld",
              "L244.DeleteThermalService_EUR",
              "L244.Satiation_impedance_EUR",
              "L244.GenericServiceImpedance_EUR",
@@ -147,10 +150,10 @@ module_gcameurope_building_det_xml <- function(command, ...) {
       add_xml_data(L244.StubTechEff_bld_EUR, "StubTechEff") %>%
       add_xml_data(L244.StubTechCalInput_bld_EUR, "StubTechCalInput") %>%
       add_xml_data(L244.StubTechIntGainOutputRatio_EUR, "StubTechIntGainOutputRatio") %>%
-      # add_xml_data(L244.GlobalTechShrwt_bld_EUR, "GlobalTechShrwt") %>%
+      add_xml_data(L244.GlobalTechShrwt_bld_EUR, "GlobalTechShrwt") %>%
       add_node_equiv_xml("input") %>%
-      # add_xml_data(L244.GlobalTechTrackCapital_bld_EUR, "GlobalTechTrackCapital") %>%
-      # add_xml_data(L244.GlobalTechCost_bld_EUR, "GlobalTechCost") %>%
+      add_xml_data(L244.GlobalTechTrackCapital_bld_EUR, "GlobalTechTrackCapital") %>%
+      add_xml_data(L244.GlobalTechCost_bld_EUR, "GlobalTechCost") %>%
       add_precursors("L244.SubsectorInterpTo_bld_EUR", "L244.SubsectorInterp_bld_EUR" , "L244.SubsectorShrwtFllt_bld_EUR",
                      "L244.SubsectorShrwt_bld_EUR", "L244.FinalEnergyKeyword_bld_EUR", "L244.Supplysector_bld_EUR",
                      "L244.ShellConductance_bld_EUR", "L244.Intgains_scalar_EUR", "L244.GenericServiceSatiation_EUR",

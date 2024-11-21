@@ -44,7 +44,12 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
     Eurostat_sector_fuel_modifications <- get_data(all_data, "gcam-europe/mappings/Eurostat_sector_fuel_modifications")
     enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
 
-    L1011.en_bal_EJ_R_Si_Fi_Yh <- get_data(all_data, "L1011.en_bal_EJ_R_Si_Fi_Yh")
+    L1011.en_bal_EJ_R_Si_Fi_Yh <- get_data(all_data, "L1011.en_bal_EJ_R_Si_Fi_Yh") %>%
+      # set biomass_tradbio as biomass
+      mutate(fuel = if_else(fuel == 'biomass_tradbio','biomass',fuel)) %>%
+      group_by(GCAM_region_ID, sector, fuel, year) %>%
+      summarise(value = sum(value)) %>%
+      ungroup()
 
 
     # EUR regions
