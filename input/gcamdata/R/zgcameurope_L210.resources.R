@@ -46,8 +46,8 @@ module_gcameurope_L210.resources <- function(command, ...) {
                                "L210.ResTechCost")
   MODULE_INPUTS <- c(FILE = "common/GCAM_region_names",
                     FILE = "energy/A_regions",
-                    FILE = "energy/A10.rsrc_info",
-                    FILE = "energy/A10.subrsrc_info",
+                    FILE = "gcam-europe/A10.rsrc_info_EUR",
+                    FILE = "gcam-europe/A10.subrsrc_info_EUR",
                     FILE = "energy/A10.TechChange",
                     FILE = "energy/A10.TechChange_SSPs",
                     FILE = "energy/A10.EnvironCost_SSPs",
@@ -106,48 +106,27 @@ module_gcameurope_L210.resources <- function(command, ...) {
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
-    A10.rsrc_info <- A10.rsrc_info %>% gather_years()
+    A10.rsrc_info_EUR <- A10.rsrc_info_EUR %>% gather_years()
+    # Remove trad bio in EUR datasets
+    L210.RenewRsrc_EUR <- L210.RenewRsrc %>%
+      filter(renewresource != 'traditional biomass') %>%
+      filter_regions_europe()
+    L210.RenewRsrcPrice_EUR <- L210.RenewRsrcPrice %>%
+      filter(renewresource != 'traditional biomass') %>%
+      filter_regions_europe()
+    L210.ResTechShrwt <- L210.ResTechShrwt %>%
+      filter(subresource != 'traditional biomass') %>%
+      filter_regions_europe()
 
     # Create outputs that are simply copied from main scripts and filtered to Eurostat regions
     copy_filter_europe(all_data, OUTPUTS_TO_COPY_FILTER)
-
-    # 1A. Tradbio: Output unit, price unit, market -------------
-    L210.rsrc_info_tradbio_EUR <- A10.rsrc_info %>%
-      filter(resource == "traditional biomass") %>%
-      repeat_add_columns(tibble(region = gcameurope.EUROSTAT_COUNTRIES)) %>%
-      # Reset regional markets to the names of the specific regions
-      mutate(market = if_else(market == "regional", region, market))
-
-    # L210.RenewRsrc: output unit, price unit, and market for renewable resources
-    L210.RenewRsrc_tradbio_EUR <- L210.rsrc_info_tradbio_EUR %>%
-      filter(resource_type == "renewresource") %>%
-      select(region, renewresource = resource, output.unit = `output-unit`, price.unit = `price-unit`, market) %>%
-      distinct()
-
-    # add in non tradbio from default values
-    L210.RenewRsrc_EUR <- L210.RenewRsrc %>%
-      filter_regions_europe() %>%
-      anti_join(L210.RenewRsrc_tradbio_EUR, by = c("region", "renewresource", "output.unit", "price.unit", "market")) %>%
-      bind_rows(L210.RenewRsrc_tradbio_EUR)
-
-    # L210.RenewRsrcPrice: historical prices for renewable resources
-    L210.RenewRsrcPrice_tradbio_EUR <- L210.rsrc_info_tradbio_EUR %>%
-      filter(resource_type == "renewresource",
-             year %in% MODEL_BASE_YEARS) %>%
-      select(region, renewresource = resource, year, price = value)
-
-    # add in non tradbio from default values
-    L210.RenewRsrcPrice_EUR <- L210.RenewRsrcPrice %>%
-      filter_regions_europe() %>%
-      anti_join(L210.RenewRsrcPrice_tradbio_EUR, by = c("region", "renewresource", "year", "price")) %>%
-      bind_rows(L210.RenewRsrcPrice_tradbio_EUR)
 
     # 2A. Fossil: RESOURCE RESERVE ADDITIONS functions ----------------------------------
     # Check for calibrated resource prices for final historical model year.
     # Otherwise, price behavior is undefinded, and so stop process.
     # There should be calibrated prices for all historical model years for
     # full consistency, however.
-    if(!(MODEL_FINAL_BASE_YEAR %in% c(unique(A10.rsrc_info$year)))){
+    if(!(MODEL_FINAL_BASE_YEAR %in% c(unique(A10.rsrc_info_EUR$year)))){
       stop("No calibrated prices for resources in final historical year")
     }
 
@@ -287,7 +266,7 @@ module_gcameurope_L210.resources <- function(command, ...) {
       # Add region name
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       # Add subresource
-      left_join_error_no_match(A10.subrsrc_info, by = c("fuel" = "resource","technology"= "subresource")) %>%
+      left_join_error_no_match(A10.subrsrc_info_EUR, by = c("fuel" = "resource","technology"= "subresource")) %>%
       mutate(cal.production = round(value, energy.DIGITS_CALPRODUCTION)) %>%
       select(region, resource = fuel, subresource= technology, year, cal.production)
 
@@ -296,7 +275,7 @@ module_gcameurope_L210.resources <- function(command, ...) {
       # Add region name
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       # Add subresource
-      left_join_error_no_match(A10.subrsrc_info, by = c("fuel" = "resource","technology"= "subresource")) %>%
+      left_join_error_no_match(A10.subrsrc_info_EUR, by = c("fuel" = "resource","technology"= "subresource")) %>%
       select(region, resource = fuel, reserve.subresource = technology, year, cal.reserve) %>%
       filter(resource != "unconventional oil") ->
       L210.ReserveCalReserve_EUR
@@ -321,8 +300,8 @@ module_gcameurope_L210.resources <- function(command, ...) {
 
     # We need to make sure we have at least a shell technology for ALL resources
     # and so we will just use the share weight table to facilatate doing that.
-    A10.subrsrc_info %>%
-      filter(resource %in% unique(c(L210.RsrcCalProd_EUR$resource, "traditional biomass"))) %>%
+    A10.subrsrc_info_EUR %>%
+      filter(resource %in% unique(L210.RsrcCalProd_EUR$resource)) %>%
       repeat_add_columns(GCAM_region_names %>%  filter_regions_europe) %>%
       repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
       left_join(L210.RsrcCalProd_EUR %>%
@@ -355,14 +334,14 @@ module_gcameurope_L210.resources <- function(command, ...) {
     L210.RenewRsrc_EUR %>%
       add_title("Market information for renewable resources") %>%
       add_units("NA") %>%
-      add_comments("A10.rsrc_info written to all regions") %>%
-      add_precursors("energy/A_regions", "common/GCAM_region_names", "energy/A10.rsrc_info") ->
+      add_comments("A10.rsrc_info_EUR written to all regions") %>%
+      add_precursors("energy/A_regions", "common/GCAM_region_names", "gcam-europe/A10.rsrc_info_EUR") ->
       L210.RenewRsrc_EUR
 
     L210.RenewRsrcPrice_EUR %>%
       add_title("Historical prices for renewable resources") %>%
       add_units("1975$/GJ") %>%
-      add_comments("A10.rsrc_info written to all regions") %>%
+      add_comments("A10.rsrc_info_EUR written to all regions") %>%
       same_precursors_as(L210.RenewRsrc_EUR) ->
       L210.RenewRsrcPrice_EUR
 
@@ -370,7 +349,7 @@ module_gcameurope_L210.resources <- function(command, ...) {
       add_title("Calibrated production of depletable resources") %>%
       add_units("EJ/yr") %>%
       add_comments("Data from L111.Prod_EJ_R_F_Yh_EUR") %>%
-      add_precursors("L111.Prod_EJ_R_F_Yh_EUR", "common/GCAM_region_names", "energy/A10.subrsrc_info") ->
+      add_precursors("L111.Prod_EJ_R_F_Yh_EUR", "common/GCAM_region_names", "gcam-europe/A10.subrsrc_info_EUR") ->
       L210.RsrcCalProd_EUR
 
     L210.ReserveCalReserve_EUR %>%
@@ -378,7 +357,7 @@ module_gcameurope_L210.resources <- function(command, ...) {
       add_units("EJ cumulative") %>%
       add_comments("Calibrated reserve additions in each model year from which") %>%
       add_comments("the vintage will produce from for the assumed lifetime") %>%
-      add_precursors("L111.Prod_EJ_R_F_Yh_EUR", "gcam-europe/A10.ResSubresourceProdLifetime", "common/GCAM_region_names", "energy/A10.subrsrc_info") ->
+      add_precursors("L111.Prod_EJ_R_F_Yh_EUR", "gcam-europe/A10.ResSubresourceProdLifetime", "common/GCAM_region_names", "gcam-europe/A10.subrsrc_info_EUR") ->
       L210.ReserveCalReserve_EUR
 
     L210.RsrcCurves_fos_EUR %>%
@@ -393,7 +372,7 @@ module_gcameurope_L210.resources <- function(command, ...) {
       add_units("NA") %>%
       add_comments("Share weights won't matter for resource technologies as there") %>%
       add_comments("is no competetion between technologies.") %>%
-      add_precursors("common/GCAM_region_names", "energy/A10.subrsrc_info") ->
+      add_precursors("common/GCAM_region_names", "gcam-europe/A10.subrsrc_info_EUR") ->
       L210.ResTechShrwt_EUR
 
     return_data(MODULE_OUTPUTS)

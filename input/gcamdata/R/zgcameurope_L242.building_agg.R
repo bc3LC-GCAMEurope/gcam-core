@@ -21,15 +21,15 @@
 module_gcameurope_L242.building_agg <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/GCAM_region_names",
-             FILE = "energy/calibrated_techs_bld_agg",
+             FILE = "gcam-europe/calibrated_techs_bld_agg_EUR",
              FILE = "energy/A_regions",
              FILE = "energy/A42.sector",
-             FILE = "energy/A42.subsector_interp",
-             FILE = "energy/A42.subsector_logit",
-             FILE = "energy/A42.subsector_shrwt",
-             FILE = "energy/A42.globaltech_eff",
-             FILE = "energy/A42.globaltech_shrwt",
-             FILE = "energy/A42.fuelprefElasticity",
+             FILE = "gcam-europe/A42.subsector_interp_EUR",
+             FILE = "gcam-europe/A42.subsector_logit_EUR",
+             FILE = "gcam-europe/A42.subsector_shrwt_EUR",
+             FILE = "gcam-europe/A42.globaltech_eff_EUR",
+             FILE = "gcam-europe/A42.globaltech_shrwt_EUR",
+             FILE = "gcam-europe/A42.fuelprefElasticity_EUR",
              FILE = "energy/A42.demand",
              "L142.in_EJ_R_bld_F_Yh_EUR"))
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -52,15 +52,15 @@ module_gcameurope_L242.building_agg <- function(command, ...) {
 
     # Load required inputs
     GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>% filter_regions_europe()
-    calibrated_techs_bld_agg <- get_data(all_data, "energy/calibrated_techs_bld_agg")
+    calibrated_techs_bld_agg <- get_data(all_data, "gcam-europe/calibrated_techs_bld_agg_EUR")
     A_regions <- get_data(all_data, "energy/A_regions") %>% filter_regions_europe()
     A42.sector <- get_data(all_data, "energy/A42.sector", strip_attributes = TRUE)
-    A42.subsector_interp <- get_data(all_data, "energy/A42.subsector_interp", strip_attributes = TRUE)
-    A42.subsector_logit <- get_data(all_data, "energy/A42.subsector_logit", strip_attributes = TRUE)
-    A42.subsector_shrwt <- get_data(all_data, "energy/A42.subsector_shrwt", strip_attributes = TRUE)
-    A42.globaltech_eff <- get_data(all_data, "energy/A42.globaltech_eff")
-    A42.globaltech_shrwt <- get_data(all_data, "energy/A42.globaltech_shrwt", strip_attributes = TRUE)
-    A42.fuelprefElasticity <- get_data(all_data, "energy/A42.fuelprefElasticity", strip_attributes = TRUE)
+    A42.subsector_interp <- get_data(all_data, "gcam-europe/A42.subsector_interp_EUR", strip_attributes = TRUE)
+    A42.subsector_logit <- get_data(all_data, "gcam-europe/A42.subsector_logit_EUR", strip_attributes = TRUE)
+    A42.subsector_shrwt <- get_data(all_data, "gcam-europe/A42.subsector_shrwt_EUR", strip_attributes = TRUE)
+    A42.globaltech_eff <- get_data(all_data, "gcam-europe/A42.globaltech_eff_EUR")
+    A42.globaltech_shrwt <- get_data(all_data, "gcam-europe/A42.globaltech_shrwt_EUR", strip_attributes = TRUE)
+    A42.fuelprefElasticity <- get_data(all_data, "gcam-europe/A42.fuelprefElasticity_EUR", strip_attributes = TRUE)
     A42.demand <- get_data(all_data, "energy/A42.demand", strip_attributes = TRUE)
     L142.in_EJ_R_bld_F_Yh_EUR <- get_data(all_data, "L142.in_EJ_R_bld_F_Yh_EUR")
 
@@ -324,8 +324,8 @@ module_gcameurope_L242.building_agg <- function(command, ...) {
       add_comments("Subsector logit exponents of building sector were written for all regions") %>%
       add_comments("Region/fuel combinations where heat and traditional biomass are not modeled as separate fuels were removed") %>%
       add_legacy_name("L242.SubsectorLogit_bld_EUR") %>%
-      add_precursors("common/GCAM_region_names", "energy/calibrated_techs_bld_agg",
-                     "energy/A_regions", "energy/A42.subsector_logit") ->
+      add_precursors("common/GCAM_region_names", "gcam-europe/calibrated_techs_bld_agg_EUR",
+                     "energy/A_regions", "gcam-europe/A42.subsector_logit_EUR") ->
       L242.SubsectorLogit_bld_EUR
 
     if(exists("L242.SubsectorShrwt_bld_EUR")) {
@@ -335,8 +335,8 @@ module_gcameurope_L242.building_agg <- function(command, ...) {
         add_comments("Subsector shareweights of building sector were written for all regions") %>%
         add_comments("Region/fuel combinations where heat and traditional biomass are not modeled as separate fuels were removed") %>%
         add_legacy_name("L242.SubsectorShrwt_bld_EUR") %>%
-        add_precursors("common/GCAM_region_names", "energy/calibrated_techs_bld_agg",
-                       "energy/A_regions", "energy/A42.subsector_shrwt") ->
+        add_precursors("common/GCAM_region_names", "gcam-europe/calibrated_techs_bld_agg_EUR",
+                       "energy/A_regions", "gcam-europe/A42.subsector_shrwt_EUR") ->
         L242.SubsectorShrwt_bld_EUR
     } else {
       missing_data() %>%
@@ -351,8 +351,8 @@ module_gcameurope_L242.building_agg <- function(command, ...) {
         add_comments("Subsector shareweights of building sector were written for all regions") %>%
         add_comments("Region/fuel combinations where heat and traditional biomass are not modeled as separate fuels were removed") %>%
         add_legacy_name("L242.SubsectorShrwtFllt_bld_EUR") %>%
-        add_precursors("common/GCAM_region_names", "energy/calibrated_techs_bld_agg",
-                       "energy/A_regions", "energy/A42.subsector_shrwt") ->
+        add_precursors("common/GCAM_region_names", "gcam-europe/calibrated_techs_bld_agg_EUR",
+                       "energy/A_regions", "gcam-europe/A42.subsector_shrwt_EUR") ->
         L242.SubsectorShrwtFllt_bld_EUR
     } else {
       missing_data() %>%
@@ -367,8 +367,8 @@ module_gcameurope_L242.building_agg <- function(command, ...) {
         add_comments("Subsector shareweight interpolation data of building sector were written for all regions") %>%
         add_comments("Region/fuel combinations where heat and traditional biomass are not modeled as separate fuels were removed") %>%
         add_legacy_name("L242.SubsectorInterp_bld_EUR") %>%
-        add_precursors("common/GCAM_region_names", "energy/calibrated_techs_bld_agg",
-                       "energy/A_regions", "energy/A42.subsector_interp") ->
+        add_precursors("common/GCAM_region_names", "gcam-europe/calibrated_techs_bld_agg_EUR",
+                       "energy/A_regions", "gcam-europe/A42.subsector_interp_EUR") ->
         L242.SubsectorInterp_bld_EUR
     } else {
       missing_data() %>%
@@ -383,8 +383,8 @@ module_gcameurope_L242.building_agg <- function(command, ...) {
         add_comments("Subsector shareweight interpolation data of building sector were written for all regions") %>%
         add_comments("Region/fuel combinations where heat and traditional biomass are not modeled as separate fuels were removed") %>%
         add_legacy_name("L242.SubsectorInterpTo_bld_EUR") %>%
-        add_precursors("common/GCAM_region_names", "energy/calibrated_techs_bld_agg",
-                       "energy/A_regions", "energy/A42.subsector_interp") ->
+        add_precursors("common/GCAM_region_names", "gcam-europe/calibrated_techs_bld_agg_EUR",
+                       "energy/A_regions", "gcam-europe/A42.subsector_interp_EUR") ->
         L242.SubsectorInterpTo_bld_EUR
     } else {
       missing_data() %>%
@@ -398,8 +398,8 @@ module_gcameurope_L242.building_agg <- function(command, ...) {
       add_comments("Identification of stub technologies of building sector were written for all regions") %>%
       add_comments("Region/fuel combinations where heat and traditional biomass are not modeled as separate fuels were removed") %>%
       add_legacy_name("L242.StubTech_bld_EUR") %>%
-      add_precursors("common/GCAM_region_names", "energy/calibrated_techs_bld_agg",
-                     "energy/A_regions", "energy/A42.globaltech_shrwt") ->
+      add_precursors("common/GCAM_region_names", "gcam-europe/calibrated_techs_bld_agg_EUR",
+                     "energy/A_regions", "gcam-europe/A42.globaltech_shrwt_EUR") ->
       L242.StubTech_bld_EUR
 
     L242.StubTechCalInput_bld_EUR %>%
@@ -407,8 +407,8 @@ module_gcameurope_L242.building_agg <- function(command, ...) {
       add_units("EJ") %>%
       add_comments("Data were aggregated (dropping fuel) and shareweights were determined from the calibrated value") %>%
       add_legacy_name("L242.StubTechCalInput_bld_EUR") %>%
-      add_precursors("common/GCAM_region_names", "energy/calibrated_techs_bld_agg",
-                     "energy/A42.globaltech_eff", "L142.in_EJ_R_bld_F_Yh_EUR") ->
+      add_precursors("common/GCAM_region_names", "gcam-europe/calibrated_techs_bld_agg_EUR",
+                     "gcam-europe/A42.globaltech_eff_EUR", "L142.in_EJ_R_bld_F_Yh_EUR") ->
       L242.StubTechCalInput_bld_EUR
 
     L242.FuelPrefElast_bld_EUR %>%
@@ -417,8 +417,8 @@ module_gcameurope_L242.building_agg <- function(command, ...) {
       add_comments("Data were written for all regions") %>%
       add_comments("Region/fuel combinations where heat and traditional biomass are not modeled as separate fuels were removed") %>%
       add_legacy_name("L242.FuelPrefElast_bld_EUR") %>%
-      add_precursors("common/GCAM_region_names", "energy/calibrated_techs_bld_agg",
-                     "energy/A_regions", "energy/A42.fuelprefElasticity") ->
+      add_precursors("common/GCAM_region_names", "gcam-europe/calibrated_techs_bld_agg_EUR",
+                     "energy/A_regions", "gcam-europe/A42.fuelprefElasticity_EUR") ->
       L242.FuelPrefElast_bld_EUR
 
     L242.PerCapitaBased_bld_EUR %>%
@@ -442,8 +442,8 @@ module_gcameurope_L242.building_agg <- function(command, ...) {
       add_units("EJ") %>%
       add_comments("Base service is equal to the output of the building supplysector") %>%
       add_legacy_name("L242.BaseService_bld_EUR") %>%
-      add_precursors("common/GCAM_region_names", "energy/calibrated_techs_bld_agg", "energy/A42.globaltech_eff",
-                     "L142.in_EJ_R_bld_F_Yh_EUR", "energy/A42.globaltech_eff") ->
+      add_precursors("common/GCAM_region_names", "gcam-europe/calibrated_techs_bld_agg_EUR", "gcam-europe/A42.globaltech_eff_EUR",
+                     "L142.in_EJ_R_bld_F_Yh_EUR", "gcam-europe/A42.globaltech_eff_EUR") ->
       L242.BaseService_bld_EUR
 
     return_data(L242.Supplysector_bld_EUR, L242.FinalEnergyKeyword_bld_EUR,
