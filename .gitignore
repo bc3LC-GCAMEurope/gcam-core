@@ -85,4 +85,8 @@ exe7.0
 /ModelInterface
 analysis/*
 input/gcamdata/inst/extdata/bld_prices.csv
+input/gcamdata/.Rprofile
+output/modelinterface/modelinterface
+/exe/country-specific_config
+/exe/old
 
