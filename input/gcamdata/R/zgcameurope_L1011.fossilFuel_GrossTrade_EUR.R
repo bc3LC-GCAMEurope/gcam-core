@@ -49,6 +49,7 @@ module_gcameurope_L1011.ff_GrossTrade_EUR <- function(command, ...) {
     Europe_Single_Market_Regions <- GCAM32_to_EU_EurostatCountries %>%
       mutate( GCAM32_region = case_when(
         GCAMEU_region == "UK" ~ "UK",
+        GCAMEU_region == "Switzerland" ~ "Switzerland",
         country_name == "Croatia" ~ "EU-12",
         .default = GCAM32_region
       )) %>%
