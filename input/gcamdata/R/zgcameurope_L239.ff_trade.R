@@ -67,17 +67,18 @@ module_gcameurope_L239.ff_trade <- function(command, ...) {
     # Load required inputs ----
     get_data_list(all_data, MODULE_INPUTS)
 
+    EURO_NAMES <- union(gcameurope.EUROSTAT_COUNTRIES, Europe_Single_Market_Regions$GCAMEU_region)
     # Create outputs that are simply copied form main scripts and filtered to Eurostat
     # Only for non-traded outputs
     copy_filter_europe(all_data, OUTPUTS_TO_COPY_FILTER[!grepl("_tra", OUTPUTS_TO_COPY_FILTER)],
-                       regions_to_keep = c(gcameurope.EUROSTAT_COUNTRIES, "Switzerland"))
+                       regions_to_keep = EURO_NAMES)
 
     # Single market names and adjustments
     SINGLE_MARKET_NAME <- unique(A_ff_RegionalTechnology_EUR$market.name[A_ff_RegionalTechnology_EUR$market.name != "regional"])
 
     GCAM_region_names <- GCAM_region_names %>% dplyr::add_row(GCAM_region_ID = 0, region = SINGLE_MARKET_NAME)
 
-    EURO_TRADE_REGIONS <- c(gcameurope.EUROSTAT_COUNTRIES, SINGLE_MARKET_NAME, "Switzerland")
+    EURO_TRADE_REGIONS <- c(EURO_NAMES, SINGLE_MARKET_NAME)
 
     # Combine the single market and global market output
     L239.ff_GrossTrade_EJ_R_C_Y_EUR <- L2011.ff_GrossTrade_EJ_R_C_Y_EUR %>%
@@ -191,7 +192,7 @@ module_gcameurope_L239.ff_trade <- function(command, ...) {
 
     A_ff_regionalTechnology_R_Y <-  repeat_add_columns(A_ff_RegionalTechnology,
                                                        tibble(year = MODEL_YEARS)) %>%
-      repeat_add_columns(tibble(region = c(gcameurope.EUROSTAT_COUNTRIES, "Switzerland"))) %>%
+      repeat_add_columns(tibble(region = EURO_NAMES)) %>%
       mutate(market.name = if_else(market.name == "regional", region, if_else(region %in% Europe_Single_Market_Regions$GCAMEU_region, SINGLE_MARKET_NAME, gcam.USA_REGION)))
 
     # L239.Production_tra_EUR: Output (gross exports) of traded technologies -------------

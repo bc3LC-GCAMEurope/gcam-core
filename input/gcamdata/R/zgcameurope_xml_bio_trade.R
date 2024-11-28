@@ -41,7 +41,7 @@ module_gcameurope_bio_trade_xml <- function(command, ...) {
     get_data_list(all_data, MODULE_INPUTS)
 
     L281.TechAccountOutput_entrade_EUR <- L281.TechAccountOutput_entrade_EUR %>%
-      filter(supplysector %in% unique(L243.TechCoef_TradedBio$supplysector))
+      filter(supplysector %in% unique(L243.TechCoef_TradedBio_EUR$supplysector))
 
     # ===================================================
     # Rename tibble columns to match header info.
