@@ -5,46 +5,46 @@
 # Column types: cccn
 # ----------
 supplysector,subsector,technology,NEcostPerService
-resid heating modern,biomass,biomass,0.9417305
-resid heating coal,coal,coal,0.9417305
-resid heating modern,gas,gas,1.3739374
-resid heating modern,gas,hydrogen,1.4809598
-resid heating modern,electricity,electricity,1.2951476
-resid heating modern,refined liquids,refined liquids,1.8423003
-resid heating modern,district heat,district heat,0.6710238
-resid cooling modern,electricity,electricity,6.712409
-resid cooling modern,gas,gas,11.242246
-resid hot water modern,biomass,biomass,0.9417305
-resid hot water coal,coal,coal,0.9417305
-resid hot water modern,gas,gas,1.3739374
-resid hot water modern,electricity,electricity,5.502
-resid hot water modern,refined liquids,refined liquids,9.879
-resid hot water modern,district heat,district heat,1.2951476
-resid other appliance modern,electricity,electricity,1.2951476
-resid cooking modern,biomass,biomass,0.9417305
-resid cooking coal,coal,coal,0.9417305
-resid cooking modern,electricity,electricity,1.2951476
-resid cooking modern,gas,gas,1.3739374
-resid cooking modern,refined liquids,refined liquids,1.8423003
-resid others modern,biomass,biomass,3.200354
-resid others coal,coal,coal,2.1335694
-resid others modern,gas,gas,3.0014812
-resid others modern,gas,hydrogen,3.278901
-resid others modern,electricity,electricity,2.5726981
-resid others modern,refined liquids,refined liquids,3.3424061
-comm heating,biomass,biomass,0.9884987
-comm heating,coal,coal,0.9884987
-comm heating,gas,gas,1.5356661
-comm heating,gas,hydrogen,1.6483274
-comm heating,electricity,electricity,1.2799009
-comm heating,refined liquids,refined liquids,1.7065345
-comm heating,district heat,district heat,0.5793888
-comm cooling,gas,gas,2.629955
-comm cooling,electricity,electricity,4.949514
-comm others,biomass,biomass,3.200354
-comm others,coal,coal,2.133569
-comm others,gas,gas,3.085298
-comm others,gas,hydrogen,3.341378
-comm others,electricity,electricity,2.621402
-comm others,refined liquids,refined liquids,3.342406
-comm others,district heat,district heat,1.618934
+resid heating modern EUR,biomass,biomass,0.9417305
+resid heating coal EUR,coal,coal,0.9417305
+resid heating modern EUR,gas,gas,1.3739374
+resid heating modern EUR,gas,hydrogen,1.4809598
+resid heating modern EUR,electricity,electricity,1.2951476
+resid heating modern EUR,refined liquids,refined liquids,1.8423003
+resid heating modern EUR,district heat,district heat,0.6710238
+resid cooling modern EUR,electricity,electricity,6.712409
+resid cooling modern EUR,gas,gas,11.242246
+resid hot water modern EUR,biomass,biomass,0.9417305
+resid hot water coal EUR,coal,coal,0.9417305
+resid hot water modern EUR,gas,gas,1.3739374
+resid hot water modern EUR,electricity,electricity,5.502
+resid hot water modern EUR,refined liquids,refined liquids,9.879
+resid hot water modern EUR,district heat,district heat,1.2951476
+resid other appliance modern EUR,electricity,electricity,1.2951476
+resid cooking modern EUR,biomass,biomass,0.9417305
+resid cooking coal EUR,coal,coal,0.9417305
+resid cooking modern EUR,electricity,electricity,1.2951476
+resid cooking modern EUR,gas,gas,1.3739374
+resid cooking modern EUR,refined liquids,refined liquids,1.8423003
+resid others modern EUR,biomass,biomass,3.200354
+resid others coal EUR,coal,coal,2.1335694
+resid others modern EUR,gas,gas,3.0014812
+resid others modern EUR,gas,hydrogen,3.278901
+resid others modern EUR,electricity,electricity,2.5726981
+resid others modern EUR,refined liquids,refined liquids,3.3424061
+comm heating EUR,biomass,biomass,0.9884987
+comm heating EUR,coal,coal,0.9884987
+comm heating EUR,gas,gas,1.5356661
+comm heating EUR,gas,hydrogen,1.6483274
+comm heating EUR,electricity,electricity,1.2799009
+comm heating EUR,refined liquids,refined liquids,1.7065345
+comm heating EUR,district heat,district heat,0.5793888
+comm cooling EUR,gas,gas,2.629955
+comm cooling EUR,electricity,electricity,4.949514
+comm others EUR,biomass,biomass,3.200354
+comm others EUR,coal,coal,2.133569
+comm others EUR,gas,gas,3.085298
+comm others EUR,gas,hydrogen,3.341378
+comm others EUR,electricity,electricity,2.621402
+comm others EUR,refined liquids,refined liquids,3.342406
+comm others EUR,district heat,district heat,1.618934

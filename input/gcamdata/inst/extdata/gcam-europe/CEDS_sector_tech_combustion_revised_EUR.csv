@@ -27,32 +27,32 @@ electricity,coal,coal (conv pul),elec_heat,coal
 electricity,gas,gas (CC),elec_heat,gas
 electricity,gas,gas (steam/CT),elec_heat,gas
 electricity,refined liquids,refined liquids (steam/CT),elec_heat,refined liquids
-comm heating,biomass,biomass,bld_comm,biomass
-comm others,biomass,biomass,bld_comm,biomass
-comm heating,coal,coal,bld_comm,coal
-comm others,coal,coal,bld_comm,coal
-comm cooling,gas,gas,bld_comm,gas
-comm heating,gas,gas,bld_comm,gas
-comm others,gas,gas,bld_comm,gas
-comm heating,refined liquids,refined liquids,bld_comm,refined liquids
-comm others,refined liquids,refined liquids,bld_comm,refined liquids
-resid heating modern,biomass,biomass,bld_resid,biomass
-resid cooking modern,biomass,biomass,bld_resid,biomass
-resid hot water modern,biomass,biomass,bld_resid,biomass
-resid others modern,biomass,biomass,bld_resid,biomass
-resid heating coal,coal,coal,bld_resid,coal
-resid cooking coal,coal,coal,bld_resid,coal
-resid hot water coal,coal,coal,bld_resid,coal
-resid others coal,coal,coal,bld_resid,coal
-resid cooling modern,gas,gas,bld_resid,gas
-resid heating modern,gas,gas,bld_resid,gas
-resid cooking modern,gas,gas,bld_resid,gas
-resid hot water modern,gas,gas,bld_resid,gas
-resid others modern,gas,gas,bld_resid,gas
-resid heating modern,refined liquids,refined liquids,bld_resid,refined liquids
-resid cooking modern,refined liquids,refined liquids,bld_resid,refined liquids
-resid hot water modern,refined liquids,refined liquids,bld_resid,refined liquids
-resid others modern,refined liquids,refined liquids,bld_resid,refined liquids
+comm heating EUR,biomass,biomass,bld_comm,biomass
+comm others EUR,biomass,biomass,bld_comm,biomass
+comm heating EUR,coal,coal,bld_comm,coal
+comm others EUR,coal,coal,bld_comm,coal
+comm cooling EUR,gas,gas,bld_comm,gas
+comm heating EUR,gas,gas,bld_comm,gas
+comm others EUR,gas,gas,bld_comm,gas
+comm heating EUR,refined liquids,refined liquids,bld_comm,refined liquids
+comm others EUR,refined liquids,refined liquids,bld_comm,refined liquids
+resid heating modern EUR,biomass,biomass,bld_resid,biomass
+resid cooking modern EUR,biomass,biomass,bld_resid,biomass
+resid hot water modern EUR,biomass,biomass,bld_resid,biomass
+resid others modern EUR,biomass,biomass,bld_resid,biomass
+resid heating coal EUR,coal,coal,bld_resid,coal
+resid cooking coal EUR,coal,coal,bld_resid,coal
+resid hot water coal EUR,coal,coal,bld_resid,coal
+resid others coal EUR,coal,coal,bld_resid,coal
+resid cooling modern EUR,gas,gas,bld_resid,gas
+resid heating modern EUR,gas,gas,bld_resid,gas
+resid cooking modern EUR,gas,gas,bld_resid,gas
+resid hot water modern EUR,gas,gas,bld_resid,gas
+resid others modern EUR,gas,gas,bld_resid,gas
+resid heating modern EUR,refined liquids,refined liquids,bld_resid,refined liquids
+resid cooking modern EUR,refined liquids,refined liquids,bld_resid,refined liquids
+resid hot water modern EUR,refined liquids,refined liquids,bld_resid,refined liquids
+resid others modern EUR,refined liquids,refined liquids,bld_resid,refined liquids
 trn_freight,Freight Rail,Coal,trn_rail,coal
 trn_freight,Freight Rail,Liquids,trn_rail,refined liquids
 trn_freight,Domestic Ship,Liquids,trn_domestic ship,refined liquids
@@ -99,8 +99,8 @@ trn_pass_road_LDV_4W,Car,Liquids,LDV_4W,refined liquids
 trn_pass_road_LDV_4W,Large Car and Truck,Liquids,LDV_4W,refined liquids
 trn_pass_road_bus,All,Liquids,Bus,refined liquids
 trn_pass_road_bus,All,Liquids,Bus,refined liquids
-resid heating TradBio,traditional biomass,traditional biomass,bld_resid,biomass
-resid cooking TradBio,traditional biomass,traditional biomass,bld_resid,biomass
+resid heating TradBio EUR,traditional biomass,traditional biomass,bld_resid,biomass
+resid cooking TradBio EUR,traditional biomass,traditional biomass,bld_resid,biomass
 trn_pass_road_LDV_2W,2W and 3W,Liquids,LDV_2W_3W,refined liquids
 agricultural energy use,mobile,refined liquids,agricultural energy use,refined liquids
 agricultural energy use,stationary,refined liquids,agricultural energy use,refined liquids

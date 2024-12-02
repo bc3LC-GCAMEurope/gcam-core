@@ -81,51 +81,51 @@ refining,gas to liquids,gas to liquids,0.0075,0.0054,0.002,0,0,0
 refining,oil refining,oil refining,0,0,0,0,0,0
 unconventional oil production,unconventional oil production,unconventional oil production,0,,,,,
 regional oil,crude oil,crude oil,0,0,0,0,0,0
-resid heating modern,biomass,biomass,0.0035,0.04,0.0929,0,0,0.0453
-resid heating coal,coal,coal,0.0181,0.0256,0.6444,0,0,0.286
-resid heating modern,electricity,electricity,,,,,,
-resid heating modern,gas,gas,0.0035,0.04,0.0929,0,0,0.0453
-resid heating modern,refined liquids,refined liquids,0.0007,0.04,0.0929,0.0025,0.0013,0.0453
-resid heating TradBio,traditional biomass,traditional biomass,0.1206,0.0384,0.6444,0,0,0.7151
-resid heating modern,district heat,district heat,,,,,,
-resid cooking modern,biomass,biomass,0.0035,0.04,0.0929,0,0,0.0453
-resid cooking coal,coal,coal,0.0181,0.0256,0.6444,0,0,0.286
-resid cooking modern,electricity,electricity,,,,,,
-resid cooking modern,gas,gas,0.0035,0.04,0.0929,0,0,0.0453
-resid cooking modern,refined liquids,refined liquids,0.0007,0.04,0.0929,0.0025,0.0013,0.0453
-resid cooking TradBio,traditional biomass,traditional biomass,0.1206,0.0384,0.6444,0,0,0.7151
-resid cooking modern,district heat,district heat,,,,,,
-resid hot water modern,biomass,biomass,0.0035,0.04,0.0929,0,0,0.0453
-resid hot water coal,coal,coal,0.0181,0.0256,0.6444,0,0,0.286
-resid hot water modern,electricity,electricity,,,,,,
-resid hot water modern,gas,gas,0.0035,0.04,0.0929,0,0,0.0453
-resid hot water modern,refined liquids,refined liquids,0.0007,0.04,0.0929,0.0025,0.0013,0.0453
-resid hot water modern,district heat,district heat,,,,,,
-resid cooling modern modern,electricity,electricity,,,,,,
-resid cooling modern modern,gas,gas,0,0,0,0,0,0
-resid other appliance modern,electricity,electricity,,,,,,
-resid others modern,biomass,biomass,0.0035,0.04,0.0929,0,0,0.0453
-resid others coal,coal,coal,0.0181,0.0256,0.6444,0.0651,0.0521,0.286
-resid others modern,electricity,electricity,,,,,,
-resid others modern,gas,gas,0.0035,0.04,0.0929,0,0,0.0453
-resid others modern,refined liquids,refined liquids,0.0007,0.04,0.0929,0.0025,0.0013,0.0453
-resid others modern,district heat,district heat,,,,,,
-comm heating,biomass,biomass,0.0107,0.0408,0.0072,0.0018,0.0121,0.0015
-comm heating,coal,coal,0,0,0,0,0,0
-comm heating,electricity,electricity,,,,,,
-comm heating,gas,gas,0.0107,0.0408,0.0072,0,0,0.0015
-comm heating,refined liquids,refined liquids,0.0021,0.0408,0.0072,0.0023,0.0012,0.0015
-comm heating,traditional biomass,traditional biomass,0,0,0,0,0,0
-comm heating,district heat,district heat,,,,,,
-comm cooling,electricity,electricity,,,,,,
-comm cooling,gas,gas,0.0107,0.0408,0.0072,0,0,0.0015
-comm others,biomass,biomass,0,0,0,0,0,0
-comm others,coal,coal,0.0032,0.0272,0.0072,0.019,0.0155,0.0015
-comm others,electricity,electricity,,,,,,
-comm others,gas,gas,0.0107,0.0408,0.0072,0,0,0.0015
-comm others,refined liquids,refined liquids,0.0021,0.0408,0.0072,0.0023,0.0012,0.0015
-comm others,traditional biomass,traditional biomass,0,0,0,0,0,0
-comm others,district heat,district heat,,,,,,
+resid heating modern EUR,biomass,biomass,0.0035,0.04,0.0929,0,0,0.0453
+resid heating coal EUR,coal,coal,0.0181,0.0256,0.6444,0,0,0.286
+resid heating modern EUR,electricity,electricity,,,,,,
+resid heating modern EUR,gas,gas,0.0035,0.04,0.0929,0,0,0.0453
+resid heating modern EUR,refined liquids,refined liquids,0.0007,0.04,0.0929,0.0025,0.0013,0.0453
+resid heating TradBio EUR,traditional biomass,traditional biomass,0.1206,0.0384,0.6444,0,0,0.7151
+resid heating modern EUR,district heat,district heat,,,,,,
+resid cooking modern EUR,biomass,biomass,0.0035,0.04,0.0929,0,0,0.0453
+resid cooking coal EUR,coal,coal,0.0181,0.0256,0.6444,0,0,0.286
+resid cooking modern EUR,electricity,electricity,,,,,,
+resid cooking modern EUR,gas,gas,0.0035,0.04,0.0929,0,0,0.0453
+resid cooking modern EUR,refined liquids,refined liquids,0.0007,0.04,0.0929,0.0025,0.0013,0.0453
+resid cooking TradBio EUR,traditional biomass,traditional biomass,0.1206,0.0384,0.6444,0,0,0.7151
+resid cooking modern EUR,district heat,district heat,,,,,,
+resid hot water modern EUR,biomass,biomass,0.0035,0.04,0.0929,0,0,0.0453
+resid hot water coal EUR,coal,coal,0.0181,0.0256,0.6444,0,0,0.286
+resid hot water modern EUR,electricity,electricity,,,,,,
+resid hot water modern EUR,gas,gas,0.0035,0.04,0.0929,0,0,0.0453
+resid hot water modern EUR,refined liquids,refined liquids,0.0007,0.04,0.0929,0.0025,0.0013,0.0453
+resid hot water modern EUR,district heat,district heat,,,,,,
+resid cooling modern EUR modern EUR,electricity,electricity,,,,,,
+resid cooling modern EUR modern EUR,gas,gas,0,0,0,0,0,0
+resid other appliance modern EUR,electricity,electricity,,,,,,
+resid others modern EUR,biomass,biomass,0.0035,0.04,0.0929,0,0,0.0453
+resid others coal EUR,coal,coal,0.0181,0.0256,0.6444,0.0651,0.0521,0.286
+resid others modern EUR,electricity,electricity,,,,,,
+resid others modern EUR,gas,gas,0.0035,0.04,0.0929,0,0,0.0453
+resid others modern EUR,refined liquids,refined liquids,0.0007,0.04,0.0929,0.0025,0.0013,0.0453
+resid others modern EUR,district heat,district heat,,,,,,
+comm heating EUR,biomass,biomass,0.0107,0.0408,0.0072,0.0018,0.0121,0.0015
+comm heating EUR,coal,coal,0,0,0,0,0,0
+comm heating EUR,electricity,electricity,,,,,,
+comm heating EUR,gas,gas,0.0107,0.0408,0.0072,0,0,0.0015
+comm heating EUR,refined liquids,refined liquids,0.0021,0.0408,0.0072,0.0023,0.0012,0.0015
+comm heating EUR,traditional biomass,traditional biomass,0,0,0,0,0,0
+comm heating EUR,district heat,district heat,,,,,,
+comm cooling EUR,electricity,electricity,,,,,,
+comm cooling EUR,gas,gas,0.0107,0.0408,0.0072,0,0,0.0015
+comm others EUR,biomass,biomass,0,0,0,0,0,0
+comm others EUR,coal,coal,0.0032,0.0272,0.0072,0.019,0.0155,0.0015
+comm others EUR,electricity,electricity,,,,,,
+comm others EUR,gas,gas,0.0107,0.0408,0.0072,0,0,0.0015
+comm others EUR,refined liquids,refined liquids,0.0021,0.0408,0.0072,0.0023,0.0012,0.0015
+comm others EUR,traditional biomass,traditional biomass,0,0,0,0,0,0
+comm others EUR,district heat,district heat,,,,,,
 regional coal,regional coal,regional coal,,,,0,0,
 regional natural gas,regional natural gas,regional natural gas,0,,,,,
 trn_aviation_intl,International Aviation,Liquids,0,0,0,0.0012,0.0002,0
