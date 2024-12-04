@@ -1,7 +1,7 @@
 # File: A44.globaltech_cost_EUR.csv
 # Title: Building technology costs per service for gcameurope
 # Units: 1975$/GJ
-# Source: Same as gcamusa A44.globaltech_eff. Heat pumps have been removed and traditional biomass and district heat have been added, as well as some biomass and coal technologies for different supplysectors. Unpublished inputs to the NEMS model, as well as some biomass and coal technologies for different supplysectors. Unpublished inputs to the NEMS model
+# Source: Same as gcamusa A44.globaltech_eff. Heat pumps have been removed and district heat have been added, as well as some biomass and coal technologies for different supplysectors. Unpublished inputs to the NEMS model, as well as some biomass and coal technologies for different supplysectors. Unpublished inputs to the NEMS model
 # Column types: cccn
 # ----------
 supplysector,subsector,technology,NEcostPerService

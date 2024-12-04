@@ -1,7 +1,7 @@
 # File: A44.globaltech_eff_EUR.csv
 # Title: Building default technology efficiency for gcameurope
 # Units: Unitless
-# Source: Same as gcamusa A44.globaltech_eff. Heat pumps have been removed and traditional biomass and district heat have been added, as well as some biomass and coal technologies for different supplysectors. Unpublished inputs to the NEMS model; provided by EIA. Assumptions are simliar to the 2016 Annual Energy Outlook (Table 22; https://www.eia.gov/outlooks/aeo/data/browser/#/?id=30-AEO2016&cases=ref2016~ref_no_cpp&sourcekey=0)
+# Source: Same as gcamusa A44.globaltech_eff. Heat pumps have been removed and district heat have been added, as well as some biomass and coal technologies for different supplysectors. Unpublished inputs to the NEMS model; provided by EIA. Assumptions are simliar to the 2016 Annual Energy Outlook (Table 22; https://www.eia.gov/outlooks/aeo/data/browser/#/?id=30-AEO2016&cases=ref2016~ref_no_cpp&sourcekey=0)
 # Column types: cccccnnnnnnnnn
 # ----------
 supplysector,subsector,technology,technology_detail,minicam.energy.input,1971,2010,2015,2020,2025,2030,2035,2040,2100

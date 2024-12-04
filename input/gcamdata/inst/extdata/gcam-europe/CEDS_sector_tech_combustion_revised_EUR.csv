@@ -99,8 +99,6 @@ trn_pass_road_LDV_4W,Car,Liquids,LDV_4W,refined liquids
 trn_pass_road_LDV_4W,Large Car and Truck,Liquids,LDV_4W,refined liquids
 trn_pass_road_bus,All,Liquids,Bus,refined liquids
 trn_pass_road_bus,All,Liquids,Bus,refined liquids
-resid heating TradBio EUR,traditional biomass,traditional biomass,bld_resid,biomass
-resid cooking TradBio EUR,traditional biomass,traditional biomass,bld_resid,biomass
 trn_pass_road_LDV_2W,2W and 3W,Liquids,LDV_2W_3W,refined liquids
 agricultural energy use,mobile,refined liquids,agricultural energy use,refined liquids
 agricultural energy use,stationary,refined liquids,agricultural energy use,refined liquids

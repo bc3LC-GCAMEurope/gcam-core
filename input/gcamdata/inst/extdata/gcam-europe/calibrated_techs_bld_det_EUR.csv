@@ -9,7 +9,6 @@ bld_resid,coal,resid heating coal EUR,resid heating coal EUR,coal,coal,delivered
 bld_resid,electricity,resid heating modern EUR,resid heating modern EUR,electricity,electricity,elect_td_bld,resid EUR,resid EUR,resid_building
 bld_resid,gas,resid heating modern EUR,resid heating modern EUR,gas,gas,delivered gas,resid EUR,resid EUR,resid_building
 bld_resid,refined liquids,resid heating modern EUR,resid heating modern EUR,refined liquids,refined liquids,refined liquids enduse,resid EUR,resid EUR,resid_building
-bld_resid,traditional biomass,resid heating TradBio EUR,resid heating TradBio EUR,traditional biomass,traditional biomass,traditional biomass,resid EUR,resid EUR,resid_building
 bld_resid,heat,resid heating modern EUR,resid heating modern EUR,district heat,district heat,district heat,resid EUR,resid EUR,resid_building
 bld_resid,electricity,resid cooling modern EUR,resid cooling modern EUR,electricity,electricity,elect_td_bld,resid EUR,resid EUR,resid_building
 bld_resid,gas,resid cooling modern EUR,resid cooling modern EUR,gas,gas,delivered gas,resid EUR,resid EUR,resid_building
@@ -18,7 +17,6 @@ bld_resid,coal,resid cooking coal EUR,resid cooking coal EUR,coal,coal,delivered
 bld_resid,electricity,resid cooking modern EUR,resid cooking modern EUR,electricity,electricity,elect_td_bld,resid EUR,resid EUR,resid_building
 bld_resid,gas,resid cooking modern EUR,resid cooking modern EUR,gas,gas,delivered gas,resid EUR,resid EUR,resid_building
 bld_resid,refined liquids,resid cooking modern EUR,resid cooking modern EUR,refined liquids,refined liquids,refined liquids enduse,resid EUR,resid EUR,resid_building
-bld_resid,traditional biomass,resid cooking TradBio EUR,resid cooking TradBio EUR,traditional biomass,traditional biomass,traditional biomass,resid EUR,resid EUR,resid_building
 bld_resid,biomass,resid hot water modern EUR,resid hot water modern EUR,biomass,biomass,delivered biomass,resid EUR,resid EUR,resid_building
 bld_resid,coal,resid hot water coal EUR,resid hot water coal EUR,coal,coal,delivered coal,resid EUR,resid EUR,resid_building
 bld_resid,electricity,resid hot water modern EUR,resid hot water modern EUR,electricity,electricity,elect_td_bld,resid EUR,resid EUR,resid_building

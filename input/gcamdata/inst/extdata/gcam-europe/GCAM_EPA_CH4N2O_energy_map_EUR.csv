@@ -151,8 +151,6 @@ trn_pass_road_LDV_4W,Car,Liquids,Combustion_general
 trn_pass_road_LDV_4W,Car,NG,Combustion_general
 trn_pass_road_LDV_4W,Large Car and Truck,Liquids,Combustion_general
 trn_pass_road_LDV_4W,Large Car and Truck,NG,Combustion_general
-resid heating TradBio EUR,traditional biomass,traditional biomass,Combustion_Bio
-resid cooking TradBio EUR,traditional biomass,traditional biomass,Combustion_Bio
 trn_pass_road_LDV,2W and 3W,NG,Combustion_general
 agricultural energy use,stationary,biomass,Combustion_general
 agricultural energy use,stationary,coal,Combustion_general
