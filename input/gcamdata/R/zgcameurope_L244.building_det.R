@@ -1014,7 +1014,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       repeat_add_columns(tibble(group=unique(L106.income_shares$gcam.consumer))) %>%
       mutate(gcam.consumer = if_else(grepl("resid",supplysector),"resid EUR","comm EUR"),
              nodeInput = gcam.consumer,
-             building.node.input = paste0(nodeInput,"_building")) %>%
+             building.node.input = if_else(grepl("resid",supplysector),"resid_building","comm_building")) %>%
       unite(gcam.consumer, c(gcam.consumer,group),sep="_") %>%
       separate(gcam.consumer, c("adj","group"),sep="_",remove = F) %>%
       # adjust commercial
@@ -1045,7 +1045,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       repeat_add_columns(tibble(group=unique(L106.income_shares$gcam.consumer))) %>%
       mutate(gcam.consumer = if_else(grepl("resid",supplysector),"resid EUR","comm EUR"),
              nodeInput = gcam.consumer,
-             building.node.input = paste0(nodeInput,"_building")) %>%
+             building.node.input = if_else(grepl("resid",supplysector),"resid_building","comm_building")) %>%
       unite(gcam.consumer, c(gcam.consumer,group),sep="_") %>%
       separate(gcam.consumer, c("adj","group"),sep="_",remove = F) %>%
       # adjust commercial
