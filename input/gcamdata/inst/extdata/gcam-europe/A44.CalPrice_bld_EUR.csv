@@ -170,17 +170,10 @@ Hungary,resid heating modern EUR,5.21499,5.42419,6.37754,6.42214
 Hungary,resid hot water modern EUR,9.22335,9.42288,11.0042,11.058
 Hungary,resid other appliance modern EUR,19.9049,18.131,18.9824,19.2788
 Hungary,resid others modern EUR,20.5875,18.2999,18.9782,19.103
-Iceland,comm cooling EUR,0,0,0,0
-Iceland,comm heating EUR,0,0,0,0
-Iceland,comm others EUR,0,0,0,0
-Iceland,resid cooking modern EUR,0,0,0,0
-Iceland,resid cooling modern EUR,0,0,0,0
-Iceland,resid heating coal EUR,0,0,0,0
-Iceland,resid heating modern EUR,0,0,0,0
-Iceland,resid hot water coal EUR,0,0,0,0
-Iceland,resid hot water modern EUR,0,0,0,0
-Iceland,resid other appliance modern EUR,0,0,0,0
-Iceland,resid others modern EUR,0,0,0,0
+Iceland,comm heating EUR,15.1869,15.4455,17.4372,17.0838
+Iceland,comm others EUR,16.8087,16.8748,18.8031,18.6365
+Iceland,resid heating modern EUR,13.6618,14.9805,17.5648,17.6446
+Iceland,resid others modern EUR,14.4806,15.8827,18.5124,18.4264
 Ireland,comm cooling EUR,6.97469,6.40839,6.36617,6.29133
 Ireland,comm heating EUR,6.54142,7.0954,8.42704,8.58128
 Ireland,comm others EUR,11.4088,12.3185,13.2234,13.2929
@@ -390,17 +383,14 @@ Sweden,resid hot water modern EUR,10.4998,10.857,10.8114,11.6168
 Sweden,resid other appliance modern EUR,16.5951,16.4416,16.6822,16.3144
 Sweden,resid others coal EUR,0,0,0,0
 Sweden,resid others modern EUR,17.211,16.6272,16.7235,16.226
-Turkey,comm cooling EUR,0,0,0,0
-Turkey,comm heating EUR,0,0,0,0
-Turkey,comm others EUR,0,0,0,0
-Turkey,resid cooking modern EUR,0,0,0,0
-Turkey,resid cooling modern EUR,0,0,0,0
-Turkey,resid heating coal EUR,0,0,0,0
-Turkey,resid heating modern EUR,0,0,0,0
-Turkey,resid hot water coal EUR,0,0,0,0
-Turkey,resid hot water modern EUR,0,0,0,0
-Turkey,resid other appliance modern EUR,0,0,0,0
-Turkey,resid others modern EUR,0,0,0,0
+Turkey,comm cooling EUR,7.2037,6.44098,6.75305,6.78
+Turkey,comm heating EUR,6.35166,6.73905,5.20861,6.13287
+Turkey,comm others EUR,13.6643,11.9273,11.6238,12.4146
+Turkey,resid cooling modern EUR,11.4619,10.7147,11.034,11.0915
+Turkey,resid heating coal EUR,2.25835,2.19909,2.40692,2.55289
+Turkey,resid heating modern EUR,8.33694,7.0903,8.47874,7.83559
+Turkey,resid others coal EUR,3.77942,3.70534,3.96513,4.14759
+Turkey,resid others modern EUR,11.666,11.0784,12.805,12.4576
 UK,comm cooling EUR,7.45846,6.66539,6.82808,7.06661
 UK,comm heating EUR,5.62975,5.75934,6.81834,7.25638
 UK,comm others EUR,11.4796,11.2783,12.3674,13.1572
