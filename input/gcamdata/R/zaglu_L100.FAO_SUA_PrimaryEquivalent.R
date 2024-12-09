@@ -38,7 +38,8 @@ module_aglu_L100.FAO_SUA_PrimaryEquivalent <- function(command, ...) {
       FILE = "aglu/FAO/GCAMDATA_FAOSTAT_ProdArea_96Regs_16FodderItems_1973to2020",
       FILE = "aglu/FAO/FAO_ag_items_PRODSTAT",
       FILE = "aglu/FAO/FAO_an_items_PRODSTAT",
-      FILE = "aglu/FAO/GCAMDATA_FAOSTAT_MacroNutrientRate_179Regs_426Items_2010to2019Mean"
+      FILE = "aglu/FAO/GCAMDATA_FAOSTAT_MacroNutrientRate_179Regs_426Items_2010to2019Mean",
+      "Europe_Single_Market_Regions"
     )
 
   MODULE_OUTPUTS <-
@@ -46,7 +47,8 @@ module_aglu_L100.FAO_SUA_PrimaryEquivalent <- function(command, ...) {
       "FAO_AgProd_Kt_All",
       "FAO_AgArea_Kha_All",
       "FAO_Food_Macronutrient_All_2010_2019",
-      "FAO_Food_MacronutrientRate_2010_2019_MaxValue")
+      "FAO_Food_MacronutrientRate_2010_2019_MaxValue",
+      "EuroSingleMarket_BiTrade_Ag")
 
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -115,15 +117,42 @@ module_aglu_L100.FAO_SUA_PrimaryEquivalent <- function(command, ...) {
       DF_SUA_Agg
 
     # Calculate intra regional trade
-    GCAMDATA_FAOSTAT_BiTrade_194Regs_400Items_2010to2020 %>%
+    GCAMDATA_FAOSTAT_BiTrade_194Regs_400Items_2010to2020_regID <- GCAMDATA_FAOSTAT_BiTrade_194Regs_400Items_2010to2020 %>%
       left_join_error_no_match(Area_Region_Map %>% select(area_code, GCAM_region_ID), by="area_code") %>%
-      left_join_error_no_match(Area_Region_Map %>% select(source_code = area_code, source_GCAM_region_ID = GCAM_region_ID), by="source_code") %>%
+      left_join_error_no_match(Area_Region_Map %>% select(source_code = area_code, source_GCAM_region_ID = GCAM_region_ID), by="source_code")
+
+    GCAMDATA_FAOSTAT_BiTrade_194Regs_400Items_2010to2020_regID %>%
       filter(GCAM_region_ID == source_GCAM_region_ID) %>%
       group_by(GCAM_region_ID, item_code, year) %>%
       summarize(value = sum(value), .groups = "drop") %>%
       ungroup() %>%
       mutate(value = -value) ->
       DF_INTRA_REG_TRADE
+
+    # Filter to only trade involving european single market regions to later define double armington market for ag
+    SINGLE_MARKET_IDs <- GCAM_region_names %>% filter(region %in% Europe_Single_Market_Regions$GCAMEU_region) %>%  pull(GCAM_region_ID)
+
+    EuroSingleMarket_BiTrade_Ag <- GCAMDATA_FAOSTAT_BiTrade_194Regs_400Items_2010to2020_regID %>%
+      filter(GCAM_region_ID %in% SINGLE_MARKET_IDs | source_GCAM_region_ID %in% SINGLE_MARKET_IDs,
+             year %in% MODEL_BASE_YEARS) %>%
+      # group all non-single market regions into 1
+      mutate(import_GCAM_region_ID = if_else(GCAM_region_ID %in% SINGLE_MARKET_IDs, GCAM_region_ID, -1),
+             export_GCAM_region_ID = if_else(source_GCAM_region_ID %in% SINGLE_MARKET_IDs, source_GCAM_region_ID, -1)) %>%
+      group_by(import_GCAM_region_ID, export_GCAM_region_ID, item_code, year) %>%
+      summarise(value = sum(value)) %>%
+      ungroup %>%
+      left_join_error_no_match(SUA_item_code_map, by = "item_code") %>%
+      left_join(Mapping_SUA_PrimaryEquivalent %>% distinct(GCAM_commodity, item = source_item), by = "item") %>%
+      left_join(Mapping_SUA_PrimaryEquivalent %>% distinct(GCAM_commodity, item = sink_item, extraction_rate_world2019),
+                by = "item") %>%
+      mutate(GCAM_commodity = if_else(is.na(GCAM_commodity.x), GCAM_commodity.y, GCAM_commodity.x)) %>%
+      select(-GCAM_commodity.x, -GCAM_commodity.y) %>%
+      tidyr::replace_na(list(extraction_rate_world2019 = 1)) %>%
+      mutate(value = value / extraction_rate_world2019) %>%
+      na.omit() %>%
+      group_by(import_GCAM_region_ID, export_GCAM_region_ID, GCAM_commodity, year) %>%
+      summarise(value = sum(value)) %>%
+      ungroup
 
     # SUA has fewer items and years than the bilateral data set and in addition
     # there are some small discrepancies zero import/export in SUA vs tiny amounts of trade
@@ -166,6 +195,7 @@ module_aglu_L100.FAO_SUA_PrimaryEquivalent <- function(command, ...) {
     ## Clean up
     rm(GCAMDATA_FAOSTAT_SUA_195Regs_530Items_2010to2019)
     rm(GCAMDATA_FAOSTAT_BiTrade_194Regs_400Items_2010to2020)
+    rm(GCAMDATA_FAOSTAT_BiTrade_194Regs_400Items_2010to2020_regID)
     ## Done Section1 ----
     #****************************----
 

@@ -25,9 +25,12 @@ module_energy_L1092.iron_steel_GrossTrade <- function(command, ...){
              FILE = "energy/Rt_iron_steel_bilateral_trade",
              FILE = "common/GCAM_region_names",
              FILE = "common/iso_GCAM_regID",
+             FILE = "gcam-europe/A_ff_RegionalTechnology_EUR",
+             "Europe_Single_Market_Regions",
              "L201.GDP_Scen"))
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("LB1092.Tradebalance_iron_steel_Mt_R_Y"))
+    return(c("LB1092.Tradebalance_iron_steel_Mt_R_Y",
+             "LB1092.Single_Market_Trade_Steel"))
   } else if(command == driver.MAKE) {
 
     Country <- GCAM_region <- Metric <- '1970' <-'1971' <- '1972' <- '1973' <- '1974' <- '1975' <-
@@ -49,6 +52,10 @@ module_energy_L1092.iron_steel_GrossTrade <- function(command, ...){
     Rt_iron_steel_bilateral_trade_data <- get_data(all_data, "energy/Rt_iron_steel_bilateral_trade",strip_attributes = TRUE) %>%
       filter(Year %in% c("2000",MODEL_BASE_YEARS))
     L201.GDP_Scen <- get_data(all_data, "L201.GDP_Scen")
+
+    A_ff_RegionalTechnology_EUR <- get_data(all_data, "gcam-europe/A_ff_RegionalTechnology_EUR")
+    Europe_Single_Market_Regions <- get_data(all_data, "Europe_Single_Market_Regions")
+    SINGLE_MARKET_NAME <- unique(A_ff_RegionalTechnology_EUR$market.name[A_ff_RegionalTechnology_EUR$market.name != "regional"])
 
     # Bind iron and steel production, consumption, and trade data
     # Convert data from wide to long format, and adjust units
@@ -248,6 +255,18 @@ module_energy_L1092.iron_steel_GrossTrade <- function(command, ...){
              value=if_else(metric %in% c("domestic_supply"),value+intra_exports,value))%>%
       select(-intra_exports)-> LB1092.Tradebalance_iron_steel_Mt_R_Y
 
+    # GCAM Europe Single Market Trade
+    LB1092.Single_Market_Trade_Steel <- Rt_iron_steel_bilateral_trade_data %>%
+      ungroup %>%
+      mutate(Exporter_Region = case_when(
+        Exporter_Region %in% Europe_Single_Market_Regions$GCAMEU_region ~ SINGLE_MARKET_NAME,
+        !Exporter_Region %in% Europe_Single_Market_Regions$GCAMEU_region ~ "global"),
+        Importer_Region = case_when(
+          Importer_Region %in% Europe_Single_Market_Regions$GCAMEU_region ~ SINGLE_MARKET_NAME,
+          !Importer_Region %in% Europe_Single_Market_Regions$GCAMEU_region ~ "global")) %>%
+      group_by(year = Year, Exporter_Region, Importer_Region) %>%
+      summarise(Weight_Mt = sum(Weight) / 1e6) %>%
+      ungroup
 
     # Produce outputs
     LB1092.Tradebalance_iron_steel_Mt_R_Y %>%
@@ -262,7 +281,7 @@ module_energy_L1092.iron_steel_GrossTrade <- function(command, ...){
                      "common/GCAM_region_names",
                      "common/iso_GCAM_regID") -> LB1092.Tradebalance_iron_steel_Mt_R_Y
 
-    return_data(LB1092.Tradebalance_iron_steel_Mt_R_Y)
+    return_data(LB1092.Tradebalance_iron_steel_Mt_R_Y, LB1092.Single_Market_Trade_Steel)
 
   } else {
     stop("Unknown command")

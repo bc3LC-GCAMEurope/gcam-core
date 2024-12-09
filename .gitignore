@@ -83,3 +83,4 @@ input/gcamdata/comparisson_Russells_Eurostat_BLD_data.csv
 input/gcamdata/R/comparisson_Russell_Eurostat_BLD.R
 exe7.0
 /ModelInterface
+analysis/*

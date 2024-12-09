@@ -50,12 +50,15 @@ module_energy_en_supply_xml <- function(command, ...) {
              "L239.Consumption_intraregional",
              "L239.CarbonCoef",
              "L281.TechAccountOutput_entrade",
-             "L281.TechAccountInput_entrade"))
+             "L281.TechAccountInput_entrade",
+             "Europe_Single_Market_Regions"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c(XML = "en_supply.xml"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
+
+    EURO_REGIONS <- Europe_Single_Market_Regions$GCAMEU_region
 
     # Load required inputs
     L221.Supplysector_en <- get_data(all_data, "L221.Supplysector_en")
@@ -79,7 +82,7 @@ module_energy_en_supply_xml <- function(command, ...) {
     L221.StubTechCalInput_bioOil <- get_data(all_data, "L221.StubTechCalInput_bioOil")
     L221.StubTechInterp_bioOil <- get_data(all_data, "L221.StubTechInterp_bioOil")
     L221.StubTechShrwt_bioOil <- get_data(all_data, "L221.StubTechShrwt_bioOil")
-    L239.PrimaryConsKeyword_en <- get_data(all_data, "L239.PrimaryConsKeyword_en")
+    L239.PrimaryConsKeyword_en <- get_data(all_data, "L239.PrimaryConsKeyword_en") %>% filter(!region %in% EURO_REGIONS)
     L239.Supplysector_tra <- get_data(all_data, "L239.Supplysector_tra")
     L239.SectorUseTrialMarket_tra <- get_data(all_data, "L239.SectorUseTrialMarket_tra")
     L239.SubsectorAll_tra <- get_data(all_data, "L239.SubsectorAll_tra")
@@ -87,18 +90,18 @@ module_energy_en_supply_xml <- function(command, ...) {
     L239.TechCost_tra <- get_data(all_data, "L239.TechCost_tra")
     L239.TechCoef_tra <- get_data(all_data, "L239.TechCoef_tra")
     L239.Production_tra <- get_data(all_data, "L239.Production_tra")
-    L239.Supplysector_reg <- get_data(all_data, "L239.Supplysector_reg")
-    L239.SubsectorAll_reg <- get_data(all_data, "L239.SubsectorAll_reg")
-    L239.TechShrwt_reg <- get_data(all_data, "L239.TechShrwt_reg")
-    L239.TechCoef_reg <- get_data(all_data, "L239.TechCoef_reg")
-    L239.Production_reg_imp <- get_data(all_data, "L239.Production_reg_imp")
-    L239.Production_reg_dom <- get_data(all_data, "L239.Production_reg_dom")
-    L239.Consumption_intraregional <- get_data(all_data, "L239.Consumption_intraregional")
+    L239.Supplysector_reg <- get_data(all_data, "L239.Supplysector_reg")  %>% filter(!region %in% EURO_REGIONS)
+    L239.SubsectorAll_reg <- get_data(all_data, "L239.SubsectorAll_reg")  %>% filter(!region %in% EURO_REGIONS)
+    L239.TechShrwt_reg <- get_data(all_data, "L239.TechShrwt_reg")  %>% filter(!region %in% EURO_REGIONS)
+    L239.TechCoef_reg <- get_data(all_data, "L239.TechCoef_reg")  %>% filter(!region %in% EURO_REGIONS)
+    L239.Production_reg_imp <- get_data(all_data, "L239.Production_reg_imp") %>% filter(!region %in% EURO_REGIONS)
+    L239.Production_reg_dom <- get_data(all_data, "L239.Production_reg_dom")  %>% filter(!region %in% EURO_REGIONS)
+    L239.Consumption_intraregional <- get_data(all_data, "L239.Consumption_intraregional")  %>% filter(!region %in% EURO_REGIONS)
     L239.CarbonCoef <- get_data(all_data, "L239.CarbonCoef")
-    L281.TechAccountInput_entrade <- get_data(all_data, "L281.TechAccountInput_entrade")
+    L281.TechAccountInput_entrade <- get_data(all_data, "L281.TechAccountInput_entrade")  %>% filter(!region %in% EURO_REGIONS)
     # constrain to only the sectors that are in this XML (i.e. filter out gas trade)
     L281.TechAccountOutput_entrade <- get_data(all_data, "L281.TechAccountOutput_entrade") %>%
-        filter(supplysector %in% unique(L239.TechCoef_tra$supplysector))
+        filter(supplysector %in% unique(L239.TechCoef_tra$supplysector))  %>% filter(!region %in% EURO_REGIONS)
     # ===================================================
 
     # Produce outputs

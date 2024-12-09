@@ -37,7 +37,7 @@ module_gcameurope_gas_trade_xml <- function(command, ...) {
                      "L2392.Production_tra_NG_EUR",
                      "L2392.Production_reg_imp_NG_EUR",
                      "L2392.Production_reg_dom_NG_EUR",
-                     "L281.TechAccountOutput_entrade",
+                     "L281.TechAccountOutput_entrade_EUR",
                      "L281.TechAccountInput_NG_entrade")
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -57,7 +57,7 @@ module_gcameurope_gas_trade_xml <- function(command, ...) {
     L2392.SubsectorInterp_reg_NG_EUR <- L2392.SubsectorAll_reg_NG_EUR %>%
       select(LEVEL2_DATA_NAMES[["SubsectorInterpTo"]], "subsector0")
     # filter for only gas trade
-    L281.TechAccountOutput_entrade <- L281.TechAccountOutput_entrade %>%
+    L281.TechAccountOutput_entrade_EUR <- L281.TechAccountOutput_entrade_EUR %>%
       filter(supplysector %in% unique(L2392.TechCoef_tra_NG_EUR$supplysector))
 
     # ===================================================
@@ -78,7 +78,7 @@ module_gcameurope_gas_trade_xml <- function(command, ...) {
       add_xml_data(L2392.TechSCurve_tra_NG_EUR, "TechSCurve") %>%
       add_xml_data(L2392.ProfitShutdown_tra_NG_EUR, "TechProfitShutdown") %>%
       add_xml_data(L2392.TechCoef_tra_NG_EUR, "TechCoef") %>%
-      add_xml_data(L281.TechAccountOutput_entrade, "TechAccountOutput") %>%
+      add_xml_data(L281.TechAccountOutput_entrade_EUR, "TechAccountOutput") %>%
       add_xml_data(L2392.Production_tra_NG_EUR, "Production") %>%
       add_logit_tables_xml(L2392.Supplysector_reg_NG_EUR, "Supplysector") %>%
       add_logit_tables_xml(L2392.NestingSubsectorAll_reg_NG_EUR, "SubsectorAllTo", base_logit_header = "SubsectorLogit") %>%

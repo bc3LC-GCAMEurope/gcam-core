@@ -20,71 +20,57 @@
 #' @importFrom tidyr complete nesting
 #' @author LF September 2017
 module_gcameurope_L2322.Fert <- function(command, ...) {
+  GLOBAL_INPUTS_ADJUST <- c("L2322.Supplysector_Fert",
+                            "L2322.SectorUseTrialMarket_tra",
+                            "L2322.FinalEnergyKeyword_Fert",
+                            "L2322.SubsectorLogit_Fert",
+                            "L2322.SubsectorShrwtFllt_Fert",
+                            "L2322.SubsectorInterp_Fert",
+                            "L2322.StubTech_Fert",
+                            "L2322.TechShrwt_TradedFert",
+                            "L2322.TechCoef_TradedFert",
+                            "L2322.StubTechMarket_FertImports",
+                            "L2322.StubTechProd_FertProd",
+                            "L2322.StubTechCoef_Fert",
+                            "L2322.Production_FertExport",
+                            "L2322.StubTechProd_FertImport",
+                            "L2322.StubTechProd_FertDomCons",
+                            "L2322.StubTechProd_NtoAg")
+  MODULE_INPUTS <- c(FILE = "common/GCAM_region_names",
+                     FILE = "energy/calibrated_techs",
+                     FILE = "energy/A322.sector",
+                     FILE = "energy/A322.subsector_interp",
+                     FILE = "energy/A322.subsector_logit",
+                     FILE = "energy/A322.subsector_shrwt",
+                     FILE = "energy/A322.globaltech_coef",
+                     FILE = "energy/A322.globaltech_shrwt",
+                     FILE = "energy/A322.globaltech_co2capture",
+                     FILE = "energy/A322.globaltech_retirement",
+                     FILE = "gcam-europe/trade_balances/estat_ammonia_fert",
+                     FILE = "gcam-europe/A_ff_RegionalTechnology_EUR",
+                     "L1322.Fert_Prod_MtNH3_R_F_Y_EUR",
+                     "L1322.IO_R_Fert_F_Yh_EUR",
+                     "L1322.Fert_NEcost_75USDkgNH3_F_EUR",
+                     "L142.ag_Fert_NetExp_MtN_R_Y",
+                     "Europe_Single_Market_Regions",
+                     GLOBAL_INPUTS_ADJUST)
+  MODULE_OUTPUTS <- paste0(GLOBAL_INPUTS_ADJUST, "_EUR")
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "common/GCAM_region_names",
-             FILE = "energy/calibrated_techs",
-             FILE = "energy/A322.sector",
-             FILE = "energy/A322.subsector_interp",
-             FILE = "energy/A322.subsector_logit",
-             FILE = "energy/A322.subsector_shrwt",
-             FILE = "energy/A322.globaltech_coef",
-             FILE = "energy/A322.globaltech_shrwt",
-             FILE = "energy/A322.globaltech_co2capture",
-             FILE = "energy/A322.globaltech_retirement",
-             "L1322.Fert_Prod_MtNH3_R_F_Y_EUR",
-             "L1322.IO_R_Fert_F_Yh_EUR",
-             "L1322.Fert_NEcost_75USDkgNH3_F_EUR",
-             "L142.ag_Fert_NetExp_MtN_R_Y"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L2322.Supplysector_Fert_EUR",
-             "L2322.SectorUseTrialMarket_tra_EUR",
-             "L2322.FinalEnergyKeyword_Fert_EUR",
-             "L2322.SubsectorLogit_Fert_EUR",
-             "L2322.SubsectorShrwtFllt_Fert_EUR",
-             "L2322.SubsectorInterp_Fert_EUR",
-             "L2322.StubTech_Fert_EUR",
-             "L2322.TechShrwt_TradedFert_EUR",
-             "L2322.TechCoef_TradedFert_EUR",
-             "L2322.StubTechMarket_FertImports_EUR",
-             "L2322.StubTechProd_FertProd_EUR",
-             "L2322.StubTechCoef_Fert_EUR",
-             "L2322.Production_FertExport_EUR",
-             "L2322.StubTechProd_FertImport_EUR",
-             "L2322.StubTechProd_FertDomCons_EUR",
-             "L2322.StubTechProd_NtoAg_EUR"))
+    return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
 
-    # Load required inputs
-    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>% filter_regions_europe()
-    calibrated_techs <- get_data(all_data, "energy/calibrated_techs")
-    A322.sector <- get_data(all_data, "energy/A322.sector", strip_attributes = TRUE)
-    A322.subsector_interp <- get_data(all_data, "energy/A322.subsector_interp", strip_attributes = TRUE)
-    A322.subsector_logit <- get_data(all_data, "energy/A322.subsector_logit", strip_attributes = TRUE)
-    A322.subsector_shrwt <- get_data(all_data, "energy/A322.subsector_shrwt", strip_attributes = TRUE)
-    A322.globaltech_coef <- get_data(all_data, "energy/A322.globaltech_coef")
-    A322.globaltech_shrwt <- get_data(all_data, "energy/A322.globaltech_shrwt", strip_attributes = TRUE)
-    A322.globaltech_co2capture <- get_data(all_data, "energy/A322.globaltech_co2capture")
-    A322.globaltech_retirement <- get_data(all_data, "energy/A322.globaltech_retirement", strip_attributes = TRUE)
-    L1322.Fert_Prod_MtNH3_R_F_Y_EUR <- get_data(all_data, "L1322.Fert_Prod_MtNH3_R_F_Y_EUR", strip_attributes = TRUE)
-    L1322.IO_R_Fert_F_Yh_EUR <- get_data(all_data, "L1322.IO_R_Fert_F_Yh_EUR", strip_attributes = TRUE)
-    L1322.Fert_NEcost_75USDkgNH3_F_EUR <- get_data(all_data, "L1322.Fert_NEcost_75USDkgNH3_F_EUR")
-    L142.ag_Fert_NetExp_MtN_R_Y <- get_data(all_data, "L142.ag_Fert_NetExp_MtN_R_Y", strip_attributes = TRUE) %>%
-      filter_regions_europe(region_ID_mapping = GCAM_region_names)
+    # Load required inputs ------------
+    get_data_list(all_data, MODULE_INPUTS, strip_attributes = T)
 
-    # ===================================================
-    # 0. Give binding for variable names used in pipeline
+    GCAM_region_names <- filter_regions_europe(GCAM_region_names)
+    L142.ag_Fert_NetExp_MtN_R_Y <- L142.ag_Fert_NetExp_MtN_R_Y %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
+    SINGLE_MARKET_NAME <- unique(A_ff_RegionalTechnology_EUR$market.name[A_ff_RegionalTechnology_EUR$market.name != "regional"])
 
-    year.fillout <- to.value <- technology <- year <-
-      share.weight <- supplysector <- subsector <- coefficient <- minicam.energy.input <-
-      NEcost_75USDkgNH3 <- input.cost <- remove.fraction <- half.life <- median.shutdown.point <-
-      value <- calOutputValue <- sector <- fuel <- subs.share.weight <- region <- fixedOutput <- . <- NULL
-
-    # ===================================================
-    # 1. Perform computations
-    # Create tables to delete technologies and subsectors in regions where heat is not modeled as a fuel
-    # 1a. Supplysector information
+    # 1a. Supplysector information --------------------------
     # L2322.Supplysector_Fert_EUR: Supply sector information for fertilizer sector
     A322.sector %>%
       filter(supplysector != 'traded ammonia') %>%
@@ -107,7 +93,7 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
       na.omit ->
       L2322.FinalEnergyKeyword_Fert_EUR
 
-    # 2b. Subsector information
+    # 1b. Subsector information --------------------------
     # L2322.SubsectorLogit_Fert_EUR: Subsector logit exponents of fertilizer sector
     A322.subsector_logit %>%
       filter(supplysector != 'traded ammonia') %>%
@@ -132,7 +118,7 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
                            has_traded = TRUE) ->
       L2322.SubsectorInterp_Fert_EUR
 
-    # 2c. Technology information
+    # 1c. Technology information --------------------------
     # L2322.StubTech_Fert_EUR: Identification of stub technologies of fertilizer sector
     # Note: assuming that technology list in the shareweight table includes the full set (any others would default to a 0 shareweight)
     # Traded technologies are not represented as stub technologies and are dropped here
@@ -244,7 +230,7 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
     # Retirement may consist of any of three types of retirement function (phased, s-curve, or none)
     # All of these options have different headers, and all are allowed
 
-    # Calibration and region-specific data
+    # 2a. Calibration and region-specific data FERTILIZERS -----------------------------
     # L2322.StubTechProd_FertProd_EUR: calibrated output of fertilizer production technologies
     L1322.Fert_Prod_MtNH3_R_F_Y_EUR %>%
       filter(year %in% MODEL_BASE_YEARS) %>%
@@ -272,6 +258,7 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
       mutate(market.name = region) ->
       L2322.StubTechCoef_Fert_EUR
 
+    # 2b. Regional ammonia calibration -----------------------------
     # Ammonia Exports = NetExports where positive
     L142.ag_Fert_NetExp_MtN_R_Y %>%
       select(GCAM_region_ID, year, calOutputValue = value) %>%
@@ -343,8 +330,190 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["StubTechProd"]]) ->
       L2322.StubTechProd_NtoAg_EUR
 
-    # ===================================================
-    # Produce outputs
+    # 3a. Functions for ammonia trade adjust -----------------
+    combine_EUR_global <- function(df, df_EUR){
+      df %>%
+        anti_join(df_EUR, by = "region") %>%
+        bind_rows(df_EUR)
+    }
+
+    copy_for_EUR <- function(df){
+      if ("region" %in% names(df)){
+        df %>%
+          filter(grepl("traded", supplysector)) %>%
+          mutate(region = SINGLE_MARKET_NAME) %>%
+          bind_rows(df)
+      } else { df }
+    }
+
+    add_single_market <- function(df){
+      df_singleMarket <- df %>%
+        mutate(region_tmp = stringr::str_extract(subsector, ".*(?= traded)"),
+               region = if_else(region_tmp %in% Europe_Single_Market_Regions$GCAMEU_region, SINGLE_MARKET_NAME, region))
+      # now copy one region and rename it to global tech
+      df_subsector_global <- df_singleMarket %>%
+        filter(region == SINGLE_MARKET_NAME)
+
+      df_subsector_EUR <- df_singleMarket %>%
+        filter(region == gcam.USA_REGION)
+
+      if ("year" %in% names(df_singleMarket)){
+        df_subsector_global <- group_by(df_subsector_global, supplysector, year)
+        df_subsector_EUR <- group_by(df_subsector_EUR, supplysector, year)
+      } else {
+        df_subsector_global <- group_by(df_subsector_global, supplysector)
+        df_subsector_EUR <- group_by(df_subsector_EUR, supplysector)
+      }
+
+      df_subsector_global <-  dplyr::slice_head(df_subsector_global) %>%
+        ungroup %>%
+        mutate(subsector = stringr::str_replace(subsector, region_tmp, "global"))
+
+      if ("market.name" %in% names(df)){
+        df_subsector_global <- df_subsector_global %>% mutate(market.name = gcam.USA_REGION)
+        df_subsector_EUR <- df_subsector_EUR %>% mutate(market.name = SINGLE_MARKET_NAME)
+      }
+
+      df_subsector_EUR <- dplyr::slice_head(df_subsector_EUR) %>%
+        ungroup %>%
+        mutate(subsector = stringr::str_replace(subsector, region_tmp, SINGLE_MARKET_NAME)) %>%
+        bind_rows(df_subsector_global, df_singleMarket)
+
+      if ("technology" %in% names(df)){
+        df_subsector_EUR %>% mutate(technology = subsector)  %>% select(-region_tmp)
+      } else { df_subsector_EUR %>% select(-region_tmp) }
+    }
+
+    subsector_combine_add_market <- function(df, df_EUR){
+      tmp <- combine_EUR_global(df, df_EUR)
+      tmp %>%
+        filter(grepl("traded", supplysector)) %>%
+        add_single_market %>%
+        bind_rows(tmp %>%  filter(!grepl("traded", supplysector)))
+    }
+    # 3a. Supplysector ------------------------------------
+    L2322.Supplysector_Fert_EUR <- combine_EUR_global(L2322.Supplysector_Fert, L2322.Supplysector_Fert_EUR) %>% distinct() %>% copy_for_EUR
+    L2322.SectorUseTrialMarket_tra_EUR <- copy_for_EUR(L2322.SectorUseTrialMarket_tra)
+    L2322.FinalEnergyKeyword_Fert_EUR <- combine_EUR_global(L2322.FinalEnergyKeyword_Fert, L2322.FinalEnergyKeyword_Fert_EUR)
+
+    # 3b. Subsector ------------------------------------
+    L2322.SubsectorLogit_Fert_EUR <-  subsector_combine_add_market(L2322.SubsectorLogit_Fert, L2322.SubsectorLogit_Fert_EUR)
+    L2322.SubsectorShrwtFllt_Fert_EUR <-  subsector_combine_add_market(L2322.SubsectorShrwtFllt_Fert, L2322.SubsectorShrwtFllt_Fert_EUR)
+    L2322.SubsectorInterp_Fert_EUR <-  subsector_combine_add_market(L2322.SubsectorInterp_Fert, L2322.SubsectorInterp_Fert_EUR)
+
+    # 3c. Technology ----------------------------------
+    # techs with no trade
+    L2322.StubTech_Fert_EUR <- combine_EUR_global(L2322.StubTech_Fert, L2322.StubTech_Fert_EUR)
+    L2322.StubTechProd_NtoAg_EUR <- combine_EUR_global(L2322.StubTechProd_NtoAg, L2322.StubTechProd_NtoAg_EUR)
+    L2322.StubTechProd_FertProd_EUR <- combine_EUR_global(L2322.StubTechProd_FertProd, L2322.StubTechProd_FertProd_EUR)
+    L2322.StubTechCoef_Fert_EUR <- combine_EUR_global(L2322.StubTechCoef_Fert, L2322.StubTechCoef_Fert_EUR)
+    L2322.StubTechProd_FertImport_EUR  <- combine_EUR_global(L2322.StubTechProd_FertImport, L2322.StubTechProd_FertImport_EUR)
+    L2322.StubTechProd_FertDomCons_EUR  <- combine_EUR_global(L2322.StubTechProd_FertDomCons, L2322.StubTechProd_FertDomCons_EUR)
+
+    # change region/market
+    L2322.TechShrwt_TradedFert_EUR  <- add_single_market(L2322.TechShrwt_TradedFert)
+    L2322.TechCoef_TradedFert_EUR <- add_single_market(L2322.TechCoef_TradedFert)  %>%
+      mutate(market.name = if_else(grepl(SINGLE_MARKET_NAME, subsector), SINGLE_MARKET_NAME, market.name),
+             market.name = if_else(grepl("global", subsector), gcam.USA_REGION, market.name),
+             minicam.energy.input = if_else(market.name == SINGLE_MARKET_NAME | grepl("global", subsector),
+                                            supplysector, minicam.energy.input))
+    L2322.StubTechMarket_FertImports_EUR <- L2322.StubTechMarket_FertImports %>%
+      mutate(market.name = if_else(grepl("imported", subsector) & region %in% Europe_Single_Market_Regions$GCAMEU_region,
+                                   SINGLE_MARKET_NAME,
+                                   market.name))
+
+    # 3d. Calculate single market trade for L2322.Production_FertExport_EUR --------------------------
+    # We don't have full bilateral trade data
+    # But from eurostat we have pulled the trade between EU and EU/non-EU
+    # Will use to calibrate trade between single market and globe
+    Eurostat_ammonia <- estat_ammonia_fert %>%
+      group_by(reporter, partner, flow, unit = indicators, year = TIME_PERIOD) %>%
+      summarise(value = sum(OBS_VALUE)) %>%
+      ungroup %>%
+      # convert from 100kg to Mt
+      mutate(value = value / 1e10,
+             unit = "Mt",
+             flow = case_when(
+               flow == 1 ~ "imports",
+               flow == 2 ~ "exports")) %>%
+      filter(partner != "EU_INTRA") %>%
+      tidyr::pivot_wider(names_from = flow) %>%
+      mutate(net_exports = exports - imports) %>%
+      select(-reporter, -partner)
+
+    # Calculate net trade in GCAM
+    Europe_imports <- L2322.StubTechProd_FertImport_EUR %>%
+      filter(region %in% Europe_Single_Market_Regions$GCAMEU_region) %>%
+      group_by(sector = subsector, year) %>%
+      summarise(imports = sum(calOutputValue )) %>%
+      ungroup %>%
+      mutate(region = SINGLE_MARKET_NAME,
+             sector = stringr::str_remove(sector, "imported "))
+
+    Europe_exports <- L2322.Production_FertExport %>%
+      mutate(region_export = stringr::str_extract(subsector, ".*(?= traded)")) %>%
+      filter(region_export %in% Europe_Single_Market_Regions$GCAMEU_region) %>%
+      group_by(sector = supplysector, year) %>%
+      summarise(exports = sum(calOutputValue )) %>%
+      ungroup %>%
+      mutate(region = SINGLE_MARKET_NAME,
+             sector = stringr::str_remove(sector, "traded "))
+
+    Europe_net_trade_GCAM <- left_join_error_no_match(Europe_imports, Europe_exports,
+                                                      by = c("sector", "year", "region")) %>%
+      mutate(net_exports_GCAM = exports - imports) %>%
+      rename(exports_GCAM = exports, imports_GCAM = imports)
+
+    commodity_input_map <- L2322.TechCoef_TradedFert_EUR %>%
+      distinct(sector = supplysector, GCAM_commodity = minicam.energy.input) %>%
+      mutate(sector = stringr::str_remove(sector, "traded "))
+
+    # scale exports and imports according to net exports in GCAM
+    Europe_net_trade_calib_calc <- Eurostat_ammonia %>%
+      # Calculate EU net exports
+      filter(year %in% MODEL_BASE_YEARS) %>%
+      # now add in GCAM calibration and scale
+      repeat_add_columns(commodity_input_map) %>%
+      full_join(Europe_net_trade_GCAM, by = c("year", "sector")) %>%
+      # there will be NAs for base years that have not been included
+      # simply assume alll net_exports go to either exports/imports
+      mutate(exports = if_else(is.na(exports), pmax(0, net_exports_GCAM), exports),
+             imports = if_else(is.na(imports), pmax(0, -net_exports_GCAM), imports),
+             net_exports = exports - imports) %>%
+      # net exports are far more negative in GCAM, so using scalars will create crazy results
+      # instead going to increase/decrease exports/imports by same amount to reach net_exports in GCAM
+      mutate(diff = net_exports_GCAM - net_exports ,
+             # if the scalar is negative, we are just going to add to imports/exports to reach net_exports
+             exports = exports + diff / 2,
+             imports = imports - diff / 2,
+             net_exports_new = exports - imports,
+             imports_adj = case_when(
+               (exports < 0 | imports < 0) & net_exports_new > 0 ~ 0,
+               (exports < 0 | imports < 0) & net_exports_new <= 0 ~ net_exports_new,
+               is.numeric(imports) ~ imports) ,
+             exports_adj = case_when(
+               (exports < 0 | imports < 0) & net_exports_new > 0 ~ net_exports_new,
+               (exports < 0 | imports < 0) & net_exports_new <= 0 ~ 0,
+               is.numeric(exports) ~ exports)
+             ) %>%
+      select(sector, region, year, exports = exports_adj, imports = imports_adj) %>%
+      tidyr::pivot_longer(cols = c(exports, imports), names_to = "flow", values_to = "value") %>%
+      mutate(region = if_else(flow == "imports", "global", region),
+             subsector = paste(region, "traded", sector, sep = " ")) %>%
+      select(subsector, year, value)
+
+    L2322.Production_FertExport_EUR <- L2322.Production_FertExport %>%
+      # this will add in global/Europe single markets, but the cal output values are wrong
+      add_single_market %>%
+      left_join(Europe_net_trade_calib_calc, by = c("subsector", "year")) %>%
+      mutate(calOutputValue = if_else(is.na(value), calOutputValue, value),
+             subs.share.weight = if_else(calOutputValue > 0, 1, 0),
+             tech.share.weight = subs.share.weight) %>%
+      select(LEVEL2_DATA_NAMES[["Production"]])
+
+
+    #
+    # Produce outputs ===================================================
 
     L2322.Supplysector_Fert_EUR %>%
       add_title("Supply sector information for fertilizer sector") %>%

@@ -44,7 +44,9 @@ module_gcameurope_en_supply_xml <- function(command, ...) {
                      "L239.Production_reg_dom_EUR",
                      "L239.Consumption_intraregional_EUR",
                      "L239.CarbonCoef_EUR",
-                     "L281.TechAccountOutput_entrade",
+                     "L239.Pop_europeSingleMarket",
+                     "L239.GDP_europeSingleMarket",
+                     "L281.TechAccountOutput_entrade_EUR",
                      "L281.TechAccountInput_entrade")
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -60,7 +62,7 @@ module_gcameurope_en_supply_xml <- function(command, ...) {
     #   filter(grepl(paste(gcameurope.EUROSTAT_COUNTRIES, collapse = "|"), subsector) | region %in% gcameurope.EUROSTAT_COUNTRIES)
     L281.TechAccountInput_entrade <- L281.TechAccountInput_entrade  %>%
       filter(grepl(paste(gcameurope.EUROSTAT_COUNTRIES, collapse = "|"), subsector) | region %in% gcameurope.EUROSTAT_COUNTRIES)
-    L281.TechAccountOutput_entrade <- L281.TechAccountOutput_entrade  %>%
+    L281.TechAccountOutput_entrade_EUR <- L281.TechAccountOutput_entrade_EUR  %>%
       filter(supplysector %in% unique(L239.TechCoef_tra_EUR$supplysector))
 
     # ===================================================
@@ -119,12 +121,14 @@ module_gcameurope_en_supply_xml <- function(command, ...) {
       add_logit_tables_xml(L239.SubsectorAll_reg_EUR, "SubsectorAllTo", base_logit_header = "SubsectorLogit") %>%
       add_xml_data(L239.TechShrwt_reg_EUR, "TechShrwt") %>%
       add_xml_data(L239.TechCoef_reg_EUR, "TechCoef") %>%
-      add_xml_data(L281.TechAccountOutput_entrade, "TechAccountOutput") %>%
+      add_xml_data(L281.TechAccountOutput_entrade_EUR, "TechAccountOutput") %>%
       add_xml_data(L239.Production_reg_imp_EUR, "Production") %>%
       add_xml_data(L239.Production_reg_dom_EUR, "Production") %>%
       add_xml_data(L239.Consumption_intraregional_EUR, "Production") %>%
       add_xml_data(L239.PrimaryConsKeyword_en_EUR, "PrimaryConsKeywordff") %>%
       add_xml_data(L239.CarbonCoef_EUR, "CarbonCoef") %>%
+      add_xml_data(L239.Pop_europeSingleMarket, "Pop") %>%
+      add_xml_data(L239.GDP_europeSingleMarket, "GDP") %>%
       add_xml_data(L221.StubTechCalInput_bioOil_EUR, "StubTechCalInput") %>%
       add_xml_data(L221.StubTechInterp_bioOil_EUR, "StubTechInterp") %>%
       add_xml_data(L221.StubTechShrwt_bioOil_EUR, "StubTechShrwt") %>%
