@@ -6,15 +6,28 @@
 supplysector,subsector,technology,input.ratio
 resid others modern EUR,biomass,biomass,0.5
 resid others coal EUR,coal,coal,0.5
-resid others modern EUR,electricity,electric,0.5
+resid others modern EUR,electricity,electricity,0.5
 resid others modern EUR,gas,gas,0.5
-resid others modern EUR,refined liquids,oil,0.5
+resid others modern EUR,refined liquids,refined liquids,0.5
 resid others modern EUR,district heat,district heat,0.5
+resid others modern EUR,gas,hydrogen,0.5
+resid hot water modern EUR,biomass,biomass,0.5
+resid hot water coal EUR,coal,coal,0.5
+resid hot water modern EUR,electricity,electricity,0.5
+resid hot water modern EUR,gas,gas,0.5
+resid hot water modern EUR,refined liquids,refined liquids,0.5
+resid hot water modern EUR,district heat,district heat,0.5
+resid other appliance modern EUR,electricity,electricity,0.5
+resid cooking modern EUR,biomass,biomass,0.5
+resid cooking coal EUR,coal,coal,0.5
+resid cooking modern EUR,electricity,electricity,0.5
+resid cooking modern EUR,gas,gas,0.5
+resid cooking modern EUR,refined liquids,refined liquids,0.5
+resid cooking modern EUR,district heat,district heat,0.5
 comm others EUR,biomass,biomass,0.5
 comm others EUR,coal,coal,0.5
-comm others EUR,electricity,electric,0.5
+comm others EUR,electricity,electricity,0.5
 comm others EUR,gas,gas,0.5
-comm others EUR,refined liquids,oil,0.5
+comm others EUR,refined liquids,refined liquids,0.5
 comm others EUR,district heat,district heat,0.5
-resid others modern EUR,gas,hydrogen,0.5
 comm others EUR,gas,hydrogen,0.5
