@@ -132,12 +132,10 @@ void BuildingServiceInput::copy( const BuildingServiceInput& aInput ) {
     mName = aInput.mName;
     mServiceDemand = aInput.mServiceDemand;
 	mBiasAdderEn = aInput.mBiasAdderEn;
-    mCoalA = aInput.mCoalA;
-    mCoalK = aInput.mCoalK;
-    mCoalBase = aInput.mCoalBase;
-    mTradBioX = aInput.mTradBioX;
-    mTradBioY = aInput.mTradBioY;
-    mTradBioBase = aInput.mTradBioBase;
+    mB1TradFuel = aInput.mB1TradFuel;
+    mB2TradFuel = aInput.mB2TradFuel;
+    mB3TradFuel = aInput.mB3TradFuel;
+    mPrelastTradFuel = aInput.mPrelastTradFuel;
     mServPriceBase = aInput.mServPriceBase;
     mServBaseDens = aInput.mServBaseDens;
 	mCoef = aInput.mCoef;
@@ -157,12 +155,10 @@ void BuildingServiceInput::toDebugXML( const int aPeriod, ostream& aOut, Tabs* a
 
     XMLWriteElement( mServiceDemand[ aPeriod ], "service", aOut, aTabs );
 	XMLWriteElement(mBiasAdderEn[ aPeriod ], "bias-adder", aOut, aTabs);
-    XMLWriteElement(mCoalA, "A-coal", aOut, aTabs);
-    XMLWriteElement(mCoalK, "k-coal", aOut, aTabs);
-    XMLWriteElement(mCoalBase, "base-coal", aOut, aTabs);
-    XMLWriteElement(mTradBioX, "x-TradBio", aOut, aTabs);
-    XMLWriteElement(mTradBioY, "y-TradBio", aOut, aTabs);
-    XMLWriteElement(mTradBioBase, "base-TradBio", aOut, aTabs);
+    XMLWriteElement(mB1TradFuel, "b1", aOut, aTabs);
+    XMLWriteElement(mB2TradFuel, "b2", aOut, aTabs);
+    XMLWriteElement(mB3TradFuel, "b3", aOut, aTabs);
+    XMLWriteElement(mPrelastTradFuel, "Prelast", aOut, aTabs);
     XMLWriteElement(mServPriceBase, "price", aOut, aTabs);
     XMLWriteElement(mServBaseDens, "base-density", aOut, aTabs);
 	XMLWriteElement(mCoef, "coef", aOut, aTabs);
@@ -251,33 +247,26 @@ double BuildingServiceInput::getCoef() const {
 }
 
 /*!
- * \brief Get the coal coefficients and bias adder for service demand.
+ * \brief Get the TradFuel coefficients and bias adder for service demand.
   * \return The coefficient.
  */
 
-double BuildingServiceInput::getCoalA() const {
-    return mCoalA;
+double BuildingServiceInput::getTradFuelPrelast() const {
+    return mPrelastTradFuel;
 }
 
-double BuildingServiceInput::getCoalK() const {
-    return mCoalK;
+double BuildingServiceInput::getTradFuelb1() const {
+    return mB1TradFuel;
 }
 
-double BuildingServiceInput::getCoalBase() const {
-    return mCoalBase;
+double BuildingServiceInput::getTradFuelb2() const {
+    return mB2TradFuel;
 }
 
-double BuildingServiceInput::getTradBioX() const {
-    return mTradBioX;
+double BuildingServiceInput::getTradFuelb3() const {
+    return mB3TradFuel;
 }
 
-double BuildingServiceInput::getTradBioY() const {
-    return mTradBioY;
-}
-
-double BuildingServiceInput::getTradBioBase() const {
-    return mTradBioBase;
-}
 
 double BuildingServiceInput::getServPriceBase() const {
     return mServPriceBase;

@@ -30,8 +30,6 @@ module_gcameurope_resources_xml <- function(command, ...) {
                        "L210.SmthRenewRsrcCurvesGdpElast_roofPV_EUR",
                        "L210.GrdRenewRsrcCurves_geo_EUR",
                        "L210.GrdRenewRsrcMax_geo_EUR",
-                       "L210.GrdRenewRsrcCurves_tradbio_EUR",
-                       "L210.GrdRenewRsrcMax_tradbio_EUR",
                        "L210.ResSubresourceProdLifetime_EUR",
                        "L210.SubresourcePriceAdder_EUR",
                        "L210.ResReserveTechLifetime_EUR",
@@ -87,8 +85,6 @@ module_gcameurope_resources_xml <- function(command, ...) {
       add_xml_data(L210.SmthRenewRsrcCurvesGdpElast_roofPV_EUR, "SmthRenewRsrcCurvesGdpElast") %>%
       add_xml_data(L210.GrdRenewRsrcCurves_geo_EUR, "GrdRenewRsrcCurves") %>%
       add_xml_data(L210.GrdRenewRsrcMax_geo_EUR, "GrdRenewRsrcMax") %>%
-      add_xml_data(L210.GrdRenewRsrcCurves_tradbio_EUR, "GrdRenewRsrcCurves") %>%
-      add_xml_data(L210.GrdRenewRsrcMax_tradbio_EUR, "GrdRenewRsrcMax") %>%
       add_xml_data(L210.ResTechShrwt_EUR, "ResTechShrwt") %>%
       add_xml_data(L210.DeleteRsrcTradBio_EUR, "DeleteRsrc") %>%
       add_precursors(MODULE_INPUTS) ->

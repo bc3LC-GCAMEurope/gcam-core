@@ -4,44 +4,42 @@
 # Column types: ccccn
 # ----------
 supplysector,subsector,year.fillout,year,share.weight
-resid heating modern,biomass,start-year,,1
-resid heating coal,coal,start-year,,1
-resid heating modern,electricity,start-year,,1
-resid heating modern,gas,start-year,,1
-resid heating modern,refined liquids,start-year,,1
-resid heating TradBio,traditional biomass,start-year,,1
-resid heating modern,district heat,start-year,,1
-resid cooking modern,biomass,start-year,,1
-resid cooking coal,coal,start-year,,1
-resid cooking modern,electricity,start-year,,1
-resid cooking modern,gas,start-year,,1
-resid cooking modern,refined liquids,start-year,,1
-resid cooking TradBio,traditional biomass,start-year,,1
-resid other appliance modern,electricity,start-year,,1
-resid hot water modern,biomass,start-year,,1
-resid hot water coal,coal,start-year,,1
-resid hot water modern,electricity,start-year,,1
-resid hot water modern,gas,start-year,,1
-resid hot water modern,refined liquids,start-year,,1
-resid hot water modern,district heat,start-year,,1
-resid cooling modern,electricity,start-year,,1
-resid cooling modern,gas,start-year,,1
-resid others modern,biomass,start-year,,1
-resid others coal,coal,start-year,,1
-resid others modern,electricity,start-year,,1
-resid others modern,gas,start-year,,1
-resid others modern,refined liquids,start-year,,1
-comm heating,biomass,start-year,,1
-comm heating,coal,start-year,,1
-comm heating,electricity,start-year,,1
-comm heating,gas,start-year,,1
-comm heating,refined liquids,start-year,,1
-comm heating,district heat,start-year,,1
-comm cooling,electricity,start-year,,1
-comm cooling,gas,start-year,,1
-comm others,biomass,start-year,,1
-comm others,coal,start-year,,1
-comm others,electricity,start-year,,1
-comm others,gas,start-year,,1
-comm others,refined liquids,start-year,,1
-comm others,district heat,start-year,,1
+resid heating modern EUR,biomass,start-year,,1
+resid heating coal EUR,coal,start-year,,1
+resid heating modern EUR,electricity,start-year,,1
+resid heating modern EUR,gas,start-year,,1
+resid heating modern EUR,refined liquids,start-year,,1
+resid heating modern EUR,district heat,start-year,,1
+resid cooking modern EUR,biomass,start-year,,1
+resid cooking coal EUR,coal,start-year,,1
+resid cooking modern EUR,electricity,start-year,,1
+resid cooking modern EUR,gas,start-year,,1
+resid cooking modern EUR,refined liquids,start-year,,1
+resid other appliance modern EUR,electricity,start-year,,1
+resid hot water modern EUR,biomass,start-year,,1
+resid hot water coal EUR,coal,start-year,,1
+resid hot water modern EUR,electricity,start-year,,1
+resid hot water modern EUR,gas,start-year,,1
+resid hot water modern EUR,refined liquids,start-year,,1
+resid hot water modern EUR,district heat,start-year,,1
+resid cooling modern EUR,electricity,start-year,,1
+resid cooling modern EUR,gas,start-year,,1
+resid others modern EUR,biomass,start-year,,1
+resid others coal EUR,coal,start-year,,1
+resid others modern EUR,electricity,start-year,,1
+resid others modern EUR,gas,start-year,,1
+resid others modern EUR,refined liquids,start-year,,1
+comm heating EUR,biomass,start-year,,1
+comm heating EUR,coal,start-year,,1
+comm heating EUR,electricity,start-year,,1
+comm heating EUR,gas,start-year,,1
+comm heating EUR,refined liquids,start-year,,1
+comm heating EUR,district heat,start-year,,1
+comm cooling EUR,electricity,start-year,,1
+comm cooling EUR,gas,start-year,,1
+comm others EUR,biomass,start-year,,1
+comm others EUR,coal,start-year,,1
+comm others EUR,electricity,start-year,,1
+comm others EUR,gas,start-year,,1
+comm others EUR,refined liquids,start-year,,1
+comm others EUR,district heat,start-year,,1

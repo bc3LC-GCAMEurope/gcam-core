@@ -654,7 +654,7 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
       select(gcam.consumer) %>%
       filter(grepl("resid",gcam.consumer)) %>%
       distinct() %>%
-      mutate(gcam.consumer = gsub("resid_","",gcam.consumer))
+      mutate(gcam.consumer = gsub("resid EUR_","",gcam.consumer))
 
     L112.in_EJ_R_en_S_F_Yh_calib_all_resid<- L112.in_EJ_R_en_S_F_Yh_calib_all %>%
       filter(grepl("resid",supplysector)) %>%

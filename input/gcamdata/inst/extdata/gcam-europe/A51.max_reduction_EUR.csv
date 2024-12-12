@@ -81,51 +81,51 @@ refining,gas to liquids,gas to liquids,25,46,80,50,50,60
 refining,oil refining,oil refining,25,46,80,50,50,60
 unconventional oil production,unconventional oil production,unconventional oil production,,,,,,60
 regional oil,crude oil,crude oil,95,46,80,,,60
-resid heating modern,biomass,biomass,50,46,80,92,90,60
-resid heating coal,coal,coal,85,64,80,90,90,60
-resid heating modern,electricity,electricity,,,,,,
-resid heating modern,gas,gas,50,46,80,80,50,60
-resid heating modern,refined liquids,refined liquids,90,46,80,50,50,60
-resid heating TradBio,traditional biomass,traditional biomass,0,46,80,50,75,
-resid heating modern,district heat,district heat,,,,,,
-resid cooking modern,biomass,biomass,50,46,80,92,90,60
-resid cooking coal,coal,coal,85,64,80,90,90,60
-resid cooking modern,electricity,electricity,,,,,,
-resid cooking modern,gas,gas,50,46,80,80,50,60
-resid cooking modern,refined liquids,refined liquids,90,46,80,50,50,60
-resid cooking TradBio,traditional biomass,traditional biomass,0,46,80,50,75,
-resid cooking modern,district heat,district heat,,,,,,
-resid hot water modern,biomass,biomass,50,46,80,92,90,60
-resid hot water coal,coal,coal,85,64,80,90,90,60
-resid hot water modern,electricity,electricity,,,,,,
-resid hot water modern,gas,gas,50,46,80,80,50,60
-resid hot water modern,refined liquids,refined liquids,90,46,80,50,50,60
-resid hot water modern,district heat,district heat,,,,,,
-resid other appliance modern,electricity,electricity,,,,,,
-resid cooling modern,electricity,electricity,,,,,,
-resid cooling modern,gas,gas,50,46,80,80,50,60
-resid others modern modern,biomass,biomass,50,46,80,92,90,60
-resid others coal,coal,coal,85,64,80,90,90,60
-resid others modern,electricity,electricity,,,,,,
-resid others modern,gas,gas,50,46,80,80,50,60
-resid others modern,refined liquids,refined liquids,90,46,80,50,50,60
-resid others modern,district heat,district heat,,,,,,
-comm heating,biomass,biomass,50,46,80,92,90,60
-comm heating,coal,coal,85,64,80,90,90,60
-comm heating,electricity,electricity,,,,,,
-comm heating,gas,gas,50,46,80,80,50,60
-comm heating,refined liquids,refined liquids,90,46,80,50,50,60
-comm heating,traditional biomass,traditional biomass,0,46,80,50,75,
-comm heating,district heat,district heat,,,,,,
-comm cooling,electricity,electricity,,,,,,
-comm cooling,gas,gas,50,46,80,80,50,60
-comm others,biomass,biomass,50,46,80,92,90,60
-comm others,coal,coal,85,64,80,90,90,60
-comm others,electricity,electricity,,,,,,
-comm others,gas,gas,50,46,80,80,50,60
-comm others,refined liquids,refined liquids,90,46,80,50,50,60
-comm others,traditional biomass,traditional biomass,0,46,80,50,75,
-comm others,district heat,district heat,,,,,,
+resid heating modern EUR,biomass,biomass,50,46,80,92,90,60
+resid heating coal EUR,coal,coal,85,64,80,90,90,60
+resid heating modern EUR,electricity,electricity,,,,,,
+resid heating modern EUR,gas,gas,50,46,80,80,50,60
+resid heating modern EUR,refined liquids,refined liquids,90,46,80,50,50,60
+resid heating TradBio EUR,traditional biomass,traditional biomass,0,46,80,50,75,
+resid heating modern EUR,district heat,district heat,,,,,,
+resid cooking modern EUR,biomass,biomass,50,46,80,92,90,60
+resid cooking coal EUR,coal,coal,85,64,80,90,90,60
+resid cooking modern EUR,electricity,electricity,,,,,,
+resid cooking modern EUR,gas,gas,50,46,80,80,50,60
+resid cooking modern EUR,refined liquids,refined liquids,90,46,80,50,50,60
+resid cooking TradBio EUR,traditional biomass,traditional biomass,0,46,80,50,75,
+resid cooking modern EUR,district heat,district heat,,,,,,
+resid hot water modern EUR,biomass,biomass,50,46,80,92,90,60
+resid hot water coal EUR,coal,coal,85,64,80,90,90,60
+resid hot water modern EUR,electricity,electricity,,,,,,
+resid hot water modern EUR,gas,gas,50,46,80,80,50,60
+resid hot water modern EUR,refined liquids,refined liquids,90,46,80,50,50,60
+resid hot water modern EUR,district heat,district heat,,,,,,
+resid other appliance modern EUR,electricity,electricity,,,,,,
+resid cooling modern EUR,electricity,electricity,,,,,,
+resid cooling modern EUR,gas,gas,50,46,80,80,50,60
+resid others modern EUR modern EUR,biomass,biomass,50,46,80,92,90,60
+resid others coal EUR,coal,coal,85,64,80,90,90,60
+resid others modern EUR,electricity,electricity,,,,,,
+resid others modern EUR,gas,gas,50,46,80,80,50,60
+resid others modern EUR,refined liquids,refined liquids,90,46,80,50,50,60
+resid others modern EUR,district heat,district heat,,,,,,
+comm heating EUR,biomass,biomass,50,46,80,92,90,60
+comm heating EUR,coal,coal,85,64,80,90,90,60
+comm heating EUR,electricity,electricity,,,,,,
+comm heating EUR,gas,gas,50,46,80,80,50,60
+comm heating EUR,refined liquids,refined liquids,90,46,80,50,50,60
+comm heating EUR,traditional biomass,traditional biomass,0,46,80,50,75,
+comm heating EUR,district heat,district heat,,,,,,
+comm cooling EUR,electricity,electricity,,,,,,
+comm cooling EUR,gas,gas,50,46,80,80,50,60
+comm others EUR,biomass,biomass,50,46,80,92,90,60
+comm others EUR,coal,coal,85,64,80,90,90,60
+comm others EUR,electricity,electricity,,,,,,
+comm others EUR,gas,gas,50,46,80,80,50,60
+comm others EUR,refined liquids,refined liquids,90,46,80,50,50,60
+comm others EUR,traditional biomass,traditional biomass,0,46,80,50,75,
+comm others EUR,district heat,district heat,,,,,,
 transportation,refined liquids,refined liquids,93,98,97,84,88,96
 transportation,coal,coal,50,,,85,50,60
 transportation,gas,gas,50,,,,,60

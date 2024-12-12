@@ -19,7 +19,7 @@
 module_gcameurope_L141.hfc_R_S_T_Y <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/GCAM_region_names",
-             FILE = "emissions/gcam_fgas_tech",
+             FILE = "gcam-europe/gcam_fgas_tech_EUR",
              FILE = "emissions/other_f_gases",
              "L144.in_EJ_R_bld_serv_F_Yh_EUR",
              FILE = "common/iso_GCAM_regID",
@@ -62,7 +62,7 @@ module_gcameurope_L141.hfc_R_S_T_Y <- function(command, ...) {
 
     # Load required inputs
     GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>% filter_regions_europe()
-    gcam_fgas_tech <- get_data(all_data, "emissions/gcam_fgas_tech", strip_attributes = TRUE)
+    gcam_fgas_tech_EUR <- get_data(all_data, "gcam-europe/gcam_fgas_tech_EUR", strip_attributes = TRUE)
     other_f_gases <- get_data(all_data, "emissions/other_f_gases")
     L144.in_EJ_R_bld_serv_F_Yh_EUR <- get_data(all_data, "L144.in_EJ_R_bld_serv_F_Yh_EUR")
     iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID") %>% filter_regions_europe()
@@ -155,7 +155,7 @@ module_gcameurope_L141.hfc_R_S_T_Y <- function(command, ...) {
       mutate(year = as.numeric(year))
 
     # Map Emissions to GCAM technologies
-    L141.hfc_R_S_T_Yh_EUR.long <- gcam_fgas_tech %>%
+    L141.hfc_R_S_T_Yh_EUR.long <- gcam_fgas_tech_EUR %>%
       repeat_add_columns(tibble(GCAM_region_ID = unique(GCAM_region_names$GCAM_region_ID))) %>%
       repeat_add_columns(tibble(year = emissions.EDGAR_YEARS)) %>%
       repeat_add_columns(tibble(Non.CO2 = unique(L141.EDGAR_hfc_R_S_T_Yh.long$Non.CO2))) %>%
@@ -433,7 +433,7 @@ module_gcameurope_L141.hfc_R_S_T_Y <- function(command, ...) {
       add_comments("Edgar emissions, scaled to Guus HFC inventory for residential and commercial cooling") %>%
       add_legacy_name("L141.hfc_R_S_T_Yh_EUR") %>%
       add_precursors("common/GCAM_region_names",
-                     "emissions/gcam_fgas_tech",
+                     "gcam-europe/gcam_fgas_tech_EUR",
                      "emissions/other_f_gases",
                      "L144.in_EJ_R_bld_serv_F_Yh_EUR",
                      "common/iso_GCAM_regID",
@@ -471,7 +471,7 @@ module_gcameurope_L141.hfc_R_S_T_Y <- function(command, ...) {
       add_comments("HFC emissions (scaled to Guus data) divided by GCAM cooling energy use") %>%
       add_legacy_name("L141.hfc_ef_R_cooling_Yh_EUR") %>%
       add_precursors("common/GCAM_region_names",
-                     "emissions/gcam_fgas_tech",
+                     "gcam-europe/gcam_fgas_tech_EUR",
                      "emissions/other_f_gases",
                      "L144.in_EJ_R_bld_serv_F_Yh_EUR",
                      "common/iso_GCAM_regID",

@@ -21,14 +21,13 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
              FILE = "common/iso_GCAM_regID",
              FILE = "energy/A_regions",
              FILE = "gcam-europe/calibrated_techs_bld_det_EUR",
-             FILE = "energy/A44.internal_gains",
-             FILE = "energy/A44.share_serv_fuel",
+             FILE = "gcam-europe/A44.cost_efficiency_EUR",
+             FILE = "gcam-europe/A44.internal_gains_EUR",
+             FILE = "gcam-europe/A44.share_serv_fuel_EUR",
              FILE = "energy/A44.shell_eff_mult_RG3",
              FILE = "energy/A44.tech_eff_mult_RG3",
              FILE = "energy/mappings/enduse_fuel_aggregation",
              FILE = "gcam-europe/A44.USA_TechChange_EUR",
-             FILE = "gcam-europe/A44.globaltech_eff_EUR",
-             FILE = "gcam-europe/A44.globaltech_cost_EUR",
              FILE = "gcam-europe/estat_nrg_d_hhq_filtered_en",
              FILE = "gcam-europe/mappings/geo_to_iso_map",
              FILE = "gcam-europe/mappings/nrgbal_to_service_map",
@@ -56,13 +55,12 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID") %>% filter_regions_europe()
     A_regions <- get_data(all_data, "energy/A_regions") %>% filter_regions_europe()
     calibrated_techs_bld_det_EUR <- get_data(all_data, "gcam-europe/calibrated_techs_bld_det_EUR")
-    A44.internal_gains <- get_data(all_data, "energy/A44.internal_gains")
-    A44.share_serv_fuel <- get_data(all_data, "energy/A44.share_serv_fuel")
+    A44.cost_efficiency_EUR <- get_data(all_data, "gcam-europe/A44.cost_efficiency_EUR", strip_attributes = TRUE)
+    A44.internal_gains_EUR <- get_data(all_data, "gcam-europe/A44.internal_gains_EUR")
+    A44.share_serv_fuel_EUR <- get_data(all_data, "gcam-europe/A44.share_serv_fuel_EUR")
     A44.shell_eff_mult_RG3 <- get_data(all_data, "energy/A44.shell_eff_mult_RG3")
     A44.tech_eff_mult_RG3 <- get_data(all_data, "energy/A44.tech_eff_mult_RG3")
     A44.USA_TechChange_EUR <- get_data(all_data, "gcam-europe/A44.USA_TechChange_EUR")
-    A44.globaltech_eff_EUR <- get_data(all_data, "gcam-europe/A44.globaltech_eff_EUR")
-    A44.globaltech_cost_EUR <- get_data(all_data, "gcam-europe/A44.globaltech_cost_EUR")
     A44.CalPrice_bld_EUR <- get_data(all_data, "gcam-europe/A44.CalPrice_bld_EUR") %>% filter_regions_europe()
     enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
     EUR_hhEnergyConsum <- get_data(all_data, "gcam-europe/estat_nrg_d_hhq_filtered_en")
@@ -109,7 +107,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       left_join(nrgbal_to_service_map, by = 'nrg_bal') %>%
       filter(!is.na(service)) %>% # remove nrg_bal == TOTAL
       # add GCAM fuels
-      left_join(siec_to_fuel_map, by = 'siec') %>% # deleting heat pumpts (because they are not present in the mapping file)
+      left_join(siec_to_fuel_map, by = 'siec') %>% # deleting heat pumps (because they are not present in the mapping file)
       filter(!(grepl("elec_", fuel) & !grepl("electricity generation", service))) %>% # remove renewables & biofuels
       # compute by GCAM_region_ID total fuel-service consumption
       group_by(GCAM_region_ID, year, unit, service, fuel, product) %>%
@@ -131,10 +129,12 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       ungroup() %>%
       # update the services' names
       dplyr::rowwise() %>%
-      dplyr::mutate(service = dplyr::if_else(fuel == 'coal', paste(service,'coal',sep=' '),
-                                            dplyr::if_else(fuel == 'biomass_tradbio', paste(service,'TradBio',sep=' '),
-                                                          paste(service,'modern',sep=' ')))) %>%
-      ungroup()
+      dplyr::mutate(service = if_else(fuel == 'coal', paste(service,'coal',sep=' '),
+                                      if_else(fuel == 'biomass_tradbio', paste(service,'TradBio',sep=' '),
+                                              paste(service,'modern',sep=' ')))) %>%
+      ungroup() %>%
+      # add "EUR" to all services
+      mutate(service = paste(service, 'EUR'))
 
 
     # Some regions are missing resid others, so we calculate the average service share in the regions with resid others
@@ -142,19 +142,19 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     MEAN_RESID_OTHER_ELEC_PROP <- EUR_hhEnergyConsum_R_Y_S %>%
       filter(year == MODEL_FINAL_BASE_YEAR) %>%
       group_by(GCAM_region_ID) %>%
-      filter(any(service == "resid others modern" & fuel == "electricity")) %>%
-      summarise(resid_other_elec_prop = value_eurostat[service == "resid others modern" & fuel == "electricity"] / sum(value_eurostat)) %>%
+      filter(any(service == "resid others modern EUR" & fuel == "electricity")) %>%
+      summarise(resid_other_elec_prop = value_eurostat[service == "resid others modern EUR" & fuel == "electricity"] / sum(value_eurostat)) %>%
       ungroup %>%
       filter(resid_other_elec_prop != 0) %>%
       summarise(mean(resid_other_elec_prop)) %>%  pull()
 
     missing_resid_other_elec <- EUR_hhEnergyConsum_R_Y_S %>%
       group_by(GCAM_region_ID, year) %>%
-      filter(!any(service == "resid others modern" & fuel == "electricity")) %>%
+      filter(!any(service == "resid others modern EUR" & fuel == "electricity")) %>%
       summarise(value_eurostat = sum(value_eurostat)) %>%
       ungroup %>%
       mutate(value_eurostat = MEAN_RESID_OTHER_ELEC_PROP * value_eurostat,
-             service = "resid others modern",
+             service = "resid others modern EUR",
              fuel = "electricity",
              unit = "TJ")
 
@@ -163,11 +163,11 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       group_by(GCAM_region_ID, year) %>%
       mutate(sum_energy = sum(value_eurostat)) %>%
       ungroup %>%
-      mutate(value_eurostat = if_else(service == "resid others modern" & fuel == "electricity" & value_eurostat == 0,
+      mutate(value_eurostat = if_else(service == "resid others modern EUR" & fuel == "electricity" & value_eurostat == 0,
                                       sum_energy * MEAN_RESID_OTHER_ELEC_PROP, value_eurostat)) %>%
       select(-sum_energy)
 
-    # Compute the service-fuel shares and add them to the GCAM basic shares (A44.share_serv_fuel)
+    # Compute the service-fuel shares and add them to the GCAM basic shares (A44.share_serv_fuel_EUR)
     EUR_hhEnergyConsum_shares <- EUR_hhEnergyConsum_R_Y_S %>%
       # filter to calib techs
       semi_join(calibrated_techs_bld_det_EUR %>% mutate(fuel = if_else(fuel == "traditional biomass", "biomass_tradbio", fuel)),
@@ -244,8 +244,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     # Write out the tech change table to all desired years, and convert to ratios from a base year
     # A44.USA_TechChange_EUR reports improvement rates of technology (annual rate)
     A44.USA_TechChange_EUR %>%
-      mutate(supplysector = if_else(supplysector %in% c("resid others modern","resid others TradBio") & technology == "traditional biomass",
-                                    "resid cooking TradBio", supplysector)) %>%
+      mutate(supplysector = if_else(supplysector %in% c("resid others modern EUR","resid others TradBio EUR") & technology == "traditional biomass",
+                                    "resid cooking TradBio EUR", supplysector)) %>%
       gather_years %>% # Year needs to be integer (or numeric) for the interpolation step below
       # Expand table to include all historical and future years
       group_by(supplysector, technology) %>%
@@ -373,23 +373,6 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       mutate(value = value * value_tech) ->
       L144.end_use_eff_EUR_Index
 
-    # Compute the average effiency by technology and expand to all years
-    A44.globaltech_eff_EUR %>%
-      # Average by tech (since there is tech_detail column but we do not have more info about the EUR implemented technologies)
-      gather_years %>%
-      group_by(supplysector, subsector, technology, minicam.energy.input, year) %>%
-      dplyr::summarise(value = mean(value)) %>%
-      ungroup() %>%
-      mutate(year = as.integer(year)) %>%
-      # Expand to all years
-      group_by(supplysector, subsector, technology, minicam.energy.input) %>%
-      complete(year = HIST_FUT_YEARS) %>%
-      # Extrapolate to fill out values for all years
-      # Rule 2 is used in case there are years outside of min-max range, which will be assigned values from closest data
-      mutate(value = approx_fun(year, value, rule = 2)) %>%
-      ungroup() ->
-      L144.TechUSA_eff
-
 
     # These values are indexed to the USA in the base year. Unlike shells, the end-use technology values read to the model
     # are not just indices, so need to multiply through by assumed base efficiency levels for each technology
@@ -403,10 +386,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
 
     # Note that this produces a final output table.
     L144.end_use_eff_EUR <-  L144.end_use_eff_EUR_Index %>%
-      # Join AVERAGE efficiency values (by sector and technology)
-      left_join_error_no_match(L144.TechUSA_eff %>%
-                                 rename(efficiency = value),
-                               by = c("supplysector", "subsector", "technology", "year")) %>%
+      # Join efficiency values (by sector and technology)
+      left_join_error_no_match(A44.cost_efficiency_EUR, by = c("supplysector", "subsector", "technology")) %>%
       # Multiply by efficiency values
       mutate(value = value * efficiency,
              # Prepare to drop region/subsector combinations where district heat are not modeled
@@ -421,10 +402,17 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     # 1C building non-energy costs ############################################################################
     # by supply sector, subsector, and technology
 
-    # A44.globaltech_cost_EUR reports direct costs of building technologies
+    # Define discount rate
+    discount_rate_bld <- 0.1
+
+    # A44.cost_efficiency reports base costs and efficiencies of building technologies
     # Note that this produces a final output table.
-    A44.globaltech_cost_EUR %>%
-      mutate(NEcostPerService = NEcostPerService * gdp_deflator(1975, 2005)) %>%
+    A44.cost_efficiency_EUR %>%
+      mutate(CRF = discount_rate_bld * ((1 + discount_rate_bld) ^ lifetime) / (((1 + discount_rate_bld) ^ lifetime) - 1),
+             CapitalCost = `installed cost` * CRF,
+             NonEnergyCost = CapitalCost + `O&M cost`,
+             ServiceOutput = UEC * efficiency,
+             NEcostPerService = NonEnergyCost / ServiceOutput * gdp_deflator(1975, 2005)) %>%
       select(supplysector, subsector, technology, NEcostPerService) ->
       L144.NEcost_75USDGJ_EUR # This is a final output table.
 
@@ -435,7 +423,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     # 2A Consider the standard GCAM procedure to compute it -- for bld_comm and regions not present in the EUR_hhEnergyConsum_shares
 
     # don´t want any zeros
-    A44.share_serv_fuel_adj <- A44.share_serv_fuel %>%
+    A44.share_serv_fuel_EUR_adj <- A44.share_serv_fuel_EUR %>%
       mutate(share_TFEbysector = if_else( share_TFEbysector == 0,
                                          0.001,
                                          share_TFEbysector)) %>%
@@ -443,17 +431,17 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       mutate(share_TFEbysector = share_TFEbysector / sum(share_TFEbysector)) %>%
       ungroup
 
-    # A44.share_serv_fuel reports shares of residential and commercial TFE by region
+    # A44.share_serv_fuel_EUR reports shares of residential and commercial TFE by region
     # Service share data is share of total TFE by sector, not share within each fuel
     # So, re-normalize
-    A44.share_serv_fuel_adj %>%
+    A44.share_serv_fuel_EUR_adj %>%
       # Dropping service
       group_by(region_GCAM3, sector, fuel) %>%
       summarise(fuel_share_of_TFEbysector = sum(share_TFEbysector)) %>%
       ungroup() ->
       L144.share_fuel_noS
 
-    A44.share_serv_fuel_adj %>%
+    A44.share_serv_fuel_EUR_adj %>%
       # Join fuel share data
       left_join_error_no_match(L144.share_fuel_noS, by = c("region_GCAM3", "sector", "fuel")) %>%
       # Calculate service share
@@ -479,7 +467,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     # The next sequence of steps is intended to modify service shares for countries within region_GCAM3,
     # to account for sub-regional differences in HDDCDD.
     # First, need to associate HDD and CDD with the corresponding services (heating and cooling, respectively)
-    list_supplysector <- unique(A44.internal_gains$supplysector)
+    list_supplysector <- unique(A44.internal_gains_EUR$supplysector)
 
     thermal_services <- calibrated_techs_bld_det_EUR %>%
       filter(!supplysector %in% list_supplysector) %>%
@@ -630,7 +618,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     # 2B building energy consumption for detailed Eurostat regions ##########################################################################
     # Consider the refined shares to compute it for bld_resid for regions present in the EUR_hhEnergyConsum_shares
 
-    # A44.share_serv_fuel reports shares of residential and commercial TFE by region
+    # A44.share_serv_fuel_EUR reports shares of residential and commercial TFE by region
     # Service share data is share of total TFE by sector, not share within each fuel
     # So, re-normalize
     EUR_hhEnergyConsum_shares %>%
@@ -654,7 +642,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     L144.share_serv_fuel_yesS <- bind_rows(
       L144.share_serv_fuel_yesS,
       tibble(GCAM_region_ID = unique(L144.share_serv_fuel_yesS$GCAM_region_ID),
-             service = 'resid cooking modern',
+             service = 'resid cooking modern EUR',
              sector = 'bld_resid',
              share_TFEbysector = 1,
              fuel = 'biomass',
@@ -750,37 +738,38 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
 
     # fill fuels of resid others modern and coal
     L144.in_EJ_R_bld_serv_F_Yh_EUR_residothers <- L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
-      filter(str_detect(service,'resid others coal')) %>%
+      filter(str_detect(service,'resid others coal EUR')) %>%
       complete(GCAM_region_ID = unique(iso_GCAM_regID$GCAM_region_ID),
                sector, fuel, service, year, fill = list(value = 0)) %>%
       bind_rows(L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
-                  filter(str_detect(service,'resid others modern')) %>%
+                  filter(str_detect(service,'resid others modern EUR')) %>%
                   complete(GCAM_region_ID = unique(iso_GCAM_regID$GCAM_region_ID),
                            sector, service, year, fill = list(value = 0),
-                           fuel = unique(A44.globaltech_cost_EUR %>%
-                                           filter(supplysector == 'resid others modern') %>%
+                           fuel = unique(A44.cost_efficiency_EUR %>%
+                                           filter(supplysector == 'resid others modern EUR') %>%
                                            pull(subsector) %>%
                                            unique())))
 
     # complete resid cooling to have gas and electricity, and resid heating and others with hydrogen
     L144.in_EJ_R_bld_serv_F_Yh_EUR_residcooling <- L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
-      filter(service == 'resid cooling modern') %>%
+      filter(service == 'resid cooling modern EUR') %>%
       complete(GCAM_region_ID = unique(iso_GCAM_regID$GCAM_region_ID),
                sector, fuel, service, year, fill = list(value = 1e-7))
 
     L144.in_EJ_R_bld_serv_F_Yh_EUR_residhydrogen <- L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
-      filter(service %in% c('resid heating modern','resid others modern'), fuel == 'hydrogen') %>%
+      filter(service %in% c('resid heating modern EUR','resid others modern EUR'), fuel == 'hydrogen') %>%
       complete(GCAM_region_ID = unique(iso_GCAM_regID$GCAM_region_ID),
                sector, fuel, service, year, fill = list(value = 0))
 
     L144.in_EJ_R_bld_serv_F_Yh_EUR <- bind_rows(
-      L144.in_EJ_R_bld_serv_F_Yh_EUR %>% filter(service != 'resid cooling modern' &
+      L144.in_EJ_R_bld_serv_F_Yh_EUR %>% filter(service != 'resid cooling modern EUR' &
                                                 !(sector == 'bld_resid' & fuel == 'hydrogen') &
-                                                  !str_detect(service,'resid others')),
+                                                  !str_detect(service,'resid others EUR')),
       L144.in_EJ_R_bld_serv_F_Yh_EUR_residcooling,
       L144.in_EJ_R_bld_serv_F_Yh_EUR_residhydrogen,
       L144.in_EJ_R_bld_serv_F_Yh_EUR_residothers
-    ) # This is a final output table.
+    ) %>%
+      distinct() # This is a final output table.
 
     # confirm that energy totals are the same as L142.in_EJ_R_bld_F_Yh_EUR
     L144.in_EJ_check <- L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
@@ -808,12 +797,12 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
 
   # complete resid cooling to have gas and electricity
   L144.end_use_eff_EUR_2f_residcooling <- L144.end_use_eff_EUR_2f %>%
-    filter(service == 'resid cooling modern') %>%
+    filter(service == 'resid cooling modern EUR') %>%
     complete(GCAM_region_ID = unique(iso_GCAM_regID$GCAM_region_ID),
              sector, fuel, service, year, fill = list(value_eff = 0))
 
   L144.end_use_eff_EUR_2f <- bind_rows(
-    L144.end_use_eff_EUR_2f %>% filter(service != 'resid cooling modern'),
+    L144.end_use_eff_EUR_2f %>% filter(service != 'resid cooling modern EUR'),
     L144.end_use_eff_EUR_2f_residcooling
   )
 
@@ -851,7 +840,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
   # efficiency, matching on supplysector / subsector / technology
 
   # First, create list pairing supplysector with technology, for which to filter by
-  A44.internal_gains %>%
+  A44.internal_gains_EUR %>%
     mutate(supp_tech = paste(supplysector, technology)) %>%
     pull(supp_tech) ->
     supp_tech
@@ -866,7 +855,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
   # This is for both historical and future years
   # Note that this produces a final output table.
   L144.end_use_eff_EUR_for_intgains %>%
-    left_join_error_no_match(A44.internal_gains, by = c("supplysector", "subsector", "technology")) %>%
+    left_join_error_no_match(A44.internal_gains_EUR, by = c("supplysector", "subsector", "technology")) %>%
     mutate(value = input.ratio / value) %>%
     select(GCAM_region_ID, region_GCAM3, supplysector, subsector, technology, year, value) ->
     L144.internal_gains_EUR # This is a final output table.
@@ -908,7 +897,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       add_comments("End-use tech efficiency is the product of region-specific adjustment factors, tech-specific improvement rates, and tech-specific efficiency levels") %>%
       add_legacy_name("L144.end_use_eff_EUR") %>%
       add_precursors("gcam-europe/A44.USA_TechChange_EUR", "enegrgy/calibrated_techs_bld_det_EUR", "common/iso_GCAM_regID", "energy/A44.tech_eff_mult_RG3",
-                     "energy/A_regions", "gcam-europe/A44.globaltech_eff_EUR", "common/GCAM_region_names") ->
+                     "energy/A_regions", "gcam-europe/A44.cost_efficiency_EUR", "common/GCAM_region_names") ->
       L144.end_use_eff_EUR
 
     L144.shell_eff_R_Y_EUR %>%
@@ -925,7 +914,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       add_units("EJ/yr") %>%
       add_comments("Energy consumption by service is calculated by allocating energy consumption across services using calculated service shares") %>%
       add_legacy_name("L144.in_EJ_R_bld_serv_F_Yh_EUR") %>%
-      add_precursors("energy/A_regions", "L142.in_EJ_R_bld_F_Yh_EUR", "energy/A44.share_serv_fuel", "L101.in_EJ_R_bld_Fi_Yh_EUR",
+      add_precursors("energy/A_regions", "L142.in_EJ_R_bld_F_Yh_EUR", "gcam-europe/A44.share_serv_fuel_EUR", "L101.in_EJ_R_bld_Fi_Yh_EUR",
                      "L143.HDDCDD_scen_RG3_Y", "L143.HDDCDD_scen_ctry_Y") ->
       L144.in_EJ_R_bld_serv_F_Yh_EUR
 
@@ -934,7 +923,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       add_units("1975$/GJ-service") %>%
       add_comments("Non energy cost per service is calculated using lifetime, O&M cost, installed cost, discount rate, efficiency, and other underlying variables") %>%
       add_legacy_name("L144.NEcost_75USDGJ_EUR") %>%
-      add_precursors("gcam-europe/A44.globaltech_cost_EUR") ->
+      add_precursors("gcam-europe/A44.cost_efficiency_EUR") ->
       L144.NEcost_75USDGJ_EUR
 
     L144.internal_gains_EUR %>%
@@ -945,7 +934,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       add_comments("Then divide the intgains assumptions by the efficiency, matching on supplysector / subsector / technology") %>%
       add_legacy_name("L144.internal_gains_EUR") %>%
       add_precursors("gcam-europe/A44.USA_TechChange_EUR", "gcam-europe/calibrated_techs_bld_det_EUR", "common/iso_GCAM_regID", "energy/A44.tech_eff_mult_RG3",
-                     "energy/A_regions", "gcam-europe/A44.globaltech_eff_EUR", "energy/A44.internal_gains", "common/GCAM_region_names") ->
+                     "energy/A_regions", "gcam-europe/A44.cost_efficiency_EUR", "gcam-europe/A44.internal_gains_EUR", "common/GCAM_region_names") ->
       L144.internal_gains_EUR
 
     L144.base_service_EJ_serv_EUR %>%
@@ -954,7 +943,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       add_comments("Product of energy consumption and efficiency aggregated by region, sector, service") %>%
       add_legacy_name("L144.base_service_EJ_serv_EUR") %>%
       add_precursors("gcam-europe/A44.USA_TechChange_EUR", "gcam-europe/calibrated_techs_bld_det_EUR", "common/iso_GCAM_regID", "energy/A44.tech_eff_mult_RG3",
-                     "energy/A_regions", "gcam-europe/A44.globaltech_eff_EUR", "common/GCAM_region_names") ->
+                     "energy/A_regions", "gcam-europe/A44.cost_efficiency_EUR", "common/GCAM_region_names") ->
       L144.base_service_EJ_serv_EUR
 
     L144.base_service_EJ_serv_fuel_EUR %>%
@@ -963,7 +952,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       add_comments("Product of energy consumption and efficiency aggregated by region, sector, service") %>%
       add_legacy_name("L144.base_service_EJ_serv_fuel") %>%
       add_precursors("energy/A44.USA_TechChange_EUR", "gcam-europe/calibrated_techs_bld_det_EUR", "common/iso_GCAM_regID", "energy/A44.tech_eff_mult_RG3",
-                     "energy/A_regions", "gcam-europe/A44.cost_efficiency_EUR", "common/GCAM_region_names") ->
+                     "energy/A_regions", "gcam-europe/A44.cost_efficiency_EUR", "gcam-europe/A44.cost_efficiency_EUR", "common/GCAM_region_names") ->
       L144.base_service_EJ_serv_fuel_EUR
 
     L144.prices_bld_EUR %>%
