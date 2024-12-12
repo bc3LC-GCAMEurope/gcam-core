@@ -43,6 +43,7 @@ module_gcameurope_building_det_xml <- function(command, ...) {
              "L244.GlobalTechShrwt_bld",
              "L244.GlobalTechCost_bld",
              "L244.GlobalTechTrackCapital_bld",
+             "L244.GlobalTechSCurve_bld_EUR",
              "L244.DeleteThermalService_EUR",
              "L244.Satiation_impedance_EUR",
              "L244.GenericServiceImpedance_EUR",
@@ -94,6 +95,7 @@ module_gcameurope_building_det_xml <- function(command, ...) {
     L244.GlobalTechShrwt_bld_EUR <- get_data(all_data, "L244.GlobalTechShrwt_bld_EUR")
     L244.GlobalTechCost_bld_EUR <- get_data(all_data, "L244.GlobalTechCost_bld_EUR")
     L244.GlobalTechTrackCapital_bld_EUR <- get_data(all_data, "L244.GlobalTechTrackCapital_bld_EUR")
+    L244.GlobalTechSCurve_bld_EUR <- get_data(all_data, "L244.GlobalTechSCurve_bld_EUR")
     L244.DeleteThermalService_EUR <- get_data(all_data, "L244.DeleteThermalService_EUR")
     L244.DeleteGenericService_EUR <- get_data(all_data, "L244.DeleteGenericService_EUR")
     L244.Satiation_impedance_EUR <- get_data(all_data, "L244.Satiation_impedance_EUR")
@@ -135,6 +137,7 @@ module_gcameurope_building_det_xml <- function(command, ...) {
       add_xml_data(L244.GompFnParam_EUR, "GompFnParam") %>%
       add_xml_data(L244.GenericTradFuelParams_EUR, "GenericTradFuelParams") %>%
       add_xml_data(L244.ThermalTradFuelParams_EUR, "ThermalTradFuelParams") %>%
+      add_xml_data(L244.GlobalTechSCurve_bld_EUR, "GlobalTechSCurve")  %>%
       add_xml_data(L244.GenericServicePrice_EUR, "GenericServicePrice") %>%
       add_xml_data(L244.ThermalServicePrice_EUR, "ThermalServicePrice") %>%
       add_xml_data(L244.GenericBaseDens_EUR, "GenericBaseDens") %>%

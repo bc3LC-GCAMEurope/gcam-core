@@ -1,0 +1,18 @@
+# File: A44.globaltech_retirement_EUR.csv
+# Title: Building technology retirement function (survival curve) parameters
+# Units: lifetime/half_life: years; steepness: shape parameter used by the s-curve-shutdown-decider retirement function
+# Comments: PortionSurviving(t) = 1 / ( 1 + EXP( Steepness * ( t - HalfLife ) ) )
+# Source: Internal, unpublished comparison between 2005 RECS data on building stock age, and NEMS data on annual historical equipment sales from 1990 to 2005 (unpublished, provided to JGCRI in ~2009).
+# Column types: ciinin 
+# ----------
+supplysector,lifetime,half_life_stock,steepness_stock,half_life_new,steepness_new
+resid heating modern EUR,40,20,0.1219,18,0.1886
+resid heating coal EUR,40,20,0.1219,18,0.1886
+resid cooling modern EUR,30,15,0.162,15,0.2598
+resid other appliance modern EUR,20,10,0.162,9,0.2266
+resid hot water modern EUR,20,10,0.162,9,0.2266
+resid hot water coal EUR,20,10,0.162,9,0.2266
+resid cooking modern EUR,25,13,0.1932,14,0.2752
+resid cooking coal EUR,25,13,0.1932,14,0.2752
+comm heating EUR,30,15,0.1219,15,0.1886
+comm cooling EUR,30,15,0.162,20,0.2598
