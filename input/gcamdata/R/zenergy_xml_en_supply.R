@@ -58,6 +58,7 @@ module_energy_en_supply_xml <- function(command, ...) {
 
     all_data <- list(...)[[1]]
 
+    Europe_Single_Market_Regions <- get_data(all_data, "Europe_Single_Market_Regions")
     EURO_REGIONS <- Europe_Single_Market_Regions$GCAMEU_region
 
     # Load required inputs
