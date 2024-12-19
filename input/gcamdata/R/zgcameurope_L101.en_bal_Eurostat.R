@@ -1,6 +1,6 @@
 # Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
 
-#' module_europe_L101.en_bal_Eurostat
+#' module_gcameurope_L101.en_bal_Eurostat
 #'
 #' Rename Eurostat products and flows to intermediate fuels and sectors used for constructing GCAM's fuel and sector calibration.
 #'
