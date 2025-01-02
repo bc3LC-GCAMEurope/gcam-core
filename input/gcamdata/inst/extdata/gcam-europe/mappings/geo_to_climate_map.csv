@@ -1,0 +1,36 @@
+# File: geo_to_climate_map.csv
+# Title: Mapping from geos in Eurostat energy balances to north-south climate groupings for heat-pump efficiency
+# Units: NA
+# Source: own elaboration based on geography and heat pump efficiency data from Eurostat 
+# Column types: cc
+# ----------
+geo,climate_group
+AT,middle south
+BE,middle north
+BG,middle south
+CY,south
+CZ,middle north
+DE,middle north
+DK,middle north
+EE,north
+EL,south
+ES,south
+FI,north
+FR,middle south
+HR,middle south
+HU,middle south
+IE,middle north
+IS,north
+IT,middle south
+LT,north
+LU,middle north
+LV,north
+MT,south
+NL,middle north
+NO,north
+PL,north
+PT,south
+RO,middle south
+SE,north
+SI,middle south
+SK,middle north
