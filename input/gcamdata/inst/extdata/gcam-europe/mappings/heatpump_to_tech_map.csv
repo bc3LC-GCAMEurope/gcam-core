@@ -1,9 +1,9 @@
-# File: heatpump_to_tech_map.csv,,,
-# Title: Mapping from disaggregated data on pumped ambient heat by technology to GCAM-Europe techs,,,
-# Units: NA,,,
-# Source: Eurostat ,,,
-# Column types: cccc,,,
-# ----------,,,
+# File: heatpump_to_tech_map.csv
+# Title: Mapping from disaggregated data on pumped ambient heat by technology to GCAM-Europe techs
+# Units: NA
+# Source: Eurostat 
+# Column types: cccc
+# ----------
 nrg_bal,subsector,tech,climate
 ATH_AA_EA,electricity,air-air pump,average
 ATH_AA_EC,electricity,air-air pump,cold

@@ -1,8 +1,8 @@
 # File: A44.cost_efficiency_EUR.csv
 # Title: Base costs and efficiencies of building technologies
-# Units: lifetime in years; costs in 2020���; unitless for efficiency an
+# Units: lifetime in years; costs in 2020euro; unitless for efficiency and rate
 # Comments: UEC = unit energy consumption. Before efficiency correction e.g. 60 units useful energy for heating devices
-# Column types: ccciiinnn 
+# Column types: cccniinnn 
 # ----------
 supplysector,subsector,technology,installed cost,lifetime,O&M cost,efficiency,UEC,shutdown.rate
 resid heating modern EUR,biomass,biomass,2452.095808,15,100,0.72,83.33333333,0.024
