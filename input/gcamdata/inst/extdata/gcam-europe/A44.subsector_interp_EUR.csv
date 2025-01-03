@@ -10,6 +10,7 @@ resid heating modern EUR,electricity,share-weight,final-calibration-year,end-yea
 resid heating modern EUR,gas,share-weight,final-calibration-year,end-year,,fixed
 resid heating modern EUR,refined liquids,share-weight,final-calibration-year,end-year,,fixed
 resid heating modern EUR,district heat,share-weight,final-calibration-year,end-year,,fixed
+resid heating modern EUR,water heat pump,share-weight,final-calibration-year,end-year,,fixed
 resid cooling modern EUR,electricity,share-weight,final-calibration-year,end-year,,fixed
 resid cooling modern EUR,gas,share-weight,final-calibration-year,end-year,,fixed
 resid cooking modern EUR,biomass,share-weight,final-calibration-year,end-year,,fixed
@@ -23,6 +24,7 @@ resid hot water modern EUR,electricity,share-weight,final-calibration-year,end-y
 resid hot water modern EUR,gas,share-weight,final-calibration-year,end-year,,fixed
 resid hot water modern EUR,refined liquids,share-weight,final-calibration-year,end-year,,fixed
 resid hot water modern EUR,district heat,share-weight,final-calibration-year,end-year,,fixed
+resid hot water modern EUR,renewable,share-weight,final-calibration-year,end-year,,fixed
 resid other appliance modern EUR,electricity,share-weight,final-calibration-year,end-year,,fixed
 resid others modern EUR,biomass,share-weight,final-calibration-year,end-year,,fixed
 resid others coal EUR,coal,share-weight,final-calibration-year,end-year,,fixed
@@ -35,6 +37,7 @@ comm heating EUR,electricity,share-weight,final-calibration-year,end-year,,fixed
 comm heating EUR,gas,share-weight,final-calibration-year,end-year,,fixed
 comm heating EUR,refined liquids,share-weight,final-calibration-year,end-year,,fixed
 comm heating EUR,district heat,share-weight,final-calibration-year,end-year,,fixed
+comm heating EUR,water heat pump,share-weight,final-calibration-year,end-year,,fixed
 comm cooling EUR,electricity,share-weight,final-calibration-year,end-year,,fixed
 comm cooling EUR,gas,share-weight,final-calibration-year,end-year,,fixed
 comm others EUR,biomass,share-weight,final-calibration-year,end-year,,fixed

@@ -1,7 +1,7 @@
 # File: A44.globaltech_eff_EUR.csv
 # Title: Building default technology efficiency for gcameurope
 # Units: Unitless
-# Source: Same as gcamusa A44.globaltech_eff. Heat pumps have been removed and district heat have been added, as well as some biomass and coal technologies for different supplysectors. Unpublished inputs to the NEMS model; provided by EIA. Assumptions are simliar to the 2016 Annual Energy Outlook (Table 22; https://www.eia.gov/outlooks/aeo/data/browser/#/?id=30-AEO2016&cases=ref2016~ref_no_cpp&sourcekey=0)
+# Source: Same as gcamusa A44.globaltech_eff. District heat have been added, as well as some biomass and coal technologies for different supplysectors. Unpublished inputs to the NEMS model; provided by EIA. Assumptions are simliar to the 2016 Annual Energy Outlook (Table 22; https://www.eia.gov/outlooks/aeo/data/browser/#/?id=30-AEO2016&cases=ref2016~ref_no_cpp&sourcekey=0)
 # Column types: cccccnnnnnnnnn
 # ----------
 supplysector,subsector,technology,technology_detail,minicam.energy.input,1971,2010,2015,2020,2025,2030,2035,2040,2100
@@ -14,6 +14,17 @@ resid heating modern EUR,electricity,electricity,electric furnace,elect_td_bld,0
 resid heating modern EUR,refined liquids,refined liquids,fuel furnace,refined liquids enduse,0.8,0.8,0.83,0.83,0.83,0.83,0.83,0.83,0.83
 resid heating modern EUR,refined liquids,refined liquids,fuel furnace hi-eff,refined liquids enduse,0.97,0.97,0.97,0.97,0.97,0.97,0.97,0.97,0.97
 resid heating modern EUR,district heat,district heat,district heat furnace,district heat,1,1,1,1,1,1,1,1,1
+resid heating modern EUR,electricity,resistance,electric resistance water heater,elect_td_bld,0.894,0.894,0.9,0.9,0.9,0.9,0.9,0.9,0.9
+resid heating modern EUR,electricity,air-air pump south,air-air pump south,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
+resid heating modern EUR,electricity,air-air pump middle south,air-air pump middle south,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
+resid heating modern EUR,electricity,air-air pump middle north,air-air pump middle north,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
+resid heating modern EUR,electricity,air-air pump north,air-air pump north,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
+resid heating modern EUR,water heat pump,air-water pump south,air-water pump south,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
+resid heating modern EUR,water heat pump,air-water pump middle south,air-water pump middle south,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
+resid heating modern EUR,water heat pump,air-water pump middle north,air-water pump middle north,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
+resid heating modern EUR,water heat pump,air-water pump north,air-water pump north,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
+resid heating modern EUR,water heat pump,geo-water pump,geo-water pump,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
+resid heating modern EUR,water heat pump,solar thermal,solar thermal,global solar resource,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
 resid cooling modern EUR,electricity,electricity,air conditioning,elect_td_bld,3.043,3.043,3.81,3.81,3.81,3.81,3.81,3.81,3.81
 resid cooling modern EUR,electricity,electricity,air conditioning hi-eff,elect_td_bld,7.03,7.03,7.03,7.03,7.03,7.03,7.03,7.03,7.03
 resid cooling modern EUR,gas,gas,gas air conditioning,delivered gas,0.83,0.83,0.83,0.83,0.83,0.83,0.83,0.83,0.83
@@ -26,6 +37,8 @@ resid hot water modern EUR,electricity,electricity,electric resistance water hea
 resid hot water modern EUR,refined liquids,refined liquids,fuel water heater,refined liquids enduse,0.59,0.59,0.62,0.62,0.62,0.62,0.62,0.62,0.62
 resid hot water modern EUR,refined liquids,refined liquids,fuel water heater hi-eff,refined liquids enduse,0.82,0.82,0.82,0.82,0.82,0.82,0.82,0.82,0.82
 resid hot water modern EUR,district heat,district heat,district heat water heater,district heat,1,1,1,1,1,1,1,1,1
+resid hot water modern EUR,renewable,heat pump,heat pump,elect_td_bld,0.894,0.894,0.9,0.9,0.9,0.9,0.9,0.9,0.9
+resid hot water modern EUR,renewable,solar thermal,solar thermal,global solar resource,0.894,0.894,0.9,0.9,0.9,0.9,0.9,0.9,0.9
 resid other appliance modern EUR,electricity,electricity,incandescent,elect_td_bld,4.028,4.028,5.5,5.5,5.5,5.5,5.5,5.5,5.5
 resid other appliance modern EUR,electricity,electricity,fluorescent,elect_td_bld,18.667,18.667,18.667,19.167,19.167,19.639,19.639,20.139,20.139
 resid other appliance modern EUR,electricity,electricity,solid state,elect_td_bld,12.222,12.222,25.556,43.611,49.861,56.111,56.111,56.111,56.111
@@ -51,6 +64,17 @@ comm heating EUR,electricity,electricity,electric furnace,elect_td_bld,0.98,0.98
 comm heating EUR,electricity,electricity,electric heat pump,elect_td_bld,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3
 comm heating EUR,refined liquids,refined liquids,fuel furnace,refined liquids enduse,0.785,0.785,0.795,0.795,0.795,0.795,0.795,0.795,0.795
 comm heating EUR,district heat,district heat,district heat furnace,district heat,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9
+comm heating EUR,electricity,resistance,electric resistance water heater,elect_td_bld,0.894,0.894,0.9,0.9,0.9,0.9,0.9,0.9,0.9
+comm heating EUR,electricity,air-air pump south,air-air pump south,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
+comm heating EUR,electricity,air-air pump middle south,air-air pump middle south,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
+comm heating EUR,electricity,air-air pump middle north,air-air pump middle north,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
+comm heating EUR,electricity,air-air pump north,air-air pump north,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
+comm heating EUR,water heat pump,air-water pump south,air-water pump south,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
+comm heating EUR,water heat pump,air-water pump middle south,air-water pump middle south,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
+comm heating EUR,water heat pump,air-water pump middle north,air-water pump middle north,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
+comm heating EUR,water heat pump,air-water pump north,air-water pump north,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
+comm heating EUR,water heat pump,geo-water pump,geo-water pump,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
+comm heating EUR,water heat pump,solar thermal,solar thermal,global solar resource,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
 comm cooling EUR,gas,gas,gas cooling,delivered gas,0.866,0.866,0.951,0.977,1.005,1.03,1.052,1.073,1.1
 comm cooling EUR,electricity,electricity,air conditioning,elect_td_bld,2.872,2.872,3.224,3.224,3.224,3.224,3.224,3.224,3.224
 comm cooling EUR,electricity,electricity,air conditioning hi-eff,elect_td_bld,5.803,5.803,5.803,6.064,6.064,6.28,6.28,6.28,6.28

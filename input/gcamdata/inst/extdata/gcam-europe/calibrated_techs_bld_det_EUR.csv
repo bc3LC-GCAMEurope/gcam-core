@@ -10,6 +10,16 @@ bld_resid,electricity,resid heating modern EUR,resid heating modern EUR,electric
 bld_resid,gas,resid heating modern EUR,resid heating modern EUR,gas,gas,delivered gas,resid EUR,resid EUR,resid_building
 bld_resid,refined liquids,resid heating modern EUR,resid heating modern EUR,refined liquids,refined liquids,refined liquids enduse,resid EUR,resid EUR,resid_building
 bld_resid,heat,resid heating modern EUR,resid heating modern EUR,district heat,district heat,district heat,resid EUR,resid EUR,resid_building
+bld_resid,electricity,resid heating modern EUR,resid heating modern EUR,electricity,resistance,elect_td_bld,resid EUR,resid EUR,resid_building
+bld_resid,electricity,resid heating modern EUR,resid heating modern EUR,electricity,air-air pump south,elect_td_bld,resid EUR,resid EUR,resid_building
+bld_resid,electricity,resid heating modern EUR,resid heating modern EUR,electricity,air-air pump middle south,elect_td_bld,resid EUR,resid EUR,resid_building
+bld_resid,electricity,resid heating modern EUR,resid heating modern EUR,electricity,air-air pump middle north,elect_td_bld,resid EUR,resid EUR,resid_building
+bld_resid,electricity,resid heating modern EUR,resid heating modern EUR,electricity,air-air pump north,elect_td_bld,resid EUR,resid EUR,resid_building
+bld_resid,electricity,resid heating modern EUR,resid heating modern EUR,water heat pump,air-water pump south,elect_td_bld,resid EUR,resid EUR,resid_building
+bld_resid,electricity,resid heating modern EUR,resid heating modern EUR,water heat pump,air-water pump middle south,elect_td_bld,resid EUR,resid EUR,resid_building
+bld_resid,electricity,resid heating modern EUR,resid heating modern EUR,water heat pump,air-water pump middle north,elect_td_bld,resid EUR,resid EUR,resid_building
+bld_resid,electricity,resid heating modern EUR,resid heating modern EUR,water heat pump,air-water pump north,elect_td_bld,resid EUR,resid EUR,resid_building
+bld_resid,global solar resource,resid heating modern EUR,resid heating modern EUR,water heat pump,solar thermal,global solar resource,resid EUR,resid EUR,resid_building
 bld_resid,electricity,resid cooling modern EUR,resid cooling modern EUR,electricity,electricity,elect_td_bld,resid EUR,resid EUR,resid_building
 bld_resid,gas,resid cooling modern EUR,resid cooling modern EUR,gas,gas,delivered gas,resid EUR,resid EUR,resid_building
 bld_resid,biomass,resid cooking modern EUR,resid cooking modern EUR,biomass,biomass,delivered biomass,resid EUR,resid EUR,resid_building
@@ -23,6 +33,8 @@ bld_resid,electricity,resid hot water modern EUR,resid hot water modern EUR,elec
 bld_resid,gas,resid hot water modern EUR,resid hot water modern EUR,gas,gas,delivered gas,resid EUR,resid EUR,resid_building
 bld_resid,refined liquids,resid hot water modern EUR,resid hot water modern EUR,refined liquids,refined liquids,refined liquids enduse,resid EUR,resid EUR,resid_building
 bld_resid,heat,resid hot water modern EUR,resid hot water modern EUR,district heat,district heat,district heat,resid EUR,resid EUR,resid_building
+bld_resid,electricity,resid hot water modern EUR,resid hot water modern EUR,renewable,heat pump,elect_td_bld,resid EUR,resid EUR,resid_building
+bld_resid,global solar resource,resid hot water modern EUR,resid hot water modern EUR,renewable,solar thermal,global solar resource,resid EUR,resid EUR,resid_building
 bld_resid,electricity,resid other appliance modern EUR,resid other appliance modern EUR,electricity,electricity,elect_td_bld,resid EUR,resid EUR,resid_building
 bld_resid,biomass,resid others modern EUR,resid others modern EUR,biomass,biomass,delivered biomass,resid EUR,resid EUR,resid_building
 bld_resid,coal,resid others coal EUR,resid others coal EUR,coal,coal,delivered coal,resid EUR,resid EUR,resid_building
@@ -35,6 +47,16 @@ bld_comm,electricity,comm heating EUR,comm heating EUR,electricity,electricity,e
 bld_comm,gas,comm heating EUR,comm heating EUR,gas,gas,delivered gas,comm EUR,comm EUR,comm_building
 bld_comm,refined liquids,comm heating EUR,comm heating EUR,refined liquids,refined liquids,refined liquids enduse,comm EUR,comm EUR,comm_building
 bld_comm,heat,comm heating EUR,comm heating EUR,district heat,district heat,district heat,comm EUR,comm EUR,comm_building
+bld_comm,electricity,comm heating EUR,comm heating EUR,electricity,resistance,elect_td_bld,comm EUR,comm EUR,comm_building
+bld_comm,electricity,comm heating EUR,comm heating EUR,electricity,air-air pump south,elect_td_bld,comm EUR,comm EUR,comm_building
+bld_comm,electricity,comm heating EUR,comm heating EUR,electricity,air-air pump middle south,elect_td_bld,comm EUR,comm EUR,comm_building
+bld_comm,electricity,comm heating EUR,comm heating EUR,electricity,air-air pump middle north,elect_td_bld,comm EUR,comm EUR,comm_building
+bld_comm,electricity,comm heating EUR,comm heating EUR,electricity,air-air pump north,elect_td_bld,comm EUR,comm EUR,comm_building
+bld_comm,electricity,comm heating EUR,comm heating EUR,water heat pump,air-water pump south,elect_td_bld,comm EUR,comm EUR,comm_building
+bld_comm,electricity,comm heating EUR,comm heating EUR,water heat pump,air-water pump middle south,elect_td_bld,comm EUR,comm EUR,comm_building
+bld_comm,electricity,comm heating EUR,comm heating EUR,water heat pump,air-water pump middle north,elect_td_bld,comm EUR,comm EUR,comm_building
+bld_comm,electricity,comm heating EUR,comm heating EUR,water heat pump,air-water pump north,elect_td_bld,comm EUR,comm EUR,comm_building
+bld_comm,global solar resource,comm heating EUR,comm heating EUR,water heat pump,solar thermal,global solar resource,comm EUR,comm EUR,comm_building
 bld_comm,electricity,comm cooling EUR,comm cooling EUR,electricity,electricity,elect_td_bld,comm EUR,comm EUR,comm_building
 bld_comm,gas,comm cooling EUR,comm cooling EUR,gas,gas,delivered gas,comm EUR,comm EUR,comm_building
 bld_comm,biomass,comm others EUR,comm others EUR,biomass,biomass,delivered biomass,comm EUR,comm EUR,comm_building

@@ -10,6 +10,17 @@ resid heating modern EUR,electricity,electricity,1,1,1,1,1
 resid heating modern EUR,gas,gas,1,1,1,1,1
 resid heating modern EUR,refined liquids,refined liquids,1,1,1,1,1
 resid heating modern EUR,district heat,district heat,1,1,1,1,1
+resid heating modern EUR,electricity,resistance,1,1,1,1,1
+resid heating modern EUR,electricity,air-air pump south,1,1,1,1,1
+resid heating modern EUR,electricity,air-air pump middle south,1,1,1,1,1
+resid heating modern EUR,electricity,air-air pump middle north,1,1,1,1,1
+resid heating modern EUR,electricity,air-air pump north,1,1,1,1,1
+resid heating modern EUR,water heat pump,air-water pump south,1,1,1,1,1
+resid heating modern EUR,water heat pump,air-water pump middle south,1,1,1,1,1
+resid heating modern EUR,water heat pump,air-water pump middle north,1,1,1,1,1
+resid heating modern EUR,water heat pump,air-water pump north,1,1,1,1,1
+resid heating modern EUR,water heat pump,geo-water pump,1,1,1,1,1
+resid heating modern EUR,water heat pump,solar thermal,1,1,1,1,1
 resid cooling modern EUR,electricity,electricity,1,1,1,1,1
 resid cooling modern EUR,gas,gas,1,1,1,1,1
 resid cooking modern EUR,biomass,biomass,1,1,1,1,1
@@ -24,6 +35,8 @@ resid hot water modern EUR,electricity,electricity,1,1,1,1,1
 resid hot water modern EUR,gas,gas,1,1,1,1,1
 resid hot water modern EUR,refined liquids,refined liquids,1,1,1,1,1
 resid hot water modern EUR,district heat,district heat,1,1,1,1,1
+resid hot water modern EUR,renewable,heat pump,1,1,1,1,1
+resid hot water modern EUR,renewable,solar thermal,1,1,1,1,1
 resid others modern EUR,biomass,biomass,1,1,1,1,1
 resid others coal EUR,coal,coal,1,1,1,1,1
 resid others modern EUR,electricity,electricity,1,1,1,1,1
@@ -35,6 +48,17 @@ comm heating EUR,electricity,electricity,1,1,1,1,1
 comm heating EUR,gas,gas,1,1,1,1,1
 comm heating EUR,refined liquids,refined liquids,1,1,1,1,1
 comm heating EUR,district heat,district heat,1,1,1,1,1
+comm heating EUR,electricity,resistance,1,1,1,1,1
+comm heating EUR,electricity,air-air pump south,1,1,1,1,1
+comm heating EUR,electricity,air-air pump middle south,1,1,1,1,1
+comm heating EUR,electricity,air-air pump middle north,1,1,1,1,1
+comm heating EUR,electricity,air-air pump north,1,1,1,1,1
+comm heating EUR,water heat pump,air-water pump south,1,1,1,1,1
+comm heating EUR,water heat pump,air-water pump middle south,1,1,1,1,1
+comm heating EUR,water heat pump,air-water pump middle north,1,1,1,1,1
+comm heating EUR,water heat pump,air-water pump north,1,1,1,1,1
+comm heating EUR,water heat pump,geo-water pump,1,1,1,1,1
+comm heating EUR,water heat pump,solar thermal,1,1,1,1,1
 comm cooling EUR,electricity,electricity,1,1,1,1,1
 comm cooling EUR,gas,gas,1,1,1,1,1
 comm others EUR,biomass,biomass,1,1,1,1,1

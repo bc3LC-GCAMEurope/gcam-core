@@ -1,7 +1,7 @@
 # File: A44.globaltech_cost_EUR.csv
 # Title: Building technology costs per service for gcameurope
 # Units: 1975$/GJ
-# Source: Same as gcamusa A44.globaltech_eff. Heat pumps have been removed and district heat have been added, as well as some biomass and coal technologies for different supplysectors. Unpublished inputs to the NEMS model, as well as some biomass and coal technologies for different supplysectors. Unpublished inputs to the NEMS model
+# Source: Same as gcamusa A44.globaltech_eff. District heat have been added, as well as some biomass and coal technologies for different supplysectors. Unpublished inputs to the NEMS model, as well as some biomass and coal technologies for different supplysectors. Unpublished inputs to the NEMS model
 # Column types: cccn
 # ----------
 supplysector,subsector,technology,NEcostPerService
@@ -12,6 +12,17 @@ resid heating modern EUR,gas,hydrogen,1.4809598
 resid heating modern EUR,electricity,electricity,1.2951476
 resid heating modern EUR,refined liquids,refined liquids,1.8423003
 resid heating modern EUR,district heat,district heat,0.6710238
+resid heating modern EUR,electricity,resistance,1.5
+resid heating modern EUR,electricity,air-air pump south,1.5
+resid heating modern EUR,electricity,air-air pump middle south,1.5
+resid heating modern EUR,electricity,air-air pump middle north,1.5
+resid heating modern EUR,electricity,air-air pump north,1.5
+resid heating modern EUR,water heat pump,air-water pump south,1.5
+resid heating modern EUR,water heat pump,air-water pump middle south,1.5
+resid heating modern EUR,water heat pump,air-water pump middle north,1.5
+resid heating modern EUR,water heat pump,air-water pump north,1.5
+resid heating modern EUR,water heat pump,geo-water pump,1.5
+resid heating modern EUR,water heat pump,solar thermal,1.5
 resid cooling modern EUR,electricity,electricity,6.712409
 resid cooling modern EUR,gas,gas,11.242246
 resid hot water modern EUR,biomass,biomass,0.9417305
@@ -20,6 +31,8 @@ resid hot water modern EUR,gas,gas,1.3739374
 resid hot water modern EUR,electricity,electricity,5.502
 resid hot water modern EUR,refined liquids,refined liquids,9.879
 resid hot water modern EUR,district heat,district heat,1.2951476
+resid hot water modern EUR,renewable,heat pump,1.5
+resid hot water modern EUR,renewable,solar thermal,1.5
 resid other appliance modern EUR,electricity,electricity,1.2951476
 resid cooking modern EUR,biomass,biomass,0.9417305
 resid cooking coal EUR,coal,coal,0.9417305
@@ -39,6 +52,17 @@ comm heating EUR,gas,hydrogen,1.6483274
 comm heating EUR,electricity,electricity,1.2799009
 comm heating EUR,refined liquids,refined liquids,1.7065345
 comm heating EUR,district heat,district heat,0.5793888
+comm heating EUR,electricity,resistance,1.5
+comm heating EUR,electricity,air-air pump south,1.5
+comm heating EUR,electricity,air-air pump middle south,1.5
+comm heating EUR,electricity,air-air pump middle north,1.5
+comm heating EUR,electricity,air-air pump north,1.5
+comm heating EUR,water heat pump,air-water pump south,1.5
+comm heating EUR,water heat pump,air-water pump middle south,1.5
+comm heating EUR,water heat pump,air-water pump middle north,1.5
+comm heating EUR,water heat pump,air-water pump north,1.5
+comm heating EUR,water heat pump,geo-water pump,1.5
+comm heating EUR,water heat pump,solar thermal,1.5
 comm cooling EUR,gas,gas,2.629955
 comm cooling EUR,electricity,electricity,4.949514
 comm others EUR,biomass,biomass,3.200354
