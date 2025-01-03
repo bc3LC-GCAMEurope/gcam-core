@@ -5,7 +5,9 @@
 # Column types: cc
 # ----------
 geo,climate_group
+AL,south
 AT,middle south
+BA,middle south
 BE,middle north
 BG,middle south
 CY,south
@@ -17,6 +19,7 @@ EL,south
 ES,south
 FI,north
 FR,middle south
+GE,south
 HR,middle south
 HU,middle south
 IE,middle north
@@ -25,12 +28,19 @@ IT,middle south
 LT,north
 LU,middle north
 LV,north
+MD,middle south
+ME,south
+MK,south
 MT,south
 NL,middle north
 NO,north
 PL,north
 PT,south
 RO,middle south
+RS,middle south
 SE,north
 SI,middle south
 SK,middle north
+TR,south
+UK,middle north
+XK,middle south
