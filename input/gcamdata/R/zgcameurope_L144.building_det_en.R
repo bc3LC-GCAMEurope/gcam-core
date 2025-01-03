@@ -385,7 +385,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       pull(regions_NoDistHeat)
 
     # Note that this produces a final output table.
-    L144.end_use_eff_EUR <-  L144.end_use_eff_EUR_Index %>%
+    L144.end_use_eff_EUR <- L144.end_use_eff_EUR_Index %>%
       # Join efficiency values (by sector and technology)
       left_join_error_no_match(A44.cost_efficiency_EUR, by = c("supplysector", "subsector", "technology")) %>%
       # Multiply by efficiency values
