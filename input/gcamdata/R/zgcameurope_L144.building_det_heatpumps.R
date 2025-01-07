@@ -42,7 +42,7 @@ module_gcameurope_L144.building_det_heatpumps <- function(command, ...) {
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
 
 
-    # Compute ctry specific ambient heat given by Eurostat
+    # Compute ctry specific ambient heat given by Eurostat - not considering 'solar thermal'
     L144.ambient_heat <- estat_nrg_ind_ahbtc_filtered_en %>%
       select(-OBS_FLAG) %>%
       left_join_error_no_match(heatpump_to_tech_map, by = c('hp_tech' = 'nrg_bal')) %>%
@@ -68,29 +68,26 @@ module_gcameurope_L144.building_det_heatpumps <- function(command, ...) {
 
     # Assuming we divide equally the energy consumption among all technologies (non heat pumps),
     # reduce the heating energy consumption, and if necessary, the cooking energy consumption
-    L144.in_EJ_R_bld_serv_heat_F_Yh_EUR <- L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
-      filter(fuel == 'heat') %>%
-      group_by(GCAM_region_ID, sector, fuel, year) %>%
-      mutate(n_elem = n()) %>%
-      ungroup() %>%
+    L144.in_EJ_R_bld_serv_elec_F_Yh_EUR <- L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
+      filter(fuel == 'electricity') %>%
       left_join(L144.en_used %>%
-                  group_by(GCAM_region_ID, year) %>%
+                  group_by(GCAM_region_ID, year, service = supplysector) %>%
                   summarise(value = sum(value)) %>%
                   ungroup(),
-                by = c('GCAM_region_ID','year')) %>%
+                by = c('GCAM_region_ID','year','service')) %>%
       # divide equally the heat pump energy among the technologies
-      mutate(value.y = if_else(is.na(value.y), 0, value.y / n_elem)) %>%
+      mutate(value.y = if_else(is.na(value.y), 0, value.y)) %>%
       mutate(value = value.x - value.y) %>%
       # if heat pumps energy is > than consumed heat, we reduce the remaining energy from cooking
       mutate(adj_cooking = if_else(value < 0, value, 0),
              value = if_else(value < 0, 0, value)) %>%
-      select(-value.x, -value.y, -n_elem)
+      select(-value.x, -value.y)
 
     L144.in_EJ_R_bld_serv_complete_F_Yh_EUR <-
       bind_rows(L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
-                  filter(fuel != 'heat') %>%
+                  filter(fuel != 'electricity') %>%
                   mutate(adj_cooking = 0),
-                L144.in_EJ_R_bld_serv_heat_F_Yh_EUR) %>%
+                L144.in_EJ_R_bld_serv_elec_F_Yh_EUR) %>%
       mutate(value = if_else(service == 'resid cooking modern EUR',
                              value + adj_cooking, value)) %>% # adj_cooking is already negative
       select(-adj_cooking)
