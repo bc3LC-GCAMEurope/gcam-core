@@ -18,8 +18,13 @@
 module_gcameurope_L144.building_det_en <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/GCAM_region_names",
+             FILE = "common/GCAM32_to_EU",
              FILE = "common/iso_GCAM_regID",
              FILE = "energy/A_regions",
+             FILE = "gcam-europe/estat_nrg_ind_ahbtc_filtered_en",
+             FILE = "gcam-europe/mappings/geo_to_climate_map",
+             FILE = "gcam-europe/mappings/geo_to_iso_map",
+             FILE = "gcam-europe/mappings/heatpump_to_tech_map",
              FILE = "gcam-europe/calibrated_techs_bld_det_EUR",
              FILE = "gcam-europe/A44.cost_efficiency_EUR",
              FILE = "gcam-europe/A44.internal_gains_EUR",
@@ -734,14 +739,14 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       filter(!regions_fuel %in% regions_noheat,
              sector_fuel != "bld_comm traditional biomass") %>%  # Note that the number of rows didn't decrease
       select(GCAM_region_ID, sector, fuel, service, year, value) ->
-      L144.in_EJ_R_bld_serv_F_Yh_EUR
+      L144.in_EJ_R_bld_serv_F_Yh_EUR_pre
 
     # fill fuels of resid others modern and coal
-    L144.in_EJ_R_bld_serv_F_Yh_EUR_residothers <- L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
+    L144.in_EJ_R_bld_serv_F_Yh_EUR_residothers <- L144.in_EJ_R_bld_serv_F_Yh_EUR_pre %>%
       filter(str_detect(service,'resid others coal EUR')) %>%
       complete(GCAM_region_ID = unique(iso_GCAM_regID$GCAM_region_ID),
                sector, fuel, service, year, fill = list(value = 0)) %>%
-      bind_rows(L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
+      bind_rows(L144.in_EJ_R_bld_serv_F_Yh_EUR_pre %>%
                   filter(str_detect(service,'resid others modern EUR')) %>%
                   complete(GCAM_region_ID = unique(iso_GCAM_regID$GCAM_region_ID),
                            sector, service, year, fill = list(value = 0),
@@ -751,25 +756,76 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
                                            unique())))
 
     # complete resid cooling to have gas and electricity, and resid heating and others with hydrogen
-    L144.in_EJ_R_bld_serv_F_Yh_EUR_residcooling <- L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
+    L144.in_EJ_R_bld_serv_F_Yh_EUR_residcooling <- L144.in_EJ_R_bld_serv_F_Yh_EUR_pre %>%
       filter(service == 'resid cooling modern EUR') %>%
       complete(GCAM_region_ID = unique(iso_GCAM_regID$GCAM_region_ID),
                sector, fuel, service, year, fill = list(value = 1e-7))
 
-    L144.in_EJ_R_bld_serv_F_Yh_EUR_residhydrogen <- L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
+    L144.in_EJ_R_bld_serv_F_Yh_EUR_residhydrogen <- L144.in_EJ_R_bld_serv_F_Yh_EUR_pre %>%
       filter(service %in% c('resid heating modern EUR','resid others modern EUR'), fuel == 'hydrogen') %>%
       complete(GCAM_region_ID = unique(iso_GCAM_regID$GCAM_region_ID),
                sector, fuel, service, year, fill = list(value = 0))
 
-    L144.in_EJ_R_bld_serv_F_Yh_EUR <- bind_rows(
-      L144.in_EJ_R_bld_serv_F_Yh_EUR %>% filter(service != 'resid cooling modern EUR' &
+    L144.in_EJ_R_bld_serv_F_Yh_EUR_pre <- bind_rows(
+      L144.in_EJ_R_bld_serv_F_Yh_EUR_pre %>% filter(service != 'resid cooling modern EUR' &
                                                 !(sector == 'bld_resid' & fuel == 'hydrogen') &
                                                   !str_detect(service,'resid others EUR')),
       L144.in_EJ_R_bld_serv_F_Yh_EUR_residcooling,
       L144.in_EJ_R_bld_serv_F_Yh_EUR_residhydrogen,
       L144.in_EJ_R_bld_serv_F_Yh_EUR_residothers
     ) %>%
-      distinct() # This is a final output table.
+      distinct()
+
+    # CONSIDER HEAT PUMPS
+    # Compute ctry specific ambient heat given by Eurostat - not considering 'solar thermal'
+    L144.ambient_heat <- estat_nrg_ind_ahbtc_filtered_en %>%
+      select(-OBS_FLAG) %>%
+      left_join_error_no_match(heatpump_to_tech_map, by = c('hp_tech' = 'nrg_bal')) %>%
+      filter(nchar(geo) == 2) %>%
+      left_join_error_no_match(geo_to_climate_map, by = c('geo')) %>%
+      # delete Georgia (non EUR region)
+      filter(geo != 'GE') %>%
+      mutate(technology = if_else(tech != 'geo-water pump', paste(tech, climate_group), tech)) %>%
+      group_by(unit, geo, year = TIME_PERIOD, value = OBS_VALUE, subsector, technology) %>%
+      summarise(value = sum(value)) %>%
+      ungroup()
+
+    # Compute energy used by tech: en_used * efficiency = ambient_heat
+    L144.en_used <- L144.ambient_heat %>%
+      left_join(A44.cost_efficiency_EUR, by = c('subsector','technology'), relationship = "many-to-many") %>%
+      # from GWH to EJ/yr
+      mutate(en = (value / efficiency)  * 3.6e-6) %>%
+      left_join_error_no_match(geo_to_iso_map, by = 'geo') %>%
+      left_join_error_no_match(GCAM32_to_EU %>%
+                                 filter(GCAMEU_region != GCAM32_region),
+                               by = 'iso') %>%
+      select(supplysector, subsector, technology, value = en, GCAM_region_ID, year)
+
+    # Assuming we divide equally the energy consumption among all technologies (non heat pumps),
+    # reduce the heating energy consumption, and if necessary, the cooking energy consumption
+    L144.in_EJ_R_bld_serv_elec_F_Yh_EUR <- L144.in_EJ_R_bld_serv_F_Yh_EUR_pre %>%
+      filter(fuel == 'electricity') %>%
+      left_join(L144.en_used %>%
+                  group_by(GCAM_region_ID, year, service = supplysector) %>%
+                  summarise(value = sum(value)) %>%
+                  ungroup(),
+                by = c('GCAM_region_ID','year','service')) %>%
+      # divide equally the heat pump energy among the technologies
+      mutate(value.y = if_else(is.na(value.y), 0, value.y)) %>%
+      mutate(value = value.x - value.y) %>%
+      # if heat pumps energy is > than consumed heat, we reduce the remaining energy from cooking
+      mutate(adj_cooking = if_else(value < 0, value, 0),
+             value = if_else(value < 0, 0, value)) %>%
+      select(-value.x, -value.y)
+
+    L144.in_EJ_R_bld_serv_F_Yh_EUR <-
+      bind_rows(L144.in_EJ_R_bld_serv_F_Yh_EUR_pre %>%
+                  filter(fuel != 'electricity') %>%
+                  mutate(adj_cooking = 0),
+                L144.in_EJ_R_bld_serv_elec_F_Yh_EUR) %>%
+      mutate(value = if_else(service == 'resid cooking modern EUR',
+                             value + adj_cooking, value)) %>% # adj_cooking is already negative
+      select(-adj_cooking) # This is a final output table.
 
     # confirm that energy totals are the same as L142.in_EJ_R_bld_F_Yh_EUR
     L144.in_EJ_check <- L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
@@ -792,7 +848,9 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
   L144.end_use_eff_EUR %>%
     filter(year %in% HISTORICAL_YEARS) %>%
     left_join_error_no_match(calibrated_techs_bld_det_EUR, by = c("supplysector", "subsector", "technology")) %>%
-    select(GCAM_region_ID, sector, fuel, service, year, value_eff = value) ->
+    group_by(GCAM_region_ID, sector, fuel, service, year) %>%
+    summarise(value_eff = sum(value)) %>%
+    ungroup() ->
     L144.end_use_eff_EUR_2f
 
   # complete resid cooling to have gas and electricity

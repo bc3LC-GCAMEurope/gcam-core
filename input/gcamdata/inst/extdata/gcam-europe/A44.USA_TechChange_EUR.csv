@@ -11,6 +11,13 @@ resid heating modern EUR,electricity,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0
 resid heating modern EUR,gas,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002
 resid heating modern EUR,refined liquids,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 resid heating modern EUR,district heat,0,0,0,0,0,0,0,0,0,0
+resid heating modern EUR,resistance,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
+resid heating modern EUR,air-air pump south,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
+resid heating modern EUR,air-air pump middle south,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
+resid heating modern EUR,air-air pump middle north,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
+resid heating modern EUR,air-air pump north,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
+resid heating modern EUR,geo-water pump,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
+resid heating modern EUR,solar thermal,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 resid cooling modern EUR,electricity,0.006,0.006,0.006,0.006,0.006,0.006,0.006,0.006,0.006,0.006
 resid cooling modern EUR,gas,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002
 resid cooking modern EUR,biomass,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
@@ -25,6 +32,8 @@ resid hot water modern EUR,electricity,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 resid hot water modern EUR,gas,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002
 resid hot water modern EUR,refined liquids,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 resid hot water modern EUR,district heat,0,0,0,0,0,0,0,0,0,0
+resid hot water modern EUR,heat pump,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
+resid hot water modern EUR,solar thermal,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 resid other appliance modern EUR,electricity,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 resid others modern EUR,biomass,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 resid others coal EUR,coal,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
@@ -39,6 +48,13 @@ comm heating EUR,electricity,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.0
 comm heating EUR,gas,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002
 comm heating EUR,refined liquids,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 comm heating EUR,district heat,0,0,0,0,0,0,0,0,0,0
+comm heating EUR,resistance,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
+comm heating EUR,air-air pump south,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
+comm heating EUR,air-air pump middle south,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
+comm heating EUR,air-air pump middle north,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
+comm heating EUR,air-air pump north,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
+comm heating EUR,geo-water pump,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
+comm heating EUR,solar thermal,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 comm cooling EUR,electricity,0.006,0.006,0.006,0.006,0.006,0.006,0.006,0.006,0.006,0.006
 comm cooling EUR,gas,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002
 comm others EUR,biomass,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
