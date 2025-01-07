@@ -58,7 +58,12 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     # Load required inputs
     GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>% filter_regions_europe()
     iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID") %>% filter_regions_europe()
+    GCAM32_to_EU <- get_data(all_data, "common/GCAM32_to_EU") %>% filter_regions_europe()
     A_regions <- get_data(all_data, "energy/A_regions") %>% filter_regions_europe()
+    estat_nrg_ind_ahbtc_filtered_en <- get_data(all_data, "gcam-europe/estat_nrg_ind_ahbtc_filtered_en")
+    geo_to_climate_map <- get_data(all_data, "gcam-europe/mappings/geo_to_climate_map")
+    geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map")
+    heatpump_to_tech_map <- get_data(all_data, "gcam-europe/mappings/heatpump_to_tech_map")
     calibrated_techs_bld_det_EUR <- get_data(all_data, "gcam-europe/calibrated_techs_bld_det_EUR")
     A44.cost_efficiency_EUR <- get_data(all_data, "gcam-europe/A44.cost_efficiency_EUR", strip_attributes = TRUE)
     A44.internal_gains_EUR <- get_data(all_data, "gcam-europe/A44.internal_gains_EUR")
@@ -814,18 +819,35 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       mutate(value.y = if_else(is.na(value.y), 0, value.y)) %>%
       mutate(value = value.x - value.y) %>%
       # if heat pumps energy is > than consumed heat, we reduce the remaining energy from cooking
-      mutate(adj_cooking = if_else(value < 0, value, 0),
-             value = if_else(value < 0, 0, value)) %>%
+      mutate(adj_value = if_else(value < 0 & value.y != 0, value, 0),
+             value = if_else(value < 0 & value.x > 0, 0, value)) %>%
+      # adjust the adj_value value to all services by group
+      group_by(GCAM_region_ID, sector, fuel, year) %>%
+      mutate(adj_value = min(adj_value)) %>%
+      ungroup() %>%
       select(-value.x, -value.y)
 
     L144.in_EJ_R_bld_serv_F_Yh_EUR <-
-      bind_rows(L144.in_EJ_R_bld_serv_F_Yh_EUR_pre %>%
-                  filter(fuel != 'electricity') %>%
-                  mutate(adj_cooking = 0),
-                L144.in_EJ_R_bld_serv_elec_F_Yh_EUR) %>%
-      mutate(value = if_else(service == 'resid cooking modern EUR',
-                             value + adj_cooking, value)) %>% # adj_cooking is already negative
-      select(-adj_cooking) # This is a final output table.
+      bind_rows(
+        # non-electricity bld_serv
+        L144.in_EJ_R_bld_serv_F_Yh_EUR_pre %>%
+          filter(fuel != 'electricity') %>%
+          mutate(adj_value = 0),
+        # adjusted bld_serv
+        L144.in_EJ_R_bld_serv_elec_F_Yh_EUR,
+        # heat pumps
+        L144.en_used %>%
+          mutate(adj_value = 0,
+                 fuel = 'electricity',
+                 sector = if_else(grepl('resid',supplysector), 'bld_resid', 'bld_comm')) %>%
+          group_by(GCAM_region_ID, sector, fuel, service = supplysector, year, adj_value) %>%
+          summarise(value = sum(value)) %>%
+          ungroup()) %>%
+      mutate(value = if_else(service == 'resid cooking modern EUR', value + adj_value, value)) %>% # adj_value is already negative
+      mutate(value = if_else(service == 'comm others EUR', value + adj_value, value)) %>% # adj_value is already negative
+      select(-adj_value) %>%
+      # select historical years
+      filter(year <= MODEL_FINAL_BASE_YEAR) # This is a final output table.
 
     # confirm that energy totals are the same as L142.in_EJ_R_bld_F_Yh_EUR
     L144.in_EJ_check <- L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
