@@ -143,7 +143,8 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
     #Process data for international shipping to disaggregate to the GCAM regions
     L112.CEDS_intl_shipping %>%
       right_join(Int_shipping_IEA_EIA %>% select(iso,year,value) %>%
-                   filter(year >= min(HISTORICAL_YEARS), year <= max(HISTORICAL_YEARS)), by=c("year")) %>%
+                   filter(year >= min(HISTORICAL_YEARS), year <= max(HISTORICAL_YEARS)), by=c("year"),
+                 relationship = "many-to-many") %>%
       mutate(emissions=if_else(is.na(emissions),0,emissions)) %>%
       group_by(Non.CO2,year,sector,fuel) %>%
       mutate(share_in_global_ship= value/sum(value)) %>%
@@ -580,7 +581,8 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
 
     # Splits energy balances out for industry sector and maps to final GCAM sectors
     L101.in_EJ_R_en_Si_F_Yh_EUR %>%
-      left_join(calibrated_techs %>% bind_rows(calibrated_outresources) %>% select(-secondary.output), by = c("sector", "fuel", "technology")) %>%
+      left_join(calibrated_techs %>% bind_rows(calibrated_outresources) %>% select(-secondary.output),
+                by = c("sector", "fuel", "technology"), relationship = "many-to-many") %>%
       # Replace subsector with fuel to preserve both in dataframe. Subsector will be added back later in L201
       mutate(subsector = if_else(sector == "iron and steel", fuel, subsector)) %>%
       rename(stub.technology = technology) %>%
@@ -593,7 +595,8 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
       left_join(calibrated_techs_bld_det_EUR %>%
                   select(sector, fuel, service, supplysector, subsector, technology) %>%
                   rename(stub.technology = technology),
-                by = c("sector" = "service", "fuel")) %>%
+                by = c("sector" = "service", "fuel"),
+                relationship = "many-to-many") %>%
       na.omit() %>%
       select(GCAM_region_ID, year, energy, supplysector, subsector, stub.technology) ->
       L112.in_EJ_R_en_S_F_Yh_calib_bld

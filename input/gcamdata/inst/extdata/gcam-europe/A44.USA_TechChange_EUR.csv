@@ -16,6 +16,10 @@ resid heating modern EUR,air-air pump south,0.001,0.001,0.001,0.001,0.001,0.001,
 resid heating modern EUR,air-air pump middle south,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 resid heating modern EUR,air-air pump middle north,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 resid heating modern EUR,air-air pump north,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
+resid heating modern EUR,air-water pump south,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
+resid heating modern EUR,air-water pump middle south,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
+resid heating modern EUR,air-water pump middle north,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
+resid heating modern EUR,air-water pump north,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 resid heating modern EUR,geo-water pump,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 resid heating modern EUR,solar thermal,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 resid cooling modern EUR,electricity,0.006,0.006,0.006,0.006,0.006,0.006,0.006,0.006,0.006,0.006
@@ -53,6 +57,10 @@ comm heating EUR,air-air pump south,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.
 comm heating EUR,air-air pump middle south,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 comm heating EUR,air-air pump middle north,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 comm heating EUR,air-air pump north,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
+comm heating EUR,air-water pump south,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
+comm heating EUR,air-water pump middle south,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
+comm heating EUR,air-water pump middle north,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
+comm heating EUR,air-water pump north,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 comm heating EUR,geo-water pump,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 comm heating EUR,solar thermal,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 comm cooling EUR,electricity,0.006,0.006,0.006,0.006,0.006,0.006,0.006,0.006,0.006,0.006

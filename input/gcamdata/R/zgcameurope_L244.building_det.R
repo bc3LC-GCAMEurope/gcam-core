@@ -889,7 +889,8 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       rename(calibrated.value = value) %>%
       mutate(calibrated.value = round(calibrated.value, energy.DIGITS_CALOUTPUT)) %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
-      left_join_error_no_match(calibrated_techs_bld_det_EUR, by = c("sector", "service", "fuel")) %>%
+      left_join(calibrated_techs_bld_det_EUR, by = c("sector", "service", "fuel"),
+                relationship = "many-to-many") %>%
       mutate(share.weight.year = year,
              stub.technology = technology) %>%
       group_by(region, supplysector, subsector, year) %>%

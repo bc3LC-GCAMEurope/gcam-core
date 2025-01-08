@@ -35,6 +35,12 @@ comm cooling EUR,gas,gas,bld_comm,gas
 comm heating EUR,gas,gas,bld_comm,gas
 comm others EUR,gas,gas,bld_comm,gas
 comm heating EUR,refined liquids,refined liquids,bld_comm,refined liquids
+comm heating EUR,water heat pump,air-water pump south,bld_comm,air-water pump south
+comm heating EUR,water heat pump,air-water pump middle south,bld_comm,air-water pump middle south
+comm heating EUR,water heat pump,air-water pump middle north,bld_comm,air-water pump middle north
+comm heating EUR,water heat pump,air-water pump north,bld_comm,air-water pump north
+comm heating EUR,water heat pump,geo-water pump,bld_comm,geo-water pump
+comm heating EUR,water heat pump,solar thermal,bld_comm,solar thermal
 comm others EUR,refined liquids,refined liquids,bld_comm,refined liquids
 resid heating modern EUR,biomass,biomass,bld_resid,biomass
 resid cooking modern EUR,biomass,biomass,bld_resid,biomass
@@ -53,6 +59,12 @@ resid heating modern EUR,refined liquids,refined liquids,bld_resid,refined liqui
 resid cooking modern EUR,refined liquids,refined liquids,bld_resid,refined liquids
 resid hot water modern EUR,refined liquids,refined liquids,bld_resid,refined liquids
 resid others modern EUR,refined liquids,refined liquids,bld_resid,refined liquids
+resid heating modern EUR,water heat pump,air-water pump south,bld_resid,air-water pump south
+resid heating modern EUR,water heat pump,air-water pump middle south,bld_resid,air-water pump middle south
+resid heating modern EUR,water heat pump,air-water pump middle north,bld_resid,air-water pump middle north
+resid heating modern EUR,water heat pump,air-water pump north,bld_resid,air-water pump north
+resid heating modern EUR,water heat pump,geo-water pump,bld_resid,geo-water pump
+resid heating modern EUR,water heat pump,solar thermal,bld_resid,solar thermal
 trn_freight,Freight Rail,Coal,trn_rail,coal
 trn_freight,Freight Rail,Liquids,trn_rail,refined liquids
 trn_freight,Domestic Ship,Liquids,trn_domestic ship,refined liquids

@@ -845,7 +845,10 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
           ungroup()) %>%
       mutate(value = if_else(service == 'resid cooking modern EUR', value + adj_value, value)) %>% # adj_value is already negative
       mutate(value = if_else(service == 'comm others EUR', value + adj_value, value)) %>% # adj_value is already negative
-      select(-adj_value) %>%
+      # aggregate if necessary
+      group_by(GCAM_region_ID, sector, fuel, service, year) %>%
+      summarise(value = sum(value)) %>%
+      ungroup() %>%
       # select historical years
       filter(year <= MODEL_FINAL_BASE_YEAR) # This is a final output table.
 
