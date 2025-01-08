@@ -786,13 +786,14 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     L144.ambient_heat <- estat_nrg_ind_ahbtc_filtered_en %>%
       select(-OBS_FLAG) %>%
       left_join_error_no_match(heatpump_to_tech_map, by = c('hp_tech' = 'nrg_bal')) %>%
+      filter(climate == 'average') %>%
       filter(nchar(geo) == 2) %>%
       left_join_error_no_match(geo_to_climate_map, by = c('geo')) %>%
       # delete Georgia (non EUR region)
       filter(geo != 'GE') %>%
       mutate(technology = if_else(tech != 'geo-water pump', paste(tech, climate_group), tech)) %>%
-      group_by(unit, geo, year = TIME_PERIOD, value = OBS_VALUE, subsector, technology) %>%
-      summarise(value = sum(value)) %>%
+      group_by(unit, geo, year = TIME_PERIOD, subsector, technology) %>%
+      summarise(value = sum(OBS_VALUE)) %>%
       ungroup()
 
     # Compute energy used by tech: en_used * efficiency = ambient_heat
