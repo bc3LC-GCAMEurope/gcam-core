@@ -1,0 +1,58 @@
+# File: EPA_country_map_EUR.csv
+# Title: Map of EPA countries to iso codes and GCAM EUR regions
+# Description: Maps EPA country names to iso country names and iso country codes and GCAM EUR regions and Used to prepare EUR EPA emissions data from the global emissions projections
+# Units: Unitless
+# Source: Update of the emissions/EPA_country_map.csv file
+# Column types: cci
+EPA_country,iso,GCAM_region_ID
+Cyprus,cyp,32
+Hungary,hun,40
+Romania,rou,50
+Latvia,lva,43
+Slovenia,svn,52
+Czechia,cze,33
+Bulgaria,bgr,30
+Poland,pol,48
+Czech Republic,cze,33
+Estonia,est,35
+Lithuania,ltu,44
+Slovakia,svk,51
+Malta,mlt,46
+Saint Pierre and Miquelon,spm,37
+Denmark,dnk,34
+Ireland,irl,41
+Spain,esp,53
+Turks and Caicos Islands,tca,65
+Belgium,bel,29
+Finland,fin,36
+Holy See,ita,42
+United Kingdom,gbr,65
+Germany,deu,38
+Greece,grc,39
+Austria,aut,28
+Falkland Islands,flk,65
+Netherlands,nld,47
+Portugal,prt,49
+Andorra,and,53
+Sweden,swe,54
+Italy,ita,42
+Wallis and Futuna Islands,wlf,65
+San Marino,ita,42
+Monaco,fra,37
+Faeroe Islands,fro,34
+France,fra,37
+Greenland,grl,34
+British Virgin Islands,vgb,65
+Luxembourg,lux,45
+Gibraltar,gib,65
+Moldova,mda,60
+Ukraine,ukr,66
+Croatia,hrv,31
+Montenegro,mne,62
+Serbia,srb,62
+Bosnia and Herzegovina,bih,57
+Turkey,tur,64
+Albania,alb,55
+Macedonia,mkd,59
+Iceland,isl,58
+Norway,nor,61

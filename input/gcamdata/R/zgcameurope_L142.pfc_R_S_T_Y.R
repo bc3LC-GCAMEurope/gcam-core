@@ -39,7 +39,7 @@ module_gcameurope_L142.pfc_R_S_T_Y <- function(command, ...) {
              FILE = "emissions/EPA/EPA_SF6_Semi",
              FILE = "emissions/EPA_fgas_sector_map",
              FILE = "emissions/EPA_GWPs",
-             FILE = "emissions/EPA_country_map",
+             FILE = "gcam-europe/EPA_country_map_EUR",
              "L106.income_distributions",
              "L244.GenericShares_EUR",
              "L244.ThermalShares_EUR"))
@@ -86,7 +86,7 @@ module_gcameurope_L142.pfc_R_S_T_Y <- function(command, ...) {
     EPA_SF6_Semi <- get_data(all_data, "emissions/EPA/EPA_SF6_Semi")
     EPA_fgas_sector_map <- get_data(all_data, "emissions/EPA_fgas_sector_map")
     EPA_GWPs <- get_data(all_data, "emissions/EPA_GWPs")
-    EPA_country_map <- get_data(all_data, "emissions/EPA_country_map") %>% filter_regions_europe()
+    EPA_country_map <- get_data(all_data, "gcam-europe/EPA_country_map_EUR") %>% filter_regions_europe()
 
     # This chunk maps EDGAR HFC emissions to GCAM technologies
     # First, create a table with all EDGAR HFCs, and prep "Other_F" table for use by renaming column.
