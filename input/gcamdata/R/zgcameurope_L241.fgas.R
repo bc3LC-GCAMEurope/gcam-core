@@ -10,7 +10,7 @@
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{L241.hfc_all_EUR}, \code{L241.pfc_all_EUR}, \code{L241.hfc_future_EUR}, \code{L241.fgas_all_units_EUR}. The corresponding file in the
 #' original data system was \code{L241.fgas.R} (emissions level2).
-#' @details Formats hfc and pfc gas emissions for input. Calculates future emission factors for hfc gases based on 2010 region emissions and USA emission factors and emission factors from Guus Velders (http://www.sciencedirect.com/science/article/pii/S135223101530488X) for the  SSP scenarios.
+#' @details Formats hfc and pfc gas emissions for input. Calculates future emission factors for hfc gases based on 2010 region emissions and Germany emission factors and emission factors from Guus Velders (http://www.sciencedirect.com/science/article/pii/S135223101530488X) for the  SSP scenarios.
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr bind_rows filter if_else group_by left_join mutate select
 #' @importFrom tidyr gather spread
@@ -42,7 +42,7 @@ module_gcameurope_L241.fgas <- function(command, ...) {
 
     ## silence package check.
     . <- `2010` <- `2020` <- `2030` <- EF <- Emissions <- GCAM_region_ID <- GDP <-
-      Non.CO2 <- Ratio_2020 <- Ratio_2030 <- Scenario <- Species <- USA_factor <-
+      Non.CO2 <- Ratio_2020 <- Ratio_2030 <- Scenario <- Species <- gcam.Germany_REGION <-
       Year <- curr_table <- emiss.coeff <- input.emissions <- region <-
       stub.technology <- subsector <- supplysector <- value <- year <-
       year_min <- NULL
@@ -81,7 +81,7 @@ module_gcameurope_L241.fgas <- function(command, ...) {
     # First, create a subset of the cooling emission factors from  the max year, currently 2010.
     # (Update 11 Aug 2017: subset the last HFC_MODEL_BASE_YEARS present in data, letting us pass timeshift test.)
     # Eventually these values will be used to estimate future emission factors by scaling with
-    # USA emission factors.
+    # Germany emission factors.
     MAX_DATA_YEAR <- max(intersect(L141.hfc_ef_R_cooling_Yh_EUR$year, emissions.HFC_MODEL_BASE_YEARS))
 
     L141.hfc_ef_R_cooling_Yh_EUR %>%
@@ -90,44 +90,46 @@ module_gcameurope_L241.fgas <- function(command, ...) {
       L141.hfc_ef_cooling_maxhistyr
 
 
-    # From the max historical year (2010) hfc cooling emission factors select USA emission factors, in
-    # subsequent steps the USA emission factors will be used to estimate future
+    # From the max historical year (2010) hfc cooling emission factors select Germany emission factors, in
+    # subsequent steps the Germany emission factors will be used to estimate future
     # emission factors.
-    # But first correct the USA factor emissions for HFC134a by dividing by three
-    # since it is less commonly used now in USA.
+    # But first correct the Germany factor emissions for HFC134a by dividing by three
+    # since it is less commonly used now in Germany.
     L141.hfc_ef_cooling_maxhistyr %>%
       filter(GCAM_region_ID == gcam.Germany_REGION) %>%
       mutate(value = if_else(Non.CO2 == "HFC134a", value / 3, value)) %>%
-      select(value, -region, Non.CO2, supplysector) ->
-      L141.hfc_ef_cooling_maxhistyr_USA
+      group_by(Non.CO2, supplysector) %>%
+      summarise(value = sum(value)) %>%
+      ungroup() ->
+      L141.hfc_ef_cooling_maxhistyr_DEU
 
 
-    # Match USA cooling hfc emissions factors from by sector and gas with max hist year (2010)
-    # emission factors for other regions. Eventually the USA factor emissions will
+    # Match Germany cooling hfc emissions factors from by sector and gas with max hist year (2010)
+    # emission factors for other regions. Eventually the Germany factor emissions will
     # be used to interpolate future emission factors for the other regions.
     #
     L141.hfc_ef_cooling_maxhistyr %>%
       select(-year, -value) %>%
-      left_join_error_no_match(L141.hfc_ef_cooling_maxhistyr_USA, by = c("supplysector", "Non.CO2")) %>%
+      left_join_error_no_match(L141.hfc_ef_cooling_maxhistyr_DEU, by = c("supplysector", "Non.CO2")) %>%
       mutate(year = emissions.HFC_FUT_YEAR) ->
-      L241.hfc_cool_ef_futyr_USfactor
+      L241.hfc_cool_ef_futyr_DEUfactor
 
     # Format the data frame of max hist year (2010) regional emission factors and max hist year (2010)
-    # USA emission factors for the next step where future emission factors are calculated.
+    # Germany emission factors for the next step where future emission factors are calculated.
     #
     # Future emission factors are will not be calculated for regions with max hist year (2010) emission factors
-    # greater than the max hist year (2010) USA emission factor because of the way that the calculated as a
-    # fraction of the change between the region and USA max hist year (2010) emission factors, negative emission
+    # greater than the max hist year (2010) Germany emission factor because of the way that the calculated as a
+    # fraction of the change between the region and Germany max hist year (2010) emission factors, negative emission
     # factors would be estimated.
     L141.hfc_ef_cooling_maxhistyr %>%
-      bind_rows(L241.hfc_cool_ef_futyr_USfactor) %>%
+      bind_rows(L241.hfc_cool_ef_futyr_DEUfactor) %>%
       group_by(GCAM_region_ID , supplysector, subsector, stub.technology, Non.CO2, region) %>%
       filter(value[year == emissions.HFC_FUT_YEAR] > value[year == MAX_DATA_YEAR]) %>%
       ungroup() ->
       L241.hfc_cool_ef_update
 
-    # Linearlly interpolate future regional emission factors from max yr (2010) emission factor and
-    # the max year (2010) USA emission factor for all model years between
+    # Linearly interpolate future regional emission factors from max yr (2010) emission factor and
+    # the max year (2010) Germany emission factor for all model years between
     # MAX_DATA_YEAR (2010) and emissions.HFC_FUT_YEAR.
     years_to_complete <- MODEL_YEARS[MODEL_YEARS < emissions.HFC_FUT_YEAR & MODEL_YEARS > MAX_DATA_YEAR]
     L241.hfc_cool_ef_update %>%
@@ -147,12 +149,12 @@ module_gcameurope_L241.fgas <- function(command, ...) {
       L241.hfc_cool_ef_update_filtered
 
 
-    # Estimate future emission for non-cooling emissions.
+    # Estimate future emission for non-bld emissions.
     #
-    # First, subset the hfc emissions for non-cooling emissions.
+    # First, subset the hfc emissions for non-bld emissions.
     L141.hfc_R_S_T_Yh_EUR %>%
-      filter(!grepl("cooling",supplysector)) %>%
-      # EF is 1000 x emissions for non-cooling sectors
+      filter(!grepl("cooling|heating",supplysector)) %>%
+      # EF is 1000 x emissions for non-bld sectors
       mutate(value = value * 1000) %>%
       filter(year == MAX_DATA_YEAR) %>%
       filter(value > 0) %>%
@@ -161,7 +163,7 @@ module_gcameurope_L241.fgas <- function(command, ...) {
 
     # Use data from Guus Velders (a f-gas expert) of near future f gas
     # emissions to calculate the future to max hist yr (2010) emission factor ratios.
-    # These emission factor ratios will be used to update the non-cooling
+    # These emission factor ratios will be used to update the non-bld
     # emission factors.
     #
     # Format the FUT_EMISS_GV species by removing the "-" so that the species
@@ -190,7 +192,8 @@ module_gcameurope_L241.fgas <- function(command, ...) {
     L241.hfc_ef_maxhistyr %>%
       select(-year) %>%
       # Since Guus Velders data set contains information on extra gases we can use left_join here because we expect there to be NAs that will latter be removed.
-      left_join(L241.FUT_EF_Ratio, by = c("Non.CO2" = "Species")) %>%
+      left_join(L241.FUT_EF_Ratio, by = c("Non.CO2" = "Species"),
+                relationship = "many-to-many") %>%
       mutate(value = value * ratio) %>%
       select(-ratio, -EF) %>%
       na.omit() %>%
@@ -256,7 +259,7 @@ module_gcameurope_L241.fgas <- function(command, ...) {
     L241.hfc_future_EUR %>%
       add_title("Future HFC emission factors") %>%
       add_units("Gg") %>%
-      add_comments("Cooling future emission factors are calculated from 2010 USA emission factors.") %>%
+      add_comments("Cooling future emission factors are calculated from 2010 Germany emission factors.") %>%
       add_comments("Non-cooling future emission factors are calculated from Guus Velders emission factors.") %>%
       add_legacy_name("L241.hfc_future_EUR") %>%
       add_precursors("common/GCAM_region_names", "emissions/A_regions", "emissions/FUT_EMISS_GV",

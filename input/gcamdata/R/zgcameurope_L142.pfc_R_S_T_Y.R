@@ -86,7 +86,7 @@ module_gcameurope_L142.pfc_R_S_T_Y <- function(command, ...) {
     EPA_SF6_Semi <- get_data(all_data, "emissions/EPA/EPA_SF6_Semi")
     EPA_fgas_sector_map <- get_data(all_data, "emissions/EPA_fgas_sector_map")
     EPA_GWPs <- get_data(all_data, "emissions/EPA_GWPs")
-    EPA_country_map <- get_data(all_data, "gcam-europe/EPA_country_map_EUR") %>% filter_regions_europe()
+    EPA_country_map_EUR <- get_data(all_data, "gcam-europe/EPA_country_map_EUR") %>% filter_regions_europe()
 
     # This chunk maps EDGAR HFC emissions to GCAM technologies
     # First, create a table with all EDGAR HFCs, and prep "Other_F" table for use by renaming column.
@@ -148,33 +148,38 @@ module_gcameurope_L142.pfc_R_S_T_Y <- function(command, ...) {
       replace_na(list(EDGAR_emissions = 0)) ->
       L142.pfc_R_S_T_Yh_EUR.tmp1
 
-    # Disaggregate cooling emissions to residential and commercial sectors.
+    # Disaggregate bld emissions to cooling/heating supplysectors and residential/commercial sectors.
 
     L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
-      filter(service %in% c("comm cooling EUR", "resid cooling EUR") & fuel == "electricity") ->
-      L142.R_cooling_T_Yh
+      filter(grepl("comm cooling|comm heating|resid cooling|resid heating", service) & fuel == "electricity") ->
+      L142.R_bld_T_Yh
 
-    L142.R_cooling_T_Yh %>%
+    L142.R_bld_T_Yh %>%
       group_by(GCAM_region_ID, year) %>%
       summarise(value = sum(value)) %>%
       ungroup() ->
-      L142.R_cooling_Yh
+      L142.R_bld_Yh
 
-    # Calculate emission shares for residential and commerical sectors.
+    # Calculate emission shares for residential and commercial sectors.
     # Use 'left_join' because the number of rows is not equal, and NA values are needed.
 
-    L142.R_cooling_Yh %>%
-      left_join(L142.R_cooling_T_Yh, by = c("GCAM_region_ID", "year")) %>%
-      mutate(share = value.y / value.x) ->
-      L142.R_cooling_T_Yh.tmp1
+    L142.R_bld_Yh %>%
+      left_join(L142.R_bld_T_Yh, by = c("GCAM_region_ID", "year")) %>%
+      mutate(share = value.y / value.x) %>%
+      rename(supplysector = service) ->
+      L142.R_bld_T_Yh.tmp1
 
     # Calculate emissions by share, then sum up emissions over region, sector, technology, and gas by year.
 
-    L142.R_cooling_T_Yh.tmp1 %>%
-      rename(supplysector = service) %>%
+    L142.R_bld_T_Yh.tmp1 %>%
       right_join(L142.pfc_R_S_T_Yh_EUR.tmp1, by = c("GCAM_region_ID", "year", "supplysector")) %>%
       replace_na(list(share = 1)) %>%
-      mutate(emissions = EDGAR_emissions * share) %>%
+      # split share into the technologies
+      group_by(GCAM_region_ID, year, sector, fuel, supplysector, Non.CO2) %>%
+      mutate(n = n()) %>%
+      ungroup() %>%
+      # apply the adjusted share
+      mutate(emissions = EDGAR_emissions * share / n) %>%
       group_by(GCAM_region_ID, supplysector, subsector, stub.technology, Non.CO2, year) %>%
       summarise(emissions = sum(emissions)) %>%
       ungroup() %>%
@@ -237,7 +242,7 @@ module_gcameurope_L142.pfc_R_S_T_Y <- function(command, ...) {
 
     # Map countries to GCAM regions and aggregate country emissions to GCAM regions
     L142.EPA_PFCs %>%
-      left_join(EPA_country_map, by = c("country" = "EPA_country")) %>%
+      left_join(EPA_country_map_EUR, by = c("country" = "EPA_country")) %>%
       group_by(GCAM_region_ID, EPA_sector, gas, year) %>%
       summarise(EPA_emissions = sum(EPA_emissions)) %>%
       ungroup() %>%
@@ -270,7 +275,7 @@ module_gcameurope_L142.pfc_R_S_T_Y <- function(command, ...) {
 
     # Aggregate comm/resid cooling to a single sector to match to EPA totals
     L142.pfc_R_S_T_Yh_GWP %>%
-      filter(supplysector == "comm cooling EUR" | supplysector == "resid cooling EUR") %>%
+      filter(supplysector == "comm cooling EUR" | supplysector == "resid cooling modern EUR") %>%
       group_by(subsector, stub.technology, GCAM_region_ID, year, Non.CO2) %>%
       summarise(emissions = sum(emissions)) %>%
       ungroup() %>%
@@ -280,7 +285,7 @@ module_gcameurope_L142.pfc_R_S_T_Y <- function(command, ...) {
 
     # Rebind aggregated cooling to main HFC emissions
     L142.pfc_R_S_T_Yh_GWP %>%
-      filter(supplysector != "comm cooling EUR" & supplysector != "resid cooling EUR") %>%
+      filter(supplysector != "comm cooling EUR" & supplysector != "resid cooling modern EUR") %>%
       bind_rows(L142.pfc_R_S_T_Yh_coolingonly) ->
       L142.pfc_R_S_T_Yh_cool
 
@@ -487,7 +492,7 @@ module_gcameurope_L142.pfc_R_S_T_Y <- function(command, ...) {
                      "emissions/EPA/EPA_SF6_Semi",
                      "emissions/EPA_fgas_sector_map",
                      "emissions/EPA_GWPs",
-                     "emissions/EPA_country_map",
+                     "emissions/EPA_country_map_EUR",
                      "L106.income_distributions",
                      "L244.GenericShares_EUR",
                      "L244.ThermalShares_EUR") ->

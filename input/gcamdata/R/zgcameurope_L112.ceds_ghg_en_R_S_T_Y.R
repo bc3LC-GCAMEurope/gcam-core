@@ -66,7 +66,7 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
              FILE = "emissions/CEDS/ceds_sector_map",
              FILE = "emissions/CEDS/ceds_fuel_map",
              # EPA scaling process 2020
-             FILE = "emissions/EPA_country_map",
+             FILE = "gcam-europe/EPA_country_map_EUR",
              FILE = "emissions/EPA/EPA_2019_raw",
              FILE = "emissions/EPA_CH4N2O_map",
              FILE = "gcam-europe/GCAM_EPA_CH4N2O_energy_map_EUR",
@@ -249,7 +249,7 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
     # YO 2020 EPA scaling
     EPA_master <- get_data(all_data, "emissions/EPA/EPA_2019_raw")
     EPA_CH4N2O_map <- get_data(all_data, "emissions/EPA_CH4N2O_map")
-    EPA_country_map <- get_data(all_data, "emissions/EPA_country_map") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
+    EPA_country_map_EUR <- get_data(all_data, "gcam-europe/EPA_country_map_EUR") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
     GCAM_EPA_CH4N2O_map <- get_data(all_data, "gcam-europe/GCAM_EPA_CH4N2O_energy_map_EUR")
     L111.Prod_EJ_R_F_Yh <- get_data(all_data, "L111.Prod_EJ_R_F_Yh_EUR",strip_attributes = TRUE)
 
@@ -1533,7 +1533,7 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
         EPA_master %>%
           filter(sector %in% EPA_SECTOR & gas %in% c("CH4", "N2O") & (!use.Source | source %in% EPA_SOURCE)) %>%
           left_join_error_no_match(EPA_CH4N2O_map, by = c("sector", "source", "subsource")) %>%
-          left_join_error_no_match(EPA_country_map, by = c("country" = "EPA_country")) %>%
+          left_join_error_no_match(EPA_country_map_EUR, by = c("country" = "EPA_country")) %>%
           group_by(GCAM_region_ID, EPA_sector, year, gas) %>%
           summarise(EPA_emissions = sum(value)) %>%
           ungroup() ->
@@ -1931,7 +1931,7 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
                      "emissions/EPA/EPA_2019_raw",
                      "emissions/EPA_CH4N2O_map",
                      "L111.Prod_EJ_R_F_Yh",
-                     "emissions/EPA_country_map",
+                     "gcam-europe/EPA_country_map_EUR",
                      "gcam-europe/CEDS_sector_tech_combustion_revised_EUR",
                      "emissions/mappings/UCD_techs_emissions_revised",
                      "L270.nonghg_tg_state_refinery_F_Yb",
