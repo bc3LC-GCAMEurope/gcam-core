@@ -80,6 +80,43 @@ left_join_keep_first_only <- function(x, y, by) {
 }
 
 
+#' left_join_strict
+#'
+#' A restrictive version of \code{\link{left_join}} that ensures that all keys
+#' in the left dataset have corresponding matches in the right dataset.
+#' If any rows in the left dataset do not have matching keys in the right dataset,
+#' the function will throw an error. However, it will NOT through an error if
+#' the number of lines is modified.
+#'
+#' @param left_df A data frame. The left dataset in the join.
+#' @param right_df A data frame. The right dataset in the join.
+#' @param ... Rest of call to \code{\link{left_join}}
+#' @param ignore_columns Optional column name(s) to ignore, character vector
+#' @return A data frame resulting from the left join. If any rows in `left_df` do not have matching keys in `right_df`, an error is thrown.
+#' @export
+left_join_strict <- function(left_df, right_df, ..., ignore_columns = NULL) {
+  # Perform the left join
+  result <- dplyr::left_join(left_df, right_df, ...)
+
+  # Identify unmatched rows (rows with NA in any of the columns from right_df)
+  unmatched <- result %>%
+    dplyr::filter(dplyr::if_any(-one_of(names(left_df)), is.na))
+
+  # Ignore any unmatched rows which have names (in any column) specified as fine to be ignored
+  if (!is.null(ignore_columns)) {
+    unmatched <- unmatched %>%
+      dplyr::filter(!(dplyr::if_any(.cols = everything(), ~ grepl(paste(ignore_columns, collapse = "|"), .))))
+  }
+
+  # Check if there are any unmatched rows
+  if (nrow(unmatched) > 0) {
+    stop("left_join_strict_no_match: NA values in new data columns")
+  }
+
+  return(result)
+}
+
+
 #' Fast left join for large tables
 #'
 #' The dplyr join functions are a little on the slow side for very large

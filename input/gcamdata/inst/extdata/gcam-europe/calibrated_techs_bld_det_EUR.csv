@@ -19,6 +19,7 @@ bld_resid,electricity,resid heating modern EUR,resid heating modern EUR,water he
 bld_resid,electricity,resid heating modern EUR,resid heating modern EUR,water heat pump,air-water pump middle south,elect_td_bld,resid EUR,resid EUR,resid_building
 bld_resid,electricity,resid heating modern EUR,resid heating modern EUR,water heat pump,air-water pump middle north,elect_td_bld,resid EUR,resid EUR,resid_building
 bld_resid,electricity,resid heating modern EUR,resid heating modern EUR,water heat pump,air-water pump north,elect_td_bld,resid EUR,resid EUR,resid_building
+bld_resid,electricity,resid heating modern EUR,resid heating modern EUR,water heat pump,geo-water pump,elect_td_bld,resid EUR,resid EUR,resid_building
 bld_resid,global solar resource,resid heating modern EUR,resid heating modern EUR,water heat pump,solar thermal,global solar resource,resid EUR,resid EUR,resid_building
 bld_resid,electricity,resid cooling modern EUR,resid cooling modern EUR,electricity,electricity,elect_td_bld,resid EUR,resid EUR,resid_building
 bld_resid,gas,resid cooling modern EUR,resid cooling modern EUR,gas,gas,delivered gas,resid EUR,resid EUR,resid_building
@@ -56,6 +57,7 @@ bld_comm,electricity,comm heating EUR,comm heating EUR,water heat pump,air-water
 bld_comm,electricity,comm heating EUR,comm heating EUR,water heat pump,air-water pump middle south,elect_td_bld,comm EUR,comm EUR,comm_building
 bld_comm,electricity,comm heating EUR,comm heating EUR,water heat pump,air-water pump middle north,elect_td_bld,comm EUR,comm EUR,comm_building
 bld_comm,electricity,comm heating EUR,comm heating EUR,water heat pump,air-water pump north,elect_td_bld,comm EUR,comm EUR,comm_building
+bld_comm,electricity,comm heating EUR,comm heating EUR,water heat pump,geo-water pump,elect_td_bld,comm EUR,comm EUR,comm_building
 bld_comm,global solar resource,comm heating EUR,comm heating EUR,water heat pump,solar thermal,global solar resource,comm EUR,comm EUR,comm_building
 bld_comm,electricity,comm cooling EUR,comm cooling EUR,electricity,electricity,elect_td_bld,comm EUR,comm EUR,comm_building
 bld_comm,gas,comm cooling EUR,comm cooling EUR,gas,gas,delivered gas,comm EUR,comm EUR,comm_building

@@ -1,31 +1,46 @@
 # File: heatpump_to_tech_map.csv
-# Title: Mapping from disaggregated data on pumped ambient heat by technology to GCAM-Europe techs
+# Title: Mapping from disaggregated data on pumped ambient heat by technology / subsector / service = supplysector to GCAM-Europe techs
 # Units: NA
 # Source: Eurostat 
-# Column types: cccc
+# Column types: ccccc
 # ----------
-nrg_bal,subsector,tech,climate
-ATH_AA_EA,electricity,air-air pump,average
-ATH_AA_EC,electricity,air-air pump,cold
-ATH_AA_EW,electricity,air-air pump,warm
-ATH_AW_EA,water heat pump,air-water pump,average
-ATH_AW_EC,water heat pump,air-water pump,cold
-ATH_AW_EW,water heat pump,air-water pump,warm
-ATH_EAA_EA,electricity,air-air pump,average
-ATH_EAA_EC,electricity,air-air pump,cold
-ATH_EAA_EW,electricity,air-air pump,warm
-ATH_EAW_EA,water heat pump,air-water pump,average
-ATH_EAW_EC,water heat pump,air-water pump,cold
-ATH_EAW_EW,water heat pump,air-water pump,warm
-ATH_RAA_EA,electricity,air-air pump,average
-ATH_RAA_EC,electricity,air-air pump,cold
-ATH_RAA_EW,electricity,air-air pump,warm
-ATH_RAW_EA,water heat pump,air-water pump,average
-ATH_RAW_EC,water heat pump,air-water pump,cold
-ATH_RAW_EW,water heat pump,air-water pump,warm
-GTH_EA,water heat pump,geo-water pump,average
-GTH_EC,water heat pump,geo-water pump,cold
-GTH_EW,water heat pump,geo-water pump,warm
-HTH_EA,water heat pump,geo-water pump,average
-HTH_EC,water heat pump,geo-water pump,cold
-HTH_EW,water heat pump,geo-water pump,warm
+nrg_bal,service,subsector,tech,climate
+ATH_AA_EA,resid heating modern EUR,electricity,air-air pump,average
+ATH_AA_EC,resid heating modern EUR,electricity,air-air pump,cold
+ATH_AA_EW,resid heating modern EUR,electricity,air-air pump,warm
+ATH_EAA_EA,resid heating modern EUR,electricity,air-air pump,average
+ATH_EAA_EC,resid heating modern EUR,electricity,air-air pump,cold
+ATH_EAA_EW,resid heating modern EUR,electricity,air-air pump,warm
+ATH_RAA_EA,resid heating modern EUR,electricity,air-air pump,average
+ATH_RAA_EC,resid heating modern EUR,electricity,air-air pump,cold
+ATH_RAA_EW,resid heating modern EUR,electricity,air-air pump,warm
+ATH_AW_EA,resid heating modern EUR,water heat pump,air-water pump,average
+ATH_AW_EC,resid heating modern EUR,water heat pump,air-water pump,cold
+ATH_AW_EW,resid heating modern EUR,water heat pump,air-water pump,warm
+ATH_EAW_EA,resid heating modern EUR,water heat pump,air-water pump,average
+ATH_EAW_EC,resid heating modern EUR,water heat pump,air-water pump,cold
+ATH_EAW_EW,resid heating modern EUR,water heat pump,air-water pump,warm
+ATH_RAW_EA,resid heating modern EUR,water heat pump,air-water pump,average
+ATH_RAW_EC,resid heating modern EUR,water heat pump,air-water pump,cold
+ATH_RAW_EW,resid heating modern EUR,water heat pump,air-water pump,warm
+GTH_EA,resid heating modern EUR,water heat pump,geo-water pump,average
+GTH_EC,resid heating modern EUR,water heat pump,geo-water pump,cold
+GTH_EW,resid heating modern EUR,water heat pump,geo-water pump,warm
+HTH_EA,resid heating modern EUR,water heat pump,geo-water pump,average
+HTH_EC,resid heating modern EUR,water heat pump,geo-water pump,cold
+HTH_EW,resid heating modern EUR,water heat pump,geo-water pump,warm
+ATH_AW_EA,resid hot water modern EUR,water heat pump,air-water pump,average
+ATH_AW_EC,resid hot water modern EUR,water heat pump,air-water pump,cold
+ATH_AW_EW,resid hot water modern EUR,water heat pump,air-water pump,warm
+ATH_EAW_EA,resid hot water modern EUR,water heat pump,air-water pump,average
+ATH_EAW_EC,resid hot water modern EUR,water heat pump,air-water pump,cold
+ATH_EAW_EW,resid hot water modern EUR,water heat pump,air-water pump,warm
+ATH_RAW_EA,resid hot water modern EUR,water heat pump,air-water pump,average
+ATH_RAW_EC,resid hot water modern EUR,water heat pump,air-water pump,cold
+ATH_RAW_EW,resid hot water modern EUR,water heat pump,air-water pump,warm
+GTH_EA,resid hot water modern EUR,water heat pump,geo-water pump,average
+GTH_EC,resid hot water modern EUR,water heat pump,geo-water pump,cold
+GTH_EW,resid hot water modern EUR,water heat pump,geo-water pump,warm
+HTH_EA,resid hot water modern EUR,water heat pump,geo-water pump,average
+HTH_EC,resid hot water modern EUR,water heat pump,geo-water pump,cold
+HTH_EW,resid hot water modern EUR,water heat pump,geo-water pump,warm
