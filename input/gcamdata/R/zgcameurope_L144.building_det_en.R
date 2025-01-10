@@ -783,6 +783,39 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       distinct()
 
     # CONSIDER HEAT PUMPS
+    # iso-geo-climate_group mapping
+    iso_to_climate_group <- geo_to_iso_map %>%
+      filter_regions_europe() %>%
+      left_join_error_no_match(geo_to_climate_map, by = 'geo') %>%
+      left_join_error_no_match(GCAM32_to_EU %>%
+                                 filter(GCAMEU_region != GCAM32_region),
+                               by = 'iso') %>%
+      select(geo, GCAM_region_ID, climate_group)
+
+
+    # Compute ambient heat by technology
+    L144.ambient_heat_tech <- estat_nrg_ind_ahbtc_filtered_en %>%
+      select(-OBS_FLAG) %>%
+      left_join_strict(heatpump_to_tech_map, by = c('hp_tech' = 'nrg_bal'), relationship = "many-to-many") %>%
+      filter(climate == 'average') %>%
+      # remove EU-27 and other aggregated regions
+      filter(nchar(geo) == 2) %>%
+      left_join_error_no_match(geo_to_climate_map, by = c('geo')) %>%
+      # delete Georgia (non EUR region)
+      filter(geo != 'GE') %>%
+      mutate(technology = if_else(!tech %in% c('heat pump','geo-water pump'), paste(tech, climate_group), tech)) %>%
+      group_by(unit, geo, year = TIME_PERIOD, service, subsector, technology) %>%
+      summarise(value = sum(OBS_VALUE)) %>%
+      ungroup() %>%
+      # select historical years
+      filter(year %in% MODEL_BASE_YEARS) %>%
+      # add iso - GCAM_region_ID
+      left_join_error_no_match(iso_to_climate_group, by = 'geo') %>%
+      group_by(GCAM_region_ID, year, service, subsector, technology, climate_group) %>%
+      summarise(tech_ambient_heat = sum(value)) %>%
+      ungroup()
+
+
     # Compute ctry specific ambient heat given by Eurostat - not considering 'solar thermal'
     EUR_hhAmbientHeat_R_Y_S <- estat_nrg_d_hhq_filtered_en %>%
       filter(freq == 'A') %>% # Annual frequency
@@ -815,7 +848,19 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       mutate(service = paste(service, 'EUR'),
              fuel = "electricity") %>%
       # consider only heating and hot water (the only items whose ambient heat is not null already)
-      filter(service %in% c("resid heating modern EUR", "resid hot water modern EUR")) %>%
+      filter(service %in% c("resid heating modern EUR", "resid hot water modern EUR"))
+
+    # detect false 0s (the "estat_nrg_ind_ahbtc_filtered_en.csv" data file reports
+    # not null values or  in year > 2015 some high values are reported)
+    EUR_hhAmbientHeat_R_Y_S_clean <- EUR_hhAmbientHeat_R_Y_S %>%
+      # check if annual total by region is null
+      group_by(GCAM_region_ID, year) %>%
+      mutate(total_by_reg = sum(service_ambient_heat)) %>%
+      ungroup() %>%
+      filter(total_by_reg != 0) %>%
+      select(-total_by_reg)
+
+    EUR_hhAmbientHeat_R_Y_S_extr <- EUR_hhAmbientHeat_R_Y_S_clean %>%
       # linearly extrapolate backwards (some regions start reporting ambient heat in > MODEL_BASE_YEARS)
       # 1. compute ambient heat growth rate
       group_by(GCAM_region_ID, service) %>%
@@ -823,7 +868,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       mutate(growth_rate = mean(rate, na.rm = T)) %>%
       mutate(growth_rate = if_else(is.na(growth_rate), 0, growth_rate)) %>%
       # 2. complete dataset
-      complete(nesting(GCAM_region_ID, unit, service, fuel), year = c(2010,2015)) %>% # TODO - decide what to do with 1975 and 1990
+      complete(nesting(GCAM_region_ID, unit, service, fuel), year = c(2005, 2010,2015)) %>% # TODO - decide what to do with 1975 and 1990
       # 3. fill growth rate and store the oldest (historically speaking) known year and corresponding value
       mutate(
         growth_rate = mean(growth_rate, na.rm = T), # Fill the growth rate
@@ -846,59 +891,42 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       # clean
       select(GCAM_region_ID, unit, service, fuel, year, service_ambient_heat)
 
-    iso_to_climate_group <- geo_to_iso_map %>%
-      filter_regions_europe() %>%
-      left_join_error_no_match(geo_to_climate_map, by = 'geo') %>%
-      left_join_error_no_match(GCAM32_to_EU %>%
-                                 filter(GCAMEU_region != GCAM32_region),
-                               by = 'iso') %>%
-      select(geo, GCAM_region_ID, climate_group)
-
-    # complete for missing regions considering the annual mean of the climate_region
-    EUR_hhAmbientHeat_R_Y_S_mean <- EUR_hhAmbientHeat_R_Y_S %>%
+    # manually add missing regions (data present in the tech csv but not in the service csv)
+    # consider the mean by climate_group
+    EUR_hhAmbientHeat_R_Y_S_mean <- EUR_hhAmbientHeat_R_Y_S_extr %>%
       left_join_strict(iso_to_climate_group, by = 'GCAM_region_ID') %>%
-      group_by(climate_group, unit, service, fuel, year) %>%
-      summarise(service_ambient_heat = mean(service_ambient_heat, na.rm = T)) %>%
+      group_by(unit, service, fuel, year, climate_group) %>%
+      summarise(service_ambient_heat = mean(service_ambient_heat)) %>%
       ungroup()
 
-    EUR_hhAmbientHeat_R_Y_S_full <- data.frame() %>%
-      tibble::as_tibble()
-    for (reg in unique(iso_to_climate_group$GCAM_region_ID)) {
-      if (reg %in% unique(EUR_hhAmbientHeat_R_Y_S$GCAM_region_ID)) {
-        tmp <- EUR_hhAmbientHeat_R_Y_S %>%
-          filter(GCAM_region_ID == reg) %>%
-          mutate(climate_group = iso_to_climate_group[iso_to_climate_group$GCAM_region_ID == reg,]$climate_group)
-      } else {
-        tmp <- EUR_hhAmbientHeat_R_Y_S_mean %>%
-          filter(climate_group == iso_to_climate_group[iso_to_climate_group$GCAM_region_ID == reg,]$climate_group) %>%
-          mutate(GCAM_region_ID = reg)
-      }
-      EUR_hhAmbientHeat_R_Y_S_full <- bind_rows(EUR_hhAmbientHeat_R_Y_S_full, tmp)
+    missing_reg <- setdiff(unique(L144.ambient_heat_tech$GCAM_region_ID),
+                           unique(EUR_hhAmbientHeat_R_Y_S_extr$GCAM_region_ID))
+
+    for (reg in missing_reg) {
+      cg <- unique(iso_to_climate_group[iso_to_climate_group$GCAM_region_ID == reg,]$climate_group)
+      EUR_hhAmbientHeat_R_Y_S_reg <- EUR_hhAmbientHeat_R_Y_S_mean %>%
+        filter(climate_group == cg) %>%
+        mutate(GCAM_region_ID = reg) %>%
+        select(-climate_group)
+
+      EUR_hhAmbientHeat_R_Y_S_extr <- bind_rows(
+        EUR_hhAmbientHeat_R_Y_S_extr,
+        EUR_hhAmbientHeat_R_Y_S_reg
+      )
     }
-    EUR_hhAmbientHeat_R_Y_S_full <- EUR_hhAmbientHeat_R_Y_S_full %>%
-      filter(year %in% MODEL_BASE_YEARS)
 
-    # compute technology shares
-    L144.ambient_heat_tech <- estat_nrg_ind_ahbtc_filtered_en %>%
-      select(-OBS_FLAG) %>%
-      left_join_strict(heatpump_to_tech_map, by = c('hp_tech' = 'nrg_bal'), relationship = "many-to-many") %>%
-      filter(climate == 'average') %>%
-      # remove EU-27 and other aggregated regions
-      filter(nchar(geo) == 2) %>%
-      left_join_error_no_match(geo_to_climate_map, by = c('geo')) %>%
-      # delete Georgia (non EUR region)
-      filter(geo != 'GE') %>%
-      mutate(technology = if_else(!tech %in% c('heat pump','geo-water pump'), paste(tech, climate_group), tech)) %>%
-      group_by(unit, geo, year = TIME_PERIOD, service, subsector, technology) %>%
-      summarise(value = sum(OBS_VALUE)) %>%
+
+    # Scale the ambient heat reported by technology to the ambient heat reported by service
+    L144.ambient_heat_tech_scaled <- L144.ambient_heat_tech %>%
+      group_by(GCAM_region_ID, year, service) %>%
+      mutate(total_tech = sum(tech_ambient_heat)) %>%
       ungroup() %>%
-      # select historical years
-      filter(year %in% MODEL_BASE_YEARS) %>%
-      # add iso - GCAM_region_ID
-      left_join_error_no_match(iso_to_climate_group, by = 'geo') %>%
-      group_by(GCAM_region_ID, year, service, subsector, technology, climate_group) %>%
-      summarise(tech_ambient_heat = sum(value)) %>%
-      ungroup()
+      left_join_strict(EUR_hhAmbientHeat_R_Y_S_extr, by = c('GCAM_region_ID', 'year', 'service'))
+    # not working - hun hot water & shares extrapolation to old years
+
+    # GWh = TJ × 0.27778
+    mutate(service_ambient_heat = service_ambient_heat * 0.27778) %>%
+
 
     # adapt the tech amount before computing the shares
     EUR_hhAmbientHeat_R_Y_S_hotwater <- EUR_hhAmbientHeat_R_Y_S_full %>%
