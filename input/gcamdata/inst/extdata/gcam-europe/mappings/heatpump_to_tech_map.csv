@@ -29,18 +29,18 @@ GTH_EW,resid heating modern EUR,water heat pump,geo-water pump,warm
 HTH_EA,resid heating modern EUR,water heat pump,geo-water pump,average
 HTH_EC,resid heating modern EUR,water heat pump,geo-water pump,cold
 HTH_EW,resid heating modern EUR,water heat pump,geo-water pump,warm
-ATH_AW_EA,resid hot water modern EUR,water heat pump,air-water pump,average
-ATH_AW_EC,resid hot water modern EUR,water heat pump,air-water pump,cold
-ATH_AW_EW,resid hot water modern EUR,water heat pump,air-water pump,warm
-ATH_EAW_EA,resid hot water modern EUR,water heat pump,air-water pump,average
-ATH_EAW_EC,resid hot water modern EUR,water heat pump,air-water pump,cold
-ATH_EAW_EW,resid hot water modern EUR,water heat pump,air-water pump,warm
-ATH_RAW_EA,resid hot water modern EUR,water heat pump,air-water pump,average
-ATH_RAW_EC,resid hot water modern EUR,water heat pump,air-water pump,cold
-ATH_RAW_EW,resid hot water modern EUR,water heat pump,air-water pump,warm
-GTH_EA,resid hot water modern EUR,water heat pump,geo-water pump,average
-GTH_EC,resid hot water modern EUR,water heat pump,geo-water pump,cold
-GTH_EW,resid hot water modern EUR,water heat pump,geo-water pump,warm
-HTH_EA,resid hot water modern EUR,water heat pump,geo-water pump,average
-HTH_EC,resid hot water modern EUR,water heat pump,geo-water pump,cold
-HTH_EW,resid hot water modern EUR,water heat pump,geo-water pump,warm
+ATH_AW_EA,resid hot water modern EUR,water heat pump,heat pump,average
+ATH_AW_EC,resid hot water modern EUR,water heat pump,heat pump,cold
+ATH_AW_EW,resid hot water modern EUR,water heat pump,heat pump,warm
+ATH_EAW_EA,resid hot water modern EUR,water heat pump,heat pump,average
+ATH_EAW_EC,resid hot water modern EUR,water heat pump,heat pump,cold
+ATH_EAW_EW,resid hot water modern EUR,water heat pump,heat pump,warm
+ATH_RAW_EA,resid hot water modern EUR,water heat pump,heat pump,average
+ATH_RAW_EC,resid hot water modern EUR,water heat pump,heat pump,cold
+ATH_RAW_EW,resid hot water modern EUR,water heat pump,heat pump,warm
+GTH_EA,resid hot water modern EUR,water heat pump,heat pump,average
+GTH_EC,resid hot water modern EUR,water heat pump,heat pump,cold
+GTH_EW,resid hot water modern EUR,water heat pump,heat pump,warm
+HTH_EA,resid hot water modern EUR,water heat pump,heat pump,average
+HTH_EC,resid hot water modern EUR,water heat pump,heat pump,cold
+HTH_EW,resid hot water modern EUR,water heat pump,heat pump,warm

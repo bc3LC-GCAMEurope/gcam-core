@@ -31,8 +31,8 @@ resid hot water modern EUR,electricity,electricity,875.7961783,15,50,0.9,46.6666
 resid hot water modern EUR,refined liquids,refined liquids,2720.276008,15,75,0.7,60,0.027
 resid hot water modern EUR,district heat,district heat,676.7515924,20,20,0.72,58.33333333,0.024
 resid hot water modern EUR,biomass,biomass,2000,15,150,0.4,260,0.024
-resid hot water modern EUR,renewable,heat pump,2527.866242,20,90,2.4,17.5,0.027
-resid hot water modern EUR,renewable,solar thermal,2022.292994,20,90,0.58,72.4137931,0.027
+resid hot water modern EUR,water heat pump,heat pump,2527.866242,20,90,2.4,17.5,0.027
+resid hot water modern EUR,water heat pump,solar thermal,2022.292994,20,90,0.58,72.4137931,0.027
 resid other appliance modern EUR,electricity,electricity,2000,15,50,0.95,50,0.027
 resid cooking modern EUR,biomass,biomass,2000,15,150,0.4,260,0.024
 resid cooking coal EUR,coal,coal,750,15,75,0.5,100,0.027
