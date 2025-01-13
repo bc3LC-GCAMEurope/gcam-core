@@ -37,6 +37,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
              FILE = "gcam-europe/mappings/geo_to_iso_map",
              FILE = "gcam-europe/mappings/nrgbal_to_service_map",
              FILE = "gcam-europe/mappings/siec_to_fuel_map",
+             FILE = "gcam-europe/nrg_bal_c",
              "L101.in_EJ_R_bld_Fi_Yh_EUR",
              "L142.in_EJ_R_bld_F_Yh_EUR",
              "L143.HDDCDD_scen_RG3_Y",
@@ -78,6 +79,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     nrgbal_to_service_map <- get_data(all_data, "gcam-europe/mappings/nrgbal_to_service_map")
     siec_to_fuel_map <- get_data(all_data, "gcam-europe/mappings/siec_to_fuel_map")
     geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map") %>% filter_regions_europe()
+    nrg_bal_c <- get_data(all_data, "gcam-europe/nrg_bal_c")
     L101.in_EJ_R_bld_Fi_Yh_EUR <- get_data(all_data, "L101.in_EJ_R_bld_Fi_Yh_EUR")
     L142.in_EJ_R_bld_F_Yh_EUR <- get_data(all_data, "L142.in_EJ_R_bld_F_Yh_EUR")
     L143.HDDCDD_scen_RG3_Y <- get_data(all_data, "L143.HDDCDD_scen_RG3_Y") %>% filter_regions_europe()
@@ -816,13 +818,15 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     L144.ambient_heat_tech_extr <- L144.ambient_heat_tech %>%
       # linearly extrapolate backwards (some regions start reporting ambient heat in > MODEL_BASE_YEARS)
       # 1. compute ambient heat growth rate
-      group_by(GCAM_region_ID, service, subsector, technology) %>%
-      mutate(rate = if_else(tech_ambient_heat == 0, 0, (tech_ambient_heat - lag(tech_ambient_heat)) / tech_ambient_heat)) %>%
+      group_by(GCAM_region_ID, service, subsector, technology, climate_group) %>%
+      mutate(rate = if_else(tech_ambient_heat == 0 | is.na(lag(tech_ambient_heat)), 0, (tech_ambient_heat - lag(tech_ambient_heat)) / tech_ambient_heat)) %>%
       mutate(growth_rate = mean(rate, na.rm = T)) %>%
       mutate(growth_rate = if_else(is.na(growth_rate), 0, growth_rate)) %>%
+      ungroup() %>%
       # 2. complete dataset
-      complete(nesting(GCAM_region_ID, service, subsector, technology), year = c(2005, 2010,2015)) %>% # TODO - decide what to do with 1975 and 1990
+      complete(nesting(GCAM_region_ID, service, subsector, technology, climate_group), year = c(1990, 2005, 2010,2015)) %>% # TODO - decide what to do with 1975 and 1990
       # 3. fill growth rate and store the oldest (historically speaking) known year and corresponding value
+      group_by(GCAM_region_ID, service, subsector, technology, climate_group) %>%
       mutate(
         growth_rate = mean(growth_rate, na.rm = T), # Fill the growth rate
         latest_known_year = min(year[!is.na(tech_ambient_heat)], na.rm = T), # Find latest known year
@@ -847,21 +851,35 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
 
 
     # Compute ctry specific ambient heat given by Eurostat - not considering 'solar thermal'
-    EUR_hhAmbientHeat_R_Y_S <- estat_nrg_d_hhq_filtered_en %>%
-      filter(freq == 'A') %>% # Annual frequency
-      select(geo, year = TIME_PERIOD, value_eurostat = OBS_VALUE, nrg_bal, siec, unit) %>%
-      # add iso codes
-      left_join(geo_to_iso_map, by = 'geo') %>%
-      filter(!is.na(iso)) %>%
+    EUR_hhAmbientHeat_R_Y_S <- bind_rows(
+      # commercial (total) (and total residential, not accounted)
+      nrg_bal_c %>%
+        # reshape
+        tidyr::pivot_longer(cols = matches("^[0-9]+$"), names_to = 'year', values_to = 'value_eurostat') %>%
+        mutate(year = as.double(year)),
+      # residential by supplysector
+      estat_nrg_d_hhq_filtered_en %>%
+        filter(freq == 'A') %>% # Annual frequency
+        select(geo, year = TIME_PERIOD, value_eurostat = OBS_VALUE, nrg_bal, siec, unit)
+      ) %>%
+      # Remove GEorgia and aggregation of regions
+      filter(!geo %in% c("EU27_2020","EA20",'GE')) %>%
       # add GCAM regions
+      left_join_error_no_match(geo_to_iso_map, by = "geo") %>%
       left_join(iso_GCAM_regID, by = 'iso') %>%
-      # add GCAM sectors
-      left_join(nrgbal_to_service_map, by = 'nrg_bal') %>%
-      filter(!is.na(service)) %>% # remove nrg_bal == TOTAL
-      # add GCAM fuels
-      left_join(siec_to_fuel_map, by = 'siec') %>% # deleting heat pumps (because they are not present in the mapping file)
-      # SELECT AMBIENT HEAT (siec == RA600)
+      # Ok to have NAs
+      left_join(nrgbal_to_service_map %>%
+                  bind_rows(data.frame(
+                    nrg_bal = 'FC_OTH_CP_E',
+                    sector_EUROSTAT = 'Commercial',
+                    service = 'comm heating', # it corresponds to TOTAL commercial, but to our purpose and given that it is ambient heat, we consider that's all HEATING
+                    stringsAsFactors = FALSE
+                  )), by = "nrg_bal") %>%
+      left_join(siec_to_fuel_map, by = 'siec') %>%
+      # select ambient heat
       filter(siec == 'RA600') %>%
+      # remove NAs
+      filter(!is.na(service)) %>%
       # compute by GCAM_region_ID total fuel-service consumption
       group_by(GCAM_region_ID, year, unit, service, fuel, product) %>%
       summarise(value_eurostat = sum(value_eurostat)) %>%
@@ -878,7 +896,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       mutate(service = paste(service, 'EUR'),
              fuel = "electricity") %>%
       # consider only heating and hot water (the only items whose ambient heat is not null already)
-      filter(service %in% c("resid heating modern EUR", "resid hot water modern EUR"))
+      filter(service %in% c("comm heating modern EUR", "resid heating modern EUR", "resid hot water modern EUR"))
 
     # detect false 0s (the "estat_nrg_ind_ahbtc_filtered_en.csv" data file reports
     # not null values or  in year > 2015 some high values are reported)
@@ -898,7 +916,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       mutate(growth_rate = mean(rate, na.rm = T)) %>%
       mutate(growth_rate = if_else(is.na(growth_rate), 0, growth_rate)) %>%
       # 2. complete dataset
-      complete(nesting(GCAM_region_ID, unit, service, fuel), year = c(2005, 2010,2015)) %>% # TODO - decide what to do with 1975 and 1990
+      complete(nesting(GCAM_region_ID, unit, service, fuel), year = c(1990, 2005, 2010,2015)) %>% # TODO - decide what to do with 1975 and 1990
       # 3. fill growth rate and store the oldest (historically speaking) known year and corresponding value
       mutate(
         growth_rate = mean(growth_rate, na.rm = T), # Fill the growth rate
