@@ -1,0 +1,14 @@
+# File: heatpump_service_to_tech_map.csv
+# Title: Mapping from disaggregated data on pumped ambient heat by technology / subsector / service to GCAM-Europe techs
+# Units: NA
+# Source: Eurostat 
+# Column types: ccc
+# ----------
+service,subsector,technology
+resid heating modern EUR,electricity,air-air pump
+resid heating modern EUR,water heat pump,air-water pump
+resid heating modern EUR,water heat pump,geo-water pump
+comm heating EUR,electricity,air-air pump
+comm heating EUR,water heat pump,air-water pump
+comm heating EUR,water heat pump,geo-water pump
+resid hot water modern EUR,water heat pump,heat pump
