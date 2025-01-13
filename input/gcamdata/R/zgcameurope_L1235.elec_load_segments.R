@@ -33,7 +33,7 @@ module_gcameurope_L1235.elec_load_segments <- function(command, ...) {
 
     all_data <- list(...)[[1]]
 
-    # Load required inputs
+    # Load required inputs -------------------
     get_data_list(all_data, MODULE_INPUTS)
 
     elecS_time_fraction_long <- elecS_time_fraction %>%
@@ -60,73 +60,89 @@ module_gcameurope_L1235.elec_load_segments <- function(command, ...) {
     # Re-wrote gcam-usa code to be more concise and flexible to segment names
     # Assumes that the order of horizontal segments goes from base to peak in elecS_horizontal_to_vertical_map and
     # elecS_time_fraction
-    L1235.elecS_horizontal_vertical_EUR <- elecS_time_fraction_long %>%
-      left_join_error_no_match(elecS_horizontal_to_vertical_map %>% select(section, time_sec, seg_order), by = "time_sec") %>%
-      repeat_add_columns(tibble(seg_order_horizontal = seq_along(elecS_horizontal_to_vertical_map$horizontal_segment))) %>%
-      mutate(time = if_else(seg_order_horizontal > seg_order, 0, time)) %>%
-      group_by(grid_region, seg_order_horizontal) %>%
-      mutate(time = time / sum(time)) %>%
-      ungroup %>%
-      left_join_error_no_match(elecS_horizontal_to_vertical_map %>%  select(horizontal_segment, seg_order),
-                               by = c("seg_order_horizontal" = "seg_order")) %>%
-      select(-seg_order, -seg_order_horizontal, -time_sec) %>%
-      tidyr::pivot_wider(names_from = section, values_from = time)
+    # L1235.elecS_horizontal_vertical_EUR <- elecS_time_fraction_long %>%
+    #   left_join_error_no_match(elecS_horizontal_to_vertical_map %>% select(section, time_sec, seg_order), by = "time_sec") %>%
+    #   repeat_add_columns(tibble(seg_order_horizontal = seq_along(elecS_horizontal_to_vertical_map$horizontal_segment))) %>%
+    #   mutate(time = if_else(seg_order_horizontal > seg_order, 0, time)) %>%
+    #   group_by(grid_region, seg_order_horizontal) %>%
+    #   mutate(time = time / sum(time)) %>%
+    #   ungroup %>%
+    #   left_join_error_no_match(elecS_horizontal_to_vertical_map %>%  select(horizontal_segment, seg_order),
+    #                            by = c("seg_order_horizontal" = "seg_order")) %>%
+    #   select(-seg_order, -seg_order_horizontal, -time_sec) %>%
+    #   tidyr::pivot_wider(names_from = section, values_from = time)
 
-    # Computing GCAM I/O coefficients --------------------------------------------
-    # Again simplified code to reduce hard-coding and
-    L1235.elecS_horizontal_vertical_GCAM_coeff_EUR <- elecS_demand_fraction_long %>%
-      left_join_error_no_match(elecS_horizontal_to_vertical_map %>%  select(section, demand_sec, time_sec, seg_order, vertical_segment), by = "demand_sec") %>%
-      left_join_error_no_match(elecS_time_fraction_long, by = c("grid_region", "time_sec")) %>%
-      repeat_add_columns(select(elecS_horizontal_to_vertical_map, horizontal_segment, seg_order_horizontal = seg_order)) %>%
-      mutate(load_pct = 0)
+    # With new data from Comillas, all horizontal and vertical segments are equal
+    L1235.elecS_horizontal_vertical_EUR <- elecS_horizontal_to_vertical_map %>%
+      select(horizontal_segment, section) %>%
+      mutate(fraction = 1) %>%
+      tidyr::pivot_wider(names_from = section, values_from = fraction) %>%
+      replace(is.na(.), 0) %>%
+      repeat_add_columns(distinct(L1234.out_EJ_grid_elec_F_EUR, grid_region))
 
-    # loop through calculating % of load supplied by horizontal segments
-    for (i in 1:max(L1235.elecS_horizontal_vertical_GCAM_coeff_EUR$seg_order_horizontal)){
-      # The first load segment is an exception, load just equals demand
-      if (i == 1){
-        elec_tmp <- L1235.elecS_horizontal_vertical_GCAM_coeff_EUR %>%
-          filter(seg_order_horizontal == i) %>%
-          group_by(grid_region) %>%
-          mutate(load_pct = if_else(seg_order >=  seg_order_horizontal,
-                                demand[seg_order == seg_order_horizontal] * time / time[seg_order == seg_order_horizontal],
-                                load_pct)) %>%
-          ungroup
-      } else {
-        # For other load segments, need to know sum of previous segment
-        elec_tmp <- L1235.elecS_horizontal_vertical_GCAM_coeff_EUR %>%
-          group_by(grid_region, seg_order) %>%
-          mutate(load_pct = if_else(seg_order == i & seg_order_horizontal == i, demand - sum(load_pct[seg_order_horizontal < i]), load_pct)) %>%
-          ungroup %>%
-          filter(seg_order_horizontal == i) %>%
-          group_by(grid_region) %>%
-          mutate(load_pct = if_else(seg_order >  seg_order_horizontal,
-                                load_pct[seg_order == seg_order_horizontal] * time / time[seg_order == seg_order_horizontal],
-                                load_pct)) %>%
-          ungroup
-      }
-      # Now update with newly calculated load
-      L1235.elecS_horizontal_vertical_GCAM_coeff_EUR <- L1235.elecS_horizontal_vertical_GCAM_coeff_EUR %>%
-        filter(seg_order_horizontal != i) %>%
-        bind_rows(elec_tmp)
-    }
 
-    L1235.elecS_horizontal_vertical_GCAM_coeff_EUR <- L1235.elecS_horizontal_vertical_GCAM_coeff_EUR %>%
-      select(grid_region, horizontal_segment, section, vertical_segment, load_pct) # %>%
-      # tidyr::pivot_wider(names_from = section, values_from = elec) %>%
-      # arrange(grid_region)
+    # Computing GCAM I/O coefficients OLD --------------------------------------------
+    # # Again simplified code to reduce hard-coding and
+    # L1235.elecS_horizontal_vertical_GCAM_coeff_EUR <- elecS_demand_fraction_long %>%
+    #   left_join_error_no_match(elecS_horizontal_to_vertical_map %>%  select(section, demand_sec, time_sec, seg_order, vertical_segment), by = "demand_sec") %>%
+    #   left_join_error_no_match(elecS_time_fraction_long, by = c("grid_region", "time_sec")) %>%
+    #   repeat_add_columns(select(elecS_horizontal_to_vertical_map, horizontal_segment, seg_order_horizontal = seg_order)) %>%
+    #   mutate(load_pct = 0)
+    #
+    # # loop through calculating % of load supplied by horizontal segments
+    # for (i in 1:max(L1235.elecS_horizontal_vertical_GCAM_coeff_EUR$seg_order_horizontal)){
+    #   # The first load segment is an exception, load just equals demand
+    #   if (i == 1){
+    #     elec_tmp <- L1235.elecS_horizontal_vertical_GCAM_coeff_EUR %>%
+    #       filter(seg_order_horizontal == i) %>%
+    #       group_by(grid_region) %>%
+    #       mutate(load_pct = if_else(seg_order >=  seg_order_horizontal,
+    #                             demand[seg_order == seg_order_horizontal] * time / time[seg_order == seg_order_horizontal],
+    #                             load_pct)) %>%
+    #       ungroup
+    #   } else {
+    #     # For other load segments, need to know sum of previous segment
+    #     elec_tmp <- L1235.elecS_horizontal_vertical_GCAM_coeff_EUR %>%
+    #       group_by(grid_region, seg_order) %>%
+    #       mutate(load_pct = if_else(seg_order == i & seg_order_horizontal == i, demand - sum(load_pct[seg_order_horizontal < i]), load_pct)) %>%
+    #       ungroup %>%
+    #       filter(seg_order_horizontal == i) %>%
+    #       group_by(grid_region) %>%
+    #       mutate(load_pct = if_else(seg_order >  seg_order_horizontal,
+    #                             load_pct[seg_order == seg_order_horizontal] * time / time[seg_order == seg_order_horizontal],
+    #                             load_pct)) %>%
+    #       ungroup
+    #   }
+    #   # Now update with newly calculated load
+    #   L1235.elecS_horizontal_vertical_GCAM_coeff_EUR <- L1235.elecS_horizontal_vertical_GCAM_coeff_EUR %>%
+    #     filter(seg_order_horizontal != i) %>%
+    #     bind_rows(elec_tmp)
+    # }
+    #
+    # L1235.elecS_horizontal_vertical_GCAM_coeff_EUR <- L1235.elecS_horizontal_vertical_GCAM_coeff_EUR %>%
+    #   select(grid_region, horizontal_segment, section, vertical_segment, load_pct) # %>%
+    #   # tidyr::pivot_wider(names_from = section, values_from = elec) %>%
+    #   # arrange(grid_region)
 
+    # Computing GCAM I/O coefficients NEW COMILLAS ---------------------
+    # no differential between horizontal and vertical segments
+    L1235.elecS_horizontal_vertical_GCAM_coeff_EUR <- elecS_horizontal_to_vertical_map %>%
+      select(supplysector = vertical_segment, minicam.energy.input = horizontal_segment) %>%
+      mutate(coefficient = 1,
+             subsector = supplysector, technology = supplysector) %>%
+      repeat_add_columns(distinct(L1234.out_EJ_grid_elec_F_EUR, grid_region))
     # Final GCAM Coefficients ------------------------------------------------------
-    # The final GCAM coefficients will be obtained by dividing the percentage of load supplied by
-    # horizontal segments by total load in the vertical segments
-    L1235.elecS_horizontal_vertical_GCAM_coeff_EUR <- L1235.elecS_horizontal_vertical_GCAM_coeff_EUR %>%
-      group_by(grid_region, section) %>%
-      mutate(coefficient = load_pct / sum(load_pct)) %>%
-      ungroup %>%
-      filter(coefficient != 0) %>%
-      mutate(supplysector = vertical_segment, subsector = vertical_segment, technology = vertical_segment) %>%
-      select(grid_region, supplysector, subsector, technology,
-             minicam.energy.input = horizontal_segment, coefficient) %>%
-      arrange(grid_region)
+    # # The final GCAM coefficients will be obtained by dividing the percentage of load supplied by
+    # # horizontal segments by total load in the vertical segments
+    # L1235.elecS_horizontal_vertical_GCAM_coeff_EUR <- L1235.elecS_horizontal_vertical_GCAM_coeff_EUR %>%
+    #   group_by(grid_region, section) %>%
+    #   mutate(coefficient = load_pct / sum(load_pct)) %>%
+    #   ungroup %>%
+    #   filter(coefficient != 0) %>%
+    #   mutate(supplysector = vertical_segment, subsector = vertical_segment, technology = vertical_segment) %>%
+    #   select(grid_region, supplysector, subsector, technology,
+    #          minicam.energy.input = horizontal_segment, coefficient) %>%
+    #   arrange(grid_region)
 
     # Check for negative coefficients.
     stopifnot(all(L1235.elecS_horizontal_vertical_GCAM_coeff_EUR$coefficient >= 0))
@@ -137,10 +153,10 @@ module_gcameurope_L1235.elec_load_segments <- function(command, ...) {
       left_join(elecS_horizontal_to_vertical_map, by = "demand_sec") %>%
       select(grid_region, vertical_segment, demand_fraction = demand)
 
-    elecS_fuel_fraction <- elecS_fuel_fraction %>%
-      gather(year, fraction, -fuel, -segment) %>%
-      mutate(year = gsub("fraction", "", year),
-             year = as.integer(year))
+    # elecS_fuel_fraction <- elecS_fuel_fraction %>%
+    #   gather(year, fraction, -fuel, -segment) %>%
+    #   mutate(year = gsub("fraction", "", year),
+    #          year = as.integer(year))
 
     L1235.grid_elec_supply_EUR <- L1234.out_EJ_grid_elec_F_EUR %>%
       mutate(fuel = sub("solar CSP", "solar", fuel),
@@ -151,7 +167,7 @@ module_gcameurope_L1235.elec_load_segments <- function(command, ...) {
       mutate(year = as.integer(year)) %>%
       # this join is intended to duplicate rows; left_join_error_no_match throws an error,
       # so left_join is used instead
-      left_join(elecS_fuel_fraction, by = c("fuel", "year")) %>%
+      left_join(elecS_fuel_fraction, by = c("fuel")) %>%
       filter(!is.na(fraction)) %>%
       mutate(generation = generation * fraction) %>%
       select(grid_region, segment, fuel, year, generation, fraction)

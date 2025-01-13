@@ -30,7 +30,7 @@ module_gcameurope_L1236.elec_load_segments_solver <- function(command, ...) {
 
     all_data <- list(...)[[1]]
 
-    # Load required inputs
+    # Load required inputs ------------
     get_data_list(all_data, MODULE_INPUTS)
 
     # Idea: balance horizontal segment production while minimizing change to demand fraction
@@ -88,7 +88,7 @@ module_gcameurope_L1236.elec_load_segments_solver <- function(command, ...) {
       filter(tot_generation > 0)
 
     L1236.grid_elec_supply_EUR <- tibble()
-
+    horizontal_segment_shares_R <- tibble()
 
     for (REGION in unique(L1235.elecS_horizontal_vertical_EUR$grid_region)){
       for (YEAR in MODEL_BASE_YEARS){
@@ -109,7 +109,8 @@ module_gcameurope_L1236.elec_load_segments_solver <- function(command, ...) {
 
         horizontal_segment_shares <- solve(A, B) %>% as_tibble()
         horizontal_segment_shares$horizontal_segment <- unique(L1235.elecS_horizontal_vertical_EUR$horizontal_segment)
-
+        horizontal_segment_shares_R <- bind_rows(horizontal_segment_shares_R,
+                                                 horizontal_segment_shares %>% mutate(grid_region = REGION)) %>% distinct()
         # Need to change these fractions
         supply_init <- L1236.grid_elec_supply_preadj %>%
           filter(grid_region == REGION, year == YEAR)
@@ -233,7 +234,7 @@ module_gcameurope_L1236.elec_load_segments_solver <- function(command, ...) {
       group_by(grid_region, year) %>%
       summarise(generation = round(sum(generation), CHECK_ROUND)) %>%
       ungroup %>%
-      repeat_add_columns(horizontal_segment_shares %>%  rename(segment = horizontal_segment)) %>%
+      left_join(horizontal_segment_shares_R %>%  rename(segment = horizontal_segment), by = "grid_region") %>%
       mutate(generation =  round(generation * demand_fraction, CHECK_ROUND)) %>%
       select(-demand_fraction)
 
