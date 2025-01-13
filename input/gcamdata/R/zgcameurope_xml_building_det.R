@@ -11,38 +11,39 @@
 #' the generated outputs: \code{building_det_EUR.xml}. The corresponding file in the
 #' original data system was \code{batch_building_det_EUR.xml} (energy XML).
 module_gcameurope_building_det_xml <- function(command, ...) {
+  MODULE_INPUTS <- c("L244.SubsectorInterpTo_bld_EUR",
+                     "L244.SubsectorInterp_bld_EUR",
+                     "L244.SubsectorShrwtFllt_bld_EUR",
+                     "L244.SubsectorShrwt_bld_EUR",
+                     "L244.FinalEnergyKeyword_bld_EUR",
+                     "L244.Supplysector_bld_EUR",
+                     "L244.ShellConductance_bld_EUR",
+                     "L244.Intgains_scalar_EUR",
+                     "L244.GenericServiceSatiation_EUR",
+                     "L244.ThermalServiceSatiation_EUR",
+                     "L244.GenericBaseService_EUR",
+                     "L244.ThermalBaseService_EUR",
+                     "L244.SatiationAdder_EUR",
+                     "L244.Satiation_flsp_EUR",
+                     "L244.DemandFunction_flsp_EUR",
+                     "L244.DemandFunction_serv_EUR",
+                     "L244.Floorspace_EUR",
+                     "L244.PriceExp_IntGains_EUR",
+                     "L244.SubregionalShares_EUR",
+                     "L244.SubsectorLogit_bld_EUR",
+                     "L244.FuelPrefElast_bld_EUR",
+                     "L244.StubTech_bld_EUR",
+                     "L244.StubTechEff_bld_EUR",
+                     "L244.StubTechCalInput_bld_EUR",
+                     "L244.StubTechIntGainOutputRatio_EUR",
+                     "L244.DeleteThermalService_EUR",
+                     "L244.DeleteGenericService_EUR",
+                     "L244.GompFnParam_EUR",
+                     "L244.GlobalTechShrwt_bld_EUR",
+                     "L244.GlobalTechCost_bld_EUR",
+                     "L244.GlobalTechTrackCapital_bld_EUR")
   if(command == driver.DECLARE_INPUTS) {
-    return(c("L244.SubsectorInterpTo_bld_EUR",
-             "L244.SubsectorInterp_bld_EUR",
-             "L244.SubsectorShrwtFllt_bld_EUR",
-             "L244.SubsectorShrwt_bld_EUR",
-             "L244.FinalEnergyKeyword_bld_EUR",
-             "L244.Supplysector_bld_EUR",
-             "L244.ShellConductance_bld_EUR",
-             "L244.Intgains_scalar_EUR",
-             "L244.GenericServiceSatiation_EUR",
-             "L244.ThermalServiceSatiation_EUR",
-             "L244.GenericBaseService_EUR",
-             "L244.ThermalBaseService_EUR",
-             "L244.SatiationAdder_EUR",
-             "L244.Satiation_flsp_EUR",
-             "L244.DemandFunction_flsp_EUR",
-             "L244.DemandFunction_serv_EUR",
-             "L244.Floorspace_EUR",
-             "L244.PriceExp_IntGains_EUR",
-             "L244.SubregionalShares_EUR",
-             "L244.SubsectorLogit_bld_EUR",
-             "L244.FuelPrefElast_bld_EUR",
-             "L244.StubTech_bld_EUR",
-             "L244.StubTechEff_bld_EUR",
-             "L244.StubTechCalInput_bld_EUR",
-             "L244.StubTechIntGainOutputRatio_EUR",
-             "L244.DeleteThermalService_EUR",
-             "L244.DeleteGenericService_EUR",
-             "L244.GompFnParam_EUR",
-             "L244.GlobalTechShrwt_bld_EUR",
-             "L244.GlobalTechCost_bld_EUR",
-             "L244.GlobalTechTrackCapital_bld_EUR"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c(XML = "building_det_EUR.xml"))
   } else if(command == driver.MAKE) {
@@ -50,37 +51,18 @@ module_gcameurope_building_det_xml <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    L244.SubsectorInterpTo_bld_EUR <- get_data(all_data, "L244.SubsectorInterpTo_bld_EUR")
-    L244.SubsectorInterp_bld_EUR <- get_data(all_data, "L244.SubsectorInterp_bld_EUR")
-    L244.SubsectorShrwtFllt_bld_EUR <- get_data(all_data, "L244.SubsectorShrwtFllt_bld_EUR")
-    L244.SubsectorShrwt_bld_EUR <- get_data(all_data, "L244.SubsectorShrwt_bld_EUR")
-    L244.FinalEnergyKeyword_bld_EUR <- get_data(all_data, "L244.FinalEnergyKeyword_bld_EUR")
-    L244.Supplysector_bld_EUR <- get_data(all_data, "L244.Supplysector_bld_EUR")
-    L244.ShellConductance_bld_EUR <- get_data(all_data, "L244.ShellConductance_bld_EUR")
-    L244.Intgains_scalar_EUR <- get_data(all_data, "L244.Intgains_scalar_EUR")
-    L244.GenericServiceSatiation_EUR <- get_data(all_data, "L244.GenericServiceSatiation_EUR")
-    L244.ThermalServiceSatiation_EUR <- get_data(all_data, "L244.ThermalServiceSatiation_EUR")
-    L244.GenericBaseService_EUR <- get_data(all_data, "L244.GenericBaseService_EUR")
-    L244.ThermalBaseService_EUR <- get_data(all_data, "L244.ThermalBaseService_EUR")
-    L244.SatiationAdder_EUR <- get_data(all_data, "L244.SatiationAdder_EUR")
-    L244.Satiation_flsp_EUR <- get_data(all_data, "L244.Satiation_flsp_EUR")
-    L244.DemandFunction_flsp_EUR <- get_data(all_data, "L244.DemandFunction_flsp_EUR")
-    L244.DemandFunction_serv_EUR <- get_data(all_data, "L244.DemandFunction_serv_EUR")
-    L244.Floorspace_EUR <- get_data(all_data, "L244.Floorspace_EUR")
-    L244.PriceExp_IntGains_EUR <- get_data(all_data, "L244.PriceExp_IntGains_EUR")
-    L244.SubregionalShares_EUR <- get_data(all_data, "L244.SubregionalShares_EUR")
-    L244.SubsectorLogit_bld_EUR <- get_data(all_data, "L244.SubsectorLogit_bld_EUR")
-    L244.FuelPrefElast_bld_EUR <- get_data(all_data, "L244.FuelPrefElast_bld_EUR")
-    L244.StubTech_bld_EUR <- get_data(all_data, "L244.StubTech_bld_EUR")
-    L244.StubTechEff_bld_EUR <- get_data(all_data, "L244.StubTechEff_bld_EUR")
-    L244.StubTechCalInput_bld_EUR <- get_data(all_data, "L244.StubTechCalInput_bld_EUR")
-    L244.StubTechIntGainOutputRatio_EUR <- get_data(all_data, "L244.StubTechIntGainOutputRatio_EUR")
-    L244.DeleteThermalService_EUR <- get_data(all_data, "L244.DeleteThermalService_EUR")
-    L244.DeleteGenericService_EUR <- get_data(all_data, "L244.DeleteGenericService_EUR")
-    L244.GompFnParam_EUR <- get_data(all_data, "L244.GompFnParam_EUR")
-    L244.GlobalTechShrwt_bld_EUR <- get_data(all_data, "L244.GlobalTechShrwt_bld_EUR")
-    L244.GlobalTechCost_bld_EUR <- get_data(all_data, "L244.GlobalTechCost_bld_EUR")
-    L244.GlobalTechTrackCapital_bld_EUR <- get_data(all_data, "L244.GlobalTechTrackCapital_bld_EUR")
+    get_data_list(all_data, MODULE_INPUTS)
+
+    # TEMPORARY: add _EUR to all techs
+    for (df_nm in MODULE_INPUTS){
+      df <- get(df_nm)
+      tech_cols <- grepl("technology", names(df))
+      if(any(tech_cols)){
+        col_id <- which(tech_cols)
+        df[, col_id] <- apply(df[, col_id], 2, function(x) paste0(x, "_EUR"))
+      }
+      assign(df_nm, df)
+    }
 
     # ===================================================
 
