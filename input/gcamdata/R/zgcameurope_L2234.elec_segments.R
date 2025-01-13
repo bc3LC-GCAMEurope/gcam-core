@@ -393,7 +393,9 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
                                                              "period", "minicam.energy.input", "market.name", "efficiency"),
                                                            region_list = grid_regions$region) %>%
       left_join_error_no_match(grid_regions, by = "region") %>%
-      mutate(market.name = if_else(market.name == "grid_region", grid_region, region)) %>%
+      left_join_error_no_match(L2234.elecS_globaltech_capital_battery_ATB %>% distinct(supplysector, subsector, technology)) %>%
+      mutate(market.name = if_else(market.name == "grid_region", grid_region, region),
+             stub.technology = technology) %>%
       select(region, supplysector, subsector, stub.technology, year = period,
              minicam.energy.input, efficiency, market.name)
 
