@@ -16,12 +16,14 @@
 #' @author KD August 2018 / YO March 2022 / RH Sept 2024
 module_gcameurope_L2236.elecS_emissions <- function(command, ...) {
   MODULE_INPUTS <- c(FILE = "energy/A23.globaltech_input_driver",
+                     FILE = "water/elec_tech_water_map",
                      FILE = "gcam-europe/A23.elecS_naming",
                      FILE = "common/GCAM_region_names",
                      'L1231.in_EJ_R_elec_F_tech_Yh_EUR',
                      'L201.OutputEmissions_elec',
                      'L241.OutputEmissCoeff_elec',
                      'L2234.StubTechCost_offshore_wind_elecS_EUR',
+                     'L2234.GlobalTechOMfixed_elecS_EUR',
                      'L2235.StubTech_elecS_cool_EUR',
                      'L2235.StubTechCalInput_elecS_cool_EUR')
   if(command == driver.DECLARE_INPUTS) {
@@ -35,6 +37,25 @@ module_gcameurope_L2236.elecS_emissions <- function(command, ...) {
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
+
+    battery_mapping <- L2234.GlobalTechOMfixed_elecS_EUR %>%  filter(grepl("battery", technology)) %>%
+      distinct(subsector.name, technology) %>%
+      mutate(to.technology = technology)
+
+    elec_cool_expansion <- distinct(elec_tech_water_map, subsector.name = from.subsector,
+                                    technology = to.subsector, to.technology, from.technology) %>%
+      repeat_add_columns(distinct(A23.elecS_naming, name_adder)) %>%
+      # storage, wind , and solar tech names need to be taken from from.technology, other techs from.technology col
+      mutate(technology = if_else(grepl("storage|solar|wind", technology),
+                                  paste(from.technology, name_adder, sep = "_"),
+                                  # don't want to change rooftop
+                                  if_else(subsector.name == "rooftop_pv", technology,
+                                          # All other cases
+                                          paste(technology, name_adder, sep = "_")))) %>%
+      select(subsector.name, technology, to.technology) %>%
+      # add in battery
+      bind_rows(battery_mapping) %>%
+      distinct()
 
     # 1. Define functions ===========================================================================================
     add_global_cooling_techs <- function(data){
