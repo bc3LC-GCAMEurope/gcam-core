@@ -829,7 +829,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       mutate(growth_rate = if_else(is.na(growth_rate), 0, growth_rate)) %>%
       ungroup() %>%
       # 2. complete dataset
-      complete(nesting(GCAM_region_ID, subsector, technology, climate_group), year = c(1990, 2005, 2010,2015)) %>% # TODO - decide what to do with 1975 and 1990
+      complete(nesting(GCAM_region_ID, subsector, technology, climate_group), year = c(1975, 1990, 2005, 2010, 2015)) %>%
       # 3. fill growth rate and store the oldest (historically speaking) known year and corresponding value
       group_by(GCAM_region_ID, subsector, technology, climate_group) %>%
       mutate(
@@ -919,7 +919,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       mutate(growth_rate = mean(rate, na.rm = T)) %>%
       mutate(growth_rate = if_else(is.na(growth_rate), 0, growth_rate)) %>%
       # 2. complete dataset
-      complete(nesting(GCAM_region_ID, unit, service, fuel), year = c(1990, 2005, 2010,2015)) %>% # TODO - decide what to do with 1975 and 1990
+      complete(nesting(GCAM_region_ID, unit, service, fuel), year = c(1975, 1990, 2005, 2010, 2015)) %>%
       # 3. fill growth rate and store the oldest (historically speaking) known year and corresponding value
       mutate(
         growth_rate = mean(growth_rate, na.rm = T), # Fill the growth rate

@@ -52,6 +52,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              "L144.base_service_EJ_serv_EUR",
              "L144.base_service_EJ_serv_fuel_EUR",
              "L144.in_EJ_R_bld_serv_F_Yh_EUR",
+             "L144.in_EJ_R_bld_serv_tech_F_Yh_EUR",
              "L144.end_use_eff_EUR",
              "L144.shell_eff_R_Y_EUR",
              "L144.NEcost_75USDGJ_EUR",
@@ -807,8 +808,15 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     ## The level1 end-use tech efficiency file has all of the combinations that exist
     L244.Tech_bld <- add.cg(L144.end_use_eff_EUR) %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
+      # remove non matching region - tech pairs (e.g., Austria air-air pump north)
+      mutate(service = sub("_d.*", "", supplysector)) %>%
+      inner_join(L144.in_EJ_R_bld_serv_tech_F_Yh_EUR %>%
+                   select(GCAM_region_ID, service, subsector, technology) %>%
+                   distinct(),
+                 by = c('GCAM_region_ID','service','subsector','technology')) %>%
       select(region, supplysector, subsector, technology) %>%
       distinct()
+
 
     # L244.SubsectorLogit_bld_EUR: Subsector logit exponents of building sector
     L244.SubsectorLogit_bld_EUR <- write_to_all_regions(A44.subsector_logit_EUR, c(LEVEL2_DATA_NAMES[["SubsectorLogit"]], LOGIT_TYPE_COLNAME),
@@ -884,13 +892,12 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       rename(stub.technology = technology)
 
     # L244.StubTechCalInput_bld_EUR: Calibrated energy consumption by buildings technologies
-    L244.StubTechCalInput_bld_pre <- L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
+    L244.StubTechCalInput_bld_pre <- L144.in_EJ_R_bld_serv_tech_F_Yh_EUR %>%
       filter(year %in% MODEL_BASE_YEARS) %>%
       rename(calibrated.value = value) %>%
       mutate(calibrated.value = round(calibrated.value, energy.DIGITS_CALOUTPUT)) %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
-      left_join(calibrated_techs_bld_det_EUR, by = c("sector", "service", "fuel"),
-                relationship = "many-to-many") %>%
+      left_join_error_no_match(calibrated_techs_bld_det_EUR, by = c("sector", "service", "fuel", "subsector", "technology")) %>% # to have minicam.energy.input, gcam.consumer... and other columns
       mutate(share.weight.year = year,
              stub.technology = technology) %>%
       group_by(region, supplysector, subsector, year) %>%
@@ -904,6 +911,10 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     # L244.StubTechEff_bld_EUR: Assumed efficiencies (all years) of buildings technologies
     L244.StubTechEff_bld_pre <- L144.end_use_eff_EUR %>%
+      inner_join(L144.in_EJ_R_bld_serv_tech_F_Yh_EUR %>%
+                   select(GCAM_region_ID, year, supplysector = service, subsector, technology) %>%
+                   distinct(),
+                 by = c('GCAM_region_ID','year','supplysector','subsector','technology')) %>%
       filter(year %in% MODEL_YEARS) %>%
       mutate(value = round(value, energy.DIGITS_CALOUTPUT)) %>%
       rename(efficiency = value) %>%
@@ -973,6 +984,10 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     # L244.StubTechIntGainOutputRatio_EUR: Output ratios of internal gain energy from non-thermal building services
     L244.StubTechIntGainOutputRatio_pre <- L144.internal_gains_EUR %>%
+      inner_join(L144.in_EJ_R_bld_serv_tech_F_Yh_EUR %>%
+                   select(GCAM_region_ID, year, supplysector = service, subsector, technology) %>%
+                   distinct(),
+                 by = c('GCAM_region_ID','year','supplysector','subsector','technology')) %>%
       filter(year %in% MODEL_YEARS) %>%
       # Round and rename value
       mutate(value = round(value, energy.DIGITS_EFFICIENCY)) %>%
