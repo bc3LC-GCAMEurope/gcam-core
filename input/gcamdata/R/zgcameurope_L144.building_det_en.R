@@ -1246,56 +1246,71 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
   # Base service (output by each service) is the product of energy consumption and efficiency, aggregated by region, sector, service
 
 
-  #### L144.in_EJ_R_bld_serv_tech_F_Yh_EUR
-  # Assuming we divide equally the energy consumption among all technologies (non heat pumps),
-  # reduce the heating energy consumption, and if necessary, the cooking energy consumption
-  L144.in_EJ_R_bld_serv_tech_elec_F_Yh_EUR <- L144.in_EJ_R_bld_serv_F_Yh_EUR_pre %>%
-    filter(fuel == 'electricity') %>%
-    left_join(L144.en_used %>%
-                group_by(GCAM_region_ID, year, service = supplysector, technology) %>%
-                summarise(value = sum(value)) %>%
-                ungroup(),
-              by = c('GCAM_region_ID','year','service')) %>%
-    # divide equally the heat pump energy among the technologies
-    mutate(value.y = if_else(is.na(value.y), 0, value.y)) %>%
-    mutate(value = value.x - value.y) %>%
-    # if heat pumps energy is > than consumed heat, we reduce the remaining energy from cooking
-    mutate(adj_value = if_else(value < 0 & value.y != 0, value, 0),
-           value = if_else(value < 0 & value.x > 0, 0, value)) %>%
-    # adjust the adj_value value to all services by group
-    group_by(GCAM_region_ID, sector, fuel, year) %>%
-    mutate(adj_value = min(adj_value)) %>%
-    ungroup() %>%
-    select(-value.x, -value.y) %>%
-    # add 'technology' if NA
-    mutate(technology = if_else(is.na(technology), 'electricity', technology))
+   #### L144.in_EJ_R_bld_serv_tech_F_Yh_EUR
+   # Reduce the heating energy consumption (substract the heat pumps energy),
+   # and if necessary, the cooking/other energy consumption
+   L144.in_EJ_R_bld_serv_tech_elec_F_Yh_EUR <- L144.in_EJ_R_bld_serv_F_Yh_EUR_pre %>%
+     filter(fuel == 'electricity') %>%
+     left_join(L144.en_used %>%
+                 group_by(GCAM_region_ID, year, service) %>%
+                 summarise(value = sum(value)) %>%
+                 ungroup(),
+               by = c('GCAM_region_ID','year','service')) %>%
+     mutate(value.y = if_else(is.na(value.y), 0, value.y)) %>%
+     mutate(value = value.x - value.y) %>%
+     # if heat pumps energy is > than consumed heat, we reduce the remaining energy from cooking/other
+     mutate(adj_value = if_else(value < 0 & value.y != 0, value, 0),
+            value = if_else(value < 0 & value.x > 0, 0, value)) %>%
+     # adjust the adj_value value to all services by group
+     group_by(GCAM_region_ID, sector, fuel, year) %>%
+     mutate(adj_value = min(adj_value)) %>%
+     ungroup() %>%
+     select(-value.x, -value.y)
 
-  L144.in_EJ_R_bld_serv_tech_F_Yh_EUR <-
-    bind_rows(
-      # non-electricity bld_serv
-      L144.in_EJ_R_bld_serv_F_Yh_EUR_pre %>%
-        filter(fuel != 'electricity') %>%
-        mutate(adj_value = 0,
-               technology = if_else(fuel == 'heat', 'district heat', fuel)),
-      # adjusted bld_serv
-      L144.in_EJ_R_bld_serv_tech_elec_F_Yh_EUR,
-      # heat pumps
-      L144.en_used %>%
-        mutate(adj_value = 0,
-               fuel = 'electricity',
-               sector = if_else(grepl('resid',supplysector), 'bld_resid', 'bld_comm')) %>%
-        group_by(GCAM_region_ID, sector, fuel, service = supplysector, technology, year, adj_value) %>%
-        summarise(value = sum(value)) %>%
-        ungroup()) %>%
-    mutate(value = if_else(service == 'resid cooking modern EUR', value + adj_value, value)) %>% # adj_value is already negative
-    mutate(value = if_else(service == 'comm others EUR', value + adj_value, value)) %>% # adj_value is already negative
-    # aggregate if necessary
-    group_by(GCAM_region_ID, sector, fuel, service, technology, year) %>%
-    summarise(value = sum(value)) %>%
-    ungroup() %>%
-    # select historical years
-    filter(year <= MODEL_FINAL_BASE_YEAR) # This is a final output table.
+   L144.in_EJ_R_bld_serv_tech_F_Yh_EUR <-
+     bind_rows(
+       # non-electricity bld_serv
+       L144.in_EJ_R_bld_serv_F_Yh_EUR_pre %>%
+         filter(fuel != 'electricity') %>%
+         mutate(adj_value = 0),
+       # adjusted bld_serv
+       L144.in_EJ_R_bld_serv_tech_elec_F_Yh_EUR
+     ) %>%
+     left_join_error_no_match(calibrated_techs_bld_det_EUR %>%
+                                filter(!grepl('pump', technology),
+                                       !(grepl('heating', service) & subsector == 'electricity' & technology == 'electricity')), # remaining energy is "resistance"
+                              by = c("sector", "service", "fuel")) %>%
+     bind_rows(
+       # heat pumps
+       L144.en_used %>%
+         mutate(adj_value = 0,
+                fuel = 'electricity',
+                sector = if_else(grepl('resid',service), 'bld_resid', 'bld_comm')) %>%
+         left_join_error_no_match(calibrated_techs_bld_det_EUR,
+                                  by = c("sector", "service", "fuel", "subsector", "technology"))) %>%
+     mutate(value = if_else(service == 'resid cooking modern EUR', value + adj_value, value)) %>% # adj_value is already negative
+     mutate(value = if_else(service == 'comm others EUR', value + adj_value, value)) %>% # adj_value is already negative
+     # aggregate if necessary
+     group_by(GCAM_region_ID, sector, fuel, service, year) %>%
+     summarise(value = sum(value)) %>%
+     ungroup() %>%
+     # select historical years
+     filter(year <= MODEL_FINAL_BASE_YEAR) # This is a final output table.
 
+
+   # confirm that energy totals are the same as L142.in_EJ_R_bld_F_Yh_EUR
+   L144.in_EJ_check <- L144.in_EJ_R_bld_serv_tech_F_Yh_EUR %>%
+     group_by(GCAM_region_ID, sector, fuel, year) %>%
+     summarise(value = sum(value)) %>%
+     ungroup()
+
+   check <- L142.in_EJ_R_bld_F_Yh_EUR %>%
+     filter(abs(value) > 1e-7) %>%
+     left_join(L144.in_EJ_check,
+               by = c("GCAM_region_ID", "sector", "fuel", "year")) %>%
+     mutate(diff = round(abs(value.y - value.x), energy.DIGITS_CALOUTPUT-1))
+
+   stopifnot(max(check$diff) == 0)
 
 
   # Match in sector, fuel, service into efficiency table
