@@ -10,7 +10,6 @@ resid heating coal EUR,coal,coal,coal furnace,delivered coal,0.4,0.4,0.4,0.4,0.4
 resid heating modern EUR,gas,gas,gas furnace,delivered gas,0.78,0.78,0.8,0.8,0.8,0.8,0.8,0.8,0.8
 resid heating modern EUR,gas,gas,gas furnace hi-eff,delivered gas,0.98,0.98,0.98,0.98,0.98,0.98,0.98,0.98,0.98
 resid heating modern EUR,gas,hydrogen,hydrogen furnace,delivered gas,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8
-resid heating modern EUR,electricity,electricity,electric furnace,elect_td_bld,0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99,0.99
 resid heating modern EUR,refined liquids,refined liquids,fuel furnace,refined liquids enduse,0.8,0.8,0.83,0.83,0.83,0.83,0.83,0.83,0.83
 resid heating modern EUR,refined liquids,refined liquids,fuel furnace hi-eff,refined liquids enduse,0.97,0.97,0.97,0.97,0.97,0.97,0.97,0.97,0.97
 resid heating modern EUR,district heat,district heat,district heat furnace,district heat,1,1,1,1,1,1,1,1,1
@@ -32,13 +31,13 @@ resid hot water modern EUR,biomass,biomass,wood water heater,delivered biomass,0
 resid hot water coal EUR,coal,coal,coal water heater,delivered coal,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4,0.4
 resid hot water modern EUR,gas,gas,gas water heater,delivered gas,0.59,0.59,0.62,0.62,0.62,0.62,0.62,0.62,0.62
 resid hot water modern EUR,gas,gas,gas water heater hi-eff,delivered gas,0.82,0.82,0.82,0.82,0.82,0.82,0.82,0.82,0.82
-resid hot water modern EUR,electricity,electricity,electric resistance water heater,elect_td_bld,0.894,0.894,0.9,0.9,0.9,0.9,0.9,0.9,0.9
-resid hot water modern EUR,electricity,electricity,electric resistance water heater hi-eff,elect_td_bld,0.95,0.95,0.95,0.96,0.96,0.96,0.96,0.96,0.96
+resid hot water modern EUR,electricity,resistance,electric resistance water heater,elect_td_bld,0.894,0.894,0.9,0.9,0.9,0.9,0.9,0.9,0.9
+resid hot water modern EUR,electricity,resistance,electric resistance water heater hi-eff,elect_td_bld,0.95,0.95,0.95,0.96,0.96,0.96,0.96,0.96,0.96
 resid hot water modern EUR,refined liquids,refined liquids,fuel water heater,refined liquids enduse,0.59,0.59,0.62,0.62,0.62,0.62,0.62,0.62,0.62
 resid hot water modern EUR,refined liquids,refined liquids,fuel water heater hi-eff,refined liquids enduse,0.82,0.82,0.82,0.82,0.82,0.82,0.82,0.82,0.82
 resid hot water modern EUR,district heat,district heat,district heat water heater,district heat,1,1,1,1,1,1,1,1,1
-resid hot water modern EUR,renewable,heat pump,heat pump,elect_td_bld,0.894,0.894,0.9,0.9,0.9,0.9,0.9,0.9,0.9
-resid hot water modern EUR,renewable,solar thermal,solar thermal,global solar resource,0.894,0.894,0.9,0.9,0.9,0.9,0.9,0.9,0.9
+resid hot water modern EUR,water heat pump,heat pump,heat pump,elect_td_bld,0.894,0.894,0.9,0.9,0.9,0.9,0.9,0.9,0.9
+resid hot water modern EUR,water heat pump,solar thermal,solar thermal,global solar resource,0.894,0.894,0.9,0.9,0.9,0.9,0.9,0.9,0.9
 resid other appliance modern EUR,electricity,electricity,incandescent,elect_td_bld,4.028,4.028,5.5,5.5,5.5,5.5,5.5,5.5,5.5
 resid other appliance modern EUR,electricity,electricity,fluorescent,elect_td_bld,18.667,18.667,18.667,19.167,19.167,19.639,19.639,20.139,20.139
 resid other appliance modern EUR,electricity,electricity,solid state,elect_td_bld,12.222,12.222,25.556,43.611,49.861,56.111,56.111,56.111,56.111
@@ -60,11 +59,10 @@ comm heating EUR,coal,coal,coal furnace,delivered coal,0.65,0.65,0.65,0.65,0.65,
 comm heating EUR,gas,gas,gas furnace,delivered gas,0.758,0.758,0.775,0.775,0.775,0.775,0.775,0.775,0.775
 comm heating EUR,gas,gas,gas furnace hi-eff,delivered gas,0.875,0.875,0.875,0.875,0.875,0.885,0.885,0.885,0.885
 comm heating EUR,gas,hydrogen,hydrogen,delivered gas,0.79,0.79,0.79,0.79,0.79,0.79,0.79,0.79,0.79
-comm heating EUR,electricity,electricity,electric furnace,elect_td_bld,0.98,0.98,0.98,0.98,0.98,0.98,0.98,0.98,0.98
-comm heating EUR,electricity,electricity,electric heat pump,elect_td_bld,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3,3.3
 comm heating EUR,refined liquids,refined liquids,fuel furnace,refined liquids enduse,0.785,0.785,0.795,0.795,0.795,0.795,0.795,0.795,0.795
 comm heating EUR,district heat,district heat,district heat furnace,district heat,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9,0.9
 comm heating EUR,electricity,resistance,electric resistance water heater,elect_td_bld,0.894,0.894,0.9,0.9,0.9,0.9,0.9,0.9,0.9
+comm heating EUR,electricity,resistance,electric heat pump,elect_td_bld,0.894,0.894,0.9,0.9,0.9,0.9,0.9,0.9,0.9
 comm heating EUR,electricity,air-air pump south,air-air pump south,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
 comm heating EUR,electricity,air-air pump middle south,air-air pump middle south,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
 comm heating EUR,electricity,air-air pump middle north,air-air pump middle north,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5

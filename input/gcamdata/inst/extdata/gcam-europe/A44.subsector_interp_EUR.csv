@@ -24,7 +24,7 @@ resid hot water modern EUR,electricity,share-weight,final-calibration-year,end-y
 resid hot water modern EUR,gas,share-weight,final-calibration-year,end-year,,fixed
 resid hot water modern EUR,refined liquids,share-weight,final-calibration-year,end-year,,fixed
 resid hot water modern EUR,district heat,share-weight,final-calibration-year,end-year,,fixed
-resid hot water modern EUR,renewable,share-weight,final-calibration-year,end-year,,fixed
+resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,end-year,,fixed
 resid other appliance modern EUR,electricity,share-weight,final-calibration-year,end-year,,fixed
 resid others modern EUR,biomass,share-weight,final-calibration-year,end-year,,fixed
 resid others coal EUR,coal,share-weight,final-calibration-year,end-year,,fixed

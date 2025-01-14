@@ -25,7 +25,7 @@ resid hot water modern EUR,electricity,0
 resid hot water modern EUR,gas,0
 resid hot water modern EUR,refined liquids,-0.5
 resid hot water modern EUR,district heat,-0.5
-resid hot water modern EUR,renewable,-0.5
+resid hot water modern EUR,water heat pump,-0.5
 resid others modern EUR,biomass,-1
 resid others coal EUR,coal,-1
 resid others modern EUR,electricity,0

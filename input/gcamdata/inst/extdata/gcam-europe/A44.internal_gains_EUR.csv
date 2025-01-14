@@ -13,7 +13,7 @@ resid others modern EUR,district heat,district heat,0.5
 resid others modern EUR,gas,hydrogen,0.5
 resid hot water modern EUR,biomass,biomass,0.5
 resid hot water coal EUR,coal,coal,0.5
-resid hot water modern EUR,electricity,electricity,0.5
+resid hot water modern EUR,electricity,resistance,0.5
 resid hot water modern EUR,gas,gas,0.5
 resid hot water modern EUR,refined liquids,refined liquids,0.5
 resid hot water modern EUR,district heat,district heat,0.5

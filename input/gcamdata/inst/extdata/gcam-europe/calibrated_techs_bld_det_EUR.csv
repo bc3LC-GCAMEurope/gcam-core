@@ -6,7 +6,6 @@
 sector,fuel,service,supplysector,subsector,technology,minicam.energy.input,gcam.consumer,nodeInput,building.node.input
 bld_resid,biomass,resid heating modern EUR,resid heating modern EUR,biomass,biomass,delivered biomass,resid EUR,resid EUR,resid_building
 bld_resid,coal,resid heating coal EUR,resid heating coal EUR,coal,coal,delivered coal,resid EUR,resid EUR,resid_building
-bld_resid,electricity,resid heating modern EUR,resid heating modern EUR,electricity,electricity,elect_td_bld,resid EUR,resid EUR,resid_building
 bld_resid,gas,resid heating modern EUR,resid heating modern EUR,gas,gas,delivered gas,resid EUR,resid EUR,resid_building
 bld_resid,refined liquids,resid heating modern EUR,resid heating modern EUR,refined liquids,refined liquids,refined liquids enduse,resid EUR,resid EUR,resid_building
 bld_resid,heat,resid heating modern EUR,resid heating modern EUR,district heat,district heat,district heat,resid EUR,resid EUR,resid_building
@@ -30,7 +29,7 @@ bld_resid,gas,resid cooking modern EUR,resid cooking modern EUR,gas,gas,delivere
 bld_resid,refined liquids,resid cooking modern EUR,resid cooking modern EUR,refined liquids,refined liquids,refined liquids enduse,resid EUR,resid EUR,resid_building
 bld_resid,biomass,resid hot water modern EUR,resid hot water modern EUR,biomass,biomass,delivered biomass,resid EUR,resid EUR,resid_building
 bld_resid,coal,resid hot water coal EUR,resid hot water coal EUR,coal,coal,delivered coal,resid EUR,resid EUR,resid_building
-bld_resid,electricity,resid hot water modern EUR,resid hot water modern EUR,electricity,electricity,elect_td_bld,resid EUR,resid EUR,resid_building
+bld_resid,electricity,resid hot water modern EUR,resid hot water modern EUR,electricity,resistance,elect_td_bld,resid EUR,resid EUR,resid_building
 bld_resid,gas,resid hot water modern EUR,resid hot water modern EUR,gas,gas,delivered gas,resid EUR,resid EUR,resid_building
 bld_resid,refined liquids,resid hot water modern EUR,resid hot water modern EUR,refined liquids,refined liquids,refined liquids enduse,resid EUR,resid EUR,resid_building
 bld_resid,heat,resid hot water modern EUR,resid hot water modern EUR,district heat,district heat,district heat,resid EUR,resid EUR,resid_building
@@ -44,7 +43,6 @@ bld_resid,gas,resid others modern EUR,resid others modern EUR,gas,gas,delivered 
 bld_resid,refined liquids,resid others modern EUR,resid others modern EUR,refined liquids,refined liquids,refined liquids enduse,resid EUR,resid EUR,resid_building
 bld_comm,biomass,comm heating EUR,comm heating EUR,biomass,biomass,delivered biomass,comm EUR,comm EUR,comm_building
 bld_comm,coal,comm heating EUR,comm heating EUR,coal,coal,delivered coal,comm EUR,comm EUR,comm_building
-bld_comm,electricity,comm heating EUR,comm heating EUR,electricity,electricity,elect_td_bld,comm EUR,comm EUR,comm_building
 bld_comm,gas,comm heating EUR,comm heating EUR,gas,gas,delivered gas,comm EUR,comm EUR,comm_building
 bld_comm,refined liquids,comm heating EUR,comm heating EUR,refined liquids,refined liquids,refined liquids enduse,comm EUR,comm EUR,comm_building
 bld_comm,heat,comm heating EUR,comm heating EUR,district heat,district heat,district heat,comm EUR,comm EUR,comm_building

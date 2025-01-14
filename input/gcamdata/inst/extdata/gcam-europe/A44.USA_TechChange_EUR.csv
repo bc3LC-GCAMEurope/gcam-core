@@ -7,7 +7,6 @@ supplysector,technology,1971,1990,2010,2020,2035,2050,2065,2080,2095,2100
 resid EUR,resid shell,-0.0045,-0.0045,-0.0045,-0.0045,-0.0045,-0.0045,-0.0045,-0.0045,-0.0045,-0.0045
 resid heating modern EUR,biomass,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 resid heating coal EUR,coal,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
-resid heating modern EUR,electricity,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 resid heating modern EUR,gas,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002
 resid heating modern EUR,refined liquids,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 resid heating modern EUR,district heat,0,0,0,0,0,0,0,0,0,0
@@ -32,7 +31,7 @@ resid cooking modern EUR,refined liquids,0.001,0.001,0.001,0.001,0.001,0.001,0.0
 resid cooking modern EUR,district heat,0,0,0,0,0,0,0,0,0,0
 resid hot water modern EUR,biomass,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 resid hot water coal EUR,coal,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
-resid hot water modern EUR,electricity,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
+resid hot water modern EUR,resistance,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 resid hot water modern EUR,gas,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002
 resid hot water modern EUR,refined liquids,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 resid hot water modern EUR,district heat,0,0,0,0,0,0,0,0,0,0
@@ -48,7 +47,6 @@ resid others modern EUR,district heat,0,0,0,0,0,0,0,0,0,0
 comm EUR,comm shell,-0.004,-0.004,-0.004,-0.004,-0.004,-0.004,-0.004,-0.004,-0.004,-0.004
 comm heating EUR,biomass,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 comm heating EUR,coal,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
-comm heating EUR,electricity,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 comm heating EUR,gas,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002,0.002
 comm heating EUR,refined liquids,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001,0.001
 comm heating EUR,district heat,0,0,0,0,0,0,0,0,0,0

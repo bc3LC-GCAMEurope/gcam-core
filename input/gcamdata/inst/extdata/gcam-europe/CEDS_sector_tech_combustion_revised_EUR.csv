@@ -59,6 +59,8 @@ resid heating modern EUR,refined liquids,refined liquids,bld_resid,refined liqui
 resid cooking modern EUR,refined liquids,refined liquids,bld_resid,refined liquids
 resid hot water modern EUR,refined liquids,refined liquids,bld_resid,refined liquids
 resid others modern EUR,refined liquids,refined liquids,bld_resid,refined liquids
+resid hot water modern EUR,water heat pump,heat pump,bld_resid,heat pump
+resid hot water modern EUR,water heat pump,solar thermal,bld_resid,solar thermal
 resid heating modern EUR,water heat pump,air-water pump south,bld_resid,air-water pump south
 resid heating modern EUR,water heat pump,air-water pump middle south,bld_resid,air-water pump middle south
 resid heating modern EUR,water heat pump,air-water pump middle north,bld_resid,air-water pump middle north

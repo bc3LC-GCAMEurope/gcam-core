@@ -1277,8 +1277,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
        L144.in_EJ_R_bld_serv_tech_elec_F_Yh_EUR
      ) %>%
      left_join_error_no_match(calibrated_techs_bld_det_EUR %>%
-                                filter(!grepl('pump', technology),
-                                       !(grepl('heating', service) & subsector == 'electricity' & technology == 'electricity')), # remaining energy is "resistance"
+                                filter(!grepl('pump', technology)),
                               by = c("sector", "service", "fuel")) %>%
      bind_rows(
        # heat pumps
@@ -1291,7 +1290,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
      mutate(value = if_else(service == 'resid cooking modern EUR', value + adj_value, value)) %>% # adj_value is already negative
      mutate(value = if_else(service == 'comm others EUR', value + adj_value, value)) %>% # adj_value is already negative
      # aggregate if necessary
-     group_by(GCAM_region_ID, sector, fuel, service, year) %>%
+     group_by(GCAM_region_ID, sector, fuel, service, subsector, technology, year) %>%
      summarise(value = sum(value)) %>%
      ungroup() %>%
      # select historical years

@@ -220,7 +220,7 @@ resid hot water modern EUR,biomass,biomass,resid hot water modern EUR,biomass,bi
 resid hot water coal EUR,coal,coal,resid hot water coal EUR,coal,coal,bld_resid,coal,bld_resid,coal,coal,bld,dom,bld_resid,coal,,bld_coal
 resid hot water modern EUR,gas,gas,resid hot water modern EUR,gas,gas,bld_resid,gas,bld_resid,gas,gas,bld,dom,bld_resid,gas,,bld_gas
 resid hot water modern EUR,refined liquids,refined liquids,resid hot water modern EUR,refined liquids,refined liquids,bld_resid,refined liquids,bld_resid,refined liquids,refined liquids,bld,dom,bld_resid,refined liquids,,bld_oil
-resid hot water modern EUR,electricity,geo-water pump,resid heating modern EUR,water heat pump,geo-water pump,bld_resid,refined liquids,bld_resid,electricity,electricity,bld,dom,bld_resid,electricity,,bld_oil
+resid hot water modern EUR,electricity,solar thermal,resid heating modern EUR,water heat pump,solar thermal,bld_resid,refined liquids,bld_resid,electricity,electricity,bld,dom,bld_resid,electricity,,bld_oil
 resid hot water modern EUR,global solar resource,solar thermal,resid heating modern EUR,water heat pump,solar thermal,bld_resid,refined liquids,bld_resid,electricity,electricity,bld,dom,bld_resid,electricity,,bld_oil
 Rice,,,Rice,,,,,,,,,,,,Rice Cultivation,
 RootTuber,,,RootTuber,,,,,,,,,,,,Cropland Management,

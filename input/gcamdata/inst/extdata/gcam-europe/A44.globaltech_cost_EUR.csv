@@ -9,7 +9,6 @@ resid heating modern EUR,biomass,biomass,0.9417305
 resid heating coal EUR,coal,coal,0.9417305
 resid heating modern EUR,gas,gas,1.3739374
 resid heating modern EUR,gas,hydrogen,1.4809598
-resid heating modern EUR,electricity,electricity,1.2951476
 resid heating modern EUR,refined liquids,refined liquids,1.8423003
 resid heating modern EUR,district heat,district heat,0.6710238
 resid heating modern EUR,electricity,resistance,1.5
@@ -28,11 +27,11 @@ resid cooling modern EUR,gas,gas,11.242246
 resid hot water modern EUR,biomass,biomass,0.9417305
 resid hot water coal EUR,coal,coal,0.9417305
 resid hot water modern EUR,gas,gas,1.3739374
-resid hot water modern EUR,electricity,electricity,5.502
+resid hot water modern EUR,electricity,resistance,5.502
 resid hot water modern EUR,refined liquids,refined liquids,9.879
 resid hot water modern EUR,district heat,district heat,1.2951476
-resid hot water modern EUR,renewable,heat pump,1.5
-resid hot water modern EUR,renewable,solar thermal,1.5
+resid hot water modern EUR,water heat pump,heat pump,1.5
+resid hot water modern EUR,water heat pump,solar thermal,1.5
 resid other appliance modern EUR,electricity,electricity,1.2951476
 resid cooking modern EUR,biomass,biomass,0.9417305
 resid cooking coal EUR,coal,coal,0.9417305
@@ -49,7 +48,6 @@ comm heating EUR,biomass,biomass,0.9884987
 comm heating EUR,coal,coal,0.9884987
 comm heating EUR,gas,gas,1.5356661
 comm heating EUR,gas,hydrogen,1.6483274
-comm heating EUR,electricity,electricity,1.2799009
 comm heating EUR,refined liquids,refined liquids,1.7065345
 comm heating EUR,district heat,district heat,0.5793888
 comm heating EUR,electricity,resistance,1.5

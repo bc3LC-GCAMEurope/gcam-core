@@ -23,7 +23,7 @@ resid hot water modern EUR,electricity,start-year,,1
 resid hot water modern EUR,gas,start-year,,1
 resid hot water modern EUR,refined liquids,start-year,,1
 resid hot water modern EUR,district heat,start-year,,1
-resid hot water modern EUR,renewable,start-year,,1
+resid hot water modern EUR,water heat pump,start-year,,1
 resid cooling modern EUR,electricity,start-year,,1
 resid cooling modern EUR,gas,start-year,,1
 resid others modern EUR,biomass,start-year,,1
