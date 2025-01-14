@@ -1189,12 +1189,10 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       filter(fuel == 'electricity') %>%
       left_join(L144.en_used %>%
                   group_by(GCAM_region_ID, year, service) %>%
-                  mutate(value = sum(value)) %>%
+                  summarise(value = sum(value)) %>%
                   ungroup(),
                 by = c('GCAM_region_ID','year','service')) %>%
-      mutate(subsector = if_else(is.na(subsector), fuel, subsector),
-             technology = if_else(is.na(technology), fuel, technology),
-             value.y = if_else(is.na(value.y), 0, value.y)) %>%
+      mutate(value.y = if_else(is.na(value.y), 0, value.y)) %>%
       mutate(value = value.x - value.y) %>%
       # if heat pumps energy is > than consumed heat, we reduce the remaining energy from cooking/other
       mutate(adj_value = if_else(value < 0 & value.y != 0, value, 0),
