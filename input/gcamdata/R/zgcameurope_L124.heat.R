@@ -26,6 +26,7 @@ module_gcameurope_L124.heat <- function(command, ...) {
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L124.in_EJ_R_heat_F_Yh_EUR",
              "L124.out_EJ_R_heat_F_Yh_EUR",
+             "L124.coef_R_heat_F_Yh_EUR",
              "L124.out_EJ_R_heatfromelec_F_Yh_EUR",
              "L124.heatoutratio_R_elec_F_tech_Yh_EUR"))
   } else if(command == driver.MAKE) {
@@ -79,16 +80,39 @@ module_gcameurope_L124.heat <- function(command, ...) {
       select(supplysector, subsector, technology, minicam.energy.input, year, value, sector, fuel)
 
     # 2. Heat output: fuel inputs to heat divided by exogenous input-output coefficients --------------
+    # Instead of using global coefs, going to use the output from EUR and use region-specific coefficients
+    L124.out_EJ_R_heat_F_Yh_EUR_unadj <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
+      filter(sector == "out_heat") %>%
+      mutate(sector = sub("out_", "", sector)) %>%
+      left_join(enduse_fuel_aggregation, by = "fuel") %>%
+      filter(!is.na(heat)) %>%
+      select(GCAM_region_ID, sector, year, value, heat) %>%
+      rename(fuel = heat) %>%
+      group_by(fuel, sector, GCAM_region_ID, year) %>% # removed -> temp
+      summarise(value = sum(value)) %>%
+      ungroup()
+
+    # Calculate coefs by region
+    L124.coef_R_heat_F_Yh_EUR <- L124.in_EJ_R_heat_F_Yh_EUR %>%
+      left_join(L124.out_EJ_R_heat_F_Yh_EUR_unadj, by = c("fuel", "sector", "GCAM_region_ID", "year")) %>%
+      mutate(coefficient = if_else(value.y == 0, 0, value.x / value.y),
+             # don't allow coef less than 0
+             coefficient = if_else(coefficient < 1, 1,coefficient)) %>%
+      select(-value.x, -value.y) %>%
+      # replace missing values with global coefs
+      left_join_error_no_match(L124.globaltech_coef %>% select(year, value, fuel), by = c("year", "fuel")) %>%
+      mutate(coefficient = if_else(is.na(coefficient), value, coefficient)) %>%
+      select(-value)
+
+    # adjust for coefs that were adjusted
     L124.out_EJ_R_heat_F_Yh_EUR <- L124.in_EJ_R_heat_F_Yh_EUR %>%
-      left_join_error_no_match(L124.globaltech_coef %>%
-                                 rename(IO_Coef = value),
-                               by = c("sector", "fuel", "year")) %>%
-      mutate(value = value / IO_Coef) %>%
-      select(-IO_Coef) %>%
-      filter(GCAM_region_ID %in% heat_regionIDs$GCAM_region_ID)
+      filter(GCAM_region_ID %in% heat_regionIDs$GCAM_region_ID) %>%
+      left_join_error_no_match(L124.coef_R_heat_F_Yh_EUR, c("fuel", "sector", "GCAM_region_ID", "year")) %>%
+      mutate(value = value  / coefficient) %>%
+      select(-coefficient)
 
     # 3a. Secondary output of heat from main activity CHP plants ----------
-    L124.out_EJ_R_heatfromelec_F_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
+    L124.out_EJ_R_heatfromelec_F_Yh_EUR_unadj <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(sector %in% c("out_electricity_heat") ,
              GCAM_region_ID %in% heat_regionIDs$GCAM_region_ID) %>%
       mutate(sector = "electricity_heat") %>%
@@ -101,16 +125,32 @@ module_gcameurope_L124.heat <- function(command, ...) {
       filter(fuel != is.na(fuel))
 
     # 3b. Secondary output coefficients on heat produced by main activity CHP plants -------------
+    # option to set a maximum heat ratio of 3 (3:1 heat:elec)
+    # The issue is that some facilities are primarily heat plants, with a small electricity output
+    # But we model as power plants with secondary heat output
+    # This ends up distorting the electricity market, particularly with the added complexity of segments
+    # In 2015, this affects 8 regions, primarily for biomass plants
+    # MAX_HEAT_RATIO <- 3
     L124.heatoutratio_R_elec_F_tech_Yh_EUR <- L1231.out_EJ_R_elec_F_tech_Yh_EUR %>%
       filter(GCAM_region_ID %in% heat_regionIDs$GCAM_region_ID,
              year %in% HISTORICAL_YEARS) %>%
       # Select only technologies that have heat output in calibrated techs mapping
       filter(technology %in% calibrated_techs$technology[calibrated_techs$secondary.output == "heat"]) %>%
-      left_join_error_no_match(L124.out_EJ_R_heatfromelec_F_Yh_EUR %>%
+      rename(elec_out = value) %>%
+      left_join_error_no_match(L124.out_EJ_R_heatfromelec_F_Yh_EUR_unadj %>%
                                  rename(value_heatfromelec = value) %>%
                                  rename(temp = sector), by = c("GCAM_region_ID", "fuel", "year")) %>%
       # Heat output divided by electricity output
-      mutate(value = value_heatfromelec / value) %>%
+      mutate(value = if_else(elec_out  == 0, 0, value_heatfromelec / elec_out),
+             #value = if_else(elec_out == 0, 0, pmin(MAX_HEAT_RATIO, value_heatfromelec / elec_out)),
+             heat_output = value * elec_out)
+
+    # recalculated output
+    L124.out_EJ_R_heatfromelec_F_Yh_EUR <- L124.heatoutratio_R_elec_F_tech_Yh_EUR %>%
+      select(GCAM_region_ID, sector, fuel, year, value = heat_output) %>%
+      mutate(sector = "electricity_heat")
+
+    L124.heatoutratio_R_elec_F_tech_Yh_EUR <- L124.heatoutratio_R_elec_F_tech_Yh_EUR %>%
       select(GCAM_region_ID, sector, fuel, technology, year, value) %>%
       # Reset missing and infinite values (applicable for CC in the base years) to 0
       mutate(value = if_else(is.na(value) | is.infinite(value), 0, value))
@@ -195,7 +235,6 @@ module_gcameurope_L124.heat <- function(command, ...) {
       add_units("EJ") %>%
       add_comments("Input heat is extracted from energy balance, aggregated based on aggregate fuel types") %>%
       add_comments("To avoid processing failure, 0 years have base year (2010) * 1e-3 added") %>%
-      add_legacy_name("L124.in_EJ_R_heat_F_Yh_EUR") %>%
       add_precursors("energy/A_regions", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "energy/mappings/enduse_fuel_aggregation") ->
       L124.in_EJ_R_heat_F_Yh_EUR
 
@@ -204,15 +243,19 @@ module_gcameurope_L124.heat <- function(command, ...) {
       add_units("EJ") %>%
       add_comments("Output heat calculated based on input divided by a technology coefficient") %>%
       add_comments("To avoid processing failure, 0 years have base year (2010) * 1e-3 added") %>%
-      add_legacy_name("L124.out_EJ_R_heat_F_Yh_EUR") %>%
       add_precursors("energy/A_regions", "energy/A24.globaltech_coef", "energy/calibrated_techs") ->
       L124.out_EJ_R_heat_F_Yh_EUR
+
+    L124.coef_R_heat_F_Yh_EUR  %>%
+      add_title("Coef of district heat sector by GCAM region / fuel / historical year") %>%
+      add_units("IO") %>%
+      add_precursors("energy/A_regions", "energy/A24.globaltech_coef", "energy/calibrated_techs") ->
+      L124.coef_R_heat_F_Yh_EUR
 
     L124.out_EJ_R_heatfromelec_F_Yh_EUR %>%
       add_title("Heat output from electricity generation by GCAM region / fuel / historical year") %>%
       add_units("EJ") %>%
       add_comments("Data on heat from CHP is read in, aggregated") %>%
-      add_legacy_name("L124.out_EJ_R_heatfromelec_F_Yh_EUR") %>%
       add_precursors("energy/A_regions", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "energy/mappings/enduse_fuel_aggregation") ->
       L124.out_EJ_R_heatfromelec_F_Yh_EUR
 
@@ -220,11 +263,11 @@ module_gcameurope_L124.heat <- function(command, ...) {
       add_title("Heat output ratio from electricity generation by GCAM region / fuel / historical year") %>%
       add_units("GJ heat / GJ elec") %>%
       add_comments("Data on CHP electricity generation read in, heat from elec divided by electricity gives ratio") %>%
-      add_legacy_name("L124.heatoutratio_R_elec_F_tech_Yh_EUR") %>%
       add_precursors("energy/A_regions", "L1231.out_EJ_R_elec_F_tech_Yh_EUR", "energy/calibrated_techs") ->
       L124.heatoutratio_R_elec_F_tech_Yh_EUR
 
-    return_data(L124.in_EJ_R_heat_F_Yh_EUR, L124.out_EJ_R_heat_F_Yh_EUR, L124.out_EJ_R_heatfromelec_F_Yh_EUR, L124.heatoutratio_R_elec_F_tech_Yh_EUR)
+    return_data(L124.in_EJ_R_heat_F_Yh_EUR, L124.out_EJ_R_heat_F_Yh_EUR, L124.coef_R_heat_F_Yh_EUR,
+                L124.out_EJ_R_heatfromelec_F_Yh_EUR, L124.heatoutratio_R_elec_F_tech_Yh_EUR)
   } else {
     stop("Unknown command")
   }

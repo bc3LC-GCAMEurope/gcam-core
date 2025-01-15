@@ -33,6 +33,9 @@ module_gcameurope_L224.heat <- function(command, ...) {
                      FILE = "gcam-europe/A23.elecS_naming",
                      "L1231.eff_R_elec_F_tech_Yh_EUR",
                      "L124.in_EJ_R_heat_F_Yh_EUR",
+                     "L124.out_EJ_R_heat_F_Yh_EUR",
+                     "L124.out_EJ_R_heat_F_Yh",
+                     "L124.coef_R_heat_F_Yh_EUR",
                      "L124.heatoutratio_R_elec_F_tech_Yh_EUR",
                      "L1231.eff_R_elec_F_tech_Yh",
                      "L124.in_EJ_R_heat_F_Yh",
@@ -41,10 +44,12 @@ module_gcameurope_L224.heat <- function(command, ...) {
                      OUTPUTS_TO_COPY_FILTER)
 
   MODULE_OUTPUTS <- c("L224.StubTechCalInput_heat_EUR",
+                      "L224.StubTechCoef_heat_EUR",
                       "L224.StubTechSecOut_elec_EUR",
                       "L224.StubTechCost_elec_EUR",
                       "L224.StubTechSecOut_elecS_EUR",
                       "L224.StubTechCost_elecS_EUR",
+                      "L224.StubTechCalOutput_heat_EUR",
                       paste0(OUTPUTS_TO_COPY_FILTER, "_EUR"))
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -102,6 +107,9 @@ module_gcameurope_L224.heat <- function(command, ...) {
     L124.in_EJ_R_heat_F_Yh_EUR <- replace_with_eurostat(L124.in_EJ_R_heat_F_Yh, L124.in_EJ_R_heat_F_Yh_EUR) %>%
       filter_regions_europe(regions_to_keep_name = GCAM_region_names$region, region_ID_mapping = GCAM_region_names)
 
+    L124.out_EJ_R_heat_F_Yh_EUR  <- replace_with_eurostat(L124.out_EJ_R_heat_F_Yh, L124.out_EJ_R_heat_F_Yh_EUR) %>%
+      filter_regions_europe(regions_to_keep_name = GCAM_region_names$region, region_ID_mapping = GCAM_region_names)
+
     L124.heatoutratio_R_elec_F_tech_Yh_EUR <- replace_with_eurostat(L124.heatoutratio_R_elec_F_tech_Yh, L124.heatoutratio_R_elec_F_tech_Yh_EUR) %>%
       filter_regions_europe(regions_to_keep_name = GCAM_region_names$region, region_ID_mapping = GCAM_region_names)
 
@@ -119,6 +127,36 @@ module_gcameurope_L224.heat <- function(command, ...) {
              subs.share.weight = if_else(calibrated.value == 0, 0, 1),
              share.weight = subs.share.weight) %>%
       select(-value) -> L224.StubTechCalInput_heat_EUR
+
+    # L224.StubTechCoef_heat_EUR ------------
+    L224.StubTechCoef_heat_EUR <- L124.coef_R_heat_F_Yh_EUR %>%
+      left_join(GCAM_region_names, by = "GCAM_region_ID") %>%
+      left_join(calibrated_techs %>%
+                  select(sector, fuel, supplysector, subsector, technology, minicam.energy.input) %>%
+                  distinct, by = c("sector", "fuel")) %>%
+      rename(stub.technology = technology) %>%
+      filter(year %in% MODEL_BASE_YEARS) %>%
+      mutate(market.name = region) %>%
+      select(LEVEL2_DATA_NAMES$StubTechCoef) %>%
+      complete(year = MODEL_YEARS, nesting(region, supplysector, subsector,
+                                           stub.technology, minicam.energy.input, market.name)) %>%
+      group_by(region, supplysector, subsector, stub.technology, minicam.energy.input, market.name) %>%
+      mutate(coefficient = approx_fun(year, coefficient, rule = 2)) %>%
+      ungroup
+
+    # L224.StubTechCalOutput_heat_EUR -----------------------
+    L224.StubTechCalOutput_heat_EUR <- L124.out_EJ_R_heat_F_Yh_EUR %>%
+      left_join(GCAM_region_names, by = "GCAM_region_ID") %>%
+      left_join(calibrated_techs %>%
+                  select(sector, fuel, supplysector, subsector, technology) %>%
+                  distinct, by = c("sector", "fuel")) %>%
+      rename(stub.technology = technology) %>%
+      filter(year %in% MODEL_BASE_YEARS) %>%
+      mutate(calOutputValue = round(value, energy.DIGITS_CALOUTPUT),
+             share.weight.year = year,
+             subs.share.weight = if_else(calOutputValue == 0, 0, 1),
+             tech.share.weight = subs.share.weight) %>%
+      select(LEVEL2_DATA_NAMES[["StubTechProd"]])
 
     # L224.StubTechSecOut_elec_EUR ------------
     # Secondary output of heat, applied to electricity generation technologies
