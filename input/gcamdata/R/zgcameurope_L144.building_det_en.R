@@ -1319,9 +1319,9 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
      filter(!region_subsector %in% c(regions_NoDistHeat)) %>%
      select(GCAM_region_ID, region_GCAM3, supplysector, subsector, technology, year, value) %>%
      inner_join(L144.in_EJ_R_bld_serv_tech_F_Yh_EUR %>%
-                  select(GCAM_region_ID, year, supplysector = service, subsector, technology) %>%
+                  select(GCAM_region_ID, supplysector = service, subsector, technology) %>%
                   distinct(),
-                by = c('GCAM_region_ID','year','supplysector','subsector','technology'))
+                by = c('GCAM_region_ID','supplysector','subsector','technology'))
    # This is a final output table.
 
   L144.end_use_eff_EUR %>%

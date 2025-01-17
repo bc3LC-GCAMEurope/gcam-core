@@ -920,9 +920,9 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     # L244.StubTechEff_bld_EUR: Assumed efficiencies (all years) of buildings technologies
     L244.StubTechEff_bld_pre <- L144.end_use_eff_EUR %>%
       inner_join(L144.in_EJ_R_bld_serv_tech_F_Yh_EUR %>%
-                   select(GCAM_region_ID, year, supplysector = service, subsector, technology) %>%
+                   select(GCAM_region_ID, supplysector = service, subsector, technology) %>%
                    distinct(),
-                 by = c('GCAM_region_ID','year','supplysector','subsector','technology')) %>%
+                 by = c('GCAM_region_ID','supplysector','subsector','technology')) %>%
       filter(year %in% MODEL_YEARS) %>%
       mutate(value = round(value, energy.DIGITS_CALOUTPUT)) %>%
       rename(efficiency = value) %>%
@@ -993,9 +993,9 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     # L244.StubTechIntGainOutputRatio_EUR: Output ratios of internal gain energy from non-thermal building services
     L244.StubTechIntGainOutputRatio_pre <- L144.internal_gains_EUR %>%
       inner_join(L144.in_EJ_R_bld_serv_tech_F_Yh_EUR %>%
-                   select(GCAM_region_ID, year, supplysector = service, subsector, technology) %>%
+                   select(GCAM_region_ID, supplysector = service, subsector, technology) %>%
                    distinct(),
-                 by = c('GCAM_region_ID','year','supplysector','subsector','technology')) %>%
+                 by = c('GCAM_region_ID','supplysector','subsector','technology')) %>%
       filter(year %in% MODEL_YEARS) %>%
       # Round and rename value
       mutate(value = round(value, energy.DIGITS_EFFICIENCY)) %>%
