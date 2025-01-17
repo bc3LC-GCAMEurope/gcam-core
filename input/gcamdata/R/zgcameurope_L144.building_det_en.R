@@ -899,19 +899,29 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
 
     # linearly extrapolate backwards (some regions start reporting ambient heat in > MODEL_BASE_YEARS)
     EUR_hhAmbientHeat_R_Y_S_extr <- EUR_hhAmbientHeat_R_Y_S %>%
+      # add climate_group
+      left_join_strict(iso_to_climate_group, by = 'GCAM_region_ID')  %>%
+      # remove the "middle" regions
+      mutate(across(where(is.character), ~ stringr::str_remove_all(., "middle "))) %>%
       # 1. compute ambient heat growth rate
       group_by(GCAM_region_ID, service) %>%
       mutate(rate = if_else(service_ambient_heat == 0, 0, (service_ambient_heat - lag(service_ambient_heat)) / service_ambient_heat)) %>%
       mutate(growth_rate = mean(rate, na.rm = T)) %>%
       mutate(growth_rate = if_else(is.na(growth_rate), 0, growth_rate)) %>%
       # 2. complete dataset
-      complete(nesting(GCAM_region_ID, unit, service, fuel), year = c(1975, 1990, 2005, 2010, 2015)) %>%
+      complete(nesting(GCAM_region_ID, unit, service, fuel, climate_group, geo), year = c(1975, 1990, 2005, 2010, 2015)) %>%
       # 3. fill growth rate and store the oldest (historically speaking) known year and corresponding value
       mutate(
         growth_rate = mean(growth_rate, na.rm = T), # Fill the growth rate
         latest_known_year = min(year[!is.na(service_ambient_heat)], na.rm = T), # Find latest known year
         latest_known_value = service_ambient_heat[year == latest_known_year]    # Get the ambient_hear for the latest known year
       ) %>%
+      # 3.b. if growth_rate is negative, assume the mean growth_rate by climate region
+      group_by(year, service, fuel, climate_group) %>%
+      mutate(mean_growth_rate = mean(growth_rate, na.rm = T)) %>%
+      ungroup() %>%
+      mutate(growth_rate = if_else(growth_rate < 0, mean_growth_rate, growth_rate)) %>%
+      select(-mean_growth_rate) %>%
       # 4. extrapolate backwards for missing years
       mutate(
         service_ambient_heat = case_when(
@@ -926,11 +936,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       # select historical years
       filter(year <= MODEL_FINAL_BASE_YEAR) %>%
       # clean
-      select(GCAM_region_ID, unit, service, fuel, year, service_ambient_heat) %>%
-      # add climate_group
-      left_join_strict(iso_to_climate_group, by = 'GCAM_region_ID')  %>%
-      # remove the "middle" regions
-      mutate(across(where(is.character), ~ stringr::str_remove_all(., "middle ")))
+      select(GCAM_region_ID, unit, service, fuel, year, service_ambient_heat, climate_group, geo)
 
     # manually add missing regions (data present in the tech csv but not in the service csv)
     # consider the mean by climate_group
