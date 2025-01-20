@@ -330,6 +330,22 @@ module_gcameurope_L210.resources <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["ResSubresourceProdLifetime"]]) ->
       L210.ResSubresourceProdLifetime_EUR
 
+    # 4.  Adjust lifetimes -----------------
+    # Only for 1975 resources if there is no production from 1990 to 2015
+    # because the 1975 vintage will come back if not and countries with no fossil prod in last 50 years start producing
+    no_hist_production <- L210.RsrcCalProd_EUR %>%
+      filter(year > MODEL_BASE_YEARS[1]) %>%
+      group_by(region, resource, subresource) %>%
+      filter(all(cal.production == 0)) %>%
+      ungroup %>%
+      distinct(region, resource) %>%
+      mutate(year = MODEL_BASE_YEARS[1],
+             lifetime.adj = 40)
+
+    L210.ResReserveTechLifetime_EUR <- L210.ResReserveTechLifetime_EUR %>%
+      left_join(no_hist_production, by = c("region", "resource", "year")) %>%
+      mutate(lifetime = if_else(!is.na(lifetime.adj), lifetime.adj, lifetime)) %>%
+      select(-lifetime.adj)
     # Produce outputs ===================================================
     L210.RenewRsrc_EUR %>%
       add_title("Market information for renewable resources") %>%
