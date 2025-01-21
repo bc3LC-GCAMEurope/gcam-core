@@ -1317,11 +1317,21 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
             year = as.integer(year)) %>%
      # Drop district heat in regions where these are not modeled
      filter(!region_subsector %in% c(regions_NoDistHeat)) %>%
-     select(GCAM_region_ID, region_GCAM3, supplysector, subsector, technology, year, value) %>%
+     select(GCAM_region_ID, region_GCAM3, supplysector, subsector, technology, year, value)
+
+   # Drop air-air & air-water north/south in regions where these are not modeled
+   L144.end_use_eff_EUR_heatpumps <- L144.end_use_eff_EUR %>%
+     filter(grepl('north|south',technology)) %>%
      inner_join(L144.in_EJ_R_bld_serv_tech_F_Yh_EUR %>%
                   select(GCAM_region_ID, supplysector = service, subsector, technology) %>%
                   distinct(),
                 by = c('GCAM_region_ID','supplysector','subsector','technology'))
+
+   L144.end_use_eff_EUR <- bind_rows(
+     L144.end_use_eff_EUR %>%
+       filter(!grepl('north|south',technology)),
+     L144.end_use_eff_EUR_heatpumps
+   )
    # This is a final output table.
 
   L144.end_use_eff_EUR %>%
