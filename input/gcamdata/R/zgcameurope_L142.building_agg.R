@@ -114,7 +114,9 @@ module_gcameurope_L142.building_agg <- function(command, ...) {
       filter(!conc_column %in% concatenate_list_no_heat) %>% # Dropping heat in regions where this fuel is backed out to its fuel inputs
       group_by(GCAM_region_ID, sector, fuel, year) %>%
       summarise(value = sum(value)) %>%
-      ungroup() ->
+      ungroup() %>%
+      # Adjust: if negative values (only Luxemburg), set 0
+      mutate(value = if_else(value < 0, 0, value)) ->
       L142.in_EJ_R_bld_F_Yh_EUR
 
     # ===================================================
