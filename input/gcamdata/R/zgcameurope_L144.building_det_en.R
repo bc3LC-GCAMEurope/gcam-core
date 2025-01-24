@@ -1188,7 +1188,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       mutate(value = value.x - value.y) %>%
       # if heat pumps energy is > than consumed heat, we reduce the remaining energy from cooking/other
       mutate(adj_value = if_else(value < 0 & value.y != 0, value, 0),
-             value = if_else(value < 0 & value.x > 0, 0, value)) %>%
+             value = if_else(value < 0 & value.x >= 0, 0, value)) %>%
       # adjust the adj_value value to all services by group
       group_by(GCAM_region_ID, sector, fuel, year) %>%
       mutate(adj_value = min(adj_value)) %>%
@@ -1213,6 +1213,17 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
           ungroup()) %>%
       mutate(value = if_else(service == 'resid cooking modern EUR', value + adj_value, value)) %>% # adj_value is already negative
       mutate(value = if_else(service == 'comm others EUR', value + adj_value, value)) %>% # adj_value is already negative
+      # # if value is negative in some resid context, remove the remaining from resid others modern
+      # # avoid null values. Set 1e-4
+      mutate(adj_value = if_else(service == 'resid cooking modern EUR' & value < 0 & adj_value != 0, value - 1e-4,
+                                 if_else(service == 'comm others EUR' & value < 0 & adj_value != 0, value - 1e-4, 0))) %>%
+      mutate(value = if_else(service == 'resid cooking modern EUR' & value < 0, 1e-4, value)) %>%
+      mutate(value = if_else(service == 'comm others EUR' & value < 0, 1e-4, value)) %>%
+      group_by(GCAM_region_ID, sector, fuel, year) %>%
+      mutate(adj_value = min(adj_value)) %>%
+      ungroup() %>%
+      mutate(value = if_else(service == 'resid other appliance modern EUR', value + adj_value, value)) %>%
+      mutate(value = if_else(service == 'comm cooling EUR', value + adj_value, value)) %>%
       # aggregate if necessary
       group_by(GCAM_region_ID, sector, fuel, service, year) %>%
       summarise(value = sum(value)) %>%
@@ -1252,7 +1263,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
      mutate(value = value.x - value.y) %>%
      # if heat pumps energy is > than consumed heat, we reduce the remaining energy from cooking/other
      mutate(adj_value = if_else(value < 0 & value.y != 0, value, 0),
-            value = if_else(value < 0 & value.x > 0, 0, value)) %>%
+            value = if_else(value < 0 & value.x >= 0, 0, value)) %>%
      # adjust the adj_value value to all services by group
      group_by(GCAM_region_ID, sector, fuel, year) %>%
      mutate(adj_value = min(adj_value)) %>%
@@ -1281,6 +1292,30 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
                                   by = c("sector", "service", "fuel", "subsector", "technology"))) %>%
      mutate(value = if_else(service == 'resid cooking modern EUR', value + adj_value, value)) %>% # adj_value is already negative
      mutate(value = if_else(service == 'comm others EUR', value + adj_value, value)) %>% # adj_value is already negative
+     # # if value is negative in some resid context, remove the remaining from resid others modern
+     # # avoid null values. Set 1e-4
+     mutate(adj_value = if_else(service == 'resid cooking modern EUR' & value < 0 & adj_value != 0, value - 1e-4,
+                                if_else(service == 'comm others EUR' & value < 0 & adj_value != 0, value - 1e-4, 0))) %>%
+     mutate(value = if_else(service == 'resid cooking modern EUR' & value < 0, 1e-4, value)) %>%
+     mutate(value = if_else(service == 'comm others EUR' & value < 0, 1e-4, value)) %>%
+     group_by(GCAM_region_ID, sector, fuel, year) %>%
+     mutate(adj_value = min(adj_value)) %>%
+     ungroup() %>%
+     mutate(value = if_else(service == 'resid other appliance modern EUR', value + adj_value, value)) %>%
+     mutate(value = if_else(service == 'comm cooling EUR', value + adj_value, value)) %>%
+     # repeat the process if necessary
+     mutate(adj_value = if_else(service == 'resid other appliance modern EUR' & value < 0 & adj_value != 0, value - 1e-4,
+                                if_else(service == 'comm cooling EUR' & value < 0 & adj_value != 0, value - 1e-4, 0))) %>%
+     mutate(value = if_else(service == 'resid other appliance modern EUR' & value < 0, 1e-4, value)) %>%
+     mutate(value = if_else(service == 'comm cooling EUR' & value < 0, 1e-4, value)) %>%
+     group_by(GCAM_region_ID, sector, fuel, year) %>%
+     mutate(adj_value = min(adj_value)) %>%
+     ungroup() %>%
+     # join with shares, only for heatpump technologies, so "normal" left join
+     left_join(L144.ambient_heat_tech_shares_adj,
+               by = c('GCAM_region_ID','year','subsector','technology')) %>%
+     mutate(adj_value = adj_value * share, na.rm = T) %>%
+     mutate(value = if_else(service == 'comm heating EUR' & !is.na(adj_value), value + adj_value, value)) %>%
      # aggregate if necessary
      group_by(GCAM_region_ID, sector, fuel, service, subsector, technology, year) %>%
      summarise(value = sum(value)) %>%
@@ -1361,6 +1396,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     left_join(L144.end_use_eff_EUR_2f, by = c("GCAM_region_ID", "sector", "fuel", "service",
                                               "subsector", "technology", "year")) %>%
     # Energy output is the product of energy consumption and efficiency
+    mutate(value = value * value_eff) %>%
     # Aggregate across fuel types (by region, sector, service)
     group_by(GCAM_region_ID, sector, service, year) %>%
     summarise(value = sum(value)) %>%
@@ -1373,6 +1409,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
   L144.in_EJ_R_bld_serv_tech_F_Yh_EUR %>%
     left_join_error_no_match(L144.end_use_eff_EUR_2f, by = c("GCAM_region_ID", "sector", "fuel", "service",
                                                              "subsector", "technology", "year")) %>%
+    # Energy output is the product of energy consumption and efficiency
     mutate(value = value * value_eff) %>%
     # Aggregate across technologies (by region, sector, service, fuel)
     group_by(GCAM_region_ID, sector, fuel, service, subsector, technology, year) %>%
