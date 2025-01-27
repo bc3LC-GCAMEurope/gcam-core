@@ -162,11 +162,11 @@ double FoodDemandFunction::calcDemand( InputSet& aInput, double income, const st
                                 // didn't experiment with changing this in the
                                 // original model development.
     
-    if(alphaTotal > budget) {
-        ILogger& mainLog = ILogger::getLogger( "main_log" );
-        mainLog.setLevel( ILogger::DEBUG );
-        mainLog << "Share of budget spent on FoodDemand: " << alphaTotal << " exceeds total income in " << aRegionName << endl;
-    }
+    //if(alphaTotal > budget) {
+      //  ILogger& mainLog = ILogger::getLogger( "main_log" );
+      //  mainLog.setLevel( ILogger::DEBUG );
+       // mainLog << "Share of budget spent on FoodDemand: " << alphaTotal << " exceeds total income in " << aRegionName << endl;
+    //}
     
     // Set the final demands and actual shares into the inputs which will
     // take care of updating the values in the marketplace.

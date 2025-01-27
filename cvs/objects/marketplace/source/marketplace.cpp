@@ -568,12 +568,12 @@ void Marketplace::addToDemand( const string& goodName, const string& regionName,
                                const int per, bool aMustExist )
 {
     // Print a warning message when adding infinity values to the demand
-    if ( !util::isValidNumber( value ) ) {
-        ILogger& mainLog = ILogger::getLogger( "main_log" );
-        mainLog.setLevel( ILogger::NOTICE );
-        mainLog << "Error adding to demand in marketplace for: " << goodName << ", region: " << regionName << ", value: " << value << endl;
-        return;
-    }
+    //if ( !util::isValidNumber( value ) ) {
+      //  ILogger& mainLog = ILogger::getLogger( "main_log" );
+      //  mainLog.setLevel( ILogger::NOTICE );
+      //  mainLog << "Error adding to demand in marketplace for: " << goodName << ", region: " << regionName << ", value: " << value << endl;
+      //  return;
+    //}
 
     const int marketNumber = mMarketLocator->getMarketNumber( regionName, goodName );
     if ( marketNumber != MarketLocator::MARKET_NOT_FOUND ) {
