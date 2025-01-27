@@ -326,7 +326,13 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
 
     L2235.SubsectorShrwtInterp_elecS_EUR <-  rename(L2234.SubsectorShrwtInterp_elecS_EUR, subsector0 = subsector)
 
-    L2235.SubsectorShrwtInterpTo_elecS_EUR <- rename(L2234.SubsectorShrwtInterpTo_elecS_EUR, subsector0 = subsector)
+    L2235.SubsectorShrwtInterpTo_elecS_EUR <- rename(L2234.SubsectorShrwtInterpTo_elecS_EUR, subsector0 = subsector) %>%
+      # for now, just set fixed for all techs, except for refined liquids, nuclear, and geothermal
+      mutate(to.value = if_else(subsector0 == "geothermal", 1, to.value),
+             interpolation.function = if_else(subsector0 == "geothermal", "linear", interpolation.function),
+             interpolation.function = if_else(subsector0 %in% c("refined liquids", "nuclear", "geothermal"), interpolation.function, "fixed"),
+             # exception
+             interpolation.function = if_else(region == "Malta" & subsector0 %in% c("gas") & supplysector == "peak generation", "linear", interpolation.function))
 
     # Subsector shareweights are really generation technology shareweights
     # These use the global tech object in L2234, so copy to all regions
