@@ -1099,7 +1099,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              building.service.input = if_else(grepl("resid",gcam.consumer) ,paste0(building.service.input,"_",group),building.service.input)) %>%
       select(LEVEL2_DATA_NAMES[["DeleteGenericService"]])
 
-    if (is.na(unique(L244.DeleteGenericService_EUR$region))) {
+    if (all(is.na(unique(L244.DeleteGenericService_EUR$region)))) {
       L244.DeleteGenericService_EUR <- L244.DeleteGenericService_EUR[0,]
     }
 
