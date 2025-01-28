@@ -968,13 +968,15 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       mutate(half.life = lifetime / 2) %>%
       tidyr::expand_grid(unique(L106.income_shares %>%
                                 select(gcam.consumer))) %>%
-      mutate(supplysector = paste(supplysector, gcam.consumer, sep = '_'))
+      mutate(supplysector = if_else(grepl('resid',supplysector),
+                                    paste(supplysector, gcam.consumer, sep = '_'),
+                                    supplysector))
 
     L244.GlobalTechSCurve_bld_EUR <- L244.GlobalTechCost_bld_EUR %>%
       filter(year %in% c(max(MODEL_BASE_YEARS), MODEL_FUTURE_YEARS),
              sector.name %in% L244.globaltech_retirement_EUR$supplysector) %>%
       # Add lifetimes and steepness
-      left_join_error_no_match(L244.globaltech_retirement_EUR, by = c("sector.name" = "supplysector",
+      left_join_strict(L244.globaltech_retirement_EUR, by = c("sector.name" = "supplysector",
                                                                       "subsector.name" = "subsector",
                                                                       "technology")) %>%
       # Set steepness/halflife values to stock for base years, new for future years
