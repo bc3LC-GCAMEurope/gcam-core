@@ -20,6 +20,9 @@
 module_gcameurope_L142.pfc_R_S_T_Y <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/GCAM_region_names",
+             FILE = "common/GCAM32_to_EU",
+             FILE = "gcam-europe/mappings/geo_to_climate_map",
+             FILE = "gcam-europe/mappings/geo_to_iso_map",
              FILE = "gcam-europe/gcam_fgas_tech_EUR",
              FILE = "emissions/other_f_gases",
              "L144.in_EJ_R_bld_serv_F_Yh_EUR",
@@ -58,8 +61,10 @@ module_gcameurope_L142.pfc_R_S_T_Y <- function(command, ...) {
     gas <- adj_emissions  <- emiss_share <- supply <- emscalar <- tot_emissions <- MAC_type1 <- gwp <- EPA_emissions <- EPA_sector <- NULL
 
     # Load required inputs
-
     GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>% filter_regions_europe()
+    GCAM32_to_EU <- get_data(all_data, "common/GCAM32_to_EU") %>% filter_regions_europe()
+    geo_to_climate_map <- get_data(all_data, "gcam-europe/mappings/geo_to_climate_map") %>% filter_regions_europe()
+    geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map") %>% filter_regions_europe()
     GCAM_tech <- get_data(all_data, "gcam-europe/gcam_fgas_tech_EUR")
     Other_F <- get_data(all_data, "emissions/other_f_gases")
     iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID") %>% filter_regions_europe()
@@ -137,6 +142,16 @@ module_gcameurope_L142.pfc_R_S_T_Y <- function(command, ...) {
       ungroup() ->                         # ungroup needed for later `left_join_keep_first_only`
       L142.EDGAR_PFC_R_S_T_Yh.tmp1
 
+
+    # iso-geo-climate_group mapping
+    iso_to_climate_group <- geo_to_iso_map %>%
+      filter_regions_europe() %>%
+      left_join_error_no_match(geo_to_climate_map, by = 'geo') %>%
+      left_join_error_no_match(GCAM32_to_EU %>%
+                                 filter(GCAMEU_region != GCAM32_region),
+                               by = 'iso') %>%
+      select(GCAM_region_ID, climate_group)
+
     # Map PFC gases to GCAM technologies.
 
     GCAM_tech %>%
@@ -145,8 +160,27 @@ module_gcameurope_L142.pfc_R_S_T_Y <- function(command, ...) {
       repeat_add_columns(tibble("Non.CO2" = emissions.PFCS)) %>%
       left_join_keep_first_only(L142.EDGAR_PFC_R_S_T_Yh.tmp1, by = c("GCAM_region_ID", "year", "EDGAR_agg_sector", "Non.CO2")) %>%
       select(GCAM_region_ID, supplysector, subsector, stub.technology, Non.CO2, year, EDGAR_emissions) %>%
-      replace_na(list(EDGAR_emissions = 0)) ->
+      replace_na(list(EDGAR_emissions = 0)) %>%
+      # extract climate region
+      mutate(
+        climate_group = case_when(
+          grepl("south", stub.technology, ignore.case = TRUE) & !grepl("middle", stub.technology, ignore.case = TRUE) ~ "south",
+          grepl("middle south", stub.technology, ignore.case = TRUE) ~ "middle south",
+          grepl("middle north", stub.technology, ignore.case = TRUE) ~ "middle north",
+          grepl("north", stub.technology, ignore.case = TRUE) & !grepl("middle", stub.technology, ignore.case = TRUE) ~ "north",
+          TRUE ~ NA_character_  # Default case: if no pattern matches, set NA
+        )
+      ) %>%
+      # filter region-climateregion pairs
+      left_join(iso_to_climate_group %>%
+                  mutate(tokeep = T),
+                by = c('GCAM_region_ID','climate_group'),
+                relationship = "many-to-many") %>%
+      filter(is.na(climate_group) | tokeep) %>%
+      select(-climate_group, -tokeep) %>%
+      distinct() ->
       L142.pfc_R_S_T_Yh_EUR.tmp1
+
 
     # Disaggregate bld emissions to cooling/heating supplysectors and residential/commercial sectors.
 
