@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?><scenario name="CCSP450">
+	<world>
+		<region name="Austria">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+                <fixedTax year="2025">25</fixedTax>
+                <fixedTax year="2030">31.9070390625</fixedTax>
+                <fixedTax year="2035">40.722365669436</fixedTax>
+                <fixedTax year="2040">51.9732044852842</fixedTax>
+                <fixedTax year="2045">66.3324426286105</fixedTax>
+                <fixedTax year="2050">84.6588735224847</fixedTax>
+                <fixedTax year="2055">108.048559378767</fixedTax>
+                <fixedTax year="2060">137.900384189806</fixedTax>
+                <fixedTax year="2065">175.999717803116</fixedTax>
+                <fixedTax year="2070">224.62519483732</fixedTax>
+                <fixedTax year="2075">286.684994643842</fixedTax>
+                <fixedTax year="2080">365.890772909347</fixedTax>
+                <fixedTax year="2085">466.979647353074</fixedTax>
+                <fixedTax year="2090">595.997513979481</fixedTax>
+                <fixedTax year="2095">760.660638387847</fixedTax>
+                <fixedTax year="2100">970.817148093889</fixedTax>
+			</ghgpolicy>
+		</region>
+		<region name="Belgium">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+		<region name="Bulgaria">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+        <region name="Croatia">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+        <region name="Cyprus">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+		<region name="Czech Republic">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+		<region name="Denmark">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+		<region name="Estonia">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+        <region name="Finland">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+		<region name="France">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+		<region name="Germany">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+		<region name="Greece">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+        <region name="Hungary">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+        <region name="Ireland">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+        <region name="Italy">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+        <region name="Latvia">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+		<region name="Lithuania">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+        <region name="Luxembourg">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+        <region name="Malta">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+        <region name="Netherlands">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+        <region name="Poland">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+        <region name="Portugal">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+        <region name="Romania">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+		<region name="Slovakia">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+        <region name="Slovenia">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+        <region name="Spain">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+        <region name="Sweden">
+			<ghgpolicy name="CO2">
+				<market>EU</market>
+			</ghgpolicy>
+		</region>
+
+	</world>
+</scenario>
