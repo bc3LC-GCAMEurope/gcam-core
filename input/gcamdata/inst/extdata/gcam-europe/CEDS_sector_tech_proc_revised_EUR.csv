@@ -33,7 +33,7 @@ comm heating EUR,electricity,air-water pump middle south,comm heating EUR,water 
 comm heating EUR,electricity,air-water pump middle north,comm heating EUR,water heat pump,air-water pump middle north,bld_comm,refined liquids,bld_comm,electricity,electricity,bld,dom,bld_comm,electricity,,bld_oil
 comm heating EUR,electricity,air-water pump north,comm heating EUR,water heat pump,air-water pump north,bld_comm,refined liquids,bld_comm,electricity,electricity,bld,dom,bld_comm,electricity,,bld_oil
 comm heating EUR,electricity,geo-water pump,comm heating EUR,water heat pump,geo-water pump,bld_comm,refined liquids,bld_comm,electricity,electricity,bld,dom,bld_comm,electricity,,bld_oil
-comm heating EUR,global solar resource,solar thermal,comm heating EUR,water heat pump,solar thermal,bld_comm,refined liquids,bld_comm,electricity,electricity,bld,dom,bld_comm,electricity,,bld_oil
+comm heating EUR,elec_solar CSP,solar thermal,comm heating EUR,water heat pump,solar thermal,bld_comm,refined liquids,bld_comm,electricity,electricity,bld,dom,bld_comm,electricity,,bld_oil
 comm others EUR,biomass,biomass,comm others EUR,biomass,biomass,bld_comm,biomass,bld_comm,biomass,biomass,bld,dom,bld_comm,biomass,,bld_bio
 comm others EUR,coal,coal,comm others EUR,coal,coal,bld_comm,coal,bld_comm,coal,coal,bld,dom,bld_comm,coal,,bld_coal
 comm others EUR,gas,gas,comm others EUR,gas,gas,bld_comm,gas,bld_comm,gas,gas,bld,dom,bld_comm,gas,,bld_gas
@@ -208,7 +208,7 @@ resid heating modern EUR,electricity,air-water pump middle south,resid heating m
 resid heating modern EUR,electricity,air-water pump middle north,resid heating modern EUR,water heat pump,air-water pump middle north,bld_resid,refined liquids,bld_resid,electricity,electricity,bld,dom,bld_resid,electricity,,bld_oil
 resid heating modern EUR,electricity,air-water pump north,resid heating modern EUR,water heat pump,air-water pump north,bld_resid,refined liquids,bld_resid,electricity,electricity,bld,dom,bld_resid,electricity,,bld_oil
 resid heating modern EUR,electricity,geo-water pump,resid heating modern EUR,water heat pump,geo-water pump,bld_resid,refined liquids,bld_resid,electricity,electricity,bld,dom,bld_resid,electricity,,bld_oil
-resid heating modern EUR,global solar resource,solar thermal,resid heating modern EUR,water heat pump,solar thermal,bld_resid,refined liquids,bld_resid,electricity,electricity,bld,dom,bld_resid,electricity,,bld_oil
+resid heating modern EUR,elec_solar CSP,solar thermal,resid heating modern EUR,water heat pump,solar thermal,bld_resid,refined liquids,bld_resid,electricity,electricity,bld,dom,bld_resid,electricity,,bld_oil
 resid others modern EUR,biomass,biomass,resid others modern EUR,biomass,biomass,bld_resid,biomass,bld_resid,biomass,biomass,bld,dom,bld_resid,biomass,,bld_bio
 resid others coal EUR,coal,coal,resid others coal EUR,coal,coal,bld_resid,coal,bld_resid,coal,coal,bld,dom,bld_resid,coal,,bld_coal
 resid others modern EUR,gas,gas,resid others modern EUR,gas,gas,bld_resid,gas,bld_resid,gas,gas,bld,dom,bld_resid,gas,,bld_gas
@@ -222,7 +222,7 @@ resid hot water coal EUR,coal,coal,resid hot water coal EUR,coal,coal,bld_resid,
 resid hot water modern EUR,gas,gas,resid hot water modern EUR,gas,gas,bld_resid,gas,bld_resid,gas,gas,bld,dom,bld_resid,gas,,bld_gas
 resid hot water modern EUR,refined liquids,refined liquids,resid hot water modern EUR,refined liquids,refined liquids,bld_resid,refined liquids,bld_resid,refined liquids,refined liquids,bld,dom,bld_resid,refined liquids,,bld_oil
 resid hot water modern EUR,electricity,heat pump,resid heating modern EUR,water heat pump,heat pump,bld_resid,refined liquids,bld_resid,electricity,electricity,bld,dom,bld_resid,electricity,,bld_oil
-resid hot water modern EUR,global solar resource,solar thermal,resid heating modern EUR,water heat pump,solar thermal,bld_resid,refined liquids,bld_resid,electricity,electricity,bld,dom,bld_resid,electricity,,bld_oil
+resid hot water modern EUR,elec_solar CSP,solar thermal,resid heating modern EUR,water heat pump,solar thermal,bld_resid,refined liquids,bld_resid,electricity,electricity,bld,dom,bld_resid,electricity,,bld_oil
 Rice,,,Rice,,,,,,,,,,,,Rice Cultivation,
 RootTuber,,,RootTuber,,,,,,,,,,,,Cropland Management,
 SheepGoat,Mixed,FeedCrops,SheepGoat,Mixed,FeedCrops,Animals,process,SheepGoat,all,all,Animals,,SheepGoat,all,Livestock,

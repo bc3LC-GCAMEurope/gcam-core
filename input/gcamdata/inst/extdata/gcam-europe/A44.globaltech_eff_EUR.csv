@@ -23,7 +23,7 @@ resid heating modern EUR,water heat pump,air-water pump middle south,air-water p
 resid heating modern EUR,water heat pump,air-water pump middle north,air-water pump middle north,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
 resid heating modern EUR,water heat pump,air-water pump north,air-water pump north,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
 resid heating modern EUR,water heat pump,geo-water pump,geo-water pump,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
-resid heating modern EUR,water heat pump,solar thermal,solar thermal,global solar resource,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
+resid heating modern EUR,water heat pump,solar thermal,solar thermal,distributed_solar,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
 resid cooling modern EUR,electricity,electricity,air conditioning,elect_td_bld,3.043,3.043,3.81,3.81,3.81,3.81,3.81,3.81,3.81
 resid cooling modern EUR,electricity,electricity,air conditioning hi-eff,elect_td_bld,7.03,7.03,7.03,7.03,7.03,7.03,7.03,7.03,7.03
 resid cooling modern EUR,gas,gas,gas air conditioning,delivered gas,0.83,0.83,0.83,0.83,0.83,0.83,0.83,0.83,0.83
@@ -37,7 +37,7 @@ resid hot water modern EUR,refined liquids,refined liquids,fuel water heater,ref
 resid hot water modern EUR,refined liquids,refined liquids,fuel water heater hi-eff,refined liquids enduse,0.82,0.82,0.82,0.82,0.82,0.82,0.82,0.82,0.82
 resid hot water modern EUR,district heat,district heat,district heat water heater,district heat,1,1,1,1,1,1,1,1,1
 resid hot water modern EUR,water heat pump,heat pump,heat pump,elect_td_bld,0.894,0.894,0.9,0.9,0.9,0.9,0.9,0.9,0.9
-resid hot water modern EUR,water heat pump,solar thermal,solar thermal,global solar resource,0.894,0.894,0.9,0.9,0.9,0.9,0.9,0.9,0.9
+resid hot water modern EUR,water heat pump,solar thermal,solar thermal,distributed_solar,0.894,0.894,0.9,0.9,0.9,0.9,0.9,0.9,0.9
 resid other appliance modern EUR,electricity,electricity,incandescent,elect_td_bld,4.028,4.028,5.5,5.5,5.5,5.5,5.5,5.5,5.5
 resid other appliance modern EUR,electricity,electricity,fluorescent,elect_td_bld,18.667,18.667,18.667,19.167,19.167,19.639,19.639,20.139,20.139
 resid other appliance modern EUR,electricity,electricity,solid state,elect_td_bld,12.222,12.222,25.556,43.611,49.861,56.111,56.111,56.111,56.111
@@ -72,7 +72,7 @@ comm heating EUR,water heat pump,air-water pump middle south,air-water pump midd
 comm heating EUR,water heat pump,air-water pump middle north,air-water pump middle north,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
 comm heating EUR,water heat pump,air-water pump north,air-water pump north,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
 comm heating EUR,water heat pump,geo-water pump,geo-water pump,elect_td_bld,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
-comm heating EUR,water heat pump,solar thermal,solar thermal,global solar resource,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
+comm heating EUR,water heat pump,solar thermal,solar thermal,distributed_solar,2,2,2.3,2.3,2.3,2.45,2.45,2.5,2.5
 comm cooling EUR,gas,gas,gas cooling,delivered gas,0.866,0.866,0.951,0.977,1.005,1.03,1.052,1.073,1.1
 comm cooling EUR,electricity,electricity,air conditioning,elect_td_bld,2.872,2.872,3.224,3.224,3.224,3.224,3.224,3.224,3.224
 comm cooling EUR,electricity,electricity,air conditioning hi-eff,elect_td_bld,5.803,5.803,5.803,6.064,6.064,6.28,6.28,6.28,6.28

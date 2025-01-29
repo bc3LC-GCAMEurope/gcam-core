@@ -19,7 +19,7 @@ resid heating modern EUR,water heat pump,air-water pump middle south,10526.94611
 resid heating modern EUR,water heat pump,air-water pump middle north,10526.94611,20,100,3.32,18.07228916,0.024
 resid heating modern EUR,water heat pump,air-water pump north,10526.94611,20,100,3.03,19.8019802,0.024
 resid heating modern EUR,water heat pump,geo-water pump,12179.64072,20,100,3.6,16.66666667,0.024
-resid heating modern EUR,water heat pump,solar thermal,13473.05389,25,100,0.58,103.4482759,0.024
+resid heating modern EUR,water heat pump,solar thermal,13473.05389,25,100,3.3,18.18,0.024
 resid heating modern EUR,refined liquids,refined liquids,1553.892216,15,100,0.77,77.92207792,0.024
 resid heating modern EUR,district heat,district heat,961.0778443,20,20,0.72,83.33333333,0.024
 resid cooling modern EUR,electricity,electricity,2000,15,100,2.63,7.0092,0.034
@@ -31,7 +31,7 @@ resid hot water modern EUR,refined liquids,refined liquids,2720.276008,15,75,0.7
 resid hot water modern EUR,district heat,district heat,676.7515924,20,20,0.72,58.33333333,0.024
 resid hot water modern EUR,biomass,biomass,2000,15,150,0.4,260,0.024
 resid hot water modern EUR,water heat pump,heat pump,2527.866242,20,90,2.4,17.5,0.027
-resid hot water modern EUR,water heat pump,solar thermal,5573.248408,20,90,0.58,72.4137931,0.027
+resid hot water modern EUR,water heat pump,solar thermal,5573.248408,20,90,3.3,12.73,0.027
 resid other appliance modern EUR,electricity,electricity,2000,15,50,0.95,50,0.027
 resid cooking modern EUR,biomass,biomass,2000,15,150,0.4,260,0.024
 resid cooking coal EUR,coal,coal,750,15,75,0.5,100,0.027
@@ -58,7 +58,7 @@ comm heating EUR,water heat pump,air-water pump middle south,24702.35546,25,400,
 comm heating EUR,water heat pump,air-water pump middle north,24702.35546,25,400,3.178523735,56.6300632,0.024
 comm heating EUR,water heat pump,air-water pump north,24702.35546,25,400,2.9,62.06896552,0.024
 comm heating EUR,water heat pump,geo-water pump,37932.90507,25,400,3.6,50,0.024
-comm heating EUR,water heat pump,solar thermal,35761.3967,25,400,0.58,310.3448276,0.024
+comm heating EUR,water heat pump,solar thermal,35761.3967,25,400,3.3,54.55,0.024
 comm heating EUR,refined liquids,refined liquids,5179.640719,25,200,0.77,233.7662338,0.024
 comm heating EUR,district heat,district heat,3437.544611,20,20,0.72,250,0.024
 comm cooling EUR,gas,gas,4000,15,200,0.83,60.24096386,0.034
