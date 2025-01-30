@@ -84,16 +84,18 @@ Eastern Europe,bld_comm,heat,comm cooling EUR,0
 Eastern Europe,bld_comm,refined liquids,comm cooling EUR,0
 Eastern Europe,bld_comm,biomass,comm heating EUR,0.018901304
 Eastern Europe,bld_comm,coal,comm heating EUR,0.048564148
-Eastern Europe,bld_comm,electricity,comm heating EUR,0.044966676
+Eastern Europe,bld_comm,electricity,comm heating EUR,0.04406283
 Eastern Europe,bld_comm,gas,comm heating EUR,0.172
 Eastern Europe,bld_comm,heat,comm heating EUR,0.102567872
 Eastern Europe,bld_comm,refined liquids,comm heating EUR,0.043
 Eastern Europe,bld_comm,biomass,comm others EUR,0.008100559
 Eastern Europe,bld_comm,coal,comm others EUR,0
-Eastern Europe,bld_comm,electricity,comm others EUR,0.394307067
+Eastern Europe,bld_comm,electricity,comm others EUR,0.386989759
 Eastern Europe,bld_comm,gas,comm others EUR,0.121345095
 Eastern Europe,bld_comm,heat,comm others EUR,0
 Eastern Europe,bld_comm,refined liquids,comm others EUR,0.01624728
+Eastern Europe,bld_comm,elec_solar CSP,comm heating EUR,0.000903846
+Eastern Europe,bld_comm,elec_solar CSP,comm others EUR,0.007317308
 Former Soviet Union,bld_comm,biomass,comm cooling EUR,0
 Former Soviet Union,bld_comm,coal,comm cooling EUR,0
 Former Soviet Union,bld_comm,electricity,comm cooling EUR,0.001
@@ -246,16 +248,18 @@ Western Europe,bld_comm,heat,comm cooling EUR,0
 Western Europe,bld_comm,refined liquids,comm cooling EUR,0
 Western Europe,bld_comm,biomass,comm heating EUR,0.012388686
 Western Europe,bld_comm,coal,comm heating EUR,0.019246798
-Western Europe,bld_comm,electricity,comm heating EUR,0.047444382
+Western Europe,bld_comm,electricity,comm heating EUR,0.046540536
 Western Europe,bld_comm,gas,comm heating EUR,0.16
 Western Europe,bld_comm,heat,comm heating EUR,0.048920133
 Western Europe,bld_comm,refined liquids,comm heating EUR,0.032
 Western Europe,bld_comm,biomass,comm others EUR,0.005309437
 Western Europe,bld_comm,coal,comm others EUR,0.008248628
-Western Europe,bld_comm,electricity,comm others EUR,0.380542027
+Western Europe,bld_comm,electricity,comm others EUR,0.373224719
 Western Europe,bld_comm,gas,comm others EUR,0.142657609
 Western Europe,bld_comm,heat,comm others EUR,0
 Western Europe,bld_comm,refined liquids,comm others EUR,0.093242299
+Western Europe,bld_comm,elec_solar CSP,comm heating EUR,0.000903846
+Western Europe,bld_comm,elec_solar CSP,comm others EUR,0.007317308
 Africa,bld_resid,biomass,resid cooling modern EUR,0
 Africa,bld_resid,electricity,resid cooling modern EUR,0.02
 Africa,bld_resid,gas,resid cooling modern EUR,0
@@ -339,18 +343,20 @@ Eastern Europe,bld_resid,heat,resid cooling modern EUR,0
 Eastern Europe,bld_resid,refined liquids,resid cooling modern EUR,0
 Eastern Europe,bld_resid,coal,resid heating coal EUR,0.145488312
 Eastern Europe,bld_resid,biomass,resid heating modern EUR,0.000325477
-Eastern Europe,bld_resid,electricity,resid heating modern EUR,0.05897647
+Eastern Europe,bld_resid,electricity,resid heating modern EUR,0.058072624
 Eastern Europe,bld_resid,gas,resid heating modern EUR,0.111542953
 Eastern Europe,bld_resid,heat,resid heating modern EUR,0.147173135
 Eastern Europe,bld_resid,refined liquids,resid heating modern EUR,0.014723057
 Eastern Europe,bld_resid,traditional biomass,resid heating TradBio EUR,0.180524976
 Eastern Europe,bld_resid,coal,resid others coal EUR,0
 Eastern Europe,bld_resid,biomass,resid others modern EUR,0
-Eastern Europe,bld_resid,electricity,resid others modern EUR,0.117611763
+Eastern Europe,bld_resid,electricity,resid others modern EUR,0.110294455
 Eastern Europe,bld_resid,gas,resid others modern EUR,0.111542953
 Eastern Europe,bld_resid,heat,resid others modern EUR,0
 Eastern Europe,bld_resid,refined liquids,resid others modern EUR,0.014723057
 Eastern Europe,bld_resid,traditional biomass,resid others TradBio EUR,0.077367847
+Eastern Europe,bld_resid,elec_solar CSP,comm heating EUR,0.000903846
+Eastern Europe,bld_resid,elec_solar CSP,comm others EUR,0.007317308
 Former Soviet Union,bld_resid,biomass,resid cooling modern EUR,0
 Former Soviet Union,bld_resid,electricity,resid cooling modern EUR,0.001
 Former Soviet Union,bld_resid,gas,resid cooling modern EUR,0
@@ -510,18 +516,20 @@ Western Europe,bld_resid,heat,resid cooling modern EUR,0
 Western Europe,bld_resid,refined liquids,resid cooling modern EUR,0
 Western Europe,bld_resid,coal,resid heating coal EUR,0
 Western Europe,bld_resid,biomass,resid heating modern EUR,0.000618508
-Western Europe,bld_resid,electricity,resid heating modern EUR,0.117866764
+Western Europe,bld_resid,electricity,resid heating modern EUR,0.116962918
 Western Europe,bld_resid,gas,resid heating modern EUR,0.29
 Western Europe,bld_resid,heat,resid heating modern EUR,0.038274046
 Western Europe,bld_resid,refined liquids,resid heating modern EUR,0.041458158
 Western Europe,bld_resid,traditional biomass,resid heating TradBio EUR,0.091782524
 Western Europe,bld_resid,coal,resid others coal EUR,0.014940569
 Western Europe,bld_resid,biomass,resid others modern EUR,0
-Western Europe,bld_resid,electricity,resid others modern EUR,0.132320177
+Western Europe,bld_resid,electricity,resid others modern EUR,0.125002869
 Western Europe,bld_resid,gas,resid others modern EUR,0.095265021
 Western Europe,bld_resid,heat,resid others modern EUR,0.016403163
 Western Europe,bld_resid,refined liquids,resid others modern EUR,0.096735702
 Western Europe,bld_resid,traditional biomass,resid others TradBio EUR,0.039335367
+Western Europe,bld_resid,elec_solar CSP,comm heating EUR,0.000903846
+Western Europe,bld_resid,elec_solar CSP,comm others EUR,0.007317308
 USA,bld_comm,hydrogen,comm others EUR,0
 USA,bld_comm,hydrogen,comm heating EUR,0
 USA,bld_resid,hydrogen,resid others modern EUR,0
