@@ -18,7 +18,7 @@
 module_gcameurope_L1324.Off_road <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "energy/A_regions",
-             FILE = "energy/mappings/enduse_fuel_aggregation",
+             FILE = "gcam-europe/mappings/enduse_fuel_aggregation",
              "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
              "L1322.in_EJ_R_indfeed_F_Yh_EUR",
              "L1323.in_EJ_R_indenergy_F_Yh_EUR"))
@@ -37,7 +37,7 @@ module_gcameurope_L1324.Off_road <- function(command, ...) {
 
     # Load required inputs
     A_regions <- get_data(all_data, "energy/A_regions")
-    enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
+    enduse_fuel_aggregation <- get_data(all_data, "gcam-europe/mappings/enduse_fuel_aggregation")
     L1012.en_bal_EJ_R_Si_Fi_Yh_EUR <- get_data(all_data, "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", strip_attributes = TRUE)
     L1323.in_EJ_R_indenergy_F_Yh_EUR <- get_data(all_data, "L1323.in_EJ_R_indenergy_F_Yh_EUR", strip_attributes = TRUE)
     L1322.in_EJ_R_indfeed_F_Yh_EUR <- get_data(all_data, "L1322.in_EJ_R_indfeed_F_Yh_EUR", strip_attributes = TRUE)
@@ -179,7 +179,7 @@ module_gcameurope_L1324.Off_road <- function(command, ...) {
       add_legacy_name("L1324.in_EJ_R_Off_road_F_Y_EUR") %>%
       add_precursors("L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
                      "energy/A_regions",
-                     "energy/mappings/enduse_fuel_aggregation") ->
+                     "gcam-europe/mappings/enduse_fuel_aggregation") ->
       L1324.in_EJ_R_Off_road_F_Y_EUR
 
     L1324.in_EJ_R_indenergy_F_Yh_EUR %>%
@@ -189,7 +189,7 @@ module_gcameurope_L1324.Off_road <- function(command, ...) {
       add_comments("To determine adjusted input energy for industrial energy use") %>%
       add_legacy_name("L1324.in_EJ_R_indenergy_F_Yh_EUR") %>%
       add_precursors("L1323.in_EJ_R_indenergy_F_Yh_EUR", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
-                     "energy/mappings/enduse_fuel_aggregation") ->
+                     "gcam-europe/mappings/enduse_fuel_aggregation") ->
       L1324.in_EJ_R_indenergy_F_Yh_EUR
 
     L1323.in_EJ_R_indfeed_F_Yh_EUR %>%
@@ -198,7 +198,7 @@ module_gcameurope_L1324.Off_road <- function(command, ...) {
       add_comments("Subtracted Off_road feedstock use from industrial feedstock use values in L1322.in_EJ_R_indfeed_F_Yh_EUR") %>%
       add_comments("To determine adjusted input feedstock for industrial feed use") %>%
       add_legacy_name("L1323.in_EJ_R_indfeed_F_Yh_EUR") %>%
-      add_precursors("L1322.in_EJ_R_indfeed_F_Yh_EUR", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "energy/mappings/enduse_fuel_aggregation") ->
+      add_precursors("L1322.in_EJ_R_indfeed_F_Yh_EUR", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "gcam-europe/mappings/enduse_fuel_aggregation") ->
       L1323.in_EJ_R_indfeed_F_Yh_EUR
 
     return_data(L1324.in_EJ_R_Off_road_F_Y_EUR, L1324.in_EJ_R_indenergy_F_Yh_EUR, L1323.in_EJ_R_indfeed_F_Yh_EUR)

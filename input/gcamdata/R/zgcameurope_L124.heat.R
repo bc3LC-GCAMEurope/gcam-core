@@ -20,7 +20,7 @@ module_gcameurope_L124.heat <- function(command, ...) {
     return(c(FILE = "energy/A_regions",
              FILE = "energy/A24.globaltech_coef",
              FILE = "energy/calibrated_techs",
-             FILE = "energy/mappings/enduse_fuel_aggregation",
+             FILE = "gcam-europe/mappings/enduse_fuel_aggregation",
              "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
              "L1231.out_EJ_R_elec_F_tech_Yh_EUR"))
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -42,7 +42,7 @@ module_gcameurope_L124.heat <- function(command, ...) {
     A_regions <- get_data(all_data, "energy/A_regions")
     A24.globaltech_coef <- get_data(all_data, "energy/A24.globaltech_coef")
     calibrated_techs <- get_data(all_data, "energy/calibrated_techs")
-    enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
+    enduse_fuel_aggregation <- get_data(all_data, "gcam-europe/mappings/enduse_fuel_aggregation")
     L1012.en_bal_EJ_R_Si_Fi_Yh_EUR <- get_data(all_data, "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR")
     L1231.out_EJ_R_elec_F_tech_Yh_EUR <- get_data(all_data, "L1231.out_EJ_R_elec_F_tech_Yh_EUR", strip_attributes = TRUE)
 
@@ -196,7 +196,7 @@ module_gcameurope_L124.heat <- function(command, ...) {
       add_comments("Input heat is extracted from energy balance, aggregated based on aggregate fuel types") %>%
       add_comments("To avoid processing failure, 0 years have base year (2010) * 1e-3 added") %>%
       add_legacy_name("L124.in_EJ_R_heat_F_Yh_EUR") %>%
-      add_precursors("energy/A_regions", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "energy/mappings/enduse_fuel_aggregation") ->
+      add_precursors("energy/A_regions", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "gcam-europe/mappings/enduse_fuel_aggregation") ->
       L124.in_EJ_R_heat_F_Yh_EUR
 
     L124.out_EJ_R_heat_F_Yh_EUR %>%
@@ -213,7 +213,7 @@ module_gcameurope_L124.heat <- function(command, ...) {
       add_units("EJ") %>%
       add_comments("Data on heat from CHP is read in, aggregated") %>%
       add_legacy_name("L124.out_EJ_R_heatfromelec_F_Yh_EUR") %>%
-      add_precursors("energy/A_regions", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "energy/mappings/enduse_fuel_aggregation") ->
+      add_precursors("energy/A_regions", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "gcam-europe/mappings/enduse_fuel_aggregation") ->
       L124.out_EJ_R_heatfromelec_F_Yh_EUR
 
     L124.heatoutratio_R_elec_F_tech_Yh_EUR %>%

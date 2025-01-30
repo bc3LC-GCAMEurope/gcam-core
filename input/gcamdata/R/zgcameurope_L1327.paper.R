@@ -18,7 +18,7 @@
 module_gcameurope_L1327.paper <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "energy/A_regions",
-             FILE = "energy/mappings/enduse_fuel_aggregation",
+             FILE = "gcam-europe/mappings/enduse_fuel_aggregation",
              FILE = "aglu/FAO/FAO_Paper_Prod_t_FORESTAT",
              FILE = "aglu/AGLU_ctry",
              FILE = "common/iso_GCAM_regID",
@@ -51,7 +51,7 @@ module_gcameurope_L1327.paper <- function(command, ...) {
     # Load required inputs
     L101.en_bal_EJ_R_Si_Fi_Yh_EUR <- get_data(all_data, "L101.en_bal_EJ_R_Si_Fi_Yh_EUR", strip_attributes = TRUE)
     A_regions <- get_data(all_data, "energy/A_regions",strip_attributes = TRUE) %>% filter_regions_europe()
-    enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation", strip_attributes = TRUE)
+    enduse_fuel_aggregation <- get_data(all_data, "gcam-europe/mappings/enduse_fuel_aggregation", strip_attributes = TRUE)
     L1326.in_EJ_R_indenergy_F_Yh_EUR <- get_data(all_data, "L1326.in_EJ_R_indenergy_F_Yh_EUR", strip_attributes = TRUE)
     FAO_Paper_Prod_t_FORESTAT <- get_data(all_data, "aglu/FAO/FAO_Paper_Prod_t_FORESTAT", strip_attributes = TRUE)
     AGLU_ctry <- get_data(all_data, "aglu/AGLU_ctry", strip_attributes = TRUE) %>% filter_regions_europe()
@@ -395,7 +395,7 @@ module_gcameurope_L1327.paper <- function(command, ...) {
       add_comments("PAPERPRO sector from IEA energy balances aggregated to GCAM regions") %>%
       add_legacy_name("L1327.in_EJ_R_paper_F_Yh_EUR") %>%
       add_precursors("L101.en_bal_EJ_R_Si_Fi_Yh_EUR", "energy/A_regions",
-                     "common/iso_GCAM_regID", "energy/mappings/enduse_fuel_aggregation",
+                     "common/iso_GCAM_regID", "gcam-europe/mappings/enduse_fuel_aggregation",
                      "L123.in_EJ_R_indchp_F_Yh_EUR", "energy/paper_food_TFE") ->
       L1327.in_EJ_R_paper_F_Yh_EUR
 
@@ -413,7 +413,7 @@ module_gcameurope_L1327.paper <- function(command, ...) {
       add_legacy_name("L1327.IO_GJkg_R_paper_F_Yh_EUR") %>%
       add_comments("IO coefficients for heat energy and electricity are calculated from IEA energy consumption and FAO paper production data") %>%
       add_precursors("L101.en_bal_EJ_R_Si_Fi_Yh_EUR", "aglu/FAO/FAO_Paper_Prod_t_FORESTAT", "aglu/AGLU_ctry", "energy/A_regions",
-                     "common/iso_GCAM_regID","energy/mappings/enduse_fuel_aggregation", "L123.in_EJ_R_indchp_F_Yh_EUR",
+                     "common/iso_GCAM_regID","gcam-europe/mappings/enduse_fuel_aggregation", "L123.in_EJ_R_indchp_F_Yh_EUR",
                      "energy/paper_food_TFE", "energy/A327.globaltech_coef") ->
       L1327.IO_GJkg_R_paper_F_Yh_EUR
 
@@ -424,7 +424,7 @@ module_gcameurope_L1327.paper <- function(command, ...) {
       add_comments("To determine adjusted input energy for industrial energy use") %>%
       add_legacy_name("L1327.in_EJ_R_indenergy_F_Yh_EUR") %>%
       add_precursors("L101.en_bal_EJ_R_Si_Fi_Yh_EUR", "L1326.in_EJ_R_indenergy_F_Yh_EUR", "aglu/FAO/FAO_Paper_Prod_t_FORESTAT",
-                     "aglu/AGLU_ctry", "energy/A_regions", "common/iso_GCAM_regID","energy/mappings/enduse_fuel_aggregation") ->
+                     "aglu/AGLU_ctry", "energy/A_regions", "common/iso_GCAM_regID","gcam-europe/mappings/enduse_fuel_aggregation") ->
       L1327.in_EJ_R_indenergy_F_Yh_EUR
 
     L1327.elec_noheat_adj_shwt_R_EUR %>%
@@ -433,7 +433,7 @@ module_gcameurope_L1327.paper <- function(command, ...) {
       add_comments("Subsector share weights for process heat technologies will be reset from 0 to 1 for these regions") %>%
       add_legacy_name("L1327.elec_noheat_adj_shwt_R_EUR") %>%
       add_precursors("L101.en_bal_EJ_R_Si_Fi_Yh_EUR", "energy/A_regions",
-                     "common/iso_GCAM_regID","energy/mappings/enduse_fuel_aggregation") ->
+                     "common/iso_GCAM_regID","gcam-europe/mappings/enduse_fuel_aggregation") ->
       L1327.elec_noheat_adj_shwt_R_EUR
 
     L127.in_EJ_R_indchp_F_Yh_EUR %>%
@@ -451,7 +451,7 @@ module_gcameurope_L1327.paper <- function(command, ...) {
       add_comments("Woodpulp in Mt divided by paper sector biomass energy in EJ") %>%
       add_legacy_name("L1327.IO_woodpulp_energy_EUR") %>%
       add_precursors("L101.en_bal_EJ_R_Si_Fi_Yh_EUR", "energy/A_regions", "common/GCAM_region_names",
-                     "common/iso_GCAM_regID", "energy/mappings/enduse_fuel_aggregation",
+                     "common/iso_GCAM_regID", "gcam-europe/mappings/enduse_fuel_aggregation",
                      "L123.in_EJ_R_indchp_F_Yh_EUR", "energy/paper_food_TFE",
                      "L110.For_ALL_bm3_R_Y") ->
       L1327.IO_woodpulp_energy_EUR

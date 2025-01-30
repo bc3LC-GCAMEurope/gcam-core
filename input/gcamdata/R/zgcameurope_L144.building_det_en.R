@@ -32,7 +32,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
              FILE = "gcam-europe/A44.share_serv_fuel_EUR",
              FILE = "energy/A44.shell_eff_mult_RG3",
              FILE = "energy/A44.tech_eff_mult_RG3",
-             FILE = "energy/mappings/enduse_fuel_aggregation",
+             FILE = "gcam-europe/mappings/enduse_fuel_aggregation",
              FILE = "gcam-europe/A44.USA_TechChange_EUR",
              FILE = "gcam-europe/estat_nrg_d_hhq_filtered_en",
              FILE = "gcam-europe/mappings/geo_to_iso_map",
@@ -76,7 +76,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     A44.tech_eff_mult_RG3 <- get_data(all_data, "energy/A44.tech_eff_mult_RG3")
     A44.USA_TechChange_EUR <- get_data(all_data, "gcam-europe/A44.USA_TechChange_EUR")
     A44.CalPrice_bld_EUR <- get_data(all_data, "gcam-europe/A44.CalPrice_bld_EUR") %>% filter_regions_europe()
-    enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
+    enduse_fuel_aggregation <- get_data(all_data, "gcam-europe/mappings/enduse_fuel_aggregation")
     estat_nrg_d_hhq_filtered_en <- get_data(all_data, "gcam-europe/estat_nrg_d_hhq_filtered_en")
     nrgbal_to_service_map <- get_data(all_data, "gcam-europe/mappings/nrgbal_to_service_map")
     siec_to_fuel_map <- get_data(all_data, "gcam-europe/mappings/siec_to_fuel_map")
@@ -123,7 +123,6 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       filter(!is.na(service)) %>% # remove nrg_bal == TOTAL
       # add GCAM fuels
       left_join(siec_to_fuel_map, by = 'siec') %>% # deleting heat pumps (because they are not present in the mapping file)
-      filter(!(grepl("elec_", fuel) & !grepl("electricity generation", service))) %>% # remove renewables & biofuels
       # compute by GCAM_region_ID total fuel-service consumption
       group_by(GCAM_region_ID, year, unit, service, fuel, product) %>%
       summarise(value_eurostat = sum(value_eurostat)) %>%

@@ -20,7 +20,7 @@ module_gcameurope_L111.rsrc_fos_Prod <- function(command, ...) {
   MODULE_INPUTS <- c(FILE = "common/GCAM32_to_EU",
                      FILE = "common/GCAM_region_names",
                      FILE = "energy/mappings/IEA_product_rsrc",
-                     FILE = "energy/mappings/enduse_fuel_aggregation",
+                     FILE = "gcam-europe/mappings/enduse_fuel_aggregation",
                      FILE = "energy/rsrc_unconv_oil_prod_bbld",
                      FILE = "energy/A11.fos_curves",
                      FILE = "energy/mappings/IEA_flow_sector",
@@ -204,7 +204,7 @@ module_gcameurope_L111.rsrc_fos_Prod <- function(command, ...) {
       add_comments("Regions with no Primary Solid Fuels according to IEA balances") %>%
       add_legacy_name("L210.DeleteRsrcTradBio_EUR") %>%
       add_precursors("common/GCAM_region_names", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
-                     "energy/mappings/enduse_fuel_aggregation") ->
+                     "gcam-europe/mappings/enduse_fuel_aggregation") ->
       L210.DeleteRsrcTradBio_EUR
 
     return_data(L111.Prod_EJ_R_F_Yh_EUR, L111.RsrcCurves_EJ_R_Ffos_EUR, L210.DeleteRsrcTradBio_EUR)

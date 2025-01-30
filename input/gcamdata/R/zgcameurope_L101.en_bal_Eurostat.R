@@ -23,7 +23,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
              FILE = "gcam-europe/mappings/nrgbal_to_sector_map",
              FILE = "gcam-europe/mappings/siec_to_fuel_map",
              FILE = "gcam-europe/mappings/Eurostat_sector_fuel_modifications",
-             FILE = "energy/mappings/enduse_fuel_aggregation",
+             FILE = "gcam-europe/mappings/enduse_fuel_aggregation",
              "L1011.en_bal_EJ_R_Si_Fi_Yh"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L101.GCAM_EUR_regions",
@@ -42,7 +42,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
     nrgbal_to_sector_map <- get_data(all_data, "gcam-europe/mappings/nrgbal_to_sector_map")
     siec_to_fuel_map <- get_data(all_data, "gcam-europe/mappings/siec_to_fuel_map")
     Eurostat_sector_fuel_modifications <- get_data(all_data, "gcam-europe/mappings/Eurostat_sector_fuel_modifications")
-    enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
+    enduse_fuel_aggregation <- get_data(all_data, "gcam-europe/mappings/enduse_fuel_aggregation")
 
     L1011.en_bal_EJ_R_Si_Fi_Yh <- get_data(all_data, "L1011.en_bal_EJ_R_Si_Fi_Yh") %>%
       # set biomass_tradbio as biomass
@@ -110,10 +110,14 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
     # Electricity-generation-only fuels (e.g., wind, solar, hydro, geothermal) consumed by sectors other than electricity generation
     # REVISIT FOR GCAM-EUROPE - THIS REMOVES BUILDING SOLAR THERMAL and GEOTHERMAL HEATING (TURKEY & ICELAND)
     # Primary biomass and district heat consumed by the transportation sector
-    L101.Eurostat_en_bal_ctry_hist_clean <- L101.Eurostat_en_bal_ctry_hist %>%
-      filter(!(grepl("elec_", fuel) & !grepl("electricity generation",sector)),
-             !(fuel == "biomass" & grepl("trn_", sector)),
-             !(fuel == "heat" & grepl("trn_", sector)))
+   L101.Eurostat_en_bal_ctry_hist_clean <- L101.Eurostat_en_bal_ctry_hist %>%
+     filter(!(
+       grepl("elec_", fuel) & !grepl("electricity generation",sector) &
+         !(fuel == "elec_solar CSP" & grepl("bld", sector))
+     ),
+     !(fuel == "biomass" & grepl("trn_", sector)),
+     !(fuel == "heat" & grepl("trn_", sector)))
+
 
     # Aggregate by relevant categories (in EJ)
     L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat <- L101.Eurostat_en_bal_ctry_hist_clean %>%
@@ -216,20 +220,29 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
 
 
     # Update the L101.GCAM_EUR_regions mapping by removing iso codes whose data is not
-    # available in Eurostat (e.g Switzerland)
+    # available in Eurostat (e.g Switzerland) & add 0s to elec_solar CSP for the bld
+    # sector from 1971 to 1989 to avoid further problems. Data start in 1990.
     L101.GCAM_EUR_regions <- L101.GCAM_EUR_regions %>%
       filter(GCAM_region_ID %in% L101.en_bal_EJ_R_Si_Fi_Yh_Eurostat$GCAM_region_ID)
 
     L101.en_bal_EJ_R_Si_Fi_Yh_EUR_replace_na_years <- L1011.en_bal_EJ_R_Si_Fi_Yh %>%
       semi_join(year_filters, by = c("GCAM_region_ID", "year"))
 
-    L101.en_bal_EJ_R_Si_Fi_Yh_EUR <- L101.en_bal_EJ_R_Si_Fi_Yh_Eurostat %>%
+    L101.en_bal_EJ_R_Si_Fi_Yh_EUR_tmp <- L101.en_bal_EJ_R_Si_Fi_Yh_Eurostat %>%
       anti_join(year_filters, by = c("GCAM_region_ID", "year")) %>%
       bind_rows(L1011.en_bal_EJ_R_Si_Fi_Yh %>%
                   filter(GCAM_region_ID %in% L101.GCAM_EUR_regions$GCAM_region_ID,
                          year < min(L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat$year)),
                 L101.en_bal_EJ_R_Si_Fi_Yh_EUR_replace_na_years
-                ) # FINAL OUTPUT TABLE - temporally complete EUR data
+                )
+
+    L101.en_bal_EJ_R_Si_Fi_Yh_EUR <- L101.en_bal_EJ_R_Si_Fi_Yh_EUR_tmp %>%
+      bind_rows(L101.en_bal_EJ_R_Si_Fi_Yh_EUR_tmp %>%
+                  filter(fuel == 'elec_solar CSP', grepl('bld', sector)) %>%
+                  complete(nesting(GCAM_region_ID, sector, fuel),
+                           year = unique(L101.en_bal_EJ_R_Si_Fi_Yh_EUR_tmp$year),
+                           fill = list(value = 0)) %>%
+                  filter(year <= MODEL_FINAL_BASE_YEAR)) # FINAL OUTPUT TABLE - temporally complete EUR data
 
     # 2. Building & Transport Downscale -----------
     # For downscaling of buildings and transportation energy, aggregate by fuel and country
@@ -272,7 +285,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       add_comments("Consumption of energy by the transport sector by fuel and historical year. Aggregated by fuel and country") %>%
       add_precursors("common/GCAM32_to_EU", "europe/nrg_bal_c", "europe/mappings/geo_to_iso_map",
                      "europe/mappings/nrgbal_to_sector_map", "europe/mappings/siec_to_fuel_map",
-                     "energy/mappings/IEA_sector_fuel_modifications", "energy/mappings/enduse_fuel_aggregation")  ->
+                     "energy/mappings/IEA_sector_fuel_modifications", "gcam-europe/mappings/enduse_fuel_aggregation")  ->
       L101.in_EJ_R_trn_Fi_Yh_EUR
 
     L101.in_EJ_R_bld_Fi_Yh_EUR %>%

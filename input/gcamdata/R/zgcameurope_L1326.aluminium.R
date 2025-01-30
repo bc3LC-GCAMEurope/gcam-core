@@ -19,7 +19,7 @@ module_gcameurope_L1326.aluminum <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/GCAM_region_names",
              FILE = "energy/A_regions",
-             FILE = "energy/mappings/enduse_fuel_aggregation",
+             FILE = "gcam-europe/mappings/enduse_fuel_aggregation",
              FILE = "energy/aluminum_prod_USGS", # TODO UPDATE?
              FILE = "energy/aluminum_prod_region_IAA", # TODO UPDATE?
              FILE = "energy/aluminum_energy_region_IAA", # TODO UPDATE?
@@ -43,7 +43,7 @@ module_gcameurope_L1326.aluminum <- function(command, ...) {
 
     # Load required inputs
     A_regions <- get_data(all_data, "energy/A_regions") %>% filter_regions_europe()
-    enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
+    enduse_fuel_aggregation <- get_data(all_data, "gcam-europe/mappings/enduse_fuel_aggregation")
     L1325.in_EJ_R_indenergy_F_Yh_EUR <- get_data(all_data, "L1325.in_EJ_R_indenergy_F_Yh_EUR", strip_attributes = TRUE)
     aluminum_prod_country <- get_data(all_data, "energy/aluminum_prod_USGS") %>% filter_regions_europe()
     aluminum_prod_region <- get_data(all_data, "energy/aluminum_prod_region_IAA",) %>% filter_regions_europe()
@@ -242,7 +242,7 @@ module_gcameurope_L1326.aluminum <- function(command, ...) {
       add_comments("Obtained from World aluminum association and then aggregated to GCAM regions") %>%
       add_legacy_name("L1326.in_EJ_R_aluminum_Yh_EUR") %>%
       add_precursors("energy/A_regions", "energy/aluminum_prod_USGS", "energy/aluminum_energy_region_IAA",
-                     "energy/mappings/IAA_ctry_region", "common/iso_GCAM_regID", "energy/mappings/enduse_fuel_aggregation") ->
+                     "energy/mappings/IAA_ctry_region", "common/iso_GCAM_regID", "gcam-europe/mappings/enduse_fuel_aggregation") ->
       L1326.in_EJ_R_aluminum_Yh_EUR
 
     L1326.out_Mt_R_aluminum_Yh_EUR %>%
@@ -262,7 +262,7 @@ module_gcameurope_L1326.aluminum <- function(command, ...) {
       add_legacy_name("L1326.IO_GJkg_R_aluminum_F_Yh_EUR") %>%
       add_precursors("energy/A_regions", "energy/aluminum_prod_region_IAA", "energy/aluminum_prod_USGS",
                      "energy/aluminum_energy_region_IAA", "energy/mappings/IAA_ctry_region", "common/iso_GCAM_regID",
-                     "energy/mappings/enduse_fuel_aggregation") ->
+                     "gcam-europe/mappings/enduse_fuel_aggregation") ->
       L1326.IO_GJkg_R_aluminum_F_Yh_EUR
 
     L1326.in_EJ_R_indenergy_F_Yh_EUR %>%
@@ -272,7 +272,7 @@ module_gcameurope_L1326.aluminum <- function(command, ...) {
       add_comments("To determine adjusted input energy for industrial energy use") %>%
       add_legacy_name("L1326.in_EJ_R_indenergy_F_Yh_EUR") %>%
       add_precursors("L1325.in_EJ_R_indenergy_F_Yh_EUR", "energy/aluminum_prod_region_IAA", "energy/aluminum_prod_USGS", "energy/aluminum_energy_region_IAA",
-                     "energy/mappings/IAA_ctry_region", "common/iso_GCAM_regID","energy/mappings/enduse_fuel_aggregation") ->
+                     "energy/mappings/IAA_ctry_region", "common/iso_GCAM_regID","gcam-europe/mappings/enduse_fuel_aggregation") ->
       L1326.in_EJ_R_indenergy_F_Yh_EUR
 
 

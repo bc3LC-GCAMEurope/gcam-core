@@ -26,7 +26,7 @@ module_gcameurope_L154.transportation_UCD <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/iso_GCAM_regID",
              FILE = "energy/mappings/calibrated_techs_trn_agg",
-             FILE = "energy/mappings/enduse_fuel_aggregation",
+             FILE = "gcam-europe/mappings/enduse_fuel_aggregation",
              FILE = "energy/mappings/UCD_ctry",
              FILE = "energy/mappings/UCD_techs",
              #kbn 2019-10-09 Added size class divisions file here.
@@ -67,7 +67,7 @@ module_gcameurope_L154.transportation_UCD <- function(command, ...) {
     # Load required inputs
     iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID")
     calibrated_techs_trn_agg <- get_data(all_data, "energy/mappings/calibrated_techs_trn_agg")
-    enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
+    enduse_fuel_aggregation <- get_data(all_data, "gcam-europe/mappings/enduse_fuel_aggregation")
     UCD_ctry <- get_data(all_data, "energy/mappings/UCD_ctry")
     UCD_techs <- get_data(all_data, "energy/mappings/UCD_techs")
     OTAQ_trn_data_EMF37 <- get_data(all_data, "energy/OTAQ_trn_data_EMF37")
@@ -561,7 +561,7 @@ module_gcameurope_L154.transportation_UCD <- function(command, ...) {
       add_legacy_name("L154.in_EJ_R_trn_m_sz_tech_F_Yh") %>%
       add_precursors("common/iso_GCAM_regID", "L101.in_EJ_R_trn_Fi_Yh_EUR",
                      "L1011.in_EJ_ctry_intlship_TOT_Yh", "L131.in_EJ_R_Senduse_F_Yh_EUR",
-                     "energy/mappings/calibrated_techs_trn_agg", "energy/mappings/enduse_fuel_aggregation",
+                     "energy/mappings/calibrated_techs_trn_agg", "gcam-europe/mappings/enduse_fuel_aggregation",
                      "energy/mappings/UCD_ctry", "energy/mappings/UCD_techs",
                      "energy/UCD_trn_data_SSP1","energy/UCD_trn_data_SSP3","energy/UCD_trn_data_SSP5","energy/UCD_trn_data_CORE",
                      "energy/mappings/UCD_size_class_revisions") ->
@@ -576,7 +576,7 @@ module_gcameurope_L154.transportation_UCD <- function(command, ...) {
       add_legacy_name("L154.EUR_hist_data_times_UCD_shares") %>%
       add_precursors("common/iso_GCAM_regID", "L101.in_EJ_R_trn_Fi_Yh_EUR",
                      "L1011.in_EJ_ctry_intlship_TOT_Yh", "L131.in_EJ_R_Senduse_F_Yh_EUR",
-                     "energy/mappings/calibrated_techs_trn_agg", "energy/mappings/enduse_fuel_aggregation",
+                     "energy/mappings/calibrated_techs_trn_agg", "gcam-europe/mappings/enduse_fuel_aggregation",
                      "energy/mappings/UCD_ctry", "energy/mappings/UCD_techs",
                      "energy/UCD_trn_data_SSP1","energy/UCD_trn_data_SSP3","energy/UCD_trn_data_SSP5","energy/UCD_trn_data_CORE",
                      "energy/mappings/UCD_size_class_revisions") ->
@@ -589,10 +589,10 @@ module_gcameurope_L154.transportation_UCD <- function(command, ...) {
       add_legacy_name("L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y") %>%
       add_precursors("energy/UCD_trn_data_SSP1","energy/UCD_trn_data_SSP3","energy/UCD_trn_data_SSP5","energy/UCD_trn_data_CORE",
                      "energy/mappings/UCD_size_class_revisions", "energy/mappings/UCD_ctry",
-                     "common/iso_GCAM_regID", "energy/mappings/calibrated_techs_trn_agg", "energy/mappings/enduse_fuel_aggregation",
+                     "common/iso_GCAM_regID", "energy/mappings/calibrated_techs_trn_agg", "gcam-europe/mappings/enduse_fuel_aggregation",
                      "energy/mappings/UCD_techs",
                      "L131.in_EJ_R_Senduse_F_Yh_EUR", "common/iso_GCAM_regID", "energy/mappings/calibrated_techs_trn_agg",
-                     "energy/mappings/enduse_fuel_aggregation", "energy/mappings/UCD_techs",
+                     "gcam-europe/mappings/enduse_fuel_aggregation", "energy/mappings/UCD_techs",
                      "L101.in_EJ_R_trn_Fi_Yh_EUR", "L1011.in_EJ_ctry_intlship_TOT_Yh",
                      "L131.in_EJ_R_Senduse_F_Yh_EUR") ->
       L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y_EUR
@@ -604,10 +604,10 @@ module_gcameurope_L154.transportation_UCD <- function(command, ...) {
       add_legacy_name("L154.loadfactor_R_trn_m_sz_tech_F_Y") %>%
       add_precursors("energy/UCD_trn_data_CORE","energy/UCD_trn_data_SSP1","energy/UCD_trn_data_SSP3","energy/UCD_trn_data_SSP5",
                      "energy/mappings/UCD_size_class_revisions", "energy/mappings/UCD_ctry",
-                     "common/iso_GCAM_regID", "energy/mappings/calibrated_techs_trn_agg", "energy/mappings/enduse_fuel_aggregation",
+                     "common/iso_GCAM_regID", "energy/mappings/calibrated_techs_trn_agg", "gcam-europe/mappings/enduse_fuel_aggregation",
                      "energy/mappings/UCD_techs",
                      "L131.in_EJ_R_Senduse_F_Yh_EUR", "common/iso_GCAM_regID", "energy/mappings/calibrated_techs_trn_agg",
-                     "energy/mappings/enduse_fuel_aggregation", "energy/mappings/UCD_techs",
+                     "gcam-europe/mappings/enduse_fuel_aggregation", "energy/mappings/UCD_techs",
                      "L101.in_EJ_R_trn_Fi_Yh_EUR", "L1011.in_EJ_ctry_intlship_TOT_Yh",
                      "L131.in_EJ_R_Senduse_F_Yh_EUR") ->
       L154.loadfactor_R_trn_m_sz_tech_F_Y_EUR
@@ -619,10 +619,10 @@ module_gcameurope_L154.transportation_UCD <- function(command, ...) {
       add_legacy_name("L154.cost_usdvkm_R_trn_m_sz_tech_F_Y") %>%
       add_precursors("energy/UCD_trn_data_CORE","energy/UCD_trn_data_SSP1","energy/UCD_trn_data_SSP3","energy/UCD_trn_data_SSP5",
                      "energy/mappings/UCD_size_class_revisions", "energy/mappings/UCD_ctry",
-                     "common/iso_GCAM_regID", "energy/mappings/calibrated_techs_trn_agg", "energy/mappings/enduse_fuel_aggregation",
+                     "common/iso_GCAM_regID", "energy/mappings/calibrated_techs_trn_agg", "gcam-europe/mappings/enduse_fuel_aggregation",
                      "energy/mappings/UCD_techs",
                      "L131.in_EJ_R_Senduse_F_Yh_EUR", "common/iso_GCAM_regID", "energy/mappings/calibrated_techs_trn_agg",
-                     "energy/mappings/enduse_fuel_aggregation", "energy/mappings/UCD_techs",
+                     "gcam-europe/mappings/enduse_fuel_aggregation", "energy/mappings/UCD_techs",
                      "L101.in_EJ_R_trn_Fi_Yh_EUR", "L1011.in_EJ_ctry_intlship_TOT_Yh",
                      "L131.in_EJ_R_Senduse_F_Yh_EUR") ->
       L154.cost_usdvkm_R_trn_m_sz_tech_F_Y_EUR
@@ -648,10 +648,10 @@ module_gcameurope_L154.transportation_UCD <- function(command, ...) {
       add_legacy_name("L154.speed_kmhr_R_trn_m_sz_tech_F_Y") %>%
       add_precursors("energy/UCD_trn_data_CORE","energy/UCD_trn_data_SSP1","energy/UCD_trn_data_SSP3","energy/UCD_trn_data_SSP5",
                      "energy/mappings/UCD_size_class_revisions", "energy/mappings/UCD_ctry",
-                     "common/iso_GCAM_regID", "energy/mappings/calibrated_techs_trn_agg", "energy/mappings/enduse_fuel_aggregation",
+                     "common/iso_GCAM_regID", "energy/mappings/calibrated_techs_trn_agg", "gcam-europe/mappings/enduse_fuel_aggregation",
                      "energy/mappings/UCD_techs",
                      "L131.in_EJ_R_Senduse_F_Yh_EUR", "common/iso_GCAM_regID", "energy/mappings/calibrated_techs_trn_agg",
-                     "energy/mappings/enduse_fuel_aggregation", "energy/mappings/UCD_techs",
+                     "gcam-europe/mappings/enduse_fuel_aggregation", "energy/mappings/UCD_techs",
                      "L101.in_EJ_R_trn_Fi_Yh_EUR", "L1011.in_EJ_ctry_intlship_TOT_Yh",
                      "L131.in_EJ_R_Senduse_F_Yh_EUR") ->
       L154.speed_kmhr_R_trn_m_sz_tech_F_Y_EUR

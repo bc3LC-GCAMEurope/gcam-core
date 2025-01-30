@@ -18,7 +18,7 @@
 module_gcameurope_L1325.chemical <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "energy/A_regions",
-             FILE = "energy/mappings/enduse_fuel_aggregation",
+             FILE = "gcam-europe/mappings/enduse_fuel_aggregation",
              "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
              "L1321.in_EJ_R_indenergy_F_Yh_EUR",
              "L132.in_EJ_R_indfeed_F_Yh_EUR",
@@ -45,7 +45,7 @@ module_gcameurope_L1325.chemical <- function(command, ...) {
     # Load required inputs
     A_regions <- get_data(all_data, "energy/A_regions")
     L1012.en_bal_EJ_R_Si_Fi_Yh_EUR <- get_data(all_data, "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", strip_attributes = TRUE)
-    enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
+    enduse_fuel_aggregation <- get_data(all_data, "gcam-europe/mappings/enduse_fuel_aggregation")
     L1324.in_EJ_R_indenergy_F_Yh_EUR <- get_data(all_data, "L1324.in_EJ_R_indenergy_F_Yh_EUR", strip_attributes = TRUE)
     L1323.in_EJ_R_indfeed_F_Yh_EUR <- get_data(all_data, "L1323.in_EJ_R_indfeed_F_Yh_EUR", strip_attributes = TRUE)
     L1321.in_EJ_R_indenergy_F_Yh_EUR <- get_data(all_data, "L1321.in_EJ_R_indenergy_F_Yh_EUR")
@@ -222,7 +222,7 @@ module_gcameurope_L1325.chemical <- function(command, ...) {
       add_legacy_name("L1325.in_EJ_R_chemical_F_Y_EUR") %>%
       add_precursors("energy/A_regions",
                      "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
-                     "energy/mappings/enduse_fuel_aggregation") ->
+                     "gcam-europe/mappings/enduse_fuel_aggregation") ->
       L1325.in_EJ_R_chemical_F_Y_EUR
 
     L1325.in_EJ_R_indenergy_F_Yh_EUR %>%
@@ -232,7 +232,7 @@ module_gcameurope_L1325.chemical <- function(command, ...) {
       add_comments("To determine adjusted input energy for industrial energy use") %>%
       add_legacy_name("L1325.in_EJ_R_indenergy_F_Yh_EUR") %>%
       add_precursors("L1324.in_EJ_R_indenergy_F_Yh_EUR","L1321.in_EJ_R_indenergy_F_Yh_EUR",
-                     "L1322.in_EJ_R_indenergy_F_Yh_EUR","L1012.en_bal_EJ_R_Si_Fi_Yh_EUR","energy/mappings/enduse_fuel_aggregation") ->
+                     "L1322.in_EJ_R_indenergy_F_Yh_EUR","L1012.en_bal_EJ_R_Si_Fi_Yh_EUR","gcam-europe/mappings/enduse_fuel_aggregation") ->
       L1325.in_EJ_R_indenergy_F_Yh_EUR
 
     L1324.in_EJ_R_indfeed_F_Yh_EUR %>%
@@ -242,7 +242,7 @@ module_gcameurope_L1325.chemical <- function(command, ...) {
       add_comments("To determine adjusted input feedstock for industrial feed use") %>%
       add_legacy_name("L1324.in_EJ_R_indfeed_F_Yh_EUR") %>%
       add_precursors("L1323.in_EJ_R_indfeed_F_Yh_EUR","L1322.in_EJ_R_indfeed_F_Yh_EUR", "L132.in_EJ_R_indfeed_F_Yh_EUR","L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
-                     "energy/mappings/enduse_fuel_aggregation") ->
+                     "gcam-europe/mappings/enduse_fuel_aggregation") ->
       L1324.in_EJ_R_indfeed_F_Yh_EUR
 
     return_data(L1325.in_EJ_R_chemical_F_Y_EUR, L1325.in_EJ_R_indenergy_F_Yh_EUR, L1324.in_EJ_R_indfeed_F_Yh_EUR)

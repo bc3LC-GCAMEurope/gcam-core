@@ -22,7 +22,7 @@ module_gcameurope_L1328.food_processing <- function(command, ...) {
   MODULE_INPUTS <-
     c("L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
       FILE = "energy/A_regions",
-      FILE = "energy/mappings/enduse_fuel_aggregation",
+      FILE = "gcam-europe/mappings/enduse_fuel_aggregation",
       "L1327.in_EJ_R_indenergy_F_Yh_EUR",
       FILE = "common/iso_GCAM_regID",
       FILE = "common/GCAM_region_names",
@@ -30,7 +30,7 @@ module_gcameurope_L1328.food_processing <- function(command, ...) {
       "L101.CropMeat_Food_Pcal_R_C_Y",
       "L100.IEA_en_bal_ctry_hist",
       FILE = "energy/mappings/IEA_product_fuel",
-      FILE = "energy/mappings/enduse_fuel_aggregation",
+      FILE = "gcam-europe/mappings/enduse_fuel_aggregation",
       FILE = "energy/mappings/IEA_flow_sector",
       FILE = "energy/A328.energy_infill_model_coefs",
       FILE = "energy/A328.energy_infill_model_intercepts_R",
@@ -238,7 +238,7 @@ module_gcameurope_L1328.food_processing <- function(command, ...) {
         add_comments("Calculated as the share of total industry energy (from all of the IEA industry sectors) that is in food processing") %>%
         add_comments("And the share that is in non-specified industry energy") %>%
         add_legacy_name("L1328.en_bal_frac_industry_food_inonspec_R_Yh_EUR") %>%
-        add_precursors("common/iso_GCAM_regID","energy/mappings/enduse_fuel_aggregation", "L100.IEA_en_bal_ctry_hist",
+        add_precursors("common/iso_GCAM_regID","gcam-europe/mappings/enduse_fuel_aggregation", "L100.IEA_en_bal_ctry_hist",
                        "energy/mappings/IEA_product_fuel", "energy/mappings/IEA_flow_sector") ->
         L1328.en_bal_frac_industry_food_inonspec_R_Yh_EUR
 
@@ -459,7 +459,7 @@ module_gcameurope_L1328.food_processing <- function(command, ...) {
       add_comments("between food processing energy use and calorie consumption and GDP) when IEA data are limited") %>%
       add_legacy_name("L1328.in_EJ_R_food_F_Yh_EUR") %>%
       add_precursors("L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "energy/A_regions",
-                     "common/iso_GCAM_regID","energy/mappings/enduse_fuel_aggregation",
+                     "common/iso_GCAM_regID","gcam-europe/mappings/enduse_fuel_aggregation",
                      "L1327.in_EJ_R_indenergy_F_Yh_EUR", "L101.CropMeat_Food_Pcal_R_C_Y", "L100.IEA_en_bal_ctry_hist",
                      "energy/mappings/IEA_product_fuel", "energy/mappings/IEA_flow_sector", "energy/A328.energy_infill_model_coefs",
                      "energy/A328.energy_infill_model_intercepts_R", "aglu/A_demand_technology", "L102.gdp_mil90usd_Scen_R_Y") ->
@@ -479,7 +479,7 @@ module_gcameurope_L1328.food_processing <- function(command, ...) {
       add_legacy_name("L1328.IO_EJPcal_R_food_F_Yh_EUR") %>%
       add_comments("IO coefficients for heat energy and electricity are calculated from IEA and infilled energy consumption and AGLU module calorie production data") %>%
       add_precursors("L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "energy/A_regions", "common/iso_GCAM_regID",
-                     "energy/mappings/enduse_fuel_aggregation", "L1327.in_EJ_R_indenergy_F_Yh_EUR",
+                     "gcam-europe/mappings/enduse_fuel_aggregation", "L1327.in_EJ_R_indenergy_F_Yh_EUR",
                      "energy/A328.globaltech_coef", "L101.CropMeat_Food_Pcal_R_C_Y",
                      "common/GCAM_region_names", "L100.IEA_en_bal_ctry_hist",
                      "energy/mappings/IEA_product_fuel", "energy/mappings/IEA_flow_sector", "energy/A328.energy_infill_model_coefs",
@@ -493,7 +493,7 @@ module_gcameurope_L1328.food_processing <- function(command, ...) {
       add_comments("To determine adjusted input energy for industrial energy use; taking into account infilling of food processing energy use data") %>%
       add_legacy_name("L1328.in_EJ_R_indenergy_F_Yh_EUR") %>%
       add_precursors("L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "L1327.in_EJ_R_indenergy_F_Yh_EUR",
-                     "energy/A_regions", "common/iso_GCAM_regID","energy/mappings/enduse_fuel_aggregation", "L101.CropMeat_Food_Pcal_R_C_Y", "L100.IEA_en_bal_ctry_hist",
+                     "energy/A_regions", "common/iso_GCAM_regID","gcam-europe/mappings/enduse_fuel_aggregation", "L101.CropMeat_Food_Pcal_R_C_Y", "L100.IEA_en_bal_ctry_hist",
                      "energy/mappings/IEA_product_fuel", "energy/mappings/IEA_flow_sector", "energy/A328.energy_infill_model_coefs",
                      "energy/A328.energy_infill_model_intercepts_R", "aglu/A_demand_technology", "L102.gdp_mil90usd_Scen_R_Y") ->
       L1328.in_EJ_R_indenergy_F_Yh_EUR
@@ -505,7 +505,7 @@ module_gcameurope_L1328.food_processing <- function(command, ...) {
       add_comments("Energy that is used to infill for food processing for some regions is further subtracted") %>%
       add_legacy_name("L1328.in_EJ_R_indenergy_infilled_for_food_F_Yh_EUR") %>%
       add_precursors("L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "L1327.in_EJ_R_indenergy_F_Yh_EUR",
-                     "energy/A_regions", "common/iso_GCAM_regID","energy/mappings/enduse_fuel_aggregation", "L101.CropMeat_Food_Pcal_R_C_Y", "L100.IEA_en_bal_ctry_hist",
+                     "energy/A_regions", "common/iso_GCAM_regID","gcam-europe/mappings/enduse_fuel_aggregation", "L101.CropMeat_Food_Pcal_R_C_Y", "L100.IEA_en_bal_ctry_hist",
                      "energy/mappings/IEA_product_fuel", "energy/mappings/IEA_flow_sector", "energy/A328.energy_infill_model_coefs",
                      "energy/A328.energy_infill_model_intercepts_R", "aglu/A_demand_technology", "L102.gdp_mil90usd_Scen_R_Y") ->
       L1328.in_EJ_R_indenergy_infilled_for_food_F_Yh_EUR

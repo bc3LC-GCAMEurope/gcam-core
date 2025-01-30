@@ -25,7 +25,7 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
              FILE = "energy/WSA_direct_reduced_iron_2008_2019.csv",
              FILE = "common/iso_GCAM_regID",
              FILE = "common/GCAM_region_names",
-             FILE = "energy/mappings/enduse_fuel_aggregation",
+             FILE = "gcam-europe/mappings/enduse_fuel_aggregation",
              FILE = "energy/A323.subsector_interp",
              "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
              "L1322.in_EJ_R_indenergy_F_Yh_EUR",
@@ -59,7 +59,7 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
       filter_regions_europe()
     GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>%
       filter_regions_europe()
-    enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
+    enduse_fuel_aggregation <- get_data(all_data, "gcam-europe/mappings/enduse_fuel_aggregation")
 
     # 1. Estimate DRI (direct reduced iron) consumption ============================================================
     # from country-wise WSA DRI production, imports, and exports data
@@ -285,7 +285,7 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
       add_units("GJ/kg steel") %>%
       add_comments("IO coefficients for steel") %>%
       add_legacy_name("L1323.IO_GJkg_R_iron_steel_F_Yh_EUR") %>%
-      add_precursors( "energy/steel_prod_process", "energy/steel_intensity", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "energy/mappings/enduse_fuel_aggregation") ->
+      add_precursors( "energy/steel_prod_process", "energy/steel_intensity", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "gcam-europe/mappings/enduse_fuel_aggregation") ->
       L1323.IO_GJkg_R_iron_steel_F_Yh_EUR
 
     L1323.in_EJ_R_iron_steel_F_Y_EUR %>%
@@ -293,7 +293,7 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
       add_units("Exajoules") %>%
       add_comments("Calculated by steel production and IO coefficients") %>%
       add_legacy_name("L1323.in_EJ_R_iron_steel_F_Y_EUR") %>%
-      add_precursors("energy/steel_prod_process","energy/steel_intensity", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "energy/mappings/enduse_fuel_aggregation") ->
+      add_precursors("energy/steel_prod_process","energy/steel_intensity", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "gcam-europe/mappings/enduse_fuel_aggregation") ->
       L1323.in_EJ_R_iron_steel_F_Y_EUR
 
     L1323.in_EJ_R_indenergy_F_Yh_EUR %>%
@@ -302,7 +302,7 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
       add_comments("Subtracted iron and steel energy use from industrial energy use values in L1322.in_EJ_R_indenergy_F_Yh_EUR") %>%
       add_comments("To determine adjusted input energy for industrial energy use") %>%
       add_legacy_name("L1323.in_EJ_R_indenergy_F_Yh_EUR") %>%
-      add_precursors("L1322.in_EJ_R_indenergy_F_Yh_EUR", "energy/steel_prod_process", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "energy/mappings/enduse_fuel_aggregation") ->
+      add_precursors("L1322.in_EJ_R_indenergy_F_Yh_EUR", "energy/steel_prod_process", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "gcam-europe/mappings/enduse_fuel_aggregation") ->
       L1323.in_EJ_R_indenergy_F_Yh_EUR
 
     L1323.SubsectorInterp_iron_steel_EUR %>%
