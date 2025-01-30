@@ -84,3 +84,5 @@ input/gcamdata/R/comparisson_Russell_Eurostat_BLD.R
 exe7.0
 /ModelInterface
 analysis/*
+input/gcamdata/inst/extdata/bld_prices.csv
+input/gcamdata/inst/extdata/bld_prices.csv
