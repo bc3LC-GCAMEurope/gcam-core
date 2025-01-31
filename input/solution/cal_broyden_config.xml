@@ -165,6 +165,7 @@
 		<solution-floor fillout="1" region="Belgium" market-type="district heat">0.01</solution-floor>
 		<solution-floor fillout="1" region="Greece" market-type="district heat">0.01</solution-floor>
 		<solution-floor fillout="1" region="Germany" market-type="district heat">0.01</solution-floor>
+		<solution-tolerance fillout="1" region="Albania" period="3" market-type="crude oil">0.05</solution-tolerance>
         <!-- applies to all regions since region attribute is not included -->
         <max-price-change fillout="1" market-type="Trial-Value" period="1">10</max-price-change>
 		<solution-tolerance fillout="1" market-type="energy net export">0.05</solution-tolerance>
