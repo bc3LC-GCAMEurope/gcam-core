@@ -200,7 +200,7 @@ module_energy_electricity_xml <- function(command, ...) {
                      "L223.StubTechProd_elec",
                      "L223.StubTechEff_elec",
                      "L223.StubTechSecOut_desal") %>%
-      remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) ->
+      remove_regions_xml(c(gcameurope.EUROSTAT_COUNTRIES, "Switzerland")) ->
       electricity.xml
 
     return_data(electricity.xml)

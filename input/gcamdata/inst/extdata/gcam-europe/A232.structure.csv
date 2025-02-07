@@ -1,0 +1,10 @@
+# File: A232.structure.csv
+# Title: Europe electricity sector structure characteristics
+# Units: Unitless
+# Column types: ccccccicicccc
+# ----------
+region,supplysector,subsector,technology,minicam.energy.input,market.name,subsector.logit,subsector.logit.type,technology.logit,technology.logit.type,output.unit,input.unit,price.unit
+Austria,traded electricity,traded electricity,traded electricity,electricity_net_ownuse,grid_region,-3,,-6,,EJ,EJ,1975$/GJ
+grid_region,electricity_net_ownuse,electricity_net_ownuse,electricity_net_ownuse,electricity,grid_region,-3,,-6,,EJ,EJ,1975$/GJ
+grid_region,regional electricity,domestic electricity,domestic electricity,electricity_net_ownuse,grid_region,-3,,-6,,EJ,EJ,1975$/GJ
+grid_region,regional electricity,imported electricity,imported electricity,traded electricity,Austria,-3,,-6,,EJ,EJ,1975$/GJ

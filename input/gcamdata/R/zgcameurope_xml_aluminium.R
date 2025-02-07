@@ -11,19 +11,31 @@
 #' the generated outputs: \code{aluminum_EUR.xml}. The corresponding file in the
 #' original data system was \code{batch_aluminum_xml.R} (energy XML).
 module_gcameurope_aluminum_xml <- function(command, ...) {
+  MODULE_INPUTS <- c("L2326.Supplysector_aluminum_EUR",
+                     "L2326.FinalEnergyKeyword_aluminum_EUR",
+                     "L2326.SubsectorLogit_aluminum_EUR",
+                     "L2326.SubsectorShrwtFllt_aluminum_EUR",
+                     "L2326.SubsectorInterp_aluminum_EUR",
+                     "L2326.StubTech_aluminum_EUR",
+                     "L2326.StubTechProd_aluminum_EUR",
+                     "L2326.StubTechCalInput_aluminum_EUR",
+                     "L2326.StubTechCoef_aluminum_EUR",
+                     "L2326.StubTechSecMarket_aluminum_EUR",
+                     "L2326.PerCapitaBased_aluminum_EUR",
+                     "L2326.BaseService_aluminum_EUR",
+                     "L2326.PriceElasticity_aluminum_EUR",
+                     "L2326.GlobalTechShrwt_aluminum_EUR",
+                     "L2326.GlobalTechCoef_aluminum_EUR",
+                     "L2326.GlobalTechCost_aluminum_EUR",
+                     "L2326.GlobalTechTrackCapital_aluminum_EUR",
+                     "L2326.GlobalTechCapture_aluminum_EUR",
+                     "L2326.GlobalTechShutdown_aluminum_EUR",
+                     "L2326.GlobalTechSCurve_aluminum_EUR",
+                     "L2326.GlobalTechLifetime_aluminum_EUR",
+                     "L2326.GlobalTechProfitShutdown_aluminum_EUR",
+                     "L2326.GlobalTechSecOut_aluminum_EUR")
   if(command == driver.DECLARE_INPUTS) {
-    return(c("L2326.Supplysector_aluminum_EUR",
-             "L2326.FinalEnergyKeyword_aluminum_EUR",
-             "L2326.SubsectorLogit_aluminum_EUR",
-             "L2326.SubsectorShrwtFllt_aluminum_EUR",
-             "L2326.SubsectorInterp_aluminum_EUR",
-             "L2326.StubTech_aluminum_EUR",
-             "L2326.StubTechProd_aluminum_EUR",
-             "L2326.StubTechCalInput_aluminum_EUR",
-             "L2326.StubTechCoef_aluminum_EUR",
-             "L2326.PerCapitaBased_aluminum_EUR",
-             "L2326.BaseService_aluminum_EUR",
-             "L2326.PriceElasticity_aluminum_EUR"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c(XML = "aluminum_EUR.xml"))
   } else if(command == driver.MAKE) {
@@ -31,18 +43,8 @@ module_gcameurope_aluminum_xml <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    L2326.Supplysector_aluminum_EUR <- get_data(all_data, "L2326.Supplysector_aluminum_EUR")
-    L2326.FinalEnergyKeyword_aluminum_EUR <- get_data(all_data, "L2326.FinalEnergyKeyword_aluminum_EUR")
-    L2326.SubsectorLogit_aluminum_EUR <- get_data(all_data, "L2326.SubsectorLogit_aluminum_EUR")
-    L2326.SubsectorShrwtFllt_aluminum_EUR <- get_data(all_data, "L2326.SubsectorShrwtFllt_aluminum_EUR")
-    L2326.SubsectorInterp_aluminum_EUR <- get_data(all_data, "L2326.SubsectorInterp_aluminum_EUR")
-    L2326.StubTech_aluminum_EUR <- get_data(all_data, "L2326.StubTech_aluminum_EUR")
-    L2326.StubTechProd_aluminum_EUR <- get_data(all_data, "L2326.StubTechProd_aluminum_EUR")
-    L2326.StubTechCalInput_aluminum_EUR <- get_data(all_data, "L2326.StubTechCalInput_aluminum_EUR")
-    L2326.StubTechCoef_aluminum_EUR <- get_data(all_data, "L2326.StubTechCoef_aluminum_EUR")
-    L2326.PerCapitaBased_aluminum_EUR <- get_data(all_data, "L2326.PerCapitaBased_aluminum_EUR")
-    L2326.BaseService_aluminum_EUR <- get_data(all_data, "L2326.BaseService_aluminum_EUR")
-    L2326.PriceElasticity_aluminum_EUR <- get_data(all_data, "L2326.PriceElasticity_aluminum_EUR")
+    get_data_list(all_data, MODULE_INPUTS)
+
     # ===================================================
 
     # Produce outputs
@@ -57,13 +59,19 @@ module_gcameurope_aluminum_xml <- function(command, ...) {
       add_xml_data(L2326.StubTechProd_aluminum_EUR, "StubTechProd") %>%
       add_xml_data(L2326.StubTechCalInput_aluminum_EUR, "StubTechCalInput") %>%
       add_xml_data(L2326.StubTechCoef_aluminum_EUR, "StubTechCoef") %>%
+      add_xml_data(L2326.StubTechSecMarket_aluminum_EUR, "StubTechSecMarket") %>%
       add_xml_data(L2326.PerCapitaBased_aluminum_EUR, "PerCapitaBased") %>%
       add_xml_data(L2326.BaseService_aluminum_EUR, "BaseService") %>%
       add_xml_data(L2326.PriceElasticity_aluminum_EUR, "PriceElasticity") %>%
-      add_precursors("L2326.Supplysector_aluminum_EUR", "L2326.FinalEnergyKeyword_aluminum_EUR", "L2326.SubsectorLogit_aluminum_EUR",
-                     "L2326.SubsectorShrwtFllt_aluminum_EUR", "L2326.SubsectorInterp_aluminum_EUR","L2326.StubTechProd_aluminum_EUR",
-                     "L2326.StubTech_aluminum_EUR","L2326.StubTechCoef_aluminum_EUR", "L2326.StubTechCalInput_aluminum_EUR",
-                     "L2326.PerCapitaBased_aluminum_EUR", "L2326.BaseService_aluminum_EUR", "L2326.PriceElasticity_aluminum_EUR") ->
+      add_xml_data(L2326.GlobalTechShrwt_aluminum_EUR, "GlobalTechShrwt") %>%
+      add_node_equiv_xml("input") %>%
+      add_xml_data(L2326.GlobalTechCoef_aluminum_EUR, "GlobalTechCoef") %>%
+      add_xml_data(L2326.GlobalTechTrackCapital_aluminum_EUR, "GlobalTechTrackCapital") %>%
+      add_xml_data(L2326.GlobalTechCost_aluminum_EUR, "GlobalTechCost") %>%
+      add_xml_data(L2326.GlobalTechSCurve_aluminum_EUR, "GlobalTechSCurve") %>%
+      add_xml_data(L2326.GlobalTechProfitShutdown_aluminum_EUR, "GlobalTechProfitShutdown") %>%
+      add_xml_data(L2326.GlobalTechCapture_aluminum_EUR, "GlobalTechCapture") %>%
+      add_precursors(MODULE_INPUTS) ->
       aluminum_EUR.xml
 
     return_data(aluminum_EUR.xml)

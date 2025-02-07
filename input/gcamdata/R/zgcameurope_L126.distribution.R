@@ -22,40 +22,48 @@
 #' @importFrom tidyr replace_na
 #' @author RH February 2024
 module_gcameurope_L126.distribution <- function(command, ...) {
+  MODULE_INPUTS <- c(FILE = "common/GCAM_region_names",
+                     FILE = "gcam-europe/mappings/grid_regions",
+                     "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
+                     "L122.out_EJ_R_gasproc_F_Yh_EUR",
+                     "L123.out_EJ_R_elec_F_Yh_EUR",
+                     "L123.out_EJ_R_indchp_F_Yh_EUR",
+                     "L1012.en_bal_EJ_R_Si_Fi_Yh",
+                     "L123.out_EJ_R_elec_F_Yh",
+                     "L123.out_EJ_R_indchp_F_Yh")
+  MODULE_OUTPUTS <- c("L126.in_EJ_R_elecownuse_F_Yh_EUR",
+                      "L126.out_EJ_R_elecownuse_F_Yh_EUR",
+                      "L126.IO_R_elecownuse_F_Yh_EUR",
+                      "L126.in_EJ_R_electd_F_Yh_EUR",
+                      "L126.out_EJ_R_electd_F_Yh_EUR",
+                      "L126.IO_R_electd_F_Yh_EUR",
+                      "L126.in_EJ_R_gaspipe_F_Yh_EUR",
+                      "L126.out_EJ_R_gaspipe_F_Yh_EUR",
+                      "L126.IO_R_gaspipe_F_Yh_EUR")
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "common/GCAM_region_names",
-             "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
-             "L122.out_EJ_R_gasproc_F_Yh_EUR",
-             "L123.out_EJ_R_elec_F_Yh_EUR",
-             "L123.out_EJ_R_indchp_F_Yh_EUR"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L126.in_EJ_R_elecownuse_F_Yh_EUR",
-             "L126.out_EJ_R_elecownuse_F_Yh_EUR",
-             "L126.IO_R_elecownuse_F_Yh_EUR",
-             "L126.in_EJ_R_electd_F_Yh_EUR",
-             "L126.out_EJ_R_electd_F_Yh_EUR",
-             "L126.IO_R_electd_F_Yh_EUR",
-             "L126.in_EJ_R_gaspipe_F_Yh_EUR",
-             "L126.out_EJ_R_gaspipe_F_Yh_EUR",
-             "L126.IO_R_gaspipe_F_Yh_EUR"))
+    return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
-
-    year <- value <- GCAM_region_ID <- sector <- fuel <-
-      value_electricity_generation <- value_industryCHP <-
-      value_electricity_ownuse_in <- value_electricity_ownuse <-
-      value_electricity_ownuse_out <- value_electricity_ownuse_IO <-
-      value_electd <- value_electd_out <- value_electd_IO <-
-      value_gaspipe_in <- value_gaspipe <- value_gaspipe_out <-
-      value_gaspipe_IO <- NULL       # silence package check.
 
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    L1012.en_bal_EJ_R_Si_Fi_Yh_EUR <- get_data(all_data, "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR")
-    L122.out_EJ_R_gasproc_F_Yh_EUR <- get_data(all_data, "L122.out_EJ_R_gasproc_F_Yh_EUR")
-    L123.out_EJ_R_elec_F_Yh_EUR <- get_data(all_data, "L123.out_EJ_R_elec_F_Yh_EUR")
-    L123.out_EJ_R_indchp_F_Yh_EUR <- get_data(all_data, "L123.out_EJ_R_indchp_F_Yh_EUR")
-    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names")
+    get_data_list(all_data, MODULE_INPUTS)
+
+    # Add in switzerland to eurostat electricity data ---------------------
+    L1012.en_bal_EJ_R_Si_Fi_Yh_EUR <- replace_with_eurostat(L1012.en_bal_EJ_R_Si_Fi_Yh, L1012.en_bal_EJ_R_Si_Fi_Yh_EUR) %>%
+      filter_regions_europe(regions_to_keep_name = union(grid_regions$region, gcameurope.EUROSTAT_COUNTRIES),
+                            region_ID_mapping = GCAM_region_names)
+
+    L123.out_EJ_R_elec_F_Yh_EUR <- replace_with_eurostat(L123.out_EJ_R_elec_F_Yh, L123.out_EJ_R_elec_F_Yh_EUR) %>%
+      filter_regions_europe(regions_to_keep_name =  union(grid_regions$region, gcameurope.EUROSTAT_COUNTRIES),
+                            region_ID_mapping = GCAM_region_names)
+
+    L123.out_EJ_R_indchp_F_Yh_EUR <- replace_with_eurostat(L123.out_EJ_R_indchp_F_Yh, L123.out_EJ_R_indchp_F_Yh_EUR) %>%
+      filter_regions_europe(regions_to_keep_name =  union(grid_regions$region, gcameurope.EUROSTAT_COUNTRIES),
+                            region_ID_mapping = GCAM_region_names)
+
     # 1. ELECTRICITY OWNUSE ===================================================
     # i.e., electricity consumed onsite prior to any transmission and distribution losses
     # Summing industrial CHP electricity generation and electricity generation by GCAM region ID and year
@@ -77,7 +85,8 @@ module_gcameurope_L126.distribution <- function(command, ...) {
       Electricity_total
 
     # Filtering energy balance by to electricity ownuse sectors
-    # Pumped hydro has input and output, so we need to calculate the difference
+    # Pumped hydro has input and output, so we need to calculate the difference -- no longer the case, since this would double count
+    # pumped hydro is already included in hydro production, would need to be removed to avoid double counting
     L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(grepl("electricity ownuse", sector),
              fuel == "electricity") %>%
@@ -143,7 +152,7 @@ module_gcameurope_L126.distribution <- function(command, ...) {
       group_by(GCAM_region_ID, sector, fuel) %>%
       mutate(value = if_else(!is.nan(value), value, approx_fun(year, value, 2))) %>%
       ungroup()  -> L126.IO_R_electd_F_Yh_EUR
-
+#
     # 3. GAS PIPELINE  =========================================
     # Preparing to be joined later - summing by GCAM region ID and year
     L122.out_EJ_R_gasproc_F_Yh_EUR %>%
@@ -240,9 +249,7 @@ module_gcameurope_L126.distribution <- function(command, ...) {
       add_precursors("L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "L122.out_EJ_R_gasproc_F_Yh_EUR") ->
       L126.IO_R_gaspipe_F_Yh_EUR
 
-    return_data(L126.in_EJ_R_elecownuse_F_Yh_EUR, L126.out_EJ_R_elecownuse_F_Yh_EUR, L126.IO_R_elecownuse_F_Yh_EUR,
-                L126.in_EJ_R_electd_F_Yh_EUR, L126.out_EJ_R_electd_F_Yh_EUR, L126.IO_R_electd_F_Yh_EUR,
-                L126.in_EJ_R_gaspipe_F_Yh_EUR, L126.out_EJ_R_gaspipe_F_Yh_EUR, L126.IO_R_gaspipe_F_Yh_EUR)
+    return_data(MODULE_OUTPUTS)
   } else {
     stop("Unknown command")
   }

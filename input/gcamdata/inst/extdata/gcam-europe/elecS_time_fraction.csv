@@ -1,0 +1,16 @@
+# File: elecS_time_fraction.csv
+# Title: Fraction of electricity demand supplied by vertical segment
+# Units: unitless (fraction)
+# Comments: This table specifies the fraction of electricity demand supplied by vertical load segment.
+# Source: estimated from recent U.S. annual hourly (8760) load duration curves
+# Column types: cnnnn
+# ----------
+grid_region,off.peak.electricity.time,intermediate.electricity.time,subpeak.electricity.time,peak.electricity.time
+Appenine_Peninsula,0.19,0.32,0.34,0.15
+British_Isles,0.19,0.32,0.34,0.15
+Central_Eastern_Europe,0.19,0.32,0.34,0.15
+Central_Western_Europe,0.19,0.32,0.34,0.15
+Iberian_Peninsula,0.19,0.32,0.34,0.15
+Northern_Europe,0.19,0.32,0.34,0.15
+South_Eastern_Europe,0.19,0.32,0.34,0.15
+Ukraine_Moldova,0.19,0.32,0.34,0.15

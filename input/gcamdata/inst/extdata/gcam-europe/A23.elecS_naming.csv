@@ -1,0 +1,11 @@
+# File: A23.elecS_naming.csv
+# Title: Names to attach to techs for each segment
+# Units: unitless
+# Source: None (GCAM assumptions)
+# Column types: cc 
+# ----------
+supplysector,name_adder
+base load generation,base
+intermediate generation,int
+subpeak generation,subpeak
+peak generation,peak

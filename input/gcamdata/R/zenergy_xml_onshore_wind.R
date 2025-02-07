@@ -38,7 +38,8 @@ module_energy_onshore_wind_xml<- function(command, ...) {
       add_precursors("L2231.SmthRenewRsrcCurves_onshore_wind",
                      "L2231.StubTechCapFactor_onshore_wind",
                      "L2231.SmthRenewRsrcTechChange_onshore_wind",
-                     "L2231.StubTechCost_onshore_wind") ->
+                     "L2231.StubTechCost_onshore_wind") %>%
+      remove_regions_xml(c(gcameurope.EUROSTAT_COUNTRIES, "Switzerland")) ->
       onshore_wind.xml
 
     return_data(onshore_wind.xml)

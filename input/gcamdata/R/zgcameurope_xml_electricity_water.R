@@ -22,6 +22,7 @@ module_gcameurope_electricity_water_xml <- function(command, ...) {
                      "L223.SubsectorShrwt_coal_EUR",
                      "L223.SubsectorShrwt_nuc_EUR",
                      "L223.SubsectorShrwt_renew_EUR",
+                     "L223.StubTechCost_offshore_wind_EUR",
                      "L2233.StubTech_elecPassthru_EUR",
                      "L2233.StubTechProd_elecPassthru_EUR",
                      "L2233.PassThroughSector_elec_cool_EUR",
@@ -35,7 +36,37 @@ module_gcameurope_electricity_water_xml <- function(command, ...) {
                      "L2233.StubTechProd_elec_cool_EUR",
                      "L2233.StubTechCapFactor_elec_cool_EUR",
                      "L2233.StubTechFixOut_hydro_EUR",
-                     "L2233.StubTechShrwt_elec_cool_EUR")
+                     "L2233.StubTechShrwt_elec_cool_EUR",
+                     "L2231.PassthroughSector_elec_EUR",
+                     "L2231.PassthroughTech_elec_grid_EUR",
+                     "L2231.Supplysector_elec_grid_EUR",
+                     "L2231.SubsectorShrwtFllt_elec_grid_EUR",
+                     "L2231.SubsectorInterp_elec_grid_EUR",
+                     "L2231.SubsectorLogit_elec_grid_EUR",
+                     "L2231.TechShrwt_elec_grid_EUR",
+                     "L2231.TechCoef_elec_grid_EUR",
+                     "L2231.Production_elec_grid_EUR",
+                     "L2231.InterestRate_grid_EUR",
+                     "L2231.Pop_grid_EUR",
+                     "L2231.GDP_grid_EUR",
+                     "L2232.Supplysector_EURelec",
+                     "L2232.SubsectorShrwtFllt_EURelec",
+                     "L2232.SubsectorInterp_EURelec",
+                     "L2232.SubsectorLogit_EURelec",
+                     "L2232.TechShrwt_EURelec",
+                     "L2232.TechCoef_EURelec",
+                     "L2232.Production_exports_EURelec",
+                     "L2232.Supplysector_elec_EUR_trade",
+                     "L2232.ElecReserve_EUR_trade",
+                     "L2232.SubsectorShrwtFllt_elec_EUR_trade",
+                     "L2232.SubsectorInterp_elec_EUR_trade",
+                     "L2232.SubsectorLogit_elec_EUR_trade",
+                     "L2232.TechShrwt_elec_EUR_trade",
+                     "L2232.TechCoef_elec_EUR_trade",
+                     "L2232.TechCoef_elecownuse_EUR_trade",
+                     "L2232.Production_imports_EUR_trade",
+                     "L2232.Production_elec_gen_EUR_trade",
+                     "L2232.StubTechElecMarket_backup_EUR")
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -47,11 +78,26 @@ module_gcameurope_electricity_water_xml <- function(command, ...) {
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
 
+    L2231.PassthroughSector_elec_EUR <- rename(L2231.PassthroughSector_elec_EUR, pass.through.sector = passthrough.sector)
+    L2231.PassthroughTech_elec_grid_EUR  <- rename(L2231.PassthroughTech_elec_grid_EUR, pass.through.technology = technology)
     # ===================================================
     # Produce outputs
     create_xml("electricity_water_EUR.xml") %>%
       add_node_equiv_xml("sector") %>%
       add_node_equiv_xml("technology") %>%
+      add_xml_data(L2231.PassthroughSector_elec_EUR, "PassThroughSector") %>%
+      add_xml_data(L2231.PassthroughTech_elec_grid_EUR, "PassThroughTech") %>%
+      add_logit_tables_xml(L2231.Supplysector_elec_grid_EUR, "Supplysector") %>%
+      add_xml_data(L2231.SubsectorShrwtFllt_elec_grid_EUR, "SubsectorShrwtFllt") %>%
+      add_xml_data(L2231.SubsectorInterp_elec_grid_EUR, "SubsectorInterp") %>%
+      add_logit_tables_xml(L2231.SubsectorLogit_elec_grid_EUR, "SubsectorLogit") %>%
+      add_xml_data(L2231.TechShrwt_elec_grid_EUR, "TechShrwt") %>%
+      add_xml_data(L2231.TechCoef_elec_grid_EUR, "TechCoef") %>%
+      add_xml_data(L2231.Production_elec_grid_EUR, "Production") %>%
+      add_xml_data(L2231.InterestRate_grid_EUR, "InterestRate") %>%
+      add_xml_data(L2231.Pop_grid_EUR, "Pop") %>%
+      add_xml_data(L2231.GDP_grid_EUR, "GDP") %>%
+
       add_logit_tables_xml(L223.Supplysector_elec_EUR, "Supplysector") %>%
       add_xml_data(L223.SubsectorShrwtFllt_elec_EUR, "SubsectorShrwtFllt") %>%
       add_xml_data(L223.ElecReserve_EUR, "ElecReserve") %>%
@@ -78,6 +124,26 @@ module_gcameurope_electricity_water_xml <- function(command, ...) {
       add_xml_data(L2233.StubTechCapFactor_elec_cool_EUR, "StubTechCapFactor") %>%
       add_xml_data(L2233.StubTechFixOut_hydro_EUR, "StubTechFixOut") %>%
       add_xml_data(L2233.StubTechShrwt_elec_cool_EUR, "StubTechShrwt") %>%
+
+      add_logit_tables_xml(L2232.Supplysector_EURelec, "Supplysector") %>%
+      add_xml_data(L2232.SubsectorShrwtFllt_EURelec, "SubsectorShrwtFllt") %>%
+      add_xml_data(L2232.SubsectorInterp_EURelec, "SubsectorInterp") %>%
+      add_logit_tables_xml(L2232.SubsectorLogit_EURelec, "SubsectorLogit") %>%
+      add_xml_data(L2232.TechShrwt_EURelec, "TechShrwt") %>%
+      add_xml_data(L2232.TechCoef_EURelec, "TechCoef") %>%
+      add_xml_data(L2232.Production_exports_EURelec, "Production") %>%
+      add_logit_tables_xml(L2232.Supplysector_elec_EUR_trade, "Supplysector") %>%
+      add_xml_data(L2232.ElecReserve_EUR_trade, "ElecReserve") %>%
+      add_xml_data(L2232.SubsectorShrwtFllt_elec_EUR_trade, "SubsectorShrwtFllt") %>%
+      add_xml_data(L2232.SubsectorInterp_elec_EUR_trade, "SubsectorInterp") %>%
+      add_logit_tables_xml(L2232.SubsectorLogit_elec_EUR_trade, "SubsectorLogit") %>%
+      add_xml_data(L2232.TechShrwt_elec_EUR_trade, "TechShrwt") %>%
+      add_xml_data(L2232.TechCoef_elec_EUR_trade, "TechCoef") %>%
+      add_xml_data(L2232.TechCoef_elecownuse_EUR_trade, "TechCoef") %>%
+      add_xml_data(L2232.Production_imports_EUR_trade, "Production") %>%
+      add_xml_data(L2232.Production_elec_gen_EUR_trade, "Production") %>%
+      add_xml_data(L2232.StubTechElecMarket_backup_EUR, "StubTechElecMarket") %>%
+      add_xml_data(L223.StubTechCost_offshore_wind_EUR, "StubTechCost") %>%
       add_precursors(MODULE_INPUTS) ->
       electricity_water_EUR.xml
 

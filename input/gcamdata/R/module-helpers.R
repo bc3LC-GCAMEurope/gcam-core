@@ -1503,12 +1503,35 @@ copy_filter_europe <- function(all_data, df_list, regions_to_keep = gcameurope.E
     for (df_nm in df_list){
       df <- get_data(all_data, df_nm)
       if (is.null(df)){df <- missing_data()}
-      df_new <- df %>% filter_regions_europe(regions_to_keep) %>% add_copy_comment_europe(df_nm)
+      df_new <- df %>% filter_regions_europe(regions_to_keep_name = regions_to_keep) %>% add_copy_comment_europe(df_nm)
       assign(paste0(df_nm, "_EUR"), df_new, envir = parent.frame())
     }
 
 }
 
+#' replace_with_eurostat
+#'
+#' Helper function to take a dataset with global data and replace the european regions with eurostat data
+#' @param global_df Tibble of global data
+#' @param eur_df Tibble of european data
+#' @importFrom assertthat assert_that
+#' @importFrom dplyr filter left_join rename mutate group_by select summarise_all ungroup
+#' @return new tibble
+#'
+replace_with_eurostat <- function(global_df, eur_df){
+  assert_that(is_tibble(global_df))
+  assert_that(is_tibble(eur_df))
+  if("GCAM_region_ID" %in% names(global_df) & "GCAM_region_ID" %in% names(eur_df)){
+    global_df %>%
+      anti_join(eur_df, by = "GCAM_region_ID") %>%
+      bind_rows(eur_df)
+  } else if("region" %in% names(global_df) & "region" %in% names(eur_df)){
+    global_df %>%
+      anti_join(eur_df, by = "region") %>%
+      bind_rows(eur_df)
+  }
+
+}
 
 #' replace_outlier_EFs
 #'
@@ -1587,4 +1610,100 @@ replace_outlier_EFs <- function(df, to_group, names, ef_col_name) {
     select(all_of(names))
 
   return (noBCOC)
+}
+
+#' expand_to_segments
+#'
+#' Helper function to replace normal electricity sector with segments
+#' @param df
+#' @param sector sector name to match
+#' @param group_by_cols columns to group by for each segment
+#' @param segments names of segments
+#' @importFrom assertthat assert_that
+#' @importFrom dplyr filter left_join rename mutate group_by select summarise_all ungroup
+#' @return new tibble
+#'
+expand_to_segments <- function(df, sector = "supplysector", group_by_cols, segments){
+  expansion_df <- tibble(!!sector := "electricity", segment = segments)
+  df %>%
+    left_join(expansion_df, by = sector) %>%
+    group_by(across(group_by_cols)) %>%
+    mutate(!!sector := if_else(!is.na(segment) & !segment %in% unique(get(sector)), segment, get(sector))) %>%
+    ungroup %>%
+    filter(get(sector) == segment | is.na(segment)) %>%
+    select(-segment)
+}
+
+#' tech_name_expansion
+#'
+#' Helper function to replace normal electricity techs with segment names
+#' @param df
+#' @param sector sector name to match
+#' @param tech column to add prefix
+#' @param mapping segment name mapping data
+#' @importFrom assertthat assert_that
+#' @importFrom dplyr filter left_join rename mutate group_by select summarise_all ungroup
+#' @return new tibble
+#'
+tech_name_expansion <- function(df, sector = "supplysector", tech = "technology", mapping){
+  df %>%
+    left_join(mapping %>%  rename(!!sector := supplysector), by = sector) %>%
+    mutate(!!tech := if_else(!is.na(name_adder), paste(get(tech), name_adder, sep = "_"), get(tech))) %>%
+    select(-name_adder)
+}
+
+#' cogen_global_tech
+#'
+#' Helper function to rename cogen techs in global tech db
+#' @param df_name String name of tibble
+#' @importFrom dplyr filter mutate group_by
+#' @return assignment of new db
+#'
+cogen_global_tech <- function(df_name, env){
+  df <- get(df_name, envir = env)
+  if (is.null(df)){
+    assign(paste0(df_name, "_EUR"),
+           missing_data(),
+           envir = env)
+    return(0)
+  } else {
+    if ("technology" %in% names(df)){
+      assign(paste0(df_name, "_EUR"),
+             df %>%
+               filter(grepl("cogen", technology)) %>%
+               mutate(technology = paste0(technology, "_grid")),
+             envir = env)
+      return(0)
+    } else {
+      assign(paste0(df_name, "_EUR"),
+             df,
+             envir = env)
+      return(0)
+    }
+  }
+}
+
+#' cogen_stubtech_rename
+#'
+#' Helper function to rename cogen techs in global tech db
+#' @param df_name String name of tibble
+#' @importFrom dplyr filter mutate group_by
+#' @return assignment of new db
+cogen_stubtech_rename <- function(df_name, env, grid_region_df = grid_regions){
+  df <- get(df_name, envir = env)
+  if (is.null(df)){
+    return(0)
+  }
+  if ("stub.technology" %in% names(df)){
+      assign(df_name,
+             df %>%
+               mutate(stub.technology = if_else(grepl("cogen$", stub.technology) &
+                                                  region %in% grid_region_df$region,
+                                                paste0(stub.technology, "_grid"),
+                                                stub.technology)),
+             envir = env)
+      return(0)
+  }
+
+  return(0)
 }

@@ -30,14 +30,26 @@ module_gcameurope_L224.heat <- function(command, ...) {
                      FILE = "energy/calibrated_techs",
                      FILE = "energy/A_regions",
                      FILE = "energy/A24.sector",
+                     FILE = "gcam-europe/A23.elecS_naming",
                      "L1231.eff_R_elec_F_tech_Yh_EUR",
                      "L124.in_EJ_R_heat_F_Yh_EUR",
+                     "L124.out_EJ_R_heat_F_Yh_EUR",
+                     "L124.out_EJ_R_heat_F_Yh",
+                     "L124.coef_R_heat_F_Yh_EUR",
                      "L124.heatoutratio_R_elec_F_tech_Yh_EUR",
+                     "L1231.eff_R_elec_F_tech_Yh",
+                     "L124.in_EJ_R_heat_F_Yh",
+                     "L124.heatoutratio_R_elec_F_tech_Yh",
+                     "L2235.StubTech_elecS_cool_EUR",
                      OUTPUTS_TO_COPY_FILTER)
 
   MODULE_OUTPUTS <- c("L224.StubTechCalInput_heat_EUR",
+                      "L224.StubTechCoef_heat_EUR",
                       "L224.StubTechSecOut_elec_EUR",
                       "L224.StubTechCost_elec_EUR",
+                      "L224.StubTechSecOut_elecS_EUR",
+                      "L224.StubTechCost_elecS_EUR",
+                      "L224.StubTechCalOutput_heat_EUR",
                       paste0(OUTPUTS_TO_COPY_FILTER, "_EUR"))
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -56,18 +68,27 @@ module_gcameurope_L224.heat <- function(command, ...) {
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
-    GCAM_region_names <- L101.GCAM_EUR_regions %>%
+
+    # regional adjustments -------------------
+    GCAM_region_names_Eurostat <- L101.GCAM_EUR_regions %>%
       distinct(GCAM_region_ID, region = GCAMEU_region)
 
+    # add any regions in segments, but not in Eurostat (Switzerland)
+    GCAM_region_names <- L2235.StubTech_elecS_cool_EUR %>%
+      anti_join(GCAM_region_names_Eurostat, by = "region") %>%
+      distinct(region) %>%
+      left_join_error_no_match(A_regions %>% distinct(GCAM_region_ID, region), by = "region") %>%
+      bind_rows(GCAM_region_names_Eurostat)
+
     # Create outputs that are simply copied from main scripts and filtered to Eurostat regions
-    copy_filter_europe(all_data, OUTPUTS_TO_COPY_FILTER)
+    copy_filter_europe(all_data, OUTPUTS_TO_COPY_FILTER, regions_to_keep = GCAM_region_names$region)
 
     # Some regions missing, add them in here
     for (df_nm in paste0(OUTPUTS_TO_COPY_FILTER, "_EUR")){
       df <- get(df_nm)
       if ("region" %in% names(df)){
-        missing_regions <- L101.GCAM_EUR_regions %>%
-          distinct(region = GCAMEU_region) %>%
+        missing_regions <- GCAM_region_names %>%
+          distinct(region) %>%
           anti_join(df, by = "region")
 
         df_no_region <- df %>%
@@ -79,6 +100,18 @@ module_gcameurope_L224.heat <- function(command, ...) {
       }
     }
 
+    # Add in segment regions not in Eurostat
+    L1231.eff_R_elec_F_tech_Yh_EUR <- replace_with_eurostat(L1231.eff_R_elec_F_tech_Yh, L1231.eff_R_elec_F_tech_Yh_EUR) %>%
+      filter_regions_europe(regions_to_keep_name = GCAM_region_names$region, region_ID_mapping = GCAM_region_names)
+
+    L124.in_EJ_R_heat_F_Yh_EUR <- replace_with_eurostat(L124.in_EJ_R_heat_F_Yh, L124.in_EJ_R_heat_F_Yh_EUR) %>%
+      filter_regions_europe(regions_to_keep_name = GCAM_region_names$region, region_ID_mapping = GCAM_region_names)
+
+    L124.out_EJ_R_heat_F_Yh_EUR  <- replace_with_eurostat(L124.out_EJ_R_heat_F_Yh, L124.out_EJ_R_heat_F_Yh_EUR) %>%
+      filter_regions_europe(regions_to_keep_name = GCAM_region_names$region, region_ID_mapping = GCAM_region_names)
+
+    L124.heatoutratio_R_elec_F_tech_Yh_EUR <- replace_with_eurostat(L124.heatoutratio_R_elec_F_tech_Yh, L124.heatoutratio_R_elec_F_tech_Yh_EUR) %>%
+      filter_regions_europe(regions_to_keep_name = GCAM_region_names$region, region_ID_mapping = GCAM_region_names)
 
     # L224.StubTechCalInput_heat_EUR ------------
     L124.in_EJ_R_heat_F_Yh_EUR %>%
@@ -95,6 +128,36 @@ module_gcameurope_L224.heat <- function(command, ...) {
              share.weight = subs.share.weight) %>%
       select(-value) -> L224.StubTechCalInput_heat_EUR
 
+    # L224.StubTechCoef_heat_EUR ------------
+    L224.StubTechCoef_heat_EUR <- L124.coef_R_heat_F_Yh_EUR %>%
+      left_join(GCAM_region_names, by = "GCAM_region_ID") %>%
+      left_join(calibrated_techs %>%
+                  select(sector, fuel, supplysector, subsector, technology, minicam.energy.input) %>%
+                  distinct, by = c("sector", "fuel")) %>%
+      rename(stub.technology = technology) %>%
+      filter(year %in% MODEL_BASE_YEARS) %>%
+      mutate(market.name = region) %>%
+      select(LEVEL2_DATA_NAMES$StubTechCoef) %>%
+      complete(year = MODEL_YEARS, nesting(region, supplysector, subsector,
+                                           stub.technology, minicam.energy.input, market.name)) %>%
+      group_by(region, supplysector, subsector, stub.technology, minicam.energy.input, market.name) %>%
+      mutate(coefficient = approx_fun(year, coefficient, rule = 2)) %>%
+      ungroup
+
+    # L224.StubTechCalOutput_heat_EUR -----------------------
+    L224.StubTechCalOutput_heat_EUR <- L124.out_EJ_R_heat_F_Yh_EUR %>%
+      left_join(GCAM_region_names, by = "GCAM_region_ID") %>%
+      left_join(calibrated_techs %>%
+                  select(sector, fuel, supplysector, subsector, technology) %>%
+                  distinct, by = c("sector", "fuel")) %>%
+      rename(stub.technology = technology) %>%
+      filter(year %in% MODEL_BASE_YEARS) %>%
+      mutate(calOutputValue = round(value, energy.DIGITS_CALOUTPUT),
+             share.weight.year = year,
+             subs.share.weight = if_else(calOutputValue == 0, 0, 1),
+             tech.share.weight = subs.share.weight) %>%
+      select(LEVEL2_DATA_NAMES[["StubTechProd"]])
+
     # L224.StubTechSecOut_elec_EUR ------------
     # Secondary output of heat, applied to electricity generation technologies
     # NOTE: This is complicated. Initially tried using historical information for all model periods that fall within historical time
@@ -102,7 +165,7 @@ module_gcameurope_L224.heat <- function(command, ...) {
     # from the district heat sector, and most heat as a secondary output from the electricity sector, the secondary output heat can easily
     # exceed the demands from the end-use sectors, causing model solution failure. For this reason, the convention applied here is to
     # use the secondary output of heat from the power sector only in the model base years.
-    L124.heatoutratio_R_elec_F_tech_Yh_EUR %>%
+    L224.StubTechSecOut_elec_EUR_pre <- L124.heatoutratio_R_elec_F_tech_Yh_EUR %>%
       filter(year %in% MODEL_BASE_YEARS) %>%
       left_join(GCAM_region_names, by = "GCAM_region_ID") %>%
       left_join(calibrated_techs %>%
@@ -111,11 +174,27 @@ module_gcameurope_L224.heat <- function(command, ...) {
       mutate(stub.technology = technology,
              secondary.output = A24.sector[["supplysector"]],
              output.ratio = round(value, energy.DIGITS_CALOUTPUT)) %>%
-      select(LEVEL2_DATA_NAMES[["StubTechSecOut"]]) -> L224.StubTechSecOut_elec_EUR
+      select(LEVEL2_DATA_NAMES[["StubTechSecOut"]])
+
+    # For regions with segments, need to change the elec sector names
+    L224.StubTechSecOut_elecS_EUR <- L224.StubTechSecOut_elec_EUR_pre %>%
+      select(-supplysector, -subsector) %>%
+      # change sector names for electricity segments
+      repeat_add_columns(distinct(A23.elecS_naming, name_adder)) %>%
+      mutate(stub.technology = paste(stub.technology, name_adder, sep = "_")) %>%
+      left_join(L2235.StubTech_elecS_cool_EUR, by = c("region", "stub.technology" = "subsector")) %>%
+      select(region, supplysector, subsector0, subsector = stub.technology, stub.technology = stub.technology.y,
+             year, secondary.output, output.ratio) %>%
+      na.omit()
+
+    # Remove in regions that are in grid regions
+    L224.StubTechSecOut_elec_EUR <- L224.StubTechSecOut_elec_EUR_pre %>%
+      anti_join(L224.StubTechSecOut_elecS_EUR, by = "region")
+
 
     # L224.StubTechCost_elec_EUR -----------------------
     # Calculate cost adjustment, equal to the output of heat multiplied by the heat price (to minimize the distortion of including the secondary output)
-    L224.StubTechSecOut_elec_EUR %>%
+    L224.StubTechSecOut_elec_EUR_pre %>%
       select(LEVEL2_DATA_NAMES[["StubTechYr"]], "output.ratio") %>%
       mutate(minicam.non.energy.input = "heat plant",
              input.cost = round(output.ratio * energy.HEAT_PRICE, energy.DIGITS_COST))-> L224.StubTechCost_elec_EUR
@@ -152,6 +231,22 @@ module_gcameurope_L224.heat <- function(command, ...) {
     L224.StubTechCost_elec_EUR %>%
       bind_rows(L224.StubTechCost_elec_EUR_fut) -> L224.StubTechCost_elec_EUR
 
+    # For regions with segments, need to change the elec sector names
+    L224.StubTechCost_elecS_EUR <- L224.StubTechCost_elec_EUR %>%
+      select(-supplysector, -subsector) %>%
+      # change sector names for electricity segments
+      repeat_add_columns(distinct(A23.elecS_naming, name_adder)) %>%
+      mutate(stub.technology = paste(stub.technology, name_adder, sep = "_")) %>%
+      left_join(L2235.StubTech_elecS_cool_EUR, by = c("region", "stub.technology" = "subsector")) %>%
+      select(region, supplysector, subsector0, subsector = stub.technology, stub.technology = stub.technology.y,
+             year, minicam.non.energy.input, input.cost) %>%
+      na.omit()
+
+    # Remove in regions that are in grid regions
+    L224.StubTechCost_elec_EUR <- L224.StubTechCost_elec_EUR %>%
+      anti_join(L224.StubTechCost_elecS_EUR, by = "region")
+
+
     # Produce outputs ===================================================
     L224.StubTechCalInput_heat_EUR %>%
       add_title("Calibrated input to district heat") %>%
@@ -176,6 +271,24 @@ module_gcameurope_L224.heat <- function(command, ...) {
       add_comments("modify costs for technologies with efficiencies below default, apply to all model periods") %>%
       add_precursors("L124.heatoutratio_R_elec_F_tech_Yh_EUR", "energy/calibrated_techs", "energy/A24.sector", "energy/A_regions", "L1231.eff_R_elec_F_tech_Yh_EUR", "common/GCAM_region_names") ->
       L224.StubTechCost_elec_EUR
+
+    L224.StubTechSecOut_elecS_EUR %>%
+      add_title("Secondary output of district heat from electricity segment technologies") %>%
+      add_units("EJ") %>%
+      add_comments("L124.heatoutratio_R_elec_F_tech_Yh_EUR used to determine secondary output heat from elec, ") %>%
+      add_comments("filtering for only model base years") %>%
+      same_precursors_as(L224.StubTechSecOut_elec_EUR) %>%
+      add_precursors("L2235.StubTech_elecS_cool_EUR") ->
+      L224.StubTechSecOut_elecS_EUR
+
+    L224.StubTechCost_elecS_EUR %>%
+      add_title("Stubtech costs with secondary output heat for electricity segments") %>%
+      add_units("1975$/GJ") %>%
+      add_comments("From L224.StubTechSecOut_elec_EUR calculate cost adjustment, equal to the output of heat multiplied by the heat price") %>%
+      add_comments("modify costs for technologies with efficiencies below default, apply to all model periods") %>%
+      same_precursors_as(L224.StubTechCost_elec_EUR) %>%
+      add_precursors("L2235.StubTech_elecS_cool_EUR") ->
+      L224.StubTechCost_elecS_EUR
 
     return_data(MODULE_OUTPUTS)
   } else {

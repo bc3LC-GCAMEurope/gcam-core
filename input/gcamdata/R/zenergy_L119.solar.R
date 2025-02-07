@@ -125,6 +125,14 @@ module_energy_L119.solar <- function(command, ...) {
       select(GCAM_region_ID, irradiance_avg_rel, dni_avg_rel) ->
       L119.Irradiance_rel_R
 
+    # Adjustment for Malta - give same irradiance_avg_rel as Italy
+    MALTA_ID <- iso_GCAM_regID %>%  filter(iso == "mlt") %>%  pull(GCAM_region_ID)
+    ITALY_ID <- iso_GCAM_regID %>%  filter(iso == "ita") %>%  pull(GCAM_region_ID)
+    L119.Irradiance_rel_R <- L119.Irradiance_rel_R %>%
+      mutate(irradiance_avg_rel = if_else(GCAM_region_ID == MALTA_ID,
+                                          irradiance_avg_rel[GCAM_region_ID == ITALY_ID],
+                                          irradiance_avg_rel))
+
     # ===================================================
     # Produce outputs
 
