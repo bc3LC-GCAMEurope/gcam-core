@@ -21,12 +21,12 @@
 		<Value name = "socioeconomics">../input/gcamdata/xml/socioeconomics_gSSP2.xml</Value>
 		<Value name = "resources">../input/gcamdata/xml/resources.xml</Value>
 		<Value name = "resources">../input/gcamdata/xml/resources_EUR.xml</Value>
-		<Value name = "energy_supply">../input/gcamdata/xml/en_supply_EUR.xml</Value>
 		<Value name = "energy_supply">../input/gcamdata/xml/en_supply.xml</Value>
+		<Value name = "energy_supply">../input/gcamdata/xml/en_supply_EUR.xml</Value>
 		<Value name = "energy_transformation">../input/gcamdata/xml/en_transformation.xml</Value>
 		<Value name = "energy_transformation">../input/gcamdata/xml/en_transformation_EUR.xml</Value>
 		<Value name = "elec_water_base">../input/gcamdata/xml/electricity_water.xml</Value>
-		<Value name = "elec_water_base">../input/gcamdata/xml/electricity_water_EUR.xml</Value>
+		<Value name = "elec_water_base">../input/gcamdata/xml/elec_segments_water_EUR.xml</Value>
 		<Value name = "heat">../input/gcamdata/xml/heat.xml</Value>
 		<Value name = "heat">../input/gcamdata/xml/heat_EUR.xml</Value>
 		<Value name = "hydrogen">../input/gcamdata/xml/hydrogen.xml</Value>
@@ -85,7 +85,7 @@
 		<Value name = "land5">../input/gcamdata/xml/land_input_5_IRR_MGMT.xml</Value>
 		<Value name = "protected_land2">../input/gcamdata/xml/protected_land_input_2.xml</Value>
 		<Value name = "protected_land3">../input/gcamdata/xml/protected_land_input_3.xml</Value>
-		<Value name = "demand">../input/gcamdata/xml/ag_an_demand_input.xml</Value>
+		<Value name = "demand">../input/gcamdata/xml/ag_an_demand_input_multiple_consumers.xml</Value>
 		<Value name = "demand_paper">../input/gcamdata/xml/paper_delete_ag_demand.xml</Value>
 		<!--Value name = "bio_trade">../input/gcamdata/xml/bio_trade.xml</Value-->
 		<Value name = "bio_trade_EUR">../input/gcamdata/xml/bio_trade_EUR.xml</Value>
@@ -141,6 +141,7 @@
 		<Value name = "nonco2_proc">../input/gcamdata/xml/ind_urb_processing_sectors_MAC.xml</Value> 
 		<Value name = "nonco2_proc">../input/gcamdata/xml/ind_urb_processing_sectors_MAC_EUR.xml</Value> 
 
+		<Value name = "nonco2_elecS">../input/gcamdata/xml/elecS_ghg_emissions_water_EUR.xml</Value> 
 		<!--Value name = "macro">../input/gcamdata/xml/socioeconomics_macro.xml</Value-->
 		
 		<Value name = "bio_feedstock_limit">../input/gcamdata/xml/liquids_limits.xml</Value>

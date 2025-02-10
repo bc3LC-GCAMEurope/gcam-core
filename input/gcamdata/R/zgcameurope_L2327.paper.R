@@ -19,6 +19,17 @@
 #' @importFrom tidyr gather spread
 #' @author MMC July 2022
 module_gcameurope_L2327.paper <- function(command, ...) {
+  GLOBAL_TECH_COGEN <- c("L2327.GlobalTechCoef_paper",
+                         "L2327.GlobalTechShrwt_paper",
+                         "L2327.GlobalTechCost_paper",
+                         "L2327.GlobalTechTrackCapital_paper",
+                         "L2327.GlobalTechCapture_paper",
+                         "L2327.GlobalTechShutdown_paper",
+                         "L2327.GlobalTechSCurve_paper",
+                         "L2327.GlobalTechLifetime_paper",
+                         "L2327.GlobalTechProfitShutdown_paper",
+                         "L2327.GlobalTechSecOut_paper")
+
   MODULE_INPUTS <- c(FILE = "common/GCAM_region_names",
                      FILE = "energy/calibrated_techs",
                      FILE = "energy/A_regions",
@@ -35,13 +46,19 @@ module_gcameurope_L2327.paper <- function(command, ...) {
                      FILE = "energy/A327.demand",
                      FILE = "energy/A327.subsector_interp_adj_future_years",
                      FILE = "energy/A327.subsector_shrwt_adj_future_years",
+                     FILE = "gcam-europe/mappings/grid_regions",
                      "L1327.in_EJ_R_paper_F_Yh_EUR",
                      "L1327.out_Mt_R_paper_Yh_EUR",
                      "L1327.IO_GJkg_R_paper_F_Yh_EUR",
                      "L1327.elec_noheat_adj_shwt_R_EUR",
+                     "L1327.in_EJ_R_paper_F_Yh",
+                     "L1327.out_Mt_R_paper_Yh",
+                     "L1327.IO_GJkg_R_paper_F_Yh",
+                     "L1327.elec_noheat_adj_shwt_R",
                      "L203.Supplysector_demand",
                      "L203.PerCapitaBased",
-                     "L123.eff_R_indchp_F_Yh_EUR")
+                     "L123.eff_R_indchp_F_Yh_EUR",
+                     GLOBAL_TECH_COGEN)
   MODULE_OUTPUTS <- c("L2327.Supplysector_paper_EUR",
                       "L2327.FinalEnergyKeyword_paper_EUR",
                       "L2327.SubsectorLogit_paper_EUR",
@@ -56,7 +73,10 @@ module_gcameurope_L2327.paper <- function(command, ...) {
                       "L2327.PriceElasticity_paper_EUR",
                       "L2327.DeleteSupplysector_PaperAgDemand_EUR",
                       "L2327.DeleteFinalDemand_PaperAgDemand_EUR",
-                      "L2327.StubTechSecOut_paper_EUR")
+                      "L2327.StubTechSecOut_paper_EUR",
+                      paste0(GLOBAL_TECH_COGEN, "_EUR"),
+                      "L2327.StubTechSecMarket_paper_EUR"
+                      )
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -67,11 +87,21 @@ module_gcameurope_L2327.paper <- function(command, ...) {
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = T)
-    GCAM_region_names <- GCAM_region_names %>% filter_regions_europe()
-    A_regions <- A_regions%>% filter_regions_europe()
+    GCAM_region_names <- GCAM_region_names %>% filter_regions_europe(regions_to_keep_name = unique(c(grid_regions$region, gcameurope.EUROSTAT_COUNTRIES)))
+    A_regions <- A_regions%>% filter_regions_europe(regions_to_keep_name = unique(c(grid_regions$region, gcameurope.EUROSTAT_COUNTRIES)))
     L203.Supplysector_demand <- L203.Supplysector_demand %>% filter_regions_europe()
     L203.PerCapitaBased <- L203.PerCapitaBased %>% filter_regions_europe()
 
+
+    # Add in segment regions not in Eurostat
+    L1327.in_EJ_R_paper_F_Yh_EUR <- replace_with_eurostat(L1327.in_EJ_R_paper_F_Yh, L1327.in_EJ_R_paper_F_Yh_EUR) %>%
+      filter_regions_europe(regions_to_keep_name = GCAM_region_names$region, region_ID_mapping = GCAM_region_names)
+    L1327.out_Mt_R_paper_Yh_EUR <- replace_with_eurostat(L1327.out_Mt_R_paper_Yh, L1327.out_Mt_R_paper_Yh_EUR) %>%
+      filter_regions_europe(regions_to_keep_name = GCAM_region_names$region, region_ID_mapping = GCAM_region_names)
+    L1327.IO_GJkg_R_paper_F_Yh_EUR <- replace_with_eurostat(L1327.IO_GJkg_R_paper_F_Yh, L1327.IO_GJkg_R_paper_F_Yh_EUR) %>%
+      filter_regions_europe(regions_to_keep_name = GCAM_region_names$region, region_ID_mapping = GCAM_region_names)
+    L1327.elec_noheat_adj_shwt_R_EUR <- replace_with_eurostat(L1327.elec_noheat_adj_shwt_R, L1327.elec_noheat_adj_shwt_R_EUR) %>%
+      filter_regions_europe(regions_to_keep_name = GCAM_region_names$region, region_ID_mapping = GCAM_region_names)
     # ===================================================
     # 0. Give binding for variable names used in pipeline
     has_district_heat <- year <- value <- GCAM_region_ID <- sector <- fuel <- year.fillout <- to.value <-
@@ -397,10 +427,10 @@ module_gcameurope_L2327.paper <- function(command, ...) {
       left_join_error_no_match(L2327.GlobalTechCoef_paper %>%
                                  filter(grepl("cogen", technology)),
                                by = c("year", "fuel" = "subsector.name")) %>%
+      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       mutate(output.ratio = value * coefficient,
              output.ratio = round(output.ratio, energy.DIGITS_COEFFICIENT),
-             fractional.secondary.output = "electricity") %>%
-      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
+             fractional.secondary.output = if_else(region %in% grid_regions$region, "base load generation", "electricity")) %>%
       select(region, supplysector = sector.name, subsector = fuel,
              stub.technology = technology, fractional.secondary.output, year, output.ratio) %>%
       # NOTE: holding the output ratio constant over time in future periods
@@ -409,7 +439,32 @@ module_gcameurope_L2327.paper <- function(command, ...) {
       group_by(region, supplysector, subsector, stub.technology, fractional.secondary.output) %>%
       mutate(output.ratio = approx_fun(year, output.ratio, rule = 2)) %>%
       ungroup %>%
-      select(LEVEL2_DATA_NAMES[["StubTechFractSecOut"]])
+      left_join(grid_regions, by = "region") %>%
+      mutate(market.name = if_else(is.na(grid_region), region, grid_region)) %>%
+      select(LEVEL2_DATA_NAMES[["StubTechFractSecOutMarket"]])
+
+    # Any missing stubtechs, add market here (e.g. H2 cogen)
+    L2327.StubTechSecMarket_paper_EUR <- L2327.StubTech_paper_EUR %>%
+      filter(grepl("cogen", stub.technology)) %>%
+      anti_join(L2327.StubTechSecOut_paper_EUR, by = c("region", "supplysector", "subsector", "stub.technology")) %>%
+      repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
+      left_join(grid_regions, by = "region") %>%
+      mutate(market.name = if_else(is.na(grid_region), region, grid_region),
+             fractional.secondary.output = if_else(region %in% grid_regions$region, "base load generation", "electricity")) %>%
+      select(LEVEL2_DATA_NAMES[["StubTechFractSecMarket"]])
+
+    # COGEN RENAMING ---------------------
+    # Create global tech for grid region specific cogen
+    env_module <- rlang::current_env()
+
+    lapply(GLOBAL_TECH_COGEN, cogen_global_tech, env = env_module)
+    L2327.GlobalTechSecOut_paper_EUR <- L2327.GlobalTechSecOut_paper_EUR %>%
+      mutate(secondary.output = "base load generation")
+
+    env_module <- rlang::current_env()
+
+    lapply(MODULE_OUTPUTS, cogen_stubtech_rename, env = env_module,
+           grid_region_df = grid_regions)
 
     # =======================================================
     # Produce outputs

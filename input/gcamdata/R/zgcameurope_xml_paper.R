@@ -23,7 +23,18 @@ module_gcameurope_paper_xml <- function(command, ...) {
                      "L2327.PerCapitaBased_paper_EUR",
                      "L2327.BaseService_paper_EUR",
                      "L2327.PriceElasticity_paper_EUR",
-                     "L2327.StubTechSecOut_paper_EUR")
+                     "L2327.StubTechSecOut_paper_EUR",
+                     "L2327.StubTechSecMarket_paper_EUR",
+                     "L2327.GlobalTechCoef_paper_EUR",
+                     "L2327.GlobalTechShrwt_paper_EUR",
+                     "L2327.GlobalTechCost_paper_EUR",
+                     "L2327.GlobalTechTrackCapital_paper_EUR",
+                     "L2327.GlobalTechCapture_paper_EUR",
+                     "L2327.GlobalTechShutdown_paper_EUR",
+                     "L2327.GlobalTechSCurve_paper_EUR",
+                     "L2327.GlobalTechLifetime_paper_EUR",
+                     "L2327.GlobalTechProfitShutdown_paper_EUR",
+                     "L2327.GlobalTechSecOut_paper_EUR")
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -48,10 +59,21 @@ module_gcameurope_paper_xml <- function(command, ...) {
       add_xml_data(L2327.StubTechProd_paper_EUR, "StubTechProd") %>%
       add_xml_data(L2327.StubTechCalInput_paper_heat_EUR, "StubTechCalInput") %>%
       add_xml_data(L2327.StubTechCoef_paper_EUR, "StubTechCoef") %>%
-      add_xml_data(L2327.StubTechSecOut_paper_EUR, "StubTechFractSecOut") %>%
+      add_xml_data(L2327.StubTechSecOut_paper_EUR, "StubTechFractSecOutMarket") %>%
+      add_xml_data(L2327.StubTechSecMarket_paper_EUR, "StubTechFractSecMarket") %>%
       add_xml_data(L2327.PerCapitaBased_paper_EUR, "PerCapitaBased") %>%
       add_xml_data(L2327.BaseService_paper_EUR, "BaseService") %>%
       add_xml_data(L2327.PriceElasticity_paper_EUR, "PriceElasticity") %>%
+
+      add_xml_data(L2327.GlobalTechShrwt_paper_EUR, "GlobalTechShrwt") %>%
+      add_xml_data(L2327.GlobalTechCoef_paper_EUR, "GlobalTechCoef") %>%
+      add_xml_data(L2327.GlobalTechSCurve_paper_EUR, "GlobalTechSCurve") %>%
+      add_xml_data(L2327.GlobalTechProfitShutdown_paper_EUR, "GlobalTechProfitShutdown") %>%
+      add_node_equiv_xml("input") %>%
+      add_xml_data(L2327.GlobalTechTrackCapital_paper_EUR, "GlobalTechTrackCapital") %>%
+      add_xml_data(L2327.GlobalTechCost_paper_EUR, "GlobalTechCost") %>%
+      add_xml_data(L2327.GlobalTechCapture_paper_EUR, "GlobalTechCapture") %>%
+      add_xml_data(L2327.GlobalTechSecOut_paper_EUR, "GlobalTechSecOut") %>%
       add_precursors(MODULE_INPUTS) ->
       paper_EUR.xml
 

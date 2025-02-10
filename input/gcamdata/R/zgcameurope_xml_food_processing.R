@@ -23,7 +23,17 @@ module_gcameurope_food_processing_xml <- function(command, ...) {
                      "L2328.StubTechCoef_food_EUR",
                      "L2328.StubCalorieContent_EUR",
                      "L2328.StubCaloriePriceConv_EUR",
-                     "L2328.StubTechSecOut_food_EUR")
+                     "L2328.StubTechSecOut_food_EUR",
+                     "L2328.StubTechSecMarket_food_EUR",
+                     "L2328.GlobalTechShrwt_food_EUR",
+                     "L2328.GlobalTechCoef_food_EUR",
+                     "L2328.GlobalTechCost_food_EUR",
+                     "L2328.GlobalTechTrackCapital_food_EUR",
+                     "L2328.GlobalTechShutdown_food_EUR",
+                     "L2328.GlobalTechSCurve_food_EUR",
+                     "L2328.GlobalTechLifetime_food_EUR",
+                     "L2328.GlobalTechProfitShutdown_food_EUR",
+                     "L2328.GlobalTechSecOut_food_EUR")
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -50,9 +60,18 @@ module_gcameurope_food_processing_xml <- function(command, ...) {
       add_xml_data(L2328.StubTechProd_food_EUR, "StubTechProd") %>%
       add_xml_data(L2328.StubTechCalInput_food_heat_EUR, "StubTechCalInput") %>%
       add_xml_data(L2328.StubTechCoef_food_EUR, "StubTechCoef") %>%
-      add_xml_data(L2328.StubTechSecOut_food_EUR, "StubTechFractSecOut") %>%
+      add_xml_data(L2328.StubTechSecOut_food_EUR, "StubTechFractSecOutMarket") %>%
+      add_xml_data(L2328.StubTechSecMarket_food_EUR, "StubTechFractSecMarket") %>%
       add_xml_data_generate_levels(L2328.StubCalorieContent_EUR, "StubCalorieContent", "subsector","nesting-subsector",1,FALSE) %>%
       add_xml_data_generate_levels(L2328.StubCaloriePriceConv_EUR, "StubCaloriePriceConv", "subsector","nesting-subsector",1,FALSE) %>%
+      add_xml_data(L2328.GlobalTechShrwt_food_EUR, "GlobalTechShrwt") %>%
+      add_node_equiv_xml("input") %>%
+      add_xml_data(L2328.GlobalTechCoef_food_EUR, "GlobalTechCoef") %>%
+      add_xml_data(L2328.GlobalTechSCurve_food_EUR, "GlobalTechSCurve") %>%
+      add_xml_data(L2328.GlobalTechProfitShutdown_food_EUR, "GlobalTechProfitShutdown") %>%
+      add_xml_data(L2328.GlobalTechTrackCapital_food_EUR, "GlobalTechTrackCapital") %>%
+      add_xml_data(L2328.GlobalTechCost_food_EUR, "GlobalTechCost") %>%
+      add_xml_data(L2328.GlobalTechSecOut_food_EUR, "GlobalTechSecOut") %>%
       add_precursors(MODULE_INPUTS) ->
       food_processing_EUR.xml
 

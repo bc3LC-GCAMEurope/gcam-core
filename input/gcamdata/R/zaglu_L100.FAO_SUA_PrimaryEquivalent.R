@@ -7,9 +7,9 @@
 #' @param command API command to execute
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs, a vector of output names, or (if
-#'   \code{command} is "MAKE") all the generated outputs: \code{GCAM_AgLU_SUA_APE_1973_2019},
-#'   \code{FAO_AgProd_Kt_All},\code{FAO_AgArea_Kha_All},\code{FAO_Food_Macronutrient_All_2010_2019},
-#'   \code{FAO_Food_MacronutrientRate_2010_2019_MaxValue}
+#' \code{command} is "MAKE") all the generated outputs: \code{GCAM_AgLU_SUA_APE_1973_2019},
+#' \code{FAO_AgProd_Kt_All},\code{FAO_AgArea_Kha_All},\code{FAO_Food_Macronutrient_All_2010_2019},
+#' \code{FAO_Food_MacronutrientRate_2010_2019_MaxValue}
 #' @details This chunk compiles balanced supply utilization data in primary equivalent in GCAM region and commodities.
 #' A method to generate primary equivalent is created for the new FAOSTAT supply utilization data (2010 to 2019).
 #' New SUA balance is connected to the old one (before 2010). Production and harvested area data with FAO region and item
@@ -197,7 +197,7 @@ module_aglu_L100.FAO_SUA_PrimaryEquivalent <- function(command, ...) {
     rm(GCAMDATA_FAOSTAT_BiTrade_194Regs_400Items_2010to2020)
     rm(GCAMDATA_FAOSTAT_BiTrade_194Regs_400Items_2010to2020_regID)
     ## Done Section1 ----
-    #****************************----
+    #--------------------------------
 
     # Section2: [2010-2019] Primary equivalent aggregation to GCAM commodities ----
 
@@ -594,7 +594,7 @@ module_aglu_L100.FAO_SUA_PrimaryEquivalent <- function(command, ...) {
     rm(FAO_SUA_Kt_2010to2019_R)
 
     ## Done Section2 ----
-    #****************************----
+    #--------------------------------
 
     # Section3 [1970-2009] Food balance sheet (original) aggregation to GCAM regions and commodities ----
 
@@ -707,7 +707,7 @@ module_aglu_L100.FAO_SUA_PrimaryEquivalent <- function(command, ...) {
     rm(FBSH_CB, FBSH_CB_GCAM)
 
     ## Done Section3 ----
-    #****************************----
+    #--------------------------------
 
     # Section4 [1970-2019] GCAM_APE SUA ----
 
@@ -792,7 +792,7 @@ module_aglu_L100.FAO_SUA_PrimaryEquivalent <- function(command, ...) {
 
 
     ## Done Section4 ----
-    #****************************----
+    #--------------------------------
 
     # Section5 [1970-2019] Connect production and area data ----
 
@@ -950,7 +950,7 @@ module_aglu_L100.FAO_SUA_PrimaryEquivalent <- function(command, ...) {
       left_join_error_no_match(Area_Region_Map %>% select(-region), by = "area_code") ->
       FAO_AgArea_Kha_All
 
-    #****************************----
+    #--------------------------------
     #Section6 Connect food items and macronutrient rates ----
 
     # 6.1 Separate FAO food items into GCAM food items and NEC for macronutrient ----
@@ -1052,9 +1052,9 @@ module_aglu_L100.FAO_SUA_PrimaryEquivalent <- function(command, ...) {
       FAO_Food_MacronutrientRate_2010_2019_MaxValue
 
 
-    #****************************----
+    #--------------------------------
     # Produce outputs ----
-    #*******************************
+    #-------------------------------
 
     GCAM_AgLU_SUA_APE_1973_2019 %>%
       add_title("GCAM_AgLU_SUA_APE_1973_2019") %>%

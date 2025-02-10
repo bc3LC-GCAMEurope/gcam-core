@@ -41,12 +41,12 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
                      FILE = "energy/A32.globaltech_retirement",
                      FILE = "energy/A32.demand",
                      "L127.in_EJ_R_indchp_F_Yh_EUR",
+                     "L127.in_EJ_R_indchp_F_Yh",
                      FILE = "gcam-europe/mappings/grid_regions",
                      "L123.eff_R_indchp_F_Yh_EUR",
                      "L1328.in_EJ_R_indenergy_F_Yh_EUR",
+                     "L1328.in_EJ_R_indenergy_F_Yh",
                      "L1324.in_EJ_R_indfeed_F_Yh_EUR",
-                     "L123.in_EJ_R_indchp_F_Yh",
-                     "L1326.in_EJ_R_indenergy_F_Yh",
                      "L1324.in_EJ_R_indfeed_F_Yh",
                      FILE = "socioeconomics/A32.inc_elas_output",
                      "L101.Pop_thous_GCAM3_R_Y",
@@ -95,8 +95,13 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
     L102.pcgdp_thous90USD_Scen_R_Y <- L102.pcgdp_thous90USD_Scen_R_Y %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
 
     # Add in segment regions not in Eurostat
+    L127.in_EJ_R_indchp_F_Yh_EUR <- replace_with_eurostat(L127.in_EJ_R_indchp_F_Yh, L127.in_EJ_R_indchp_F_Yh_EUR) %>%
+      filter_regions_europe(regions_to_keep_name = GCAM_region_names$region, region_ID_mapping = GCAM_region_names)
     L1324.in_EJ_R_indfeed_F_Yh_EUR <- replace_with_eurostat(L1324.in_EJ_R_indfeed_F_Yh, L1324.in_EJ_R_indfeed_F_Yh_EUR) %>%
       filter_regions_europe(regions_to_keep_name = GCAM_region_names$region, region_ID_mapping = GCAM_region_names)
+    L1328.in_EJ_R_indenergy_F_Yh_EUR <- replace_with_eurostat(L1328.in_EJ_R_indenergy_F_Yh, L1328.in_EJ_R_indenergy_F_Yh_EUR) %>%
+      filter_regions_europe(regions_to_keep_name = GCAM_region_names$region, region_ID_mapping = GCAM_region_names)
+
 
     # ===================================================
     # 0. Give binding for variable names used in pipeline
