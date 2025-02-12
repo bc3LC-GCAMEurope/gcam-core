@@ -60,7 +60,7 @@ module_socio_L280.GDP_macro <- function(command, ...) {
     pop.hist.data <- L101.Pop_thous_R_Yh
     gcam.region.id <- GCAM_region_names
     GCAM32_to_EU <- get_data(all_data, "common/GCAM32_to_EU", strip_attributes = TRUE)
----------------------------------------------------------------
+# ---------------------------------------------------------------
 
     #Calculate fractional wage rates to determine employment weighted
     #wage rate by GCAM region.
