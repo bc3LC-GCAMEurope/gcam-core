@@ -160,7 +160,7 @@ module_gcameurope_L111.rsrc_fos_Prod <- function(command, ...) {
         select(-region) %>%
         left_join_error_no_match(distinct(A11.fos_curves, resource, subresource, grade, extractioncost),
                                   by = c("resource", "subresource", "grade"))
-
+    }
 
     # -------
     # Some regions do not have traditional biomass in MODEL historical years
@@ -190,7 +190,7 @@ module_gcameurope_L111.rsrc_fos_Prod <- function(command, ...) {
                      "energy/mappings/IEA_product_rsrc", "L100.IEA_en_bal_ctry_hist",
                      "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR") ->
       L111.RsrcCurves_EJ_R_Ffos_EUR
-    }
+
 
     L111.Prod_EJ_R_F_Yh_EUR %>%
       add_title("Historical fossil energy production") %>%
