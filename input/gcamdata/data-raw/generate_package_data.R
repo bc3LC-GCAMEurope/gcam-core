@@ -574,6 +574,7 @@ prebuilt_data_names <- c(
 
   # output of module_energy_LA111.rsrc_fos_Prod
   "L111.RsrcCurves_EJ_R_Ffos",
+  "L111.RsrcCurves_EJ_R_Ffos_EUR",
 
   # output of module_energy_LA118.hydro
   "L118.out_EJ_R_elec_hydro_Yfut",
