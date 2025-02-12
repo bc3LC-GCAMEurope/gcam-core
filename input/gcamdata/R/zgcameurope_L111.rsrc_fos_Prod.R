@@ -161,6 +161,17 @@ module_gcameurope_L111.rsrc_fos_Prod <- function(command, ...) {
         left_join_error_no_match(distinct(A11.fos_curves, resource, subresource, grade, extractioncost),
                                   by = c("resource", "subresource", "grade"))
 
+      L111.RsrcCurves_EJ_R_Ffos_EUR %>%
+        add_title("Fossil resource supply curves for Eurostat", overwrite = TRUE) %>%
+        add_units("available: EJ; extractioncost: 1975$/GJ") %>%
+        add_comments("Downscale GCAM3.0 supply curves to the country level (on the basis of resource") %>%
+        add_comments("production) and aggregate by the new GCAM regions.") %>%
+        add_comments("Use crude oil production shares as a proxy for unconventional oil resources.") %>%
+        add_precursors("common/iso_GCAM_regID", "energy/A11.fos_curves",
+                       "energy/mappings/IEA_product_rsrc", "L100.IEA_en_bal_ctry_hist",
+                       "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR") ->
+        L111.RsrcCurves_EJ_R_Ffos_EUR
+    }
 
     # -------
     # Some regions do not have traditional biomass in MODEL historical years
@@ -179,19 +190,6 @@ module_gcameurope_L111.rsrc_fos_Prod <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["DeleteRsrc"]])
 
     # Produce outputs ------------------------------
-
-    L111.RsrcCurves_EJ_R_Ffos_EUR %>%
-      add_title("Fossil resource supply curves for Eurostat", overwrite = TRUE) %>%
-      add_units("available: EJ; extractioncost: 1975$/GJ") %>%
-      add_comments("Downscale GCAM3.0 supply curves to the country level (on the basis of resource") %>%
-      add_comments("production) and aggregate by the new GCAM regions.") %>%
-      add_comments("Use crude oil production shares as a proxy for unconventional oil resources.") %>%
-      add_precursors("common/iso_GCAM_regID", "energy/A11.fos_curves",
-                     "energy/mappings/IEA_product_rsrc", "L100.IEA_en_bal_ctry_hist",
-                     "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR") ->
-      L111.RsrcCurves_EJ_R_Ffos_EUR
-    }
-
     L111.Prod_EJ_R_F_Yh_EUR %>%
       add_title("Historical fossil energy production") %>%
       add_units("EJ") %>%
