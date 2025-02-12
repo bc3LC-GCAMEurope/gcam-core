@@ -590,7 +590,8 @@ prebuilt_data_names <- c(
   "L100.GTAP_capital_stock",
 
   # output of module_energy_L1328.food_processing, based on IEA data
-  "L1328.en_bal_frac_industry_food_inonspec_R_Yh"
+  "L1328.en_bal_frac_industry_food_inonspec_R_Yh",
+  "L1328.en_bal_frac_industry_food_inonspec_R_Yh_EUR"
 )
 
 #' PREBUILT_DATA
