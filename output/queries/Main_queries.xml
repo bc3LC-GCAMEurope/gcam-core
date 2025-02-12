@@ -5027,13 +5027,13 @@ A user can adjust the query to search for any of:
         <query title="National Account">
             <axis1 name="Account">account[@name]</axis1>
             <axis2 name="Year">nationalAccount[@year]</axis2>
-            <xPath buildList="true" dataName="all accounts" group="false" sumAll="false">nationalAccount/account/node()</xPath>
+            <xPath buildList="true" dataName="all accounts" group="false" sumAll="false">nationalAccount[@year&gt;1975]/account/node()</xPath>
             <comments/>
         </query>
         <query title="Social Accounting Matrix">
             <axis1 name="column">social-accounting-matrix-col[@name]</axis1>
             <axis2 name="Year">nationalAccount[@year]</axis2>
-            <xPath buildList="false" dataName="all accounts" group="false" sumAll="false">nationalAccount/social-accounting-matrix-row/social-accounting-matrix-col/node()</xPath>
+            <xPath buildList="false" dataName="all accounts" group="false" sumAll="false">nationalAccount[@year&gt;1990]/social-accounting-matrix-row/social-accounting-matrix-col/node()</xPath>
             <comments/>
         </query>
         <supplyDemandQuery title="Tracking accounts by tech">
