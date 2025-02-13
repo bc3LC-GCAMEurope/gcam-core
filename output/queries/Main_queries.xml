@@ -4746,6 +4746,8 @@ local:generate-sector-output-coefs(remove($inputNameQueue, 1), $currTree, $coefs
                         <rewrite from="comm cooling" to="buildings"/>
                         <rewrite from="aluminum" to="industry"/>
                         <rewrite from="agricultural energy use" to="industry"/>
+<rewrite from="FoodDemand_Staples" to="industry"/>
+<rewrite from="FoodDemand_NonStaples" to="industry"/>
                         <rewrite from="trn_pass_road_LDV" to="transportation"/>
                         <rewrite from="trn_pass_road_bus" to="transportation"/>
                         <rewrite from="trn_aviation_intl" to="intl bunkers"/>
