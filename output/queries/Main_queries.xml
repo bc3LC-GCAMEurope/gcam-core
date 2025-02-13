@@ -2395,7 +2395,7 @@ element input {
                     <axis1 name="sector">sector</axis1>
                     <axis2 name="Year">physical-output[@vintage]</axis2>
                     <xPath buildList="true" dataName="output" group="false" sumAll="true">*[@type='sector' and (@name='building' or (exists(child::keyword[@final-energy='building'])))]/
-               *[@type='subsector']/*[@type='technology' and (@name='heat pump' or @name='geo-water pump' or @name='air-water pump north' or @name='air-water pump middle north' or @name='air-water pump middle south' or @name='air-water pump south' or @name='air-air pump north' or @name='air-air pump middle north' or @name='air-air pump middle south' or @name='air-air pump south' or @name='solar thermal')]/
+               *[@type='subsector']/*[@type='technology' and (@name='heat pump' or @name='geo-water pump' or @name='air-water pump north' or @name='air-water pump middle north' or @name='air-water pump middle south' or @name='air-water pump south' or @name='air-air pump north' or @name='air-air pump middle north' or @name='air-air pump middle south' or @name='air-air pump south')]/
                output-primary[@type='output' (:collapse:)]/
                physical-output/node()</xPath>
                     <comments/>
