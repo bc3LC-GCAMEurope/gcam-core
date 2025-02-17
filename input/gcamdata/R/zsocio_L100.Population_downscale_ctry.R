@@ -215,7 +215,7 @@ module_socio_L100.Population_downscale_ctry <- function(command, ...) {
       L100.Pop_thous_SSP_ctry_Yfut_0
 
     # Compute the population ratio change from the Last historical year (2015)
-    if (SSP_EUR) {
+    if (socioeconomics.SSP_EUR) {
       # If detailed data for EUR decided to use, substitute the
       # available EUR population data (from 2022 to 2070, SSP2)
       L100.Pop_thous_SSP_ctry_Yfut_1 <-

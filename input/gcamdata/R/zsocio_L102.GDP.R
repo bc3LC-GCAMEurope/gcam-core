@@ -149,7 +149,7 @@ module_socio_L102.GDP <- function(command, ...) {
       ungroup() %>%
       select(scenario, GCAM_region_ID, year, gdp_gr = adj_gdp_gr)
 
-    EUR_gdp_gr_param <- if (SSP_EUR) A01.gdp_gr_EUR else NULL
+    EUR_gdp_gr_param <- if (socioeconomics.SSP_EUR) A01.gdp_gr_EUR else NULL
 
     ## 3.1 for SSP scenarios ----
     # join.gdp.ts hist and future
