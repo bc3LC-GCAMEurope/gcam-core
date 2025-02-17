@@ -30,6 +30,8 @@ module_socio_L102.GDP <- function(command, ...) {
       FILE = "socioeconomics/SSP/SSP_database_2024",
       FILE = "socioeconomics/SSP/iso_SSP_regID",
       FILE = "socioeconomics/GDP/GCAM3_GDP",
+      FILE = "gcam-europe/A01.popgdp_EUR",
+      FILE = "gcam-europe/mappings/geo_to_iso_map",
       "L100.gdp_mil90usd_ctry_Yh",
       "L101.Pop_thous_GCAM3_R_Y",
       "L101.Pop_thous_GCAM3_ctry_Y",
@@ -60,6 +62,13 @@ module_socio_L102.GDP <- function(command, ...) {
 
     # Load required inputs ----
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
+
+    A01.popgdp_EUR <- A01.popgdp_EUR %>%
+      left_join_error_no_match(geo_to_iso_map,
+                               by = 'geo') %>%
+      left_join_error_no_match(select(iso_GCAM_regID, iso, GCAM_region_ID), by = 'iso') %>%
+      mutate(gdp_gr = 1 + gdp_gr / 100,       # from percentage to growth rate
+             gdppc_gr = 1 + gdppc_gr / 100)   # from percentage to growth rate
 
     # Step 1: Get historical GDP data & mapping ready ----
 
@@ -126,7 +135,21 @@ module_socio_L102.GDP <- function(command, ...) {
 
     # all regions currently GDP up to 2023 (FAOSTAT)
     # SSP scenarios use 2020-2100 growth rate from SSP
-    # gSSP scenarios use 2023 -2100 growth rate from SSP
+    # gSSP scenarios use 2023-2100 growth rate from SSP
+
+    # update annual growth rates to growth rates with respect to 2020
+    A01.gdp_gr_EUR <- gdp_bilusd_rgn_Yfut %>%
+      filter_regions_europe(region_ID_mapping = iso_GCAM_regID) %>%
+      left_join(A01.popgdp_EUR %>%
+                  select(GCAM_region_ID, scenario, year, gdp_gr),
+                by = c('scenario','GCAM_region_ID','year')) %>%
+      group_by(scenario, GCAM_region_ID) %>%
+      mutate(adj_gdp = lag(gdp) * gdp_gr) %>%
+      mutate(adj_gdp_gr = 1 + (adj_gdp - gdp[year == min(MODEL_FUTURE_YEARS)]) / gdp[year == min(MODEL_FUTURE_YEARS)]) %>%
+      ungroup() %>%
+      select(scenario, GCAM_region_ID, year, gdp_gr = adj_gdp_gr)
+
+    EUR_gdp_gr_param <- if (SSP_EUR) A01.gdp_gr_EUR else NULL
 
     ## 3.1 for SSP scenarios ----
     # join.gdp.ts hist and future
@@ -136,7 +159,11 @@ module_socio_L102.GDP <- function(command, ...) {
         gdp_mil90usd_rgn %>% filter(year <= socioeconomics.SSP_DB_BASEYEAR),
         # future: gdp_bilusd_rgn_Yfut
         gdp_bilusd_rgn_Yfut,
-        grouping = 'GCAM_region_ID')
+        grouping = 'GCAM_region_ID',
+        # assuming base year is 2020 (max(intersect(past$year, future$year)),
+        # where past = gdp_mil90usd_rgn %>% filter(year <= socioeconomics.SSP_DB_BASEYEAR)
+        # where future = gdp_bilusd_rgn_Yfut
+        EUR_data = EUR_gdp_gr_param)
 
     ## 3.2 for gSSP scenarios ----
 
@@ -147,7 +174,11 @@ module_socio_L102.GDP <- function(command, ...) {
         gdp_mil90usd_rgn,
         # future: gdp_bilusd_rgn_Yfut
         gdp_bilusd_rgn_Yfut,
-        grouping = 'GCAM_region_ID') %>%
+        grouping = 'GCAM_region_ID',
+        # assuming base year is 2020 (max(intersect(past$year, future$year)),
+        # where past = gdp_mil90usd_rgn %>% filter(year <= socioeconomics.SSP_DB_BASEYEAR)
+        # where future = gdp_bilusd_rgn_Yfut
+        EUR_data = EUR_gdp_gr_param) %>%
       mutate(scenario = paste0('g', scenario))
 
 
@@ -156,7 +187,7 @@ module_socio_L102.GDP <- function(command, ...) {
     gdp.mil90usd.scen.rgn.yr <-
       bind_rows(gdp.mil90usd.SSP.rgn.yr, gdp.mil90usd.gSSP.rgn.yr)
 
-    # Step 5: Additional adjustment  for Venezuela (South Amer North) and Taiwan ----
+    # Step 5: Additional adjustment for Venezuela (South Amer North) and Taiwan ----
 
     # Step 5.1 smoothing GDP when needed (socioeconomics.GDP_Adj_Moving_Average_ISO)
 
@@ -174,7 +205,7 @@ module_socio_L102.GDP <- function(command, ...) {
           filter(!GCAM_region_ID %in% GDP_Adj_Moving_Average_GCAM_region_ID)) ->
       gdp.mil90usd.scen.rgn.yr_1
 
-    # Step 5.1 no negative gdp growth (per IIASA GDP 2023 scenarios for twn)
+    # Step 5.2 no negative gdp growth (per IIASA GDP 2023 scenarios for twn)
     GDP_Adj_No_Neg_Growth_GCAM_region_ID <-
       iso_GCAM_regID$GCAM_region_ID[iso_GCAM_regID$iso %in% socioeconomics.GDP_Adj_No_Neg_Growth_ISO]
 
@@ -200,10 +231,10 @@ module_socio_L102.GDP <- function(command, ...) {
 
     # *******************----
     # Derive ppp.mer.rgn ----
-    ## Construct a table of population by scenario, region, and year.  We have a
+    ## Construct a table of population by scenario, region, and year. We have a
     ## table of historical population, and a table of future population by
-    ## scenario, both in wide form.  Convert to long form and filter to the years
-    ## we need.  Add a scenario column to historical years, and combine the
+    ## scenario, both in wide form. Convert to long form and filter to the years
+    ## we need. Add a scenario column to historical years, and combine the
     ## whole thing into a single table.
     pop.thous.fut <-
       rename(L101.Pop_thous_Scen_R_Yfut, population = value) %>%
@@ -244,7 +275,7 @@ module_socio_L102.GDP <- function(command, ...) {
     ## the Palestinian Territories, which has four slightly different values across
     ## the 5 SSPs. (It's SSP 2 and 4 that are the same).  The value
     ## actually used in the old data system is the one for SSP1, so that's the
-    ## one we'll use here.  Arguably we should average the values over the 5
+    ## one we'll use here. Arguably we should average the values over the 5
     ## scenarios, but the differences are only 1 part in 10^4, so we can just
     ## let it slide.
     ppp.rgn <- gdp_bilusd_rgn_Yfut %>%
@@ -357,6 +388,8 @@ module_socio_L102.GDP <- function(command, ...) {
       left_join_error_no_match(L101.Pop_thous_GCAM3_ctry_Y, by = c("year", "iso")) %>%
       transmute(iso, year, value = value.x / value.y)
 
+
+    # ===================================================
     # Produce outputs ----
     gdp.mil90usd.scen.rgn.yr %>%
       ungroup %>%

@@ -1300,13 +1300,17 @@ compute_BC_OC_elc <- function(df, BC_OC_assumptions) {
 #' joined.  The units of the output time series will be the same as the units of
 #' \code{past}.
 #'
+#' NEW: if we have more detailed data for the EUR region, we substitute it for the
+#' available years. This data should be passed through the `EUR_data` as GDP growth rates
+#'
 #' @param past Tibble with the past time series (year, gdp, and grouping).
 #' @param future Tibble with the future data (year, gdp, scenario, and
 #' grouping).
 #' @param grouping Name of the grouping column (generally either 'iso' or
 #' 'GCAM_region_ID', but could be anything
+#' @param EUR_data GDP growth rates for the EUR region
 #' @return Time series with the past and future joined as described in details.
-join.gdp.ts <- function(past, future, grouping) {
+join.gdp.ts <- function(past, future, grouping, EUR_data = NULL) {
 
   year <- gdp <- base.gdp <- gdp.ratio <- . <- scenario <-
     NULL                            # silence notes on package check.
@@ -1334,6 +1338,12 @@ join.gdp.ts <- function(past, future, grouping) {
     left_join_error_no_match(baseyear.future.gdp, by = c('scenario', grouping)) %>%
     mutate(gdp.ratio = gdp / base.gdp) %>%
     select('scenario', grouping, 'year', 'gdp.ratio')
+  if (!is.null(EUR_data)) {
+    gdp.future.ratio <- gdp.future.ratio %>%
+      left_join(EUR_data, by = c('scenario','GCAM_region_ID','year')) %>%
+      mutate(gdp.ratio = ifelse(!is.na(gdp_gr), gdp_gr, gdp.ratio)) %>%
+      select(-gdp_gr)
+  }
 
   ## add the scenario column to the past
   gdp.past <- tidyr::crossing(past, scenario = unique(gdp.future.ratio[['scenario']]))
