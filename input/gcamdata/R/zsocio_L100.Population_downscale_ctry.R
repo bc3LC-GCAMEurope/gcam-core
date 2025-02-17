@@ -22,7 +22,9 @@ module_socio_L100.Population_downscale_ctry <- function(command, ...) {
       FILE = "socioeconomics/POP/Maddison_population",
       FILE = "socioeconomics/SSP/SSP_database_2024",
       FILE = "socioeconomics/SSP/iso_SSP_regID",
-      FILE = "socioeconomics/POP/UN_popTot")
+      FILE = "socioeconomics/POP/UN_popTot",
+      FILE = "gcam-europe/A01.popgdp_EUR",
+      FILE = "gcam-europe/mappings/geo_to_iso_map")
 
   MODULE_OUTPUTS <-
     c("L100.Pop_thous_ctry_Yh",
@@ -45,6 +47,11 @@ module_socio_L100.Population_downscale_ctry <- function(command, ...) {
 
     # Load required inputs ----
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
+
+    A01.popgdp_EUR <- A01.popgdp_EUR %>%
+      left_join_error_no_match(geo_to_iso_map,
+                               by = 'geo') %>%
+      mutate(pop = pop / 1e6) # Units: to Million people
 
     Maddison_population %>%
       select(-deleteme) %>%
@@ -207,17 +214,41 @@ module_socio_L100.Population_downscale_ctry <- function(command, ...) {
       select(iso, scenario, year, pop = value) ->
       L100.Pop_thous_SSP_ctry_Yfut_0
 
+    # Compute the population ratio change from the Last historical year (2015)
+    if (SSP_EUR) {
+      # If detailed data for EUR decided to use, substitute the
+      # available EUR population data (from 2022 to 2070, SSP2)
+      L100.Pop_thous_SSP_ctry_Yfut_1 <-
+        L100.Pop_thous_SSP_ctry_Yfut_0 %>%
+        complete(nesting(scenario, iso), year = c(socioeconomics.FINAL_HIST_YEAR, FUTURE_YEARS)) %>%
+        filter(year %in% c(socioeconomics.FINAL_HIST_YEAR, FUTURE_YEARS)) %>%
+        left_join(A01.popgdp_EUR %>%
+                    select(scenario, year, pop_EUR = pop, iso),
+                  by = c('scenario','year','iso')) %>%
+        mutate(pop = ifelse(!is.na(pop_EUR), pop_EUR, pop)) %>%
+        select(-pop_EUR) %>%
+        group_by(scenario, iso) %>%
+        mutate(pop = approx_fun(year, pop),
+               ratio_iso_ssp = pop / pop[year == socioeconomics.FINAL_HIST_YEAR]) %>%  # Calculate population ratios to final historical year (2015), no units
+        select(-pop) %>%
+        ungroup()
+    } else {
+      # Otherwise, stick to standard SSP2 data
+      L100.Pop_thous_SSP_ctry_Yfut_1 <-
+        L100.Pop_thous_SSP_ctry_Yfut_0 %>%
+        complete(nesting(scenario, iso), year = c(socioeconomics.FINAL_HIST_YEAR, FUTURE_YEARS)) %>%
+        filter(year %in% c(socioeconomics.FINAL_HIST_YEAR, FUTURE_YEARS)) %>%
+        group_by(scenario, iso) %>%
+        mutate(pop = approx_fun(year, pop),
+               ratio_iso_ssp = pop / pop[year == socioeconomics.FINAL_HIST_YEAR]) %>%  # Calculate population ratios to final historical year (2015), no units
+        select(-pop) %>%
+        ungroup()
+    }
+
     L100.Pop_thous_SSP_ctry_Yfut <-
-      L100.Pop_thous_SSP_ctry_Yfut_0 %>%
-      complete(nesting(scenario, iso), year = c(socioeconomics.FINAL_HIST_YEAR, FUTURE_YEARS)) %>%
-      filter(year %in% c(socioeconomics.FINAL_HIST_YEAR, FUTURE_YEARS)) %>%
-      group_by(scenario, iso) %>%
-      mutate(pop = approx_fun(year, pop),
-             ratio_iso_ssp = pop / pop[year == socioeconomics.FINAL_HIST_YEAR]) %>%  # Calculate population ratios to final historical year (2010), no units
-      select(-pop) %>%
+      L100.Pop_thous_SSP_ctry_Yfut_1 %>%
       # Third, project country population values using SSP ratios and final historical year populations.
       # Not all countries in the UN data are in SSP data. Create complete tibble with all UN countries & SSP years.
-      ungroup() %>%
       complete(scenario = unique(scenario),
                year = unique(year),
                iso = unique(L100.Pop_thous_ctry_Yh$iso)) %>%
