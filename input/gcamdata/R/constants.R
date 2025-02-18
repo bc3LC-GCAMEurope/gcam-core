@@ -641,6 +641,7 @@ socioeconomics.GDP_Adj_No_Neg_Growth_ISO <- c("ven", "twn")
 socioeconomics.GDP_Adj_No_Neg_Growth_Year <- 2025 # used for adjusting GDP projection to avoid negative GDP growth after this year (for Taiwan and South_America_North)
 
 socioeconomics.CORE_GCAM_SCENARIO <- "gSSP2"
+socioeconomics.SSP_EUR <- TRUE  # used for using Population & GDP European SSP2 data projections
 
 # Population years - note that these sequences shouldn't have any overlap,
 # and should contain all historical years used by other modules
