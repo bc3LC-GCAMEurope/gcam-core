@@ -120,7 +120,9 @@ module_aglu_L2062.ag_Fert_irr_mgmt <- function(command, ...) {
       mutate(FertCost = coefficient * aglu.FERT_PRICE * gdp_deflator(1975, aglu.FERT_PRICE_YEAR) * CONV_KG_T / CONV_NH3_N) %>%
       # If we wanted we could apply regional fertilizer adjustments here.
       # Since we are handling negative profits with the min cal profit rate there is no pressing need at the moment.
-      mutate(nonLandVariableCost = round(nonLandVariableCost - FertCost, aglu.DIGITS_CALPRICE)) %>%
+      mutate(nonLandVariableCost = round(nonLandVariableCost - FertCost, aglu.DIGITS_CALPRICE),
+             nonLandVariableCost = if_else(nonLandVariableCost < 0 & region %in% gcameurope.EUROSTAT_COUNTRIES,
+                                           0, nonLandVariableCost)) %>%
       select(-minicam.energy.input, -coefficient, -FertCost) ->
       L2062.AgCost_ag_irr_mgmt_adj
 
@@ -138,7 +140,7 @@ module_aglu_L2062.ag_Fert_irr_mgmt <- function(command, ...) {
       # If we wanted we could apply regional fertilizer adjustments here.
       # Since we are handling negative profits with the min cal profit rate there is no pressing need at the moment.
       mutate(nonLandVariableCost = round(nonLandVariableCost - FertCost, aglu.DIGITS_CALPRICE)) %>%
-      select(-minicam.energy.input, -coefficient, -FertCost) %>% 
+      select(-minicam.energy.input, -coefficient, -FertCost) %>%
       # Given the historical price of biomass is solved we could end up with negative profit rates
       # when trying to calibrate "ghost" share weights.  Which conceptually makes sense but mechanically
       # is an issue.  Instead we will modify meaning of the ghost share weight by scaling down costs during
