@@ -112,7 +112,8 @@ module_aglu_L100.regional_ag_an_for_prices <- function(command, ...) {
     L100.FAO_ag_an_ProducerPrice_1 <-
       L100.FAO_ag_an_ProducerPrice_0 %>%
       left_join_error_no_match(AGLU_ctry %>% select(area = FAO_country, iso), by = "area") %>%
-      left_join_error_no_match(iso_GCAM_regID %>% select(iso, GCAM_region_ID), by = "iso")
+      left_join_error_no_match(iso_GCAM_regID %>% select(iso, GCAM_region_ID), by = "iso") %>%
+      filter(!(Prod_Value_USD == 0 & iso %in% gcameurope.EUROSTAT_ISO))
 
     ## 2.4. Join region-specific GDP deflator ----
     # Data has no NA in aglu.MODEL_PRICE_YEARS
