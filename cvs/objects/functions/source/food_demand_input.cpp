@@ -150,9 +150,9 @@ void FoodDemandInput::initCalc( const string& aRegionName,
             mainLog.setLevel(ILogger::WARNING);
             //mainLog << "Last period's share of budget spent on FoodDemand: " << totalBudget << " exceeds total income in " << aRegionName
             //        << mName << ".  With staples share: " << otherBudgetShare << " and non-staples share: " << mShare[aPeriod -1] << endl;
-            mainLog << "Last period's share of budget spent on FoodDemand for" << aRegionName
-                << mName << mSectorName << "exceeds budget threshold of " << TOTAL_BUDGET_THRESHOLD
-                << ". With staples share : " << otherBudgetShare << " and non - staples share : " << mShare[aPeriod - 1] << endl;
+           // mainLog << "Last period's share of budget spent on FoodDemand for" << aRegionName
+            //    << mName << mSectorName << "exceeds budget threshold of " << TOTAL_BUDGET_THRESHOLD
+             //   << ". With staples share : " << otherBudgetShare << " and non - staples share : " << mShare[aPeriod - 1] << endl;
 
         }
     }
