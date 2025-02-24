@@ -189,7 +189,7 @@ module_energy_L120.offshore_wind <- function(command, ...) {
       L120.offshore_wind_curve_region %>%
         select(price, supply) -> L120.supply_points_region
 
-      L120.error_min_curve.exp <- optimize(f = smooth_res_curve_approx_error, interval=c(1.0,15.0),
+      L120.error_min_curve.exp <- optimize(f = smooth_res_curve_approx_error, interval=c(1.0,9.0),
                                            L120.offshore_wind_curve_region$mid.price,
                                            L120.offshore_wind_curve_region$base.price,
                                            L120.offshore_wind_curve_region$maxSubResource,

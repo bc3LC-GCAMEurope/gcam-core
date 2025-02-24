@@ -158,7 +158,7 @@ module_energy_L114.wind <- function(command, ...) {
         L114.RsrcCurves_EJ_R_wind.currR
 
       # We must solve for the curve exponent that best fits the supply-points
-      L114.error_min_curve.exp <- optimize(f = smooth_res_curve_approx_error, interval = c(1.0, 15.0),
+      L114.error_min_curve.exp <- optimize(f = smooth_res_curve_approx_error, interval = c(1.0, 9.0),
                                            L114.RsrcCurves_EJ_R_wind.currR$mid.price,
                                            L114.RsrcCurves_EJ_R_wind.currR$base.price,
                                            L114.RsrcCurves_EJ_R_wind.currR$maxSubResource,
