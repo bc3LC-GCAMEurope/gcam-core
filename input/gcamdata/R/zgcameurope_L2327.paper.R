@@ -460,6 +460,8 @@ module_gcameurope_L2327.paper <- function(command, ...) {
     lapply(GLOBAL_TECH_COGEN, cogen_global_tech, env = env_module)
     L2327.GlobalTechSecOut_paper_EUR <- L2327.GlobalTechSecOut_paper_EUR %>%
       mutate(secondary.output = "base load generation")
+    L2327.GlobalTechShrwt_paper_EUR <- L2327.GlobalTechShrwt_paper_EUR %>%
+      mutate(share.weight = if_else(subsector.name != "biomass", 0, share.weight))
 
     env_module <- rlang::current_env()
 
@@ -472,7 +474,6 @@ module_gcameurope_L2327.paper <- function(command, ...) {
       add_title("Supply sector information for paper sector") %>%
       add_units("NA") %>%
       add_comments("For paper sector, the supply sector information (output.unit, input.unit, price.unit, logit.year.fillout, logit.exponent) from A327.sector is expended into all GCAM regions") %>%
-      add_legacy_name("L2327.Supplysector_paper_EUR") %>%
       add_precursors("energy/A327.sector", "common/GCAM_region_names") ->
       L2327.Supplysector_paper_EUR
 
@@ -480,7 +481,6 @@ module_gcameurope_L2327.paper <- function(command, ...) {
       add_title("Supply sector keywords for paper sector") %>%
       add_units("NA") %>%
       add_comments("For paper sector, the supply sector final energy keywords from A327.sector are expended into all GCAM regions") %>%
-      add_legacy_name("L2327.FinalEnergyKeyword_paper_EUR") %>%
       add_precursors("energy/A327.sector", "common/GCAM_region_names") ->
       L2327.FinalEnergyKeyword_paper_EUR
 
@@ -488,7 +488,6 @@ module_gcameurope_L2327.paper <- function(command, ...) {
       add_title("Subsector logit exponents of paper sector") %>%
       add_units("Unitless") %>%
       add_comments("For paper sector, the subsector logit exponents from A327.subsector_logit are expanded into all GCAM regions") %>%
-      add_legacy_name("L2327.SubsectorLogit_paper_EUR") %>%
       add_precursors("energy/A327.subsector_logit", "energy/A_regions","common/GCAM_region_names") ->
       L2327.SubsectorLogit_paper_EUR
 
@@ -496,7 +495,6 @@ module_gcameurope_L2327.paper <- function(command, ...) {
       add_title("Subsector shareweights of paper sector") %>%
       add_units("unitless") %>%
       add_comments("For paper sector, the subsector shareweights from A327.subsector_shrwt are expanded into all GCAM regions") %>%
-      add_legacy_name("L2327.SubsectorShrwtFllt_paper_EUR") %>%
       add_precursors("energy/A327.subsector_shrwt", "energy/A_regions","common/GCAM_region_names",
                      "energy/A327.subsector_shrwt_adj_future_years", "L1327.elec_noheat_adj_shwt_R_EUR") ->
       L2327.SubsectorShrwtFllt_paper_EUR
@@ -505,7 +503,6 @@ module_gcameurope_L2327.paper <- function(command, ...) {
       add_title("Subsector shareweight interpolation of paper sector") %>%
       add_units("NA") %>%
       add_comments("For paper sector, the subsector shareweight interpolation function infromation from A327.subsector_interp is expanded into all GCAM regions") %>%
-      add_legacy_name("L2327.SubsectorInterp_paper_EUR") %>%
       add_precursors("energy/A327.subsector_interp", "energy/A_regions","common/GCAM_region_names",
                      "energy/A327.subsector_interp_adj_future_years", "L1327.elec_noheat_adj_shwt_R_EUR") ->
       L2327.SubsectorInterp_paper_EUR
@@ -514,7 +511,6 @@ module_gcameurope_L2327.paper <- function(command, ...) {
       add_title("Identification of stub technologies of paper") %>%
       add_units("NA") %>%
       add_comments("For paper sector, the stub technologies from A327.globaltech_shrwt are expanded into all GCAM regions") %>%
-      add_legacy_name("L2327.StubTech_paper_EUR") %>%
       add_precursors("energy/A327.globaltech_shrwt","energy/A_regions", "common/GCAM_region_names") ->
       L2327.StubTech_paper_EUR
 
@@ -522,7 +518,6 @@ module_gcameurope_L2327.paper <- function(command, ...) {
       add_title("calibrated paper production") %>%
       add_units("EJ") %>%
       add_comments("Values are calculated using L1327.out_Mt_R_paper_Yh_EUR, then added GCAM region information and supplysector, subsector, and technology information") %>%
-      add_legacy_name("L2327.StubTechProd_paper_EUR") %>%
       add_precursors("energy/calibrated_techs",  "common/GCAM_region_names", "L1327.out_Mt_R_paper_Yh_EUR") ->
       L2327.StubTechProd_paper_EUR
 
@@ -530,7 +525,6 @@ module_gcameurope_L2327.paper <- function(command, ...) {
       add_title("calibrated paper production") %>%
       add_units("EJ") %>%
       add_comments("Values are calculated using L1327.in_EJ_R_paper_F_Yh_EUR then added GCAM region information and supplysector, subsector, technology, and input information") %>%
-      add_legacy_name("L2327.StubTechCalInput_paper") %>%
       add_precursors("energy/calibrated_techs", "L1327.in_EJ_R_paper_F_Yh_EUR", "common/GCAM_region_names") ->
       L2327.StubTechCalInput_paper_heat_EUR
 
@@ -538,7 +532,6 @@ module_gcameurope_L2327.paper <- function(command, ...) {
       add_title("region-specific coefficients of paper production technologies") %>%
       add_units("unitless") %>%
       add_comments("Coefficients calculated based on energy from regional energy (IEA) and production (FAO) data") %>%
-      add_legacy_name("L2327.StubTechCoef_paper_EUR") %>%
       add_precursors("energy/calibrated_techs", "common/GCAM_region_names", "L1327.IO_GJkg_R_paper_F_Yh_EUR") ->
       L2327.StubTechCoef_paper_EUR
 
@@ -546,7 +539,6 @@ module_gcameurope_L2327.paper <- function(command, ...) {
       add_title("per-capita based flag for paper exports final demand") %>%
       add_units("NA") %>%
       add_comments("Per-capita based flags for paper from A327.demand are expanded into all GCAM regions") %>%
-      add_legacy_name("L2327.PerCapitaBased_paper_EUR") %>%
       add_precursors("energy/A327.demand", "common/GCAM_region_names") ->
       L2327.PerCapitaBased_paper_EUR
 
@@ -554,7 +546,6 @@ module_gcameurope_L2327.paper <- function(command, ...) {
       add_title("base-year service output of paper") %>%
       add_units("EJ") %>%
       add_comments("Transformed from L2327.StubTechProd_paper_EUR by adding energy.final.demand") %>%
-      add_legacy_name("L2327.BaseService_paper_EUR") %>%
       add_precursors("energy/A327.demand","L1327.out_Mt_R_paper_Yh_EUR", "energy/calibrated_techs", "common/GCAM_region_names") ->
       L2327.BaseService_paper_EUR
 
@@ -562,7 +553,6 @@ module_gcameurope_L2327.paper <- function(command, ...) {
       add_title("price elasticity for paper") %>%
       add_units("Unitless") %>%
       add_comments("The elasticity values from A327.demand are expanded into all GCAM_regions") %>%
-      add_legacy_name("L2327.PriceElasticity_paper_EUR") %>%
       add_precursors("energy/A327.demand", "common/GCAM_region_names") ->
       L2327.PriceElasticity_paper_EUR
 
@@ -570,7 +560,6 @@ module_gcameurope_L2327.paper <- function(command, ...) {
       add_title("Delete forest supplysector used in paper industry") %>%
       add_units("Unitless") %>%
       add_comments("Supplysector is replaced with paper industry demand") %>%
-      add_legacy_name("L2327.DeleteSupplysector_PaperAgDemand_EUR") %>%
       add_precursors("L203.Supplysector_demand") ->
       L2327.DeleteSupplysector_PaperAgDemand_EUR
 
@@ -578,7 +567,6 @@ module_gcameurope_L2327.paper <- function(command, ...) {
       add_title("Delete forest final demand used in paper industry") %>%
       add_units("Unitless") %>%
       add_comments("Final energy demand is replaced with paper industry demand") %>%
-      add_legacy_name("L2327.DeleteFinalDemand_PaperAgDemand_EUR") %>%
       add_precursors("L203.PerCapitaBased") ->
       L2327.DeleteFinalDemand_PaperAgDemand_EUR
 

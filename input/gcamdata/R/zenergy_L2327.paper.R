@@ -490,7 +490,6 @@ module_energy_L2327.paper <- function(command, ...) {
       add_title("Supply sector information for paper sector") %>%
       add_units("NA") %>%
       add_comments("For paper sector, the supply sector information (output.unit, input.unit, price.unit, logit.year.fillout, logit.exponent) from A327.sector is expended into all GCAM regions") %>%
-      add_legacy_name("L2327.Supplysector_paper") %>%
       add_precursors("energy/A327.sector", "common/GCAM_region_names") ->
       L2327.Supplysector_paper
 
@@ -498,7 +497,6 @@ module_energy_L2327.paper <- function(command, ...) {
       add_title("Supply sector keywords for paper sector") %>%
       add_units("NA") %>%
       add_comments("For paper sector, the supply sector final energy keywords from A327.sector are expended into all GCAM regions") %>%
-      add_legacy_name("L2327.FinalEnergyKeyword_paper") %>%
       add_precursors("energy/A327.sector", "common/GCAM_region_names") ->
       L2327.FinalEnergyKeyword_paper
 
@@ -506,7 +504,6 @@ module_energy_L2327.paper <- function(command, ...) {
       add_title("Subsector logit exponents of paper sector") %>%
       add_units("Unitless") %>%
       add_comments("For paper sector, the subsector logit exponents from A327.subsector_logit are expanded into all GCAM regions") %>%
-      add_legacy_name("L2327.SubsectorLogit_paper") %>%
       add_precursors("energy/A327.subsector_logit", "energy/A_regions","common/GCAM_region_names") ->
       L2327.SubsectorLogit_paper
 
@@ -514,7 +511,6 @@ module_energy_L2327.paper <- function(command, ...) {
       add_title("Subsector shareweights of paper sector") %>%
       add_units("unitless") %>%
       add_comments("For paper sector, the subsector shareweights from A327.subsector_shrwt are expanded into all GCAM regions") %>%
-      add_legacy_name("L2327.SubsectorShrwtFllt_paper") %>%
       add_precursors("energy/A327.subsector_shrwt", "energy/A_regions","common/GCAM_region_names",
                      "energy/A327.subsector_shrwt_adj_future_years", "L1327.elec_noheat_adj_shwt_R") ->
       L2327.SubsectorShrwtFllt_paper
@@ -523,7 +519,6 @@ module_energy_L2327.paper <- function(command, ...) {
       add_title("Subsector shareweight interpolation of paper sector") %>%
       add_units("NA") %>%
       add_comments("For paper sector, the subsector shareweight interpolation function infromation from A327.subsector_interp is expanded into all GCAM regions") %>%
-      add_legacy_name("L2327.SubsectorInterp_paper") %>%
       add_precursors("energy/A327.subsector_interp", "energy/A_regions","common/GCAM_region_names",
                      "energy/A327.subsector_interp_adj_future_years", "L1327.elec_noheat_adj_shwt_R") ->
       L2327.SubsectorInterp_paper
@@ -532,7 +527,6 @@ module_energy_L2327.paper <- function(command, ...) {
       add_title("Identification of stub technologies of paper") %>%
       add_units("NA") %>%
       add_comments("For paper sector, the stub technologies from A327.globaltech_shrwt are expanded into all GCAM regions") %>%
-      add_legacy_name("L2327.StubTech_paper") %>%
       add_precursors("energy/A327.globaltech_shrwt","energy/A_regions", "common/GCAM_region_names") ->
       L2327.StubTech_paper
 
@@ -540,7 +534,6 @@ module_energy_L2327.paper <- function(command, ...) {
       add_title("Shareweights of global paper technologies") %>%
       add_units("Unitless") %>%
       add_comments("For paper sector, the share weights from A327.globaltech_shrwt are interpolated into all base years and future years") %>%
-      add_legacy_name("L2327.GlobalTechShrwt_paper") %>%
       add_precursors("energy/A327.globaltech_shrwt") ->
       L2327.GlobalTechShrwt_paper
 
@@ -548,7 +541,6 @@ module_energy_L2327.paper <- function(command, ...) {
       add_title("Energy inputs and coefficients of paper technologies") %>%
       add_units("Unitless") %>%
       add_comments("For paper sector, the energy use coefficients from A327.globaltech_coef are interpolated into all model years") %>%
-      add_legacy_name("L2327.GlobalTechCoef_paper") %>%
       add_precursors("energy/A327.globaltech_coef") ->
       L2327.GlobalTechCoef_paper
 
@@ -556,7 +548,6 @@ module_energy_L2327.paper <- function(command, ...) {
       add_title("Non-energy costs of global paper manufacturing technologies") %>%
       add_units("1975$/kg for supplysector paper; 1975$/GJ for supplysector process heat paper") %>%
       add_comments("For paper sector, the Non-energy costs of global paper manufacturing technologies are calculated then adjusted with CCS to include CO2 capture costs") %>%
-      add_legacy_name("L2327.GlobalTechCost_paper") %>%
       add_precursors("energy/A327.globaltech_cost", "energy/A327.globaltech_coef") ->
       L2327.GlobalTechCost_paper
 
@@ -573,12 +564,10 @@ module_energy_L2327.paper <- function(command, ...) {
         add_title("Global tech lifetime for techs with shutdown rate") %>%
         add_units("Lifetime in years") %>%
         add_comments("Filters for any technology that uses a phased retirement function") %>%
-        add_legacy_name("L2327.GlobalTechShutdown_paper") %>%
         add_precursors("energy/A327.globaltech_retirement") ->
         L2327.GlobalTechShutdown_paper
     } else {
-      missing_data() %>%
-        add_legacy_name("energy/L2327.GlobalTechShutdown_paper") ->
+      missing_data() ->
         L2327.GlobalTechShutdown_paper
     }
 
@@ -587,12 +576,10 @@ module_energy_L2327.paper <- function(command, ...) {
         add_title("Global tech lifetime for techs with s-curve retirement function") %>%
         add_units("Lifetime in years, half-life in years") %>%
         add_comments("Filters for any technology that uses an S-curve retirement function") %>%
-        add_legacy_name("L2327.GlobalTechSCurve_paper") %>%
         add_precursors("energy/A327.globaltech_retirement") ->
         L2327.GlobalTechSCurve_paper
     } else {
-      missing_data() %>%
-        add_legacy_name("energy/L2327.GlobalTechSCurve_paper") ->
+      missing_data() ->
         L2327.GlobalTechSCurve_paper
     }
 
@@ -601,12 +588,10 @@ module_energy_L2327.paper <- function(command, ...) {
         add_title("Global tech lifetime for any technology with no retirement function") %>%
         add_units("Lifetime in years") %>%
         add_comments("Filters for any technology that has no phased or S-curve retirement function, empty by default.") %>%
-        add_legacy_name("L2327.GlobalTechLifetime_paper") %>%
         add_precursors("energy/A327.globaltech_retirement") ->
         L2327.GlobalTechLifetime_paper
     } else {
-      missing_data() %>%
-        add_legacy_name("energy/L2327.GlobalTechLifetime_paper") ->
+      missing_data() ->
         L2327.GlobalTechLifetime_paper
     }
 
@@ -615,12 +600,10 @@ module_energy_L2327.paper <- function(command, ...) {
         add_title("Global tech profit shutdown decider and parameters") %>%
         add_units("Unitless, used to determine shape of the function defining the relationship between shutdown rate and profitability") %>%
         add_comments("Filters for any technologies that use a profit-based shutdown parameter") %>%
-        add_legacy_name("L2327.GlobalTechProfitShutdown_paper") %>%
         add_precursors("energy/A327.globaltech_retirement") ->
         L2327.GlobalTechProfitShutdown_paper
     } else {
-      missing_data() %>%
-        add_legacy_name("energy/L2327.GlobalTechProfitShutdown_paper") ->
+      missing_data() ->
         L2327.GlobalTechProfitShutdown_paper
     }
 
@@ -628,7 +611,6 @@ module_energy_L2327.paper <- function(command, ...) {
       add_title("CO2 capture fractions from global paper production technologies with CCS") %>%
       add_units("Unitless") %>%
       add_comments("For paper sector, the remove fractions from A327.globaltech_co2capture are interpolated into all model years") %>%
-      add_legacy_name("L2327.GlobalTechCapture_paper") %>%
       add_precursors("energy/A327.globaltech_co2capture") ->
       L2327.GlobalTechCapture_paper
 
@@ -637,7 +619,6 @@ module_energy_L2327.paper <- function(command, ...) {
       add_title("calibrated paper production") %>%
       add_units("EJ") %>%
       add_comments("Values are calculated using L1327.out_Mt_R_paper_Yh, then added GCAM region information and supplysector, subsector, and technology information") %>%
-      add_legacy_name("L2327.StubTechProd_paper") %>%
       add_precursors("energy/calibrated_techs",  "common/GCAM_region_names", "L1327.out_Mt_R_paper_Yh") ->
       L2327.StubTechProd_paper
 
@@ -645,7 +626,6 @@ module_energy_L2327.paper <- function(command, ...) {
       add_title("calibrated paper production") %>%
       add_units("EJ") %>%
       add_comments("Values are calculated using L1327.in_EJ_R_paper_F_Yh then added GCAM region information and supplysector, subsector, technology, and input information") %>%
-      add_legacy_name("L2327.StubTechCalInput_paper") %>%
       add_precursors("energy/calibrated_techs", "L1327.in_EJ_R_paper_F_Yh", "common/GCAM_region_names") ->
       L2327.StubTechCalInput_paper_heat
 
@@ -653,7 +633,6 @@ module_energy_L2327.paper <- function(command, ...) {
       add_title("region-specific coefficients of paper production technologies") %>%
       add_units("unitless") %>%
       add_comments("Coefficients calculated based on energy from regional energy (IEA) and production (FAO) data") %>%
-      add_legacy_name("L2327.StubTechCoef_paper") %>%
       add_precursors("energy/calibrated_techs", "common/GCAM_region_names", "L1327.IO_GJkg_R_paper_F_Yh") ->
       L2327.StubTechCoef_paper
 
@@ -661,7 +640,6 @@ module_energy_L2327.paper <- function(command, ...) {
       add_title("per-capita based flag for paper exports final demand") %>%
       add_units("NA") %>%
       add_comments("Per-capita based flags for paper from A327.demand are expanded into all GCAM regions") %>%
-      add_legacy_name("L2327.PerCapitaBased_paper") %>%
       add_precursors("energy/A327.demand", "common/GCAM_region_names") ->
       L2327.PerCapitaBased_paper
 
@@ -669,7 +647,6 @@ module_energy_L2327.paper <- function(command, ...) {
       add_title("base-year service output of paper") %>%
       add_units("EJ") %>%
       add_comments("Transformed from L2327.StubTechProd_paper by adding energy.final.demand") %>%
-      add_legacy_name("L2327.BaseService_paper") %>%
       add_precursors("energy/A327.demand","L1327.out_Mt_R_paper_Yh", "energy/calibrated_techs", "common/GCAM_region_names") ->
       L2327.BaseService_paper
 
@@ -677,7 +654,6 @@ module_energy_L2327.paper <- function(command, ...) {
       add_title("price elasticity for paper") %>%
       add_units("Unitless") %>%
       add_comments("The elasticity values from A327.demand are expanded into all GCAM_regions") %>%
-      add_legacy_name("L2327.PriceElasticity_paper") %>%
       add_precursors("energy/A327.demand", "common/GCAM_region_names") ->
       L2327.PriceElasticity_paper
 
@@ -685,7 +661,6 @@ module_energy_L2327.paper <- function(command, ...) {
       add_title("Secondary output ratios of paper cogeneration technologies") %>%
       add_units("Unitless") %>%
       add_comments("Secondary output ratios are calculated as electricity ratio (Assumed CHP electricity output per unit fuel input) over efficiency") %>%
-      add_legacy_name("L2327.GlobalTechSecOut_paper") %>%
       add_precursors("energy/A23.chp_elecratio", "energy/A327.globaltech_coef") ->
       L2327.GlobalTechSecOut_paper
 
@@ -693,7 +668,6 @@ module_energy_L2327.paper <- function(command, ...) {
       add_title("Delete forest supplysector used in paper industry") %>%
       add_units("Unitless") %>%
       add_comments("Supplysector is replaced with paper industry demand") %>%
-      add_legacy_name("L2327.DeleteSupplysector_PaperAgDemand") %>%
       add_precursors("L203.Supplysector_demand") ->
       L2327.DeleteSupplysector_PaperAgDemand
 
@@ -701,7 +675,6 @@ module_energy_L2327.paper <- function(command, ...) {
       add_title("Delete forest final demand used in paper industry") %>%
       add_units("Unitless") %>%
       add_comments("Final energy demand is replaced with paper industry demand") %>%
-      add_legacy_name("L2327.DeleteFinalDemand_PaperAgDemand") %>%
       add_precursors("L203.PerCapitaBased") ->
       L2327.DeleteFinalDemand_PaperAgDemand
 
@@ -709,7 +682,6 @@ module_energy_L2327.paper <- function(command, ...) {
       add_title("Delete forest supplysector used in paper industry") %>%
       add_units("Unitless") %>%
       add_comments("Supplysector is replaced with paper industry demand") %>%
-      add_legacy_name("L2327.DeleteSupplysector_PaperAgDemand_USA") %>%
       add_precursors("L203.Supplysector_demand") ->
       L2327.DeleteSupplysector_PaperAgDemand_USA
 
@@ -717,7 +689,6 @@ module_energy_L2327.paper <- function(command, ...) {
       add_title("Delete forest final demand used in paper industry") %>%
       add_units("Unitless") %>%
       add_comments("Final energy demand is replaced with paper industry demand") %>%
-      add_legacy_name("L2327.DeleteFinalDemand_PaperAgDemand_USA") %>%
       add_precursors("L203.PerCapitaBased") ->
       L2327.DeleteFinalDemand_PaperAgDemand_USA
 
