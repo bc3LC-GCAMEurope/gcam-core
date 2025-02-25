@@ -21,6 +21,8 @@ module_gcameurope_resources_xml <- function(command, ...) {
                        "L210.SmthRenewRsrcTechChange_EUR",
                        "L210.SmthRenewRsrcTechChange_offshore_wind_EUR",
                        "L210.RsrcCalProd_EUR",
+                       "L210.RsrcFixOut_EUR",
+                       "L210.RsrcExoShutdown_EUR",
                        "L210.ReserveCalReserve_EUR",
                        "L210.RsrcCurves_fos_EUR",
                        "L210.RsrcCurves_U_EUR",
@@ -77,6 +79,8 @@ module_gcameurope_resources_xml <- function(command, ...) {
       add_xml_data(L210.SmthRenewRsrcTechChange_EUR, "SmthRenewRsrcTechChange") %>%
       add_xml_data(L210.SmthRenewRsrcTechChange_offshore_wind_EUR, "SmthRenewRsrcTechChange") %>%
       add_xml_data(L210.RsrcCalProd_EUR, "RsrcCalProd") %>%
+      add_xml_data(L210.RsrcFixOut_EUR, "RsrcFixOut") %>%
+      add_xml_data(L210.RsrcExoShutdown_EUR, "RsrcExoShutdown") %>%
       add_xml_data(L210.RsrcCurves_fos_EUR, "RsrcCurves") %>%
       add_xml_data(L210.RsrcCurves_U_EUR, "RsrcCurves") %>%
       add_xml_data(L210.SmthRenewRsrcCurves_MSW_EUR, "SmthRenewRsrcCurvesGdpElast") %>%

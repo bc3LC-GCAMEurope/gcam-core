@@ -29,7 +29,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
   MODULE_INPUTS <- c(FILE = "gcam-europe/mappings/grid_regions",
                      FILE = "common/GCAM_region_names",
                      FILE = "energy/A23.sector",
-                     FILE = "energy/A23.globaltech_shrwt",
+                     FILE = "gcam-europe/A23.globaltech_shrwt",
                      FILE = "gcam-europe/A23.elecS_subsector_logit",
                      FILE = "gcam-europe/A23.elecS_subsector_shrwt",
                      FILE = "gcam-europe/A23.elecS_subsector_shrwt_interp",
