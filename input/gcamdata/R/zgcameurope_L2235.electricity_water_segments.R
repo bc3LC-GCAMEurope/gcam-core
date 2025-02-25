@@ -330,7 +330,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       # for now, just set fixed for all techs, except for refined liquids, nuclear, and geothermal
       mutate(to.value = if_else(subsector0 == "geothermal", 1, to.value),
              interpolation.function = if_else(subsector0 == "geothermal", "linear", interpolation.function),
-             interpolation.function = if_else(subsector0 %in% c("refined liquids", "nuclear", "geothermal"), interpolation.function, "fixed"),
+             interpolation.function = if_else(subsector0 %in% c("refined liquids", "nuclear", "geothermal", "grid_storage", "rooftop_pv"), interpolation.function, "fixed"),
              # exception
              interpolation.function = if_else(region == "Malta" & subsector0 %in% c("gas") & supplysector == "peak generation", "linear", interpolation.function))
 
@@ -353,11 +353,8 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
              subsector0 = subsector.name,
              subsector = technology) %>%
       # we only want future years here, because past years are dictated by state-level production
-      filter(year %in% MODEL_FUTURE_YEARS)  %>%
-      # semi_join historical table to filter out techs that shouldn't be created,
-      # such as CSP and geothermal in regions without this resource
-      semi_join(L2235.SubsectorShrwt_elecS_cool_EUR_hist,
-                by = c("region", "supplysector", "subsector0", "subsector")) %>%
+      filter(year %in% MODEL_FUTURE_YEARS,
+             !(grepl("offshore", subsector) & !region %in% seawater_countries))  %>%
       select(region, supplysector, subsector0, subsector, year, share.weight)
 
 
