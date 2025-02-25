@@ -82,6 +82,8 @@ module_gcameurope_L210.resources <- function(command, ...) {
                       "L210.ReserveCalReserve_EUR",
                       "L210.RsrcCalProd_EUR",
                       "L210.ResSubresourceProdLifetime_EUR",
+                      "L210.RsrcFixOut_EUR",
+                      "L210.RsrcExoShutdown_EUR",
                       paste0(OUTPUTS_TO_COPY_FILTER, "_EUR"))
 
   if(command == driver.DECLARE_INPUTS) {
@@ -287,6 +289,23 @@ module_gcameurope_L210.resources <- function(command, ...) {
       filter(!region %in% c(unique(L210.ReserveCalReserve_EUR_unoil$region))) %>%
       mutate(resource =paste0("crude oil"),reserve.subresource =paste0("unconventional oil"),cal.reserve=0)
     L210.ReserveCalReserve_EUR <- bind_rows(L210.ReserveCalReserve_EUR,L210.ReserveCalReserve_EUR.uncon_other_reg)
+
+    # 2Cb. Fixed output zero if no recent historical production ----------------------------------
+    L210.RsrcFixOut_EUR <- L210.RsrcCalProd_EUR %>%
+      group_by(region, resource, subresource) %>%
+      filter(cal.production[year == MODEL_FINAL_BASE_YEAR] == 0 & any(cal.production > 0)) %>%
+      ungroup %>%
+      distinct(region, resource, subresource) %>%
+      repeat_add_columns(tibble(year = MODEL_FUTURE_YEARS)) %>%
+      mutate(fixedOutput = 0, technology = subresource)
+
+    L210.RsrcExoShutdown_EUR <- L210.RsrcFixOut_EUR %>%
+      distinct(region, resource, subresource, technology) %>%
+      repeat_add_columns(tibble(period = MODEL_BASE_YEARS)) %>%
+      repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
+      filter(period <= year) %>%
+      mutate(output.scalar = if_else(year %in% MODEL_BASE_YEARS, 1, 0),
+             exogenous.shutdown.decider = "exogenous.shutdown")
 
     # 2D. Fossil: Resource supply curves ---------------------------------------------
     # L210.RsrcCurves_fos_EUR: supply curves of fossil resources
