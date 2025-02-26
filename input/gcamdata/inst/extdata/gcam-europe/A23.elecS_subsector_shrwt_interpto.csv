@@ -4,7 +4,7 @@
 # Comments: Subsector shareweights for subsectors that are not fixed at calibration values. 
 # These subsectors need a to-value which specifies the value to which the shareweight is being interpolated.
 # Supplysector set to either segment or electricity to apply to all segments not listed
-# Column types: cccccic 
+# Column types: cccccnc 
 # ----------
 supplysector,subsector,apply.to,from.year,to.year,to.value,interpolation.function
 electricity,coal,share-weight,final-calibration-year,2030,1,linear
@@ -21,8 +21,8 @@ base load generation,wind,share-weight,2030,end-year,1,fixed
 electricity,wind,share-weight,final-calibration-year,end-year,1,fixed
 electricity,solar,share-weight,final-calibration-year,2030,1,linear
 electricity,solar,share-weight,2030,end-year,1,fixed
-elect_td_bld,rooftop_pv,share-weight,final-calibration-year,2030,1,linear
-elect_td_bld,rooftop_pv,share-weight,2030,end-year,1,fixed
+elect_td_bld,rooftop_pv,share-weight,final-calibration-year,2030,0.25,linear
+elect_td_bld,rooftop_pv,share-weight,2030,end-year,0.25,fixed
 peak generation,grid_storage,share-weight,final-calibration-year,end-year,1,linear
 peak generation,geothermal,share-weight,initial-future-year,end-year,0,fixed
 subpeak generation,geothermal,share-weight,initial-future-year,end-year,0,fixed
