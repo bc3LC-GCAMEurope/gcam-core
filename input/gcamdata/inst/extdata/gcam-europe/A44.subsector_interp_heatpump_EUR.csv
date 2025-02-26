@@ -1,0 +1,114 @@
+# File:A44.subsector_interp_heatpump_EUR.csv
+# Title: Adust shareweights for Heatpumps in Europe (based on previous testing runs)
+# Units: NA
+# Column types: cccccinc
+# ----------
+region,supplysector,subsector,apply.to,from.year,to.year,to.value,interpolation.function
+Albania,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Austria,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Belgium,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Bosnia and Herzegovina,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,1.62957,linear
+Bulgaria,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Croatia,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Cyprus,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Czech Republic,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Denmark,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Estonia,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,0.217559,linear
+Finland,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+France,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Germany,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Greece,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Hungary,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Ireland,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Italy,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Latvia,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Lithuania,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Luxembourg,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,1,linear
+Macedonia,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,0.0161058,linear
+Malta,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Moldova,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,1,linear
+Netherlands,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Norway,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Poland,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Portugal,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Romania,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Serbia and Montenegro,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Slovakia,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Slovenia,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,0.0953644,linear
+Spain,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Sweden,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,0.0373975,linear
+Turkey,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,7.21283,linear
+UK,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Ukraine,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,0.269353,linear
+Albania,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,1,linear
+Austria,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Belgium,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Bosnia and Herzegovina,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,0.0255124,linear
+Bulgaria,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,0.0601028,linear
+Croatia,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Cyprus,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Czech Republic,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Denmark,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Estonia,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,0.0501106,linear
+Finland,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+France,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Germany,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Greece,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Hungary,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Ireland,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Italy,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Latvia,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,0.0555417,linear
+Lithuania,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Luxembourg,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Macedonia,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,1,linear
+Malta,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Moldova,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,0.259511,linear
+Netherlands,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Norway,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Poland,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Portugal,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Romania,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Serbia and Montenegro,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Slovakia,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Slovenia,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Spain,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Sweden,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Turkey,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,1,linear
+UK,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Ukraine,resid heating modern EUR,water heat pump,share-weight,final-calibration-year,2030,1,linear
+Albania,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Austria,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Belgium,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Bosnia and Herzegovina,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,0.000414238,linear
+Bulgaria,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Croatia,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Cyprus,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Czech Republic,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Denmark,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Estonia,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,0.0460768,linear
+Finland,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+France,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Germany,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Greece,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Hungary,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Ireland,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Italy,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Latvia,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,0.0715082,linear
+Lithuania,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Luxembourg,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Macedonia,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,1,linear
+Malta,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Moldova,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,1,linear
+Netherlands,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Norway,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,1,linear
+Poland,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Portugal,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Romania,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,1,linear
+Serbia and Montenegro,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,0.1,linear
+Slovakia,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Slovenia,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Spain,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Sweden,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Turkey,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+UK,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
+Ukraine,resid hot water modern EUR,water heat pump,share-weight,final-calibration-year,2030,1,linear

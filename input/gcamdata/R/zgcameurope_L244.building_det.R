@@ -37,6 +37,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              FILE = "energy/A_regions",
              FILE = "gcam-europe/A44.sector_EUR",
              FILE = "gcam-europe/A44.subsector_interp_EUR",
+             FILE = "gcam-europe/A44.subsector_interp_heatpump_EUR",
              FILE = "gcam-europe/A44.subsector_logit_EUR",
              FILE = "gcam-europe/A44.subsector_shrwt_EUR",
              FILE = "gcam-europe/A44.fuelprefElasticity_EUR",
@@ -518,6 +519,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     A44.internal_gains_EUR<-add.cg(A44.internal_gains_EUR)
     A44.sector_EUR<-add.cg(A44.sector_EUR)
     A44.subsector_interp_EUR<-add.cg(A44.subsector_interp_EUR)
+    A44.subsector_interp_heatpump_EUR<-add.cg(A44.subsector_interp_heatpump_EUR)
     A44.subsector_logit_EUR<-add.cg(A44.subsector_logit_EUR)
     A44.subsector_shrwt_EUR<-add.cg(A44.subsector_shrwt_EUR)
 
@@ -840,18 +842,30 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     }
 
     # L244.SubsectorInterp_bld_EUR and L244.SubsectorInterpTo_bld_EUR: Subsector shareweight interpolation of building sector
-    if(any(is.na(A44.subsector_interp_EUR$to.value))) {
-      L244.SubsectorInterp_bld_EUR <- A44.subsector_interp_EUR %>%
-        filter(is.na(to.value)) %>%
-        write_to_all_regions(LEVEL2_DATA_NAMES[["SubsectorInterp"]], GCAM_region_names = GCAM_region_names) %>%
-        semi_join(L244.Tech_bld, by = c("region", "supplysector", "subsector"))
-    }
-    if(any(!is.na(A44.subsector_interp_EUR$to.value))) {
       L244.SubsectorInterpTo_bld_EUR <- A44.subsector_interp_EUR %>%
-        filter(!is.na(to.value)) %>%
         write_to_all_regions(LEVEL2_DATA_NAMES[["SubsectorInterpTo"]], GCAM_region_names = GCAM_region_names) %>%
         semi_join(L244.Tech_bld, by = c("region", "supplysector", "subsector"))
-    }
+
+    # Adjust shareweight interpolation for heatpumps in Europe,basedon previous testing runs
+    L244.SubsectorInterp_bld_EUR_hp <- L244.SubsectorInterpTo_bld_EUR %>%
+      filter(subsector == unique(A44.subsector_interp_heatpump_EUR$subsector)) %>%
+      select(-to.value) %>%
+      mutate(from.year = as.character(from.year)) %>%
+      left_join(A44.subsector_interp_heatpump_EUR, by = c("region", "supplysector", "subsector", "apply.to")) %>%
+      mutate(from.year = MODEL_FINAL_BASE_YEAR,
+             to.year = if_else(is.na(to.value) == T, to.year.x, to.year.y),
+             interpolation.function = if_else(is.na(to.value) == T, interpolation.function.x, interpolation.function.y)) %>%
+      select(LEVEL2_DATA_NAMES[["SubsectorInterpTo"]])
+
+    # Merge the datasets:
+    L244.SubsectorInterpTo_bld_EUR <- L244.SubsectorInterpTo_bld_EUR %>%
+      filter(subsector != unique(A44.subsector_interp_heatpump_EUR$subsector)) %>%
+      mutate(to.value = as.numeric(to.value)) %>%
+      bind_rows(
+        L244.SubsectorInterp_bld_EUR_hp
+      ) %>%
+      select(LEVEL2_DATA_NAMES[["SubsectorInterpTo"]])
+
 
     # Adjust interpolation rule to promote electricity penetration in developing economies
     # There are some regions in which electric heating needs to be promoted due to very low values in base years:
@@ -871,9 +885,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     elec_heat_regions<-unique(elec_adj$region)
 
-
-    L244.SubsectorInterp_bld_EUR<-L244.SubsectorInterp_bld_EUR %>%
-      mutate(to.value = 1) %>%
+    L244.SubsectorInterp_bld_EUR<-L244.SubsectorInterpTo_bld_EUR %>%
       mutate(interpolation.function = if_else(grepl("resid heating modern", supplysector) &
                                                 region %in% elec_heat_regions &
                                                 subsector %in% c("electricity"),
@@ -881,7 +893,11 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              to.year = if_else(grepl("resid heating modern", supplysector) &
                                  region %in% elec_heat_regions &
                                  subsector %in% c("electricity"),
-                               2050, to.year)) %>%
+                               2050, to.year),
+             to.value = if_else(grepl("resid heating modern", supplysector) &
+                                                region %in% elec_heat_regions &
+                                                subsector %in% c("electricity"),
+                                              1, to.value)) %>%
       select(LEVEL2_DATA_NAMES[["SubsectorInterpTo"]])
 
 
@@ -2340,7 +2356,8 @@ module_gcameurope_L244.building_det <- function(command, ...) {
         add_units("NA") %>%
         add_comments("A44.subsector_interp_EUR written to all regions") %>%
         add_legacy_name("L244.SubsectorInterp_bld_EUR") %>%
-        add_precursors("gcam-europe/A44.subsector_interp_EUR", "common/GCAM_region_names", "L144.end_use_eff_EUR")  ->
+        add_precursors("gcam-europe/A44.subsector_interp_EUR", "common/GCAM_region_names", "L144.end_use_eff_EUR",
+                       "A44.subsector_interp_heatpump_EUR")  ->
         L244.SubsectorInterp_bld_EUR
     } else {
       missing_data() %>%
