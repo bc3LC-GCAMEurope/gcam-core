@@ -145,9 +145,7 @@ module_socio_L102.GDP <- function(command, ...) {
                 by = c('scenario','GCAM_region_ID','year')) %>%
       group_by(scenario, GCAM_region_ID) %>%
       mutate(adj_gdp = lag(gdp) * gdp_gr) %>%
-      mutate(adj_gdp_gr = 1 + (adj_gdp - gdp[year == min(MODEL_FUTURE_YEARS)]) / gdp[year == min(MODEL_FUTURE_YEARS)]) %>%
-      ungroup() %>%
-      select(scenario, GCAM_region_ID, year, gdp_gr = adj_gdp_gr)
+      ungroup()
 
     EUR_gdp_gr_param <- if (socioeconomics.SSP_EUR) A01.gdp_gr_EUR else NULL
 

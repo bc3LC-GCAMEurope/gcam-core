@@ -1339,6 +1339,12 @@ join.gdp.ts <- function(past, future, grouping, EUR_data = NULL) {
     mutate(gdp.ratio = gdp / base.gdp) %>%
     select('scenario', grouping, 'year', 'gdp.ratio')
   if (!is.null(EUR_data)) {
+    EUR_data <- EUR_data %>%
+      group_by(scenario, GCAM_region_ID) %>%
+      mutate(adj_gdp_gr = 1 + (adj_gdp - gdp[year == base.year]) / gdp[year == base.year]) %>%
+      ungroup() %>%
+      select(scenario, GCAM_region_ID, year, gdp_gr = adj_gdp_gr)
+
     gdp.future.ratio <- gdp.future.ratio %>%
       left_join(EUR_data, by = c('scenario','GCAM_region_ID','year')) %>%
       mutate(gdp.ratio = ifelse(!is.na(gdp_gr), gdp_gr, gdp.ratio)) %>%
