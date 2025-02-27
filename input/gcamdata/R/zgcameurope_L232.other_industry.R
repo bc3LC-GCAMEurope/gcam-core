@@ -213,8 +213,8 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
       L232.in_EJ_R_indenergy_F_Yh # intermediate tibble
 
     L232.in_EJ_R_indenergy_F_Yh %>%
-      left_join_error_no_match(distinct(select(A32.globaltech_eff, subsector, technology, minicam.energy.input)),
-                               by = c("subsector", "stub.technology" = "technology")) %>%
+      left_join_error_no_match(distinct(select(A32.globaltech_eff, supplysector, subsector, technology, minicam.energy.input)),
+                               by = c("supplysector", "subsector", "stub.technology" = "technology")) %>%
       mutate(calibrated.value = round(value, energy.DIGITS_CALOUTPUT),
              share.weight.year = year) %>%
       rename(calOutputValue = calibrated.value) %>%  # temporary column name change to accommodate function set_subsector_shrwt
@@ -235,8 +235,8 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
 
     L232.in_EJ_R_indfeed_F_Yh %>%
       select(LEVEL2_DATA_NAMES[["StubTechYr"]], "value") %>%
-      left_join(distinct(select(A32.globaltech_eff, subsector, technology, minicam.energy.input)),
-                by = c("subsector", "stub.technology" = "technology")) %>%
+      left_join(distinct(select(A32.globaltech_eff, supplysector, subsector, technology, minicam.energy.input)),
+                by = c("supplysector", "subsector", "stub.technology" = "technology")) %>%
       mutate(calibrated.value = round(value, energy.DIGITS_CALOUTPUT)) %>%
       select(-value) %>%
       mutate(share.weight.year = year) %>%
