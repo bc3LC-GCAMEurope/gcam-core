@@ -112,11 +112,11 @@ module_gcameurope_L1011.ff_GrossTrade_EUR <- function(command, ...) {
       mutate(import_ctry = case_when(
         import_ctry == "Czechia" ~"Czech Republic",
         import_ctry == "Netherlands (the)" ~  "Netherlands",
-        .default = import_ctry),
+        TRUE ~ import_ctry),
         export_ctry = case_when(
           export_ctry == "Czechia" ~"Czech Republic",
           export_ctry == "Netherlands (the)" ~  "Netherlands",
-          .default = export_ctry)) %>%
+          TRUE ~ export_ctry)) %>%
       mutate(region_importer = if_else(import_ctry %in% Europe_Single_Market_Regions$GCAMEU_region, "European_Single_Market", "Global"),
              region_exporter  = if_else(export_ctry %in% Europe_Single_Market_Regions$GCAMEU_region, "European_Single_Market", "Global")) %>%
       filter(!(region_exporter == "Global" & region_importer == "Global"))
