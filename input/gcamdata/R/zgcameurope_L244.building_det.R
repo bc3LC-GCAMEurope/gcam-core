@@ -868,7 +868,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       mutate(from.year = as.character(from.year)) %>%
       left_join(A44.subsector_interp_heatpump_EUR, by = c("region", "supplysector", "subsector", "apply.to")) %>%
       mutate(from.year = MODEL_FINAL_BASE_YEAR,
-             to.year = if_else(is.na(to.value) == T, to.year.x, to.year.y),
+             to.year = if_else(is.na(to.value) == T, as.integer(to.year.x), as.integer(to.year.y)),
              interpolation.function = if_else(is.na(to.value) == T, interpolation.function.x, interpolation.function.y)) %>%
       filter(complete.cases(to.value)) %>%
       select(LEVEL2_DATA_NAMES[["SubsectorInterpTo"]])

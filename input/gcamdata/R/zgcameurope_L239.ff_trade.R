@@ -171,7 +171,7 @@ module_gcameurope_L239.ff_trade <- function(command, ...) {
         # for countries in european market, assigning 2/3 of cost within european market, 1/3 to global
         region == SINGLE_MARKET_NAME ~ 2/3 * input.cost,
         grepl(SINGLE_MARKET_NAME, subsector) ~ 1/3 * input.cost,
-        .default = as.numeric(input.cost))
+        TRUE ~ as.numeric(input.cost))
         )
 
     L239.TechCoef_tra_EUR  <- tech_tra_adjust(L239.TechCoef_tra, cols = c("minicam.energy.input", "coefficient")) %>%

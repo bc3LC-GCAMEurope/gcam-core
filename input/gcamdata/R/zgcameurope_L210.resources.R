@@ -359,7 +359,7 @@ module_gcameurope_L210.resources <- function(command, ...) {
       ungroup %>%
       distinct(region, resource) %>%
       mutate(year = MODEL_BASE_YEARS[1],
-             lifetime.adj = 40)
+             lifetime.adj = as.integer(40))
 
     L210.ResReserveTechLifetime_EUR <- L210.ResReserveTechLifetime_EUR %>%
       left_join(no_hist_production, by = c("region", "resource", "year")) %>%
