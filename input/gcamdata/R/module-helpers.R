@@ -1723,3 +1723,28 @@ cogen_stubtech_rename <- function(df_name, env, grid_region_df = grid_regions){
 
   return(0)
 }
+
+#' policy_interpolate
+#'
+#' Helper function to interpolate policy constraints/values between years
+#' @param df data
+#' @param group_cols columns to group, as a list of strings
+#' @param value_col column to interpolate, unquoted
+#' @importFrom dplyr filter mutate group_by
+#' @return assignment of new db
+policy_interpolate <- function(df, group_cols, value_col, year_col = year){
+  df %>%
+    group_by(across({{group_cols}})) %>%
+
+    # group_by(across(all_of({{group_cols}}))) %>%
+    complete({{year_col}} := seq(min({{year_col}}), max({{year_col}}), by = 5)) %>%
+    mutate({{value_col}} := case_when(
+      n() == 1 ~ {{value_col}},  # Keep original value when only one year exists
+      TRUE ~ approx_fun({{year_col}}, {{value_col}}))) %>%
+    ungroup
+}
+
+
+
+
+
