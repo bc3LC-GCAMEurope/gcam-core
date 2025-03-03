@@ -47,11 +47,11 @@ module_gcameurope_L1011.ff_GrossTrade_EUR <- function(command, ...) {
       distinct(country_name, GCAMEU_region, GCAM32_region)
 
     Europe_Single_Market_Regions <- GCAM32_to_EU_EurostatCountries %>%
-      mutate( GCAM32_region = case_when(
+      mutate(GCAM32_region = case_when(
         GCAMEU_region == "UK" ~ "UK",
         GCAMEU_region == "Switzerland" ~ "Switzerland",
         country_name == "Croatia" ~ "EU-12",
-        .default = GCAM32_region
+        TRUE ~ GCAM32_region
       )) %>%
       filter(GCAM32_region %in% c("EU-15", "EU-12", "European Free Trade Association")) %>%
       distinct(GCAMEU_region)
