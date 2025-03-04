@@ -689,11 +689,75 @@ GHGConstrMkt, world/+{name}region, region/+{name}ghgpolicy, ghgpolicy/+market, s
 
 GHGConstr, world/+{name}region, region/+{name}ghgpolicy, ghgpolicy/+market, ghgpolicy/+{year}constraint, ghgpolicy/+constraint, scenario, scenario/world, world/region
 
-GHGConstrLink, world/+{name}region, region/+{name}linked-ghg-policy, linked-ghg-policy/+{year=1975;fillout=1}price-adjust, linked-ghg-policy/+{year=1975;fillout=1}demand-adjust, linked-ghg-policy/+market, linked-ghg-policy/+linked-policy, linked-ghg-policy/+price-unit, linked-ghg-policy/+output-unit, scenario, scenario/world, world/region
+GHGConstrFillout, world/+{name}region, region/+{name}ghgpolicy, ghgpolicy/+market, ghgpolicy/+{year;fillout=1}constraint, ghgpolicy/+constraint, scenario, scenario/world, world/region
 
-GHGConstrLinkAdj, world/+{name}region, region/+{name}linked-ghg-policy, linked-ghg-policy/+{year;fillout=1}price-adjust, linked-ghg-policy/+price-adjust, linked-ghg-policy/+{year;fillout=1}demand-adjust, linked-ghg-policy/+demand-adjust, scenario, scenario/world, world/region
+GHGConstrLinkPriceAdjHist, world/+{name}region, region/+{name}linked-ghg-policy, linked-ghg-policy/+{year;fillout=1}price-adjust, linked-ghg-policy/+price-adjust, scenario, scenario/world, world/region
+
+GHGConstrLinkDemandAdjHist, world/+{name}region, region/+{name}linked-ghg-policy, linked-ghg-policy/+{year;fillout=1}demand-adjust, linked-ghg-policy/+demand-adjust, scenario, scenario/world, world/region
+
+GHGConstrLinkHistoryOLD, world/+{name}region, region/+{name}linked-ghg-policy, linked-ghg-policy/+{year;fillout=1}price-adjust, linked-ghg-policy/+price-adjust, linked-ghg-policy/+{year;fillout=1}demand-adjust, linked-ghg-policy/+demand-adjust, scenario, scenario/world, world/region
+
+GHGConstrLink, world/+{name}region, region/+{name}linked-ghg-policy, linked-ghg-policy/+{year=2020;fillout=1}price-adjust, linked-ghg-policy/+{year=2020;fillout=1}demand-adjust, linked-ghg-policy/+market, linked-ghg-policy/+linked-policy, linked-ghg-policy/+price-unit, linked-ghg-policy/+output-unit, scenario, scenario/world, world/region
+
+GHGConstrLinkAdj, world/+{name}region, region/+{name}linked-ghg-policy, linked-ghg-policy/+{year;fillout=1}price-adjust, linked-ghg-policy/+price-adjust, scenario, scenario/world, world/region
+
+GHGConstrLinkPriceAdj, world/+{name}region, region/+{name}linked-ghg-policy, linked-ghg-policy/+{year;fillout=1}price-adjust, linked-ghg-policy/+price-adjust, scenario, scenario/world, world/region
+
+GHGConstrLinkDemandAdj, world/+{name}region, region/+{name}linked-ghg-policy, linked-ghg-policy/+{year;fillout=1}demand-adjust, linked-ghg-policy/+demand-adjust, scenario, scenario/world, world/region
+
+GHGConstrLinkMktUnits, world/+{name}region, region/+{name}linked-ghg-policy, linked-ghg-policy/+market, linked-ghg-policy/+linked-policy, linked-ghg-policy/+price-unit, linked-ghg-policy/+output-unit, scenario, scenario/world, world/region
 
 GHGConstrLinkMkt, world/+{name}region, region/+{name}linked-ghg-policy, linked-ghg-policy/+market, linked-ghg-policy/+linked-policy, scenario, scenario, scenario/world, world/region
+
+PortfolioStdConstraint,world/+{name}region,region/+{name}policy-portfolio-standard, policy-portfolio-standard/+market, policy-portfolio-standard/+policyType, policy-portfolio-standard/+{year}constraint, policy-portfolio-standard/+constraint,  scenario,scenario/world
+
+LN2ConstraintUnmgd, world/+{name}region, region/+{name}LandAllocatorRoot, LandAllocatorRoot/+{name}LandNode1, LandNode1/+{name}LandNode2, LandNode2/+{name}UnmanagedLandLeaf, UnmanagedLandLeaf/+land-constraint-policy, scenario, scenario/world
+
+LN2ConstraintMgd, world/+{name}region, region/+{name}LandAllocatorRoot, LandAllocatorRoot/+{name}LandNode1, LandNode1/+{name}LandNode2,  LandNode2/+{name}LandLeaf, LandLeaf/+land-constraint-policy, scenario, scenario/world
+
+LN3ConstraintUnmgd, world/+{name}region, region/+{name}LandAllocatorRoot, LandAllocatorRoot/+{name}LandNode1, LandNode1/+{name}LandNode2, LandNode2/+{name}LandNode3, LandNode3/+{name}UnmanagedLandLeaf, UnmanagedLandLeaf/+land-constraint-policy, scenario, scenario/world
+
+LN3ConstraintMgd, world/+{name}region, region/+{name}LandAllocatorRoot, LandAllocatorRoot/+{name}LandNode1, LandNode1/+{name}LandNode2, LandNode2/+{name}LandNode3, LandNode3/+{name}LandLeaf, LandLeaf/+land-constraint-policy, scenario, scenario/world
+
+StubTechResSecOut, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}stub-technology, stub-technology/+{year}period, period/+{name}res-secondary-output, res-secondary-output/+output-ratio, scenario, scenario/world
+
+TechResSecOut, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}technology, technology/+{year}period, period/+{name}res-secondary-output, res-secondary-output/+output-ratio, scenario, scenario/world
+
+StubTechResSecOutPMult, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}stub-technology, stub-technology/+{year}period, period/+{name}res-secondary-output, res-secondary-output/+pMultiplier, scenario, scenario/world
+
+TechInputTax, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}technology, technology/+{year}period, period/+{name}input-tax, scenario, scenario/world
+
+StubTechInputTax, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}stub-technology, stub-technology/+{year}period, period/+{name}input-tax, scenario, scenario/world
+
+StubTechInputSubsidy, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}stub-technology, stub-technology/+{year}period, period/+{name}input-subsidy, scenario, scenario/world
+
+StubTechCO2, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}technology, technology/+{year}period, period/+{name}CO2, scenario, scenario/world
+
+StubTranTechCO2, world/+{name}region, region/+{name}supplysector, supplysector/+{name}tranSubsector, tranSubsector/+{name}technology, technology/+{year}period, period/+{name}CO2, scenario, scenario/world
+
+ResTechCO2, world/+{name}region, region/+{name}resource, resource/+{name}reserve-subresource, reserve-subresource/+{name}resource-reserve-technology, resource-reserve-technology/+{year}period, period/+{name}CO2, scenario, scenario/world
+
+GHGTax, world/+{name}region, region/+{name}ghgpolicy, ghgpolicy/+market, ghgpolicy/+{year}fixedTax, ghgpolicy/+fixedTax, scenario, scenario/world, world/region
+
+GHGTaxFillout, world/+{name}region, region/+{name}ghgpolicy, ghgpolicy/+market, ghgpolicy/+{year;fillout=1}fixedTax, ghgpolicy/+fixedTax, scenario, scenario/world, world/region
+
+SubsectorDeleteInterp, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{apply-to}interpolation-rule, subsector/+{from-year}interpolation-rule, subsector/+{to-year}interpolation-rule,subsector/+{delete}interpolation-rule, interpolation-rule/+{name}interpolation-function, scenario/world, scenario
+
+StubTechDeleteInterp, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}stub-technology, stub-technology/+{apply-to}interpolation-rule, stub-technology/+{from-year}interpolation-rule, stub-technology/+{to-year}interpolation-rule,stub-technology/+{delete}interpolation-rule, interpolation-rule/+{name}interpolation-function, scenario, scenario/world
+
+TranSubsectorDeleteInterp, world/+{name}region, region/+{name}supplysector, supplysector/+{name}tranSubsector, tranSubsector/+{apply-to}interpolation-rule, tranSubsector/+{from-year}interpolation-rule, tranSubsector/+{to-year}interpolation-rule,tranSubsector/+{delete}interpolation-rule, interpolation-rule/+{name}interpolation-function, scenario/world, scenario
+
+TranStubTechDeleteInterp, world/+{name}region, region/+{name}supplysector, supplysector/+{name}tranSubsector, tranSubsector/+{name}stub-technology, stub-technology/+{apply-to}interpolation-rule, stub-technology/+{from-year}interpolation-rule, stub-technology/+{to-year}interpolation-rule,stub-technology/+{delete}interpolation-rule, interpolation-rule/+{name}interpolation-function, scenario, scenario/world
+
+StubTechCoef_NM_Policy, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}stub-technology, stub-technology/+{year}period, period/+{name}minicam-energy-input, minicam-energy-input/+coefficient, scenario, scenario/world
+
+StubTranTechCoef_NM, world/+{name}region, region/+{name}supplysector, supplysector/+{name}tranSubsector, tranSubsector/+{name}stub-technology, stub-technology/+{year}period, period/+{name}minicam-energy-input, minicam-energy-input/+coefficient, scenario, scenario/world
+
+StubTranTechRESOutput, world/+{name}region, region/+{name}supplysector, supplysector/+{name}tranSubsector, tranSubsector/+{name}stub-technology, stub-technology/+{year}period, period/+{name}res-secondary-output, res-secondary-output/+output-ratio, scenario, scenario/world
+
+ExoShutdown, world/+{name}region, region/+{name}supplysector, supplysector/+{name}subsector, subsector/+{name}stub-technology, stub-technology/+{year}period, period/+{name}exogenous-shutdown-decider, exogenous-shutdown-decider/+{year}output-scalar, exogenous-shutdown-decider/+output-scalar, scenario, scenario/world
+
+GlobalTechCO2, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}technology, technology/+{year}period, period/+{name}CO2, scenario, scenario/world, world/global-technology-database
 
 #####, LAND ALLOCATOR
 
