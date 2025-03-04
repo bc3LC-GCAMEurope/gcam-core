@@ -55,7 +55,8 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
                       "L2232.TechCoef_elecownuse_EUR_trade",
                       "L2232.Production_imports_EUR_trade",
                       "L2232.Production_elec_gen_EUR_trade",
-                      "L2232.StubTechElecMarket_backup_EUR")
+                      "L2232.StubTechElecMarket_backup_EUR",
+                      "L2232.SectorUseTrialMarket_en_EUR")
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -154,6 +155,11 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
       distinct(region, supplysector) %>%
       repeat_add_columns(L2232.Supplysector_EURelec %>%  select(-region, -supplysector) %>%  distinct) %>%
       bind_rows(L2232.Supplysector_EURelec)
+
+    # L2232.SectorUseTrialMarket_en_EUR: Create solved markets for the traded sectors
+    L2232.SectorUseTrialMarket_en_EUR <- distinct(L2232.Supplysector_EURelec, region, supplysector) %>%
+      filter(supplysector == "traded electricity") %>%
+      mutate(use.trial.market = 1)
 
     # L2232.SubsectorShrwtFllt_EURelec: subsector (grid region) share-weights in EUR electricity trade
     # No need to read in subsector logit exponents, which are applied to the technology competition
