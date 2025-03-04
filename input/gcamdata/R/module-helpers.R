@@ -1735,13 +1735,12 @@ cogen_stubtech_rename <- function(df_name, env, grid_region_df = grid_regions){
 policy_interpolate <- function(df, group_cols, value_col, year_col = year){
   df %>%
     group_by(across({{group_cols}})) %>%
-
-    # group_by(across(all_of({{group_cols}}))) %>%
     complete({{year_col}} := seq(min({{year_col}}), max({{year_col}}), by = 5)) %>%
     mutate({{value_col}} := case_when(
       n() == 1 ~ {{value_col}},  # Keep original value when only one year exists
       TRUE ~ approx_fun({{year_col}}, {{value_col}}))) %>%
-    ungroup
+    ungroup %>%
+    filter(!is.na({{value_col}}))
 }
 
 
