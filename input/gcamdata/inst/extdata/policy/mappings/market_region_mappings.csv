@@ -4,18 +4,6 @@
 # Column types: cc,
 # ----------,
 region,market
-EU-12,EU
-EU-15,EU
-Australia_NZ,Non-A5
-Canada,Non-A5
-EU-12,Non-A5
-EU-15,Non-A5
-Europe_Eastern,Non-A5
-European Free Trade Association,Non-A5
-Japan,Non-A5
-USA,Non-A5
-Russia,Non-A5_FormerSoviet
-Central Asia,Non-A5_FormerSoviet
 Africa_Eastern,A5_Group1
 Africa_Northern,A5_Group1
 Africa_Southern,A5_Group1
@@ -25,7 +13,7 @@ Brazil,A5_Group1
 Central America and Caribbean,A5_Group1
 China,A5_Group1
 Colombia,A5_Group1
-Europe_Non_EU,A5_Group1
+Turkey,A5_Group1
 Indonesia,A5_Group1
 Mexico,A5_Group1
 Pakistan,A5_Group1
@@ -36,25 +24,90 @@ South Asia,A5_Group1
 South Korea,A5_Group1
 Southeast Asia,A5_Group1
 Taiwan,A5_Group1
+Albania,A5_Group1
+Bosnia and Herzegovina,A5_Group1
+Macedonia,A5_Group1
+Moldova,A5_Group1
+Serbia and Montenegro,A5_Group1
 India,A5_Group2
 Middle East,A5_Group2
+Australia_NZ,Non-A5
+Canada,Non-A5
+Austria,Non-A5
+Belgium,Non-A5
+Bulgaria,Non-A5
+Croatia,Non-A5
+Cyprus,Non-A5
+Czech Republic,Non-A5
+Denmark,Non-A5
+Estonia,Non-A5
+Finland,Non-A5
+France,Non-A5
+Germany,Non-A5
+Greece,Non-A5
+Hungary,Non-A5
+Ireland,Non-A5
+Italy,Non-A5
+Latvia,Non-A5
+Lithuania,Non-A5
+Luxembourg,Non-A5
+Malta,Non-A5
+Netherlands,Non-A5
+Poland,Non-A5
+Portugal,Non-A5
+Romania,Non-A5
+Slovakia,Non-A5
+Slovenia,Non-A5
+Spain,Non-A5
+Sweden,Non-A5
+Japan,Non-A5
+USA,Non-A5
+UK,Non-A5
+Iceland,Non-A5
+Norway,Non-A5
+Switzerland,Non-A5
+Ukraine,Non-A5
+Russia,Non-A5_FormerSoviet
+Belarus,Non-A5_FormerSoviet
+Central Asia,Non-A5_FormerSoviet
+Austria,EU
+Belgium,EU
+Bulgaria,EU
+Croatia,EU
+Cyprus,EU
+Czech Republic,EU
+Denmark,EU
+Estonia,EU
+Finland,EU
+France,EU
+Germany,EU
+Greece,EU
+Hungary,EU
+Ireland,EU
+Italy,EU
+Latvia,EU
+Lithuania,EU
+Luxembourg,EU
+Malta,EU
+Netherlands,EU
+Poland,EU
+Portugal,EU
+Romania,EU
+Slovakia,EU
+Slovenia,EU
+Spain,EU
+Sweden,EU
+USA,World
 Africa_Eastern,World
 Africa_Northern,World
 Africa_Southern,World
 Africa_Western,World
-Argentina,World
 Australia_NZ,World
 Brazil,World
 Canada,World
 Central America and Caribbean,World
 Central Asia,World
 China,World
-Colombia,World
-EU-12,World
-EU-15,World
-Europe_Eastern,World
-Europe_Non_EU,World
-European Free Trade Association,World
 India,World
 Indonesia,World
 Japan,World
@@ -69,4 +122,44 @@ South Asia,World
 South Korea,World
 Southeast Asia,World
 Taiwan,World
-USA,World
+Argentina,World
+Colombia,World
+Austria,World
+Belgium,World
+Bulgaria,World
+Croatia,World
+Cyprus,World
+Czech Republic,World
+Denmark,World
+Estonia,World
+Finland,World
+France,World
+Germany,World
+Greece,World
+Hungary,World
+Ireland,World
+Italy,World
+Latvia,World
+Lithuania,World
+Luxembourg,World
+Malta,World
+Netherlands,World
+Poland,World
+Portugal,World
+Romania,World
+Slovakia,World
+Slovenia,World
+Spain,World
+Sweden,World
+Albania,World
+Belarus,World
+Bosnia and Herzegovina,World
+Iceland,World
+Macedonia,World
+Moldova,World
+Norway,World
+Serbia and Montenegro,World
+Switzerland,World
+Turkey,World
+UK,World
+Ukraine,World

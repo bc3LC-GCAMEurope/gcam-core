@@ -43,14 +43,8 @@ module_policy_L354.FuelStandards <- function(command, ...) {
       gather_years(value_col = "coefficient") %>%
       # Interpolate between years if needed
       filter(!is.na(coefficient)) %>%
-      group_by(region, supplysector, tranSubsector, stub.technology) %>%
-      complete(nesting(region, supplysector, tranSubsector, stub.technology),
-               year = seq(min(year), max(year), 5)) %>%
-      # If group only has one, approx_fun doesn't work, so we use this workaround
-      mutate(coefficient_NA = as.numeric(approx_fun(year, coefficient))) %>%
-      ungroup %>%
-      mutate(coefficient = if_else(!is.na(coefficient_NA), coefficient_NA, coefficient)) %>%
-      select(-coefficient_NA) %>%
+      policy_interpolate(group_cols = c(region, supplysector, tranSubsector, stub.technology),
+                         value_col = coefficient) %>%
       mutate(market.name = region)
 
 

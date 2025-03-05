@@ -14,10 +14,13 @@
 #' @importFrom dplyr bind_rows distinct filter if_else left_join mutate select
 #' @author RLH April 20123
 module_policy_L344.bld_shell_size <- function(command, ...) {
+  MODULE_INPUTS <- c(FILE = "policy/A_building_shell_size",
+                     "L244.ShellConductance_bld",
+                     "L244.Floorspace",
+                     "L244.ShellConductance_bld_EUR",
+                     "L244.Floorspace_EUR")
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "policy/A_building_shell_size",
-             "L244.ShellConductance_bld",
-             "L244.Floorspace"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L344.bld_shell",
              "L344.bld_size"))
@@ -26,24 +29,18 @@ module_policy_L344.bld_shell_size <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    A_building_shell_size <- get_data(all_data, "policy/A_building_shell_size") %>%
-      mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml")))
+    get_data_list(all_data, MODULE_INPUTS)
 
-    L244.ShellConductance_bld <- get_data(all_data, "L244.ShellConductance_bld")
-    L244.Floorspace <- get_data(all_data, "L244.Floorspace")
+    A_building_shell_size <- A_building_shell_size %>% mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml")))
+    L244.ShellConductance_bld <- replace_with_eurostat(L244.ShellConductance_bld, L244.ShellConductance_bld_EUR)
+    L244.Floorspace <- replace_with_eurostat(L244.Floorspace, L244.Floorspace_EUR)
 
     # Convert to long format and interpolate any missing years
     L344.bld_shell_size_overwrite <- A_building_shell_size %>%
       gather_years() %>%
       na.omit() %>%
-      group_by(xml, region, gcam.consumer, variable) %>%
-      # Interpolates between min and max years in A_aeei
-      complete(nesting(xml, region, gcam.consumer, variable), year = seq(min(year), max(year), 5)) %>%
-      # If group only has one, approx_fun doesn't work, so we use this workaround
-      mutate(value_NA = as.numeric(approx_fun(year, value))) %>%
-      ungroup %>%
-      mutate(value = if_else(!is.na(value_NA), value_NA, value)) %>%
-      select(-value_NA)
+      policy_interpolate(group_cols = c(xml, region, gcam.consumer, variable),
+                         value_col = value)
 
     # Now replace shell.conductance in L244.ShellConductance_bld
     L344.bld_shell_overwrite <- L344.bld_shell_size_overwrite %>%

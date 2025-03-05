@@ -15,100 +15,84 @@
 #' @importFrom dplyr bind_rows distinct filter if_else left_join mutate select
 #' @author RLH April 2023
 module_policy_L301.ceilings_floors <- function(command, ...) {
+  STUB_TECHS <- c("L221.StubTech_en",
+                  "L222.StubTech_en",
+                  "L224.StubTech_heat",
+                  "L223.StubTech_elec",
+                  "L2233.StubTech_elec_cool",
+                  "L226.StubTech_en",
+                  "L232.StubTech_ind",
+                  "L2321.StubTech_cement",
+                  "L2322.StubTech_Fert",
+                  "L2323.StubTech_iron_steel",
+                  "L2324.StubTech_Off_road",
+                  "L2325.StubTech_chemical",
+                  "L2326.StubTech_aluminum",
+                  "L244.StubTech_bld")
+  STUB_TECHS <- c(STUB_TECHS, paste0(STUB_TECHS, "_EUR"),
+                  "L225.StubTech_h2")
+  MODULE_INPUTS <- c(FILE = "policy/A_energy_constraints",
+                     FILE = "policy/A_renewable_energy_standards",
+                     FILE = "policy/mappings/policy_tech_mappings",
+                     FILE = "policy/mappings/market_region_mappings",
+                     "L226.StubTechCoef_elecownuse",
+                     "L226.StubTechCoef_electd",
+                     "L2233.GlobalTechEff_elec_cool",
+                     "L222.GlobalTechCoef_en",
+                     "L201.GDP_Scen",
+                     "L201.GDP_GCAM3",
+                     FILE = "policy/GCAM_results/OutputsByTech",
+                     "L239.PrimaryConsKeyword_en",
+                     "L2392.PrimaryConsKeyword_en_NG",
+                     "L221.StubTechCalInput_bioOil",
+                     "L240.Production_reg_imp",
+
+                     "L226.StubTechCoef_elecownuse_EUR",
+                     "L226.TechCoef_electd_EUR",
+                     "L226.StubTechCoef_electd_EUR",
+                     "L221.StubTechCalInput_bioOil_EUR",
+
+                     STUB_TECHS)
+  MODULE_OUTPUTS <- c("L301.policy_port_stnd",
+                      "L301.XML_policy_map",
+                      "L301.policy_RES_coefs",
+                      "L301.RES_secout",
+                      "L301.pmultiplier",
+                      "L301.input_tax",
+                      "L301.input_subsidy",
+                      "L301.policy_RES_coefs_NG",
+                      "L301.RES_secout_NG",
+                      "L301.pmultiplier_NG",
+                      "L301.input_tax_NG",
+                      "L301.input_subsidy_NG")
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "policy/A_energy_constraints",
-             FILE = "policy/A_renewable_energy_standards",
-             FILE = "policy/mappings/policy_tech_mappings",
-             FILE = "policy/mappings/market_region_mappings",
-             "L226.StubTechCoef_elecownuse",
-             "L226.StubTechCoef_electd",
-             "L2233.GlobalTechEff_elec_cool",
-             "L222.GlobalTechCoef_en",
-             "L201.GDP_Scen",
-             "L201.GDP_GCAM3",
-             FILE = "policy/GCAM_results/OutputsByTech",
-             "L221.StubTech_en",
-             "L222.StubTech_en",
-             "L224.StubTech_heat",
-             "L223.StubTech_elec",
-             "L2233.StubTech_elec_cool",
-             "L226.StubTech_en",
-             "L232.StubTech_ind",
-             "L2321.StubTech_cement",
-             "L2322.StubTech_Fert",
-             "L2323.StubTech_iron_steel",
-             "L2324.StubTech_Off_road",
-             "L2325.StubTech_chemical",
-             "L2326.StubTech_aluminum",
-             "L244.StubTech_bld",
-             "L225.StubTech_h2",
-             "L239.PrimaryConsKeyword_en",
-             "L2392.PrimaryConsKeyword_en_NG",
-             "L221.StubTechCalInput_bioOil",
-             "L240.Production_reg_imp") )
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L301.policy_port_stnd",
-             "L301.XML_policy_map",
-             "L301.policy_RES_coefs",
-             "L301.RES_secout",
-             "L301.pmultiplier",
-             "L301.input_tax",
-             "L301.input_subsidy",
-             "L301.policy_RES_coefs_NG",
-             "L301.RES_secout_NG",
-             "L301.pmultiplier_NG",
-             "L301.input_tax_NG",
-             "L301.input_subsidy_NG"
-             ))
+    return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
 
     # Load required inputs -------------------------
-    market_region_mapping <- get_data(all_data, "policy/mappings/market_region_mappings")
+    get_data_list(all_data, MODULE_INPUTS)
 
-    A_energy_constraints <- get_data(all_data, "policy/A_energy_constraints") %>%
-      left_join(market_region_mapping, by = "market") %>%
+    A_energy_constraints <- A_energy_constraints %>%
+      left_join(market_region_mappings, by = "market") %>%
       mutate(region = if_else(is.na(region), market, region))
-    A_renewable_energy_standards <- get_data(all_data, "policy/A_renewable_energy_standards") %>%
-      left_join(market_region_mapping, by = "market") %>%
+    A_renewable_energy_standards <- A_renewable_energy_standards %>%
+      left_join(market_region_mappings, by = "market") %>%
       mutate(region = if_else(is.na(region), market, region),
              policyType = "RES")
-    policy_tech_mappings <- get_data(all_data, "policy/mappings/policy_tech_mappings")
-    L226.StubTechCoef_elecownuse <- get_data(all_data, "L226.StubTechCoef_elecownuse")
-    L226.StubTechCoef_electd <- get_data(all_data, "L226.StubTechCoef_electd")
-    L222.GlobalTechCoef_en <- get_data(all_data, "L222.GlobalTechCoef_en")
-    L2233.GlobalTechEff_elec_cool <- get_data(all_data, "L2233.GlobalTechEff_elec_cool")
 
-    L201.GDP_GCAM3 <- get_data(all_data, "L201.GDP_GCAM3")
-    A_OutputsByTech <- get_data(all_data, "policy/GCAM_results/OutputsByTech") %>%
-      gather_years()
+    A_OutputsByTech <- OutputsByTech %>% gather_years()
 
-    L2392.PrimaryConsKeyword_en_NG <- get_data(all_data, "L2392.PrimaryConsKeyword_en_NG")
-    L301.StubTech_All <- bind_rows(distinct(bind_rows(get_data(all_data, "L221.StubTech_en"),
-                                   # Not all biomassOil techs are in the stubtech
-                                   get_data(all_data, "L221.StubTechCalInput_bioOil")), region, supplysector, subsector, stub.technology),
-                                    get_data(all_data, "L222.StubTech_en"),
-                                   get_data(all_data, "L223.StubTech_elec"),
-                                    get_data(all_data, "L2233.StubTech_elec_cool"),
-                                    get_data(all_data, "L224.StubTech_heat"),
-                                    get_data(all_data, "L225.StubTech_h2"),
-                                    get_data(all_data, "L226.StubTech_en"),
-                                    get_data(all_data, "L232.StubTech_ind"),
-                                    get_data(all_data, "L2321.StubTech_cement"),
-                                    get_data(all_data, "L2322.StubTech_Fert"),
-                                    get_data(all_data, "L2323.StubTech_iron_steel"),
-                                    get_data(all_data, "L2324.StubTech_Off_road"),
-                                    get_data(all_data, "L2325.StubTech_chemical"),
-                                    get_data(all_data, "L2326.StubTech_aluminum"),
-                                    get_data(all_data, "L244.StubTech_bld"),
-                                    get_data(all_data, "L239.PrimaryConsKeyword_en") %>%
-                                     select(-primary.consumption, -year) %>%
-                                     distinct() %>%
-                                     rename(stub.technology = technology),
-                                   get_data(all_data, "L240.Production_reg_imp") %>%
-                                     distinct(region, supplysector, subsector, stub.technology = technology)
-                                   )
+    L301.StubTech_All <- bind_rows(lapply(STUB_TECHS, get)) %>%
+      bind_rows(# Not all biomassOil techs are in the stubtech
+        distinct(L221.StubTechCalInput_bioOil, region, supplysector, subsector, stub.technology),
+        distinct(L221.StubTechCalInput_bioOil_EUR, region, supplysector, subsector, stub.technology),
+        L239.PrimaryConsKeyword_en %>% distinct(region, supplysector, subsector, stub.technology = technology),
+        L240.Production_reg_imp %>% distinct(region, supplysector, subsector, stub.technology = technology)) %>%
+      distinct()
 
     # 1a. Perform any gdp intensity calculations, if needed -------------------
     if (any(!is.na(A_energy_constraints$GDPIntensity_BaseYear))){
@@ -167,25 +151,9 @@ module_policy_L301.ceilings_floors <- function(command, ...) {
       L301.ceilings_floors_NA <- bind_rows(L301.ceilings_floors_NA, L301.futureEnergy)
     }
 
-    L301.ceilings_floors_NA <- L301.ceilings_floors_NA %>%
-      # Leaving grouped on purpose here
-      group_by(region, market, policy.portfolio.standard, policyType, tech_mapping ) %>%
-      # Interpolates between min and max years for each region/policy combo
-      complete(nesting(xml, region, market, policy.portfolio.standard, policyType, tech_mapping ),
-               year = seq(min(year), max(year), 5))
-
-
-    # Separate out groups with only 1 value since they get turned into NAs with approx_fun
-    L301.ceilings_floors_n1 <- L301.ceilings_floors_NA %>%
-      filter(dplyr::n() == 1) %>%
-      ungroup
-
     L301.ceilings_floors <- L301.ceilings_floors_NA %>%
-      filter(dplyr::n() > 1) %>%
-      mutate(constraint = approx_fun(year, constraint)) %>%
-      ungroup %>%
-      bind_rows(L301.ceilings_floors_n1) %>%
-      arrange(region, policyType, year) %>%
+      policy_interpolate(group_cols = c(xml, region, market, policy.portfolio.standard, policyType, tech_mapping),
+                         constraint) %>%
       left_join(policy_tech_mappings, by = "tech_mapping") %>%
       select(region, market, policy.portfolio.standard, policyType, supplysector, subsector, stub.technology, year, constraint)
 
@@ -352,15 +320,11 @@ module_policy_L301.ceilings_floors <- function(command, ...) {
       filter(variable == "pMultiplier") %>%
       gather_years(value_col = "pMultiplier") %>%
       filter(!is.na(pMultiplier)) %>%
-      # Leaving grouped on purpose here
-      group_by(region, market, policy.portfolio.standard, policyType, tech_mapping) %>%
-      # Interpolates between min and max years for each region/policy combo
-      complete(nesting(xml, region, market, policy.portfolio.standard, policyType, tech_mapping),
-               year = seq(min(year), max(year), 5)) %>%
-      mutate(pMultiplier = approx_fun(year, pMultiplier)) %>%
-      ungroup %>%
+      policy_interpolate(group_cols = c(region, market, policy.portfolio.standard, policyType, tech_mapping),
+                         value_col = pMultiplier) %>%
       left_join(policy_tech_mappings, by = "tech_mapping") %>%
       select(region, supplysector, subsector, stub.technology, res.secondary.output = policy.portfolio.standard, pMultiplier, year)
+
 
     # 8. Make mapping of policies to xml file names --------------------
     L301.XML_policy_map <- distinct(A_energy_constraints, xml, policy.portfolio.standard, market) %>%

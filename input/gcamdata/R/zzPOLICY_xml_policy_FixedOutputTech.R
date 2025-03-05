@@ -14,19 +14,21 @@ module_policy_FixedOutputTech_xml <- function(command, ...) {
                          get_xml_names("policy/A_FixedOutputTranTech.csv", "policy_FixedOutputTech.xml"))
   names(all_xml_names) <- rep("XML", length(all_xml_names))
 
+  MODULE_INPUTS <- c("L305.StubTechFixedOutput",
+                     "L305.StubTechLifetime",
+                     "L305.GlbTechFixedOutput",
+                     "L305.StubTranTechFixedOutput",
+                     "L305.GlobalTranTechInterp",
+                     "L305.GlobalTranTechShrwt",
+                     "L305.GlobalTranTechSCurve",
+                     "L305.StubTranTechLoadFactor",
+                     "L305.StubTranTechCost",
+                     "L305.StubTechTrackCapital",
+                     "L305.StubTranTechCalInput",
+                     "L305.StubTranTechCoef")
+
   if(command == driver.DECLARE_INPUTS) {
-    return(c("L305.StubTechFixedOutput",
-             "L305.StubTechLifetime",
-             "L305.GlbTechFixedOutput",
-             "L305.StubTranTechFixedOutput",
-             "L305.GlobalTranTechInterp",
-             "L305.GlobalTranTechShrwt",
-             "L305.GlobalTranTechSCurve",
-             "L305.StubTranTechLoadFactor",
-             "L305.StubTranTechCost",
-             "L305.StubTechTrackCapital",
-             "L305.StubTranTechCalInput",
-             "L305.StubTranTechCoef"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(all_xml_names)
   } else if(command == driver.MAKE) {
@@ -34,18 +36,7 @@ module_policy_FixedOutputTech_xml <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    L305.StubTechFixedOutput <- get_data(all_data, "L305.StubTechFixedOutput")
-    L305.StubTechLifetime <- get_data(all_data, "L305.StubTechLifetime")
-    L305.GlbTechFixedOutput <- get_data(all_data, "L305.GlbTechFixedOutput")
-    L305.StubTranTechFixedOutput  <- get_data(all_data, "L305.StubTranTechFixedOutput")
-    L305.GlobalTranTechInterp <- get_data(all_data, "L305.GlobalTranTechInterp")
-    L305.GlobalTranTechShrwt <- get_data(all_data, "L305.GlobalTranTechShrwt")
-    L305.GlobalTranTechSCurve <- get_data(all_data, "L305.GlobalTranTechSCurve")
-    L305.StubTranTechLoadFactor <- get_data(all_data, "L305.StubTranTechLoadFactor")
-    L305.StubTranTechCost <- get_data(all_data, "L305.StubTranTechCost")
-    L305.StubTechTrackCapital <- get_data(all_data, "L305.StubTechTrackCapital")
-    L305.StubTranTechCalInput <- get_data(all_data, "L305.StubTranTechCalInput")
-    L305.StubTranTechCoef <- get_data(all_data, "L305.StubTranTechCoef")
+    get_data_list(all_data, MODULE_INPUTS)
 
     L305.GlbTechShrwt <- L305.GlbTechFixedOutput %>%
       select(-minicam.non.energy.input, -input.cost)

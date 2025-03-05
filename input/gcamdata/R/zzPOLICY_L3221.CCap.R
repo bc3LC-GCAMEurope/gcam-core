@@ -15,33 +15,28 @@
 #' @author RLH April 2023
 module_policy_L3221.CCap <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "policy/A_CCap_Constraint",
-             FILE = "policy/mappings/policy_sector_mappings",
-             FILE = "policy/mappings/policy_tranSubsector_mappings",
-             FILE = "policy/mappings/policy_resource_mappings",
-             FILE = "policy/mappings/ghg_link",
-             FILE = "policy/GCAM_results/CO2byTech",
-             FILE = "policy/mappings/market_region_mappings",
-             "L210.ResTechCoef",
-             "L221.StubTech_en",
-             "L222.StubTech_en",
-             "L224.StubTech_heat",
-             "L223.StubTech_elec",
-             "L2233.StubTech_elec_cool",
-             "L226.StubTech_en",
-             "L232.StubTech_ind",
-             "L2321.StubTech_cement",
-             "L2322.StubTech_Fert",
-             "L2323.StubTech_iron_steel",
-             "L2324.StubTech_Off_road",
-             "L2325.StubTech_chemical",
-             "L2326.StubTech_aluminum",
-             "L244.StubTech_bld",
-             "L225.StubTech_h2",
-             "L239.PrimaryConsKeyword_en",
-             "L254.StubTranTech",
-             "L201.GDP_Scen"
-             ))
+    chunklist <- find_chunks()
+    chunkoutputs <- chunk_outputs(chunklist$name) %>%
+      filter(grepl("StubTech_", output),
+             !grepl("_aglu_|_emissions_", name),
+             !grepl("transport", name))
+    STUB_TECHS <- chunkoutputs$output
+    MODULE_INPUTS <- c(FILE = "policy/A_CCap_Constraint",
+                       FILE = "policy/mappings/policy_sector_mappings",
+                       FILE = "policy/mappings/policy_tranSubsector_mappings",
+                       FILE = "policy/mappings/policy_resource_mappings",
+                       FILE = "policy/mappings/ghg_link",
+                       FILE = "policy/GCAM_results/CO2byTech",
+                       FILE = "policy/mappings/market_region_mappings",
+                       "L210.ResTechCoef",
+                       "L210.ResTechCoef_EUR",
+                       "L201.GDP_Scen",
+                       STUB_TECHS,
+                       "L239.PrimaryConsKeyword_en",
+                       "L239.PrimaryConsKeyword_en_EUR",
+                       "L254.StubTranTech",
+                       "L254.StubTranTech_EUR")
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L3221.CCap_constraint",
              "L3221.CCap_link_regions",
@@ -53,48 +48,28 @@ module_policy_L3221.CCap <- function(command, ...) {
 
     all_data <- list(...)[[1]]
 
-    # Load required inputs
-    A_CCap_Constraint <- get_data(all_data, "policy/A_CCap_Constraint") %>%
-      mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml")))
-    policy_sector_mappings <- get_data(all_data, "policy/mappings/policy_sector_mappings")
-    policy_tranSubsector_mappings <- get_data(all_data, "policy/mappings/policy_tranSubsector_mappings")
-    policy_resource_mappings <- get_data(all_data, "policy/mappings/policy_resource_mappings")
+    # Load required inputs ------------------
+    get_data_list(all_data, MODULE_INPUTS)
+
+    A_CCap_Constraint <- A_CCap_Constraint %>% mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml")))
+
     policy_mappings <- bind_rows(policy_sector_mappings,
                                  policy_tranSubsector_mappings,
                                  policy_resource_mappings)
-    market_region_mappings <- get_data(all_data, "policy/mappings/market_region_mappings")
-    ghg_link <- get_data(all_data, "policy/mappings/ghg_link")
 
+    L239.PrimaryConsKeyword_en <- replace_with_eurostat(L239.PrimaryConsKeyword_en, L239.PrimaryConsKeyword_en_EUR)
 
-    L3221.StubTech_All <- bind_rows(get_data(all_data, "L221.StubTech_en"),
-                                    get_data(all_data, "L222.StubTech_en"),
-                                    get_data(all_data, "L223.StubTech_elec"),
-                                    get_data(all_data, "L2233.StubTech_elec_cool"),
-                                    get_data(all_data, "L224.StubTech_heat"),
-                                    get_data(all_data, "L225.StubTech_h2"),
-                                    get_data(all_data, "L226.StubTech_en"),
-                                    get_data(all_data, "L232.StubTech_ind"),
-                                    get_data(all_data, "L2321.StubTech_cement"),
-                                    get_data(all_data, "L2322.StubTech_Fert"),
-                                    get_data(all_data, "L2323.StubTech_iron_steel"),
-                                    get_data(all_data, "L2324.StubTech_Off_road"),
-                                    get_data(all_data, "L2325.StubTech_chemical"),
-                                    get_data(all_data, "L2326.StubTech_aluminum"),
-                                    get_data(all_data, "L244.StubTech_bld"),
-                                    get_data(all_data, "L239.PrimaryConsKeyword_en") %>%
-                                      select(-primary.consumption, -year) %>%
-                                      distinct() %>%
-                                      rename(stub.technology = technology))
-
-    L254.StubTranTech <- get_data(all_data, "L254.StubTranTech") %>%
-                                      filter(sce == "CORE") %>%
-                                      select(-sce)
-    L210.ResTech <- get_data(all_data, "L210.ResTechCoef") %>%
+    L210.ResTech <- replace_with_eurostat(L210.ResTechCoef, L210.ResTechCoef_EUR) %>%
       distinct(region, resource, reserve.subresource, resource.reserve.technology)
 
-    L201.GDP_Scen <- get_data(all_data, "L201.GDP_Scen")
-    CO2byTech <- get_data(all_data, "policy/GCAM_results/CO2byTech") %>%
-      gather_years()
+    L254.StubTranTech <- replace_with_eurostat(L254.StubTranTech, L254.StubTranTech_EUR)  %>%
+      filter(sce == "CORE") %>%
+      select(-sce)
+
+    L3221.StubTech_All <- bind_rows(lapply(STUB_TECHS, get)) %>%
+      bind_rows(L239.PrimaryConsKeyword_en %>% distinct(region, supplysector, subsector, stub.technology = technology))
+
+    CO2byTech <- CO2byTech %>% gather_years()
 
     # 1. Write constraint to correct regions ----------------------------
     # When a constraint applies to more than one region, we don't need to write the
@@ -154,7 +129,7 @@ module_policy_L3221.CCap <- function(command, ...) {
     L3221.CCap_tech <- filter(L3221.CCap_tech, !is.na(stub.technology))
 
     # Shouldn't have any NAs left
-    stopifnot(!any(is.na(L3221.CCap_tech)))
+    stopifnot(!any(is.na(L3221.CCap_tech %>% select(-subsector0))))
 
     # 3. Add custom CO2 market to transportation technologies ----------------------------
     L3221.CCap_tranTech_pre <- policy_mappings %>%

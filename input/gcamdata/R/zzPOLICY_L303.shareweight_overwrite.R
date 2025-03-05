@@ -50,7 +50,7 @@ module_policy_303.shareweight_overwrite <- function(command, ...) {
     L303.shareweight_interp <- L303.shareweight_interp %>%
       filter(!grepl("trn", supplysector))
 
-    # Produce outputs
+    # Produce outputs -------------------
     L303.shareweight_interp %>%
       filter(is.na(stub.technology)) %>%
       select(-stub.technology) %>%

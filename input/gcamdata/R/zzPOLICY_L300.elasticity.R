@@ -18,14 +18,20 @@ module_policy_L300.elasticity <- function(command, ...) {
               inputs_of("module_energy_aluminum_incelas_SSP_xml"),
               inputs_of("module_energy_cement_incelas_SSP_xml"),
               inputs_of("module_energy_chemical_incelas_SSP_xml"),
-              inputs_of("module_energy_other_industry_incelas_SSP_xml")
+              inputs_of("module_energy_other_industry_incelas_SSP_xml"),
+              inputs_of("module_energy_paper_incelas_SSP_xml"),
+              inputs_of("module_energy_Off_road_incelas_SSP_xml")
               )
+  MODULE_INPUTS <- c(FILE = "policy/A_elasticity",
+                     "L254.IncomeElasticity_trn",
+                     "L254.PriceElasticity_trn",
+                     "L254.PerCapitaBased_trn",
+                     "L254.IncomeElasticity_trn_EUR",
+                     "L254.PriceElasticity_trn_EUR",
+                     "L254.PerCapitaBased_trn_EUR",
+                     INDUSTRY_INCELAS)
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "policy/A_elasticity",
-             "L254.IncomeElasticity_trn",
-             "L254.PriceElasticity_trn",
-             "L254.PerCapitaBased_trn",
-             INDUSTRY_INCELAS))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L300.elasticity_income",
              "L300.elasticity_price",
@@ -34,18 +40,21 @@ module_policy_L300.elasticity <- function(command, ...) {
 
     all_data <- list(...)[[1]]
 
-    # Load required inputs
-    A_elasticity <- get_data(all_data, "policy/A_elasticity") %>%
-      mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml")))
+    # Load required inputs ----------------------
+    get_data_list(all_data, MODULE_INPUTS)
+    A_elasticity <- A_elasticity %>% mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml")))
 
-    L254.IncomeElasticity_trn <- get_data(all_data, "L254.IncomeElasticity_trn") %>%
+    L254.PerCapitaBased_trn <- replace_with_eurostat(L254.PerCapitaBased_trn, L254.PerCapitaBased_trn_EUR)
+
+    L254.IncomeElasticity_trn <- replace_with_eurostat(L254.IncomeElasticity_trn, L254.IncomeElasticity_trn_EUR) %>%
       tidyr::pivot_longer(income.elasticity, names_to = "elasticity.type")
-    L254.PriceElasticity_trn <- get_data(all_data, "L254.PriceElasticity_trn") %>%
+    L254.PriceElasticity_trn <- replace_with_eurostat(L254.PriceElasticity_trn, L254.PriceElasticity_trn_EUR)  %>%
       tidyr::pivot_longer(price.elasticity, names_to = "elasticity.type")
-    L254.PerCapitaBased_trn <- get_data(all_data, "L254.PerCapitaBased_trn")
+
 
     L300.all_incelas <- bind_rows(L254.IncomeElasticity_trn, L254.PriceElasticity_trn)
-    # Load all industry incelas
+
+    # Load all industry incelas -------------------------------
     for (nm in INDUSTRY_INCELAS){
       nm_sce <- tail(strsplit(nm, "_")[[1]], 1)
       tmp <- get_data(all_data, nm) %>%
@@ -54,22 +63,16 @@ module_policy_L300.elasticity <- function(command, ...) {
       L300.all_incelas <- bind_rows(L300.all_incelas, tmp)
     }
 
-    # Convert to long format and interpolate any missing years
+    # Convert to long format and interpolate any missing years -------------------
     if (any(is.na(A_elasticity$SSP))){
       L300.elasticity_noSSP <- A_elasticity %>%
         filter(is.na(SSP)) %>%
         select(-SSP) %>%
-        gather_years() %>%
-        group_by(xml, region, energy.final.demand, elasticity.type) %>%
-        # Interpolates between min and max years in A_aeei
-        complete(nesting(xml, region, energy.final.demand, elasticity.type), year = seq(min(year), max(year), 5)) %>%
-        # If group only has one, approx_fun doesn't work, so we use this workaround
-        mutate(value_NA = as.numeric(approx_fun(year, value))) %>%
-        ungroup %>%
-        mutate(shell.conductance = if_else(!is.na(value_NA), value_NA, value)) %>%
-        select(-value_NA, -value)
+        gather_years(value_col = shell.conductance) %>%
+        policy_interpolate(group_cols = c(xml, region, energy.final.demand, elasticity.type),
+                           value_col = shell.conductance)
     } else { L300.elasticity_noSSP <- tibble(xml = character(), region = character(), energy.final.demand = character(),
-                                             elasticity.type = character(), year = numeric(), value = numeric())}
+                                             elasticity.type = character(), year = numeric(), shell.conductance = numeric())}
 
     if (any(!is.na(A_elasticity$SSP))){
       L300.elasticity_SSP <- A_elasticity %>%
@@ -92,6 +95,7 @@ module_policy_L300.elasticity <- function(command, ...) {
       # add in xml name
       left_join_error_no_match(distinct(L300.elasticity, region, xml, energy.final.demand), by = c("region", "energy.final.demand"))
 
+    # Outputs --------------------------
 
     L300.elasticity %>%
       filter(elasticity.type == "income.elasticity") %>%
