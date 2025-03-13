@@ -6,7 +6,7 @@
 * CONTRACTOR MAKES ANY WARRANTY, EXPRESS OR IMPLIED, OR ASSUMES ANY
 * LIABILITY FOR THE USE OF THIS SOFTWARE. This notice including this
 * sentence must appear on any copies of this computer software.
-* 
+*
 * EXPORT CONTROL
 * User agrees that the Software will not be shipped, transferred or
 * exported into any country or used in any manner prohibited by the
@@ -21,33 +21,35 @@
 * (including without limitation Iran, Syria, Sudan, Cuba, and North Korea)
 *     and that User is not otherwise prohibited
 * under the Export Laws from receiving the Software.
-* 
+*
 * Copyright 2011 Battelle Memorial Institute.  All Rights Reserved.
-* Distributed as open-source under the terms of the Educational Community 
+* Distributed as open-source under the terms of the Educational Community
 * License version 2.0 (ECL 2.0). http://www.opensource.org/licenses/ecl2.php
-* 
+*
 * For further details, see: http://www.globalchange.umd.edu/models/gcam/
 *
 */
 
 
-/*! 
- * \file thermal_building_service_input.cpp
- * \ingroup Objects
- * \brief The ThermalBuildingServiceInput class source file.
- * \author Pralit Patel
- * \author Jiyong Eom
- */
+/*!
+* \file thermal_building_service_input.cpp
+* \ingroup Objects
+* \brief The ThermalBuildingServiceInput class source file.
+* \author Pralit Patel
+* \author Jiyong Eom
+*/
 
 #include "util/base/include/definitions.h"
 #include <iostream>
 #include <cmath>
 
 #include "functions/include/thermal_building_service_input.h"
+#include "containers/include/scenario.h"
+#include "marketplace/include/marketplace.h"
 #include "util/base/include/xml_helper.h"
-#include "sectors/include/sector_utils.h"
+#include "util/base/include/ivisitor.h"
 #include "functions/include/satiation_demand_function.h"
-#include "functions/include/building_node_input.h"
+#include "containers/include/market_dependency_finder.h"
 
 using namespace std;
 
@@ -56,19 +58,22 @@ extern Scenario* scenario;
 //! Default Constructor
 ThermalBuildingServiceInput::ThermalBuildingServiceInput()
 {
+    mSatiationDemandFunction = 0;
 }
 
 //! Destructor
-ThermalBuildingServiceInput::~ThermalBuildingServiceInput() {}
+ThermalBuildingServiceInput::~ThermalBuildingServiceInput() {
+    delete mSatiationDemandFunction;
+}
 
 /*! \brief Get the XML name for reporting to XML file.
- *
- * This public function accesses the private constant string, XML_NAME. This way
- * the tag is always consistent for reporting outputs and can be easily
- * changed.
- * \author Sonny Kim
- * \return The constant XML_NAME.
- */
+*
+* This public function accesses the private constant string, XML_NAME. This way
+* the tag is always consistent for reporting outputs and can be easily
+* changed.
+* \author Sonny Kim
+* \return The constant XML_NAME.
+*/
 const string& ThermalBuildingServiceInput::getXMLNameStatic() {
     static const string XML_REPORTING_NAME = "thermal-building-service-input";
     return XML_REPORTING_NAME;
@@ -82,101 +87,247 @@ const string& ThermalBuildingServiceInput::getXMLReportingName() const {
     return getXMLNameStatic();
 }
 
-void ThermalBuildingServiceInput::completeInit( const string& aRegionName,
-                                        const string& aSectorName,
-                                        const string& aSubsectorName,
-                                        const string& aTechName,
-                                        const IInfo* aTechInfo)
+void ThermalBuildingServiceInput::completeInit(const string& aRegionName,
+    const string& aSectorName,
+    const string& aSubsectorName,
+    const string& aTechName,
+    const IInfo* aTechInfo)
 {
-    BuildingServiceInput::completeInit( aRegionName, aSectorName, aSubsectorName,
-                                        aTechName, aTechInfo );
-    
-    SectorUtils::fillMissingPeriodVectorInterpolated( mDegreeDays );
+    // Indicate that this sector depends on the service this input represents.
+    // Note tech name is the name of the consumer which in GCAM is called directly
+    // and so should be the name used in dependency tracking.
+    scenario->getMarketplace()->getDependencyFinder()->addDependency(aTechName,
+        aRegionName,
+        mName,
+        aRegionName);
+}
+
+void ThermalBuildingServiceInput::initCalc(const string& aRegionName,
+    const string& aSectorName,
+    const bool aIsNewInvestmentPeriod,
+    const bool aIsTrade,
+    const IInfo* aTechInfo,
+    const int aPeriod)
+{
+    /*! \pre There must be a valid region name. */
+    assert(!aRegionName.empty());
+}
+
+void ThermalBuildingServiceInput::copyParam(const IInput* aInput,
+    const int aPeriod)
+{
+    /*!
+     * \warning The ability to copyParams has been left unimplemented for GCAM consumers.
+     */
+    assert(false);
 }
 
 IInput* ThermalBuildingServiceInput::clone() const {
     ThermalBuildingServiceInput* retNodeInput = new ThermalBuildingServiceInput;
-    retNodeInput->copy( *this );
+    retNodeInput->copy(*this);
     return retNodeInput;
 }
 
-void ThermalBuildingServiceInput::copy( const ThermalBuildingServiceInput& aInput ) {
-    BuildingServiceInput::copy( aInput );
-    mCoef = aInput.mCoef;
-    mInternalGainsScalar = aInput.mInternalGainsScalar;
-    mDegreeDays = aInput.mDegreeDays;
-	mBiasAdderEn = aInput.mBiasAdderEn;
+void ThermalBuildingServiceInput::copy(const ThermalBuildingServiceInput& aInput) {
+    mName = aInput.mName;
+    mServiceDemand = aInput.mServiceDemand;
+    mBiasAdderEn = aInput.mBiasAdderEn;
     mB1TradFuel = aInput.mB1TradFuel;
     mB2TradFuel = aInput.mB2TradFuel;
     mB3TradFuel = aInput.mB3TradFuel;
     mPrelastTradFuel = aInput.mPrelastTradFuel;
-    mTradBioBase = aInput.mTradBioBase;
     mServPriceBase = aInput.mServPriceBase;
     mServBaseDens = aInput.mServBaseDens;
-	mCoef = aInput.mCoef;
+    mCoef = aInput.mCoef;
+
+    delete mSatiationDemandFunction;
+    mSatiationDemandFunction = aInput.mSatiationDemandFunction->clone();
+}
+
+bool ThermalBuildingServiceInput::isSameType(const string& aType) const {
+    return aType == getXMLNameStatic();
 }
 
 //! Output debug info to XML
-void ThermalBuildingServiceInput::toDebugXML( const int aPeriod, ostream& aOut, Tabs* aTabs ) const {
+void ThermalBuildingServiceInput::toDebugXML(const int aPeriod, ostream& aOut, Tabs* aTabs) const {
     // write the beginning tag.
-    XMLWriteOpeningTag ( getXMLNameStatic(), aOut, aTabs, mName );
-    
-    XMLWriteElement( mServiceDemand[ aPeriod ], "service", aOut, aTabs );
-    XMLWriteElement( mServiceDensity[ aPeriod ], "service-density", aOut, aTabs );
-    XMLWriteElement( mCoef, "coef", aOut, aTabs );
-	XMLWriteElement( mBiasAdderEn[ aPeriod ], "bias-adder", aOut, aTabs);
+    XMLWriteOpeningTag(getXMLNameStatic(), aOut, aTabs, mName);
+
+    XMLWriteElement(mServiceDemand[aPeriod], "service", aOut, aTabs);
+    XMLWriteElement(mBiasAdderEn[aPeriod], "bias-adder", aOut, aTabs);
     XMLWriteElement(mB1TradFuel, "b1", aOut, aTabs);
     XMLWriteElement(mB2TradFuel, "b2", aOut, aTabs);
     XMLWriteElement(mB3TradFuel, "b3", aOut, aTabs);
     XMLWriteElement(mPrelastTradFuel, "Prelast", aOut, aTabs);
-    XMLWriteElement(mServPriceBase, "price", aOut, aTabs);
+    XMLWriteElement(mServPriceBase, "base-price", aOut, aTabs);
     XMLWriteElement(mServBaseDens, "base-density", aOut, aTabs);
-    XMLWriteElement( mInternalGainsScalar, "internal-gains-scalar", aOut, aTabs );
-    XMLWriteElement( mDegreeDays[ aPeriod ], "degree-days", aOut, aTabs );
-    
+    XMLWriteElement(mCoef, "coef", aOut, aTabs);
+    XMLWriteElement(mServiceDensity[aPeriod], "service-density", aOut, aTabs);
+
     // write the closing tag.
-    XMLWriteClosingTag( getXMLNameStatic(), aOut, aTabs );
+    XMLWriteClosingTag(getXMLNameStatic(), aOut, aTabs);
 }
 
-/*!
- * \brief Calculate the thermal load for energy service.
- * \param aBuildingInput The parent building input from which to get building characteristics.
- * \param aInternalGainsPerSqMeter The level of internal gains normalized per square meter
- *                                 of building floorspace.
- * \param aPeriod The model period.
- * \return The thermal load for heating and cooling.
- */
-double ThermalBuildingServiceInput::calcThermalLoad( const BuildingNodeInput* aBuildingInput,
-                                                     const double aInternalGainsPerSqMeter,
-                                                     const int aPeriod ) const
+double ThermalBuildingServiceInput::calcThermalLoad(const BuildingNodeInput* aBuildingInput,
+    const double aInternalGainsPerSqMeter,
+    const int aPeriod) const
 {
-    /*!
-     * \pre Degree days have been set for this period.
-     */
-    assert( mDegreeDays[ aPeriod ].isInited() );
-    
-    /*!
-     * \pre The internal gains scalar has been set.
-     */
-    assert( mInternalGainsScalar.isInited() );
-    
-    return ( mDegreeDays[ aPeriod ] * aBuildingInput->getShellConductance( aPeriod )
-             * aBuildingInput->getFloorToSurfaceRatio( aPeriod )
-             + mInternalGainsScalar * aInternalGainsPerSqMeter );
-}
-
-
-double ThermalBuildingServiceInput::getCoefficient(const int aPeriod) const {
-
+    // Generic building services do not adjust demands based on thermal load.
     return 1;
 }
 
+
+/*!
+ * \brief Set the calculated service density for reporting.
+ * \param aServiceDensity The calculated service density.
+ * \param aPeriod The model period in which the serivce density was calculated.
+ */
+void ThermalBuildingServiceInput::setServiceDensity(const double aServiceDensity, const int aPeriod) {
+    mServiceDensity[aPeriod].set(aServiceDensity);
+}
+
+
+/*!
+ * \brief Get the satiation demand function to be used in demand calculations.
+ * \return The satiation demand function.
+ */
+SatiationDemandFunction* ThermalBuildingServiceInput::getSatiationDemandFunction() const {
+    return mSatiationDemandFunction;
+}
+
+//! Get the name of the input
+const string& ThermalBuildingServiceInput::getName() const {
+    return mName;
+}
+
+/*!
+ * \brief Get the Physical Demand.
+ * \param aPeriod Model period.
+ * \return Physical demand.
+ */
+double ThermalBuildingServiceInput::getPhysicalDemand(const int aPeriod) const {
+    /*!
+     * \pre The service demand has been calculated for this period.
+     * \note The buildings model does not run in period 0 so we will
+     *       allow an uninitialized value for that period.
+     */
+    assert(aPeriod == 0 || mServiceDemand[aPeriod].isInited());
+
+    return mServiceDemand[aPeriod];
+}
+
+//! Set Physical Demand.
+void ThermalBuildingServiceInput::setPhysicalDemand(double aPhysicalDemand, const string& aRegionName, const int aPeriod)
+{
+    // We are storing the results in the same vector as the calibration data
+    // generally the calculated value should match however it may not if the
+    // solver throws us negative prices.  We must explictly gaurd against
+    // reseting these values in calibration years.
+    if (aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod()) {
+        mServiceDemand[aPeriod].set(aPhysicalDemand);
+    }
+
+    scenario->getMarketplace()->addToDemand(mName, aRegionName,
+        mServiceDemand[aPeriod], aPeriod);
+}
+
+/*!
+ * \brief Get the building service coefficient.
+ * \param aPeriod Model period.
+ * \return The coefficient.
+*/
+double ThermalBuildingServiceInput::getCoefficient(const int aPeriod) const {
+    // Generic building services do not have coefficients.
+    return 1;
+}
+
+double ThermalBuildingServiceInput::getCoef() const {
+    // Generic building services do not have coefficients.
+    return mCoef;
+}
+
+/*!
+ * \brief Get the TradFuel coefficients and bias adder for service demand.
+  * \return The coefficient.
+ */
+
+double ThermalBuildingServiceInput::getTradFuelPrelast() const {
+    return mPrelastTradFuel;
+}
+
+double ThermalBuildingServiceInput::getTradFuelb1() const {
+    return mB1TradFuel;
+}
+
+double ThermalBuildingServiceInput::getTradFuelb2() const {
+    return mB2TradFuel;
+}
+
+double ThermalBuildingServiceInput::getTradFuelb3() const {
+    return mB3TradFuel;
+}
+
+
+double ThermalBuildingServiceInput::getServPriceBase() const {
+    return mServPriceBase;
+}
+
+double ThermalBuildingServiceInput::getServBaseDens() const {
+    return mServBaseDens;
+}
+
+double ThermalBuildingServiceInput::getBiasAdder(const int aPeriod) const {
+    return mBiasAdderEn[aPeriod];
+}
 
 /*! \brief Set the building service coefficient.
  * \param aCoefficient new coefficient value
  * \param aPeriod Model period.
  */
-void ThermalBuildingServiceInput::setCoefficient( const double aCoefficient, const int aPeriod ) {
-    assert( aCoefficient != 0 ); // Can't set coefficients to zero.
-    mCoef.set( aCoefficient );
+void ThermalBuildingServiceInput::setCoefficient(const double aCoefficient, const int aPeriod) {
+    // Generic building services do not have coefficients.
 }
+
+/*!
+ * \brief Return the market price, or unadjusted price, for the building service.
+ * \param aRegionName Region containing the input.
+ * \param aPeriod Period to find the price in.
+ * \return The market or unadjusted price.
+ */
+double ThermalBuildingServiceInput::getPrice(const string& aRegionName, const int aPeriod) const {
+    return scenario->getMarketplace()->getPrice(mName, aRegionName, aPeriod);
+}
+
+void ThermalBuildingServiceInput::setPrice(const string& aRegionName,
+    const double aPrice,
+    const int aPeriod)
+{
+    // The service price is set by the supply sector and so can not be set here.
+}
+
+/*! \brief Returns the price paid for each ThermalBuildingServiceInput.
+* \param aRegionName Name of the containing region.
+* \param aPeriod Model period.
+*/
+double ThermalBuildingServiceInput::getPricePaid(const string& aRegionName, const int aPeriod) const {
+    return getPrice(aRegionName, aPeriod);
+}
+
+/*! \brief Set the price paid for each ThermalBuildingServiceInput.
+*
+* \param aPricePaid new price paid value
+* \param aPeriod Model period.
+*/
+void ThermalBuildingServiceInput::setPricePaid(double aPricePaid, const int aPeriod) {
+    // The service price is set by the supply sector and so can not be set here.
+}
+
+bool ThermalBuildingServiceInput::hasTypeFlag(const int aTypeFlag) const {
+    return false;
+}
+
+void ThermalBuildingServiceInput::accept(IVisitor* aVisitor, const int aPeriod) const {
+    aVisitor->startVisitThermalBuildingServiceInput(this, aPeriod);
+    aVisitor->endVisitThermalBuildingServiceInput(this, aPeriod);
+}
+

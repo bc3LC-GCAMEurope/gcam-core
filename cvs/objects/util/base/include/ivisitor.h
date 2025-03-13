@@ -91,6 +91,7 @@ class LandUseHistory;
 class AgProductionTechnology;
 class NodeInput;
 class BuildingServiceInput;
+class ThermalBuildingServiceInput;
 class BuildingNodeInput;
 class FoodDemandInput;
 class GCAMConsumer;
@@ -250,6 +251,9 @@ public:
 
     virtual void startVisitBuildingServiceInput( const BuildingServiceInput* aBuildingServiceInput, const int aPeriod ) = 0;
     virtual void endVisitBuildingServiceInput( const BuildingServiceInput* aBuildingServiceInput, const int aPeriod ) = 0;
+
+    virtual void startVisitThermalBuildingServiceInput( const ThermalBuildingServiceInput* aThermalBuildingServiceInput, const int aPeriod ) = 0;
+    virtual void endVisitThermalBuildingServiceInput( const ThermalBuildingServiceInput* aThermalBuildingServiceInput, const int aPeriod ) = 0;
 
     virtual void startVisitFoodDemandInput( const FoodDemandInput* aFoodDemandInput, const int aPeriod ) = 0;
     virtual void endVisitFoodDemandInput( const FoodDemandInput* aFoodDemandInput, const int aPeriod ) = 0;

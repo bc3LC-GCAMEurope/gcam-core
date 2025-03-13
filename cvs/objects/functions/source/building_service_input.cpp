@@ -152,7 +152,7 @@ bool BuildingServiceInput::isSameType( const string& aType ) const {
 void BuildingServiceInput::toDebugXML( const int aPeriod, ostream& aOut, Tabs* aTabs ) const {
     // write the beginning tag.
     XMLWriteOpeningTag ( getXMLNameStatic(), aOut, aTabs, mName );
-
+    cout << "getXMLNameStatic(): " << getXMLNameStatic() << ", aOut: " << &aOut << ", aTabs: " << aTabs << ", mName: " << mName << endl;
     XMLWriteElement( mServiceDemand[ aPeriod ], "service", aOut, aTabs );
 	XMLWriteElement(mBiasAdderEn[ aPeriod ], "bias-adder", aOut, aTabs);
     XMLWriteElement(mB1TradFuel, "b1", aOut, aTabs);
