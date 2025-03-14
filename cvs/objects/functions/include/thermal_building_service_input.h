@@ -51,13 +51,15 @@
 #include "util/base/include/value.h"
 #include "util/base/include/time_vector.h"
 
+#include "functions/include/building_node_input.h"
+
 class IFunction;
 class BuildingNodeInput;
 class SatiationDemandFunction;
 
 /*! 
  * \ingroup Objects
- * \brief An input class which demands generic building services.
+ * \brief An input class which demands heating and cooling building services.
  * \details Building services will operate with a building service function which
  *          will gradually satiate demands as affordability of the service increases.
  *
@@ -73,7 +75,11 @@ class SatiationDemandFunction;
  *              - \c SatiationDemandFunction::getXMLNameStatic() BuildingNodeInput::mSatiationDemandFunction
  *                   The self contained satiation demand function which will parse it's own
  *                   parameters.
- *
+ *              - \c degree-days BuildingNodeInput::mDegreeDays
+ *                   Total number of degree * days in a year that the heating or cooling service
+ *                   is required.
+ *              - \c internal-gains-scalar BuildingNodeInput::mInternalGainsScalar
+ *                   The extent which internal gains effects the thermal load requirement.
  * \author Pralit Patel
  * \author Jiyong Eom
  */
@@ -339,14 +345,20 @@ protected:
         //! Demand function coefficients to capture base year  characteristics.
         DEFINE_VARIABLE(SIMPLE | STATE, "prelast", mPrelastTradFuel, Value),
 
-                //! Demand function coefficients to capture base year thermal characteristics.
+        //! Demand function coefficients to capture base year thermal characteristics.
         DEFINE_VARIABLE(SIMPLE | STATE, "price", mServPriceBase, Value),
 
         //! Demand function coefficients to capture base year thermal characteristics.
         DEFINE_VARIABLE(SIMPLE | STATE, "base-density", mServBaseDens, Value),
 
         //! Satiation demand function.
-        DEFINE_VARIABLE( CONTAINER, "satiation-demand-function", mSatiationDemandFunction, SatiationDemandFunction* )
+        DEFINE_VARIABLE( CONTAINER, "satiation-demand-function", mSatiationDemandFunction, SatiationDemandFunction* ),
+
+        //! Demand function coefficients to capture internal gains thermal characteristics.
+        DEFINE_VARIABLE(SIMPLE | STATE, "internal-gains-scalar", mInternalGainsScalar, Value),
+
+        //! Demand function coefficients to capture degree days thermal characteristics.
+        DEFINE_VARIABLE(ARRAY | STATE, "degree-days", mDegreeDays, objects::PeriodVector<Value>)      
     )
     
     void copy( const ThermalBuildingServiceInput& aInput );

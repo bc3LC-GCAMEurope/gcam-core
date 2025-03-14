@@ -139,7 +139,9 @@ void ThermalBuildingServiceInput::copy(const ThermalBuildingServiceInput& aInput
     mServPriceBase = aInput.mServPriceBase;
     mServBaseDens = aInput.mServBaseDens;
     mCoef = aInput.mCoef;
-
+    mInternalGainsScalar = aInput.mInternalGainsScalar;
+    mDegreeDays = aInput.mDegreeDays;
+ 
     delete mSatiationDemandFunction;
     mSatiationDemandFunction = aInput.mSatiationDemandFunction->clone();
 }
@@ -163,7 +165,9 @@ void ThermalBuildingServiceInput::toDebugXML(const int aPeriod, ostream& aOut, T
     XMLWriteElement(mServBaseDens, "base-density", aOut, aTabs);
     XMLWriteElement(mCoef, "coef", aOut, aTabs);
     XMLWriteElement(mServiceDensity[aPeriod], "service-density", aOut, aTabs);
-
+    XMLWriteElement(mInternalGainsScalar, "internal-gains-scalar", aOut, aTabs );
+    XMLWriteElement(mDegreeDays[ aPeriod ], "degree-days", aOut, aTabs );
+ 
     // write the closing tag.
     XMLWriteClosingTag(getXMLNameStatic(), aOut, aTabs);
 }
@@ -172,8 +176,19 @@ double ThermalBuildingServiceInput::calcThermalLoad(const BuildingNodeInput* aBu
     const double aInternalGainsPerSqMeter,
     const int aPeriod) const
 {
-    // Generic building services do not adjust demands based on thermal load.
-    return 1;
+   /*!
+    * \pre Degree days have been set for this period.
+    */
+   assert( mDegreeDays[ aPeriod ].isInited() );
+   
+   /*!
+    * \pre The internal gains scalar has been set.
+    */
+   assert( mInternalGainsScalar.isInited() );
+   
+   return ( mDegreeDays[ aPeriod ] * aBuildingInput->getShellConductance( aPeriod )
+            * aBuildingInput->getFloorToSurfaceRatio( aPeriod )
+            + mInternalGainsScalar * aInternalGainsPerSqMeter );
 }
 
 
