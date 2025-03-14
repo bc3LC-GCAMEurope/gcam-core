@@ -117,15 +117,9 @@ double BuildingServiceFunction::calcDemand( InputSet& input, double consumption,
 
 
                 // May need to make an adjustment in case of negative prices.
-                if (adjustedServiceDensity < (buildingServiceInput->getCoef() *
-                    thermalLoad *
-                    calcServiceDensity(buildingServiceInput, income, basePrice, regionName, scenario->getModeltime()->getFinalCalibrationPeriod())) +
-                    buildingServiceInput->getBiasAdder(scenario->getModeltime()->getFinalCalibrationPeriod())) {
+                if (adjustedServiceDensity < 0) {
 
-                    adjustedServiceDensity = calcServiceDensity(buildingServiceInput, income, basePrice, regionName, scenario->getModeltime()->getFinalCalibrationPeriod()) *
-                        thermalLoad * 
-                        buildingServiceInput->getCoef() +
-                        buildingServiceInput->getBiasAdder(scenario->getModeltime()->getFinalCalibrationPeriod());
+                    adjustedServiceDensity = buildingServiceInput->getServBaseDens();
 
                 }
 
@@ -179,7 +173,7 @@ double BuildingServiceFunction::calcServiceDensity( BuildingServiceInput* aBuild
                                                     const string& aRegionName,
                                                     const int aPeriod ) const
 {
-    const double PriceAdjustParam = aBasePrice - aBuildingServiceInput->getPricePaid(aRegionName, scenario->getModeltime()->getFinalCalibrationPeriod());
+    const double PriceAdjustParam = 0;
 
     const double servicePrice = aBuildingServiceInput->getPricePaid(aRegionName, aPeriod);
     const double servicePriceFin = servicePrice + PriceAdjustParam;
@@ -212,7 +206,7 @@ double BuildingServiceFunction::calcServiceDensCoal(BuildingServiceInput* aBuild
     double biasadder = aBuildingServiceInput->getBiasAdder(aPeriod);
 
 
-    const double PriceAdjustParam = aBasePrice - aBuildingServiceInput->getPricePaid(aRegionName, scenario->getModeltime()->getFinalCalibrationPeriod());
+    const double PriceAdjustParam = 0;
 
     const double servicePrice = aBuildingServiceInput->getPricePaid(aRegionName, aPeriod);
     const double servicePriceFin = servicePrice + PriceAdjustParam;
@@ -256,7 +250,7 @@ double BuildingServiceFunction::calcServiceDensTradBio(BuildingServiceInput* aBu
 
     double biasadder = aBuildingServiceInput->getBiasAdder(aPeriod);
 
-    const double PriceAdjustParam = aBasePrice - aBuildingServiceInput->getPricePaid(aRegionName, scenario->getModeltime()->getFinalCalibrationPeriod());
+    const double PriceAdjustParam = 0;
 
     const double servicePrice = aBuildingServiceInput->getPricePaid(aRegionName, aPeriod);
     const double servicePriceFin = servicePrice + PriceAdjustParam;
