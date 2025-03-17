@@ -136,8 +136,8 @@ module_aglu_L100.FAO_SUA_PrimaryEquivalent <- function(command, ...) {
       filter(GCAM_region_ID %in% SINGLE_MARKET_IDs | source_GCAM_region_ID %in% SINGLE_MARKET_IDs,
              year %in% MODEL_BASE_YEARS) %>%
       # group all non-single market regions into 1
-      mutate(import_GCAM_region_ID = if_else(GCAM_region_ID %in% SINGLE_MARKET_IDs, GCAM_region_ID, -1),
-             export_GCAM_region_ID = if_else(source_GCAM_region_ID %in% SINGLE_MARKET_IDs, source_GCAM_region_ID, -1)) %>%
+      mutate(import_GCAM_region_ID = if_else(GCAM_region_ID %in% SINGLE_MARKET_IDs, GCAM_region_ID, as.integer(-1)),
+             export_GCAM_region_ID = if_else(source_GCAM_region_ID %in% SINGLE_MARKET_IDs, source_GCAM_region_ID, as.integer(-1))) %>%
       group_by(import_GCAM_region_ID, export_GCAM_region_ID, item_code, year) %>%
       summarise(value = sum(value)) %>%
       ungroup %>%
