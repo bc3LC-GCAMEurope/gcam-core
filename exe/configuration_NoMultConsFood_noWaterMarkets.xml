@@ -88,7 +88,7 @@
 		<Value name = "demand">../input/gcamdata/xml/ag_an_demand_input.xml</Value>
 		<!--Value name = "demand">../input/gcamdata/xml/ag_an_demand_input_multiple_consumers.xml</Value-->
 		<Value name = "demand_paper">../input/gcamdata/xml/paper_delete_ag_demand.xml</Value>
-		<Value name = "bio_trade">../input/gcamdata/xml/bio_trade.xml</Value-->
+		<!--Value name = "bio_trade">../input/gcamdata/xml/bio_trade.xml</Value-->
 		<Value name = "bio_trade_EUR">../input/gcamdata/xml/bio_trade_EUR.xml</Value>
 		<!--Value name = "ag_trade">../input/gcamdata/xml/ag_trade.xml</Value-->
 		<Value name = "ag_trade_EUR">../input/gcamdata/xml/ag_trade_EUR.xml</Value>
