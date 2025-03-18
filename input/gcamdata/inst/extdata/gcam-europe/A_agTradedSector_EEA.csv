@@ -1,4 +1,4 @@
-# File: A_agTradedSector.csv
+# File: A_agTradedSector_EEA.csv
 # Title: Supplysector assumptions for traded agricultural markets (including logit exponent for subsector competition)
 # Units: Various
 # Comments: These sectors compete different regions in supplying the pool of globally traded crops (source: GTAP)
