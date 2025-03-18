@@ -103,7 +103,7 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
     L240.Supplysector_tra_EUR <- mutate(A_agTradedSector_EEA, logit.year.fillout = min(MODEL_BASE_YEARS),
            region = SINGLE_MARKET_NAME) %>%
       select(c(LEVEL2_DATA_NAMES[["Supplysector"]], "logit.type")) %>%
-      bind_rows(L240.Supplysector_tra_EUR)
+      bind_rows(L240.Supplysector_tra)
 
     L240.Supplysector_reg_EUR <- mutate(A_agRegionalSector_EEA, logit.year.fillout = min(MODEL_BASE_YEARS)) %>%
       write_to_all_regions(c(LEVEL2_DATA_NAMES[["Supplysector"]], "logit.type"),
