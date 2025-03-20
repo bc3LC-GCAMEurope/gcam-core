@@ -86,7 +86,7 @@ module_gcameurope_L226.en_distribution <- function(command, ...) {
 
     # don't want grid region electd here, since we need to switch to tech instead of stub.tech
     L226.StubTech_en_EUR <- L226.StubTech_en_EUR %>%
-      filter(!(region %in% grid_regions$region & supplysector %in% gcamusa.ELECT_TD_SECTORS))
+      filter(!(region %in% grid_regions$region & grepl("elect_td", stub.technology)))
 
     # L226.StubTechCoef_elecownuse_EUR-------------
     # The ownuse sector is already taken care of in grid regions
@@ -174,14 +174,14 @@ module_gcameurope_L226.en_distribution <- function(command, ...) {
 
     # L226.TechCost_en_EUR: Tech costs for electricity T&D
     L226.TechCost_en_EUR <- L226.GlobalTechCost_en %>%
-      filter(sector.name %in% gcamusa.ELECT_TD_SECTORS) %>%
+      filter(grepl("elect_td", sector.name)) %>%
       repeat_add_columns(grid_regions %>%  select(region)) %>%
       rename(supplysector = sector.name,
              subsector = subsector.name)
 
     # L226.TechShrwt_en_EUR: Tech shareweights for electricity T&D
     L226.TechShrwt_en_EUR <-  L226.GlobalTechShrwt_en %>%
-      filter(sector.name %in% gcamusa.ELECT_TD_SECTORS) %>%
+      filter(grepl("elect_td", sector.name)) %>%
       repeat_add_columns(grid_regions %>%  select(region)) %>%
       rename(supplysector = sector.name,
              subsector = subsector.name)
