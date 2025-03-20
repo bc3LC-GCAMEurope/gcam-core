@@ -38,96 +38,300 @@
 
 
 /*! 
- * \file thermal_building_service_input.h
- * \ingroup Objects
- * \brief ThermalBuildingServiceInput class header file.
- * \author Pralit Patel
- * \author Jiyong Eom
- */
+* \file thermal_building_service_input.h
+* \ingroup Objects
+* \brief ThermalBuildingServiceInput class header file.
+* \author Pralit Patel
+* \author Jiyong Eom
+*/
 
 #include "util/base/include/definitions.h"
 
-#include "functions/include/building_service_input.h"
+#include "functions/include/inested_input.h"
+#include "util/base/include/value.h"
+#include "util/base/include/time_vector.h"
+
+#include "functions/include/building_node_input.h"
+
+class IFunction;
+class BuildingNodeInput;
+class SatiationDemandFunction;
 
 /*! 
  * \ingroup Objects
- * \brief An input class which demands heating or cooling building services.
+ * \brief An input class which demands heating and cooling building services.
  * \details Building services will operate with a building service function which
- *          will gradually satiate demands as affordability of the service increases
- *          and is adjusted for changing climate and building characteristics.
+ *          will gradually satiate demands as affordability of the service increases.
  *
  *          <b>XML specification for ThermalBuildingServiceInput</b>
  *          - XML name: \c ThermalBuildingServiceInput::getXMLNameStatic()
  *          - Contained by: BuildingNodeInput
  *          - Parsing inherited from class: None
- *          - Attributes: \c name BuildingServiceInput::mName
+ *          - Attributes: \c name ThermalBuildingServiceInput::mName
  *          - Elements:
- *              - \c base-service BuildingServiceInput::mServiceDemand
+ *              - \c base-service BuildingNodeInput::mServiceDemand
  *                   The base year service which can be utilized to back out
  *                   coefficients.
- *              - \c internal-gains-scalar ThermalBuildingServiceInput::mInternalGainsScalar
- *                   The extent which internal gains effects the thermal load requirement.
- *              - \c degree-days ThermalBuildingServiceInput::mDegreeDays
- *                   Total number of degree * days in a year that the heating or cooling service
- *                   is required.
- *              - \c SatiationDemandFunction::getXMLNameStatic() BuildingServiceInput::mSatiationDemandFunction
+ *              - \c SatiationDemandFunction::getXMLNameStatic() BuildingNodeInput::mSatiationDemandFunction
  *                   The self contained satiation demand function which will parse it's own
  *                   parameters.
- *
+ *              - \c degree-days BuildingNodeInput::mDegreeDays
+ *                   Total number of degree * days in a year that the heating or cooling service
+ *                   is required.
+ *              - \c internal-gains-scalar BuildingNodeInput::mInternalGainsScalar
+ *                   The extent which internal gains effects the thermal load requirement.
  * \author Pralit Patel
  * \author Jiyong Eom
  */
-class ThermalBuildingServiceInput : public BuildingServiceInput
+class ThermalBuildingServiceInput : public INestedInput
 {
     friend class XMLDBOutputter;
 public:
     ThermalBuildingServiceInput();
     virtual ~ThermalBuildingServiceInput();
-    
+
     static const std::string& getXMLNameStatic();
-    
+
     // Building service specific methods
-    virtual double calcThermalLoad( const BuildingNodeInput* aBuildingInput,
-                                    const double aFloorspace,
-                                    const int aPeriod ) const;
+    void setServiceDensity( const double aServiceDensity, const int aPeriod );
+
+   SatiationDemandFunction* getSatiationDemandFunction() const;
     
+    virtual double calcThermalLoad( const BuildingNodeInput* aBuildingInput,
+                                    const double aInternalGainsPerSqMeter,
+                                    const int aPeriod ) const;
+
+	virtual double getBiasAdder(const int aPeriod) const;
+
+    // INestedInput methods
+    // define them to do nothing since a ThermalBuildingServiceInput is a leaf in the nesting structure
+    // this should be the end point for recursion
+    virtual void removeEmptyInputs() {}
+
+    virtual void initialize() {}
+
+    virtual void calcCoefficient( const std::string& aRegionName, const std::string& aSectorName,
+        const int aTechPeriod ) {}
+
+    virtual void changeElasticity( const std::string& aRegionName, const int aPeriod,
+        const double aAlphaZero ) {}
+
+    virtual void changeSigma( const std::string& aRegionName, const int aPeriod,
+        const double aAlphaZero ) {}
+
+    virtual void calcLevelizedCost( const std::string& aRegionName, const std::string& aSectorName,
+        const int aPeriod, const double aAlphaZero ) {}
+
+    virtual double calcInputDemand( const std::string& aRegionName, const std::string& aSectorName,
+        const int aPeriod, const double aPhysicalOutput, const double aUtilityParameterA,
+        const double aAlphaZero ) { return 0; }
+
+    virtual double calcCapitalOutputRatio( const std::string& aRegionName, const std::string& aSectorName,
+        const int aPeriod, const double aAlphaZero ) { return 1.0; }
+
+    virtual void calcVariableLevelizedCost( const std::string& aRegionName, const std::string& aSectorName,
+        const int aPeriod, const double aAlphaZero ) {}
+
+    virtual const IFunction* getFunction() const { return 0; }
+    
+    virtual double getLevelizedCost( const std::string& aRegionName, const std::string& aSectorName,
+        const int aPeriod ) const { return 0; }
+
+    virtual void applyTechnicalChange( const std::string& aRegionName, const std::string& aSectorName,
+        const int aPeriod, const TechChange& aTechChange ) {}
+
+    virtual void resetCalcLevelizedCostFlag() {}
+
     // IInput methods
     virtual IInput* clone() const;
+    
+    virtual void copyParam( const IInput* aInput,
+                            const int aPeriod );
+
+    virtual bool isSameType( const std::string& aType ) const;
+    
+    virtual const std::string& getName() const;
+
+    virtual const std::string& getMarketName( const std::string& aRegionName ) const { return aRegionName; }
 
     virtual const std::string& getXMLReportingName() const;
     
     virtual const std::string& getXMLName() const;
-    
+
     virtual void toDebugXML( const int aPeriod,
                              std::ostream& aOut,
                              Tabs* aTabs ) const;
     
+    virtual bool hasTypeFlag( const int aTypeFlag ) const;
+
     virtual void completeInit( const std::string& aRegionName,
                                const std::string& aSectorName,
                                const std::string& aSubsectorName,
                                const std::string& aTechName,
                                const IInfo* aTechInfo );
+
+    virtual void initCalc( const std::string& aRegionName,
+                           const std::string& aSectorName,
+                           const bool aIsNewInvestmentPeriod,
+                           const bool aIsTrade,
+                           const IInfo* aTechInfo,
+                           const int aPeriod );
+
+    virtual double getPhysicalDemand( const int aPeriod ) const;
     
+    virtual void setPhysicalDemand( const double aPhysicalDemand,
+                                    const std::string& aRegionName, 
+                                    const int aPeriod );
+
+    virtual double getPrice( const std::string& aRegionName,
+                             const int aPeriod ) const;
+
+    virtual void setPrice( const std::string& aRegionName,
+                           const double aPrice,
+                           const int aPeriod );
+
+    virtual double getPricePaid( const std::string& aRegionName,
+                                 const int aPeriod ) const;
+
+    virtual void setPricePaid( const double aPricePaid,
+                               const int aPeriod );
+
     virtual double getCoefficient(const int aPeriod) const;
-  
+
+	virtual double getCoef() const;
+
+    virtual double getTradFuelPrelast() const;
+
+    virtual double getTradFuelb1() const;
+
+    virtual double getTradFuelb2() const;
+
+    virtual double getTradFuelb3() const;
+    
+    virtual double getServPriceBase() const;
+
+    virtual double getServBaseDens() const;    
+
     virtual void setCoefficient( const double aCoefficient,
                                  const int aPeriod );
+
+    // input methods which will not be implemented
+    virtual double getCurrencyDemand( const int aPeriod ) const
+    {
+        return 0;
+    }
+
+    virtual void setCurrencyDemand( const double aCurrencyDemand,
+                                    const std::string& aRegionName, 
+                                    const int aPeriod )
+    {
+    }
+
+    virtual double getConversionFactor( const int aPeriod ) const
+    {
+        return 0;
+    }
+
+    virtual double getCO2EmissionsCoefficient( const std::string& aGHGName,
+                                             const int aPeriod ) const
+    {
+        return 0;
+    }
+
+    virtual double getCarbonContent( const int aPeriod ) const
+    {
+        return 0;
+    }
+
+    virtual double getTechChange( const int aPeriod ) const
+    {
+        return 0;
+    }
+
+    virtual double getPriceAdjustment() const
+    {
+        return 0;
+    }
+
+    virtual double getCalibrationQuantity( const int aPeriod ) const
+    {
+        return -1;
+    }
+
+    virtual void tabulateFixedQuantity( const std::string& aRegionName,
+                                        const double aFixedOutput,
+                                        const bool aIsInvestmentPeriod,
+                                        const int aPeriod ) {}
+
+    virtual void scaleCalibrationQuantity( const double aScaleFactor ) {}
+
+    virtual double getPriceElasticity( const int aPeriod ) const {return 0;}
+
+    virtual double getIncomeElasticity( const int aPeriod ) const {return 0;}
+    virtual void calcPricePaid( const std::string& aRegionName,
+                                const std::string& aSectorName,
+                                const std::vector<AGHG*>& aGhgs,
+                                const ICaptureComponent* aSequestrationDevice,
+                                const int aLifetimeYears,
+                                const int aPeriod ) {}
+   
+    virtual void copyParamsInto( EnergyInput& aInput,
+        const int aPeriod ) const {}
+
+    virtual void copyParamsInto( NonEnergyInput& aInput,
+        const int aPeriod ) const {}
+
+    virtual void copyParamsInto( RenewableInput& aInput,
+        const int aPeriod ) const {}
+
+    virtual void copyParamsInto( InputSubsidy& aInput,
+        const int aPeriod ) const {}
+
+    virtual void copyParamsInto( InputTax& aInput,
+        const int aPeriod ) const {}
+
+    virtual void copyParamsInto( InputOMVar& aInput,
+                                 const int aPeriod ) const {}
     
+    virtual void copyParamsInto( InputOMFixed& aInput,
+                                 const int aPeriod ) const {}
+    
+    virtual void copyParamsInto( InputCapital& aInput,
+                                 const int aPeriod ) const {}
+
+    virtual void copyParamsInto( NodeInput& aInput,
+        const int aPeriod ) const {}
+
+    virtual void doInterpolations( const int aYear, const int aPreviousYear,
+                                   const int aNextYear, const IInput* aPreviousInput,
+                                   const IInput* aNextInput ) {}
+
+    // IVisitable interface.
+    virtual void accept( IVisitor* aVisitor,
+                         const int aPeriod ) const;
+
+
 protected:
     
     // Define data such that introspection utilities can process the data from this
     // subclass together with the data members of the parent classes.
-    DEFINE_DATA_WITH_PARENT(
-        BuildingServiceInput,
+	DEFINE_DATA_WITH_PARENT(
+		INestedInput,
 
-        //! Internal gains scaling parameter.
-        DEFINE_VARIABLE( SIMPLE, "internal-gains-scalar", mInternalGainsScalar, Value ),
-        
-        //! Degree days by period.
-        DEFINE_VARIABLE( ARRAY, "degree-days", mDegreeDays, objects::PeriodVector<Value> ),
+		//! The name of this input.
+		DEFINE_VARIABLE(SIMPLE, "name", mName, std::string),
 
-        //! Demand function coefficients to capture base year thermal characteristics.
-        DEFINE_VARIABLE( SIMPLE | STATE, "coef", mCoef, Value ),
+		//! Building service demand by period.
+		DEFINE_VARIABLE(ARRAY | STATE, "base-service", mServiceDemand, objects::PeriodVector<Value>),
+
+        //! Energy service density for reporting.
+        DEFINE_VARIABLE(ARRAY | STATE | NOT_PARSABLE, "service-density", mServiceDensity, objects::PeriodVector<Value>),
+
+		//! Demand function coefficients to capture base year thermal characteristics.
+		DEFINE_VARIABLE(SIMPLE | STATE, "coef", mCoef, Value),
+
+		//! Demand function coefficients to capture base year  characteristics.
+		DEFINE_VARIABLE(ARRAY | STATE, "bias-adder", mBiasAdderEn, objects::PeriodVector<Value>),
 
         //! Demand function coefficients to capture base year  characteristics.
         DEFINE_VARIABLE(SIMPLE | STATE, "b1", mB1TradFuel, Value),
@@ -142,20 +346,19 @@ protected:
         DEFINE_VARIABLE(SIMPLE | STATE, "prelast", mPrelastTradFuel, Value),
 
         //! Demand function coefficients to capture base year thermal characteristics.
-        DEFINE_VARIABLE(SIMPLE | STATE, "base-TradBio", mTradBioBase, Value),
-
-        //! Demand function coefficients to capture base year thermal characteristics.
         DEFINE_VARIABLE(SIMPLE | STATE, "price", mServPriceBase, Value),
 
         //! Demand function coefficients to capture base year thermal characteristics.
         DEFINE_VARIABLE(SIMPLE | STATE, "base-density", mServBaseDens, Value),
 
-        //! Demand function coefficients to capture base year thermal characteristics.
-        DEFINE_VARIABLE(ARRAY | STATE, "bias-adder", mBiasAdderEn, objects::PeriodVector<Value>),
+        //! Satiation demand function.
+        DEFINE_VARIABLE( CONTAINER, "satiation-demand-function", mSatiationDemandFunction, SatiationDemandFunction* ),
 
-        //! Demand function coefficients to capture base year thermal characteristics.
-        DEFINE_VARIABLE( SIMPLE | STATE | NOT_PARSABLE, "coefficient", mCoefficient, Value )
+        //! Demand function coefficients to capture internal gains thermal characteristics.
+        DEFINE_VARIABLE(SIMPLE | STATE, "internal-gains-scalar", mInternalGainsScalar, Value),
 
+        //! Demand function coefficients to capture degree days thermal characteristics.
+        DEFINE_VARIABLE(ARRAY | STATE, "degree-days", mDegreeDays, objects::PeriodVector<Value>)      
     )
     
     void copy( const ThermalBuildingServiceInput& aInput );

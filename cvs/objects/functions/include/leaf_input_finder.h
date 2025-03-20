@@ -64,6 +64,7 @@ public:
 
     // IVisitor methods
     virtual void startVisitBuildingServiceInput( const BuildingServiceInput* aBuildingServiceInput, const int aPeriod );
+    virtual void startVisitThermalBuildingServiceInput( const ThermalBuildingServiceInput* aThermalBuildingServiceInput, const int aPeriod );
     // Put a visit for any other type of input which could be a leaf here
 
 private:
