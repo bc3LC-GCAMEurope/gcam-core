@@ -42,6 +42,7 @@
 #include <cassert>
 #include "functions/include/leaf_input_finder.h"
 #include "functions/include/building_service_input.h"
+#include "functions/include/thermal_building_service_input.h"
 
 using namespace std;
 
@@ -52,6 +53,12 @@ LeafInputFinder::LeafInputFinder() {
 void LeafInputFinder::startVisitBuildingServiceInput( const BuildingServiceInput* aBuildingServiceInput, const int aPeriod ) {
     // add this input the the list of found leaves
     BuildingServiceInput* tempPtr = const_cast<BuildingServiceInput*>( aBuildingServiceInput );
+    mInputs.push_back( tempPtr );
+}
+
+void LeafInputFinder::startVisitThermalBuildingServiceInput( const ThermalBuildingServiceInput* aThermalBuildingServiceInput, const int aPeriod ) {
+    // add this input the the list of found leaves
+    ThermalBuildingServiceInput* tempPtr = const_cast<ThermalBuildingServiceInput*>( aThermalBuildingServiceInput );
     mInputs.push_back( tempPtr );
 }
 

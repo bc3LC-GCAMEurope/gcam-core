@@ -24,7 +24,7 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
       "L240.TechCost_tra",
       "L240.TechCoef_tra",
       "L240.Production_tra",
-      # "L240.Supplysector_reg", # no need to copy
+      "L240.Supplysector_reg",
       # "L240.SubsectorAll_reg", # no need to copy
       # "L240.TechShrwt_reg", # no need to copy
       # "L240.Production_reg_dom", # no need to copy
@@ -34,6 +34,8 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
     c(FILE = "common/GCAM_region_names",
       FILE = "common/iso_GCAM_regID",
       FILE = "gcam-europe/A_ff_RegionalTechnology_EUR",
+      FILE = "gcam-europe/A_agRegionalSector_EEA",
+      FILE = "gcam-europe/A_agTradedSector_EEA",
       "Europe_Single_Market_Regions",
       "EuroSingleMarket_BiTrade_Ag",
       "L240.Production_reg_imp", # no need to adjust, but need data
@@ -98,7 +100,16 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
       } else { df_subsector_EUR %>% select(-region_tmp) }
     }
     # 1a: Add euro market to supplysector region ----------------------
-    L240.Supplysector_tra_EUR <- copy_for_EUR(L240.Supplysector_tra)
+    L240.Supplysector_tra_EUR <- mutate(A_agTradedSector_EEA, logit.year.fillout = min(MODEL_BASE_YEARS),
+           region = SINGLE_MARKET_NAME) %>%
+      select(c(LEVEL2_DATA_NAMES[["Supplysector"]], "logit.type")) %>%
+      bind_rows(L240.Supplysector_tra)
+
+    L240.Supplysector_reg_EUR <- mutate(A_agRegionalSector_EEA, logit.year.fillout = min(MODEL_BASE_YEARS)) %>%
+      write_to_all_regions(c(LEVEL2_DATA_NAMES[["Supplysector"]], "logit.type"),
+                           filter(GCAM_region_names, region %in% Europe_Single_Market_Regions$GCAMEU_region)) %>%
+      bind_rows(L240.Supplysector_reg %>% filter(!region %in% Europe_Single_Market_Regions$GCAMEU_region))
+
     L240.SectorUseTrialMarket_tra_EUR <- copy_for_EUR(L240.SectorUseTrialMarket_tra)
 
     # 1b: Add euro market to subsector ------------------------------------

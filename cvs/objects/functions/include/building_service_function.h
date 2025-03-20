@@ -52,6 +52,7 @@
 class IInput;
 class BuildingNodeInput;
 class BuildingServiceInput;
+class ThermalBuildingServiceInput;
 
 /*!
  * \ingroup Objects

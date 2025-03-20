@@ -102,6 +102,7 @@
 #include "consumers/include/gcam_consumer.h"
 #include "functions/include/building_node_input.h"
 #include "functions/include/building_service_input.h"
+#include "functions/include/thermal_building_service_input.h"
 #include "functions/include/satiation_demand_function.h"
 #include "functions/include/food_demand_input.h"
 #include "technologies/include/ag_storage_technology.h"
@@ -2044,6 +2045,36 @@ void XMLDBOutputter::startVisitBuildingServiceInput( const BuildingServiceInput*
 
 void XMLDBOutputter::endVisitBuildingServiceInput( const BuildingServiceInput* aBuildingServiceInput, const int aPeriod ) {
     endVisitInput( aBuildingServiceInput, aPeriod );
+}
+
+void XMLDBOutputter::startVisitThermalBuildingServiceInput( const ThermalBuildingServiceInput* aThermalBuildingServiceInput, const int aPeriod ) {
+    startVisitInput( aThermalBuildingServiceInput, aPeriod );
+
+    if (aThermalBuildingServiceInput->getSatiationDemandFunction()) {
+    writeItemToBuffer( aThermalBuildingServiceInput->getSatiationDemandFunction()->mParsedSatiationImpedance,
+                       "satiation-impedance", *mBufferStack.top(), mTabs.get(), 1, "unitless" );
+    writeItemToBuffer( aThermalBuildingServiceInput->getSatiationDemandFunction()->mParsedSatiationLevel,
+                       "satiation-level", *mBufferStack.top(), mTabs.get(), 1, "GJ/m^2" );
+    }
+
+    const Modeltime* modeltime = scenario->getModeltime();
+    for( int per = 0; per < modeltime->getmaxper(); ++per ) {
+        double serviceDensity = aThermalBuildingServiceInput->mServiceDensity[ per ];
+        if( !objects::isEqual<double>( serviceDensity, 0.0 ) ) {
+            writeItemToBuffer( serviceDensity, "service-density",
+                *mBufferStack.top(), mTabs.get(), per, "GJ/m^2" );
+        }
+
+        double BiasAdderEn = aThermalBuildingServiceInput->getBiasAdder( per );
+        if (!objects::isEqual<double>(BiasAdderEn, 0.0)) {
+            writeItemToBuffer(BiasAdderEn, "bias-adder",
+                *mBufferStack.top(), mTabs.get(), per, "GJ/m^2");
+        }
+    }
+}
+
+void XMLDBOutputter::endVisitThermalBuildingServiceInput( const ThermalBuildingServiceInput* aThermalBuildingServiceInput, const int aPeriod ) {
+    endVisitInput( aThermalBuildingServiceInput, aPeriod );
 }
 
 void XMLDBOutputter::startVisitFoodDemandInput( const FoodDemandInput* aFoodDemandInput, const int aPeriod ) {

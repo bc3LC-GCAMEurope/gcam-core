@@ -187,6 +187,9 @@ public:
     virtual void startVisitBuildingServiceInput( const BuildingServiceInput* aBuildingServiceInput, const int aPeriod );
     virtual void endVisitBuildingServiceInput( const BuildingServiceInput* aBuildingServiceInput, const int aPeriod );
     
+    virtual void startVisitThermalBuildingServiceInput( const ThermalBuildingServiceInput* aThermalBuildingServiceInput, const int aPeriod );
+    virtual void endVisitThermalBuildingServiceInput( const ThermalBuildingServiceInput* aThermalBuildingServiceInput, const int aPeriod );
+    
     virtual void startVisitFoodDemandInput( const FoodDemandInput* aFoodDemandInput, const int aPeriod );
     virtual void endVisitFoodDemandInput( const FoodDemandInput* aFoodDemandInput, const int aPeriod );
 

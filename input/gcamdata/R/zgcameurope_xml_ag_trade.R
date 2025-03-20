@@ -19,7 +19,7 @@ module_gcameurope_ag_trade_xml <- function(command, ...) {
       "L240.TechCost_tra_EUR",
       "L240.TechCoef_tra_EUR",
       "L240.Production_tra_EUR",
-      "L240.Supplysector_reg",
+      "L240.Supplysector_reg_EUR",
       "L240.SubsectorAll_reg",
       "L240.TechShrwt_reg",
       "L240.TechCoef_reg_EUR",
@@ -49,7 +49,7 @@ module_gcameurope_ag_trade_xml <- function(command, ...) {
       add_xml_data(L240.TechCost_tra_EUR, "TechCost") %>%
       add_xml_data(L240.TechCoef_tra_EUR, "TechCoef") %>%
       add_xml_data(L240.Production_tra_EUR, "Production") %>%
-      add_logit_tables_xml(L240.Supplysector_reg, "Supplysector") %>%
+      add_logit_tables_xml(L240.Supplysector_reg_EUR, "Supplysector") %>%
       add_logit_tables_xml(L240.SubsectorAll_reg, "SubsectorAll", base_logit_header = "SubsectorLogit") %>%
       add_xml_data(L240.TechShrwt_reg, "TechShrwt") %>%
       add_xml_data(L240.TechCoef_reg_EUR, "TechCoef") %>%

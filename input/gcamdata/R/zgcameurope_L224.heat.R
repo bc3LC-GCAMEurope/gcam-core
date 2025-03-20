@@ -40,16 +40,16 @@ module_gcameurope_L224.heat <- function(command, ...) {
                      "L1231.eff_R_elec_F_tech_Yh",
                      "L124.in_EJ_R_heat_F_Yh",
                      "L124.heatoutratio_R_elec_F_tech_Yh",
+                     "L124.out_EJ_R_heatfromelec_F_Yh_EUR",
+                     "L124.out_EJ_R_heatfromelec_F_Yh",
                      "L2235.StubTech_elecS_cool_EUR",
                      OUTPUTS_TO_COPY_FILTER)
 
   MODULE_OUTPUTS <- c("L224.StubTechCalInput_heat_EUR",
                       "L224.StubTechCoef_heat_EUR",
-                      "L224.StubTechSecOut_elec_EUR",
-                      "L224.StubTechCost_elec_EUR",
-                      "L224.StubTechSecOut_elecS_EUR",
-                      "L224.StubTechCost_elecS_EUR",
                       "L224.StubTechCalOutput_heat_EUR",
+                      "L224.StubTechFixOutput_heat_EUR",
+                      "L224.GlobalTechShrwt_heat_EUR",
                       paste0(OUTPUTS_TO_COPY_FILTER, "_EUR"))
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -158,94 +158,44 @@ module_gcameurope_L224.heat <- function(command, ...) {
              tech.share.weight = subs.share.weight) %>%
       select(LEVEL2_DATA_NAMES[["StubTechProd"]])
 
-    # L224.StubTechSecOut_elec_EUR ------------
-    # Secondary output of heat, applied to electricity generation technologies
-    # NOTE: This is complicated. Initially tried using historical information for all model periods that fall within historical time
-    # (i.e. not just the model base years). However for regions like the FSU where historical periods often have very low output of heat
-    # from the district heat sector, and most heat as a secondary output from the electricity sector, the secondary output heat can easily
-    # exceed the demands from the end-use sectors, causing model solution failure. For this reason, the convention applied here is to
-    # use the secondary output of heat from the power sector only in the model base years.
-    L224.StubTechSecOut_elec_EUR_pre <- L124.heatoutratio_R_elec_F_tech_Yh_EUR %>%
+    # L224.StubTechFixOutput_heat_EUR -----------------------
+    # Rather than use secondary output for electricity, we are going to use a fixed output
+    # In the core, there is a secondary output from electricity in historical years, but not in future years
+    # Then there is a huge increase in district heat output in future years, which is not realistic.
+    # However we can't even do this because the electricity structure doesn't allow us to have a sec-output only in historical years for the last vintage
+    # So we are going to use a fixed output, which stays in the future, also preventing massive increases in district heat output in the first modelled year
+    L224.StubTechFixOutput_heat_EUR <- replace_with_eurostat(L124.out_EJ_R_heatfromelec_F_Yh, L124.out_EJ_R_heatfromelec_F_Yh_EUR) %>%
       filter(year %in% MODEL_BASE_YEARS) %>%
       left_join(GCAM_region_names, by = "GCAM_region_ID") %>%
-      left_join(calibrated_techs %>%
-                  select(sector, fuel, supplysector, subsector, technology) %>%
-                  distinct, by = c("sector", "fuel", "technology")) %>%
-      mutate(stub.technology = technology,
-             secondary.output = A24.sector[["supplysector"]],
-             output.ratio = round(value, energy.DIGITS_CALOUTPUT)) %>%
-      select(LEVEL2_DATA_NAMES[["StubTechSecOut"]])
+      filter(region %in% L224.StubTech_heat_EUR$region) %>%
+      # First calculate total heat output from electricity
+      group_by(region, year) %>%
+      summarise(fixedOutput = sum(value)) %>%
+      ungroup %>%
+      # assign to a new electricity subsector
+      mutate(supplysector = "district heat",
+             subsector = "electricity",
+             stub.technology = "electricity") %>%
+      # need to repeat last year in future
+      complete(year = MODEL_YEARS, nesting(region, supplysector, subsector, stub.technology)) %>%
+      group_by(region, supplysector, subsector, stub.technology) %>%
+      mutate(fixedOutput = if_else(year > MODEL_FINAL_BASE_YEAR, fixedOutput[year == MODEL_FINAL_BASE_YEAR], fixedOutput)) %>%
+      ungroup %>%
+      mutate(share.weight.year = year,
+             subs.share.weight = 0,
+             tech.share.weight = 0)
 
-    # For regions with segments, need to change the elec sector names
-    L224.StubTechSecOut_elecS_EUR <- L224.StubTechSecOut_elec_EUR_pre %>%
-      select(-supplysector, -subsector) %>%
-      # change sector names for electricity segments
-      repeat_add_columns(distinct(A23.elecS_naming, name_adder)) %>%
-      mutate(stub.technology = paste(stub.technology, name_adder, sep = "_")) %>%
-      left_join(L2235.StubTech_elecS_cool_EUR, by = c("region", "stub.technology" = "subsector")) %>%
-      select(region, supplysector, subsector0, subsector = stub.technology, stub.technology = stub.technology.y,
-             year, secondary.output, output.ratio) %>%
-      na.omit()
+    # Adjust L224.SubsectorLogit_heat_EUR  to include new subsectors
+    L224.SubsectorLogit_heat_EUR <- L224.StubTechFixOutput_heat_EUR %>%
+      distinct(region, supplysector, subsector) %>%
+      mutate(logit.year.fillout = 1975,
+             logit.exponent = -6) %>%
+      bind_rows(L224.SubsectorLogit_heat_EUR)
 
-    # Remove in regions that are in grid regions
-    L224.StubTechSecOut_elec_EUR <- L224.StubTechSecOut_elec_EUR_pre %>%
-      anti_join(L224.StubTechSecOut_elecS_EUR, by = "region")
-
-
-    # L224.StubTechCost_elec_EUR -----------------------
-    # Calculate cost adjustment, equal to the output of heat multiplied by the heat price (to minimize the distortion of including the secondary output)
-    L224.StubTechSecOut_elec_EUR_pre %>%
-      select(LEVEL2_DATA_NAMES[["StubTechYr"]], "output.ratio") %>%
-      mutate(minicam.non.energy.input = "heat plant",
-             input.cost = round(output.ratio * energy.HEAT_PRICE, energy.DIGITS_COST))-> L224.StubTechCost_elec_EUR
-
-    # The secondary output of heat from CHP in the electric sector can cause the price of the technologies
-    # to go very low or negative if the technology cost is not modified to reflect the additional costs of
-    # CHP systems (as compared with electricity-only systems). Low technology costs can cause unrealistically
-    # low electricity prices in the calibration year, distorting behavior in future years. In this method,
-    # costs related to heat production and distribution are backed out from exogenous heat prices and data-derived heat:power ratios.
-    L1231.eff_R_elec_F_tech_Yh_EUR %>%
-      filter(year %in% MODEL_YEARS) %>%
-      rename(efficiency = value) %>%
-      left_join(GCAM_region_names, by = "GCAM_region_ID") %>%
-      filter(fuel == "gas") %>%
-      filter(efficiency < energy.DEFAULT_ELECTRIC_EFFICIENCY) %>%
-      mutate(cost_modifier = energy.GAS_PRICE * (1 / energy.DEFAULT_ELECTRIC_EFFICIENCY - 1 / efficiency)) -> L224.eff_cost_adj_Rh_elec_gas_sc_Y
-
-    # Modify the costs
-    L224.StubTechCost_elec_EUR %>%
-      left_join(L224.eff_cost_adj_Rh_elec_gas_sc_Y %>%
-                  rename(subsector = fuel, stub.technology = technology) %>%
-                  select(region, subsector, stub.technology, year, cost_modifier),
-                by = c("region", "subsector", "stub.technology", "year")) %>%
-      mutate(input.cost = if_else(!is.na(cost_modifier), round(pmax(0, input.cost + cost_modifier), energy.DIGITS_COST), input.cost)) %>%
-      select(-cost_modifier, -output.ratio) -> L224.StubTechCost_elec_EUR
-
-    # Need to fill out object names for all model time periods
-    L224.StubTechCost_elec_EUR %>%
-      filter(year == max(year)) %>%
-      select(-year) %>%
-      repeat_add_columns(tibble(year = MODEL_FUTURE_YEARS)) %>%
-      mutate(input.cost = 0) -> L224.StubTechCost_elec_EUR_fut
-
-    L224.StubTechCost_elec_EUR %>%
-      bind_rows(L224.StubTechCost_elec_EUR_fut) -> L224.StubTechCost_elec_EUR
-
-    # For regions with segments, need to change the elec sector names
-    L224.StubTechCost_elecS_EUR <- L224.StubTechCost_elec_EUR %>%
-      select(-supplysector, -subsector) %>%
-      # change sector names for electricity segments
-      repeat_add_columns(distinct(A23.elecS_naming, name_adder)) %>%
-      mutate(stub.technology = paste(stub.technology, name_adder, sep = "_")) %>%
-      left_join(L2235.StubTech_elecS_cool_EUR, by = c("region", "stub.technology" = "subsector")) %>%
-      select(region, supplysector, subsector0, subsector = stub.technology, stub.technology = stub.technology.y,
-             year, minicam.non.energy.input, input.cost) %>%
-      na.omit()
-
-    # Remove in regions that are in grid regions
-    L224.StubTechCost_elec_EUR <- L224.StubTechCost_elec_EUR %>%
-      anti_join(L224.StubTechCost_elecS_EUR, by = "region")
-
+    # also need global tech entry for new tech
+    L224.GlobalTechShrwt_heat_EUR <- L224.StubTechFixOutput_heat_EUR %>%
+      distinct(sector.name = supplysector, subsector.name = subsector, technology = stub.technology, year) %>%
+      mutate(share.weight = 0)
 
     # Produce outputs ===================================================
     L224.StubTechCalInput_heat_EUR %>%
@@ -255,40 +205,6 @@ module_gcameurope_L224.heat <- function(command, ...) {
       add_comments("as 0 if the calibrated value is 0 and 1 if it is not 0") %>%
       add_precursors("L124.in_EJ_R_heat_F_Yh_EUR", "energy/calibrated_techs", "energy/A_regions", "common/GCAM_region_names") ->
       L224.StubTechCalInput_heat_EUR
-
-    L224.StubTechSecOut_elec_EUR %>%
-      add_title("Secondary output of district heat from electricity technologies") %>%
-      add_units("EJ") %>%
-      add_comments("L124.heatoutratio_R_elec_F_tech_Yh_EUR used to determine secondary output heat from elec, ") %>%
-      add_comments("filtering for only model base years") %>%
-      add_precursors("L124.heatoutratio_R_elec_F_tech_Yh_EUR", "energy/calibrated_techs", "energy/A24.sector", "common/GCAM_region_names") ->
-      L224.StubTechSecOut_elec_EUR
-
-    L224.StubTechCost_elec_EUR %>%
-      add_title("Stubtech costs with secondary output heat") %>%
-      add_units("1975$/GJ") %>%
-      add_comments("From L224.StubTechSecOut_elec_EUR calculate cost adjustment, equal to the output of heat multiplied by the heat price") %>%
-      add_comments("modify costs for technologies with efficiencies below default, apply to all model periods") %>%
-      add_precursors("L124.heatoutratio_R_elec_F_tech_Yh_EUR", "energy/calibrated_techs", "energy/A24.sector", "energy/A_regions", "L1231.eff_R_elec_F_tech_Yh_EUR", "common/GCAM_region_names") ->
-      L224.StubTechCost_elec_EUR
-
-    L224.StubTechSecOut_elecS_EUR %>%
-      add_title("Secondary output of district heat from electricity segment technologies") %>%
-      add_units("EJ") %>%
-      add_comments("L124.heatoutratio_R_elec_F_tech_Yh_EUR used to determine secondary output heat from elec, ") %>%
-      add_comments("filtering for only model base years") %>%
-      same_precursors_as(L224.StubTechSecOut_elec_EUR) %>%
-      add_precursors("L2235.StubTech_elecS_cool_EUR") ->
-      L224.StubTechSecOut_elecS_EUR
-
-    L224.StubTechCost_elecS_EUR %>%
-      add_title("Stubtech costs with secondary output heat for electricity segments") %>%
-      add_units("1975$/GJ") %>%
-      add_comments("From L224.StubTechSecOut_elec_EUR calculate cost adjustment, equal to the output of heat multiplied by the heat price") %>%
-      add_comments("modify costs for technologies with efficiencies below default, apply to all model periods") %>%
-      same_precursors_as(L224.StubTechCost_elec_EUR) %>%
-      add_precursors("L2235.StubTech_elecS_cool_EUR") ->
-      L224.StubTechCost_elecS_EUR
 
     return_data(MODULE_OUTPUTS)
   } else {
