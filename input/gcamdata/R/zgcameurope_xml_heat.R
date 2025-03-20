@@ -16,12 +16,10 @@ module_gcameurope_heat_xml <- function(command, ...) {
                      "L224.SubsectorInterp_heat_EUR",
                      "L224.StubTech_heat_EUR",
                      "L224.StubTechCalInput_heat_EUR",
-                     "L224.StubTechSecOut_elec_EUR",
-                     "L224.StubTechCost_elec_EUR",
-                     "L224.StubTechSecOut_elecS_EUR",
-                     "L224.StubTechCost_elecS_EUR",
                      "L224.StubTechCoef_heat_EUR",
-                     "L224.StubTechCalOutput_heat_EUR")
+                     "L224.StubTechCalOutput_heat_EUR",
+                     "L224.StubTechFixOutput_heat_EUR",
+                     "L224.GlobalTechShrwt_heat_EUR")
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -44,15 +42,10 @@ module_gcameurope_heat_xml <- function(command, ...) {
       add_xml_data(L224.SubsectorShrwtFllt_heat_EUR, "SubsectorShrwtFllt") %>%
       add_xml_data(L224.SubsectorInterp_heat_EUR, "SubsectorInterp") %>%
       add_xml_data(L224.StubTech_heat_EUR, "StubTech") %>%
-      # add_xml_data(L224.StubTechCalInput_heat_EUR, "StubTechCalInput") %>%
       add_xml_data(L224.StubTechCalOutput_heat_EUR, "StubTechProd") %>%
       add_xml_data(L224.StubTechCoef_heat_EUR, "StubTechCoef") %>%
-      add_xml_data(L224.StubTechSecOut_elec_EUR, "StubTechSecOut") %>%
-      add_xml_data(L224.StubTechCost_elec_EUR, "StubTechCost") %>%
-      add_xml_data_generate_levels(L224.StubTechSecOut_elecS_EUR,
-                                   "StubTechSecOut", "subsector","nesting-subsector",1,FALSE) %>%
-      add_xml_data_generate_levels(L224.StubTechCost_elecS_EUR,
-                                   "StubTechCost", "subsector","nesting-subsector",1,FALSE) %>%
+      add_xml_data(L224.StubTechFixOutput_heat_EUR, "StubTechFixOut") %>%
+      add_xml_data(L224.GlobalTechShrwt_heat_EUR, "GlobalTechShrwt") %>%
       add_precursors(MODULE_INPUTS) ->
       heat_EUR.xml
 
