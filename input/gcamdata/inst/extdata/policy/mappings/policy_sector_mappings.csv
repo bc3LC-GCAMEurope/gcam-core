@@ -16,15 +16,15 @@ ETS,alumina
 ETS,mining energy use
 ETS,iron and steel
 ETS,refining
+ETS,process heat paper
+ETS,process heat food processing
 ETS,gas processing
 ETS,district heat
 ETS,backup_electricity
-ETS,elec_coal (IGCC)
-ETS,elec_coal (conv pul)
-ETS,elec_refined liquids (CC)
-ETS,elec_refined liquids (steam/CT)
-ETS,elec_gas (CC)
-ETS,elec_gas (steam/CT)
+ETS,base load generation
+ETS,intermediate generation
+ETS,subpeak generation
+ETS,peak generation
 BUILD_SECTORS_NOCOOL,resid heating
 BUILD_SECTORS_NOCOOL,resid others
 BUILD_SECTORS_NOCOOL,comm heating
