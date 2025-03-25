@@ -16,9 +16,6 @@ policy_RE_targets_EU,EU,PV-target,subsidy,,ELEC_PV,0.5,1.81,3.41,3.41,3.41,3.41,
 policy_RE_targets_EU,EU,offshore-target,subsidy,,ELEC_WIND_OFFSHORE,0.24,0.5,0.76,1.515,2.27,3.025,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78
 policy_RE_targets_EU,EU,wind-target,subsidy,,ELEC_WIND_ONSHORE,2.19,3.3,4.47,4.47,4.47,4.47,4.47,4.47,4.47,4.47,4.47,4.47,4.47,4.47,4.47,4.47,4.47
 policy_oilcrop_eu,EU,palmoil-constraint,tax,,PALMOIL_IMP,35,30,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20
-policy_RE_targets_tur,Europe_Non_EU,PV-target,subsidy,,ELEC_PV,0.04,0.07,0.14,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25
-policy_RE_targets_tur,Europe_Non_EU,wind-target,subsidy,,ELEC_WIND_ALL,0.1,0.15,0.225,0.33,0.33,0.33,0.33,0.33,0.33,0.33,0.33,0.33,0.33,0.33,0.33,0.33,0.33
-policy_RE_targets_tur,Europe_Non_EU,nuclear-target,subsidy,,ELEC_NUCLEAR,0,0.065,0.133,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.2
 policy_RE_targets_ind,India,wind-target,subsidy,,ELEC_WIND_ALL,,0.55,1.08,1.08,1.08,1.08,1.08,1.08,1.08,1.08,1.08,1.08,1.08,1.08,1.08,1.08,1.08
 policy_RE_targets_ind,India,nuclear-target,subsidy,,ELEC_NUCLEAR,,0.39,0.56,0.56,0.56,0.56,0.56,0.56,0.56,0.56,0.56,0.56,0.56,0.56,0.56,0.56,0.56
 policy_RE_targets_ind,India,solar-target,subsidy,,ELEC_SOLAR_ALL,,1.1,2.18,2.18,2.18,2.18,2.18,2.18,2.18,2.18,2.18,2.18,2.18,2.18,2.18,2.18,2.18

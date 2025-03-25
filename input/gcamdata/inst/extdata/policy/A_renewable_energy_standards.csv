@@ -9,7 +9,7 @@ policy_biofuel_arg,Argentina,biodiesel-target,input-coefficient,REF_LIQ_TRN,BIOD
 policy_res_arg,Argentina,RES-target,input-coefficient,ELEC_RES,,EN_CARRIER_ELEC,,0.14,0.2,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25,0.25
 policy_res_aus,Australia_NZ,RES-target,input-coefficient,ELEC_RES,,EN_CARRIER_ELEC,,0.23,0.53,0.69,0.69,0.69,0.69,0.69,0.69,0.69,0.69,0.69,0.69,0.69,0.69,0.69,0.69,0.69
 policy_biofuel_bra,Brazil,biodiesel-target,input-coefficient,REF_LIQ_TRN,BIODIESEL,,,0.04,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05,0.05
-policy_biofuel_bra_UNUSED,Brazil,biofuel-target,input-coefficient,REF_LIQ_TRN,BIOFUEL,,,0.125,0.125,0.125,0.125,0.125,0.125,0.125,0.125,0.125,0.125,0.125,0.125,0.125,0.125,0.125,0.125,0.125
+policy_biofuel_bra_UNUSED,Brazil,biofuel-target,input-coefficient,REF_LIQ_TRN,BIOFUEL_ALL,,,0.125,0.125,0.125,0.125,0.125,0.125,0.125,0.125,0.125,0.125,0.125,0.125,0.125,0.125,0.125,0.125,0.125
 policy_res_bra,Brazil,RES-target,input-coefficient,ELEC_RES,,EN_CARRIER_ELEC,,,0.84,0.84,0.84,0.84,0.84,0.84,0.84,0.84,0.84,0.84,0.84,0.84,0.84,0.84,0.84,0.84
 policy_tpesres_bra,Brazil,TPES_RES,input-coefficient,PRIMARY_ENERGY,TPES_RENEWABLE,,,,0.45,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48
 policy_tpesres_bra,Brazil,TPES_RES,pMultiplier,TRAD_BIO,,,,,0.45,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48,0.48
@@ -28,9 +28,6 @@ policy_tpesRES_eu,EU,TPES_RES_OLD,input-coefficient,PRIMARY_ENERGY,TPES_RENEWABL
 policy_greenH2_eu,EU,green_h2,input-coefficient,H2_ALL,GREEN_H2,,,,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42,0.42
 policy_tpesRES_eu_UPDATE,EU,TPES_RES,input-coefficient,PRIMARY_ENERGY_FOSSIL,TPES_RENEWABLE_FEEDSTOCKSRL,,,0.25,0.454545455,0.739130435,0.739130435,0.739130435,0.739130435,0.739130435,0.739130435,0.739130435,0.739130435,0.739130435,0.739130435,0.739130435,0.739130435,0.739130435,0.739130435,0.739130435
 policy_tpesRES_eu_UPDATE,EU,TPES_RES,pMultiplier,FEEDSTOCKSRL,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-policy_res_tur,Europe_Non_EU,RES-target,input-coefficient,ELEC_RES,,EN_CARRIER_ELEC,,,0.37,0.37,0.37,0.37,0.37,0.37,0.37,0.37,0.37,0.37,0.37,0.37,0.37,0.37,0.37,0.37
-policy_tpesRES_tur,Europe_Non_EU,TPES_RES,input-coefficient,PRIMARY_ENERGY_FOSSIL,TPES_RENEWABLE_FEEDSTOCKSRL,,,0.177,0.212,0.247,0.286,0.286,0.286,0.286,0.286,0.286,0.286,0.286,0.286,0.286,0.286,0.286,0.286,0.286
-policy_tpesRES_tur,Europe_Non_EU,TPES_RES,pMultiplier,FEEDSTOCKSRL,,,,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 policy_biofuel_ind,India,biofuel-target,input-coefficient,REF_LIQ_TRN,BIOFUEL_ALL,,,0.08,0.16,0.16,0.16,0.16,0.16,0.16,0.16,0.16,0.16,0.16,0.16,0.16,0.16,0.16,0.16,0.16
 policy_biofuel_idn,Indonesia,biofuel-target,input-coefficient,REF_LIQ_TRN,BIOFUEL_NODIESEL,,,,0.085,0.17,0.17,0.17,0.17,0.17,0.17,0.17,0.17,0.17,0.17,0.17,0.17,0.17,0.17,0.17
 policy_biofuel_idn,Indonesia,biodiesel-target,input-coefficient,REF_LIQ_TRN,BIODIESEL,,,0.045,0.0525,0.0525,0.0525,0.0525,0.0525,0.0525,0.0525,0.0525,0.0525,0.0525,0.0525,0.0525,0.0525,0.0525,0.0525,0.0525
