@@ -14,6 +14,13 @@
 #' @importFrom dplyr bind_rows distinct filter if_else left_join mutate select
 #' @author RLH April 2023
 module_policy_L3221.CCap <- function(command, ...) {
+  MODULE_OUTPUTS <- c("L3221.CCap_constraint",
+                      "L3221.CCap_link_regions",
+                      "L3221.CCap_tech",
+                      "L3221.CCap_nesting_tech",
+                      "L3221.CCap_tranTech",
+                      "L3221.CCap_resource",
+                      "L3221.CCap_GHG_Link")
   if(command == driver.DECLARE_INPUTS) {
     chunklist <- find_chunks()
     chunkoutputs <- chunk_outputs(chunklist$name) %>%
@@ -38,12 +45,7 @@ module_policy_L3221.CCap <- function(command, ...) {
                        "L254.StubTranTech_EUR")
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L3221.CCap_constraint",
-             "L3221.CCap_link_regions",
-             "L3221.CCap_tech",
-             "L3221.CCap_tranTech",
-             "L3221.CCap_resource",
-             "L3221.CCap_GHG_Link"))
+    return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -66,7 +68,22 @@ module_policy_L3221.CCap <- function(command, ...) {
       filter(sce == "CORE") %>%
       select(-sce)
 
-    L3221.StubTech_All <- bind_rows(lapply(STUB_TECHS, get)) %>%
+    # sometimes the _EUR StubTechs have different names
+    # so we need to remove those European regions from the global-core StubTech outputs
+    get_filter_regions <- function(fn){
+      if (!grepl("_EUR", fn)){
+        if (paste0(fn, "_EUR") %in% STUB_TECHS){
+          get(fn) %>%
+            anti_join(get(paste0(fn, "_EUR")), by = "region")
+        } else {
+          get(fn)
+        }
+      } else {
+        get(fn)
+      }
+    }
+
+    L3221.StubTech_All <- bind_rows(lapply(STUB_TECHS, get_filter_regions)) %>%
       bind_rows(L239.PrimaryConsKeyword_en %>% distinct(region, supplysector, subsector, stub.technology = technology))
 
     CO2byTech <- CO2byTech %>% gather_years()
@@ -126,10 +143,12 @@ module_policy_L3221.CCap <- function(command, ...) {
       }
     }
 
-    L3221.CCap_tech <- filter(L3221.CCap_tech, !is.na(stub.technology))
+    L3221.CCap_nesting_tech <- L3221.CCap_tech %>%
+      filter(!is.na(subsector0))
+    L3221.CCap_tech <- filter(L3221.CCap_tech, !is.na(stub.technology), is.na(subsector0)) %>% select(-subsector0)
 
     # Shouldn't have any NAs left
-    stopifnot(!any(is.na(L3221.CCap_tech %>% select(-subsector0))))
+    stopifnot(!any(is.na(L3221.CCap_tech)))
 
     # 3. Add custom CO2 market to transportation technologies ----------------------------
     L3221.CCap_tranTech_pre <- policy_mappings %>%
@@ -217,8 +236,6 @@ module_policy_L3221.CCap <- function(command, ...) {
       L3221.CCap_constraint <- L3221.CCap_constraint %>%
         filter(is.na(GDPIntensity_BaseYear)) %>%
         bind_rows(L3221.futureEmissions)
-
-
     }
 
     # 6. Get ghg link for each -------------------------
@@ -291,9 +308,7 @@ module_policy_L3221.CCap <- function(command, ...) {
                      "policy/A_CTax_Link") ->
     L3221.CCap_GHG_Link
 
-    return_data(L3221.CCap_constraint, L3221.CCap_link_regions,
-                L3221.CCap_tech, L3221.CCap_tranTech, L3221.CCap_resource,
-                L3221.CCap_GHG_Link)
+    return_data(MODULE_OUTPUTS)
   } else {
     stop("Unknown command")
   }
