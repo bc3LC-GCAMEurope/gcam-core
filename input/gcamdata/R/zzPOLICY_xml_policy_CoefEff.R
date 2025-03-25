@@ -11,10 +11,9 @@
 #' the generated outputs: \code{policy_CoefEff.xml}.
 module_policy_CoefEff_xml <- function(command, ...) {
   all_xml_names <- get_xml_names("policy/A_Coef_Eff.csv", "policy_CoefEff.xml")
-
+  MODULE_INPUTS <- c("L304.StubTechCoef", "L304.StubTechEff")
   if(command == driver.DECLARE_INPUTS) {
-    return(c("L304.StubTechCoef",
-             "L304.StubTechEff"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(all_xml_names)
   } else if(command == driver.MAKE) {
@@ -22,27 +21,18 @@ module_policy_CoefEff_xml <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    L304.StubTechCoef <- get_data(all_data, "L304.StubTechCoef")
-    L304.StubTechEff <- get_data(all_data, "L304.StubTechEff")
-
+    get_data_list(all_data, MODULE_INPUTS)
     # ===================================================
 
     # Produce outputs
     for (xml_name in all_xml_names){
-      L304.StubTechCoef_tmp <- L304.StubTechCoef %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
-
-      L304.StubTechEff_tmp <- L304.StubTechEff %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
+      filter_for_xml <- function(df) filter_xml(df, xml_name)  # Wrapper function
 
       assign(xml_name,
              create_xml(xml_name) %>%
-               add_xml_data(L304.StubTechCoef_tmp, "StubTechCoef") %>%
-               add_xml_data(L304.StubTechEff_tmp, "StubTechEff") %>%
-               add_precursors("L304.StubTechCoef",
-                              "L304.StubTechEff")
+               add_xml_data(filter_for_xml(L304.StubTechCoef), "StubTechCoef") %>%
+               add_xml_data(filter_for_xml(L304.StubTechEff), "StubTechEff") %>%
+               add_precursors(MODULE_INPUTS)
       )
     }
 

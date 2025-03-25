@@ -25,19 +25,12 @@ module_policy_aeei_xml <- function(command, ...) {
     # ===================================================
 
     # Produce outputs
-    create_xml("policy_aeei.xml") %>%
-      add_xml_data(L326.aeei, "aeei") %>%
-      add_precursors("L326.aeei") ->
-      policy_aeei.xml
-
     for (xml_name in all_xml_names){
-      L326.aeei_tmp <- L326.aeei %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
+
       # Produce output
       assign(xml_name,
              create_xml(xml_name) %>%
-               add_xml_data(L326.aeei_tmp, "aeei") %>%
+               add_xml_data(filter_xml(L326.aeei, xml_name), "aeei") %>%
                add_precursors("L326.aeei"))
 
     }

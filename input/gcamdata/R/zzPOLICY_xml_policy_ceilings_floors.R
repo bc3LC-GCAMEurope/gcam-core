@@ -14,19 +14,21 @@ module_policy_ceilings_floors_xml <- function(command, ...) {
                          get_xml_names("policy/A_renewable_energy_standards.csv", "policy_ceilings_floors.xml"))
   names(all_xml_names) <- rep("XML", length(all_xml_names))
 
+  MODULE_INPUTS <- c("L301.policy_port_stnd",
+                     "L301.policy_RES_coefs",
+                     "L301.RES_secout",
+                     "L301.pmultiplier",
+                     "L301.input_tax",
+                     "L301.input_subsidy",
+                     "L301.XML_policy_map",
+                     "L301.policy_RES_coefs_NG",
+                     "L301.RES_secout_NG",
+                     "L301.pmultiplier_NG",
+                     "L301.input_tax_NG",
+                     "L301.input_subsidy_NG")
+
   if(command == driver.DECLARE_INPUTS) {
-    return(c("L301.policy_port_stnd",
-             "L301.policy_RES_coefs",
-             "L301.RES_secout",
-             "L301.pmultiplier",
-             "L301.input_tax",
-             "L301.input_subsidy",
-             "L301.XML_policy_map",
-             "L301.policy_RES_coefs_NG",
-             "L301.RES_secout_NG",
-             "L301.pmultiplier_NG",
-             "L301.input_tax_NG",
-             "L301.input_subsidy_NG"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(all_xml_names)
   } else if(command == driver.MAKE) {
@@ -35,19 +37,7 @@ module_policy_ceilings_floors_xml <- function(command, ...) {
 
 
     # Load required inputs
-    L301.policy_RES_coefs <- get_data(all_data, "L301.policy_RES_coefs")
-    L301.RES_secout <- get_data(all_data, "L301.RES_secout")
-    L301.pmultiplier <-  get_data(all_data, "L301.pmultiplier")
-    L301.input_tax <- get_data(all_data, "L301.input_tax")
-    L301.input_subsidy <- get_data(all_data, "L301.input_subsidy")
-    L301.policy_port_stnd <- get_data(all_data, "L301.policy_port_stnd")
-    L301.XML_policy_map <- get_data(all_data, "L301.XML_policy_map")
-
-    L301.policy_RES_coefs_NG <- get_data(all_data, "L301.policy_RES_coefs_NG")
-    L301.RES_secout_NG <- get_data(all_data, "L301.RES_secout_NG")
-    L301.pmultiplier_NG <-  get_data(all_data, "L301.pmultiplier_NG")
-    L301.input_tax_NG <- get_data(all_data, "L301.input_tax_NG")
-    L301.input_subsidy_NG <- get_data(all_data, "L301.input_subsidy_NG")
+    get_data_list(all_data, MODULE_INPUTS)
 
     # Match XML names in A_Policy_XML_Names to policies
     # If no xml listed for given region/market/policy, assign to policy_ceilings_floors.xml
@@ -57,85 +47,52 @@ module_policy_ceilings_floors_xml <- function(command, ...) {
 
     # ===================================================
 
+    #function to filter to correct region/policyType etc
+    filter_policy <- function(df, policy, policy_rgn = policy_rgn_tmp){
+      if ("policyType" %in% names(df)){
+        df <- df %>%
+          semi_join(policy_rgn, by = setNames(c("region", "policyType", "policy.portfolio.standard"),
+                                              c("region", "policyType", policy)))
+      } else {
+        df <- df %>%
+          semi_join(policy_rgn, by = setNames(c("region", "policy.portfolio.standard"),
+                                              c("region", policy)))
+      }
+
+     if ("technology" %in% names(df)){ df %>% rename("stub.technology" = "technology")} else {df}
+    }
+
     for (xml_name in all_xml_names){
-      L301.policy_port_stnd_tmp <- L301.policy_port_stnd_xml %>%
-        filter(xml == xml_name)
-
       # Use as filter for other tables
-      policy_rgn_tmp <- L301.policy_port_stnd_tmp %>%
+      policy_rgn_tmp <- filter(L301.policy_port_stnd_xml, xml == xml_name) %>%
         distinct(region, policy.portfolio.standard, policyType, xml)
-
-      L301.policy_RES_coefs_tmp <- L301.policy_RES_coefs %>%
-        semi_join(policy_rgn_tmp, by = c("region", "policyType", "minicam.energy.input" = "policy.portfolio.standard"))
-
-      L301.RES_secout_tmp <- L301.RES_secout %>%
-        semi_join(policy_rgn_tmp, by = c("region", "res.secondary.output" = "policy.portfolio.standard"))
-
-      L301.pmultiplier_tmp <- L301.pmultiplier %>%
-        semi_join(policy_rgn_tmp, by = c("region", "res.secondary.output" = "policy.portfolio.standard"))
-
-      L301.input_tax_tmp <- L301.input_tax %>%
-        semi_join(policy_rgn_tmp, by = c("region", "input.tax" = "policy.portfolio.standard"))
-
-      L301.input_subsidy_tmp <- L301.input_subsidy %>%
-        semi_join(policy_rgn_tmp, by = c("region", "input.subsidy" = "policy.portfolio.standard"))
-
-      # Repeat for NG
-      L301.policy_RES_coefs_NG_tmp <- L301.policy_RES_coefs_NG %>%
-        semi_join(policy_rgn_tmp, by = c("region", "policyType",
-                                         "minicam.energy.input" = "policy.portfolio.standard")) %>%
-        rename(stub.technology = technology)
-
-      L301.RES_secout_NG_tmp <- L301.RES_secout_NG %>%
-        semi_join(policy_rgn_tmp, by = c("region",
-                                         "res.secondary.output" = "policy.portfolio.standard")) %>%
-        rename(stub.technology = technology)
-
-      L301.pmultiplier_NG_tmp <- L301.pmultiplier_NG %>%
-        semi_join(policy_rgn_tmp, by = c("region",
-                                         "res.secondary.output" = "policy.portfolio.standard"))%>%
-        rename(stub.technology = technology)
-
-      L301.input_tax_NG_tmp <- L301.input_tax_NG %>%
-        semi_join(policy_rgn_tmp, by = c("region", "input.tax" = "policy.portfolio.standard"))%>%
-        rename(stub.technology = technology)
-
-      L301.input_subsidy_NG_tmp <- L301.input_subsidy_NG %>%
-        semi_join(policy_rgn_tmp, by = c("region", "input.subsidy" = "policy.portfolio.standard"))%>%
-        rename(stub.technology = technology)
 
       # Produce output
       assign(xml_name,
              create_xml(xml_name) %>%
-               add_xml_data(L301.policy_port_stnd_tmp, "PortfolioStdConstraint") %>%
-               add_xml_data(L301.policy_RES_coefs_tmp, "StubTechCoef_NM_Policy") %>%
-               add_xml_data_generate_levels(L301.policy_RES_coefs_NG_tmp,
+               add_xml_data(filter_xml(L301.policy_port_stnd_xml, xml_name), "PortfolioStdConstraint") %>%
+               add_xml_data(filter_policy(L301.policy_RES_coefs, "minicam.energy.input"),
+                            "StubTechCoef_NM_Policy") %>%
+               add_xml_data_generate_levels(filter_policy(L301.policy_RES_coefs_NG, "minicam.energy.input"),
                                             "StubTechCoef_NM_Policy","subsector","nesting-subsector",1,FALSE) %>%
-               add_xml_data(L301.RES_secout_tmp, "StubTechResSecOut") %>%
-               add_xml_data_generate_levels(L301.RES_secout_NG_tmp,
+               add_xml_data(filter_policy(L301.RES_secout, "res.secondary.output"),
+                            "StubTechResSecOut") %>%
+               add_xml_data_generate_levels(filter_policy(L301.RES_secout_NG, "res.secondary.output"),
                                             "StubTechResSecOut","subsector","nesting-subsector",1,FALSE) %>%
-               add_xml_data(L301.input_tax_tmp, "StubTechInputTax") %>%
-               add_xml_data_generate_levels(L301.input_tax_NG_tmp,
+               add_xml_data(filter_policy(L301.input_tax, "input.tax"),
+                            "StubTechInputTax") %>%
+               add_xml_data_generate_levels(filter_policy(L301.input_tax_NG, "input.tax"),
                                             "StubTechInputTax","subsector","nesting-subsector",1,FALSE) %>%
-               add_xml_data(L301.input_subsidy_tmp, "StubTechInputSubsidy") %>%
-               add_xml_data_generate_levels(L301.input_subsidy_NG_tmp,
+               add_xml_data(filter_policy(L301.input_subsidy, "input.subsidy"),
+                            "StubTechInputSubsidy") %>%
+               add_xml_data_generate_levels(filter_policy(L301.input_subsidy_NG, "input.subsidy"),
                                             "StubTechInputSubsidy","subsector","nesting-subsector",1,FALSE) %>%
-               add_xml_data(L301.pmultiplier_tmp, "StubTechResSecOutPMult") %>%
-               add_xml_data_generate_levels(L301.pmultiplier_NG_tmp,
+               add_xml_data(filter_policy(L301.pmultiplier, "res.secondary.output"),
+                            "StubTechResSecOutPMult") %>%
+               add_xml_data_generate_levels(filter_policy(L301.pmultiplier_NG, "res.secondary.output"),
                                             "StubTechResSecOutPMult","subsector","nesting-subsector",1,FALSE) %>%
-               add_precursors("L301.policy_port_stnd",
-                              "L301.policy_RES_coefs",
-                              "L301.RES_secout",
-                              "L301.pmultiplier",
-                              "L301.input_tax",
-                              "L301.input_subsidy",
-                              "L301.policy_RES_coefs_NG",
-                              "L301.RES_secout_NG",
-                              "L301.pmultiplier_NG",
-                              "L301.input_tax_NG",
-                              "L301.input_subsidy_NG")
+               add_precursors(MODULE_INPUTS)
              )
-
     }
 
 

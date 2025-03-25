@@ -48,78 +48,25 @@ module_policy_FixedOutputTech_xml <- function(command, ...) {
 
     # Produce outputs
     for (xml_name in all_xml_names){
-      L305.StubTechFixedOutput_tmp <- L305.StubTechFixedOutput %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
-
-      L305.StubTechLifetime_tmp <- L305.StubTechLifetime %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
-
-      L305.GlbTechShrwt_tmp <- L305.GlbTechShrwt %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
-
-      L305.GlbTechCost_tmp <- L305.GlbTechCost %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
-
-      L305.StubTranTechFixedOutput_tmp <- L305.StubTranTechFixedOutput %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
-
-      L305.GlobalTranTechInterp_tmp <- L305.GlobalTranTechInterp %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
-
-      L305.GlobalTranTechShrwt_tmp <- L305.GlobalTranTechShrwt %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
-
-      L305.GlobalTranTechSCurve_tmp <- L305.GlobalTranTechSCurve %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
-
-      L305.StubTranTechLoadFactor_tmp <- L305.StubTranTechLoadFactor %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
-
-      L305.StubTranTechCost_tmp <- L305.StubTranTechCost %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
-
-      L305.StubTechTrackCapital_tmp <- L305.StubTechTrackCapital %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
-
-      L305.StubTranTechCalInput_tmp <- L305.StubTranTechCalInput %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
-
-      L305.StubTranTechCoef_tmp <- L305.StubTranTechCoef %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
+      filter_for_xml <- function(df) filter_xml(df, xml_name)  # Wrapper function
 
       assign(xml_name,
              create_xml(xml_name) %>%
-               add_xml_data(L305.StubTechLifetime_tmp, "StubTechLifetime") %>%
-               add_xml_data(L305.StubTechFixedOutput_tmp, "StubTechFixOutNoSW") %>%
-               add_xml_data(L305.GlbTechShrwt_tmp, "GlobalTechShrwt") %>%
-               add_xml_data(L305.GlbTechCost_tmp,"GlobalTechCost") %>%
-               # add_node_equiv_xml("technology") %>%
-               # add_node_equiv_xml("input") %>%
-               add_xml_data(L305.StubTranTechFixedOutput_tmp, "StubTranTechFixedOutput") %>%
-               add_xml_data(L305.StubTranTechCalInput_tmp, "StubTranTechCalInput") %>%
-               add_xml_data(L305.StubTranTechLoadFactor_tmp, "StubTranTechLoadFactor") %>%
+               add_xml_data(filter_for_xml(L305.StubTechLifetime), "StubTechLifetime") %>%
+               add_xml_data(filter_for_xml(L305.StubTechFixedOutput), "StubTechFixOutNoSW") %>%
+               add_xml_data(filter_for_xml(L305.GlbTechShrwt), "GlobalTechShrwt") %>%
+               add_xml_data(filter_for_xml(L305.GlbTechCost),"GlobalTechCost") %>%
+               add_xml_data(filter_for_xml(L305.StubTranTechFixedOutput), "StubTranTechFixedOutput") %>%
+               add_xml_data(filter_for_xml(L305.StubTranTechCalInput), "StubTranTechCalInput") %>%
+               add_xml_data(filter_for_xml(L305.StubTranTechLoadFactor), "StubTranTechLoadFactor") %>%
                add_node_equiv_xml("subsector") %>%
-               add_xml_data(L305.StubTechTrackCapital_tmp, "StubTechTrackCapital") %>%
-               add_xml_data(L305.StubTranTechCost_tmp, "StubTranTechCost") %>%
-               add_xml_data(L305.StubTranTechCoef_tmp, "StubTranTechCoef") %>%
-               add_xml_data(L305.GlobalTranTechInterp_tmp, "GlobalTranTechInterp") %>%
-               add_xml_data(L305.GlobalTranTechShrwt_tmp, "GlobalTranTechShrwt") %>%
-               add_xml_data(L305.GlobalTranTechSCurve_tmp, "GlobalTranTechSCurve") %>%
-               add_precursors("L305.StubTechFixedOutput",
-                              "L305.GlbTechFixedOutput"))
+               add_xml_data(filter_for_xml(L305.StubTechTrackCapital), "StubTechTrackCapital") %>%
+               add_xml_data(filter_for_xml(L305.StubTranTechCost), "StubTranTechCost") %>%
+               add_xml_data(filter_for_xml(L305.StubTranTechCoef), "StubTranTechCoef") %>%
+               add_xml_data(filter_for_xml(L305.GlobalTranTechInterp), "GlobalTranTechInterp") %>%
+               add_xml_data(filter_for_xml(L305.GlobalTranTechShrwt), "GlobalTranTechShrwt") %>%
+               add_xml_data(filter_for_xml(L305.GlobalTranTechSCurve), "GlobalTranTechSCurve") %>%
+               add_precursors(MODULE_INPUTS))
 
 
     }

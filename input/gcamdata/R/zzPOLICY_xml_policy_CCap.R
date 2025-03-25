@@ -11,14 +11,16 @@
 #' the generated outputs: \code{policy_CCap.xml}.
 module_policy_CCap_xml <- function(command, ...) {
   all_xml_names <- get_xml_names("policy/A_CCap_Constraint.csv", "policy_CCap.xml")
+  MODULE_INPUTS <- c("L3221.CCap_constraint",
+                     "L3221.CCap_link_regions",
+                     "L3221.CCap_tech",
+                     "L3221.CCap_nesting_tech",
+                     "L3221.CCap_tranTech",
+                     "L3221.CCap_resource",
+                     "L3221.CCap_GHG_Link")
 
   if(command == driver.DECLARE_INPUTS) {
-    return(c("L3221.CCap_constraint",
-             "L3221.CCap_link_regions",
-             "L3221.CCap_tech",
-             "L3221.CCap_tranTech",
-             "L3221.CCap_resource",
-             "L3221.CCap_GHG_Link"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(all_xml_names)
   } else if(command == driver.MAKE) {
@@ -26,12 +28,7 @@ module_policy_CCap_xml <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    L3221.CCap_constraint <- get_data(all_data, "L3221.CCap_constraint")
-    L3221.CCap_link_regions <- get_data(all_data, "L3221.CCap_link_regions")
-    L3221.CCap_tech <- get_data(all_data, "L3221.CCap_tech")
-    L3221.CCap_tranTech <- get_data(all_data, "L3221.CCap_tranTech")
-    L3221.CCap_resource <- get_data(all_data, "L3221.CCap_resource")
-    L3221.CCap_GHG_Link <- get_data(all_data, "L3221.CCap_GHG_Link")
+    get_data_list(all_data, MODULE_INPUTS)
     # ===================================================
     # Need to split L3221.CCap_constraint into years with fillout and years without
     L3221.CCap_constraint_fillout <- L3221.CCap_constraint %>%
@@ -43,52 +40,24 @@ module_policy_CCap_xml <- function(command, ...) {
 
     # Produce outputs
     for (xml_name in all_xml_names){
-      L3221.CCap_constraint_noFillout_tmp <- L3221.CCap_constraint_noFillout %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
 
-      L3221.CCap_constraint_fillout_tmp <- L3221.CCap_constraint_fillout %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
+      filter_for_xml <- function(df) filter_xml(df, xml_name)  # Wrapper function
 
-      L3221.CCap_link_regions_tmp <- L3221.CCap_link_regions %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
-
-      L3221.CCap_tech_tmp <- L3221.CCap_tech %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
-
-      L3221.CCap_tranTech_tmp <- L3221.CCap_tranTech %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
-
-      L3221.CCap_resource_tmp <- L3221.CCap_resource %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
-
-
-      L3221.CCap_GHG_Link_tmp <- L3221.CCap_GHG_Link %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
       # Produce outputs
       assign(xml_name,
              create_xml(xml_name) %>%
-               add_xml_data(L3221.CCap_constraint_noFillout_tmp, "GHGConstr") %>%
-               add_xml_data(L3221.CCap_constraint_fillout_tmp, "GHGConstrFillout") %>%
-               add_xml_data(L3221.CCap_link_regions_tmp, "GHGConstrMkt") %>%
-               add_xml_data(L3221.CCap_tech_tmp, "StubTechCO2") %>%
-               add_xml_data(L3221.CCap_tranTech_tmp, "StubTranTechCO2") %>%
-               add_xml_data(L3221.CCap_resource_tmp, "ResTechCO2") %>%
-               add_xml_data(L3221.CCap_GHG_Link_tmp, "GHGConstrLinkPriceAdj") %>%
-               add_xml_data(L3221.CCap_GHG_Link_tmp, "GHGConstrLinkDemandAdj") %>%
-               add_xml_data(L3221.CCap_GHG_Link_tmp, "GHGConstrLinkMktUnits") %>%
-               add_precursors("L3221.CCap_constraint",
-                              "L3221.CCap_link_regions",
-                              "L3221.CCap_tech",
-                              "L3221.CCap_tranTech",
-                              "L3221.CCap_resource",
-                              "L3221.CCap_GHG_Link")
+               add_xml_data(filter_for_xml(L3221.CCap_constraint_noFillout), "GHGConstr") %>%
+               add_xml_data(filter_for_xml(L3221.CCap_constraint_fillout), "GHGConstrFillout") %>%
+               add_xml_data(filter_for_xml(L3221.CCap_link_regions), "GHGConstrMkt") %>%
+               add_xml_data(filter_for_xml(L3221.CCap_tech), "StubTechCO2") %>%
+               add_xml_data_generate_levels(filter_for_xml(L3221.CCap_nesting_tech),
+                                            "StubTechCO2","subsector","nesting-subsector",1,FALSE) %>%
+               add_xml_data(filter_for_xml(L3221.CCap_tranTech), "StubTranTechCO2") %>%
+               add_xml_data(filter_for_xml(L3221.CCap_resource), "ResTechCO2") %>%
+               add_xml_data(filter_for_xml(L3221.CCap_GHG_Link), "GHGConstrLinkPriceAdj") %>%
+               add_xml_data(filter_for_xml(L3221.CCap_GHG_Link), "GHGConstrLinkDemandAdj") %>%
+               add_xml_data(filter_for_xml(L3221.CCap_GHG_Link), "GHGConstrLinkMktUnits") %>%
+               add_precursors(MODULE_INPUTS)
       )
     }
 

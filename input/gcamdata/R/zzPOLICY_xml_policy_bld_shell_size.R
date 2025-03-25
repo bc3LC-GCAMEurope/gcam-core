@@ -11,10 +11,9 @@
 #' the generated outputs: \code{policy_inputtax.xml}.
 module_policy_bld_shell_size.xml <- function(command, ...) {
   all_xml_names <- get_xml_names("policy/A_building_shell_size.csv", "policy_bld_shell.xml")
-
+  MODULE_INPUTS <- c("L344.bld_shell", "L344.bld_size")
   if(command == driver.DECLARE_INPUTS) {
-    return(c("L344.bld_shell",
-             "L344.bld_size"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(all_xml_names)
   } else if(command == driver.MAKE) {
@@ -22,27 +21,20 @@ module_policy_bld_shell_size.xml <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    L344.bld_shell <- get_data(all_data, "L344.bld_shell")
-    L344.bld_size <- get_data(all_data, "L344.bld_size")
+    get_data_list(all_data, MODULE_INPUTS)
 
     # ===================================================
 
     # Produce outputs
 
     for (xml_name in all_xml_names){
-      L344.bld_shell_tmp <- L344.bld_shell %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
-
-      L344.bld_size_tmp <- L344.bld_size %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
+      filter_for_xml <- function(df) filter_xml(df, xml_name)  # Wrapper function
 
       assign(xml_name,
              create_xml(xml_name) %>%
-               add_xml_data(L344.bld_shell_tmp, "ShellConductance") %>%
-               add_xml_data(L344.bld_size_tmp, "Floorspace") %>%
-               add_precursors("L344.bld_shell", "L344.bld_size")
+               add_xml_data(filter_for_xml(L344.bld_shell), "ShellConductance") %>%
+               add_xml_data(filter_for_xml(L344.bld_size), "Floorspace") %>%
+               add_precursors(MODULE_INPUTS)
       )
     }
 

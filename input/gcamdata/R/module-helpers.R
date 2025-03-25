@@ -1743,7 +1743,15 @@ policy_interpolate <- function(df, group_cols, value_col, year_col = year){
     filter(!is.na({{value_col}}))
 }
 
-
-
-
+#' filter_xml
+#'
+#' Filter policy tables to desired xml
+#' @param df data
+#' @importFrom dplyr filter mutate group_by
+#' @return assignment of new db
+filter_xml <- function(df, xml_nm){
+  df %>%
+    filter(xml == xml_nm) %>%
+    select(-xml)
+}
 

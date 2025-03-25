@@ -11,11 +11,12 @@
 #' the generated outputs: \code{policy_inputtax.xml}.
 module_policy_elasticity.xml <- function(command, ...) {
   all_xml_names <- get_xml_names("policy/A_elasticity.csv", "policy_elasticity.xml")
+  MODULE_INPUTS <- c("L300.elasticity_income",
+                     "L300.elasticity_price",
+                     "L300.PerCapitaBased_trn")
 
   if(command == driver.DECLARE_INPUTS) {
-    return(c("L300.elasticity_income",
-             "L300.elasticity_price",
-             "L300.PerCapitaBased_trn"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(all_xml_names)
   } else if(command == driver.MAKE) {
@@ -23,35 +24,20 @@ module_policy_elasticity.xml <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    L300.elasticity_income <- get_data(all_data, "L300.elasticity_income")
-    L300.elasticity_price <- get_data(all_data, "L300.elasticity_price")
-    L300.PerCapitaBased_trn <- get_data(all_data, "L300.PerCapitaBased_trn")
+    get_data_list(all_data, MODULE_INPUTS)
     # ===================================================
 
     # Produce outputs
 
     for (xml_name in all_xml_names){
-      L300.PerCapitaBased_trn_tmp  <- L300.PerCapitaBased_trn %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
-
-      L300.elasticity_income_tmp <- L300.elasticity_income %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
-
-      L300.elasticity_price_tmp <- L300.elasticity_price %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
-
+      filter_for_xml <- function(df) filter_xml(df, xml_name)  # Wrapper function
 
       assign(xml_name,
              create_xml(xml_name) %>%
-               add_xml_data(L300.PerCapitaBased_trn_tmp, "PerCapitaBased") %>%
-               add_xml_data(L300.elasticity_price_tmp, "PriceElasticity") %>%
-               add_xml_data(L300.elasticity_income_tmp, "IncomeElasticity") %>%
-               add_precursors("L300.elasticity_income",
-                              "L300.elasticity_price",
-                              "L300.PerCapitaBased_trn")
+               add_xml_data(filter_for_xml(L300.PerCapitaBased_trn), "PerCapitaBased") %>%
+               add_xml_data(filter_for_xml(L300.elasticity_price), "PriceElasticity") %>%
+               add_xml_data(filter_for_xml(L300.elasticity_income), "IncomeElasticity") %>%
+               add_precursors(MODULE_INPUTS)
       )
     }
 

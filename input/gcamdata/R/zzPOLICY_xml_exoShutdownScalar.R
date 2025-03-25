@@ -25,12 +25,10 @@ module_policy_exoShutdownScalar_xml <- function(command, ...) {
     # ===================================================
     # Produce outputs
     for (xml_name in all_xml_names){
-      L307.exoShutdownScalar_tmp <- L307.exoShutdownScalar %>%
-        filter(xml == xml_name)
 
       assign(xml_name,
              create_xml(xml_name) %>%
-               add_xml_data(L307.exoShutdownScalar_tmp, "ExoShutdown") %>%
+               add_xml_data(filter_xml(L307.exoShutdownScalar, xml_name), "ExoShutdown") %>%
                add_precursors("L307.exoShutdownScalar")
       )
     }

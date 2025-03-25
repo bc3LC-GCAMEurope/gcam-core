@@ -26,13 +26,9 @@ module_policy_FuelStandards_xml <- function(command, ...) {
 
     # Produce outputs
     for (xml_name in all_xml_names){
-      L354.FuelStandards_tmp <- L354.FuelStandards %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
-
       assign(xml_name,
              create_xml(xml_name) %>%
-               add_xml_data(L354.FuelStandards_tmp, "StubTranTechCoef") %>%
+               add_xml_data(filter_xml(L354.FuelStandards, xml_name), "StubTranTechCoef") %>%
                add_precursors("L354.FuelStandards")
       )
     }

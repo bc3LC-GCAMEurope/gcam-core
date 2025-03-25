@@ -12,12 +12,13 @@
 module_policy_land_constraints_xml <- function(command, ...) {
   all_xml_names <- get_xml_names("policy/A_Land_Constraints.csv", "policy_land_constraints.xml")
 
+  MODULE_INPUTS <- c("L3231.landConstrain_mngd_LN3",
+                     "L3231.landConstrain_unmngd_LN3",
+                     "L3231.landConstrain_mngd_LN2",
+                     "L3231.landConstrain_unmngd_LN2",
+                     "L3231.landConstrain")
   if(command == driver.DECLARE_INPUTS) {
-    return(c("L3231.landConstrain_mngd_LN3",
-             "L3231.landConstrain_unmngd_LN3",
-             "L3231.landConstrain_mngd_LN2",
-             "L3231.landConstrain_unmngd_LN2",
-             "L3231.landConstrain"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(all_xml_names)
   } else if(command == driver.MAKE) {
@@ -25,44 +26,28 @@ module_policy_land_constraints_xml <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    L3231.landConstrain_mngd_LN3 <- get_data(all_data, "L3231.landConstrain_mngd_LN3")
-    L3231.landConstrain_unmngd_LN3 <- get_data(all_data, "L3231.landConstrain_unmngd_LN3")
-    L3231.landConstrain_mngd_LN2 <- get_data(all_data, "L3231.landConstrain_mngd_LN2")
-    L3231.landConstrain_unmngd_LN2 <- get_data(all_data, "L3231.landConstrain_unmngd_LN2")
-    L3231.landConstrain <- get_data(all_data, "L3231.landConstrain")
+    get_data_list(all_data, MODULE_INPUTS)
     # ===================================================
+
+    #function to filter to correct basin etc
+    filter_policy <- function(df, land_filter = L3231.landConstrain_tmp){
+      df %>%
+        semi_join(land_filter, by = c("region", "land.constraint.policy" = "policy.portfolio.standard"))
+    }
 
     # Produce outputs
     for (xml_name in all_xml_names){
-      L3231.landConstrain_tmp <- L3231.landConstrain %>%
-        filter(xml == xml_name) %>%
-        select(-xml)
-
-      L3231.landConstrain_unmngd_LN3_tmp <- L3231.landConstrain_unmngd_LN3 %>%
-        semi_join(L3231.landConstrain_tmp, by = c("region", "land.constraint.policy" = "policy.portfolio.standard"))
-
-      L3231.landConstrain_mngd_LN3_tmp <- L3231.landConstrain_mngd_LN3  %>%
-        semi_join(L3231.landConstrain_tmp, by = c("region", "land.constraint.policy" = "policy.portfolio.standard"))
-
-      L3231.landConstrain_unmngd_LN2_tmp <- L3231.landConstrain_unmngd_LN2 %>%
-        semi_join(L3231.landConstrain_tmp, by = c("region", "land.constraint.policy" = "policy.portfolio.standard"))
-
-      L3231.landConstrain_mngd_LN2_tmp <- L3231.landConstrain_mngd_LN2  %>%
-        semi_join(L3231.landConstrain_tmp, by = c("region", "land.constraint.policy" = "policy.portfolio.standard"))
+      L3231.landConstrain_tmp <- filter_xml(L3231.landConstrain, xml_name)
 
       assign(xml_name,
              create_xml(xml_name) %>%
                add_xml_data(L3231.landConstrain_tmp, "PortfolioStdConstraint") %>%
-               add_xml_data(L3231.landConstrain_unmngd_LN3_tmp, "LN3ConstraintUnmgd") %>%
-               add_xml_data(L3231.landConstrain_mngd_LN3_tmp, "LN3ConstraintMgd") %>%
-               add_xml_data(L3231.landConstrain_unmngd_LN2_tmp, "LN2ConstraintUnmgd") %>%
-               add_xml_data(L3231.landConstrain_mngd_LN2_tmp, "LN2ConstraintMgd") %>%
+               add_xml_data(filter_policy(L3231.landConstrain_unmngd_LN3), "LN3ConstraintUnmgd") %>%
+               add_xml_data(filter_policy(L3231.landConstrain_mngd_LN3), "LN3ConstraintMgd") %>%
+               add_xml_data(filter_policy(L3231.landConstrain_unmngd_LN2), "LN2ConstraintUnmgd") %>%
+               add_xml_data(filter_policy(L3231.landConstrain_mngd_LN2), "LN2ConstraintMgd") %>%
                add_rename_landnode_xml() %>%
-               add_precursors("L3231.landConstrain",
-                              "L3231.landConstrain_unmngd_LN3",
-                              "L3231.landConstrain_mngd_LN3",
-                              "L3231.landConstrain_unmngd_LN2",
-                              "L3231.landConstrain_mngd_LN2")
+               add_precursors(MODULE_INPUTS)
       )
     }
 
