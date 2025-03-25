@@ -200,7 +200,7 @@ FE_BUNKERS_NO_PV,refined liquids industrial,refined liquids industrial,refined l
 FE_BUNKERS_NO_PV,refined liquids bunkers,refined liquids bunkers,refined liquids bunkers
 FE_BUNKERS_NO_PV,H2 wholesale delivery,H2 liquid truck,H2 liquid truck
 FE_BUNKERS_NO_PV,H2 wholesale delivery,H2 pipeline,H2 pipeline
-FE_BUNKERS_NO_PV,H2 industrial,forecourt production,electrolysis
+FE_BUNKERS_NO_PV,H2 industrial,onsite production,electrolysis
 FE_BUNKERS_NO_PV,H2 wholesale dispensing,H2 delivery,H2 liquid truck
 FE_BUNKERS_NO_PV,H2 wholesale dispensing,H2 delivery,H2 pipeline
 FE_BUNKERS_NO_PV,H2 wholesale dispensing,forecourt production,electrolysis
@@ -220,7 +220,7 @@ FE_NO_PV,refined liquids transport,refined liquids transport,refined liquids tra
 FE_NO_PV,refined liquids industrial,refined liquids industrial,refined liquids industrial
 FE_NO_PV,H2 wholesale delivery,H2 liquid truck,H2 liquid truck
 FE_NO_PV,H2 wholesale delivery,H2 pipeline,H2 pipeline
-FE_NO_PV,H2 industrial,forecourt production,electrolysis
+FE_NO_PV,H2 industrial,onsite production,electrolysis
 FE_NO_PV,H2 wholesale dispensing,H2 delivery,H2 liquid truck
 FE_NO_PV,H2 wholesale dispensing,H2 delivery,H2 pipeline
 FE_NO_PV,H2 wholesale dispensing,forecourt production,electrolysis
@@ -239,7 +239,7 @@ FE_RES,refined liquids transport,refined liquids transport,refined liquids trans
 FE_RES,refined liquids industrial,refined liquids industrial,refined liquids industrial
 FE_RES,H2 wholesale delivery,H2 liquid truck,H2 liquid truck
 FE_RES,H2 wholesale delivery,H2 pipeline,H2 pipeline
-FE_RES,H2 industrial,forecourt production,electrolysis
+FE_RES,H2 industrial,onsite production,electrolysis
 FE_RES,H2 wholesale dispensing,H2 delivery,H2 liquid truck
 FE_RES,H2 wholesale dispensing,H2 delivery,H2 pipeline
 FE_RES,H2 wholesale dispensing,forecourt production,electrolysis
@@ -270,28 +270,28 @@ GREEN_H2_ELECTROLYSIS,H2 central production,biomass,biomass to H2 CCS
 GREEN_H2_ELECTROLYSIS,H2 central production,electricity,electrolysis
 GREEN_H2_ELECTROLYSIS,H2 central production,wind,electrolysis
 GREEN_H2_ELECTROLYSIS,H2 central production,solar,electrolysis
-GREEN_H2_ELECTROLYSIS,H2 industrial,forecourt production,electrolysis
+GREEN_H2_ELECTROLYSIS,H2 industrial,onsite production,electrolysis
 GREEN_H2_ELECTROLYSIS,H2 wholesale dispensing,forecourt production,electrolysis
 H2_ALL,H2 central production,coal,coal chemical
 H2_ALL,H2 central production,coal,coal chemical CCS
 H2_ALL,H2 central production,gas,natural gas steam reforming
-H2_ALL,H2 central production,gas,natural gas steam reforming CCS
+H2_ALL,H2 central production,gas,gas ATR CCS
 H2_ALL,H2 central production,biomass,biomass to H2
 H2_ALL,H2 central production,biomass,biomass to H2 CCS
-H2_ALL,H2 central production,nuclear,thermal splitting
+H2_ALL,H2 central production,nuclear,electrolysis
 H2_ALL,H2 central production,electricity,electrolysis
 H2_ALL,H2 central production,wind,electrolysis
 H2_ALL,H2 central production,solar,electrolysis
-H2_ALL,H2 industrial,forecourt production,electrolysis
+H2_ALL,H2 industrial,onsite production,electrolysis
 H2_ALL,H2 wholesale dispensing,forecourt production,natural gas steam reforming
 H2_ALL,H2 wholesale dispensing,forecourt production,electrolysis
 H2_NOGREEN,H2 central production,coal,coal chemical
 H2_NOGREEN,H2 central production,coal,coal chemical CCS
 H2_NOGREEN,H2 central production,gas,natural gas steam reforming
-H2_NOGREEN,H2 central production,gas,natural gas steam reforming CCS
-H2_NOGREEN,H2 central production,nuclear,thermal splitting
+H2_NOGREEN,H2 central production,gas,gas ATR CCS
+H2_NOGREEN,H2 central production,nuclear,electrolysis
 H2_NOGREEN,H2 central production,electricity,electrolysis
-H2_NOGREEN,H2 industrial,forecourt production,electrolysis
+H2_NOGREEN,H2 industrial,onsite production,electrolysis
 H2_NOGREEN,H2 wholesale dispensing,forecourt production,natural gas steam reforming
 H2_NOGREEN,H2 wholesale dispensing,forecourt production,electrolysis
 IND_EN,elect_td_ind,elect_td_ind,elect_td_ind
@@ -300,7 +300,7 @@ IND_EN,delivered coal industry,delivered coal industry,delivered coal industry
 IND_EN,wholesale gas,wholesale gas,wholesale gas
 IND_EN,delivered biomass industry,delivered biomass industry,delivered biomass industry
 IND_EN,H2 industrial,H2 delivery,H2 delivery
-IND_EN,H2 industrial,forecourt production,electrolysis
+IND_EN,H2 industrial,onsite production,electrolysis
 PRIMARY_ENERGY,regional biomass,regional biomass,regional biomass
 PRIMARY_ENERGY,regional coal,domestic coal,domestic coal
 PRIMARY_ENERGY,regional coal,imported coal,imported coal
@@ -337,7 +337,7 @@ PRIMARY_ENERGY,electricity,wind,wind_offshore
 PRIMARY_ENERGY,electricity,wind,wind_storage
 PRIMARY_ENERGY,H2 central production,solar,electrolysis
 PRIMARY_ENERGY,H2 central production,wind,electrolysis
-PRIMARY_ENERGY,H2 central production,nuclear,thermal splitting
+PRIMARY_ENERGY,H2 central production,nuclear,electrolysis
 PRIMARY_ENERGY_FOSSIL,regional coal,domestic coal,domestic coal
 PRIMARY_ENERGY_FOSSIL,regional coal,imported coal,imported coal
 PRIMARY_ENERGY_FOSSIL,gas processing,natural gas,natural gas
@@ -464,7 +464,7 @@ TPES_RENEWABLE,electricity,wind,wind_offshore
 TPES_RENEWABLE,electricity,wind,wind_storage
 TPES_RENEWABLE,H2 central production,solar,electrolysis
 TPES_RENEWABLE,H2 central production,wind,electrolysis
-TPES_RENEWABLE,H2 central production,nuclear,thermal splitting
+TPES_RENEWABLE,H2 central production,nuclear,electrolysis
 TPES_RENEWABLE_FEEDSTOCKSRL,regional biomass,regional biomass,regional biomass
 TPES_RENEWABLE_FEEDSTOCKSRL,regional biomassOil,regional biomassOil,Soybean
 TPES_RENEWABLE_FEEDSTOCKSRL,regional biomassOil,regional biomassOil,OilCrop
@@ -494,7 +494,7 @@ TPES_RENEWABLE_FEEDSTOCKSRL,electricity,wind,wind_offshore
 TPES_RENEWABLE_FEEDSTOCKSRL,electricity,wind,wind_storage
 TPES_RENEWABLE_FEEDSTOCKSRL,H2 central production,solar,electrolysis
 TPES_RENEWABLE_FEEDSTOCKSRL,H2 central production,wind,electrolysis
-TPES_RENEWABLE_FEEDSTOCKSRL,H2 central production,nuclear,thermal splitting
+TPES_RENEWABLE_FEEDSTOCKSRL,H2 central production,nuclear,electrolysis
 TPES_RENEWABLE_FEEDSTOCKSRL,refined liquids feedstocks,refined liquids feedstocks,refined liquids feedstocks
 TPES_RES_elec,elec_CSP,CSP,CSP (dry_hybrid)
 TPES_RES_elec,elec_CSP,CSP,CSP (recirculating)
@@ -531,7 +531,7 @@ TPES_RES_primary,regional corn for ethanol,regional corn for ethanol,regional co
 TPES_RES_primary,regional sugar for ethanol,regional sugar for ethanol,regional sugar for ethanol
 TRAD_BIO,resid heating,traditional biomass,traditional biomass
 TRAD_BIO,resid others,traditional biomass,traditional biomass
-PALMOIL_IMP,regional oilpalm,imported oilpalm,imported oilpalm
+PALMOIL_IMP,total oilpalm,imported oilpalm,imported oilpalm
 COMM,comm cooling,electricity,electricity
 COMM,comm cooling,gas,gas
 COMM,comm heating,biomass,biomass
