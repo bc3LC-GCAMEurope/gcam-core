@@ -785,8 +785,16 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     # Compute ambient heat by technology
     L144.ambient_heat_tech <- estat_nrg_ind_ahbtc_filtered_en %>%
       select(-OBS_FLAG) %>%
-      left_join_strict(heatpump_to_tech_map, by = c('hp_tech' = 'nrg_bal'), relationship = "many-to-many") %>%
-      filter(climate == 'average') %>%
+      left_join_strict(heatpump_to_tech_map %>%
+                         rename(nrg_bal_climate = nrg_bal) %>%
+                         mutate(nrg_bal = stringr::str_sub(nrg_bal_climate, 1, -4)),
+                       by = c('hp_tech' = 'nrg_bal_climate'),
+                       relationship = "many-to-many") %>%
+      # add data for different climate regions
+      group_by(STRUCTURE, STRUCTURE_ID, freq, nrg_bal, unit, geo, TIME_PERIOD, subsector, tech) %>%
+      summarise(OBS_VALUE = sum(OBS_VALUE)) %>%
+      ungroup() %>%
+      rename(hp_tech = nrg_bal) %>%
       # remove EU-27 and other aggregated regions
       filter(nchar(geo) == 2) %>%
       left_join_error_no_match(geo_to_climate_map, by = c('geo')) %>%
