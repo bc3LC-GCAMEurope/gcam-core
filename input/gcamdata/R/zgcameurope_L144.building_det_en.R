@@ -810,7 +810,10 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       summarise(tech_ambient_heat = sum(value)) %>%
       ungroup() %>%
       # remove the "middle" regions
-      mutate(across(where(is.character), ~ stringr::str_remove_all(., "middle ")))
+      mutate(across(where(is.character), ~ stringr::str_remove_all(., "middle "))) %>%
+      # UNITS: from GWH to TJ (GWh = TJ × 0.27778; TJ = GWh * 3.6)
+      mutate(tech_ambient_heat = tech_ambient_heat * 3.6)
+
 
 
     L144.ambient_heat_tech_extr <- L144.ambient_heat_tech %>%
@@ -1099,8 +1102,6 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
 
     L144.ambient_heat_tech_scaled <- L144.ambient_heat_tech_extr %>%
       left_join_strict(L144.ambient_heat_tech_scaled, by = c('GCAM_region_ID', 'year')) %>%
-      # service_ambient_heat in TJ  &&  tech_ambient_heat in GWh  =>  GWh = TJ × 0.27778
-      mutate(total_service = total_service * 0.27778) %>%
       # compute scaling rate
       mutate(scaling_rate = if_else(total_tech == 0,
                                     0,
@@ -1114,8 +1115,6 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     # adapt the tech dataset: service_ambient_heat of hot water must be
     # substracted to the tech_ambient_heat of air-water
     EUR_hhAmbientHeat_R_Y_S_extr_hotwater = EUR_hhAmbientHeat_R_Y_S_extr %>%
-      # service_ambient_heat in TJ  &&  tech_ambient_heat in GWh  =>  GWh = TJ × 0.27778
-      mutate(service_ambient_heat = service_ambient_heat * 0.27778) %>%
       filter(service == 'resid hot water modern EUR')
 
     L144.ambient_heat_tech_scaled_adj <- L144.ambient_heat_tech_scaled %>%
@@ -1193,9 +1192,9 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
                                  distinct(), by = 'GCAM_region_ID') %>%
       # apply shares
       mutate(service_ambient_heat = service_ambient_heat * share) %>%
-      # compute efficiency: en_used = service_ambient_heat / efficiency  and  convert from GWH to EJ/yr
+      # compute efficiency: en_used = service_ambient_heat / efficiency  and  convert from TJ to EJ/yr
       left_join_strict(A44.cost_efficiency_EUR, by = c('service' = 'supplysector', 'subsector', 'technology'), relationship = "many-to-many") %>%
-      mutate(en = (service_ambient_heat / efficiency) * 3.6e-6) %>%
+      mutate(en = (service_ambient_heat / efficiency) * 1e-6) %>%
       select(service, subsector, technology, value = en, GCAM_region_ID, year) %>%
       distinct()
 
