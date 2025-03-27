@@ -14,23 +14,23 @@
 #' @importFrom dplyr bind_rows distinct filter if_else left_join mutate select
 #' @author RLH April 2023
 module_policy_L3222.CTax <- function(command, ...) {
+  MODULE_INPUTS <- c(FILE = "policy/A_CTax",
+                     FILE = "policy/mappings/ghg_link",
+                     FILE = "policy/mappings/market_region_mappings")
+  MODULE_OUTPUTS <- c("L3222.CTax",
+                      "L3222.CTax_GHG_Link")
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "policy/A_CTax",
-             FILE = "policy/mappings/ghg_link",
-             FILE = "policy/mappings/market_region_mappings")
-           )
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L3222.CTax",
-             "L3222.CTax_GHG_Link"))
+    return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    A_CTax <- get_data(all_data, "policy/A_CTax") %>%
-      mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml")))
-    ghg_link <- get_data(all_data, "policy/mappings/ghg_link")
-    market_region_mappings <- get_data(all_data, "policy/mappings/market_region_mappings")
+    get_data_list(all_data, MODULE_INPUTS)
+    A_CTax <- A_CTax %>% mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml")))
+
 
     # Write tax to all regions (no reason not to and necessary sometimes)
     L3222.CTax <- A_CTax %>%
@@ -69,7 +69,7 @@ module_policy_L3222.CTax <- function(command, ...) {
                      "policy/mappings/ghg_link") ->
       L3222.CTax_GHG_Link
 
-    return_data(L3222.CTax, L3222.CTax_GHG_Link)
+    return_data(MODULE_OUTPUTS)
   } else {
     stop("Unknown command")
   }

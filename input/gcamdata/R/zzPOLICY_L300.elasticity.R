@@ -30,12 +30,14 @@ module_policy_L300.elasticity <- function(command, ...) {
                      "L254.PriceElasticity_trn_EUR",
                      "L254.PerCapitaBased_trn_EUR",
                      INDUSTRY_INCELAS)
+
+  MODULE_OUTPUTS <- c("L300.elasticity_income",
+                      "L300.elasticity_price",
+                      "L300.PerCapitaBased_trn")
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L300.elasticity_income",
-             "L300.elasticity_price",
-             "L300.PerCapitaBased_trn"))
+    return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -123,9 +125,7 @@ module_policy_L300.elasticity <- function(command, ...) {
       L300.PerCapitaBased_trn
 
 
-    return_data(L300.elasticity_income,
-                L300.elasticity_price,
-                L300.PerCapitaBased_trn)
+    return_data(MODULE_OUTPUTS)
   } else {
     stop("Unknown command")
   }

@@ -14,12 +14,13 @@
 #' @importFrom dplyr bind_rows distinct filter if_else left_join mutate select
 #' @author RLH April 2023
 module_policy_L304.Coef_Eff <- function(command, ...) {
+  MODULE_OUTPUTS <- c("L304.StubTechCoef",
+                      "L304.StubTechEff")
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "policy/A_Coef_Eff"
     ))
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L304.StubTechCoef",
-             "L304.StubTechEff"))
+    return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -59,8 +60,7 @@ module_policy_L304.Coef_Eff <- function(command, ...) {
       add_precursors("policy/A_Coef_Eff") ->
       L304.StubTechEff
 
-    return_data(L304.StubTechCoef,
-                L304.StubTechEff)
+    return_data(MODULE_OUTPUTS)
   } else {
     stop("Unknown command")
   }

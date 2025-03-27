@@ -14,28 +14,26 @@
 #' @importFrom dplyr bind_rows distinct filter if_else left_join mutate select
 #' @author RLH April 2023
 module_policy_L3231.land_constraints <- function(command, ...) {
+  MODULE_INPUTS <- c(FILE = "policy/A_Land_Constraints",
+                     "L2231.LN3_MgdAllocation_noncrop",
+                     "L2231.LN3_UnmgdAllocation",
+                     "L222.LN2_MgdAllocation",
+                     "L222.LN2_UnmgdAllocation")
+  MODULE_OUTPUTS <- c("L3231.landConstrain_mngd_LN3",
+                      "L3231.landConstrain_unmngd_LN3",
+                      "L3231.landConstrain_mngd_LN2",
+                      "L3231.landConstrain_unmngd_LN2",
+                      "L3231.landConstrain")
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "policy/A_Land_Constraints",
-             "L2231.LN3_MgdAllocation_noncrop",
-             "L2231.LN3_UnmgdAllocation",
-             "L222.LN2_MgdAllocation",
-             "L222.LN2_UnmgdAllocation"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L3231.landConstrain_mngd_LN3",
-             "L3231.landConstrain_unmngd_LN3",
-             "L3231.landConstrain_mngd_LN2",
-             "L3231.landConstrain_unmngd_LN2",
-             "L3231.landConstrain"))
+    return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    A_Land_Constraints <- get_data(all_data, "policy/A_Land_Constraints")
-    L2231.LN3_MgdAllocation_noncrop <- get_data(all_data, "L2231.LN3_MgdAllocation_noncrop")
-    L2231.LN3_UnmgdAllocation <- get_data(all_data, "L2231.LN3_UnmgdAllocation")
-    L222.LN2_MgdAllocation <- get_data(all_data, "L222.LN2_MgdAllocation")
-    L222.LN2_UnmgdAllocation <- get_data(all_data, "L222.LN2_UnmgdAllocation")
+    get_data_list(all_data, MODULE_INPUTS)
 
     L3231.landConstrain <- A_Land_Constraints %>%
       gather_years(value_col = "constraint") %>%
@@ -146,9 +144,7 @@ module_policy_L3231.land_constraints <- function(command, ...) {
                      "policy/A_Land_Constraints")  ->
       L3231.landConstrain_unmngd_LN2
 
-    return_data(L3231.landConstrain_mngd_LN3, L3231.landConstrain_unmngd_LN3,
-                L3231.landConstrain_mngd_LN2, L3231.landConstrain_unmngd_LN2,
-                L3231.landConstrain)
+    return_data(MODULE_OUTPUTS)
   } else {
     stop("Unknown command")
   }

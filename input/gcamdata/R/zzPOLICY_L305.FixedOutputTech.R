@@ -14,32 +14,33 @@
 #' @importFrom dplyr bind_rows distinct filter if_else left_join mutate select
 #' @author RLH April 2023
 module_policy_L305.FixedOutputTech <- function(command, ...) {
+  MODULE_INPUTS <- c(FILE = "policy/A_FixedOutputTech",
+                     FILE = "policy/A_FixedOutputTranTech",
+                     inputs_of("module_energy_transportation_UCD_CORE_xml"))
+  MODULE_OUTPUTS <- c("L305.StubTechFixedOutput",
+                      "L305.GlbTechFixedOutput",
+                      "L305.StubTechLifetime",
+                      "L305.StubTranTechFixedOutput",
+                      "L305.GlobalTranTechInterp",
+                      "L305.GlobalTranTechShrwt",
+                      "L305.GlobalTranTechSCurve",
+                      "L305.StubTranTechLoadFactor",
+                      "L305.StubTranTechCost",
+                      "L305.StubTechTrackCapital",
+                      "L305.StubTranTechCalInput",
+                      "L305.StubTranTechCoef")
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "policy/A_FixedOutputTech",
-             FILE = "policy/A_FixedOutputTranTech",
-             inputs_of("module_energy_transportation_UCD_CORE_xml")))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L305.StubTechFixedOutput",
-             "L305.GlbTechFixedOutput",
-             "L305.StubTechLifetime",
-             "L305.StubTranTechFixedOutput",
-             "L305.GlobalTranTechInterp",
-             "L305.GlobalTranTechShrwt",
-             "L305.GlobalTranTechSCurve",
-             "L305.StubTranTechLoadFactor",
-             "L305.StubTranTechCost",
-             "L305.StubTechTrackCapital",
-             "L305.StubTranTechCalInput",
-             "L305.StubTranTechCoef"))
+    return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    A_FixedOutputTech <- get_data(all_data, "policy/A_FixedOutputTech") %>%
-      mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml")))
-    A_FixedOutputTranTech <- get_data(all_data, "policy/A_FixedOutputTranTech") %>%
-      mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml")))
+    get_data_list(all_data, MODULE_INPUTS)
+    A_FixedOutputTech <- A_FixedOutputTech %>% mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml")))
+    A_FixedOutputTranTech <- A_FixedOutputTranTech %>% mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml")))
 
     # 1. Regular tech processing ---------------
     L305.StubTechFixedOutput <- A_FixedOutputTech %>%
@@ -79,14 +80,14 @@ module_policy_L305.FixedOutputTech <- function(command, ...) {
 
     # 2. Transportation tech processing ---------------
     # Global tech - just replace technology name
-    L305.GlobalTranTechInterp <- get_data(all_data, "L254.GlobalTranTechInterp") %>%
+    L305.GlobalTranTechInterp <- L254.GlobalTranTechInterp %>%
       semi_join(A_FixedOutputTranTech, by = c("sector.name" = "supplysector", "subsector.name" = "tranSubsector", "tranTechnology" = "tech.copy")) %>%
       left_join(distinct(A_FixedOutputTranTech, xml, supplysector, tranSubsector, tech.copy, stub.technology),
                 by = c("sector.name" = "supplysector", "subsector.name" = "tranSubsector", "tranTechnology" = "tech.copy")) %>%
       mutate(tranTechnology = stub.technology) %>%
       select(-stub.technology)
 
-    L305.GlobalTranTechShrwt <- get_data(all_data, "L254.GlobalTranTechShrwt") %>%
+    L305.GlobalTranTechShrwt <- L254.GlobalTranTechShrwt %>%
       semi_join(A_FixedOutputTranTech, by = c("sector.name" = "supplysector", "subsector.name" = "tranSubsector", "tranTechnology" = "tech.copy")) %>%
       left_join(distinct(A_FixedOutputTranTech, xml, supplysector, tranSubsector, tech.copy, stub.technology),
                                by = c("sector.name" = "supplysector", "subsector.name" = "tranSubsector", "tranTechnology" = "tech.copy")) %>%
@@ -95,7 +96,7 @@ module_policy_L305.FixedOutputTech <- function(command, ...) {
              share.weight = 0) %>%
       select(-stub.technology)
 
-    L305.GlobalTranTechSCurve <- get_data(all_data, "L254.GlobalTranTechSCurve") %>%
+    L305.GlobalTranTechSCurve <- L254.GlobalTranTechSCurve %>%
       semi_join(A_FixedOutputTranTech, by = c("sector.name" = "supplysector", "subsector.name" = "tranSubsector", "tranTechnology" = "tech.copy")) %>%
       left_join(distinct(A_FixedOutputTranTech, xml, supplysector, tranSubsector, tech.copy, stub.technology),
                                by = c("sector.name" = "supplysector", "subsector.name" = "tranSubsector", "tranTechnology" = "tech.copy")) %>%
@@ -103,7 +104,7 @@ module_policy_L305.FixedOutputTech <- function(command, ...) {
       select(-stub.technology)
 
     # Stub tech - just replace technology name, plus add fixedOutput
-    L305.StubTranTechLoadFactor<- get_data(all_data, "L254.StubTranTechLoadFactor") %>%
+    L305.StubTranTechLoadFactor<- L254.StubTranTechLoadFactor %>%
       filter(sce == "CORE") %>%
       semi_join(A_FixedOutputTranTech, by = c("region", "supplysector", "tranSubsector", "stub.technology" = "tech.copy"))  %>%
       left_join(distinct(A_FixedOutputTranTech, xml, region, supplysector, tranSubsector, tech.copy, stub.technology),
@@ -111,7 +112,7 @@ module_policy_L305.FixedOutputTech <- function(command, ...) {
       mutate(stub.technology = stub.technology.y) %>%
       select(-stub.technology.y)
 
-    L305.StubTranTechCost <- get_data(all_data, "L254.StubTranTechCost")  %>%
+    L305.StubTranTechCost <- L254.StubTranTechCost  %>%
       filter(sce == "CORE") %>%
       semi_join(A_FixedOutputTranTech, by = c("region", "supplysector", "tranSubsector", "stub.technology" = "tech.copy"))  %>%
       left_join(distinct(A_FixedOutputTranTech, xml, region, supplysector, tranSubsector, tech.copy, stub.technology),
@@ -119,7 +120,7 @@ module_policy_L305.FixedOutputTech <- function(command, ...) {
       mutate(stub.technology = stub.technology.y) %>%
       select(-stub.technology.y)
 
-    L305.StubTechTrackCapital <- get_data(all_data, "L254.StubTechTrackCapital")  %>%
+    L305.StubTechTrackCapital <- L254.StubTechTrackCapital  %>%
       filter(sce == "CORE") %>%
       semi_join(A_FixedOutputTranTech, by = c("region", "supplysector", "subsector" = "tranSubsector", "stub.technology" = "tech.copy"))  %>%
       left_join(distinct(A_FixedOutputTranTech, xml, region, supplysector, tranSubsector, tech.copy, stub.technology),
@@ -127,7 +128,7 @@ module_policy_L305.FixedOutputTech <- function(command, ...) {
       mutate(stub.technology = stub.technology.y) %>%
       select(-stub.technology.y)
 
-    L305.StubTranTechCalInput <- get_data(all_data, "L254.StubTranTechCalInput")  %>%
+    L305.StubTranTechCalInput <- L254.StubTranTechCalInput  %>%
       filter(sce == "CORE") %>%
       semi_join(A_FixedOutputTranTech, by = c("region", "supplysector", "tranSubsector", "stub.technology" = "tech.copy"))  %>%
       left_join(distinct(A_FixedOutputTranTech, xml, region, supplysector, tranSubsector, tech.copy, stub.technology),
@@ -136,7 +137,7 @@ module_policy_L305.FixedOutputTech <- function(command, ...) {
              calibrated.value = 0) %>%
       select(-stub.technology.y)
 
-    L305.StubTranTechCoef <- get_data(all_data, "L254.StubTranTechCoef") %>%
+    L305.StubTranTechCoef <- L254.StubTranTechCoef %>%
       filter(sce == "CORE") %>%
       semi_join(A_FixedOutputTranTech, by = c("region", "supplysector", "tranSubsector", "stub.technology" = "tech.copy"))  %>%
       left_join(distinct(A_FixedOutputTranTech, xml, region, supplysector, tranSubsector, tech.copy, stub.technology),
@@ -177,18 +178,7 @@ module_policy_L305.FixedOutputTech <- function(command, ...) {
       add_precursors("policy/A_FixedOutputTranTech") ->
       L305.StubTranTechFixedOutput
 
-    return_data(L305.StubTechFixedOutput,
-                L305.StubTechLifetime,
-                L305.GlbTechFixedOutput,
-                L305.StubTranTechFixedOutput,
-                L305.GlobalTranTechInterp,
-                L305.GlobalTranTechShrwt,
-                L305.GlobalTranTechSCurve,
-                L305.StubTranTechLoadFactor,
-                L305.StubTranTechCost,
-                L305.StubTechTrackCapital,
-                L305.StubTranTechCalInput,
-                L305.StubTranTechCoef)
+    return_data(MODULE_OUTPUTS)
   } else {
     stop("Unknown command")
   }

@@ -13,7 +13,7 @@
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr bind_rows distinct filter if_else left_join mutate select
 #' @author RLH April 2023
-module_policy_307.exoShutdownScalar <- function(command, ...) {
+module_policy_L307.exoShutdownScalar <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "policy/A_ExoShutdownScalar"
     ))

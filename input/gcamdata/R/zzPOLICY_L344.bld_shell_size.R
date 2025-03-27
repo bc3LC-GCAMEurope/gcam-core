@@ -19,11 +19,12 @@ module_policy_L344.bld_shell_size <- function(command, ...) {
                      "L244.Floorspace",
                      "L244.ShellConductance_bld_EUR",
                      "L244.Floorspace_EUR")
+  MODULE_OUTPUTS <- c("L344.bld_shell",
+                      "L344.bld_size")
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L344.bld_shell",
-             "L344.bld_size"))
+    return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -77,8 +78,7 @@ module_policy_L344.bld_shell_size <- function(command, ...) {
                      "L244.Floorspace") ->
       L344.bld_size
 
-    return_data(L344.bld_shell,
-                L344.bld_size)
+    return_data(MODULE_OUTPUTS)
   } else {
     stop("Unknown command")
   }

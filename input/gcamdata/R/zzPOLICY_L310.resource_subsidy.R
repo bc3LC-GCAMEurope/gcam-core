@@ -14,29 +14,31 @@
 #' @importFrom dplyr bind_rows distinct filter if_else left_join mutate select
 #' @author RLH December 2023
 module_policy_L310.resource_subsidy <- function(command, ...) {
+  MODULE_INPUTS <- c(FILE = "policy/A_resource_subsidy",
+                     outputs_of("module_energy_L254.transportation_UCD"))
+  MODULE_OUTPUTS <- c("L310.RenewRsrc",
+                      "L310.RenewRsrcPrice",
+                      "L310.SmthRenewRsrcCurves",
+                      "L310.ResTechShrwt",
+                      "L310.GlobalTranTechShrwt",
+                      "L310.GlobalTranTechSCurve",
+                      "L310.StubTranTechLoadFactor",
+                      "L310.StubTranTechCost",
+                      "L310.StubTechTrackCapital",
+                      "L310.StubTranTechCalInput",
+                      "L310.StubTranTechShwtFuture",
+                      "L310.StubTranTechCoef")
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "policy/A_resource_subsidy",
-             outputs_of("module_energy_L254.transportation_UCD")))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L310.RenewRsrc",
-             "L310.RenewRsrcPrice",
-             "L310.SmthRenewRsrcCurves",
-             "L310.ResTechShrwt",
-             "L310.GlobalTranTechShrwt",
-             "L310.GlobalTranTechSCurve",
-             "L310.StubTranTechLoadFactor",
-             "L310.StubTranTechCost",
-             "L310.StubTechTrackCapital",
-             "L310.StubTranTechCalInput",
-             "L310.StubTranTechShwtFuture",
-             "L310.StubTranTechCoef"))
+    return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    A_resource_subsidy <- get_data(all_data, "policy/A_resource_subsidy") %>%
-      mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml")))
+    get_data_list(all_data, MODULE_INPUTS)
+    A_resource_subsidy <- A_resource_subsidy %>% mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml")))
 
     # Set resource basic info ------------------
     L310.RenewRsrc <- A_resource_subsidy %>%
@@ -63,7 +65,7 @@ module_policy_L310.resource_subsidy <- function(command, ...) {
 
     # 2. Transportation tech processing - simple copying ---------------
     # Global tech - just replace technology name
-    L310.GlobalTranTechShrwt <- get_data(all_data, "L254.GlobalTranTechShrwt") %>%
+    L310.GlobalTranTechShrwt <- L254.GlobalTranTechShrwt %>%
       semi_join(A_resource_subsidy, by = c("sector.name" = "supplysector", "subsector.name" = "subsector", "tranTechnology" = "tech.to.copy")) %>%
       left_join(distinct(A_resource_subsidy, xml, supplysector, subsector, tech.to.copy, new.tech.name),
                 by = c("sector.name" = "supplysector", "subsector.name" = "subsector", "tranTechnology" = "tech.to.copy")) %>%
@@ -72,7 +74,7 @@ module_policy_L310.resource_subsidy <- function(command, ...) {
              share.weight = 0) %>%
       select(-new.tech.name)
 
-    L310.GlobalTranTechSCurve <- get_data(all_data, "L254.GlobalTranTechSCurve") %>%
+    L310.GlobalTranTechSCurve <- L254.GlobalTranTechSCurve %>%
       semi_join(A_resource_subsidy, by = c("sector.name" = "supplysector", "subsector.name" = "subsector", "tranTechnology" = "tech.to.copy")) %>%
       left_join(distinct(A_resource_subsidy, xml, supplysector, subsector, tech.to.copy, new.tech.name),
                 by = c("sector.name" = "supplysector", "subsector.name" = "subsector", "tranTechnology" = "tech.to.copy")) %>%
@@ -80,7 +82,7 @@ module_policy_L310.resource_subsidy <- function(command, ...) {
       select(-new.tech.name)
 
     # Stub tech - just replace technology name, plus add fixedOutput
-    L310.StubTranTechLoadFactor<- get_data(all_data, "L254.StubTranTechLoadFactor") %>%
+    L310.StubTranTechLoadFactor<- L254.StubTranTechLoadFactor %>%
       filter(sce == "CORE") %>%
       semi_join(A_resource_subsidy, by = c("region", "supplysector", "tranSubsector"  = "subsector", "stub.technology" = "tech.to.copy"))  %>%
       left_join(distinct(A_resource_subsidy, xml, region, supplysector, tranSubsector = subsector, tech.to.copy, new.tech.name),
@@ -88,7 +90,7 @@ module_policy_L310.resource_subsidy <- function(command, ...) {
       mutate(stub.technology = new.tech.name) %>%
       select(-new.tech.name)
 
-    L310.StubTranTechCost <- get_data(all_data, "L254.StubTranTechCost")  %>%
+    L310.StubTranTechCost <- L254.StubTranTechCost  %>%
       filter(sce == "CORE") %>%
       semi_join(A_resource_subsidy, by = c("region", "supplysector",  "tranSubsector"  = "subsector", "stub.technology" = "tech.to.copy"))  %>%
       left_join(distinct(A_resource_subsidy, xml, region, supplysector, tranSubsector = subsector,
@@ -98,7 +100,7 @@ module_policy_L310.resource_subsidy <- function(command, ...) {
              input.cost = non.energy.input.cost) %>%
       select(-new.tech.name, -non.energy.input.cost)
 
-    L310.StubTechTrackCapital <- get_data(all_data, "L254.StubTechTrackCapital")  %>%
+    L310.StubTechTrackCapital <- L254.StubTechTrackCapital  %>%
       filter(sce == "CORE") %>%
       semi_join(A_resource_subsidy, by = c("region", "supplysector", "subsector", "stub.technology" = "tech.to.copy"))  %>%
       left_join(distinct(A_resource_subsidy, xml, region, supplysector, subsector, tech.to.copy, new.tech.name),
@@ -106,7 +108,7 @@ module_policy_L310.resource_subsidy <- function(command, ...) {
       mutate(stub.technology = new.tech.name) %>%
       select(-new.tech.name)
 
-    L310.StubTranTechCalInput <- get_data(all_data, "L254.StubTranTechCalInput")  %>%
+    L310.StubTranTechCalInput <- L254.StubTranTechCalInput  %>%
       filter(sce == "CORE") %>%
       semi_join(A_resource_subsidy, by = c("region", "supplysector", "tranSubsector" = "subsector", "stub.technology" = "tech.to.copy"))  %>%
       left_join(distinct(A_resource_subsidy, xml, region, supplysector, tranSubsector = subsector, tech.to.copy, new.tech.name),
@@ -125,7 +127,7 @@ module_policy_L310.resource_subsidy <- function(command, ...) {
       select(xml, region, supplysector, tranSubsector, stub.technology, year = year.x, share.weight)
 
     # 3. Transportation tech processing - calculate coefficient ---------------
-    L310.StubTranTechCoef_energy <- get_data(all_data, "L254.StubTranTechCoef") %>%
+    L310.StubTranTechCoef_energy <- L254.StubTranTechCoef %>%
       filter(sce == "CORE") %>%
       semi_join(A_resource_subsidy, by = c("region", "supplysector", "tranSubsector" = "subsector", "stub.technology" = "tech.to.copy"))  %>%
       left_join(distinct(A_resource_subsidy, xml, region, supplysector, tranSubsector = subsector, tech.to.copy, new.tech.name),
@@ -217,16 +219,7 @@ module_policy_L310.resource_subsidy <- function(command, ...) {
       add_precursors("policy/A_resource_subsidy", "L254.StubTranTechCoef") ->
       L310.StubTranTechCoef
 
-    return_data(L310.RenewRsrc, L310.RenewRsrcPrice,
-                L310.SmthRenewRsrcCurves, L310.ResTechShrwt,
-                L310.GlobalTranTechShrwt,
-                L310.GlobalTranTechSCurve,
-                L310.StubTranTechLoadFactor,
-                L310.StubTranTechCost,
-                L310.StubTechTrackCapital,
-                L310.StubTranTechCalInput,
-                L310.StubTranTechShwtFuture,
-                L310.StubTranTechCoef)
+    return_data(MODULE_OUTPUTS)
   } else {
     stop("Unknown command")
   }

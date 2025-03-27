@@ -24,17 +24,18 @@ module_policy_L306.MAC_rename <- function(command, ...) {
                       "L252.ResMAC_fos_phaseInTime",
                       "L252.MAC_higwp_tc_average",
                       "L252.MAC_higwp_phaseInTime")
+  MODULE_OUTPUTS <- c("L306.ResMAC_fos",
+                      "L306.MAC_higwp",
+                      "L306.AgMAC",
+                      "L306.MAC_an",
+                      "L306.ResMAC_fos_tc_average",
+                      "L306.ResMAC_fos_phaseInTime",
+                      "L306.MAC_higwp_tc_average",
+                      "L306.MAC_higwp_phaseInTime")
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L306.ResMAC_fos",
-             "L306.MAC_higwp",
-             "L306.AgMAC",
-             "L306.MAC_an",
-             "L306.ResMAC_fos_tc_average",
-             "L306.ResMAC_fos_phaseInTime",
-             "L306.MAC_higwp_tc_average",
-             "L306.MAC_higwp_phaseInTime"))
+    return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -80,14 +81,7 @@ module_policy_L306.MAC_rename <- function(command, ...) {
     L306.MAC_higwp_phaseInTime <- process_MAC_data(L252.MAC_higwp_phaseInTime, A_MAC_rename, supplysector)
 
     # Produce outputs
-    return_data(L306.ResMAC_fos,
-                L306.MAC_higwp,
-                L306.AgMAC,
-                L306.MAC_an,
-                L306.ResMAC_fos_tc_average,
-                L306.ResMAC_fos_phaseInTime,
-                L306.MAC_higwp_tc_average,
-                L306.MAC_higwp_phaseInTime)
+    return_data(MODULE_OUTPUTS)
   } else {
     stop("Unknown command")
   }

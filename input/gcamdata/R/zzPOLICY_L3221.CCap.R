@@ -269,21 +269,7 @@ module_policy_L3221.CCap <- function(command, ...) {
     L3221.CCap_tech %>%
       add_title("Technology mapping to custom ghg policy", overwrite = T) %>%
       add_units("NA") %>%
-      add_precursors("policy/A_CCap_Region",
-                     "policy/A_CCap_Sector",
-                     "L221.StubTech_en",
-                     "L222.StubTech_en",
-                     "L224.StubTech_heat",
-                     "L2233.StubTech_elec_cool",
-                     "L226.StubTech_en",
-                     "L232.StubTech_ind",
-                     "L2321.StubTech_cement",
-                     "L2322.StubTech_Fert",
-                     "L2323.StubTech_iron_steel",
-                     "L2324.StubTech_Off_road",
-                     "L2325.StubTech_chemical",
-                     "L2326.StubTech_aluminum",
-                     "L244.StubTech_bld") ->
+      add_precursors(MODULE_INPUTS) ->
       L3221.CCap_tech
 
     L3221.CCap_tranTech %>%
