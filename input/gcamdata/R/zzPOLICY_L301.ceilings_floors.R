@@ -27,33 +27,33 @@ module_policy_L301.ceilings_floors <- function(command, ...) {
                       "L301.pmultiplier_NG",
                       "L301.input_tax_NG",
                       "L301.input_subsidy_NG")
+  chunklist <- find_chunks(disable_pattern = "policy")
+  chunkoutputs <- chunk_outputs(chunklist$name) %>%
+    filter(grepl("StubTech_", output),
+           !grepl("_aglu_|_emissions_", name),
+           !grepl("transport", name))
+  STUB_TECHS <- chunkoutputs$output
+  MODULE_INPUTS <- c(FILE = "policy/A_energy_constraints",
+                     FILE = "policy/A_renewable_energy_standards",
+                     FILE = "policy/mappings/policy_tech_mappings",
+                     FILE = "policy/mappings/market_region_mappings",
+                     "L226.StubTechCoef_elecownuse",
+                     "L226.StubTechCoef_electd",
+                     "L2233.GlobalTechEff_elec_cool",
+                     "L222.GlobalTechCoef_en",
+                     "L201.GDP_Scen",
+                     "L201.GDP_GCAM3",
+                     FILE = "policy/GCAM_results/OutputsByTech",
+                     "L239.PrimaryConsKeyword_en",
+                     "L2392.PrimaryConsKeyword_en_NG",
+                     "L221.StubTechCalInput_bioOil",
+                     "L240.Production_reg_imp",
+                     "L226.StubTechCoef_elecownuse_EUR",
+                     "L226.TechCoef_electd_EUR",
+                     "L226.StubTechCoef_electd_EUR",
+                     "L221.StubTechCalInput_bioOil_EUR",
+                     STUB_TECHS)
   if(command == driver.DECLARE_INPUTS) {
-    chunklist <- find_chunks()
-    chunkoutputs <- chunk_outputs(chunklist$name) %>%
-      filter(grepl("StubTech_", output),
-             !grepl("_aglu_|_emissions_", name),
-             !grepl("transport", name))
-    STUB_TECHS <- chunkoutputs$output
-    MODULE_INPUTS <- c(FILE = "policy/A_energy_constraints",
-                       FILE = "policy/A_renewable_energy_standards",
-                       FILE = "policy/mappings/policy_tech_mappings",
-                       FILE = "policy/mappings/market_region_mappings",
-                       "L226.StubTechCoef_elecownuse",
-                       "L226.StubTechCoef_electd",
-                       "L2233.GlobalTechEff_elec_cool",
-                       "L222.GlobalTechCoef_en",
-                       "L201.GDP_Scen",
-                       "L201.GDP_GCAM3",
-                       FILE = "policy/GCAM_results/OutputsByTech",
-                       "L239.PrimaryConsKeyword_en",
-                       "L2392.PrimaryConsKeyword_en_NG",
-                       "L221.StubTechCalInput_bioOil",
-                       "L240.Production_reg_imp",
-                       "L226.StubTechCoef_elecownuse_EUR",
-                       "L226.TechCoef_electd_EUR",
-                       "L226.StubTechCoef_electd_EUR",
-                       "L221.StubTechCalInput_bioOil_EUR",
-                       STUB_TECHS)
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(MODULE_OUTPUTS)

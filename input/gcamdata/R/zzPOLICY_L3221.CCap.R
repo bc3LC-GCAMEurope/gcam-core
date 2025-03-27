@@ -21,28 +21,29 @@ module_policy_L3221.CCap <- function(command, ...) {
                       "L3221.CCap_tranTech",
                       "L3221.CCap_resource",
                       "L3221.CCap_GHG_Link")
+
+  chunklist <- find_chunks(disable_pattern = "policy")
+  chunkoutputs <- chunk_outputs(chunklist$name) %>%
+    filter(grepl("StubTech_", output),
+           !grepl("_aglu_|_emissions_", name),
+           !grepl("transport", name))
+  STUB_TECHS <- chunkoutputs$output
+  MODULE_INPUTS <- c(FILE = "policy/A_CCap_Constraint",
+                     FILE = "policy/mappings/policy_sector_mappings",
+                     FILE = "policy/mappings/policy_tranSubsector_mappings",
+                     FILE = "policy/mappings/policy_resource_mappings",
+                     FILE = "policy/mappings/ghg_link",
+                     FILE = "policy/GCAM_results/CO2byTech",
+                     FILE = "policy/mappings/market_region_mappings",
+                     "L210.ResTechCoef",
+                     "L210.ResTechCoef_EUR",
+                     "L201.GDP_Scen",
+                     STUB_TECHS,
+                     "L239.PrimaryConsKeyword_en",
+                     "L239.PrimaryConsKeyword_en_EUR",
+                     "L254.StubTranTech",
+                     "L254.StubTranTech_EUR")
   if(command == driver.DECLARE_INPUTS) {
-    chunklist <- find_chunks()
-    chunkoutputs <- chunk_outputs(chunklist$name) %>%
-      filter(grepl("StubTech_", output),
-             !grepl("_aglu_|_emissions_", name),
-             !grepl("transport", name))
-    STUB_TECHS <- chunkoutputs$output
-    MODULE_INPUTS <- c(FILE = "policy/A_CCap_Constraint",
-                       FILE = "policy/mappings/policy_sector_mappings",
-                       FILE = "policy/mappings/policy_tranSubsector_mappings",
-                       FILE = "policy/mappings/policy_resource_mappings",
-                       FILE = "policy/mappings/ghg_link",
-                       FILE = "policy/GCAM_results/CO2byTech",
-                       FILE = "policy/mappings/market_region_mappings",
-                       "L210.ResTechCoef",
-                       "L210.ResTechCoef_EUR",
-                       "L201.GDP_Scen",
-                       STUB_TECHS,
-                       "L239.PrimaryConsKeyword_en",
-                       "L239.PrimaryConsKeyword_en_EUR",
-                       "L254.StubTranTech",
-                       "L254.StubTranTech_EUR")
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(MODULE_OUTPUTS)
