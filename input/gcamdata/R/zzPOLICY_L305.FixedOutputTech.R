@@ -58,8 +58,7 @@ module_policy_L305.FixedOutputTech <- function(command, ...) {
       distinct() %>%
       # add missing years
       group_by(xml, region, supplysector, subsector, stub.technology) %>%
-      complete(nesting(xml, region, supplysector, subsector, stub.technology),
-               year = seq(min(year), max(year), 5)) %>%
+      complete(year = seq(min(year), max(year), 5)) %>%
       ungroup %>%
       mutate(lifetime = -1)
 
