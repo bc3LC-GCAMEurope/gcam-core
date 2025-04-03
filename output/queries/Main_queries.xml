@@ -5416,7 +5416,7 @@ A user can adjust the query to search for any of:
             <supplyDemandQuery title="outputs by tech">
                 <axis1 name="technology">technology[@name]</axis1>
                 <axis2 name="Year">physical-output[@vintage]</axis2>
-                <xPath buildList="true" dataName="output" group="false" sumAll="false">*[@type='sector']//*[@type='subsector']//*[@type='technology']/*[@type='output']/physical-output/node()</xPath>
+                <xPath buildList="true" dataName="output" group="false" sumAll="false">*[@type='sector']//*[@type='subsector']//*[@type='technology']//*[@type='output']/physical-output/node()</xPath>
                 <comments/>
             </supplyDemandQuery>
             <supplyDemandQuery title="input-output coefficients by tech">
@@ -5565,15 +5565,14 @@ A user can adjust the query to search for any of:
                 <supplyDemandQuery title="elec gen by gen tech and cooling tech (incl cogen)">
                     <axis1 name="technology">technology</axis1>
                     <axis2 name="Year">physical-output[@vintage]</axis2>
-                    <xPath buildList="true" dataName="output" group="false" sumAll="false">*[@type='sector' and (@name='electricity' or 
-                        @name='base load generation' or @name='intermediate generation' or @name='subpeak generation' or @name='peak generation' or 
-                        @name='elect_td_bld' or @name='industrial energy use')]//
+                    <xPath buildList="true" dataName="output" group="false" sumAll="false">*[@type='sector']//
                         *[@type='subsector']//*[@type='technology' and not (@name='electricity' or @name='elect_td_bld')]/
                         *[@type='output' (:collapse:) and (@name='electricity' or @name='base load generation' or @name='intermediate generation' or 
                         @name='subpeak generation' or @name='peak generation' or @name='elect_td_bld')]/
                         physical-output/node()</xPath>
                     <comments/>
                 </supplyDemandQuery>
+				
                 <supplyDemandQuery title="elec gen by gen tech and cooling tech (incl cogen) VINTAGE">
                     <axis1 name="technology">technology</axis1>
                     <axis2 name="Year">physical-output[@vintage]</axis2>
@@ -5587,6 +5586,7 @@ A user can adjust the query to search for any of:
                     <comments/>
                     <showAttribute attribute-name="year" level="technology"/>
                 </supplyDemandQuery>
+
                 <supplyDemandQuery title="elec energy input by subsector">
                     <axis1 name="input">input</axis1>
                     <axis2 name="Year">demand-physical[@vintage]</axis2>

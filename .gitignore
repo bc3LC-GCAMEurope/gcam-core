@@ -90,3 +90,5 @@ output/modelinterface/modelinterface
 /exe/country-specific_config
 /exe/old
 
+input/price_co2_EU.xml
+input/policy/price_co2_EU.xml
