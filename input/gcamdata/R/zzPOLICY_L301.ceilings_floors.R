@@ -310,14 +310,17 @@ module_policy_L301.ceilings_floors <- function(command, ...) {
       semi_join(A_energy_constraints %>% filter(policyType == "tax"),
                 by = c("region", "market", "policy.portfolio.standard", "policyType")) %>%
       distinct(region, input.tax = policy.portfolio.standard, supplysector, subsector, stub.technology) %>%
-      repeat_add_columns(tibble(year = c(MODEL_FINAL_BASE_YEAR, MODEL_FUTURE_YEARS)))
+      repeat_add_columns(tibble(year = c(MODEL_FINAL_BASE_YEAR, MODEL_FUTURE_YEARS))) %>%
+      filter(!is.na(input.tax))
 
     # 6. Create input subsidy tables - apply to all model years because of vintages --------------------
     L301.input_subsidy <- L301.ceilings_floors %>%
       semi_join(A_energy_constraints %>% filter(policyType == "subsidy"),
                 by = c("region", "market", "policy.portfolio.standard", "policyType")) %>%
       distinct(region, input.subsidy = policy.portfolio.standard, supplysector, subsector, stub.technology) %>%
-      repeat_add_columns(tibble(year = c(MODEL_FINAL_BASE_YEAR, MODEL_FUTURE_YEARS)))
+      repeat_add_columns(tibble(year = c(MODEL_FINAL_BASE_YEAR, MODEL_FUTURE_YEARS))) %>%
+      filter(!is.na(input.subsidy))
+
 
     # 7. Add price multipliers --------------------
     L301.pmultiplier <- A_renewable_energy_standards %>%

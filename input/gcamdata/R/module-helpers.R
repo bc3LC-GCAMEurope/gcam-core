@@ -1733,14 +1733,19 @@ cogen_stubtech_rename <- function(df_name, env, grid_region_df = grid_regions){
 #' @importFrom dplyr filter mutate group_by
 #' @return assignment of new db
 policy_interpolate <- function(df, group_cols, value_col, year_col = year){
-  df %>%
-    group_by(across({{group_cols}})) %>%
-    complete({{year_col}} := seq(min({{year_col}}), max({{year_col}}), by = 5)) %>%
-    mutate({{value_col}} := case_when(
-      n() == 1 ~ {{value_col}},  # Keep original value when only one year exists
-      TRUE ~ approx_fun({{year_col}}, {{value_col}}))) %>%
-    ungroup %>%
-    filter(!is.na({{value_col}}))
+  if (nrow(df) == 0){
+    df
+  } else {
+    df %>%
+      group_by(across({{group_cols}})) %>%
+      complete({{year_col}} := seq(min({{year_col}}), max({{year_col}}), by = 5)) %>%
+      mutate({{value_col}} := case_when(
+        n() == 1 ~ {{value_col}},  # Keep original value when only one year exists
+        TRUE ~ approx_fun({{year_col}}, {{value_col}}))) %>%
+      ungroup %>%
+      filter(!is.na({{value_col}}))
+  }
+
 }
 
 #' filter_xml
