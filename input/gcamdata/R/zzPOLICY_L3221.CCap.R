@@ -168,7 +168,8 @@ module_policy_L3221.CCap <- function(command, ...) {
       bind_rows(L3221.CCap_tranTech_sector) %>%
       rename(CO2 = ghgpolicy) %>%
       select(-market) %>%
-      repeat_add_columns(tibble(year = MODEL_YEARS))
+      repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
+      filter(!is.na(xml))
 
     # Check that there are no NAs
     stopifnot(!any(is.na(L3221.CCap_tranTech)))
@@ -181,7 +182,8 @@ module_policy_L3221.CCap <- function(command, ...) {
       left_join(L210.ResTech, by = c("resource", "reserve.subresource", "region")) %>%
       rename(CO2 = ghgpolicy) %>%
       select(-market) %>%
-      repeat_add_columns(tibble(year = MODEL_YEARS))
+      repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
+      filter(!is.na(xml))
 
     # Check that there are no NAs
     stopifnot(!any(is.na(L3221.CCap_resource)))
