@@ -49,7 +49,8 @@ module_policy_L310.resource_subsidy <- function(command, ...) {
     L310.RenewRsrcPrice <- L310.RenewRsrc %>%
       select(xml, region, renewresource) %>%
       repeat_add_columns(tibble(year = MODEL_BASE_YEARS)) %>%
-      mutate(price = 0)
+      mutate(price = 0) %>%
+      filter(!is.na(xml))
 
     L310.SmthRenewRsrcCurves <- A_resource_subsidy %>%
       mutate(year.fillout = min(MODEL_BASE_YEARS), maxSubResource, mid.price = 0.0000001, curve.exponent = 4.0) %>%
@@ -61,7 +62,8 @@ module_policy_L310.resource_subsidy <- function(command, ...) {
       select(xml, region, renewresource = subsidy.name, smooth.renewable.subresource, technology, shareweight.year = year) %>%
       repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
       mutate(share.weight = if_else(year >= shareweight.year, 1, 0)) %>%
-      select(-shareweight.year)
+      select(-shareweight.year) %>%
+      filter(!is.na(xml))
 
     # 2. Transportation tech processing - simple copying ---------------
     # Global tech - just replace technology name
@@ -121,6 +123,7 @@ module_policy_L310.resource_subsidy <- function(command, ...) {
       select(-calibrated.value, -share.weight.year, -subs.share.weight, -tech.share.weight, -year) %>%
       distinct() %>%
       repeat_add_columns(tibble(year = MODEL_FUTURE_YEARS)) %>%
+      filter(!is.na(xml)) %>%
       left_join_error_no_match(A_resource_subsidy, by = c("region", "supplysector", "tranSubsector" = "subsector",
                                                           "stub.technology" = "new.tech.name", "xml")) %>%
       mutate(share.weight = if_else(year.x == year.y, shareweight, 0)) %>%

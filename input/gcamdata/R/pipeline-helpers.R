@@ -427,3 +427,12 @@ gather_years <- function(d, value_col = "value", year_pattern = YEAR_PATTERN, na
     mutate(year = as.integer(year)) %>%
     stats::setNames(sub("value", value_col, names(.)))
 }
+
+#' Helper function: call complete only if group is not empty
+#'
+#' @return The completed data frame.
+#' @export
+safe_complete <- function(.data, ...) {
+  if (nrow(.data) == 0 || all(is.na(.data$year))) return(.data)
+  tidyr::complete(.data, ...)
+}

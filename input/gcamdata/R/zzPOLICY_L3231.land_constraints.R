@@ -51,12 +51,12 @@ module_policy_L3231.land_constraints <- function(command, ...) {
       mutate(LandLeafs_to_keep = gsub(";", "|", LandLeafs_to_keep))
 
     # Get managed land nodes and add land-constraint-policy name
+    LandLeafs_to_keep_pattern <- paste(LandLeafs_to_keep$LandLeaf, collapse = "|")
+
     L3231.landConstrain_mngd_LN3 <- L2231.LN3_MgdAllocation_noncrop %>%
       inner_join(LandLeafs_to_keep, by = "region") %>%
       # Filter if LandLeafs_to_keep is in LandLeaf
-      dplyr::rowwise() %>%
-      filter(grepl(LandLeafs_to_keep, LandLeaf)) %>%
-      ungroup %>%
+      filter(grepl(LandLeafs_to_keep_pattern, LandLeaf)) %>%
       distinct(region, LandAllocatorRoot, LandNode1, LandNode2, LandNode3, LandLeaf, policy.portfolio.standard) %>%
       left_join_error_no_match(distinct(L3231.landConstrain, region, policy.portfolio.standard),
                                by = c("region", "policy.portfolio.standard")) %>%
@@ -68,9 +68,7 @@ module_policy_L3231.land_constraints <- function(command, ...) {
     L3231.landConstrain_unmngd_LN3 <- L2231.LN3_UnmgdAllocation %>%
       inner_join(LandLeafs_to_keep, by = "region") %>%
       # Filter if LandLeafs_to_keep is in LandLeaf
-      dplyr::rowwise() %>%
-      filter(grepl(LandLeafs_to_keep, UnmanagedLandLeaf)) %>%
-      ungroup %>%
+      filter(grepl(LandLeafs_to_keep_pattern, UnmanagedLandLeaf)) %>%
       distinct(region, LandAllocatorRoot, LandNode1, LandNode2, LandNode3, UnmanagedLandLeaf, policy.portfolio.standard) %>%
       left_join_error_no_match(distinct(L3231.landConstrain, region,policy.portfolio.standard),
                                by = c("region", "policy.portfolio.standard")) %>%
@@ -81,9 +79,7 @@ module_policy_L3231.land_constraints <- function(command, ...) {
     L3231.landConstrain_mngd_LN2 <- L222.LN2_MgdAllocation %>%
       inner_join(LandLeafs_to_keep, by = "region") %>%
       # Filter if LandLeafs_to_keep is in LandLeaf
-      dplyr::rowwise() %>%
-      filter(grepl(LandLeafs_to_keep, LandLeaf)) %>%
-      ungroup %>%
+      filter(grepl(LandLeafs_to_keep_pattern, LandLeaf)) %>%
       distinct(region, LandAllocatorRoot, LandNode1, LandNode2, LandLeaf, policy.portfolio.standard) %>%
       left_join_error_no_match(distinct(L3231.landConstrain, region, policy.portfolio.standard),
                                by = c("region", "policy.portfolio.standard")) %>%
@@ -94,9 +90,7 @@ module_policy_L3231.land_constraints <- function(command, ...) {
     L3231.landConstrain_unmngd_LN2 <- L222.LN2_UnmgdAllocation %>%
       inner_join(LandLeafs_to_keep, by = "region") %>%
       # Filter if LandLeafs_to_keep is in LandLeaf
-      dplyr::rowwise() %>%
-      filter(grepl(LandLeafs_to_keep, UnmanagedLandLeaf)) %>%
-      ungroup %>%
+      filter(grepl(LandLeafs_to_keep_pattern, UnmanagedLandLeaf)) %>%
       distinct(region, LandAllocatorRoot, LandNode1, LandNode2, UnmanagedLandLeaf, policy.portfolio.standard) %>%
       left_join_error_no_match(distinct(L3231.landConstrain, region,policy.portfolio.standard),
                                by = c("region", "policy.portfolio.standard")) %>%

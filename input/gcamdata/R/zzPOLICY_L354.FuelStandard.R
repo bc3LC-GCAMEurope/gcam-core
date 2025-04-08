@@ -100,7 +100,7 @@ module_policy_L354.FuelStandards <- function(command, ...) {
     # 4.Make sure future coefficients don't increase ---------------
     L354.FuelStandards_future <- L354.FuelStandards_max %>%
       group_by(xml, region, supplysector, tranSubsector, stub.technology, minicam.energy.input, market.name) %>%
-      complete(year = seq(min(year), max(MODEL_FUTURE_YEARS), 5)) %>%
+      safe_complete(year = seq(min(year), max(MODEL_FUTURE_YEARS), 5)) %>%
       left_join(filter(L254.StubTranTechCoef, sce == "CORE"),
                 by = c("region", "supplysector", "tranSubsector", "stub.technology",
                        "minicam.energy.input", "market.name", "year")) %>%

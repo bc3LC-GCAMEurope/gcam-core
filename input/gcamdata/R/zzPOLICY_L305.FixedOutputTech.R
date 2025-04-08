@@ -59,7 +59,7 @@ module_policy_L305.FixedOutputTech <- function(command, ...) {
       distinct() %>%
       # add missing years
       group_by(xml, region, supplysector, subsector, stub.technology) %>%
-      complete(year = seq(min(year), max(year), 5)) %>%
+      safe_complete(year = seq(min(year), max(year), 5)) %>%
       ungroup %>%
       mutate(lifetime = -1)
 
@@ -76,7 +76,8 @@ module_policy_L305.FixedOutputTech <- function(command, ...) {
              minicam.non.energy.input,
              input.cost = non.energy.input.cost) %>%
       # Write to all model years
-      repeat_add_columns(tibble(year = MODEL_YEARS))
+      repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
+      filter(!is.na(xml))
 
     # 2. Transportation tech processing ---------------
     # Global tech - just replace technology name
