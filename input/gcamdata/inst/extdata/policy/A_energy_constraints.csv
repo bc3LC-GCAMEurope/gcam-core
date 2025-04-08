@@ -45,3 +45,4 @@ policy_RE_targets_usa,USA,offshore-target,subsidy,,ELEC_WIND_OFFSHORE,,,,0.43,0.
 policy_RE_targets_usa,USA,biodiesel-target-OLD,subsidy,,BIODIESEL,0.25418326,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405
 policy_RE_targets_usa,USA,biofuel-target-OLD,subsidy,,BIOFUEL_ALL,1.23772801,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635
 resid_calib_world,World,elec-calib,tax,,ELEC_BLD,43.4503,,,,,,,,,,,,,,,,
+constraint_bio_efta,European Free Trade Association,Bio_Policy,tax,,TPES_BIO,,1.15,1.4,1.6,1.8,1.9,2,2.1,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,3
