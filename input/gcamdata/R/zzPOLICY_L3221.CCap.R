@@ -130,7 +130,8 @@ module_policy_L3221.CCap <- function(command, ...) {
              !grepl("bio", stub.technology, ignore.case = T)) %>%
       rename(CO2 = ghgpolicy) %>%
       select(-market) %>%
-      repeat_add_columns(tibble(year = MODEL_YEARS))
+      repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
+      filter(!is.na(xml))
 
     L3221.CCap_tech_NAs <- L3221.CCap_tech %>%
       filter(is.na(stub.technology)) %>%

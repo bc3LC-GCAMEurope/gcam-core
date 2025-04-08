@@ -1,6 +1,6 @@
 # Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
 
-#' module_policy_307.exoShutdownScalar
+#' module_policy_L307.exoShutdownScalar
 #'
 #' Exogenous shutdown decider scalars
 #'

@@ -51,8 +51,16 @@ module_policy_L344.bld_shell_size <- function(command, ...) {
     L344.bld_shell <- L244.ShellConductance_bld %>%
       semi_join(L344.bld_shell_overwrite, by = c("region", "gcam.consumer")) %>%
       left_join(L344.bld_shell_overwrite, by = c("region", "gcam.consumer", "year")) %>%
-      mutate(shell.conductance = if_else(is.na(shell.conductance.y), shell.conductance.x, shell.conductance.y)) %>%
-      select(-shell.conductance.x, -shell.conductance.y, -xml) %>%
+      select(-xml)
+
+    # in case L344.bld_shell is empty
+    if (all(c("shell.conductance.x", "shell.conductance.y") %in% names(L344.bld_shell))) {
+      L344.bld_shell <- L344.bld_shell %>%
+        mutate(shell.conductance = if_else(is.na(shell.conductance.y), shell.conductance.x, shell.conductance.y)) %>%
+        select(-shell.conductance.x, -shell.conductance.y)
+
+    }
+    L344.bld_shell <- L344.bld_shell %>%
       # Make sure all years have xml name
       left_join_error_no_match(distinct(select(L344.bld_shell_overwrite, region, gcam.consumer, xml)), by = c("region", "gcam.consumer"))
 

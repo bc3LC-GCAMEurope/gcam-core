@@ -1,6 +1,6 @@
 # Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
 
-#' module_policy_303.shareweight_overwrite
+#' module_policy_L303.shareweight_overwrite
 #'
 #' Shareweights to overwrite
 #'
@@ -39,7 +39,7 @@ module_policy_L303.shareweight_overwrite <- function(command, ...) {
     # Add in interpolation rule - just extend last year to 2100
     L303.shareweight_interp <- L303.shareweight_overwrite %>%
       group_by(xml, region, supplysector, subsector, stub.technology) %>%
-      mutate(from.year = max(year)) %>%
+      mutate(from.year = if (dplyr::n() > 0) max(year) else NA_real_) %>%
       ungroup %>%
       mutate(apply.to = "share-weight", to.year = max(MODEL_YEARS), delete = 1, interpolation.function = "fixed")
 
