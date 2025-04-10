@@ -26,6 +26,7 @@ module_aglu_ag_an_demand_input_xml <- function(command, ...) {
       "L203.StubTechProd_nonfood_meat",
       "L203.StubTechProd_For",
       "L203.StubCalorieContent",
+      "L203.StubTechMarket",
       "L203.PerCapitaBased",
       "L203.BaseService",
       "L203.IncomeElasticity",
@@ -57,6 +58,22 @@ module_aglu_ag_an_demand_input_xml <- function(command, ...) {
 
     # Load required inputs ----
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
+
+    for (name in MODULE_INPUTS) {
+      df <- get(name)  # get the tibble by name
+
+      # # Check if 'market' or 'region' exists, and do replacement if so
+      if ("market.name" %in% names(df) & "stub.technology" %in% names(df)) {
+        df <- df %>% mutate(market.name = if_else(market.name == "European_Single_Market"  & stub.technology %in% aglu.TRADED_CROPS,
+                                                  "Austria", market.name))
+      }
+      if ("region" %in% names(df) & "subsector" %in% names(df)) {
+        df <- df %>% mutate(region = if_else(region == "European_Single_Market" & subsector %in% aglu.TRADED_CROPS,
+                                             "Austria", region))
+      }
+
+      assign(name, df)  # update the tibble in the global environment
+    }
 
     # ===================================================
 

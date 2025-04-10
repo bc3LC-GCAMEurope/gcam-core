@@ -31,7 +31,8 @@ module_gcameurope_prune_empty_ag_xml <- function(command, ...) {
       "L202.StubTech_in_EUR",
       "L203.StubTech_demand_nonfood",
       "L2252.LN5_MgdAllocation_crop",
-      "L2252.LN5_MgdCarbon_crop")
+      "L2252.LN5_MgdCarbon_crop",
+      "Europe_Single_Market_Regions")
 
   MODULE_OUTPUTS <-
     c(XML = "prune_empty_ag_EUR.xml")
@@ -46,7 +47,13 @@ module_gcameurope_prune_empty_ag_xml <- function(command, ...) {
 
     # Load required inputs ----
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
-    for (item in MODULE_INPUTS[MODULE_INPUTS != 'L240.TechCoef_tra']) {
+
+    TOTAL_CROPS <- c(paste0("total ", stringr::str_to_lower(aglu.TRADED_CROPS)), "total nuts_seeds", "total root_tuber")
+    Europe_Single_Market_Regions <- Europe_Single_Market_Regions %>%
+      filter(GCAMEU_region   != "Austria") %>%
+      pull(GCAMEU_region)
+
+    for (item in MODULE_INPUTS[MODULE_INPUTS != 'L240.TechCoef_tra' & MODULE_INPUTS != 'Europe_Single_Market_Regions']) {
       assign(item, get(item) %>%
                filter_regions_europe())
     }
@@ -113,7 +120,9 @@ module_gcameurope_prune_empty_ag_xml <- function(command, ...) {
     L240.TechCoef_reg %>%
       inner_join(prune_agsupply, by=c("minicam.energy.input", "market.name")) %>%
       select(region, supplysector, subsector) %>%
-      distinct() ->
+      distinct() %>%
+      filter(!(region %in% Europe_Single_Market_Regions &
+                 supplysector %in% TOTAL_CROPS)) ->
       empty_ag_reg
 
 
@@ -271,7 +280,7 @@ module_gcameurope_prune_empty_ag_xml <- function(command, ...) {
       add_xml_data(empty_ag_subsec %>% rename(supplysector = AgSupplySector, subsector = AgSupplySubsector), "DeleteSubsector") %>%
       add_xml_data(empty_ag_sec %>% rename(supplysector = AgSupplySector), "DeleteSupplysector") %>%
       add_xml_data(empty_ag_tra, "DeleteSubsector") %>%
-      add_xml_data(empty_ag_reg, "DeleteSubsector") %>%
+      # add_xml_data(empty_ag_reg, "DeleteSubsector") %>%
       add_xml_data(empty_foddergrass, "DeleteSubsector") %>%
       add_precursors("L2012.AgProduction_ag_irr_mgmt",
                      "L240.TechCoef_tra",

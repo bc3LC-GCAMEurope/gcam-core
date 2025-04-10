@@ -187,9 +187,12 @@ module_aglu_L203.ag_an_demand_input <- function(command, ...) {
       repeat_add_columns(Europe_Single_Market_Regions %>% rename(region = GCAMEU_region, market.name = trade_region)) %>%
       select(-coefficient) %>%
       rename(supplysector = sector.name, subsector = subsector.name, stub.technology = technology) %>%
-      mutate(subsector0 = if_else(grepl("NonFood", supplysector),
-                                  NA,
-                                  subsector))
+      left_join(L203.SubsectorAll_demand_food %>%
+                  distinct(region, supplysector, subsector, subsector0),
+                by = c("region", "supplysector", "subsector"))
+      # mutate(subsector0 = if_else(grepl("NonFood", supplysector),
+      #                             NA,
+      #                             subsector))
 
 
     # Build L203.GlobalTechShrwt_demand: shareweights of demand technologies
@@ -861,7 +864,7 @@ module_aglu_L203.ag_an_demand_input <- function(command, ...) {
       add_precursors("aglu/A_demand_food_nonstaples", "aglu/A_demand_food_base_service") ->
       L203.NonStapleBaseService_ConsumerGroups
 
-    return_data(L203.Supplysector_demand, L203.NestingSubsectorAll_demand_food, L203.SubsectorAll_demand_food,
+    return_data(L203.StubTechMarket, L203.Supplysector_demand, L203.NestingSubsectorAll_demand_food, L203.SubsectorAll_demand_food,
                 L203.SubsectorAll_demand_nonfood, L203.StubTech_demand_food, L203.StubTech_demand_nonfood,
                 L203.GlobalTechCoef_demand, L203.GlobalTechShrwt_demand, L203.GlobalTechInterp_demand, L203.StubTechProd_food,
                 L203.StubTechProd_nonfood_crop, L203.StubTechProd_nonfood_meat, L203.StubTechProd_For,
