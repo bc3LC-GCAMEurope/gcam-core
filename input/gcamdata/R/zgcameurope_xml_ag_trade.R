@@ -20,11 +20,11 @@ module_gcameurope_ag_trade_xml <- function(command, ...) {
       "L240.TechCoef_tra_EUR",
       "L240.Production_tra_EUR",
       "L240.Supplysector_reg_EUR",
-      "L240.SubsectorAll_reg",
-      "L240.TechShrwt_reg",
+      "L240.SubsectorAll_reg_EUR",
+      "L240.TechShrwt_reg_EUR",
       "L240.TechCoef_reg_EUR",
-      "L240.Production_reg_imp",
-      "L240.Production_reg_dom")
+      "L240.Production_reg_imp_EUR",
+      "L240.Production_reg_dom_EUR")
 
   MODULE_OUTPUTS <-
     c(XML = "ag_trade_EUR.xml")
@@ -50,11 +50,11 @@ module_gcameurope_ag_trade_xml <- function(command, ...) {
       add_xml_data(L240.TechCoef_tra_EUR, "TechCoef") %>%
       add_xml_data(L240.Production_tra_EUR, "Production") %>%
       add_logit_tables_xml(L240.Supplysector_reg_EUR, "Supplysector") %>%
-      add_logit_tables_xml(L240.SubsectorAll_reg, "SubsectorAll", base_logit_header = "SubsectorLogit") %>%
-      add_xml_data(L240.TechShrwt_reg, "TechShrwt") %>%
+      add_logit_tables_xml(L240.SubsectorAll_reg_EUR, "SubsectorAll", base_logit_header = "SubsectorLogit") %>%
+      add_xml_data(L240.TechShrwt_reg_EUR, "TechShrwt") %>%
       add_xml_data(L240.TechCoef_reg_EUR, "TechCoef") %>%
-      add_xml_data(L240.Production_reg_imp, "Production") %>%
-      add_xml_data(L240.Production_reg_dom, "Production") %>%
+      add_xml_data(L240.Production_reg_imp_EUR, "Production") %>%
+      add_xml_data(L240.Production_reg_dom_EUR, "Production") %>%
       add_precursors(MODULE_INPUTS) ->
       ag_trade_EUR.xml
 

@@ -22,7 +22,8 @@ module_aglu_L113_ag_storage <- function(command, ...) {
       "L109.ag_ALL_Mt_R_C_Y",
       "L109.an_ALL_Mt_R_C_Y",
       "L1321.ag_prP_R_C_75USDkg",
-      "L1321.an_prP_R_C_75USDkg")
+      "L1321.an_prP_R_C_75USDkg",
+      "Europe_Single_Market_Regions")
 
   MODULE_OUTPUTS <-
     c("L113.StorageTechAndPassThrough")
@@ -63,6 +64,21 @@ module_aglu_L113_ag_storage <- function(command, ...) {
       mutate(value = value * InterAnnualStorageCostShare) ->
       L113.ClosingStockCost_R_C
 
+    # need weighted average costs for european single market
+    L113.ClosingStockCost_R_C_EUR <- L113.ClosingStockCost_R_C %>%
+      filter(region %in% Europe_Single_Market_Regions$GCAMEU_region &
+               GCAM_commodity %in% aglu.TRADED_CROPS) %>%
+      left_join_error_no_match(L109.ag_ALL_Mt_R_C_Y %>%
+                                 filter(year == MODEL_FINAL_BASE_YEAR) %>%
+                                 select(GCAM_commodity, GCAM_region_ID, stock = `Opening stocks`),
+                               by = c("GCAM_commodity", "GCAM_region_ID")) %>%
+      group_by(GCAM_commodity, unit) %>%
+      summarise(value = weighted.mean(value, stock, na.rm = T)) %>%
+      ungroup %>%
+      mutate(region = unique(Europe_Single_Market_Regions$trade_region))
+
+    L113.ClosingStockCost_R_C <- bind_rows(L113.ClosingStockCost_R_C, L113.ClosingStockCost_R_C_EUR)
+
     # 2. Get storage data from the adjusted SUA balances ----
     # And get parameters ready
     L109.ag_ALL_Mt_R_C_Y %>%
@@ -79,7 +95,15 @@ module_aglu_L113_ag_storage <- function(command, ...) {
       # all storage commodities are in L109 SUA data; this was asserted in the earlier stage
       inner_join(A_agStorageSector, by = "GCAM_commodity") %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
-      select(-GCAM_region_ID) ->
+      # sum if in european single market
+      mutate(region = if_else(region %in% Europe_Single_Market_Regions$GCAMEU_region &
+                                GCAM_commodity %in% aglu.TRADED_CROPS,
+                              unique(Europe_Single_Market_Regions$trade_region),
+                              region)) %>%
+      group_by(region, GCAM_commodity, year, element, storage_model, supplysector, minicam_energy_input,
+               technology, logit.exponent) %>%
+      summarise(value = sum(value)) %>%
+      ungroup  ->
       L113.ag_Storage_Mt_R_C_Y_adj1
 
 
