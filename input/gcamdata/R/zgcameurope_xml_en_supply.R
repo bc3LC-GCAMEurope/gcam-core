@@ -26,6 +26,7 @@ module_gcameurope_en_supply_xml <- function(command, ...) {
                      "L221.Rsrc_en_EUR",
                      "L221.RsrcPrice_en_EUR",
                      "L221.StubTechCalInput_bioOil_EUR",
+                     "L221.StubTechMkt_EUR",
                      "L221.StubTechInterp_bioOil_EUR",
                      "L221.StubTechShrwt_bioOil_EUR",
                      "L239.PrimaryConsKeyword_en_EUR",
@@ -103,6 +104,7 @@ module_gcameurope_en_supply_xml <- function(command, ...) {
       add_node_equiv_xml("technology") %>%
       add_xml_data(L221.StubTech_en_EUR, "StubTech") %>%
       add_xml_data(L221.StubTechCoef_bioOil_EUR, "StubTechCoef") %>%
+      add_xml_data(L221.StubTechMkt_EUR, "StubTechMarket") %>%
       add_xml_data(L221.StubTechFractSecOut_en_EUR, "StubTechFractSecOut") %>%
       add_xml_data(L221.StubTechFractProd_en_EUR, "StubTechFractProd") %>%
       add_xml_data(L221.StubTechFractCalPrice_en_EUR, "StubTechFractCalPrice") %>%

@@ -20,11 +20,12 @@ module_gcameurope_ag_trade_xml <- function(command, ...) {
       "L240.TechCoef_tra_EUR",
       "L240.Production_tra_EUR",
       "L240.Supplysector_reg_EUR",
-      "L240.SubsectorAll_reg",
-      "L240.TechShrwt_reg",
+      "L240.SubsectorAll_reg_EUR",
+      "L240.TechShrwt_reg_EUR",
       "L240.TechCoef_reg_EUR",
-      "L240.Production_reg_imp",
-      "L240.Production_reg_dom")
+      "L240.Production_reg_imp_EUR",
+      "L240.Production_reg_dom_EUR",
+      "L240.TechCost_reg")
 
   MODULE_OUTPUTS <-
     c(XML = "ag_trade_EUR.xml")
@@ -40,6 +41,30 @@ module_gcameurope_ag_trade_xml <- function(command, ...) {
     # Load required inputs ----
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
 
+    TOTAL_CROPS <- c(paste0("total ", stringr::str_to_lower(aglu.TRADED_CROPS)), "total nuts_seeds", "total root_tuber")
+    TRADED_CROPS <- gsub("total", "traded", TOTAL_CROPS)
+
+    for (name in MODULE_INPUTS) {
+      df <- get(name)  # get the tibble by name
+
+      # # Check if 'market' or 'region' exists, and do replacement if so
+      if ("market.name" %in% names(df)) {
+        df <- df %>% mutate(market.name = if_else(market.name == "European_Single_Market"  & supplysector %in% TOTAL_CROPS,
+                                                  "Austria", market.name),
+                            market.name = if_else(market.name == "European_Single_Market" &
+                                                    region == "USA" &
+                                                    supplysector %in% TRADED_CROPS,
+                                                  "Austria", market.name))
+      }
+      if ("region" %in% names(df)) {
+        df <- df %>% mutate(region = if_else(region == "European_Single_Market" & supplysector %in% TOTAL_CROPS,
+                                             "Austria", region))
+      }
+
+      assign(name, df)  # update the tibble in the global environment
+    }
+
+
     # Produce outputs
     create_xml("ag_trade_EUR.xml") %>%
       add_logit_tables_xml(L240.Supplysector_tra_EUR, "Supplysector") %>%
@@ -50,11 +75,12 @@ module_gcameurope_ag_trade_xml <- function(command, ...) {
       add_xml_data(L240.TechCoef_tra_EUR, "TechCoef") %>%
       add_xml_data(L240.Production_tra_EUR, "Production") %>%
       add_logit_tables_xml(L240.Supplysector_reg_EUR, "Supplysector") %>%
-      add_logit_tables_xml(L240.SubsectorAll_reg, "SubsectorAll", base_logit_header = "SubsectorLogit") %>%
-      add_xml_data(L240.TechShrwt_reg, "TechShrwt") %>%
+      add_logit_tables_xml(L240.SubsectorAll_reg_EUR, "SubsectorAll", base_logit_header = "SubsectorLogit") %>%
+      add_xml_data(L240.TechShrwt_reg_EUR, "TechShrwt") %>%
       add_xml_data(L240.TechCoef_reg_EUR, "TechCoef") %>%
-      add_xml_data(L240.Production_reg_imp, "Production") %>%
-      add_xml_data(L240.Production_reg_dom, "Production") %>%
+      add_xml_data(L240.Production_reg_imp_EUR, "Production") %>%
+      add_xml_data(L240.Production_reg_dom_EUR, "Production") %>%
+      # add_xml_data(L240.TechCost_reg, "TechCost") %>%
       add_precursors(MODULE_INPUTS) ->
       ag_trade_EUR.xml
 

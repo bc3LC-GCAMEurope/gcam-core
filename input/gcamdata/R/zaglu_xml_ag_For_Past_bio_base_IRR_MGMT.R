@@ -16,6 +16,9 @@ module_aglu_ag_For_Past_bio_base_IRR_MGMT_xml <- function(command, ...) {
     c("L2012.AgSupplySector",
       "L2012.AgSupplySubsector",
       "L2012.AgProduction_ag_irr_mgmt",
+      "L2012.AgSupplySector_EU",
+      "L2012.AgSupplySubsector_EU",
+      "L2012.AgProduction_ag_irr_mgmt_EU",
       "L2012.AgProduction_For",
       "L2012.AgProduction_Past",
       #"L2012.AgHAtoCL_irr_mgmt", # Note (XZ): not exporting HAtoCL as not used in GCAM; this should be examined later.
@@ -36,6 +39,25 @@ module_aglu_ag_For_Past_bio_base_IRR_MGMT_xml <- function(command, ...) {
     # Load required inputs ----
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
 
+    TOTAL_CROPS <- c(paste0("total ", stringr::str_to_lower(aglu.TRADED_CROPS)), "total nuts_seeds", "total root_tuber")
+    TRADED_CROPS <- gsub("total", "traded", TOTAL_CROPS)
+
+    for (name in MODULE_INPUTS) {
+      df <- get(name)  # get the tibble by name
+
+      # # Check if 'market' or 'region' exists, and do replacement if so
+      if ("market" %in% names(df)) {
+        df <- df %>% mutate(market = if_else(market == "European_Single_Market"  & AgSupplySector %in% aglu.TRADED_CROPS,
+                                                  "Austria", market))
+      }
+      if ("region" %in% names(df)) {
+        df <- df %>% mutate(region = if_else(region == "European_Single_Market" & AgSupplySector %in% aglu.TRADED_CROPS,
+                                             "Austria", region))
+      }
+
+      assign(name, df)  # update the tibble in the global environment
+    }
+
     # ===================================================
 
     # Produce outputs
@@ -43,6 +65,22 @@ module_aglu_ag_For_Past_bio_base_IRR_MGMT_xml <- function(command, ...) {
       add_logit_tables_xml(L2012.AgSupplySector, "AgSupplySector") %>%
       add_logit_tables_xml(L2012.AgSupplySubsector, "AgSupplySubsector") %>%
       add_xml_data(L2012.AgProduction_ag_irr_mgmt, "AgProduction") %>%
+      # add_logit_tables_xml(L2012.AgSupplySector_EU %>%
+      #                        rename(supplysector = AgSupplySector),
+      #                      "Supplysector") %>%
+      # # add_xml_data(L2012.AgSupplySector_EU %>%
+      # #                rename(supplysector = AgSupplySector) %>%
+      # #                repeat_add_columns(tibble(year = MODEL_BASE_YEARS)), "SupplysectorPrice") %>%
+      #
+      # add_logit_tables_xml(L2012.AgSupplySubsector_EU %>%
+      #                        rename(supplysector = AgSupplySector,
+      #                               subsector = AgSupplySubsector),
+      #                      "SubsectorLogit") %>%
+      # add_xml_data(L2012.AgProduction_ag_irr_mgmt_EU %>%
+      #                rename(supplysector = AgSupplySector,
+      #                       subsector = AgSupplySubsector,
+      #                       technology = AgProductionTechnology),
+      #              "Production") %>%
       add_xml_data(L2012.AgProduction_For, "AgProduction") %>%
       add_xml_data(L2012.AgProduction_Past, "AgProduction") %>%
       #add_xml_data(L2012.AgHAtoCL_irr_mgmt, "AgHAtoCL") %>%

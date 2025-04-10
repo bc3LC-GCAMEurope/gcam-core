@@ -25,23 +25,24 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
       "L240.TechCoef_tra",
       "L240.Production_tra",
       "L240.Supplysector_reg",
-      # "L240.SubsectorAll_reg", # no need to copy
-      # "L240.TechShrwt_reg", # no need to copy
-      # "L240.Production_reg_dom", # no need to copy
-      "L240.TechCoef_reg") # done
+      "L240.SubsectorAll_reg",
+      "L240.TechShrwt_reg",
+      "L240.Production_reg_dom", # to do
+      "L240.Production_reg_imp", # to do
+      "L240.TechCoef_reg")
 
   MODULE_INPUTS <-
     c(FILE = "common/GCAM_region_names",
       FILE = "common/iso_GCAM_regID",
-      FILE = "gcam-europe/A_ff_RegionalTechnology_EUR",
       FILE = "gcam-europe/A_agRegionalSector_EEA",
       FILE = "gcam-europe/A_agTradedSector_EEA",
       "Europe_Single_Market_Regions",
       "EuroSingleMarket_BiTrade_Ag",
-      "L240.Production_reg_imp", # no need to adjust, but need data
+      "L2012.AgSupplySector_EU",
       OUTPUTS_TO_ADJUST)
 
-  MODULE_OUTPUTS <- paste(OUTPUTS_TO_ADJUST, "EUR", sep = "_")
+  MODULE_OUTPUTS <- c(paste(OUTPUTS_TO_ADJUST, "EUR", sep = "_"),
+                      "L240.TechCost_reg")
 
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -54,9 +55,11 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
     # Load required inputs ----
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
 
-    SINGLE_MARKET_NAME <- unique(A_ff_RegionalTechnology_EUR$market.name)
-    SINGLE_MARKET_NAME <- SINGLE_MARKET_NAME[SINGLE_MARKET_NAME != "regional"]
-
+    SINGLE_MARKET_NAME <- unique(Europe_Single_Market_Regions$trade_region)
+    crops <- A_agRegionalSector_EEA$supplysector
+    TOTAL_CROPS <- c(crops[grepl(paste(aglu.TRADED_CROPS, collapse = "|"), crops, ignore.case = TRUE)],
+                      "total nuts_seeds", "total root_tuber")
+    TRADED_CROPS <- gsub("total", "traded", TOTAL_CROPS)
 
     # 0: functions ----------
     copy_for_EUR <- function(df){
@@ -99,37 +102,82 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
         df_subsector_EUR %>% mutate(technology = subsector)  %>% select(-region_tmp)
       } else { df_subsector_EUR %>% select(-region_tmp) }
     }
+
+    single_euro_mkt <- function(df){
+      df_noEU <- df %>%
+        mutate(region_tmp = stringr::str_extract(subsector, ".*(?= traded)")) %>%
+        filter(!(region_tmp %in% Europe_Single_Market_Regions$GCAMEU_region &
+                   supplysector %in% TRADED_CROPS)) %>%
+        select(-region_tmp)
+
+      df_EU <- df_noEU %>%
+        filter(region == SINGLE_MARKET_NAME & supplysector %in% TRADED_CROPS) %>%
+        mutate(subsector = gsub("global", SINGLE_MARKET_NAME, subsector))
+
+      if ("technology" %in% names(df_EU)){
+        df_EU <- df_EU %>%
+          mutate(technology = gsub("global", SINGLE_MARKET_NAME, technology))
+      }
+
+      bind_rows(df_noEU, df_EU)
+    }
+
+    filter_euro_mkt <- function(df){
+      df %>%
+        filter(!(region == SINGLE_MARKET_NAME & supplysector %in% TRADED_CROPS))
+    }
+    #
     # 1a: Add euro market to supplysector region ----------------------
     L240.Supplysector_tra_EUR <- mutate(A_agTradedSector_EEA, logit.year.fillout = min(MODEL_BASE_YEARS),
            region = SINGLE_MARKET_NAME) %>%
+      filter(!supplysector %in% TRADED_CROPS) %>%
       select(c(LEVEL2_DATA_NAMES[["Supplysector"]], "logit.type")) %>%
       bind_rows(L240.Supplysector_tra)
 
     L240.Supplysector_reg_EUR <- mutate(A_agRegionalSector_EEA, logit.year.fillout = min(MODEL_BASE_YEARS)) %>%
       write_to_all_regions(c(LEVEL2_DATA_NAMES[["Supplysector"]], "logit.type"),
                            filter(GCAM_region_names, region %in% Europe_Single_Market_Regions$GCAMEU_region)) %>%
-      bind_rows(L240.Supplysector_reg %>% filter(!region %in% Europe_Single_Market_Regions$GCAMEU_region))
+      bind_rows(L240.Supplysector_reg %>% filter(!region %in% Europe_Single_Market_Regions$GCAMEU_region)) %>%
+      mutate(region = if_else(region %in% Europe_Single_Market_Regions$GCAMEU_region &
+                                supplysector %in% TOTAL_CROPS,
+                              SINGLE_MARKET_NAME, region)) %>%
+      distinct()
 
-    L240.SectorUseTrialMarket_tra_EUR <- copy_for_EUR(L240.SectorUseTrialMarket_tra)
+    L240.SectorUseTrialMarket_tra_EUR <- copy_for_EUR(L240.SectorUseTrialMarket_tra) %>%
+      filter(!supplysector %in% TRADED_CROPS)
 
     # 1b: Add euro market to subsector ------------------------------------
-    L240.SubsectorAll_tra_EUR <- add_single_market(L240.SubsectorAll_tra)
+    L240.SubsectorAll_tra_EUR <- add_single_market(L240.SubsectorAll_tra)  %>%
+      filter_euro_mkt
 
     #
     # 1c: Add euro market to techs ----------------------
-    L240.TechShrwt_tra_EUR <- add_single_market(L240.TechShrwt_tra)
-    L240.TechCost_tra_EUR <- add_single_market(L240.TechCost_tra)
+    L240.TechShrwt_tra_EUR <- add_single_market(L240.TechShrwt_tra) %>% filter_euro_mkt()
+    L240.TechCost_tra_EUR <- add_single_market(L240.TechCost_tra) %>% filter_euro_mkt()
     L240.TechCoef_tra_EUR <- add_single_market(L240.TechCoef_tra)  %>%
+      filter_euro_mkt() %>%
       mutate(market.name = if_else(grepl(SINGLE_MARKET_NAME, subsector), SINGLE_MARKET_NAME, market.name),
              market.name = if_else(grepl("global", subsector), gcam.USA_REGION, market.name),
-             minicam.energy.input = if_else(market.name == SINGLE_MARKET_NAME | grepl("global", subsector),
+             minicam.energy.input = if_else((market.name == SINGLE_MARKET_NAME & !supplysector %in% TRADED_CROPS) | grepl("global", subsector),
                                             supplysector, minicam.energy.input))
-
     # Here only need to change market.name
-    L240.TechCoef_reg_EUR <- L240.TechCoef_reg %>%
+    L240.TechCoef_reg_EUR_pre <- L240.TechCoef_reg %>%
       mutate(market.name = if_else(grepl("imported", subsector) & region %in% Europe_Single_Market_Regions$GCAMEU_region,
                                    SINGLE_MARKET_NAME,
                                    market.name))
+
+    L240.TechCoef_reg_EUR_noEU <- L240.TechCoef_reg_EUR_pre %>%
+      filter(!(region %in% Europe_Single_Market_Regions$GCAMEU_region &
+                 supplysector %in% TOTAL_CROPS))
+
+    L240.TechCoef_reg_EUR_EU <- L240.TechCoef_reg_EUR_pre %>%
+      filter(region %in% Europe_Single_Market_Regions$GCAMEU_region & supplysector %in% TOTAL_CROPS) %>%
+      distinct(supplysector, subsector, technology, year, minicam.energy.input) %>%
+      mutate(region = SINGLE_MARKET_NAME,
+             market.name = if_else(grepl("imported", subsector), "USA", SINGLE_MARKET_NAME),
+             coefficient = 1)
+
+    L240.TechCoef_reg_EUR <- bind_rows(L240.TechCoef_reg_EUR_noEU, L240.TechCoef_reg_EUR_EU)
 
     # 2a: Calculate trade between europe and globe ------------------------------------
     # Calculate net trade in GCAM
@@ -195,6 +243,10 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
                          imports = if_else(net_exports_GCAM < 0, -net_exports_GCAM, 0)) %>%
                   select(names(Europe_net_trade_calib_calc)) %>%
                   anti_join(Europe_net_trade_calib_calc, by = c("sector", "year", "region"))) %>%
+      # mutate(exports = if_else(sector %in% c(tolower(aglu.TRADED_CROPS), "root_tuber", "nuts_seeds") & imports == 0,
+      #                          exports - 0.5, exports),
+      #        imports = if_else(sector %in% c(tolower(aglu.TRADED_CROPS), "root_tuber", "nuts_seeds") & imports == 0,
+      #                          imports + 0.5, imports)) %>%
       tidyr::pivot_longer(cols = c(exports, imports), names_to = "flow", values_to = "value") %>%
       mutate(region = if_else(flow == "imports", "global", region),
              subsector = paste(region, "traded", sector, sep = " ")) %>%
@@ -203,6 +255,7 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
     L240.Production_tra_EUR <- L240.Production_tra %>%
       # this will add in global/Europe single markets, but the cal output values are wrong
       add_single_market %>%
+      filter_euro_mkt %>%
       left_join(Europe_net_trade_calib, by = c("subsector", "year")) %>%
       mutate(calOutputValue = if_else(is.na(value), calOutputValue, value),
              subs.share.weight = if_else(calOutputValue > 0, 1, 0),
@@ -210,6 +263,109 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["Production"]])
     #
 
+    # 2b. Adjust traded_crops for europe ----------------------
+    # L240.SubsectorAll_reg_EU
+    L240.SubsectorAll_reg_noEU <- L240.SubsectorAll_reg %>%
+      filter(!(region %in% Europe_Single_Market_Regions$GCAMEU_region &
+                 supplysector %in% TOTAL_CROPS))
+
+    L240.SubsectorAll_reg_EUR <- L240.SubsectorAll_reg %>%
+      filter(region %in% Europe_Single_Market_Regions$GCAMEU_region &
+               supplysector %in% TOTAL_CROPS) %>%
+      select(-region) %>%
+      distinct() %>%
+      mutate(region = SINGLE_MARKET_NAME) %>%
+      bind_rows(L240.SubsectorAll_reg_noEU)
+
+    # L240.TechShrwt_reg
+    L240.TechShrwt_reg_noEU <- L240.TechShrwt_reg %>%
+      filter(!(region %in% Europe_Single_Market_Regions$GCAMEU_region &
+                 supplysector %in% TOTAL_CROPS))
+
+    L240.TechShrwt_reg_EUR <- L240.TechShrwt_reg %>%
+      filter(region %in% Europe_Single_Market_Regions$GCAMEU_region &
+               supplysector %in% TOTAL_CROPS) %>%
+      select(-region) %>%
+      distinct() %>%
+      mutate(region = SINGLE_MARKET_NAME) %>%
+      bind_rows(L240.TechShrwt_reg_noEU)
+
+    # L240.Production_reg_dom
+    L240.Production_reg_dom_noEU <- L240.Production_reg_dom %>%
+      filter(!(region %in% Europe_Single_Market_Regions$GCAMEU_region &
+                 supplysector %in% TOTAL_CROPS))
+
+    # add in missing intra-EEA trade to domestic consumption
+    EEA_exports <- L240.Production_tra %>%
+      mutate(region_tmp = stringr::str_trim(stringr::str_remove(subsector, supplysector))) %>%
+      filter(region_tmp %in% Europe_Single_Market_Regions$GCAMEU_region,
+             supplysector %in% TRADED_CROPS) %>%
+      group_by(supplysector, year) %>%
+      summarise(exports = sum(calOutputValue)) %>%
+      ungroup()
+
+    missing_exports <- L240.Production_tra_EUR %>%
+      filter(region == "USA", supplysector %in% TRADED_CROPS,
+             grepl(SINGLE_MARKET_NAME, subsector)) %>%
+      left_join_error_no_match(EEA_exports, by = c("supplysector", "year")) %>%
+      mutate(calOutputValue = exports - calOutputValue) %>%
+      select(supplysector, year, calOutputValue) %>%
+      mutate(supplysector = gsub("traded", "total", supplysector),
+             subsector = gsub("total", "domestic", supplysector),
+             technology = subsector)
+
+    # EEA domestic consumption is sum of countries
+    L240.Production_reg_dom_EUR <- L240.Production_reg_dom %>%
+      filter(region %in% Europe_Single_Market_Regions$GCAMEU_region &
+               supplysector %in% TOTAL_CROPS) %>%
+      bind_rows(missing_exports) %>%
+      group_by(supplysector, subsector, technology, year) %>%
+      summarise(calOutputValue = sum(calOutputValue)) %>%
+      ungroup() %>%
+      mutate(region = SINGLE_MARKET_NAME,
+             share.weight.year = min(MODEL_BASE_YEARS),
+             subs.share.weight = if_else(calOutputValue > 0, 1, 0),
+             tech.share.weight = subs.share.weight) %>%
+      bind_rows(L240.Production_reg_dom_noEU)
+
+    # L240.Production_reg_imp
+    L240.Production_reg_imp_noEU <- L240.Production_reg_imp %>%
+      filter(!(region %in% Europe_Single_Market_Regions$GCAMEU_region &
+                 supplysector %in% TOTAL_CROPS))
+
+    # EEA import consumption is from previously calculated trade in Europe_net_trade_calib
+    Europe_imports <- Europe_net_trade_calib %>%
+      filter(grepl("global", subsector)) %>%
+      mutate(supplysector = gsub("global traded", "total", subsector)) %>%
+      select(-subsector)
+
+    L240.Production_reg_imp_EUR <- L240.Production_reg_imp %>%
+      filter(region %in% Europe_Single_Market_Regions$GCAMEU_region &
+               supplysector %in% TOTAL_CROPS) %>%
+      distinct(supplysector, subsector, technology, year, share.weight.year) %>%
+      left_join_error_no_match(Europe_imports, by = c("supplysector", "year")) %>%
+      rename(calOutputValue = value) %>%
+      mutate(region = SINGLE_MARKET_NAME,
+             subs.share.weight = if_else(calOutputValue > 0, 1, 0),
+             tech.share.weight = subs.share.weight) %>%
+      bind_rows(L240.Production_reg_imp_noEU)
+
+
+    L240.TechCost_reg <- L240.Production_reg_dom_EUR %>%
+      filter(supplysector %in% TOTAL_CROPS,
+             region == unique(Europe_Single_Market_Regions$trade_region)) %>%
+      left_join_error_no_match(L2012.AgSupplySector_EU %>%
+                                 mutate(supplysector = paste0("total ", tolower(AgSupplySector)),
+                                        supplysector = gsub("nutsseeds", "nuts_seeds", supplysector),
+                                        supplysector = gsub("roottuber", "root_tuber", supplysector)) %>%
+                                 select(supplysector, price),
+                                        by = "supplysector") %>%
+      mutate(minicam.non.energy.input = "calPrice",
+             input.cost = price) %>%
+      select(LEVEL2_DATA_NAMES[["TechCost"]])
+
+
+    #
     # outputs -------------------
     return_data(MODULE_OUTPUTS)
 

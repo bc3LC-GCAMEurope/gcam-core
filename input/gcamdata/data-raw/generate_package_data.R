@@ -94,6 +94,8 @@ generate_level2_data_names <- function() {
   level2_data_names[["Supplysector"]] <- c("region", "supplysector", "output.unit", "input.unit", "price.unit", "logit.year.fillout", "logit.exponent")
   level2_data_names[["FinalEnergyKeyword"]] <- c("region", "supplysector", "final.energy")
   level2_data_names[["SupplysectorPrice"]] <- c("region", "supplysector", "year", "price")
+  level2_data_names[["SupplysectorCalPrice"]] <- c("region", "supplysector", "year", "calPrice")
+
   level2_data_names[["Supplysector_absolute-cost-logit"]] <- c("region", "supplysector")
   level2_data_names[["Supplysector_relative-cost-logit"]] <- c("region", "supplysector")
   level2_data_names[["PassThroughSector"]] <- c("region", "pass.through.sector", "marginal.revenue.sector", "marginal.revenue.market")

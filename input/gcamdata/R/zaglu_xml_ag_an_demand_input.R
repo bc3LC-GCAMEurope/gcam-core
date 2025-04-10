@@ -26,6 +26,7 @@ module_aglu_ag_an_demand_input_xml <- function(command, ...) {
       "L203.StubTechProd_nonfood_meat",
       "L203.StubTechProd_For",
       "L203.StubCalorieContent",
+      "L203.StubTechMarket",
       "L203.PerCapitaBased",
       "L203.BaseService",
       "L203.IncomeElasticity",
@@ -58,6 +59,22 @@ module_aglu_ag_an_demand_input_xml <- function(command, ...) {
     # Load required inputs ----
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
 
+    for (name in MODULE_INPUTS) {
+      df <- get(name)  # get the tibble by name
+
+      # # Check if 'market' or 'region' exists, and do replacement if so
+      if ("market.name" %in% names(df) & "stub.technology" %in% names(df)) {
+        df <- df %>% mutate(market.name = if_else(market.name == "European_Single_Market"  & stub.technology %in% aglu.TRADED_CROPS,
+                                                  "Austria", market.name))
+      }
+      if ("region" %in% names(df) & "subsector" %in% names(df)) {
+        df <- df %>% mutate(region = if_else(region == "European_Single_Market" & subsector %in% aglu.TRADED_CROPS,
+                                             "Austria", region))
+      }
+
+      assign(name, df)  # update the tibble in the global environment
+    }
+
     # ===================================================
 
     # Produce outputs
@@ -68,6 +85,7 @@ module_aglu_ag_an_demand_input_xml <- function(command, ...) {
       add_xml_data_generate_levels(L203.StubTech_demand_food, "StubTech","subsector","nesting-subsector",1,FALSE) %>%
       add_xml_data_generate_levels(L203.StubTechProd_food, "StubTechProd", "subsector","nesting-subsector",1,FALSE) %>%
       add_xml_data_generate_levels(L203.StubCalorieContent, "StubCalorieContent", "subsector","nesting-subsector",1,FALSE) %>%
+      add_xml_data_generate_levels(L203.StubTechMarket %>% filter(!is.na(subsector0)), "StubTechMarket", "subsector","nesting-subsector",1,FALSE) %>%
       add_node_equiv_xml("subsector") %>%
       add_logit_tables_xml(L203.NestingSubsectorAll_demand_food, "SubsectorAll", "SubsectorLogit") %>%
       add_logit_tables_xml(L203.SubsectorAll_demand_nonfood, "SubsectorAll", "SubsectorLogit") %>%
@@ -76,6 +94,7 @@ module_aglu_ag_an_demand_input_xml <- function(command, ...) {
       add_xml_data(L203.GlobalTechShrwt_demand, "GlobalTechShrwt") %>%
       add_xml_data(L203.GlobalTechInterp_demand, "GlobalTechInterp") %>%
       add_xml_data(L203.StubTechProd_nonfood_crop, "StubTechProd") %>%
+      add_xml_data(L203.StubTechMarket %>% filter(is.na(subsector0)), "StubTechMarket") %>%
       add_xml_data(L203.StubTechProd_nonfood_meat, "StubTechProd") %>%
       add_xml_data(L203.StubTechProd_For, "StubTechProd") %>%
       add_xml_data(L203.PerCapitaBased, "PerCapitaBased") %>%
@@ -108,6 +127,7 @@ module_aglu_ag_an_demand_input_xml <- function(command, ...) {
       add_xml_data_generate_levels(L203.StubTech_demand_food, "StubTech","subsector","nesting-subsector",1,FALSE) %>%
       add_xml_data_generate_levels(L203.StubTechProd_food, "StubTechProd", "subsector","nesting-subsector",1,FALSE) %>%
       add_xml_data_generate_levels(L203.StubCalorieContent, "StubCalorieContent", "subsector","nesting-subsector",1,FALSE) %>%
+      add_xml_data_generate_levels(L203.StubTechMarket %>% filter(!is.na(subsector0)), "StubTechMarket", "subsector","nesting-subsector",1,FALSE) %>%
       add_node_equiv_xml("subsector") %>%
       add_logit_tables_xml(L203.NestingSubsectorAll_demand_food, "SubsectorAll", "SubsectorLogit") %>%
       add_logit_tables_xml(L203.SubsectorAll_demand_nonfood, "SubsectorAll", "SubsectorLogit") %>%
@@ -116,6 +136,7 @@ module_aglu_ag_an_demand_input_xml <- function(command, ...) {
       add_xml_data(L203.GlobalTechShrwt_demand, "GlobalTechShrwt") %>%
       add_xml_data(L203.GlobalTechInterp_demand, "GlobalTechInterp") %>%
       add_xml_data(L203.StubTechProd_nonfood_crop, "StubTechProd") %>%
+      add_xml_data(L203.StubTechMarket %>% filter(is.na(subsector0)), "StubTechMarket") %>%
       add_xml_data(L203.StubTechProd_nonfood_meat, "StubTechProd") %>%
       add_xml_data(L203.StubTechProd_For, "StubTechProd") %>%
       add_xml_data(L203.PerCapitaBased, "PerCapitaBased") %>%

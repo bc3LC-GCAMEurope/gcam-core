@@ -34,7 +34,8 @@ module_gcameurope_an_input_xml <- function(command, ...) {
       "L202.StubTechCost_an_EUR",
       "L202.StubTechCost_For_proc_EUR",
       "L202.StubTechProd_in_Forest_EUR",
-      "L202.StubTechProd_in_pulp_energy_EUR")
+      "L202.StubTechProd_in_pulp_energy_EUR",
+      "L202.StubTechMkt_EUR")
 
   MODULE_OUTPUTS <-
     c(XML = "an_input_EUR.xml")
@@ -48,29 +49,23 @@ module_gcameurope_an_input_xml <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    L202.RenewRsrc_EUR <- get_data(all_data, "L202.RenewRsrc_EUR")
-    L202.RenewRsrcPrice_EUR <- get_data(all_data, "L202.RenewRsrcPrice_EUR")
-    L202.maxSubResource_EUR <- get_data(all_data, "L202.maxSubResource_EUR")
-    L202.RenewRsrcCurves_EUR <- get_data(all_data, "L202.RenewRsrcCurves_EUR")
-    L202.ResTechShrwt_EUR <- get_data(all_data, "L202.ResTechShrwt_EUR")
-    L202.UnlimitedRenewRsrcCurves_EUR <- get_data(all_data, "L202.UnlimitedRenewRsrcCurves_EUR")
-    L202.UnlimitedRenewRsrcPrice_EUR <- get_data(all_data, "L202.UnlimitedRenewRsrcPrice_EUR")
-    L202.Supplysector_in_EUR <- get_data(all_data, "L202.Supplysector_in_EUR")
-    L202.SubsectorAll_in_EUR <- get_data(all_data, "L202.SubsectorAll_in_EUR")
-    L202.SubsectorInterpTo_in_EUR <- get_data(all_data, "L202.SubsectorInterpTo_in_EUR")
-    L202.StubTech_in_EUR <- get_data(all_data, "L202.StubTech_in_EUR")
-    L202.StubTechInterp_in_EUR <- get_data(all_data, "L202.StubTechInterp_in_EUR")
-    L202.StubTechProd_in_EUR <- get_data(all_data, "L202.StubTechProd_in_EUR")
-    L202.Supplysector_an_EUR <- get_data(all_data, "L202.Supplysector_an_EUR")
-    L202.SubsectorAll_an_EUR <- get_data(all_data, "L202.SubsectorAll_an_EUR")
-    L202.StubTechInterp_an_EUR <- get_data(all_data, "L202.StubTechInterp_an_EUR")
-    L202.StubTechProd_an_EUR <- get_data(all_data, "L202.StubTechProd_an_EUR")
-    L202.StubTechCoef_an_EUR <- get_data(all_data, "L202.StubTechCoef_an_EUR")
-    L202.StubTechCost_an_EUR <- get_data(all_data, "L202.StubTechCost_an_EUR")
-    L202.StubTechCost_For_proc_EUR <- get_data(all_data,"L202.StubTechCost_For_proc_EUR")
-    L202.StubTechProd_in_Forest_EUR <- get_data(all_data,"L202.StubTechProd_in_Forest_EUR")
-    L202.StubTechProd_in_pulp_energy_EUR <- get_data(all_data, "L202.StubTechProd_in_pulp_energy_EUR")
+    get_data_list(all_data, MODULE_INPUTS)
 
+    for (name in MODULE_INPUTS) {
+      df <- get(name)  # get the tibble by name
+
+      # # Check if 'market' or 'region' exists, and do replacement if so
+      if ("market.name" %in% names(df) & "stub.technology" %in% names(df)) {
+        df <- df %>% mutate(market.name = if_else(market.name == "European_Single_Market"  & stub.technology %in% aglu.TRADED_CROPS,
+                                                  "Austria", market.name))
+      }
+      if ("region" %in% names(df) & "subsector" %in% names(df)) {
+        df <- df %>% mutate(region = if_else(region == "European_Single_Market" & subsector %in% aglu.TRADED_CROPS,
+                                             "Austria", region))
+      }
+
+      assign(name, df)  # update the tibble in the global environment
+    }
     # ===================================================
 
     # Produce outputs
@@ -99,6 +94,7 @@ module_gcameurope_an_input_xml <- function(command, ...) {
       add_xml_data(L202.StubTechCoef_an_EUR, "StubTechCoef") %>%
       add_xml_data(L202.StubTechCost_an_EUR, "StubTechCost") %>%
       add_xml_data(L202.StubTechCost_For_proc_EUR, "StubTechCost") %>%
+      add_xml_data(L202.StubTechMkt_EUR, "StubTechMarket") %>%
       add_precursors("L202.RenewRsrc_EUR",
                      "L202.RenewRsrcPrice_EUR",
                      "L202.maxSubResource_EUR",

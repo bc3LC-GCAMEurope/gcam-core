@@ -54,7 +54,8 @@ module_gcameurope_L1011.ff_GrossTrade_EUR <- function(command, ...) {
         TRUE ~ GCAM32_region
       )) %>%
       filter(GCAM32_region %in% c("EU-15", "EU-12", "European Free Trade Association")) %>%
-      distinct(GCAMEU_region)
+      distinct(GCAMEU_region) %>%
+      mutate(trade_region = "European_Single_Market")
 
     # ISSUE: Switzerland does not report trade - 75% of oil comes from refined liquids imports from EU, 25% from crude oil imported from outside of EU
     # most coal imports come from abroad
@@ -117,8 +118,10 @@ module_gcameurope_L1011.ff_GrossTrade_EUR <- function(command, ...) {
           export_ctry == "Czechia" ~"Czech Republic",
           export_ctry == "Netherlands (the)" ~  "Netherlands",
           TRUE ~ export_ctry)) %>%
-      mutate(region_importer = if_else(import_ctry %in% Europe_Single_Market_Regions$GCAMEU_region, "European_Single_Market", "Global"),
-             region_exporter  = if_else(export_ctry %in% Europe_Single_Market_Regions$GCAMEU_region, "European_Single_Market", "Global")) %>%
+      mutate(region_importer = if_else(import_ctry %in% Europe_Single_Market_Regions$GCAMEU_region,
+                                       unique(Europe_Single_Market_Regions$trade_region), "Global"),
+             region_exporter  = if_else(export_ctry %in% Europe_Single_Market_Regions$GCAMEU_region,
+                                        unique(Europe_Single_Market_Regions$trade_region), "Global")) %>%
       filter(!(region_exporter == "Global" & region_importer == "Global"))
 
     # Produce outputs ----------------------------------------
