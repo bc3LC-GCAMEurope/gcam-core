@@ -24,7 +24,8 @@ module_gcameurope_ag_trade_xml <- function(command, ...) {
       "L240.TechShrwt_reg_EUR",
       "L240.TechCoef_reg_EUR",
       "L240.Production_reg_imp_EUR",
-      "L240.Production_reg_dom_EUR")
+      "L240.Production_reg_dom_EUR",
+      "L240.TechCost_reg")
 
   MODULE_OUTPUTS <-
     c(XML = "ag_trade_EUR.xml")
@@ -49,6 +50,10 @@ module_gcameurope_ag_trade_xml <- function(command, ...) {
       # # Check if 'market' or 'region' exists, and do replacement if so
       if ("market.name" %in% names(df)) {
         df <- df %>% mutate(market.name = if_else(market.name == "European_Single_Market"  & supplysector %in% TOTAL_CROPS,
+                                                  "Austria", market.name),
+                            market.name = if_else(market.name == "European_Single_Market" &
+                                                    region == "USA" &
+                                                    supplysector %in% TRADED_CROPS,
                                                   "Austria", market.name))
       }
       if ("region" %in% names(df)) {
@@ -75,6 +80,7 @@ module_gcameurope_ag_trade_xml <- function(command, ...) {
       add_xml_data(L240.TechCoef_reg_EUR, "TechCoef") %>%
       add_xml_data(L240.Production_reg_imp_EUR, "Production") %>%
       add_xml_data(L240.Production_reg_dom_EUR, "Production") %>%
+      # add_xml_data(L240.TechCost_reg, "TechCost") %>%
       add_precursors(MODULE_INPUTS) ->
       ag_trade_EUR.xml
 

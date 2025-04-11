@@ -45,7 +45,9 @@ module_gcameurope_L202.an_input <- function(command, ...) {
       "L233.TechCoef",
       "L110.IO_Coefs_pulp",
       "L1321.For_Cost",
-      "L1327.IO_woodpulp_energy_EUR")
+      "L1327.IO_woodpulp_energy_EUR",
+      "L202.GlobalTechCoef_in",
+      "Europe_Single_Market_Regions")
 
   MODULE_OUTPUTS <-
     c("L202.RenewRsrc_EUR",
@@ -70,7 +72,8 @@ module_gcameurope_L202.an_input <- function(command, ...) {
       "L202.ag_consP_R_C_75USDkg_EUR",
       "L202.StubTechCost_For_proc_EUR",
       "L202.StubTechProd_in_Forest_EUR",
-      "L202.StubTechProd_in_pulp_energy_EUR")
+      "L202.StubTechProd_in_pulp_energy_EUR",
+      "L202.StubTechMkt_EUR")
 
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -93,6 +96,8 @@ module_gcameurope_L202.an_input <- function(command, ...) {
     # Load required inputs ----
 
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
+
+    REGIONAL_CROPS <- c(paste0("regional ", stringr::str_to_lower(aglu.TRADED_CROPS)), "regional nuts_seeds", "regional root_tuber")
 
     GCAM_region_names <- GCAM_region_names %>% filter_regions_europe()
     A_regions <- A_regions %>% filter_regions_europe()
@@ -284,6 +289,16 @@ module_gcameurope_L202.an_input <- function(command, ...) {
       write_to_all_regions(LEVEL2_DATA_NAMES[["Tech"]], GCAM_region_names) %>%
       rename(stub.technology = technology) ->
       L202.StubTech_in_EUR
+
+    L202.StubTechMkt_EUR <- L202.StubTech_in_EUR %>%
+      left_join(L202.GlobalTechCoef_in,
+                by = c("supplysector" = "sector.name",
+                       "subsector" = "subsector.name",
+                       "stub.technology" = "technology")) %>%
+      filter(minicam.energy.input %in% REGIONAL_CROPS,
+             region %in% Europe_Single_Market_Regions$GCAMEU_region) %>%
+      mutate(market.name = unique(Europe_Single_Market_Regions$trade_region)) %>%
+      select(-coefficient)
 
     # L202.StubTechInterp_in_EUR: generic technology info for inputs to animal production
     A_an_input_technology %>%

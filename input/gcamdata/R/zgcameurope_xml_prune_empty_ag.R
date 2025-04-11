@@ -278,7 +278,7 @@ module_gcameurope_prune_empty_ag_xml <- function(command, ...) {
       # add on the tables from the Ag supply side
       add_xml_data(empty_ag_tech, "AgTechDelete", "AgTech") %>%
       add_xml_data(empty_ag_subsec %>% rename(supplysector = AgSupplySector, subsector = AgSupplySubsector), "DeleteSubsector") %>%
-      add_xml_data(empty_ag_sec %>% rename(supplysector = AgSupplySector), "DeleteSupplysector") %>%
+      add_xml_data(empty_ag_sec %>% rename(supplysector = AgSupplySector) %>% filter(region != "Austria"), "DeleteSupplysector") %>%
       add_xml_data(empty_ag_tra, "DeleteSubsector") %>%
       # add_xml_data(empty_ag_reg, "DeleteSubsector") %>%
       add_xml_data(empty_foddergrass, "DeleteSubsector") %>%

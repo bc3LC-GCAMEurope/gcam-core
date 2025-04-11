@@ -415,7 +415,8 @@ module_aglu_L2012.ag_For_Past_bio_input_irr_mgmt <- function(command, ...) {
       filter(region == "Austria",
              AgSupplySector %in% aglu.TRADED_CROPS) %>%
       mutate(region = unique(Europe_Single_Market_Regions$trade_region),
-             market = unique(Europe_Single_Market_Regions$trade_region))
+             market = unique(Europe_Single_Market_Regions$trade_region)) %>%
+      rename(price = calPrice)
 
 
     L2012.AgSupplySubsector_EU <- L2012.AgSupplySector_EU %>%

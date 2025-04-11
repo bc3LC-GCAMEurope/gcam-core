@@ -38,10 +38,11 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
       FILE = "gcam-europe/A_agTradedSector_EEA",
       "Europe_Single_Market_Regions",
       "EuroSingleMarket_BiTrade_Ag",
-      "L240.Production_reg_imp", # no need to adjust, but need data
+      "L2012.AgSupplySector_EU",
       OUTPUTS_TO_ADJUST)
 
-  MODULE_OUTPUTS <- paste(OUTPUTS_TO_ADJUST, "EUR", sep = "_")
+  MODULE_OUTPUTS <- c(paste(OUTPUTS_TO_ADJUST, "EUR", sep = "_"),
+                      "L240.TechCost_reg")
 
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -242,6 +243,10 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
                          imports = if_else(net_exports_GCAM < 0, -net_exports_GCAM, 0)) %>%
                   select(names(Europe_net_trade_calib_calc)) %>%
                   anti_join(Europe_net_trade_calib_calc, by = c("sector", "year", "region"))) %>%
+      # mutate(exports = if_else(sector %in% c(tolower(aglu.TRADED_CROPS), "root_tuber", "nuts_seeds") & imports == 0,
+      #                          exports - 0.5, exports),
+      #        imports = if_else(sector %in% c(tolower(aglu.TRADED_CROPS), "root_tuber", "nuts_seeds") & imports == 0,
+      #                          imports + 0.5, imports)) %>%
       tidyr::pivot_longer(cols = c(exports, imports), names_to = "flow", values_to = "value") %>%
       mutate(region = if_else(flow == "imports", "global", region),
              subsector = paste(region, "traded", sector, sep = " ")) %>%
@@ -290,10 +295,30 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
       filter(!(region %in% Europe_Single_Market_Regions$GCAMEU_region &
                  supplysector %in% TOTAL_CROPS))
 
+    # add in missing intra-EEA trade to domestic consumption
+    EEA_exports <- L240.Production_tra %>%
+      mutate(region_tmp = stringr::str_trim(stringr::str_remove(subsector, supplysector))) %>%
+      filter(region_tmp %in% Europe_Single_Market_Regions$GCAMEU_region,
+             supplysector %in% TRADED_CROPS) %>%
+      group_by(supplysector, year) %>%
+      summarise(exports = sum(calOutputValue)) %>%
+      ungroup()
+
+    missing_exports <- L240.Production_tra_EUR %>%
+      filter(region == "USA", supplysector %in% TRADED_CROPS,
+             grepl(SINGLE_MARKET_NAME, subsector)) %>%
+      left_join_error_no_match(EEA_exports, by = c("supplysector", "year")) %>%
+      mutate(calOutputValue = exports - calOutputValue) %>%
+      select(supplysector, year, calOutputValue) %>%
+      mutate(supplysector = gsub("traded", "total", supplysector),
+             subsector = gsub("total", "domestic", supplysector),
+             technology = subsector)
+
     # EEA domestic consumption is sum of countries
     L240.Production_reg_dom_EUR <- L240.Production_reg_dom %>%
       filter(region %in% Europe_Single_Market_Regions$GCAMEU_region &
                supplysector %in% TOTAL_CROPS) %>%
+      bind_rows(missing_exports) %>%
       group_by(supplysector, subsector, technology, year) %>%
       summarise(calOutputValue = sum(calOutputValue)) %>%
       ungroup() %>%
@@ -324,6 +349,21 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
              subs.share.weight = if_else(calOutputValue > 0, 1, 0),
              tech.share.weight = subs.share.weight) %>%
       bind_rows(L240.Production_reg_imp_noEU)
+
+
+    L240.TechCost_reg <- L240.Production_reg_dom_EUR %>%
+      filter(supplysector %in% TOTAL_CROPS,
+             region == unique(Europe_Single_Market_Regions$trade_region)) %>%
+      left_join_error_no_match(L2012.AgSupplySector_EU %>%
+                                 mutate(supplysector = paste0("total ", tolower(AgSupplySector)),
+                                        supplysector = gsub("nutsseeds", "nuts_seeds", supplysector),
+                                        supplysector = gsub("roottuber", "root_tuber", supplysector)) %>%
+                                 select(supplysector, price),
+                                        by = "supplysector") %>%
+      mutate(minicam.non.energy.input = "calPrice",
+             input.cost = price) %>%
+      select(LEVEL2_DATA_NAMES[["TechCost"]])
+
 
     #
     # outputs -------------------

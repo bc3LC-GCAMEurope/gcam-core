@@ -73,9 +73,12 @@ module_aglu_L113_ag_storage <- function(command, ...) {
                                  select(GCAM_commodity, GCAM_region_ID, stock = `Opening stocks`),
                                by = c("GCAM_commodity", "GCAM_region_ID")) %>%
       group_by(GCAM_commodity, unit) %>%
-      summarise(value = weighted.mean(value, stock, na.rm = T)) %>%
+      summarise(value = weighted.mean(value, stock)) %>%
       ungroup %>%
-      mutate(region = unique(Europe_Single_Market_Regions$trade_region))
+      mutate(
+        # value = if_else(GCAM_commodity == "Wheat", value * 0.1, value ),
+        #      value = if_else(GCAM_commodity == "SugarCrop", value * 0, value ),
+             region = unique(Europe_Single_Market_Regions$trade_region))
 
     L113.ClosingStockCost_R_C <- bind_rows(L113.ClosingStockCost_R_C, L113.ClosingStockCost_R_C_EUR)
 

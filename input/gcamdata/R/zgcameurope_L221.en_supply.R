@@ -198,17 +198,6 @@ module_gcameurope_L221.en_supply <- function(command, ...) {
              stub.technology = technology) %>%
       select(LEVEL2_DATA_NAMES[["StubTechCoef"]])
 
-    # Market name
-    L221.StubTechMkt_EUR <- L221.StubTech_en_EUR %>%
-      left_join(L221.GlobalTechCoef_en_EUR,
-                by = c("supplysector" = "sector.name",
-                       "subsector" = "subsector.name",
-                       "stub.technology" = "technology")) %>%
-      filter(minicam.energy.input %in% REGIONAL_CROPS,
-             region %in% Europe_Single_Market_Regions$GCAMEU_region) %>%
-      mutate(market.name = "Austria") %>%
-      # mutate(market.name = Europe_Single_Market_Regions$trade_region) %>%
-      select(-coefficient)
 
 
 
@@ -399,6 +388,19 @@ module_gcameurope_L221.en_supply <- function(command, ...) {
     L221.StubTech_en_EUR %>%
       filter(!(region %in% aglu.NO_AGLU_REGIONS & supplysector %in% ag_en)) -> L221.StubTech_en_EUR
 
+
+    # Market name
+    L221.StubTechMkt_EUR <- bind_rows(L221.StubTech_en_EUR, L221.StubTechCalInput_bioOil_EUR) %>%
+      distinct(region, supplysector, subsector, stub.technology) %>%
+      left_join(L221.GlobalTechCoef_en_EUR,
+                by = c("supplysector" = "sector.name",
+                       "subsector" = "subsector.name",
+                       "stub.technology" = "technology")) %>%
+      filter(minicam.energy.input %in% REGIONAL_CROPS,
+             region %in% Europe_Single_Market_Regions$GCAMEU_region) %>%
+      mutate(market.name = "Austria") %>%
+      # mutate(market.name = unique(Europe_Single_Market_Regions$trade_region)) %>%
+      select(-coefficient)
 
     # ===================================================
 

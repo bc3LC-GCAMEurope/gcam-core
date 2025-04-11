@@ -68,6 +68,10 @@ module_aglu_ag_For_Past_bio_base_IRR_MGMT_xml <- function(command, ...) {
       # add_logit_tables_xml(L2012.AgSupplySector_EU %>%
       #                        rename(supplysector = AgSupplySector),
       #                      "Supplysector") %>%
+      # # add_xml_data(L2012.AgSupplySector_EU %>%
+      # #                rename(supplysector = AgSupplySector) %>%
+      # #                repeat_add_columns(tibble(year = MODEL_BASE_YEARS)), "SupplysectorPrice") %>%
+      #
       # add_logit_tables_xml(L2012.AgSupplySubsector_EU %>%
       #                        rename(supplysector = AgSupplySector,
       #                               subsector = AgSupplySubsector),
