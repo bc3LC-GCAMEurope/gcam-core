@@ -148,3 +148,16 @@ price_nonco2_mac_LTT.xml,,Southeast Asia,nonCO2,,,0,40.0623,78.8826,140,237.97,3
 price_nonco2_mac_LTT.xml,,Taiwan,nonCO2,,,,,,1.081447025,1.166821863,1.248577102,1.321102105,1.385579302,1.457028725,1.587267231,1.729630228,1.878399948,2.028714208,2.167200643,2.289383581,2.39200455,2.47394219
 price_nonco2_mac_LTT.xml,,USA,nonCO2,,,129.101,230.116,295.771,311.1857292,324.5211301,339.5524261,356.3321672,375.1072949,393.9765092,408.353711,420.2258637,430.6710956,443.3729917,458.3304081,474.6558508,494.1002111,516.3606414
 ETS_tax_EU.xml,ETS,EU,CO2_ETS,,,,88,300,400,400,400,400,,,,,,,,,,
+co2ndctax_nonEU.xml,,ss_africa,CO2,,,0,25.34,88.3881,,,,,,,,,,,,,,
+co2ndctax_nonEU.xml,,lam,CO2,,,25.7747,195.634,199.512,,,,,,,,,,,,,,
+co2ndctax_nonEU.xml,,us_can_aus,CO2,,,137.315,266.805,325.334,,,,,,,,,,,,,,
+co2ndctax_nonEU.xml,,jap_kor,CO2,,,15.409,247.919,318.986,,,,,,,,,,,,,,
+co2ndctax_nonEU.xml,,chn,CO2,,,71.5696,60.9187,64.4857,,,,,,,,,,,,,,
+co2ndctax_nonEU.xml,,ind,CO2,,,2.31853,0,0,,,,,,,,,,,,,,
+co2ndctax_nonEU.xml,,se asia,CO2,,,0,0,39.4733,,,,,,,,,,,,,,
+co2ndctax_nonEU.xml,,rus_ca,CO2,,,0,35.4544,65.1956,,,,,,,,,,,,,,
+co2ndctax_nonEU.xml,,mena,CO2,,,0,78.1911,169.221,,,,,,,,,,,,,,
+co2ndctax_nonEU.xml,,European Free Trade Association,CO2,,,55.3035,298.677,337.553,,,,,,,,,,,,,,
+co2ndctax_nonEU.xml,,other_EUR,CO2,,,53.6919,42.1948,53.3899,,,,,,,,,,,,,,
+co2ndctax_europenonEU.xml,,European Free Trade Association,CO2,,,55.3035,298.677,337.553,,,,,,,,,,,,,,
+co2ndctax_europenonEU.xml,,other_EUR,CO2,,,53.6919,42.1948,53.3899,,,,,,,,,,,,,,
