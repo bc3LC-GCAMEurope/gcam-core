@@ -46,23 +46,18 @@ module_policy_L344.bld_shell_size <- function(command, ...) {
     # Now replace shell.conductance in L244.ShellConductance_bld
     L344.bld_shell_overwrite <- L344.bld_shell_size_overwrite %>%
       filter(variable == "shell.conductance") %>%
-      tidyr::pivot_wider(names_from = variable, values_from = value)
+      tidyr::pivot_wider(names_from = variable, values_from = value) %>%
+      complete(nesting(xml, region, gcam.consumer), year = unique(L244.ShellConductance_bld$year))
 
-    L344.bld_shell <- L244.ShellConductance_bld %>%
-      semi_join(L344.bld_shell_overwrite, by = c("region", "gcam.consumer")) %>%
-      left_join(L344.bld_shell_overwrite, by = c("region", "gcam.consumer", "year")) %>%
-      select(-xml)
+    L344.bld_shell <- L344.bld_shell_overwrite %>%
+      left_join(L244.ShellConductance_bld, by = c("region", "gcam.consumer", "year"))
 
     # in case L344.bld_shell is empty
     if (all(c("shell.conductance.x", "shell.conductance.y") %in% names(L344.bld_shell))) {
       L344.bld_shell <- L344.bld_shell %>%
-        mutate(shell.conductance = if_else(is.na(shell.conductance.y), shell.conductance.x, shell.conductance.y)) %>%
+        mutate(shell.conductance = if_else(is.na(shell.conductance.x), shell.conductance.y, shell.conductance.x)) %>%
         select(-shell.conductance.x, -shell.conductance.y)
-
     }
-    L344.bld_shell <- L344.bld_shell %>%
-      # Make sure all years have xml name
-      left_join_error_no_match(distinct(select(L344.bld_shell_overwrite, region, gcam.consumer, xml)), by = c("region", "gcam.consumer"))
 
     # Finally add in all columns from L244.Floorspace to base.building.size
     L344.bld_size <- L344.bld_shell_size_overwrite %>%
