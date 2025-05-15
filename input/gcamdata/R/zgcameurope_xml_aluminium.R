@@ -21,6 +21,7 @@ module_gcameurope_aluminum_xml <- function(command, ...) {
                      "L2326.StubTechCalInput_aluminum_EUR",
                      "L2326.StubTechCoef_aluminum_EUR",
                      "L2326.StubTechSecMarket_aluminum_EUR",
+                     "L2326.StubTechSecPMult_aluminum_EUR",
                      "L2326.PerCapitaBased_aluminum_EUR",
                      "L2326.BaseService_aluminum_EUR",
                      "L2326.PriceElasticity_aluminum_EUR",
@@ -60,6 +61,7 @@ module_gcameurope_aluminum_xml <- function(command, ...) {
       add_xml_data(L2326.StubTechCalInput_aluminum_EUR, "StubTechCalInput") %>%
       add_xml_data(L2326.StubTechCoef_aluminum_EUR, "StubTechCoef") %>%
       add_xml_data(L2326.StubTechSecMarket_aluminum_EUR, "StubTechSecMarket") %>%
+      add_xml_data(L2326.StubTechSecPMult_aluminum_EUR, "StubTechSecPmult") %>%
       add_xml_data(L2326.PerCapitaBased_aluminum_EUR, "PerCapitaBased") %>%
       add_xml_data(L2326.BaseService_aluminum_EUR, "BaseService") %>%
       add_xml_data(L2326.PriceElasticity_aluminum_EUR, "PriceElasticity") %>%

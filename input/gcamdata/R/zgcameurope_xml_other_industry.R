@@ -27,6 +27,7 @@ module_gcameurope_other_industry_xml <- function(command, ...) {
                      "L232.SubsectorShrwtFllt_ind_EUR",
                      "L232.Supplysector_ind_EUR",
                      "L232.StubTechSecOut_ind_EUR",
+                     "L232.StubTechSecPMult_ind_EUR",
                      "L232.StubTechSecMarket_ind_EUR",
                      "L232.GlobalTechEff_ind_EUR",
                      "L232.GlobalTechShrwt_ind_EUR",
@@ -62,6 +63,7 @@ module_gcameurope_other_industry_xml <- function(command, ...) {
       add_xml_data(L232.StubTechProd_industry_EUR, "StubTechProd") %>%
       add_xml_data(L232.StubTechCoef_industry_EUR, "StubTechCoef") %>%
       add_xml_data(L232.StubTechSecOut_ind_EUR, "StubTechSecOutMarket") %>%
+      add_xml_data(L232.StubTechSecPMult_ind_EUR, "StubTechSecPmult") %>%
       add_xml_data(L232.StubTechSecMarket_ind_EUR, "StubTechSecMarket") %>%
       add_xml_data(L232.FuelPrefElast_indenergy_EUR, "FuelPrefElast") %>%
       add_xml_data(L232.PerCapitaBased_ind_EUR, "PerCapitaBased") %>%

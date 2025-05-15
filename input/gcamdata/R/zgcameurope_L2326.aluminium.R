@@ -43,7 +43,7 @@ module_gcameurope_L2326.aluminum <- function(command, ...) {
                      FILE = "energy/A326.subsector_interp",
                      FILE = "energy/A326.subsector_logit",
                      FILE = "energy/A326.subsector_shrwt",
-                     FILE = "energy/A326.globaltech_coef",
+                     FILE = "gcam-europe/A326.globaltech_coef",
                      FILE = "energy/A326.globaltech_co2capture",
                      FILE = "energy/A326.globaltech_cost",
                      FILE = "energy/A326.globaltech_shrwt",
@@ -67,6 +67,7 @@ module_gcameurope_L2326.aluminum <- function(command, ...) {
                       "L2326.StubTechCalInput_aluminum_EUR",
                       "L2326.StubTechCoef_aluminum_EUR",
                       "L2326.StubTechSecMarket_aluminum_EUR",
+                      "L2326.StubTechSecPMult_aluminum_EUR",
                       "L2326.PerCapitaBased_aluminum_EUR",
                       "L2326.BaseService_aluminum_EUR",
                       "L2326.PriceElasticity_aluminum_EUR",
@@ -324,8 +325,16 @@ module_gcameurope_L2326.aluminum <- function(command, ...) {
       filter(grepl("cogen", stub.technology)) %>%
       repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
       left_join(grid_regions, by = "region") %>%
-      mutate(market.name = if_else(is.na(grid_region), region, grid_region),
-             secondary.output = if_else(region %in% grid_regions$region, "base load generation", "electricity")) %>%
+      mutate(market.name = if_else(is.na(grid_region), region, grid_region)) %>%
+      left_join_error_no_match(A326.globaltech_coef %>% select(supplysector, subsector, stub.technology = technology,
+                                                              secondary.output, pMultiplier),
+                               by = c("supplysector", "subsector", "stub.technology")) %>%
+      mutate(secondary.output = if_else(region %in% grid_regions$region, secondary.output, "electricity"))
+
+    L2326.StubTechSecPMult_aluminum_EUR <- L2326.StubTechSecMarket_aluminum_EUR %>%
+      select(LEVEL2_DATA_NAMES[["StubTechSecPmult"]])
+
+    L2326.StubTechSecMarket_aluminum_EUR <- L2326.StubTechSecMarket_aluminum_EUR %>%
       select(LEVEL2_DATA_NAMES[["StubTechSecMarket"]])
 
     # Calibration and region-specific data

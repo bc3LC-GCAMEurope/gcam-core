@@ -21,6 +21,7 @@ module_gcameurope_chemical_xml <- function(command, ...) {
                      "L2325.StubTechCalInput_chemical_EUR",
                      "L2325.StubTechCoef_chemical_EUR",
                      "L2325.StubTechSecMarket_chemical_EUR",
+                     "L2325.StubTechSecPMult_chemical_EUR",
                      "L2325.PerCapitaBased_chemical_EUR",
                      "L2325.BaseService_chemical_EUR",
                      "L2325.PriceElasticity_chemical_EUR",
@@ -62,6 +63,7 @@ module_gcameurope_chemical_xml <- function(command, ...) {
       add_xml_data(L2325.StubTechCalInput_chemical_EUR, "StubTechCalInput") %>%
       add_xml_data(L2325.StubTechCoef_chemical_EUR, "StubTechCoef") %>%
       add_xml_data(L2325.StubTechSecMarket_chemical_EUR, "StubTechSecMarket") %>%
+      add_xml_data(L2325.StubTechSecPMult_chemical_EUR, "StubTechSecPmult") %>%
       add_xml_data(L2325.PerCapitaBased_chemical_EUR, "PerCapitaBased") %>%
       add_xml_data(L2325.BaseService_chemical_EUR, "BaseService") %>%
       add_xml_data(L2325.PriceElasticity_chemical_EUR, "PriceElasticity") %>%
