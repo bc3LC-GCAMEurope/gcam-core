@@ -43,7 +43,7 @@ module_gcameurope_L2325.chemical <- function(command, ...) {
                      FILE = "energy/A325.subsector_logit",
                      FILE = "energy/A325.subsector_shrwt",
                      FILE = "energy/A325.globaltech_coef",
-                     FILE = "energy/A325.globaltech_eff",
+                     FILE = "gcam-europe/A325.globaltech_eff",
                      FILE = "energy/A325.globaltech_co2capture",
                      FILE = "energy/A325.globaltech_cost",
                      FILE = "energy/A325.globaltech_retirement",
@@ -63,6 +63,7 @@ module_gcameurope_L2325.chemical <- function(command, ...) {
                       "L2325.StubTechCalInput_chemical_EUR",
                       "L2325.StubTechCoef_chemical_EUR",
                       "L2325.StubTechSecMarket_chemical_EUR",
+                      "L2325.StubTechSecPMult_chemical_EUR",
                       "L2325.PerCapitaBased_chemical_EUR",
                       "L2325.BaseService_chemical_EUR",
                       "L2325.PriceElasticity_chemical_EUR",
@@ -305,8 +306,16 @@ module_gcameurope_L2325.chemical <- function(command, ...) {
       filter(grepl("cogen", stub.technology)) %>%
       repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
       left_join(grid_regions, by = "region") %>%
-      mutate(market.name = if_else(is.na(grid_region), region, grid_region),
-             secondary.output = "electricity") %>%
+      mutate(market.name = if_else(is.na(grid_region), region, grid_region)) %>%
+      left_join_error_no_match(A325.globaltech_eff %>% select(supplysector, subsector, stub.technology = technology,
+                                                              secondary.output, pMultiplier),
+                               by = c("supplysector", "subsector", "stub.technology")) %>%
+      mutate(secondary.output = if_else(region %in% grid_regions$region, secondary.output, "electricity"))
+
+    L2325.StubTechSecPMult_chemical_EUR <- L2325.StubTechSecMarket_chemical_EUR %>%
+      select(LEVEL2_DATA_NAMES[["StubTechSecPmult"]])
+
+    L2325.StubTechSecMarket_chemical_EUR <- L2325.StubTechSecMarket_chemical_EUR %>%
       select(LEVEL2_DATA_NAMES[["StubTechSecMarket"]])
 
     # 3. Demand ====================================================

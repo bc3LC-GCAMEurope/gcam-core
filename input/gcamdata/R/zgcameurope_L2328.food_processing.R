@@ -41,7 +41,7 @@ module_gcameurope_L2328.food_processing <- function(command, ...) {
       FILE = "energy/A328.subsector_interp",
       FILE = "energy/A328.subsector_logit",
       FILE = "energy/A328.subsector_shrwt",
-      FILE = "energy/A328.globaltech_coef",
+      FILE = "gcam-europe/A328.globaltech_coef",
       FILE = "energy/A328.globaltech_cost",
       FILE = "energy/A328.regionaltech_cost",
       FILE = "energy/A328.globaltech_shrwt",
@@ -72,6 +72,7 @@ module_gcameurope_L2328.food_processing <- function(command, ...) {
       "L2328.StubCaloriePriceConv_EUR",
       "L2328.StubTechSecOut_food_EUR",
       "L2328.StubTechSecMarket_food_EUR",
+      "L2328.StubTechSecPMult_food_EUR",
       paste0(GLOBAL_TECH_COGEN, "_EUR"))
 
   if(command == driver.DECLARE_INPUTS) {
@@ -165,6 +166,7 @@ module_gcameurope_L2328.food_processing <- function(command, ...) {
     # L2328.GlobalTechCoef_food: Energy inputs and coefficients of global food processing energy use technologies
     A328.globaltech_coef %>%
       gather_years(value_col = "coefficient") %>%
+      select(-pMultiplier) %>%
       complete(nesting(supplysector, subsector, technology, minicam.energy.input, secondary.output),
                year = c(year, MODEL_BASE_YEARS, MODEL_FUTURE_YEARS)) %>%
       arrange(supplysector, subsector, technology, minicam.energy.input, secondary.output, year) %>%
@@ -363,19 +365,28 @@ module_gcameurope_L2328.food_processing <- function(command, ...) {
                                by = c("year", "fuel" = "subsector.name")) %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       mutate(output.ratio = value * coefficient,
-             output.ratio = round(output.ratio, energy.DIGITS_COEFFICIENT),
-             fractional.secondary.output = if_else(region %in% grid_regions$region, "base load generation", "electricity")) %>%
+             output.ratio = round(output.ratio, energy.DIGITS_COEFFICIENT)) %>%
       select(region, supplysector = sector.name, subsector = fuel,
-             stub.technology = technology, fractional.secondary.output, year, output.ratio) %>%
+             stub.technology = technology, year, output.ratio) %>%
+      left_join_error_no_match(A328.globaltech_coef %>% select(supplysector, subsector, stub.technology = technology,
+                                                               secondary.output, pMultiplier),
+                               by = c("supplysector", "subsector", "stub.technology")) %>%
+      mutate(secondary.output = if_else(region %in% grid_regions$region, secondary.output, "electricity")) %>%
       # NOTE: holding the output ratio constant over time in future periods
-      complete(nesting(region,supplysector, subsector, stub.technology, fractional.secondary.output),
+      complete(nesting(region,supplysector, subsector, stub.technology, secondary.output),
                year = c(MODEL_YEARS)) %>%
-      group_by(region, supplysector, subsector, stub.technology, fractional.secondary.output) %>%
-      mutate(output.ratio = approx_fun(year, output.ratio, rule = 2)) %>%
+      group_by(region, supplysector, subsector, stub.technology, secondary.output) %>%
+      mutate(output.ratio = approx_fun(year, output.ratio, rule = 2),
+             pMultiplier = approx_fun(year, pMultiplier, rule = 2)) %>%
       ungroup %>%
       left_join(grid_regions, by = "region") %>%
-      mutate(market.name = if_else(is.na(grid_region), region, grid_region)) %>%
-      select(LEVEL2_DATA_NAMES[["StubTechFractSecOutMarket"]])
+      mutate(market.name = if_else(is.na(grid_region), region, grid_region))
+
+    L2328.StubTechSecPMult_food_EUR <- L2328.StubTechSecOut_food_EUR %>%
+      select(LEVEL2_DATA_NAMES[["StubTechSecPmult"]])
+
+    L2328.StubTechSecOut_food_EUR <- L2328.StubTechSecOut_food_EUR %>%
+      select(LEVEL2_DATA_NAMES[["StubTechSecOutMarket"]])
 
     # Any missing stubtechs, add market here
     L2328.StubTechSecMarket_food_EUR <- L2328.StubTech_food_EUR %>%
@@ -383,9 +394,18 @@ module_gcameurope_L2328.food_processing <- function(command, ...) {
       anti_join(L2328.StubTechSecOut_food_EUR, by = c("region", "supplysector", "subsector", "stub.technology")) %>%
       repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
       left_join(grid_regions, by = "region") %>%
-      mutate(market.name = if_else(is.na(grid_region), region, grid_region),
-             fractional.secondary.output = if_else(region %in% grid_regions$region, "base load generation", "electricity")) %>%
-      select(LEVEL2_DATA_NAMES[["StubTechFractSecMarket"]])
+      mutate(market.name = if_else(is.na(grid_region), region, grid_region)) %>%
+      left_join_error_no_match(A328.globaltech_coef %>% select(supplysector, subsector, stub.technology = technology,
+                                                               secondary.output, pMultiplier),
+                               by = c("supplysector", "subsector", "stub.technology")) %>%
+      mutate(secondary.output = if_else(region %in% grid_regions$region, secondary.output, "electricity"))
+
+    L2328.StubTechSecPMult_food_EUR <-  bind_rows(L2328.StubTechSecPMult_food_EUR,
+                                                  L2328.StubTechSecMarket_food_EUR %>%
+                                                    select(LEVEL2_DATA_NAMES[["StubTechSecPmult"]]))
+
+    L2328.StubTechSecMarket_food_EUR <- L2328.StubTechSecMarket_food_EUR %>%
+      select(LEVEL2_DATA_NAMES[["StubTechSecMarket"]])
 
 
     # COGEN RENAMING ---------------------
