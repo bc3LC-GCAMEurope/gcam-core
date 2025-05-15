@@ -812,12 +812,12 @@ void ParseChildData::processDataVector( DataVectorType aDataVector ) {
                         found = true;
                     }
                 });
-                if(!found) {
+                /*! if(!found) {
                     // ideally we would send this to a logger however this method may
                     // be called before the loggers have been initialized
                     cout << "Unknown tag: " << childNodeName << " encountered while processing "
                          << string(mParentNode->name(), mParentNode->name_size()) << endl;
-                }
+                     }*/
             }
         }
     }

@@ -25,6 +25,7 @@ module_gcameurope_food_processing_xml <- function(command, ...) {
                      "L2328.StubCaloriePriceConv_EUR",
                      "L2328.StubTechSecOut_food_EUR",
                      "L2328.StubTechSecMarket_food_EUR",
+                     "L2328.StubTechSecPMult_food_EUR",
                      "L2328.GlobalTechShrwt_food_EUR",
                      "L2328.GlobalTechCoef_food_EUR",
                      "L2328.GlobalTechCost_food_EUR",
@@ -60,8 +61,9 @@ module_gcameurope_food_processing_xml <- function(command, ...) {
       add_xml_data(L2328.StubTechProd_food_EUR, "StubTechProd") %>%
       add_xml_data(L2328.StubTechCalInput_food_heat_EUR, "StubTechCalInput") %>%
       add_xml_data(L2328.StubTechCoef_food_EUR, "StubTechCoef") %>%
-      add_xml_data(L2328.StubTechSecOut_food_EUR, "StubTechFractSecOutMarket") %>%
-      add_xml_data(L2328.StubTechSecMarket_food_EUR, "StubTechFractSecMarket") %>%
+      add_xml_data(L2328.StubTechSecOut_food_EUR, "StubTechSecOutMarket") %>%
+      add_xml_data(L2328.StubTechSecMarket_food_EUR, "StubTechSecMarket") %>%
+      add_xml_data(L2328.StubTechSecPMult_food_EUR, "StubTechSecPmult") %>%
       add_xml_data_generate_levels(L2328.StubCalorieContent_EUR, "StubCalorieContent", "subsector","nesting-subsector",1,FALSE) %>%
       add_xml_data_generate_levels(L2328.StubCaloriePriceConv_EUR, "StubCaloriePriceConv", "subsector","nesting-subsector",1,FALSE) %>%
       add_xml_data(L2328.GlobalTechShrwt_food_EUR, "GlobalTechShrwt") %>%

@@ -25,6 +25,7 @@ module_gcameurope_paper_xml <- function(command, ...) {
                      "L2327.PriceElasticity_paper_EUR",
                      "L2327.StubTechSecOut_paper_EUR",
                      "L2327.StubTechSecMarket_paper_EUR",
+                     "L2327.StubTechSecPMult_paper_EUR",
                      "L2327.GlobalTechCoef_paper_EUR",
                      "L2327.GlobalTechShrwt_paper_EUR",
                      "L2327.GlobalTechCost_paper_EUR",
@@ -59,8 +60,9 @@ module_gcameurope_paper_xml <- function(command, ...) {
       add_xml_data(L2327.StubTechProd_paper_EUR, "StubTechProd") %>%
       add_xml_data(L2327.StubTechCalInput_paper_heat_EUR, "StubTechCalInput") %>%
       add_xml_data(L2327.StubTechCoef_paper_EUR, "StubTechCoef") %>%
-      add_xml_data(L2327.StubTechSecOut_paper_EUR, "StubTechFractSecOutMarket") %>%
-      add_xml_data(L2327.StubTechSecMarket_paper_EUR, "StubTechFractSecMarket") %>%
+      add_xml_data(L2327.StubTechSecOut_paper_EUR, "StubTechSecOutMarket") %>%
+      add_xml_data(L2327.StubTechSecMarket_paper_EUR, "StubTechSecMarket") %>%
+      add_xml_data(L2327.StubTechSecPMult_paper_EUR, "StubTechSecPmult") %>%
       add_xml_data(L2327.PerCapitaBased_paper_EUR, "PerCapitaBased") %>%
       add_xml_data(L2327.BaseService_paper_EUR, "BaseService") %>%
       add_xml_data(L2327.PriceElasticity_paper_EUR, "PriceElasticity") %>%

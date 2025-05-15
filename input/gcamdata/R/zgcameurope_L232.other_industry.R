@@ -33,7 +33,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
                      FILE = "energy/A32.subsector_shrwt",
                      FILE = "energy/A32.globaltech_coef",
                      FILE = "energy/A32.globaltech_cost",
-                     FILE = "energy/A32.globaltech_eff",
+                     FILE = "gcam-europe/A32.globaltech_eff",
                      FILE = "energy/A32.globaltech_shrwt",
                      FILE = "energy/A32.globaltech_interp",
                      FILE = "energy/A32.nonenergy_Cseq",
@@ -70,6 +70,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
                       "L232.StubTechProd_industry_EUR",
                       "L232.StubTechCoef_industry_EUR",
                       "L232.StubTechSecOut_ind_EUR",
+                      "L232.StubTechSecPMult_ind_EUR",
                       "L232.StubTechSecMarket_ind_EUR",
                       "L232.FuelPrefElast_indenergy_EUR",
                       "L232.PerCapitaBased_ind_EUR",
@@ -320,17 +321,26 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
              output.ratio = round(output.ratio, energy.DIGITS_COEFFICIENT)) %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       # If in grid regions, want to output to base load, otherwise to generic electricity
-      mutate(secondary.output = if_else(region %in% grid_regions$region, "base load generation", "electricity")) %>%
       select(region, supplysector = sector.name, subsector = fuel,
-             stub.technology = technology, secondary.output, year, output.ratio) %>%
+             stub.technology = technology, year, output.ratio) %>%
+      left_join_error_no_match(A32.globaltech_eff %>% select(supplysector, subsector, technology, secondary.output, pMultiplier),
+                               by = c("supplysector", "subsector",
+                                      "stub.technology" = "technology")) %>%
+      mutate(secondary.output = if_else(region %in% grid_regions$region, secondary.output, "electricity")) %>%
       # NOTE: holding the output ratio constant over time in future periods
       complete(nesting(region,supplysector, subsector, stub.technology, secondary.output),
                year = c(MODEL_YEARS)) %>%
       group_by(region, supplysector, subsector, stub.technology, secondary.output) %>%
-      mutate(output.ratio = approx_fun(year, output.ratio, rule = 2)) %>%
+      mutate(output.ratio = approx_fun(year, output.ratio, rule = 2),
+             pMultiplier = approx_fun(year, pMultiplier, rule = 2)) %>%
       ungroup %>%
       left_join(grid_regions, by = "region") %>%
-      mutate(market.name = if_else(is.na(grid_region), region, grid_region)) %>%
+      mutate(market.name = if_else(is.na(grid_region), region, grid_region))
+
+    L232.StubTechSecPMult_ind_EUR <- L232.StubTechSecOut_ind_EUR %>%
+      select(LEVEL2_DATA_NAMES[["StubTechSecPmult"]])
+
+    L232.StubTechSecOut_ind_EUR <- L232.StubTechSecOut_ind_EUR %>%
       select(LEVEL2_DATA_NAMES[["StubTechSecOutMarket"]])
 
     # Any missing stubtechs, add market here (e.g. H2 cogen)
