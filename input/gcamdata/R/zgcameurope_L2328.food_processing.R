@@ -414,7 +414,7 @@ module_gcameurope_L2328.food_processing <- function(command, ...) {
 
     lapply(GLOBAL_TECH_COGEN, cogen_global_tech, env = env_module)
     L2328.GlobalTechSecOut_food_EUR <- L2328.GlobalTechSecOut_food_EUR %>%
-      mutate(secondary.output = "base load generation")
+      mutate(secondary.output = unique(na.omit(A328.globaltech_coef$secondary.output)))
 
     env_module <- rlang::current_env()
 

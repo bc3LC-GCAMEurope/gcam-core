@@ -410,7 +410,7 @@ module_gcameurope_L2326.aluminum <- function(command, ...) {
 
     lapply(GLOBAL_TECH_COGEN, cogen_global_tech, env = env_module)
     L2326.GlobalTechSecOut_aluminum_EUR <- L2326.GlobalTechSecOut_aluminum_EUR %>%
-      mutate(secondary.output = "base load generation")
+      mutate(secondary.output = unique(na.omit(A326.globaltech_coef$secondary.output)))
 
     env_module <- rlang::current_env()
 

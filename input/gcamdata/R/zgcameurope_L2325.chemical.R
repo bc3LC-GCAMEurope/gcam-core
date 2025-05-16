@@ -366,8 +366,8 @@ module_gcameurope_L2325.chemical <- function(command, ...) {
     env_module <- rlang::current_env()
 
     lapply(GLOBAL_TECH_COGEN, cogen_global_tech, env = env_module)
-    L2325.GlobalTechSecOut_chemical <- L2325.GlobalTechSecOut_chemical %>%
-      mutate(secondary.output = "base load generation")
+    L2325.GlobalTechSecOut_chemical_EUR <- L2325.GlobalTechSecOut_chemical_EUR %>%
+      mutate(secondary.output = unique(na.omit(A325.globaltech_eff$secondary.output)))
 
     env_module <- rlang::current_env()
 
