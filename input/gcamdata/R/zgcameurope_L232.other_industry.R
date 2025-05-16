@@ -523,7 +523,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
 
     lapply(GLOBAL_TECH_COGEN, cogen_global_tech, env = env_module)
     L232.GlobalTechSecOut_ind_EUR <- L232.GlobalTechSecOut_ind_EUR %>%
-      mutate(secondary.output = "base load generation")
+      mutate(secondary.output = unique(na.omit(A32.globaltech_eff$secondary.output)))
 
     env_module <- rlang::current_env()
 

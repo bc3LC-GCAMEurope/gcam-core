@@ -480,7 +480,7 @@ module_gcameurope_L2327.paper <- function(command, ...) {
 
     lapply(GLOBAL_TECH_COGEN, cogen_global_tech, env = env_module)
     L2327.GlobalTechSecOut_paper_EUR <- L2327.GlobalTechSecOut_paper_EUR %>%
-      mutate(secondary.output = "base load generation")
+      mutate(secondary.output = unique(na.omit(A327.globaltech_coef$secondary.output)))
     L2327.GlobalTechShrwt_paper_EUR <- L2327.GlobalTechShrwt_paper_EUR %>%
       mutate(share.weight = if_else(subsector.name != "biomass", 0, share.weight))
 
