@@ -18,9 +18,10 @@ module_policy_L303.shareweight_overwrite <- function(command, ...) {
                       "L303.shareweight_overwrite_trnSubsector",
                       "L303.shareweight_overwrite_stubtech",
                       "L303.shareweight_overwrite_trnStubtech")
+  MODULE_INPUTS <- c(FILE = "policy/A_Shareweights",
+                     FILE = "policy/mappings/market_region_mappings")
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "policy/A_Shareweights"
-    ))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
@@ -28,8 +29,10 @@ module_policy_L303.shareweight_overwrite <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    A_Shareweights <- get_data(all_data, "policy/A_Shareweights") %>%
-      mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml")))
+    get_data_list(all_data, MODULE_INPUTS)
+    A_Shareweights <- A_Shareweights %>%
+      mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml"))) %>%
+      expand_by_region(market_region_mappings)
 
     # Convert to long and get rid of NA values
     L303.shareweight_overwrite <- A_Shareweights %>%

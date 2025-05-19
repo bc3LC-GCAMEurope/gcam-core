@@ -14,8 +14,10 @@
 #' @importFrom dplyr bind_rows distinct filter if_else left_join mutate select
 #' @author RLH April 20123
 module_policy_L326.aeei <- function(command, ...) {
+  MODULE_INPUTS <- c(FILE = "policy/A_aeei",
+                     FILE = "policy/mappings/market_region_mappings")
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "policy/A_aeei"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L326.aeei"))
   } else if(command == driver.MAKE) {
@@ -23,7 +25,8 @@ module_policy_L326.aeei <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    A_aeei <- get_data(all_data, "policy/A_aeei")
+    get_data_list(all_data, MODULE_INPUTS)
+    A_aeei <-  A_aeei %>% expand_by_region(market_region_mappings)
 
     # Convert to long format and interpolate any missing years
     L326.aeei <- A_aeei %>%

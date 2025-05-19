@@ -15,6 +15,7 @@
 #' @author RLH April 20123
 module_policy_L344.bld_shell_size <- function(command, ...) {
   MODULE_INPUTS <- c(FILE = "policy/A_building_shell_size",
+                     FILE = "policy/mappings/market_region_mappings",
                      "L244.ShellConductance_bld",
                      "L244.Floorspace",
                      "L244.ShellConductance_bld_EUR",
@@ -32,7 +33,10 @@ module_policy_L344.bld_shell_size <- function(command, ...) {
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
 
-    A_building_shell_size <- A_building_shell_size %>% mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml")))
+    A_building_shell_size <- A_building_shell_size %>%
+      mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml"))) %>%
+      expand_by_region(market_region_mappings)
+
     L244.ShellConductance_bld <- replace_with_eurostat(L244.ShellConductance_bld, L244.ShellConductance_bld_EUR)
     L244.Floorspace <- replace_with_eurostat(L244.Floorspace, L244.Floorspace_EUR)
 

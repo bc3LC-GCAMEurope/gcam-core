@@ -23,6 +23,7 @@ module_policy_L300.elasticity <- function(command, ...) {
               inputs_of("module_energy_Off_road_incelas_SSP_xml")
               )
   MODULE_INPUTS <- c(FILE = "policy/A_elasticity",
+                     FILE = "policy/mappings/market_region_mappings",
                      "L254.IncomeElasticity_trn",
                      "L254.PriceElasticity_trn",
                      "L254.PerCapitaBased_trn",
@@ -44,7 +45,9 @@ module_policy_L300.elasticity <- function(command, ...) {
 
     # Load required inputs ----------------------
     get_data_list(all_data, MODULE_INPUTS)
-    A_elasticity <- A_elasticity %>% mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml")))
+    A_elasticity <- A_elasticity %>%
+      mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml"))) %>%
+      expand_by_region(market_region_mappings)
 
     L254.PerCapitaBased_trn <- replace_with_eurostat(L254.PerCapitaBased_trn, L254.PerCapitaBased_trn_EUR)
 

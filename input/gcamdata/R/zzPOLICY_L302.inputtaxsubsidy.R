@@ -17,10 +17,11 @@ module_policy_L302.inputtaxsubsidy <- function(command, ...) {
   MODULE_OUTPUTS <- c("L302.InputTax",
                       "L302.InputTranTax",
                       "L302.InputCapitalFCR")
+  MODULE_INPUTS <- c(FILE = "policy/A_InputTaxesSubsidies",
+                     FILE = "policy/A_InputCapitalFCR",
+                     FILE = "policy/mappings/market_region_mappings")
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "policy/A_InputTaxesSubsidies",
-             FILE = "policy/A_InputCapitalFCR"
-    ))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
@@ -28,11 +29,14 @@ module_policy_L302.inputtaxsubsidy <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    A_InputTaxesSubsidies <- get_data(all_data, "policy/A_InputTaxesSubsidies") %>%
-      mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml")))
+    get_data_list(all_data, MODULE_INPUTS)
+    A_InputTaxesSubsidies <- A_InputTaxesSubsidies %>%
+      mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml"))) %>%
+      expand_by_region(market_region_mappings)
 
-    A_InputCapitalFCR <- get_data(all_data, "policy/A_InputCapitalFCR") %>%
-      mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml")))
+    A_InputCapitalFCR <- A_InputCapitalFCR %>%
+      mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml"))) %>%
+      expand_by_region(market_region_mappings)
 
     # Convert to long
     L302.InputTax <- A_InputTaxesSubsidies %>%
