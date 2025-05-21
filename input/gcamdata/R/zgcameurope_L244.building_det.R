@@ -329,7 +329,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       rename(pop_thous = value) %>%
       mutate(bias.adjust.param = (bm2_adder*1E9)/(pop_thous*1E3))
 
-    # The following table puts together all the parameters that will be used in the estimation of future residential floorspace
+    # The following table puts together all the parameters that will be used in the estimation of future residential floorspace. Multiplier applied for adjusting to EU trends.
     L244.GompFnParam_EUR<-L144.flsp_param_EUR %>%
       repeat_add_columns(tibble(gcam.consumer=paste0("resid EUR_",unique(L106.income_shares$gcam.consumer)))) %>%
       left_join_error_no_match(GCAM_region_names, by="region") %>%
@@ -338,6 +338,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       left_join_error_no_match(L244.Flsp_BiasAdder, by = c("region", "GCAM_region_ID", "year")) %>%
       mutate(nodeInput = "resid EUR",
              building.node.input = "resid_building") %>%
+      mutate(income.param = income.param * 0.65) %>%
       select(LEVEL2_DATA_NAMES[["GompFnParam"]])
 
     #----------------------------------------------------------------------
