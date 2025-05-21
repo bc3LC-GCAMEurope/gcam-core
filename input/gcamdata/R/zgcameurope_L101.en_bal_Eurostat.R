@@ -250,6 +250,42 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
                            fill = list(value = 0)) %>%
                   filter(year <= MODEL_FINAL_BASE_YEAR)) # FINAL OUTPUT TABLE - temporally complete EUR data
 
+    # 1c. Get ratio for feedstocks based on IEA -------------------
+    # Eurostat has only industrial feedstocks, but IEA splits defines industrial, chemical, and construction
+    # Note that in IEA, the industrial feedstocks is the sum of chemical, construction, and all other
+    # so we want to leave the total industrial feedstocks in Eurostat the same, but apply the ratios from IEA
+    # only to construction and chemical feedstocks
+    L1011.feedstocks_IEA <- L1011.en_bal_EJ_R_Si_Fi_Yh %>%
+      filter_regions_europe(region_ID_mapping = L101.GCAM_EUR_regions) %>%
+      filter(grepl("feedstock", sector)) %>%
+      group_by(GCAM_region_ID, fuel, year) %>%
+      mutate(total_ind = value[sector == "in_industry_feedstocks"],
+             proportion = if_else(total_ind == 0, 0, value / total_ind)) %>%
+      ungroup %>%
+      rename(IEA_sector = sector) %>%
+      filter(IEA_sector != "in_industry_feedstocks") %>%
+      select(-value, -total_ind)
+
+    # first let's filter to year/region combos with only 1 feedstock sector
+    Eurostat_feedstocks <- L101.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
+      filter(grepl("feedstock", sector)) %>%
+      group_by(GCAM_region_ID, year, fuel) %>%
+      filter(dplyr::n() == 1) %>%
+      ungroup %>%
+      repeat_add_columns(L1011.feedstocks_IEA %>%  distinct(IEA_sector))
+
+    # then join in with IEA and apply proportions
+    L101.feedstocks_Eurostat <- Eurostat_feedstocks %>%
+      inner_join(L1011.feedstocks_IEA, by = c("GCAM_region_ID", "fuel", "year", "IEA_sector")) %>%
+      tidyr::replace_na(list(proportion = 0)) %>%
+      mutate(value = value * proportion) %>%
+      select(-proportion, -sector) %>%
+      rename(sector = IEA_sector)
+
+    L101.en_bal_EJ_R_Si_Fi_Yh_EUR <- L101.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
+      bind_rows(L101.feedstocks_Eurostat)
+
+    #
     # 2. Building & Transport Downscale -----------
     # For downscaling of buildings and transportation energy, aggregate by fuel and country
     # a: transport
