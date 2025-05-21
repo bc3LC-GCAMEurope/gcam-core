@@ -15,6 +15,7 @@
 #' @author RLH April 2023
 module_policy_L354.FuelStandards <- function(command, ...) {
   MODULE_INPUTS <- c(FILE = "policy/A_FuelStandards",
+                     FILE = "policy/mappings/market_region_mappings",
                      "L254.StubTranTechCoef",
                      "UCD_trn_data",
                      FILE = "policy/mappings/UCD_addtl_subsector_mapping",
@@ -31,6 +32,8 @@ module_policy_L354.FuelStandards <- function(command, ...) {
 
     # Load required inputs ---------------
     get_data_list(all_data, MODULE_INPUTS)
+
+    A_FuelStandards <- A_FuelStandards %>% expand_by_region(market_region_mappings)
 
     # 1. Convert to long and interpolate ---------------
     L354.FuelStandards_long <- A_FuelStandards %>%

@@ -14,9 +14,10 @@
 #' @importFrom dplyr bind_rows distinct filter if_else left_join mutate select
 #' @author RLH April 2023
 module_policy_L307.exoShutdownScalar <- function(command, ...) {
+  MODULE_INPUTS <- c(FILE = "policy/mappings/market_region_mappings",
+                     FILE = "policy/A_ExoShutdownScalar")
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "policy/A_ExoShutdownScalar"
-    ))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L307.exoShutdownScalar"))
   } else if(command == driver.MAKE) {
@@ -24,8 +25,10 @@ module_policy_L307.exoShutdownScalar <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    A_ExoShutdownScalar <- get_data(all_data, "policy/A_ExoShutdownScalar") %>%
-      mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml")))
+    get_data_list(all_data, MODULE_INPUTS)
+    A_ExoShutdownScalar <- A_ExoShutdownScalar %>%
+      mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml"))) %>%
+      expand_by_region(market_region_mappings)
 
     # Convert to long and get rid of NA values
     L307.exoShutdownScalar <- A_ExoShutdownScalar %>%

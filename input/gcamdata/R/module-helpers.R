@@ -1760,3 +1760,18 @@ filter_xml <- function(df, xml_nm){
     select(-xml)
 }
 
+#' expand_by_region
+#'
+#' Filter policy tables to desired xml
+#' @param data data
+#' @param region_map region_map with 2 columns, a market column and region column
+#' @importFrom dplyr filter mutate left_join select
+#' @return assignment of new db
+expand_by_region <- function(data, region_map){
+  # Join data with the region-country map on the 'region' column
+  data %>%
+    left_join(region_map, by = c("region" = "market")) %>%
+    mutate(region = if_else(is.na(region.y), region, region.y)) %>%
+    select(-region.y)
+}
+

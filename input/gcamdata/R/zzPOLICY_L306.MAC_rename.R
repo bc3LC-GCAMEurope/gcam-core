@@ -15,6 +15,7 @@
 #' @author RLH April 2023
 module_policy_L306.MAC_rename <- function(command, ...) {
   MODULE_INPUTS <- c(FILE = "policy/A_MAC_rename",
+                     FILE = "policy/mappings/market_region_mappings",
                       FILE = "common/GCAM_region_names",
                       "L252.ResMAC_fos",
                       "L252.MAC_higwp",
@@ -43,7 +44,8 @@ module_policy_L306.MAC_rename <- function(command, ...) {
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
 
-    A_MAC_rename <- A_MAC_rename %>% mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml")))
+    A_MAC_rename <- A_MAC_rename %>% mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml"))) %>%
+      expand_by_region(market_region_mappings)
 
     if ("ALL" %in% A_MAC_rename$region){
       A_MAC_rename_global <- A_MAC_rename %>%

@@ -15,6 +15,7 @@
 #' @author RLH December 2023
 module_policy_L310.resource_subsidy <- function(command, ...) {
   MODULE_INPUTS <- c(FILE = "policy/A_resource_subsidy",
+                     FILE = "policy/mappings/market_region_mappings",
                      outputs_of("module_energy_L254.transportation_UCD"))
   MODULE_OUTPUTS <- c("L310.RenewRsrc",
                       "L310.RenewRsrcPrice",
@@ -38,7 +39,9 @@ module_policy_L310.resource_subsidy <- function(command, ...) {
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
-    A_resource_subsidy <- A_resource_subsidy %>% mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml")))
+    A_resource_subsidy <- A_resource_subsidy %>%
+      mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml"))) %>%
+      expand_by_region(market_region_mappings)
 
     # Set resource basic info ------------------
     L310.RenewRsrc <- A_resource_subsidy %>%

@@ -16,6 +16,7 @@
 module_policy_L305.FixedOutputTech <- function(command, ...) {
   MODULE_INPUTS <- c(FILE = "policy/A_FixedOutputTech",
                      FILE = "policy/A_FixedOutputTranTech",
+                     FILE = "policy/mappings/market_region_mappings",
                      inputs_of("module_energy_transportation_UCD_CORE_xml"))
   MODULE_OUTPUTS <- c("L305.StubTechFixedOutput",
                       "L305.GlbTechFixedOutput",
@@ -39,8 +40,12 @@ module_policy_L305.FixedOutputTech <- function(command, ...) {
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
-    A_FixedOutputTech <- A_FixedOutputTech %>% mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml")))
-    A_FixedOutputTranTech <- A_FixedOutputTranTech %>% mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml")))
+    A_FixedOutputTech <- A_FixedOutputTech %>%
+      mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml"))) %>%
+      expand_by_region(market_region_mappings)
+    A_FixedOutputTranTech <- A_FixedOutputTranTech %>%
+      mutate(xml = if_else(grepl(".xml", xml), xml, paste0(xml, ".xml"))) %>%
+      expand_by_region(market_region_mappings)
 
     # 1. Regular tech processing ---------------
     L305.StubTechFixedOutput <- A_FixedOutputTech %>%
