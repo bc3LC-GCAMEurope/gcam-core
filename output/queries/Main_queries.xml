@@ -4291,7 +4291,7 @@ element input {
             <supplyDemandQuery title="food demand">
                 <axis1 name="input">input[@name]</axis1>
                 <axis2 name="Year">demand-physical[@vintage]</axis2>
-                <xPath buildList="true" dataName="demand" group="false" sumAll="false">gcam-consumer[@name='FoodDemand']//*[@type='input']/demand-physical/node()</xPath>
+                <xPath buildList="true" dataName="demand" group="false" sumAll="false">gcam-consumer[contains(@name,'FoodDemand')]//*[@type='input']/demand-physical/node()</xPath>
                 <comments/>
             </supplyDemandQuery>
             <supplyDemandQuery title="food demand per capita">
@@ -5427,7 +5427,7 @@ A user can adjust the query to search for any of:
             </supplyDemandQuery>
         </queryGroup>
     </queryGroup>
-    <queryGroup name="GCAM USA">
+    <queryGroup name="GCAM USA/EUROPE">
         <queryGroup name="primary energy">
             <supplyDemandQuery title="primary energy consumption by region (direct equivalent)">
                 <axis1 name="fuel">input[@name]</axis1>
