@@ -17,27 +17,11 @@ industrial processes,Al_Mg,Al_Mg,metals,metals,Aluminum
 resid cooling modern EUR,electricity,electricity,refrigeration,refrigeration,Refrigeration
 comm cooling EUR,electricity,electricity,refrigeration,refrigeration,Refrigeration
 industrial processes,other industrial processes,other industrial processes,other,industry_processes,
-resid heating modern EUR,electricity,resistance,refrigeration,refrigeration,Refrigeration
 resid heating modern EUR,electricity,air-air pump south,refrigeration,refrigeration,Refrigeration
 resid heating modern EUR,electricity,air-air pump middle south,refrigeration,refrigeration,Refrigeration
 resid heating modern EUR,electricity,air-air pump middle north,refrigeration,refrigeration,Refrigeration
 resid heating modern EUR,electricity,air-air pump north,refrigeration,refrigeration,Refrigeration
-resid heating modern EUR,water heat pump,air-water pump south,refrigeration,refrigeration,Refrigeration
-resid heating modern EUR,water heat pump,air-water pump middle south,refrigeration,refrigeration,Refrigeration
-resid heating modern EUR,water heat pump,air-water pump middle north,refrigeration,refrigeration,Refrigeration
-resid heating modern EUR,water heat pump,air-water pump north,refrigeration,refrigeration,Refrigeration
-resid heating modern EUR,water heat pump,geo-water pump,refrigeration,refrigeration,Refrigeration
-resid heating modern EUR,water heat pump,solar thermal,refrigeration,refrigeration,Refrigeration
-resid hot water modern EUR,water heat pump,heat pump,refrigeration,refrigeration,Refrigeration
-resid hot water modern EUR,water heat pump,solar thermal,refrigeration,refrigeration,Refrigeration
-comm heating EUR,electricity,resistance,refrigeration,refrigeration,Refrigeration
 comm heating EUR,electricity,air-air pump south,refrigeration,refrigeration,Refrigeration
 comm heating EUR,electricity,air-air pump middle south,refrigeration,refrigeration,Refrigeration
 comm heating EUR,electricity,air-air pump middle north,refrigeration,refrigeration,Refrigeration
 comm heating EUR,electricity,air-air pump north,refrigeration,refrigeration,Refrigeration
-comm heating EUR,water heat pump,air-water pump south,refrigeration,refrigeration,Refrigeration
-comm heating EUR,water heat pump,air-water pump middle south,refrigeration,refrigeration,Refrigeration
-comm heating EUR,water heat pump,air-water pump middle north,refrigeration,refrigeration,Refrigeration
-comm heating EUR,water heat pump,air-water pump north,refrigeration,refrigeration,Refrigeration
-comm heating EUR,water heat pump,geo-water pump,refrigeration,refrigeration,Refrigeration
-comm heating EUR,water heat pump,solar thermal,refrigeration,refrigeration,Refrigeration
