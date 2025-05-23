@@ -25,7 +25,8 @@ module_policy_ceilings_floors_xml <- function(command, ...) {
                      "L301.RES_secout_NG",
                      "L301.pmultiplier_NG",
                      "L301.input_tax_NG",
-                     "L301.input_subsidy_NG")
+                     "L301.input_subsidy_NG",
+                     "L2235.StubTech_elecS_cool_EUR")
 
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -34,7 +35,6 @@ module_policy_ceilings_floors_xml <- function(command, ...) {
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
-
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
@@ -61,6 +61,36 @@ module_policy_ceilings_floors_xml <- function(command, ...) {
 
      if ("technology" %in% names(df)){ df %>% rename("stub.technology" = "technology")} else {df}
     }
+
+    # function to join in any nesting subsector techs from elec segments
+    move_mapped_rows <- function(df1, df2, map_df, by, new_col = "subsector0") {
+      df1_sym <- rlang::ensym(df1)
+      df2_sym <- rlang::ensym(df2)
+
+      df1_val <- rlang::eval_tidy(df1_sym)
+      df2_val <- rlang::eval_tidy(df2_sym)
+
+      df1_joined <- left_join(df1_val, map_df, by = by)
+
+      updated_df2 <- bind_rows(df2_val, filter(df1_joined, !is.na(.data[[new_col]])))
+      updated_df1 <- filter(df1_joined, is.na(.data[[new_col]])) %>%
+        select(-all_of(new_col))
+
+      # Assign back to original names in parent environment
+      assign(rlang::as_string(df1_sym), updated_df1, envir =  rlang::caller_env())
+      assign(rlang::as_string(df2_sym), updated_df2, envir =  rlang::caller_env())
+    }
+
+    move_mapped_rows(L301.policy_RES_coefs, L301.policy_RES_coefs_NG,L2235.StubTech_elecS_cool_EUR,
+                     by = c("region", "supplysector", "subsector", "stub.technology"))
+    move_mapped_rows(L301.RES_secout, L301.RES_secout_NG,L2235.StubTech_elecS_cool_EUR,
+                     by = c("region", "supplysector", "subsector", "stub.technology"))
+    move_mapped_rows(L301.pmultiplier, L301.pmultiplier_NG,L2235.StubTech_elecS_cool_EUR,
+                     by = c("region", "supplysector", "subsector", "stub.technology"))
+    move_mapped_rows(L301.input_tax, L301.input_tax_NG,L2235.StubTech_elecS_cool_EUR,
+                     by = c("region", "supplysector", "subsector", "stub.technology"))
+    move_mapped_rows(L301.input_subsidy, L301.input_subsidy_NG,L2235.StubTech_elecS_cool_EUR,
+                     by = c("region", "supplysector", "subsector", "stub.technology"))
 
     for (xml_name in all_xml_names){
       # Use as filter for other tables
