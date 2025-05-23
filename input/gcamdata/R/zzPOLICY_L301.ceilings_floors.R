@@ -52,6 +52,7 @@ module_policy_L301.ceilings_floors <- function(command, ...) {
                      "L226.TechCoef_electd_EUR",
                      "L226.StubTechCoef_electd_EUR",
                      "L221.StubTechCalInput_bioOil_EUR",
+                     "L244.StubTechEff_bld_EUR",
                      STUB_TECHS)
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -183,18 +184,10 @@ module_policy_L301.ceilings_floors <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["PortfolioStdConstraint"]]) %>%
       distinct()
 
-    # 3. Create RES coefficient tables --------------------
-    L301.policy_RES_coefs <- L301.ceilings_floors %>%
-      filter(policyType  == "RES") %>%
-      select(-market) %>%
-      rename(minicam.energy.input = policy.portfolio.standard,
-             coefficient = constraint)
-
-    # 4. Create secondary output tables - interpolate between years --------------------
+    # 3a. Create secondary output tables - interpolate between years --------------------
     L301.RES_secout <- A_renewable_energy_standards %>%
       select(- variable, -tech_mapping, -xml, -market) %>%
-      tidyr::pivot_longer(cols = c(sec.out.1, sec.out.elecloss, sec.out.fosconv), names_to = "sec_out_type", values_to = "tech_mapping") %>%
-      select(region, region, res.secondary.output = policy.portfolio.standard, sec_out_type, tech_mapping) %>%
+      select(region, region, res.secondary.output = policy.portfolio.standard, sec.out.type, tech_mapping = sec.out) %>%
       filter(!is.na(tech_mapping)) %>%
       left_join(policy_tech_mappings, by = "tech_mapping") %>%
       # Default output is always 1
@@ -215,23 +208,22 @@ module_policy_L301.ceilings_floors <- function(command, ...) {
         anti_join(tech_remove, by = c("region", "supplysector", "subsector", "stub.technology"))
     }
 
-    # Calculate electricity losses if specified
     secout_elec_losses <- L301.RES_secout %>%
-      filter(sec_out_type  == "sec.out.elecloss") %>%
+      filter(sec.out.type  == "electricity") %>%
       select(-output.ratio)
 
-    L301.RES_secout <- L301.RES_secout %>%
-      filter(sec_out_type  != "sec.out.elecloss")
-
-    # Calculate fossil equivalent losses if specified
     secout_fossil_conv <- L301.RES_secout %>%
-      filter(sec_out_type == "sec.out.fosconv") %>%
+      filter(sec.out.type  == "fossil") %>%
+      select(-output.ratio)
+
+    secout_heat_pump <- L301.RES_secout %>%
+      filter(sec.out.type  == "heat.pump") %>%
       select(-output.ratio)
 
     L301.RES_secout <- L301.RES_secout %>%
-      filter(sec_out_type != "sec.out.fosconv")
+      filter(!sec.out.type %in% c("electricity", "fossil", "heat.pump"))
 
-
+    # 3b.  Calculate electricity losses if specified ----------------------
     if (nrow(secout_elec_losses) > 0){
       # This works because each region has just one coefficient per year
       # If that changes, will need to change
@@ -242,18 +234,16 @@ module_policy_L301.ceilings_floors <- function(command, ...) {
       electd_coefs <- distinct(L226.StubTechCoef_electd, region, year, coefficient)
       stopifnot(dplyr::n_groups(group_by(electd_coefs, region, year)) == nrow(electd_coefs))
 
-      elec_losses <- secout_elec_losses %>%
+      secout_elec_losses <- secout_elec_losses %>%
         left_join_error_no_match(elecownuse_coefs,
                                  by = c("region", "year")) %>%
         left_join_error_no_match(electd_coefs,
                                  by = c("region", "year")) %>%
         mutate(output.ratio = 1 / (coefficient.x * coefficient.y)) %>%
         select(-coefficient.x, -coefficient.y)
-
-      L301.RES_secout <- L301.RES_secout %>%
-        bind_rows(elec_losses)
     }
 
+    # 3c.  Calculate fossil losses if specified ----------------------
     if (nrow(secout_fossil_conv) > 0){
       # First get coal efficiency, which will be used for all elec techs
       coal_eff <- L2233.GlobalTechEff_elec_cool %>%
@@ -297,14 +287,40 @@ module_policy_L301.ceilings_floors <- function(command, ...) {
         select(region, supplysector, subsector = subsector.x, stub.technology = stub.technology.x, res.secondary.output, output.ratio, year) %>%
         filter(!is.na(output.ratio))
 
-      L301.RES_secout <- L301.RES_secout %>%
-        bind_rows(secout_fossil_conv_ELEC,
-                  secout_fossil_conv_NONENERGY)
-
+      secout_fossil_conv <- bind_rows(secout_fossil_conv_ELEC, secout_fossil_conv_NONENERGY)
     }
+
+    # 3d.  Calculate heat pump efficiency if specified ----------------------
+    if (nrow(secout_heat_pump) > 0){
+      secout_heat_pump <- secout_heat_pump %>%
+        left_join_error_no_match(L244.StubTechEff_bld_EUR,
+                                 by = c("region", "supplysector", "subsector", "stub.technology", "year")) %>%
+        # don't want solar thermal to have its efficiency adjusted
+        mutate(output.ratio = if_else(grepl("solar", minicam.energy.input), 1, round((efficiency - 1)/efficiency, 5))) %>%
+        select(-market.name, -efficiency, -minicam.energy.input)
+    }
+
+
+    # 3e. Combine all -----------------------
     L301.RES_secout <- L301.RES_secout %>%
+      bind_rows(secout_elec_losses, secout_fossil_conv, secout_heat_pump) %>%
       select(region, res.secondary.output, supplysector, subsector, stub.technology, year, output.ratio)
 
+    # 4. Create RES coefficient tables --------------------
+    L301.policy_RES_coefs <- L301.ceilings_floors %>%
+      filter(policyType  == "RES") %>%
+      select(-market) %>%
+      rename(minicam.energy.input = policy.portfolio.standard,
+             coefficient = constraint) %>%
+      left_join(secout_heat_pump,
+                by = c("region", "supplysector", "subsector",
+                       "stub.technology", "year",
+                       "minicam.energy.input" = "res.secondary.output")) %>%
+      tidyr::replace_na(list(output.ratio = 1)) %>%
+      mutate(coefficient = coefficient * output.ratio) %>%
+      select(LEVEL2_DATA_NAMES[["StubTechCoef_NM_Policy"]], policyType)
+
+    #
     # 5. Create input tax tables - apply to all model years because of vintages --------------------
     L301.input_tax <- L301.ceilings_floors %>%
       semi_join(A_energy_constraints %>% filter(policyType == "tax"),
