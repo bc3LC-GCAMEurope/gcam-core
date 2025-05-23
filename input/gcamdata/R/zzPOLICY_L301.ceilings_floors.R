@@ -41,6 +41,7 @@ module_policy_L301.ceilings_floors <- function(command, ...) {
                      "L226.StubTechCoef_electd",
                      "L2233.GlobalTechEff_elec_cool",
                      "L222.GlobalTechCoef_en",
+                     "L2232.TechCoef_elecownuse_EUR_trade",
                      "L201.GDP_Scen",
                      "L201.GDP_GCAM3",
                      FILE = "policy/GCAM_results/OutputsByTech",
@@ -225,13 +226,30 @@ module_policy_L301.ceilings_floors <- function(command, ...) {
 
     # 3b.  Calculate electricity losses if specified ----------------------
     if (nrow(secout_elec_losses) > 0){
+      # mapping grid losses to countries
+      grid_EUR <- L226.TechCoef_electd_EUR %>% distinct(region, market.name)
+
+      L2232.TechCoef_elecownuse_EUR <- grid_EUR %>%
+        left_join(L2232.TechCoef_elecownuse_EUR_trade %>% select(-region),
+                  by = c("market.name"))
+
+      L226.StubTechCoef_elecownuse_noEUR <- L226.StubTechCoef_elecownuse %>%
+        anti_join(L2232.TechCoef_elecownuse_EUR,
+                  by = c("region", "year"))
+
+      L226.StubTechCoef_electd_noEUR <- L226.StubTechCoef_electd %>%
+        anti_join(L226.TechCoef_electd_EUR,
+                  by = c("region", "year"))
+
       # This works because each region has just one coefficient per year
       # If that changes, will need to change
       # Just in case, we confirm first
-      elecownuse_coefs <- distinct(L226.StubTechCoef_elecownuse, region, year, coefficient)
+      elecownuse_coefs <- distinct(bind_rows(L226.StubTechCoef_elecownuse_noEUR,
+                                             L2232.TechCoef_elecownuse_EUR),
+                                   region, year, coefficient)
       stopifnot(dplyr::n_groups(group_by(elecownuse_coefs, region, year)) == nrow(elecownuse_coefs))
 
-      electd_coefs <- distinct(L226.StubTechCoef_electd, region, year, coefficient)
+      electd_coefs <- distinct(bind_rows(L226.StubTechCoef_electd_noEUR, L226.TechCoef_electd_EUR), region, year, coefficient)
       stopifnot(dplyr::n_groups(group_by(electd_coefs, region, year)) == nrow(electd_coefs))
 
       secout_elec_losses <- secout_elec_losses %>%
@@ -366,6 +384,7 @@ module_policy_L301.ceilings_floors <- function(command, ...) {
                 by = c("region", "supplysector", "subsector" = "subsector0")) %>%
       rename(subsector0 = subsector, subsector = subsector.y) %>%
       select(-stub.technology) %>%
+      rename(stub.technology = technology) %>%
       add_title("Secondary output for RES markets", overwrite = T) %>%
       add_units("NA") %>%
       add_precursors("policy/A_renewable_energy_standards",
@@ -380,6 +399,7 @@ module_policy_L301.ceilings_floors <- function(command, ...) {
                 by = c("region", "supplysector", "subsector" = "subsector0")) %>%
       rename(subsector0 = subsector, subsector = subsector.y) %>%
       select(-stub.technology) %>%
+      rename(stub.technology = technology) %>%
       add_title("Coefficients for RES markets (natural gas)", overwrite = T) %>%
       add_units("Proportion of supplysector/subsector/technology") %>%
       add_precursors("policy/A_energy_constraints",
@@ -393,6 +413,7 @@ module_policy_L301.ceilings_floors <- function(command, ...) {
                 by = c("region", "supplysector", "subsector" = "subsector0")) %>%
       rename(subsector0 = subsector, subsector = subsector.y) %>%
       select(-stub.technology) %>%
+      rename(stub.technology = technology) %>%
       add_title("Price multipliers for RES markets", overwrite = T) %>%
       add_units("NA") %>%
       add_precursors("policy/A_renewable_energy_standards") ->
@@ -405,6 +426,7 @@ module_policy_L301.ceilings_floors <- function(command, ...) {
                 by = c("region", "supplysector", "subsector" = "subsector0")) %>%
       rename(subsector0 = subsector, subsector = subsector.y) %>%
       select(-stub.technology) %>%
+      rename(stub.technology = technology) %>%
       add_title("Technologies to apply constraint to", overwrite = T) %>%
       add_units("NA") %>%
       add_precursors("policy/A_renewable_energy_standards") ->
@@ -417,6 +439,7 @@ module_policy_L301.ceilings_floors <- function(command, ...) {
                 by = c("region", "supplysector", "subsector" = "subsector0")) %>%
       rename(subsector0 = subsector, subsector = subsector.y) %>%
       select(-stub.technology) %>%
+      rename(stub.technology = technology) %>%
       add_title("Technologies to apply constraint to", overwrite = T) %>%
       add_units("NA") %>%
       add_precursors("policy/A_renewable_energy_standards") ->

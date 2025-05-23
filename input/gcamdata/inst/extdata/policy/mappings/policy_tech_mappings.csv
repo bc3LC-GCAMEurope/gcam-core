@@ -106,6 +106,7 @@ ELEC_RENEWABLE,electricity,wind,wind_offshore
 ELEC_RENEWABLE,electricity,wind,wind_storage
 ELEC_RENEWABLE,electricity,geothermal,geothermal
 ELEC_RENEWABLE,electricity,hydro,hydro
+EN_CARRIER_ELEC,base load generation,PV_base,PV
 EN_CARRIER_ELEC,electricity,hydro,hydro
 EN_CARRIER_ELEC,electricity,wind,wind
 EN_CARRIER_ELEC,electricity,wind,wind_offshore
@@ -338,6 +339,7 @@ PRIMARY_ENERGY,electricity,wind,wind_storage
 PRIMARY_ENERGY,H2 central production,solar,electrolysis
 PRIMARY_ENERGY,H2 central production,wind,electrolysis
 PRIMARY_ENERGY,H2 central production,nuclear,electrolysis
+PRIMARY_ENERGY,base load generation,PV_base,PV
 PRIMARY_ENERGY_FOSSIL,regional coal,domestic coal,domestic coal
 PRIMARY_ENERGY_FOSSIL,regional coal,imported coal,imported coal
 PRIMARY_ENERGY_FOSSIL,gas processing,natural gas,natural gas
