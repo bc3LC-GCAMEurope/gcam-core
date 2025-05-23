@@ -554,3 +554,174 @@ COMM_ELEC,comm cooling,electricity,electricity
 COMM_ELEC,comm heating,electricity,electricity
 ELEC_BLD,elect_td_bld,elect_td_bld,elect_td_bld
 ELEC_BLD,elect_td_bld,rooftop_pv,rooftop_pv
+PRIMARY_ENERGY,regional biomass,regional biomass,regional biomass
+PRIMARY_ENERGY,regional coal,domestic coal,domestic coal
+PRIMARY_ENERGY,regional coal,imported coal,imported coal
+PRIMARY_ENERGY,gas processing,natural gas,natural gas
+PRIMARY_ENERGY,H2 central production,gas,natural gas steam reforming
+PRIMARY_ENERGY,refining,gas to liquids,gas to liquids
+PRIMARY_ENERGY,regional oil,domestic crude oil,domestic crude oil
+PRIMARY_ENERGY,regional oil,imported crude oil,imported crude oil
+PRIMARY_ENERGY,regional biomassOil,regional biomassOil,Soybean
+PRIMARY_ENERGY,regional biomassOil,regional biomassOil,OilCrop
+PRIMARY_ENERGY,regional biomassOil,regional biomassOil,OilPalm
+PRIMARY_ENERGY,regional corn for ethanol,regional corn for ethanol,regional corn for ethanol
+PRIMARY_ENERGY,regional sugar for ethanol,regional sugar for ethanol,regional sugar for ethanol
+PRIMARY_ENERGY,elec_CSP,CSP,CSP (dry_hybrid)
+PRIMARY_ENERGY,elec_CSP,CSP,CSP (recirculating)
+PRIMARY_ENERGY,elec_CSP_storage,CSP_storage,CSP_storage (dry_hybrid)
+PRIMARY_ENERGY,elec_CSP_storage,CSP_storage,CSP_storage (recirculating)
+PRIMARY_ENERGY,elec_Gen_III,Gen_III,Gen_III (cooling pond)
+PRIMARY_ENERGY,elec_Gen_III,Gen_III,Gen_III (once through)
+PRIMARY_ENERGY,elec_Gen_III,Gen_III,Gen_III (recirculating)
+PRIMARY_ENERGY,elec_Gen_III,Gen_III,Gen_III (seawater)
+PRIMARY_ENERGY,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (cooling pond)
+PRIMARY_ENERGY,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (once through)
+PRIMARY_ENERGY,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (recirculating)
+PRIMARY_ENERGY,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (seawater)
+PRIMARY_ENERGY,elec_geothermal,geothermal,geothermal (dry_hybrid)
+PRIMARY_ENERGY,elec_geothermal,geothermal,geothermal (recirculating)
+PRIMARY_ENERGY,elect_td_bld,rooftop_pv,rooftop_pv
+PRIMARY_ENERGY,electricity,hydro,hydro
+PRIMARY_ENERGY,electricity,solar,PV
+PRIMARY_ENERGY,electricity,solar,PV_storage
+PRIMARY_ENERGY,electricity,wind,wind
+PRIMARY_ENERGY,electricity,wind,wind_offshore
+PRIMARY_ENERGY,electricity,wind,wind_storage
+PRIMARY_ENERGY,H2 central production,solar,electrolysis
+PRIMARY_ENERGY,H2 central production,wind,electrolysis
+PRIMARY_ENERGY,H2 central production,nuclear,electrolysis
+HEAT_PUMPS,resid heating modern EUR_d1,water heat pump,geo-water pump
+HEAT_PUMPS,resid heating modern EUR_d2,water heat pump,geo-water pump
+HEAT_PUMPS,resid heating modern EUR_d3,water heat pump,geo-water pump
+HEAT_PUMPS,resid heating modern EUR_d4,water heat pump,geo-water pump
+HEAT_PUMPS,resid heating modern EUR_d5,water heat pump,geo-water pump
+HEAT_PUMPS,resid heating modern EUR_d6,water heat pump,geo-water pump
+HEAT_PUMPS,resid heating modern EUR_d7,water heat pump,geo-water pump
+HEAT_PUMPS,resid heating modern EUR_d8,water heat pump,geo-water pump
+HEAT_PUMPS,resid heating modern EUR_d9,water heat pump,geo-water pump
+HEAT_PUMPS,resid heating modern EUR_d10,water heat pump,geo-water pump
+HEAT_PUMPS,resid heating modern EUR_d1,water heat pump,solar thermal
+HEAT_PUMPS,resid heating modern EUR_d2,water heat pump,solar thermal
+HEAT_PUMPS,resid heating modern EUR_d3,water heat pump,solar thermal
+HEAT_PUMPS,resid heating modern EUR_d4,water heat pump,solar thermal
+HEAT_PUMPS,resid heating modern EUR_d5,water heat pump,solar thermal
+HEAT_PUMPS,resid heating modern EUR_d6,water heat pump,solar thermal
+HEAT_PUMPS,resid heating modern EUR_d7,water heat pump,solar thermal
+HEAT_PUMPS,resid heating modern EUR_d8,water heat pump,solar thermal
+HEAT_PUMPS,resid heating modern EUR_d9,water heat pump,solar thermal
+HEAT_PUMPS,resid heating modern EUR_d10,water heat pump,solar thermal
+HEAT_PUMPS,resid hot water modern EUR_d1,water heat pump,heat pump
+HEAT_PUMPS,resid hot water modern EUR_d2,water heat pump,heat pump
+HEAT_PUMPS,resid hot water modern EUR_d3,water heat pump,heat pump
+HEAT_PUMPS,resid hot water modern EUR_d4,water heat pump,heat pump
+HEAT_PUMPS,resid hot water modern EUR_d5,water heat pump,heat pump
+HEAT_PUMPS,resid hot water modern EUR_d6,water heat pump,heat pump
+HEAT_PUMPS,resid hot water modern EUR_d7,water heat pump,heat pump
+HEAT_PUMPS,resid hot water modern EUR_d8,water heat pump,heat pump
+HEAT_PUMPS,resid hot water modern EUR_d9,water heat pump,heat pump
+HEAT_PUMPS,resid hot water modern EUR_d10,water heat pump,heat pump
+HEAT_PUMPS,resid hot water modern EUR_d1,water heat pump,solar thermal
+HEAT_PUMPS,resid hot water modern EUR_d2,water heat pump,solar thermal
+HEAT_PUMPS,resid hot water modern EUR_d3,water heat pump,solar thermal
+HEAT_PUMPS,resid hot water modern EUR_d4,water heat pump,solar thermal
+HEAT_PUMPS,resid hot water modern EUR_d5,water heat pump,solar thermal
+HEAT_PUMPS,resid hot water modern EUR_d6,water heat pump,solar thermal
+HEAT_PUMPS,resid hot water modern EUR_d7,water heat pump,solar thermal
+HEAT_PUMPS,resid hot water modern EUR_d8,water heat pump,solar thermal
+HEAT_PUMPS,resid hot water modern EUR_d9,water heat pump,solar thermal
+HEAT_PUMPS,resid hot water modern EUR_d10,water heat pump,solar thermal
+HEAT_PUMPS,resid heating modern EUR_d1,electricity,air-air pump middle north
+HEAT_PUMPS,resid heating modern EUR_d2,electricity,air-air pump middle north
+HEAT_PUMPS,resid heating modern EUR_d3,electricity,air-air pump middle north
+HEAT_PUMPS,resid heating modern EUR_d4,electricity,air-air pump middle north
+HEAT_PUMPS,resid heating modern EUR_d5,electricity,air-air pump middle north
+HEAT_PUMPS,resid heating modern EUR_d6,electricity,air-air pump middle north
+HEAT_PUMPS,resid heating modern EUR_d7,electricity,air-air pump middle north
+HEAT_PUMPS,resid heating modern EUR_d8,electricity,air-air pump middle north
+HEAT_PUMPS,resid heating modern EUR_d9,electricity,air-air pump middle north
+HEAT_PUMPS,resid heating modern EUR_d10,electricity,air-air pump middle north
+HEAT_PUMPS,resid heating modern EUR_d1,electricity,air-air pump middle south
+HEAT_PUMPS,resid heating modern EUR_d2,electricity,air-air pump middle south
+HEAT_PUMPS,resid heating modern EUR_d3,electricity,air-air pump middle south
+HEAT_PUMPS,resid heating modern EUR_d4,electricity,air-air pump middle south
+HEAT_PUMPS,resid heating modern EUR_d5,electricity,air-air pump middle south
+HEAT_PUMPS,resid heating modern EUR_d6,electricity,air-air pump middle south
+HEAT_PUMPS,resid heating modern EUR_d7,electricity,air-air pump middle south
+HEAT_PUMPS,resid heating modern EUR_d8,electricity,air-air pump middle south
+HEAT_PUMPS,resid heating modern EUR_d9,electricity,air-air pump middle south
+HEAT_PUMPS,resid heating modern EUR_d10,electricity,air-air pump middle south
+HEAT_PUMPS,resid heating modern EUR_d1,electricity,air-air pump north
+HEAT_PUMPS,resid heating modern EUR_d2,electricity,air-air pump north
+HEAT_PUMPS,resid heating modern EUR_d3,electricity,air-air pump north
+HEAT_PUMPS,resid heating modern EUR_d4,electricity,air-air pump north
+HEAT_PUMPS,resid heating modern EUR_d5,electricity,air-air pump north
+HEAT_PUMPS,resid heating modern EUR_d6,electricity,air-air pump north
+HEAT_PUMPS,resid heating modern EUR_d7,electricity,air-air pump north
+HEAT_PUMPS,resid heating modern EUR_d8,electricity,air-air pump north
+HEAT_PUMPS,resid heating modern EUR_d9,electricity,air-air pump north
+HEAT_PUMPS,resid heating modern EUR_d10,electricity,air-air pump north
+HEAT_PUMPS,resid heating modern EUR_d1,electricity,air-air pump south
+HEAT_PUMPS,resid heating modern EUR_d2,electricity,air-air pump south
+HEAT_PUMPS,resid heating modern EUR_d3,electricity,air-air pump south
+HEAT_PUMPS,resid heating modern EUR_d4,electricity,air-air pump south
+HEAT_PUMPS,resid heating modern EUR_d5,electricity,air-air pump south
+HEAT_PUMPS,resid heating modern EUR_d6,electricity,air-air pump south
+HEAT_PUMPS,resid heating modern EUR_d7,electricity,air-air pump south
+HEAT_PUMPS,resid heating modern EUR_d8,electricity,air-air pump south
+HEAT_PUMPS,resid heating modern EUR_d9,electricity,air-air pump south
+HEAT_PUMPS,resid heating modern EUR_d10,electricity,air-air pump south
+HEAT_PUMPS,resid heating modern EUR_d1,water heat pump,air-water pump middle north
+HEAT_PUMPS,resid heating modern EUR_d2,water heat pump,air-water pump middle north
+HEAT_PUMPS,resid heating modern EUR_d3,water heat pump,air-water pump middle north
+HEAT_PUMPS,resid heating modern EUR_d4,water heat pump,air-water pump middle north
+HEAT_PUMPS,resid heating modern EUR_d5,water heat pump,air-water pump middle north
+HEAT_PUMPS,resid heating modern EUR_d6,water heat pump,air-water pump middle north
+HEAT_PUMPS,resid heating modern EUR_d7,water heat pump,air-water pump middle north
+HEAT_PUMPS,resid heating modern EUR_d8,water heat pump,air-water pump middle north
+HEAT_PUMPS,resid heating modern EUR_d9,water heat pump,air-water pump middle north
+HEAT_PUMPS,resid heating modern EUR_d10,water heat pump,air-water pump middle north
+HEAT_PUMPS,resid heating modern EUR_d1,water heat pump,air-water pump middle south
+HEAT_PUMPS,resid heating modern EUR_d2,water heat pump,air-water pump middle south
+HEAT_PUMPS,resid heating modern EUR_d3,water heat pump,air-water pump middle south
+HEAT_PUMPS,resid heating modern EUR_d4,water heat pump,air-water pump middle south
+HEAT_PUMPS,resid heating modern EUR_d5,water heat pump,air-water pump middle south
+HEAT_PUMPS,resid heating modern EUR_d6,water heat pump,air-water pump middle south
+HEAT_PUMPS,resid heating modern EUR_d7,water heat pump,air-water pump middle south
+HEAT_PUMPS,resid heating modern EUR_d8,water heat pump,air-water pump middle south
+HEAT_PUMPS,resid heating modern EUR_d9,water heat pump,air-water pump middle south
+HEAT_PUMPS,resid heating modern EUR_d10,water heat pump,air-water pump middle south
+HEAT_PUMPS,resid heating modern EUR_d1,water heat pump,air-water pump north
+HEAT_PUMPS,resid heating modern EUR_d2,water heat pump,air-water pump north
+HEAT_PUMPS,resid heating modern EUR_d3,water heat pump,air-water pump north
+HEAT_PUMPS,resid heating modern EUR_d4,water heat pump,air-water pump north
+HEAT_PUMPS,resid heating modern EUR_d5,water heat pump,air-water pump north
+HEAT_PUMPS,resid heating modern EUR_d6,water heat pump,air-water pump north
+HEAT_PUMPS,resid heating modern EUR_d7,water heat pump,air-water pump north
+HEAT_PUMPS,resid heating modern EUR_d8,water heat pump,air-water pump north
+HEAT_PUMPS,resid heating modern EUR_d9,water heat pump,air-water pump north
+HEAT_PUMPS,resid heating modern EUR_d10,water heat pump,air-water pump north
+HEAT_PUMPS,resid heating modern EUR_d1,water heat pump,air-water pump south
+HEAT_PUMPS,resid heating modern EUR_d2,water heat pump,air-water pump south
+HEAT_PUMPS,resid heating modern EUR_d3,water heat pump,air-water pump south
+HEAT_PUMPS,resid heating modern EUR_d4,water heat pump,air-water pump south
+HEAT_PUMPS,resid heating modern EUR_d5,water heat pump,air-water pump south
+HEAT_PUMPS,resid heating modern EUR_d6,water heat pump,air-water pump south
+HEAT_PUMPS,resid heating modern EUR_d7,water heat pump,air-water pump south
+HEAT_PUMPS,resid heating modern EUR_d8,water heat pump,air-water pump south
+HEAT_PUMPS,resid heating modern EUR_d9,water heat pump,air-water pump south
+HEAT_PUMPS,resid heating modern EUR_d10,water heat pump,air-water pump south
+HEAT_PUMPS,comm heating EUR,water heat pump,geo-water pump
+HEAT_PUMPS,comm heating EUR,water heat pump,solar thermal
+HEAT_PUMPS,comm heating EUR,electricity,air-air pump middle north
+HEAT_PUMPS,comm heating EUR,electricity,air-air pump middle south
+HEAT_PUMPS,comm heating EUR,electricity,air-air pump north
+HEAT_PUMPS,comm heating EUR,electricity,air-air pump south
+HEAT_PUMPS,comm heating EUR,water heat pump,air-water pump middle north
+HEAT_PUMPS,comm heating EUR,water heat pump,air-water pump middle south
+HEAT_PUMPS,comm heating EUR,water heat pump,air-water pump north
+HEAT_PUMPS,comm heating EUR,water heat pump,air-water pump south
+HEAT_PUMPS,resid heating,electricity,electric heat pump
+HEAT_PUMPS,resid hot water,electricity,electric heat pump water heater
+HEAT_PUMPS,comm heating,electricity,electric heat pump
+HEAT_PUMPS,comm hot water,electricity,electric heat pump water heater
