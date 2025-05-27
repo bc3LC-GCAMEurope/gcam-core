@@ -13,7 +13,8 @@ module_policy_inputTaxSubsidy.xml <- function(command, ...) {
   all_xml_names <- union(get_xml_names("policy/A_InputTaxesSubsidies.csv", "policy_inputtax.xml"),
                          get_xml_names("policy/A_InputCapitalFCR.csv", "policy_inputtax.xml"))
   names(all_xml_names) <- rep("XML", length(all_xml_names))
-  MODULE_INPUTS <- c("L302.InputTax", "L302.InputTranTax", "L302.InputCapitalFCR")
+  MODULE_INPUTS <- c("L302.InputTax", "L302.InputTranTax", "L302.InputCapitalFCR",
+                     "L2235.StubTech_elecS_cool_EUR")
 
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -27,6 +28,8 @@ module_policy_inputTaxSubsidy.xml <- function(command, ...) {
     get_data_list(all_data, MODULE_INPUTS)
     # ===================================================
 
+    InputTax <-  move_mapped_rows(L302.InputTax, NULL, L2235.StubTech_elecS_cool_EUR)
+    InputCapitalFCR <-  move_mapped_rows(L302.InputCapitalFCR, NULL, L2235.StubTech_elecS_cool_EUR)
     # Produce outputs
 
     for (xml_name in all_xml_names){
@@ -34,9 +37,13 @@ module_policy_inputTaxSubsidy.xml <- function(command, ...) {
 
       assign(xml_name,
              create_xml(xml_name) %>%
-               add_xml_data(filter_for_xml(L302.InputTax), "StubTechCost") %>%
+               add_xml_data(filter_for_xml(InputTax$df1), "StubTechCost") %>%
+               add_xml_data_generate_levels(filter_for_xml(InputTax$df2),
+                                            "StubTechCost","subsector","nesting-subsector",1,FALSE) %>%
                add_xml_data(filter_for_xml(L302.InputTranTax), "StubTranTechCost") %>%
-               add_xml_data(filter_for_xml(L302.InputCapitalFCR), "StubTechFCR") %>%
+               add_xml_data(filter_for_xml(InputCapitalFCR$df1), "StubTechFCR") %>%
+               add_xml_data_generate_levels(filter_for_xml(InputCapitalFCR$df2),
+                                            "StubTechFCR","subsector","nesting-subsector",1,FALSE) %>%
                add_precursors(MODULE_INPUTS)
              )
     }

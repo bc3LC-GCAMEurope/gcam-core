@@ -62,35 +62,12 @@ module_policy_ceilings_floors_xml <- function(command, ...) {
      if ("technology" %in% names(df)){ df %>% rename("stub.technology" = "technology")} else {df}
     }
 
-    # function to join in any nesting subsector techs from elec segments
-    move_mapped_rows <- function(df1, df2, map_df, by, new_col = "subsector0") {
-      df1_sym <- rlang::ensym(df1)
-      df2_sym <- rlang::ensym(df2)
-
-      df1_val <- rlang::eval_tidy(df1_sym)
-      df2_val <- rlang::eval_tidy(df2_sym)
-
-      df1_joined <- left_join(df1_val, map_df, by = by)
-
-      updated_df2 <- bind_rows(df2_val, filter(df1_joined, !is.na(.data[[new_col]])))
-      updated_df1 <- filter(df1_joined, is.na(.data[[new_col]])) %>%
-        select(-all_of(new_col))
-
-      # Assign back to original names in parent environment
-      assign(rlang::as_string(df1_sym), updated_df1, envir =  rlang::caller_env())
-      assign(rlang::as_string(df2_sym), updated_df2, envir =  rlang::caller_env())
-    }
-
-    move_mapped_rows(L301.policy_RES_coefs, L301.policy_RES_coefs_NG,L2235.StubTech_elecS_cool_EUR,
-                     by = c("region", "supplysector", "subsector", "stub.technology"))
-    move_mapped_rows(L301.RES_secout, L301.RES_secout_NG,L2235.StubTech_elecS_cool_EUR,
-                     by = c("region", "supplysector", "subsector", "stub.technology"))
-    move_mapped_rows(L301.pmultiplier, L301.pmultiplier_NG,L2235.StubTech_elecS_cool_EUR,
-                     by = c("region", "supplysector", "subsector", "stub.technology"))
-    move_mapped_rows(L301.input_tax, L301.input_tax_NG,L2235.StubTech_elecS_cool_EUR,
-                     by = c("region", "supplysector", "subsector", "stub.technology"))
-    move_mapped_rows(L301.input_subsidy, L301.input_subsidy_NG,L2235.StubTech_elecS_cool_EUR,
-                     by = c("region", "supplysector", "subsector", "stub.technology"))
+    map_tibble <- L2235.StubTech_elecS_cool_EUR
+    policy_RES_coefs <- move_mapped_rows(L301.policy_RES_coefs, L301.policy_RES_coefs_NG, map_tibble )
+    RES_secout <- move_mapped_rows(L301.RES_secout, L301.RES_secout_NG, map_tibble)
+    pmultiplier <- move_mapped_rows(L301.pmultiplier, L301.pmultiplier_NG, map_tibble)
+    input_tax <- move_mapped_rows(L301.input_tax, L301.input_tax_NG ,map_tibble)
+    input_subsidy <- move_mapped_rows(L301.input_subsidy, L301.input_subsidy_NG, map_tibble)
 
     for (xml_name in all_xml_names){
       # Use as filter for other tables
@@ -101,25 +78,25 @@ module_policy_ceilings_floors_xml <- function(command, ...) {
       assign(xml_name,
              create_xml(xml_name) %>%
                add_xml_data(filter_xml(L301.policy_port_stnd_xml, xml_name), "PortfolioStdConstraint") %>%
-               add_xml_data(filter_policy(L301.policy_RES_coefs, "minicam.energy.input"),
+               add_xml_data(filter_policy(policy_RES_coefs$df1, "minicam.energy.input"),
                             "StubTechCoef_NM_Policy") %>%
-               add_xml_data_generate_levels(filter_policy(L301.policy_RES_coefs_NG, "minicam.energy.input"),
+               add_xml_data_generate_levels(filter_policy(policy_RES_coefs$df2, "minicam.energy.input"),
                                             "StubTechCoef_NM_Policy","subsector","nesting-subsector",1,FALSE) %>%
-               add_xml_data(filter_policy(L301.RES_secout, "res.secondary.output"),
+               add_xml_data(filter_policy(RES_secout$df1, "res.secondary.output"),
                             "StubTechResSecOut") %>%
-               add_xml_data_generate_levels(filter_policy(L301.RES_secout_NG, "res.secondary.output"),
+               add_xml_data_generate_levels(filter_policy(RES_secout$df2, "res.secondary.output"),
                                             "StubTechResSecOut","subsector","nesting-subsector",1,FALSE) %>%
-               add_xml_data(filter_policy(L301.input_tax, "input.tax"),
+               add_xml_data(filter_policy(input_tax$df1, "input.tax"),
                             "StubTechInputTax") %>%
-               add_xml_data_generate_levels(filter_policy(L301.input_tax_NG, "input.tax"),
+               add_xml_data_generate_levels(filter_policy(input_tax$df2, "input.tax"),
                                             "StubTechInputTax","subsector","nesting-subsector",1,FALSE) %>%
-               add_xml_data(filter_policy(L301.input_subsidy, "input.subsidy"),
+               add_xml_data(filter_policy(input_subsidy$df1, "input.subsidy"),
                             "StubTechInputSubsidy") %>%
-               add_xml_data_generate_levels(filter_policy(L301.input_subsidy_NG, "input.subsidy"),
+               add_xml_data_generate_levels(filter_policy(input_subsidy$df2, "input.subsidy"),
                                             "StubTechInputSubsidy","subsector","nesting-subsector",1,FALSE) %>%
-               add_xml_data(filter_policy(L301.pmultiplier, "res.secondary.output"),
+               add_xml_data(filter_policy(pmultiplier$df1, "res.secondary.output"),
                             "StubTechResSecOutPMult") %>%
-               add_xml_data_generate_levels(filter_policy(L301.pmultiplier_NG, "res.secondary.output"),
+               add_xml_data_generate_levels(filter_policy(pmultiplier$df2, "res.secondary.output"),
                                             "StubTechResSecOutPMult","subsector","nesting-subsector",1,FALSE) %>%
                add_precursors(MODULE_INPUTS)
              )

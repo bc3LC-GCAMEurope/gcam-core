@@ -11,9 +11,10 @@
 #' the generated outputs: \code{policy_exoShutdownScalar.xml}.
 module_policy_exoShutdownScalar_xml <- function(command, ...) {
   all_xml_names <- get_xml_names("policy/A_ExoShutdownScalar.csv", "policy_exoShutdownScalar.xml")
-
+  MODULE_INPUTS <- c("L307.exoShutdownScalar",
+                     "L2235.StubTech_elecS_cool_EUR")
   if(command == driver.DECLARE_INPUTS) {
-    return(c("L307.exoShutdownScalar"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(all_xml_names)
   } else if(command == driver.MAKE) {
@@ -21,14 +22,19 @@ module_policy_exoShutdownScalar_xml <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    L307.exoShutdownScalar <- get_data(all_data, "L307.exoShutdownScalar")
+    get_data_list(all_data, MODULE_INPUTS)
+
+    exoShutdownScalar <- move_mapped_rows(L307.exoShutdownScalar, NULL, L2235.StubTech_elecS_cool_EUR)
+
     # ===================================================
     # Produce outputs
     for (xml_name in all_xml_names){
 
       assign(xml_name,
              create_xml(xml_name) %>%
-               add_xml_data(filter_xml(L307.exoShutdownScalar, xml_name), "ExoShutdown") %>%
+               add_xml_data(filter_xml(exoShutdownScalar$df1, xml_name), "ExoShutdown") %>%
+               add_xml_data_generate_levels(filter_xml(exoShutdownScalar$df2, xml_name),
+                                            "ExoShutdown","subsector","nesting-subsector",1,FALSE) %>%
                add_precursors("L307.exoShutdownScalar")
       )
     }

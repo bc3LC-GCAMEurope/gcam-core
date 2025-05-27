@@ -1775,3 +1775,55 @@ expand_by_region <- function(data, region_map){
     select(-region.y)
 }
 
+#' Move mapped rows from one tibble to another (or create a new one)
+#' Primarily to move technologies with a nesting subsector to a new dataframe
+#'
+#' This function joins a mapping table (`map_df`) to a source tibble (`df1`) and
+#' moves rows with non-NA values in a specified column (`new_col`) to another tibble (`df2`).
+#'
+#' - If `df2` is provided, the matching rows are appended to it.
+#' - If `df2` is `NULL`, the matching rows are assigned to a new tibble named `df1_NEST`
+#'   (or with a custom suffix via `append_suffix`).
+#' - The original `df1` is updated to exclude the moved rows.
+#' - Join keys are automatically inferred from overlapping column names unless specified via `by`.
+#'
+#' @param df1 The source tibble from which rows may be moved. This will be modified in-place.
+#' @param df2 The target tibble to receive matched rows. If NULL, a new tibble is created instead.
+#' @param map_df A mapping table used to determine which rows to move. Must include a column named `new_col`.
+#' @param by Optional. A character vector of join keys (as in dplyr::left_join). Auto-detected if NULL.
+#' @param new_col The name of the column in `map` that indicates which rows to move (default: "subsector0").
+#' @param append_suffix If `df2` is NULL, the name of the new tibble will be `foo_APPEND` (or with this suffix).
+#'
+#' @return Nothing. Updates variables in the caller's environment by reference.
+move_mapped_rows <- function(df1, df2, map_df, by = NULL, new_col = "subsector0", append_suffix = "NEST") {
+  # Auto-detect join columns
+  if (is.null(by)) {
+    by <- intersect(names(df1), names(map_df))
+    if (length(by) == 0) {
+      stop("No common columns to join on. Please specify 'by'.")
+    }
+  }
+
+  # Join and split
+  df1_joined <- dplyr::left_join(df1, map_df, by = by)
+  moved_rows <- dplyr::filter(df1_joined, !is.na(.data[[new_col]])) %>% select(names(df1), new_col) %>% distinct()
+  remaining_rows <- dplyr::filter(df1_joined, is.na(.data[[new_col]])) %>%
+    dplyr::select(-all_of(new_col)) %>% select(names(df1)) %>% distinct()
+
+  # Build return
+  if (is.null(df2)) {
+    out <- list(
+      df1 = remaining_rows,
+      df2 = moved_rows
+    )
+  } else {
+    out <- list(
+      df1 = remaining_rows,
+      df2 = dplyr::bind_rows(df2, moved_rows)
+    )
+  }
+
+  return(out)
+}
+
+

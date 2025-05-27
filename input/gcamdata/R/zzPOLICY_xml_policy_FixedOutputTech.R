@@ -25,7 +25,8 @@ module_policy_FixedOutputTech_xml <- function(command, ...) {
                      "L305.StubTranTechCost",
                      "L305.StubTechTrackCapital",
                      "L305.StubTranTechCalInput",
-                     "L305.StubTranTechCoef")
+                     "L305.StubTranTechCoef",
+                     "L2235.StubTech_elecS_cool_EUR")
 
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -43,6 +44,9 @@ module_policy_FixedOutputTech_xml <- function(command, ...) {
     L305.GlbTechCost <- L305.GlbTechFixedOutput %>%
       select(-share.weight)
 
+    StubTechFixedOutput <- move_mapped_rows(L305.StubTechFixedOutput, NULL, L2235.StubTech_elecS_cool_EUR)
+    StubTechLifetime <- move_mapped_rows(L305.StubTechLifetime, NULL, L2235.StubTech_elecS_cool_EUR)
+    StubTechTrackCapital <- move_mapped_rows(L305.StubTechTrackCapital, NULL, L2235.StubTech_elecS_cool_EUR)
 
     # ===================================================
 
@@ -52,15 +56,21 @@ module_policy_FixedOutputTech_xml <- function(command, ...) {
 
       assign(xml_name,
              create_xml(xml_name) %>%
-               add_xml_data(filter_for_xml(L305.StubTechLifetime), "StubTechLifetime") %>%
-               add_xml_data(filter_for_xml(L305.StubTechFixedOutput), "StubTechFixOutNoSW") %>%
+               add_xml_data(filter_for_xml(StubTechLifetime$df1), "StubTechLifetime") %>%
+               add_xml_data_generate_levels(filter_for_xml(StubTechLifetime$df2),
+                                            "StubTechLifetime","subsector","nesting-subsector",1,FALSE) %>%
+               add_xml_data(filter_for_xml(StubTechFixedOutput$df1), "StubTechFixOutNoSW") %>%
+               add_xml_data_generate_levels(filter_for_xml(StubTechFixedOutput$df2),
+                                            "StubTechFixOutNoSW","subsector","nesting-subsector",1,FALSE) %>%
                add_xml_data(filter_for_xml(L305.GlbTechShrwt), "GlobalTechShrwt") %>%
                add_xml_data(filter_for_xml(L305.GlbTechCost),"GlobalTechCost") %>%
                add_xml_data(filter_for_xml(L305.StubTranTechFixedOutput), "StubTranTechFixedOutput") %>%
                add_xml_data(filter_for_xml(L305.StubTranTechCalInput), "StubTranTechCalInput") %>%
                add_xml_data(filter_for_xml(L305.StubTranTechLoadFactor), "StubTranTechLoadFactor") %>%
                add_node_equiv_xml("subsector") %>%
-               add_xml_data(filter_for_xml(L305.StubTechTrackCapital), "StubTechTrackCapital") %>%
+               add_xml_data(filter_for_xml(StubTechTrackCapital$df1), "StubTechTrackCapital") %>%
+               add_xml_data_generate_levels(filter_for_xml(StubTechTrackCapital$df2),
+                                            "StubTechTrackCapital","subsector","nesting-subsector",1,FALSE) %>%
                add_xml_data(filter_for_xml(L305.StubTranTechCost), "StubTranTechCost") %>%
                add_xml_data(filter_for_xml(L305.StubTranTechCoef), "StubTranTechCoef") %>%
                add_xml_data(filter_for_xml(L305.GlobalTranTechInterp), "GlobalTranTechInterp") %>%
