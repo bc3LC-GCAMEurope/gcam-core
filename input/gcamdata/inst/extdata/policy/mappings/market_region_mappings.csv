@@ -175,3 +175,37 @@ Iceland,European Free Trade Association
 Norway,European Free Trade Association
 Switzerland,European Free Trade Association
 UK,European Free Trade Association
+Belarus,other_EUR
+Moldova,other_EUR
+Ukraine,other_EUR
+Albania,other_EUR
+Bosnia and Herzegovina,other_EUR
+Macedonia,other_EUR
+Serbia and Montenegro,other_EUR
+Turkey,other_EUR
+Africa_Eastern,ss_africa
+Africa_Northern,mena
+Africa_Southern,ss_africa
+Africa_Western,ss_africa
+South Africa,ss_africa
+Argentina,lam
+Brazil,lam
+Central America and Caribbean,lam
+Colombia,lam
+Mexico,lam
+South America_Northern,lam
+South America_Southern,lam
+Canada,us_can_aus
+Australia_NZ,us_can_aus
+USA,us_can_aus
+Japan,jap_kor
+South Korea,jap_kor
+China,chn
+Taiwan,chn
+India,ind
+South Asia,ind
+Southeast Asia,se asia
+Indonesia,se asia
+Russia,rus_ca
+Central Asia,rus_ca
+Middle East,mena

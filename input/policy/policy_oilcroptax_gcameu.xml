@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scenario>
+   <world>
+      <region name="Austria">
+         <policy-portfolio-standard name="palmoil-constraint">
+            <market>EU</market>
+            <policyType>tax</policyType>
+            <fixedTax fillout="1" year="2020">0.00641157</fixedTax>
+         </policy-portfolio-standard>
+         <supplysector name="total oilpalm">
+            <subsector name="imported oilpalm">
+               <stub-technology name="imported oilpalm">
+                  <period year="2015">
+                     <input-tax name="palmoil-constraint" />
+                  </period>
+                  <period year="2020">
+                     <input-tax name="palmoil-constraint" />
+                  </period>
+                  <period year="2025">
+                     <input-tax name="palmoil-constraint" />
+                  </period>
+                  <period year="2030">
+                     <input-tax name="palmoil-constraint" />
+                  </period>
+                  <period year="2035">
+                     <input-tax name="palmoil-constraint" />
+                  </period>
+                  <period year="2040">
+                     <input-tax name="palmoil-constraint" />
+                  </period>
+                  <period year="2045">
+                     <input-tax name="palmoil-constraint" />
+                  </period>
+                  <period year="2050">
+                     <input-tax name="palmoil-constraint" />
+                  </period>
+                  <period year="2055">
+                     <input-tax name="palmoil-constraint" />
+                  </period>
+                  <period year="2060">
+                     <input-tax name="palmoil-constraint" />
+                  </period>
+                  <period year="2065">
+                     <input-tax name="palmoil-constraint" />
+                  </period>
+                  <period year="2070">
+                     <input-tax name="palmoil-constraint" />
+                  </period>
+                  <period year="2075">
+                     <input-tax name="palmoil-constraint" />
+                  </period>
+                  <period year="2080">
+                     <input-tax name="palmoil-constraint" />
+                  </period>
+                  <period year="2085">
+                     <input-tax name="palmoil-constraint" />
+                  </period>
+                  <period year="2090">
+                     <input-tax name="palmoil-constraint" />
+                  </period>
+                  <period year="2095">
+                     <input-tax name="palmoil-constraint" />
+                  </period>
+                  <period year="2100">
+                     <input-tax name="palmoil-constraint" />
+                  </period>
+               </stub-technology>
+            </subsector>
+         </supplysector>
+      </region>
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   </world>
+</scenario>

@@ -6,13 +6,12 @@
 # ----------,
 mapping.name,supplysector
 ETS,other industrial energy use
-ETS,other industrial feedstocks
 ETS,cement
 ETS,process heat cement
 ETS,N fertilizer
 ETS,chemical energy use
-ETS,chemical feedstocks
 ETS,alumina
+ETS,ammonia
 ETS,mining energy use
 ETS,iron and steel
 ETS,refining
@@ -25,6 +24,8 @@ ETS,base load generation
 ETS,intermediate generation
 ETS,subpeak generation
 ETS,peak generation
+ETS,trn_pass
+ETS,trn_freight
 BUILD_SECTORS_NOCOOL,resid heating
 BUILD_SECTORS_NOCOOL,resid others
 BUILD_SECTORS_NOCOOL,comm heating
@@ -42,3 +43,51 @@ TRN_4W,trn_pass_road_LDV_4W
 CEMENT,cement
 CEMENT,process heat cement
 IRONSTEEL,iron and steel
+ETS2,resid cooking modern EUR_d1
+ETS2,resid cooking modern EUR_d10
+ETS2,resid cooking modern EUR_d2
+ETS2,resid cooking modern EUR_d3
+ETS2,resid cooking modern EUR_d4
+ETS2,resid cooking modern EUR_d5
+ETS2,resid cooking modern EUR_d6
+ETS2,resid cooking modern EUR_d7
+ETS2,resid cooking modern EUR_d8
+ETS2,resid cooking modern EUR_d9
+ETS2,resid cooling modern EUR_d1
+ETS2,resid cooling modern EUR_d10
+ETS2,resid cooling modern EUR_d2
+ETS2,resid cooling modern EUR_d3
+ETS2,resid cooling modern EUR_d4
+ETS2,resid cooling modern EUR_d5
+ETS2,resid cooling modern EUR_d6
+ETS2,resid cooling modern EUR_d7
+ETS2,resid cooling modern EUR_d8
+ETS2,resid cooling modern EUR_d9
+ETS2,resid heating modern EUR_d1
+ETS2,resid heating modern EUR_d10
+ETS2,resid heating modern EUR_d2
+ETS2,resid heating modern EUR_d3
+ETS2,resid heating modern EUR_d4
+ETS2,resid heating modern EUR_d5
+ETS2,resid heating modern EUR_d6
+ETS2,resid heating modern EUR_d7
+ETS2,resid heating modern EUR_d8
+ETS2,resid heating modern EUR_d9
+ETS2,resid hot water modern EUR_d1
+ETS2,resid hot water modern EUR_d10
+ETS2,resid hot water modern EUR_d2
+ETS2,resid hot water modern EUR_d3
+ETS2,resid hot water modern EUR_d4
+ETS2,resid hot water modern EUR_d5
+ETS2,resid hot water modern EUR_d6
+ETS2,resid hot water modern EUR_d7
+ETS2,resid hot water modern EUR_d8
+ETS2,resid hot water modern EUR_d9
+ETS2,trn_freight_road
+ETS2,trn_pass_road
+ETS2,trn_pass_road_LDV
+ETS2,trn_pass_road_LDV_4W
+ETS2,construction energy use
+ETS2,comm heating EUR
+ETS2,comm others EUR
+ETS2,comm cooling EUR

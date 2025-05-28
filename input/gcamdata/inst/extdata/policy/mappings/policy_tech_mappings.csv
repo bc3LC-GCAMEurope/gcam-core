@@ -106,7 +106,6 @@ ELEC_RENEWABLE,electricity,wind,wind_offshore
 ELEC_RENEWABLE,electricity,wind,wind_storage
 ELEC_RENEWABLE,electricity,geothermal,geothermal
 ELEC_RENEWABLE,electricity,hydro,hydro
-EN_CARRIER_ELEC,base load generation,PV_base,PV
 EN_CARRIER_ELEC,electricity,hydro,hydro
 EN_CARRIER_ELEC,electricity,wind,wind
 EN_CARRIER_ELEC,electricity,wind,wind_offshore
@@ -188,27 +187,27 @@ EN_CARRIER_FUEL,refining,biomass liquids,biodiesel
 EN_CARRIER_FUEL,refining,biomass liquids,BTL with hydrogen
 EN_CARRIER_FUEL,refining,biomass liquids,sugar cane ethanol
 EN_CARRIER_FUEL,gas processing,biomass gasification,biomass gasification
-FE_BUNKERS_NO_PV,delivered biomass,delivered biomass,delivered biomass
-FE_BUNKERS_NO_PV,delivered coal,delivered coal,delivered coal
-FE_BUNKERS_NO_PV,delivered biomass industry,delivered biomass industry,delivered biomass industry
-FE_BUNKERS_NO_PV,delivered coal industry,delivered coal industry,delivered coal industry
-FE_BUNKERS_NO_PV,wholesale gas,wholesale gas,wholesale gas
-FE_BUNKERS_NO_PV,delivered gas,delivered gas,delivered gas
-FE_BUNKERS_NO_PV,delivered gas transport,delivered gas transport,delivered gas transport
-FE_BUNKERS_NO_PV,refined liquids enduse,refined liquids enduse,refined liquids enduse
-FE_BUNKERS_NO_PV,refined liquids transport,refined liquids transport,refined liquids transport
-FE_BUNKERS_NO_PV,refined liquids industrial,refined liquids industrial,refined liquids industrial
-FE_BUNKERS_NO_PV,refined liquids bunkers,refined liquids bunkers,refined liquids bunkers
-FE_BUNKERS_NO_PV,H2 wholesale delivery,H2 liquid truck,H2 liquid truck
-FE_BUNKERS_NO_PV,H2 wholesale delivery,H2 pipeline,H2 pipeline
-FE_BUNKERS_NO_PV,H2 industrial,onsite production,electrolysis
-FE_BUNKERS_NO_PV,H2 wholesale dispensing,H2 delivery,H2 liquid truck
-FE_BUNKERS_NO_PV,H2 wholesale dispensing,H2 delivery,H2 pipeline
-FE_BUNKERS_NO_PV,H2 wholesale dispensing,forecourt production,electrolysis
-FE_BUNKERS_NO_PV,H2 wholesale dispensing,forecourt production,natural gas steam reforming
-FE_BUNKERS_NO_PV,elect_td_bld,elect_td_bld,elect_td_bld
-FE_BUNKERS_NO_PV,elect_td_ind,elect_td_ind,elect_td_ind
-FE_BUNKERS_NO_PV,elect_td_trn,elect_td_trn,elect_td_trn
+FE_EED_noDH,delivered biomass,delivered biomass,delivered biomass
+FE_EED_noDH,delivered coal,delivered coal,delivered coal
+FE_EED_noDH,delivered biomass industry,delivered biomass industry,delivered biomass industry
+FE_EED_noDH,delivered coal industry,delivered coal industry,delivered coal industry
+FE_EED_noDH,wholesale gas,wholesale gas,wholesale gas
+FE_EED_noDH,delivered gas,delivered gas,delivered gas
+FE_EED_noDH,delivered gas transport,delivered gas transport,delivered gas transport
+FE_EED_noDH,refined liquids enduse,refined liquids enduse,refined liquids enduse
+FE_EED_noDH,refined liquids transport,refined liquids transport,refined liquids transport
+FE_EED_noDH,refined liquids industrial,refined liquids industrial,refined liquids industrial
+FE_EED_noDH,H2 retail delivery,H2 retail delivery,H2 retail delivery
+FE_EED_noDH,H2 retail dispensing,H2 retail dispensing,H2 retail dispensing
+FE_EED_noDH,H2 wholesale delivery,H2 liquid truck,H2 liquid truck
+FE_EED_noDH,H2 wholesale delivery,H2 pipeline,H2 pipeline
+FE_EED_noDH,H2 wholesale dispensing,H2 delivery,H2 liquid truck
+FE_EED_noDH,H2 wholesale dispensing,H2 delivery,H2 pipeline
+FE_EED_noDH,H2 wholesale dispensing,forecourt production,electrolysis
+FE_EED_noDH,H2 wholesale dispensing,forecourt production,natural gas steam reforming
+FE_EED_noDH,elect_td_bld,elect_td_bld,elect_td_bld
+FE_EED_noDH,elect_td_ind,elect_td_ind,elect_td_ind
+FE_EED_noDH,elect_td_trn,elect_td_trn,elect_td_trn
 FE_NO_PV,delivered biomass,delivered biomass,delivered biomass
 FE_NO_PV,delivered coal,delivered coal,delivered coal
 FE_NO_PV,delivered biomass industry,delivered biomass industry,delivered biomass industry
@@ -229,32 +228,6 @@ FE_NO_PV,H2 wholesale dispensing,forecourt production,natural gas steam reformin
 FE_NO_PV,elect_td_bld,elect_td_bld,elect_td_bld
 FE_NO_PV,elect_td_ind,elect_td_ind,elect_td_ind
 FE_NO_PV,elect_td_trn,elect_td_trn,elect_td_trn
-FE_RES,delivered biomass,delivered biomass,delivered biomass
-FE_RES,delivered coal,delivered coal,delivered coal
-FE_RES,delivered biomass industry,delivered biomass industry,delivered biomass industry
-FE_RES,wholesale gas,wholesale gas,wholesale gas
-FE_RES,delivered gas,delivered gas,delivered gas
-FE_RES,delivered gas transport,delivered gas transport,delivered gas transport
-FE_RES,refined liquids enduse,refined liquids enduse,refined liquids enduse
-FE_RES,refined liquids transport,refined liquids transport,refined liquids transport
-FE_RES,refined liquids industrial,refined liquids industrial,refined liquids industrial
-FE_RES,H2 wholesale delivery,H2 liquid truck,H2 liquid truck
-FE_RES,H2 wholesale delivery,H2 pipeline,H2 pipeline
-FE_RES,H2 industrial,onsite production,electrolysis
-FE_RES,H2 wholesale dispensing,H2 delivery,H2 liquid truck
-FE_RES,H2 wholesale dispensing,H2 delivery,H2 pipeline
-FE_RES,H2 wholesale dispensing,forecourt production,electrolysis
-FE_RES,H2 wholesale dispensing,forecourt production,natural gas steam reforming
-FE_RES,elect_td_bld,elect_td_bld,elect_td_bld
-FE_RES,elect_td_bld,rooftop_pv,rooftop_pv
-FE_RES,elect_td_ind,elect_td_ind,elect_td_ind
-FE_RES,elect_td_trn,elect_td_trn,elect_td_trn
-FE_RES,elect_td_h2,elect_td_h2,elect_td_h2
-FE_RES,elect_td_en,elect_td_en,elect_td_en
-FE_RES,district heat,biomass,biomass
-FE_RES,district heat,coal,coal
-FE_RES,district heat,gas,gas
-FE_RES,district heat,refined liquids,refined liquids
 FEEDSTOCKS_BUNKERS,chemical feedstocks,gas,gas
 FEEDSTOCKS_BUNKERS,chemical feedstocks,refined liquids,refined liquids
 FEEDSTOCKS_BUNKERS,construction feedstocks,refined liquids,refined liquids
@@ -339,7 +312,6 @@ PRIMARY_ENERGY,electricity,wind,wind_storage
 PRIMARY_ENERGY,H2 central production,solar,electrolysis
 PRIMARY_ENERGY,H2 central production,wind,electrolysis
 PRIMARY_ENERGY,H2 central production,nuclear,electrolysis
-PRIMARY_ENERGY,base load generation,PV_base,PV
 PRIMARY_ENERGY_FOSSIL,regional coal,domestic coal,domestic coal
 PRIMARY_ENERGY_FOSSIL,regional coal,imported coal,imported coal
 PRIMARY_ENERGY_FOSSIL,gas processing,natural gas,natural gas
@@ -727,3 +699,160 @@ HEAT_PUMPS,resid heating,electricity,electric heat pump
 HEAT_PUMPS,resid hot water,electricity,electric heat pump water heater
 HEAT_PUMPS,comm heating,electricity,electric heat pump
 HEAT_PUMPS,comm hot water,electricity,electric heat pump water heater
+FE_RES_DENOM,delivered biomass,delivered biomass,delivered biomass
+FE_RES_DENOM,delivered coal,delivered coal,delivered coal
+FE_RES_DENOM,delivered biomass industry,delivered biomass industry,delivered biomass industry
+FE_RES_DENOM,wholesale gas,wholesale gas,wholesale gas
+FE_RES_DENOM,delivered gas,delivered gas,delivered gas
+FE_RES_DENOM,delivered gas transport,delivered gas transport,delivered gas transport
+FE_RES_DENOM,refined liquids enduse,refined liquids enduse,refined liquids enduse
+FE_RES_DENOM,refined liquids transport,refined liquids transport,refined liquids transport
+FE_RES_DENOM,refined liquids industrial,refined liquids industrial,refined liquids industrial
+FE_RES_DENOM,refined liquids bunkers av,refined liquids bunkers av,refined liquids bunkers av
+FE_RES_DENOM,H2 retail delivery,H2 retail delivery,H2 retail delivery
+FE_RES_DENOM,H2 retail dispensing,H2 retail dispensing,H2 retail dispensing
+FE_RES_DENOM,H2 wholesale delivery,H2 liquid truck,H2 liquid truck
+FE_RES_DENOM,H2 wholesale delivery,H2 pipeline,H2 pipeline
+FE_RES_DENOM,H2 wholesale dispensing,H2 delivery,H2 liquid truck
+FE_RES_DENOM,H2 wholesale dispensing,H2 delivery,H2 pipeline
+FE_RES_DENOM,H2 wholesale dispensing,forecourt production,electrolysis
+FE_RES_DENOM,H2 wholesale dispensing,forecourt production,natural gas steam reforming
+FE_RES_DENOM,elect_td_bld,elect_td_bld,elect_td_bld
+FE_RES_DENOM,elect_td_bld,rooftop_pv,rooftop_pv
+FE_RES_DENOM,elect_td_ind,elect_td_ind,elect_td_ind
+FE_RES_DENOM,elect_td_trn,elect_td_trn,elect_td_trn
+FE_RES_NOM,delivered biomass,delivered biomass,delivered biomass
+FE_RES_NOM,delivered biomass industry,delivered biomass industry,delivered biomass industry
+FE_RES_NOM,H2 central production,biomass,biomass to H2
+FE_RES_NOM,H2 central production,biomass,biomass to H2 CCS
+FE_RES_NOM,H2 central production,wind,electrolysis
+FE_RES_NOM,H2 central production,solar,electrolysis
+FE_RES_NOM,refining,biomass liquids,cellulosic ethanol
+FE_RES_NOM,refining,biomass liquids,cellulosic ethanol CCS level 1
+FE_RES_NOM,refining,biomass liquids,cellulosic ethanol CCS level 2
+FE_RES_NOM,refining,biomass liquids,FT biofuels
+FE_RES_NOM,refining,biomass liquids,FT biofuels CCS level 1
+FE_RES_NOM,refining,biomass liquids,FT biofuels CCS level 2
+FE_RES_NOM,refining,biomass liquids,corn ethanol
+FE_RES_NOM,refining,biomass liquids,biodiesel
+FE_RES_NOM,refining,biomass liquids,BTL with hydrogen
+FE_RES_NOM,refining,biomass liquids,sugar cane ethanol
+FE_RES_NOM,gas processing,biomass gasification,biomass gasification
+FE_RES_NOM,elect_td_bld,rooftop_pv,rooftop_pv
+ELEC_RES_NOM,base load generation,hydro_base,hydro
+ELEC_RES_NOM,base load generation,wind_base,wind
+ELEC_RES_NOM,base load generation,wind_offshore_base,wind_offshore
+ELEC_RES_NOM,base load generation,wind_storage_base,wind_storage
+ELEC_RES_NOM,base load generation,PV_base,PV
+ELEC_RES_NOM,base load generation,PV_storage_base,PV_storage
+ELEC_RES_NOM,base load generation,geothermal_base,geothermal (recirculating)
+ELEC_RES_NOM,base load generation,geothermal_base,geothermal (dry_hybrid)
+ELEC_RES_NOM,base load generation,CSP_base,CSP (recirculating)
+ELEC_RES_NOM,base load generation,CSP_base,CSP (dry_hybrid)
+ELEC_RES_NOM,base load generation,CSP_storage_base,CSP_storage (recirculating)
+ELEC_RES_NOM,base load generation,CSP_storage_base,CSP_storage (dry_hybrid)
+ELEC_RES_NOM,base load generation,biomass (conv)_base,biomass (conv) (once through)
+ELEC_RES_NOM,base load generation,biomass (conv)_base,biomass (conv) (seawater)
+ELEC_RES_NOM,base load generation,biomass (conv)_base,biomass (conv) (recirculating)
+ELEC_RES_NOM,base load generation,biomass (conv)_base,biomass (conv) (cooling pond)
+ELEC_RES_NOM,base load generation,biomass (conv)_base,biomass (conv) (dry cooling)
+ELEC_RES_NOM,base load generation,biomass (IGCC)_base,biomass (IGCC) (once through)
+ELEC_RES_NOM,base load generation,biomass (IGCC)_base,biomass (IGCC) (seawater)
+ELEC_RES_NOM,base load generation,biomass (IGCC)_base,biomass (IGCC) (recirculating)
+ELEC_RES_NOM,base load generation,biomass (IGCC)_base,biomass (IGCC) (dry cooling)
+ELEC_RES_NOM,base load generation,biomass (conv CCS)_base,biomass (conv CCS) (once through)
+ELEC_RES_NOM,base load generation,biomass (conv CCS)_base,biomass (conv CCS) (seawater)
+ELEC_RES_NOM,base load generation,biomass (conv CCS)_base,biomass (conv CCS) (recirculating)
+ELEC_RES_NOM,base load generation,biomass (conv CCS)_base,biomass (conv CCS) (dry cooling)
+ELEC_RES_NOM,base load generation,biomass (IGCC CCS)_base,biomass (IGCC CCS) (once through)
+ELEC_RES_NOM,base load generation,biomass (IGCC CCS)_base,biomass (IGCC CCS) (seawater)
+ELEC_RES_NOM,base load generation,biomass (IGCC CCS)_base,biomass (IGCC CCS) (recirculating)
+ELEC_RES_NOM,base load generation,biomass (IGCC CCS)_base,biomass (IGCC CCS) (dry cooling)
+ELEC_RES_NOM,intermediate generation,hydro_int,hydro
+ELEC_RES_NOM,intermediate generation,wind_int,wind
+ELEC_RES_NOM,intermediate generation,wind_offshore_int,wind_offshore
+ELEC_RES_NOM,intermediate generation,wind_storage_int,wind_storage
+ELEC_RES_NOM,intermediate generation,PV_int,PV
+ELEC_RES_NOM,intermediate generation,PV_storage_int,PV_storage
+ELEC_RES_NOM,intermediate generation,geothermal_int,geothermal (recirculating)
+ELEC_RES_NOM,intermediate generation,geothermal_int,geothermal (dry_hybrid)
+ELEC_RES_NOM,intermediate generation,CSP_int,CSP (recirculating)
+ELEC_RES_NOM,intermediate generation,CSP_int,CSP (dry_hybrid)
+ELEC_RES_NOM,intermediate generation,CSP_storage_int,CSP_storage (recirculating)
+ELEC_RES_NOM,intermediate generation,CSP_storage_int,CSP_storage (dry_hybrid)
+ELEC_RES_NOM,intermediate generation,biomass (conv)_int,biomass (conv) (once through)
+ELEC_RES_NOM,intermediate generation,biomass (conv)_int,biomass (conv) (seawater)
+ELEC_RES_NOM,intermediate generation,biomass (conv)_int,biomass (conv) (recirculating)
+ELEC_RES_NOM,intermediate generation,biomass (conv)_int,biomass (conv) (cooling pond)
+ELEC_RES_NOM,intermediate generation,biomass (conv)_int,biomass (conv) (dry cooling)
+ELEC_RES_NOM,intermediate generation,biomass (IGCC)_int,biomass (IGCC) (once through)
+ELEC_RES_NOM,intermediate generation,biomass (IGCC)_int,biomass (IGCC) (seawater)
+ELEC_RES_NOM,intermediate generation,biomass (IGCC)_int,biomass (IGCC) (recirculating)
+ELEC_RES_NOM,intermediate generation,biomass (IGCC)_int,biomass (IGCC) (dry cooling)
+ELEC_RES_NOM,intermediate generation,biomass (conv CCS)_int,biomass (conv CCS) (once through)
+ELEC_RES_NOM,intermediate generation,biomass (conv CCS)_int,biomass (conv CCS) (seawater)
+ELEC_RES_NOM,intermediate generation,biomass (conv CCS)_int,biomass (conv CCS) (recirculating)
+ELEC_RES_NOM,intermediate generation,biomass (conv CCS)_int,biomass (conv CCS) (dry cooling)
+ELEC_RES_NOM,intermediate generation,biomass (IGCC CCS)_int,biomass (IGCC CCS) (once through)
+ELEC_RES_NOM,intermediate generation,biomass (IGCC CCS)_int,biomass (IGCC CCS) (seawater)
+ELEC_RES_NOM,intermediate generation,biomass (IGCC CCS)_int,biomass (IGCC CCS) (recirculating)
+ELEC_RES_NOM,intermediate generation,biomass (IGCC CCS)_int,biomass (IGCC CCS) (dry cooling)
+ELEC_RES_NOM,subpeak generation,hydro_subpeak,hydro
+ELEC_RES_NOM,subpeak generation,wind_subpeak,wind
+ELEC_RES_NOM,subpeak generation,wind_offshore_subpeak,wind_offshore
+ELEC_RES_NOM,subpeak generation,wind_storage_subpeak,wind_storage
+ELEC_RES_NOM,subpeak generation,PV_subpeak,PV
+ELEC_RES_NOM,subpeak generation,PV_storage_subpeak,PV_storage
+ELEC_RES_NOM,subpeak generation,geothermal_subpeak,geothermal (recirculating)
+ELEC_RES_NOM,subpeak generation,geothermal_subpeak,geothermal (dry_hybrid)
+ELEC_RES_NOM,subpeak generation,CSP_subpeak,CSP (recirculating)
+ELEC_RES_NOM,subpeak generation,CSP_subpeak,CSP (dry_hybrid)
+ELEC_RES_NOM,subpeak generation,CSP_storage_subpeak,CSP_storage (recirculating)
+ELEC_RES_NOM,subpeak generation,CSP_storage_subpeak,CSP_storage (dry_hybrid)
+ELEC_RES_NOM,subpeak generation,biomass (conv)_subpeak,biomass (conv) (once through)
+ELEC_RES_NOM,subpeak generation,biomass (conv)_subpeak,biomass (conv) (seawater)
+ELEC_RES_NOM,subpeak generation,biomass (conv)_subpeak,biomass (conv) (recirculating)
+ELEC_RES_NOM,subpeak generation,biomass (conv)_subpeak,biomass (conv) (cooling pond)
+ELEC_RES_NOM,subpeak generation,biomass (conv)_subpeak,biomass (conv) (dry cooling)
+ELEC_RES_NOM,subpeak generation,biomass (IGCC)_subpeak,biomass (IGCC) (once through)
+ELEC_RES_NOM,subpeak generation,biomass (IGCC)_subpeak,biomass (IGCC) (seawater)
+ELEC_RES_NOM,subpeak generation,biomass (IGCC)_subpeak,biomass (IGCC) (recirculating)
+ELEC_RES_NOM,subpeak generation,biomass (IGCC)_subpeak,biomass (IGCC) (dry cooling)
+ELEC_RES_NOM,subpeak generation,biomass (conv CCS)_subpeak,biomass (conv CCS) (once through)
+ELEC_RES_NOM,subpeak generation,biomass (conv CCS)_subpeak,biomass (conv CCS) (seawater)
+ELEC_RES_NOM,subpeak generation,biomass (conv CCS)_subpeak,biomass (conv CCS) (recirculating)
+ELEC_RES_NOM,subpeak generation,biomass (conv CCS)_subpeak,biomass (conv CCS) (dry cooling)
+ELEC_RES_NOM,subpeak generation,biomass (IGCC CCS)_subpeak,biomass (IGCC CCS) (once through)
+ELEC_RES_NOM,subpeak generation,biomass (IGCC CCS)_subpeak,biomass (IGCC CCS) (seawater)
+ELEC_RES_NOM,subpeak generation,biomass (IGCC CCS)_subpeak,biomass (IGCC CCS) (recirculating)
+ELEC_RES_NOM,subpeak generation,biomass (IGCC CCS)_subpeak,biomass (IGCC CCS) (dry cooling)
+ELEC_RES_NOM,peak generation,hydro_peak,hydro
+ELEC_RES_NOM,peak generation,wind_peak,wind
+ELEC_RES_NOM,peak generation,wind_offshore_peak,wind_offshore
+ELEC_RES_NOM,peak generation,wind_storage_peak,wind_storage
+ELEC_RES_NOM,peak generation,PV_peak,PV
+ELEC_RES_NOM,peak generation,PV_storage_peak,PV_storage
+ELEC_RES_NOM,peak generation,geothermal_peak,geothermal (recirculating)
+ELEC_RES_NOM,peak generation,geothermal_peak,geothermal (dry_hybrid)
+ELEC_RES_NOM,peak generation,CSP_peak,CSP (recirculating)
+ELEC_RES_NOM,peak generation,CSP_peak,CSP (dry_hybrid)
+ELEC_RES_NOM,peak generation,CSP_storage_peak,CSP_storage (recirculating)
+ELEC_RES_NOM,peak generation,CSP_storage_peak,CSP_storage (dry_hybrid)
+ELEC_RES_NOM,peak generation,biomass (conv)_peak,biomass (conv) (once through)
+ELEC_RES_NOM,peak generation,biomass (conv)_peak,biomass (conv) (seawater)
+ELEC_RES_NOM,peak generation,biomass (conv)_peak,biomass (conv) (recirculating)
+ELEC_RES_NOM,peak generation,biomass (conv)_peak,biomass (conv) (cooling pond)
+ELEC_RES_NOM,peak generation,biomass (conv)_peak,biomass (conv) (dry cooling)
+ELEC_RES_NOM,peak generation,biomass (IGCC)_peak,biomass (IGCC) (once through)
+ELEC_RES_NOM,peak generation,biomass (IGCC)_peak,biomass (IGCC) (seawater)
+ELEC_RES_NOM,peak generation,biomass (IGCC)_peak,biomass (IGCC) (recirculating)
+ELEC_RES_NOM,peak generation,biomass (IGCC)_peak,biomass (IGCC) (dry cooling)
+ELEC_RES_NOM,peak generation,biomass (conv CCS)_peak,biomass (conv CCS) (once through)
+ELEC_RES_NOM,peak generation,biomass (conv CCS)_peak,biomass (conv CCS) (seawater)
+ELEC_RES_NOM,peak generation,biomass (conv CCS)_peak,biomass (conv CCS) (recirculating)
+ELEC_RES_NOM,peak generation,biomass (conv CCS)_peak,biomass (conv CCS) (dry cooling)
+ELEC_RES_NOM,peak generation,biomass (IGCC CCS)_peak,biomass (IGCC CCS) (once through)
+ELEC_RES_NOM,peak generation,biomass (IGCC CCS)_peak,biomass (IGCC CCS) (seawater)
+ELEC_RES_NOM,peak generation,biomass (IGCC CCS)_peak,biomass (IGCC CCS) (recirculating)
+ELEC_RES_NOM,peak generation,biomass (IGCC CCS)_peak,biomass (IGCC CCS) (dry cooling)
+COALDUMMY,delivered coal,delivered coal,delivered coal
