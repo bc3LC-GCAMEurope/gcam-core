@@ -12,18 +12,20 @@
 #' original data system was \code{batch_ag_For_Past_bio_base_IRR_MGMT.xml.R} (aglu XML).
 module_aglu_ag_For_Past_bio_base_IRR_MGMT_xml <- function(command, ...) {
 
-  MODULE_INPUTS <-
-    c("L2012.AgSupplySector",
-      "L2012.AgSupplySubsector",
-      "L2012.AgProduction_ag_irr_mgmt",
-      "L2012.AgSupplySector_EU",
-      "L2012.AgSupplySubsector_EU",
-      "L2012.AgProduction_ag_irr_mgmt_EU",
-      "L2012.AgProduction_For",
-      "L2012.AgProduction_Past",
-      #"L2012.AgHAtoCL_irr_mgmt", # Note (XZ): not exporting HAtoCL as not used in GCAM; this should be examined later.
-      "L2012.AgYield_bio_ref",
-      "L2012.AgTechYr_Past")
+  L2012_INPUTS <- c("L2012.AgSupplySector",
+                    "L2012.AgSupplySubsector",
+                    "L2012.AgProduction_ag_irr_mgmt",
+                    "L2012.AgSupplySector_EU",
+                    "L2012.AgSupplySubsector_EU",
+                    "L2012.AgProduction_ag_irr_mgmt_EU",
+                    "L2012.AgProduction_For",
+                    "L2012.AgProduction_Past",
+                    #"L2012.AgHAtoCL_irr_mgmt", # Note (XZ): not exporting HAtoCL as not used in GCAM; this should be examined later.
+                    "L2012.AgYield_bio_ref",
+                    "L2012.AgTechYr_Past")
+
+  MODULE_INPUTS <- c(L2012_INPUTS,
+                     FILE = "gcam-europe/mappings/ag_regions")
 
   MODULE_OUTPUTS <-
     c(XML = "ag_For_Past_bio_base_IRR_MGMT.xml")
@@ -42,18 +44,26 @@ module_aglu_ag_For_Past_bio_base_IRR_MGMT_xml <- function(command, ...) {
     TOTAL_CROPS <- c(paste0("total ", stringr::str_to_lower(aglu.TRADED_CROPS)), "total nuts_seeds", "total root_tuber")
     TRADED_CROPS <- gsub("total", "traded", TOTAL_CROPS)
 
-    for (name in MODULE_INPUTS) {
+    for (name in L2012_INPUTS) {
       df <- get(name)  # get the tibble by name
-
+      start_rows <- nrow(df)
       # # Check if 'market' or 'region' exists, and do replacement if so
       if ("market" %in% names(df)) {
-        df <- df %>% mutate(market = if_else(market == "European_Single_Market"  & AgSupplySector %in% aglu.TRADED_CROPS,
-                                                  "Austria", market))
+        df <- df %>%
+          left_join(ag_regions, by = c("region", "market" = "trade_region")) %>%
+          mutate(market = if_else(!is.na(ag_region)  & AgSupplySector %in% aglu.TRADED_CROPS,
+                                  ag_region, market)) %>%
+          select(-ag_region)
       }
       if ("region" %in% names(df)) {
-        df <- df %>% mutate(region = if_else(region == "European_Single_Market" & AgSupplySector %in% aglu.TRADED_CROPS,
-                                             "Austria", region))
+        df <- df %>%
+          left_join(ag_regions %>% distinct(ag_region, trade_region), by = c("region" = "trade_region")) %>%
+          mutate(region = if_else(!is.na(ag_region) & AgSupplySector %in% aglu.TRADED_CROPS,
+                                  ag_region, region)) %>%
+          select(-ag_region)
       }
+
+      stopifnot(nrow(df) == start_rows)
 
       assign(name, df)  # update the tibble in the global environment
     }

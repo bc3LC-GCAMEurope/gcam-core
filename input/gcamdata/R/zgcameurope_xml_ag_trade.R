@@ -11,7 +11,7 @@
 #' the generated outputs: \code{ag_trade_EUR.xml}.
 module_gcameurope_ag_trade_xml <- function(command, ...) {
 
-  MODULE_INPUTS <-
+  L240_INPUTS <-
     c("L240.Supplysector_tra_EUR",
       "L240.SectorUseTrialMarket_tra_EUR",
       "L240.SubsectorAll_tra_EUR",
@@ -26,6 +26,9 @@ module_gcameurope_ag_trade_xml <- function(command, ...) {
       "L240.Production_reg_imp_EUR",
       "L240.Production_reg_dom_EUR",
       "L240.TechCost_reg")
+
+  MODULE_INPUTS <- c(L240_INPUTS,
+                     FILE = "gcam-europe/mappings/ag_regions")
 
   MODULE_OUTPUTS <-
     c(XML = "ag_trade_EUR.xml")
@@ -43,23 +46,34 @@ module_gcameurope_ag_trade_xml <- function(command, ...) {
 
     TOTAL_CROPS <- c(paste0("total ", stringr::str_to_lower(aglu.TRADED_CROPS)), "total nuts_seeds", "total root_tuber")
     TRADED_CROPS <- gsub("total", "traded", TOTAL_CROPS)
+    NON_TRADE_REGIONS <- ag_regions %>%
+      anti_join(L240.Supplysector_tra_EUR, by = c("trade_region" = "region")) %>%
+      distinct(trade_region) %>% pull()
 
-    for (name in MODULE_INPUTS) {
+    for (name in L240_INPUTS) {
       df <- get(name)  # get the tibble by name
+      start_rows <- nrow(df)
 
       # # Check if 'market' or 'region' exists, and do replacement if so
       if ("market.name" %in% names(df)) {
-        df <- df %>% mutate(market.name = if_else(market.name == "European_Single_Market"  & supplysector %in% TOTAL_CROPS,
-                                                  "Austria", market.name),
-                            market.name = if_else(market.name == "European_Single_Market" &
-                                                    region == "USA" &
-                                                    supplysector %in% TRADED_CROPS,
-                                                  "Austria", market.name))
+        df <- df %>%
+            left_join(ag_regions %>% distinct(ag_region, trade_region), by = c("market.name" = "trade_region")) %>%
+            mutate(market.name = if_else(!is.na(ag_region)  & supplysector %in% TOTAL_CROPS,
+                                         ag_region, market.name),
+                   market.name = if_else(!is.na(ag_region)  & supplysector %in% TRADED_CROPS,
+                                         ag_region, market.name),
+                   market.name = if_else(market.name %in% NON_TRADE_REGIONS,
+                                         region, market.name)) %>%
+            select(-ag_region)
       }
       if ("region" %in% names(df)) {
-        df <- df %>% mutate(region = if_else(region == "European_Single_Market" & supplysector %in% TOTAL_CROPS,
-                                             "Austria", region))
+        df <- df %>%
+          left_join(ag_regions %>% distinct(ag_region, trade_region), by = c("region" = "trade_region")) %>%
+          mutate(region = if_else(!is.na(ag_region) & supplysector %in% TOTAL_CROPS,
+                                  ag_region, region)) %>%
+          select(-ag_region)
       }
+      stopifnot(nrow(df) == start_rows)
 
       assign(name, df)  # update the tibble in the global environment
     }

@@ -1,0 +1,43 @@
+# File: ag_regions.csv,,
+# Title: European country-ag groupings mappings,,
+# Units: NA,,
+# Column types: ccc,,
+# ----------,,
+region,trade_region,ag_region
+Austria,European_Single_Market,Austria
+Belgium,European_Single_Market,Austria
+Bulgaria,European_Single_Market,Austria
+Croatia,European_Single_Market,Austria
+Cyprus,European_Single_Market,Austria
+Czech Republic,European_Single_Market,Austria
+Denmark,European_Single_Market,Austria
+Estonia,European_Single_Market,Austria
+Finland,European_Single_Market,Austria
+France,European_Single_Market,Austria
+Germany,European_Single_Market,Austria
+Greece,European_Single_Market,Austria
+Hungary,European_Single_Market,Austria
+Ireland,European_Single_Market,Austria
+Italy,European_Single_Market,Austria
+Latvia,European_Single_Market,Austria
+Lithuania,European_Single_Market,Austria
+Luxembourg,European_Single_Market,Austria
+Malta,European_Single_Market,Austria
+Netherlands,European_Single_Market,Austria
+Poland,European_Single_Market,Austria
+Portugal,European_Single_Market,Austria
+Romania,European_Single_Market,Austria
+Slovakia,European_Single_Market,Austria
+Slovenia,European_Single_Market,Austria
+Spain,European_Single_Market,Austria
+Sweden,European_Single_Market,Austria
+Iceland,European_Single_Market,Austria
+Norway,European_Single_Market,Austria
+Albania,Europe_Eastern_Market,Albania
+Belarus,Europe_Eastern_Market,Albania
+Bosnia and Herzegovina,Europe_Eastern_Market,Albania
+Macedonia,Europe_Eastern_Market,Albania
+Moldova,Europe_Eastern_Market,Albania
+Serbia and Montenegro,Europe_Eastern_Market,Albania
+Turkey,Europe_Eastern_Market,Albania
+Ukraine,Europe_Eastern_Market,Albania
