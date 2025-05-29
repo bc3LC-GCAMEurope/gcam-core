@@ -12,8 +12,10 @@
 #' @author XZ 2023
 module_aglu_batch_ag_storage_xml <- function(command, ...) {
 
-  MODULE_INPUTS <-
-    c("L113.StorageTechAndPassThrough")
+  L113_INPUTS <- c("L113.StorageTechAndPassThrough")
+
+  MODULE_INPUTS <- c(L113_INPUTS,
+                     FILE = "gcam-europe/mappings/ag_regions")
 
   MODULE_OUTPUTS <-
     c(XML = "ag_storage.xml")
@@ -29,18 +31,26 @@ module_aglu_batch_ag_storage_xml <- function(command, ...) {
     # Load required inputs ----
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
 
-    for (name in MODULE_INPUTS) {
+    for (name in L113_INPUTS) {
       df <- get(name)  # get the tibble by name
+      start_rows <- nrow(df)
 
       # # Check if 'market' or 'region' exists, and do replacement if so
       if ("market.name" %in% names(df)) {
-        df <- df %>% mutate(market.name = if_else(market.name == "European_Single_Market"  & GCAM_commodity %in% aglu.TRADED_CROPS,
-                                                  "Austria", market.name))
+        df <- df %>%
+          left_join(ag_regions %>% distinct(ag_region, trade_region), by = c("market.name" = "trade_region")) %>%
+          mutate(market.name = if_else(!is.na(ag_region)  & GCAM_commodity %in% aglu.TRADED_CROPS,
+                                       ag_region, market.name)) %>%
+          select(-ag_region)
       }
       if ("region" %in% names(df)) {
-        df <- df %>% mutate(region = if_else(region == "European_Single_Market" & GCAM_commodity %in% aglu.TRADED_CROPS,
-                                             "Austria", region))
+        df <- df %>%
+          left_join(ag_regions %>% distinct(ag_region, trade_region), by = c("region" = "trade_region")) %>%
+          mutate(region = if_else(!is.na(ag_region) & GCAM_commodity %in% aglu.TRADED_CROPS,
+                                  ag_region, region)) %>%
+          select(-ag_region)
       }
+      stopifnot(nrow(df) == start_rows)
 
       assign(name, df)  # update the tibble in the global environment
     }
