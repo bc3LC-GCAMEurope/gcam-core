@@ -47,7 +47,8 @@ module_gcameurope_L202.an_input <- function(command, ...) {
       "L1321.For_Cost",
       "L1327.IO_woodpulp_energy_EUR",
       "L202.GlobalTechCoef_in",
-      "Europe_Single_Market_Regions")
+      "L202.StubTech_in",
+      FILE = "gcam-europe/mappings/ag_regions")
 
   MODULE_OUTPUTS <-
     c("L202.RenewRsrc_EUR",
@@ -290,15 +291,21 @@ module_gcameurope_L202.an_input <- function(command, ...) {
       rename(stub.technology = technology) ->
       L202.StubTech_in_EUR
 
-    L202.StubTechMkt_EUR <- L202.StubTech_in_EUR %>%
+    non_EUR_data <- L202.StubTech_in %>%
+      anti_join(L202.StubTech_in_EUR, by = c("region", "supplysector", "subsector", "stub.technology")) %>%
+      filter(region %in% ag_regions$region,
+             !region %in% gcameurope.EUROSTAT_COUNTRIES)
+
+    L202.StubTechMkt_EUR <- bind_rows(L202.StubTech_in_EUR, non_EUR_data) %>%
       left_join(L202.GlobalTechCoef_in,
                 by = c("supplysector" = "sector.name",
                        "subsector" = "subsector.name",
                        "stub.technology" = "technology")) %>%
       filter(minicam.energy.input %in% REGIONAL_CROPS,
-             region %in% Europe_Single_Market_Regions$GCAMEU_region) %>%
-      mutate(market.name = unique(Europe_Single_Market_Regions$trade_region)) %>%
-      select(-coefficient)
+             region %in% ag_regions$region) %>%
+      left_join_error_no_match(ag_regions, by = "region") %>%
+      mutate(market.name = ag_region) %>%
+      select(-coefficient, -ag_region, -trade_region)
 
     # L202.StubTechInterp_in_EUR: generic technology info for inputs to animal production
     A_an_input_technology %>%
