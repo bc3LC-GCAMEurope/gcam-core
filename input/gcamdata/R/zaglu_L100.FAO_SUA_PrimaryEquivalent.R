@@ -39,7 +39,7 @@ module_aglu_L100.FAO_SUA_PrimaryEquivalent <- function(command, ...) {
       FILE = "aglu/FAO/FAO_ag_items_PRODSTAT",
       FILE = "aglu/FAO/FAO_an_items_PRODSTAT",
       FILE = "aglu/FAO/GCAMDATA_FAOSTAT_MacroNutrientRate_179Regs_426Items_2010to2019Mean",
-      FILE = "gcam-europe/mappings/ag_regions"
+      "Europe_Single_Market_Regions"
     )
 
   MODULE_OUTPUTS <-
@@ -130,21 +130,15 @@ module_aglu_L100.FAO_SUA_PrimaryEquivalent <- function(command, ...) {
       DF_INTRA_REG_TRADE
 
     # Filter to only trade involving european single market regions to later define double armington market for ag
-    # also to calculate inter-regional trade for any grouped ag regions
+    SINGLE_MARKET_IDs <- GCAM_region_names %>% filter(region %in% Europe_Single_Market_Regions$GCAMEU_region) %>%  pull(GCAM_region_ID)
+
     EuroSingleMarket_BiTrade_Ag <- GCAMDATA_FAOSTAT_BiTrade_194Regs_400Items_2010to2020_regID %>%
-      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
-      left_join_error_no_match(GCAM_region_names %>% rename(source_region = region),
-                               by = c("source_GCAM_region_ID" = "GCAM_region_ID")) %>%
-      left_join(ag_regions %>% select(region, trade_region), by = "region") %>%
-      left_join(ag_regions %>% select(source_region = region, source_trade_region = trade_region),
-                by = "source_region") %>%
-      filter(!is.na(trade_region) | !is.na(source_trade_region),
+      filter(GCAM_region_ID %in% SINGLE_MARKET_IDs | source_GCAM_region_ID %in% SINGLE_MARKET_IDs,
              year %in% MODEL_BASE_YEARS) %>%
       # group all non-single market regions into 1
-      # but then also need to adjust in future if trade_region and source_trade_region are different
-      mutate(import_trade_region = if_else(is.na(trade_region), "ROW", trade_region),
-             export_trade_region = if_else(is.na(source_trade_region), "ROW", source_trade_region)) %>%
-      group_by(import_trade_region, export_trade_region, item_code, year) %>%
+      mutate(import_GCAM_region_ID = if_else(GCAM_region_ID %in% SINGLE_MARKET_IDs, GCAM_region_ID, as.integer(-1)),
+             export_GCAM_region_ID = if_else(source_GCAM_region_ID %in% SINGLE_MARKET_IDs, source_GCAM_region_ID, as.integer(-1))) %>%
+      group_by(import_GCAM_region_ID, export_GCAM_region_ID, item_code, year) %>%
       summarise(value = sum(value)) %>%
       ungroup %>%
       left_join_error_no_match(SUA_item_code_map, by = "item_code") %>%
@@ -156,7 +150,7 @@ module_aglu_L100.FAO_SUA_PrimaryEquivalent <- function(command, ...) {
       tidyr::replace_na(list(extraction_rate_world2019 = 1)) %>%
       mutate(value = value / extraction_rate_world2019) %>%
       na.omit() %>%
-      group_by(import_trade_region, export_trade_region, GCAM_commodity, year) %>%
+      group_by(import_GCAM_region_ID, export_GCAM_region_ID, GCAM_commodity, year) %>%
       summarise(value = sum(value)) %>%
       ungroup
 

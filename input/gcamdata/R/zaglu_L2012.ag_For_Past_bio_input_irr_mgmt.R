@@ -34,7 +34,7 @@ module_aglu_L2012.ag_For_Past_bio_input_irr_mgmt <- function(command, ...) {
       "L163.ag_rfdBioYield_GJm2_R_GLU",
       "L181.ag_Prod_Mt_R_C_Y_GLU_irr_level",
       "L181.YieldMult_R_bio_GLU_irr",
-      FILE = "gcam-europe/mappings/ag_regions")
+      "Europe_Single_Market_Regions")
 
   MODULE_OUTPUTS <-
     c("L2012.AgSupplySector",
@@ -89,13 +89,13 @@ module_aglu_L2012.ag_For_Past_bio_input_irr_mgmt <- function(command, ...) {
       select(-calPrice) %>%
       # Join calibration price data, there are missing value for biomass, use left_join instead
       left_join(L2012.P_R_C, by = c("region", AgSupplySector = "GCAM_commodity")) %>%
-      left_join(ag_regions, by = "region") %>%
       mutate(calPrice = reg_calPrice,
              calPrice = replace(calPrice, AgSupplySector == "biomass", 1), # value irrelevant
              # For regional commodities, specify market names with region names
              market = replace(market, market == "regional", region[market == "regional"]),
-             market = if_else(!is.na(trade_region) & AgSupplySector %in% aglu.TRADED_CROPS,
-                              trade_region,
+             market = if_else(region %in% Europe_Single_Market_Regions$GCAMEU_region &
+                                AgSupplySector %in% aglu.TRADED_CROPS,
+                              unique(Europe_Single_Market_Regions$trade_region),
                               market)) %>%
       select(LEVEL2_DATA_NAMES[["AgSupplySector"]], LOGIT_TYPE_COLNAME) %>%
       # Remove any regions for which agriculture and land use are not modeled
@@ -379,6 +379,8 @@ module_aglu_L2012.ag_For_Past_bio_input_irr_mgmt <- function(command, ...) {
              AgProductionTechnology = AgSupplySubsector) %>%
       bind_rows(L201.AgYield_bio_grass)
 
+
+
     # Write out the all years and CO2 object for Pasture AgProductionTechnologies
     L2012.AgProduction_For_Past %>%
       filter(AgSupplySector %in% L123.ag_Prod_Mt_R_Past_Y_GLU$GCAM_commodity) %>%
@@ -388,6 +390,7 @@ module_aglu_L2012.ag_For_Past_bio_input_irr_mgmt <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["AgTechYr"]]) ->
       L2012.AgTechYr_Past
 
+
     # calculate weighted-average price for EU countries
     # first need sum of production by region
     L2012.AgProduction_AgSupplySector <- L2012.AgProduction_ag_irr_mgmt %>%
@@ -396,20 +399,23 @@ module_aglu_L2012.ag_For_Past_bio_input_irr_mgmt <- function(command, ...) {
       summarise(prod = sum(calOutputValue)) %>%
       ungroup()
 
+
     L2012.AgSupplySector <- L2012.AgSupplySector %>%
       left_join(L2012.AgProduction_AgSupplySector, by = c("region", "AgSupplySector")) %>%
-      tidyr::replace_na(list(prod = 0)) %>%
       group_by(AgSupplySector, market) %>%
       mutate(calPrice_weighted = round(weighted.mean(calPrice, prod, na.rm = TRUE), aglu.DIGITS_CALPRICE)) %>%
       ungroup %>%
-      mutate(calPrice = if_else(!is.nan(calPrice_weighted), calPrice_weighted, calPrice)) %>%
+      mutate(calPrice = if_else(market == unique(Europe_Single_Market_Regions$trade_region) &
+                                  !is.nan(calPrice_weighted),
+                        calPrice_weighted, calPrice)) %>%
       select(-prod, -calPrice_weighted)
 
     # make a european single market region, copying austria
     L2012.AgSupplySector_EU <- L2012.AgSupplySector %>%
-      filter(region %in% ag_regions$ag_region,
+      filter(region == "Austria",
              AgSupplySector %in% aglu.TRADED_CROPS) %>%
-      mutate(region = market) %>%
+      mutate(region = unique(Europe_Single_Market_Regions$trade_region),
+             market = unique(Europe_Single_Market_Regions$trade_region)) %>%
       rename(price = calPrice)
 
 

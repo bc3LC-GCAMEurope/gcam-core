@@ -44,7 +44,7 @@ module_aglu_L203.ag_an_demand_input <- function(command, ...) {
       "L110.For_ALL_bm3_R_Y",
       "L106.income_distributions",
       "L201.Pop_gSSP2",
-      FILE = "gcam-europe/mappings/ag_regions")
+      "Europe_Single_Market_Regions")
 
 
   if(command == driver.DECLARE_INPUTS) {
@@ -184,12 +184,16 @@ module_aglu_L203.ag_an_demand_input <- function(command, ...) {
     # L203.StubTechMarket: European market for crops
     L203.StubTechMarket <- L203.GlobalTechCoef_demand %>%
       filter(technology %in% aglu.TRADED_CROPS) %>%
-      repeat_add_columns(ag_regions %>% distinct(region, market.name = trade_region)) %>%
+      repeat_add_columns(Europe_Single_Market_Regions %>% rename(region = GCAMEU_region, market.name = trade_region)) %>%
       select(-coefficient) %>%
       rename(supplysector = sector.name, subsector = subsector.name, stub.technology = technology) %>%
       left_join(L203.SubsectorAll_demand_food %>%
                   distinct(region, supplysector, subsector, subsector0),
                 by = c("region", "supplysector", "subsector"))
+      # mutate(subsector0 = if_else(grepl("NonFood", supplysector),
+      #                             NA,
+      #                             subsector))
+
 
     # Build L203.GlobalTechShrwt_demand: shareweights of demand technologies
     L203.GlobalTechCoef_demand %>%

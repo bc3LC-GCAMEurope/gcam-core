@@ -31,8 +31,7 @@ module_aglu_prune_empty_ag_xml <- function(command, ...) {
       "L202.StubTech_in",
       "L203.StubTech_demand_nonfood",
       "L2252.LN5_MgdAllocation_crop",
-      "L2252.LN5_MgdCarbon_crop",
-      FILE = "gcam-europe/mappings/ag_regions")
+      "L2252.LN5_MgdCarbon_crop")
 
   MODULE_OUTPUTS <-
     c(XML = "prune_empty_ag.xml")
@@ -111,8 +110,7 @@ module_aglu_prune_empty_ag_xml <- function(command, ...) {
     L240.TechCoef_reg %>%
       inner_join(prune_agsupply, by=c("minicam.energy.input", "market.name")) %>%
       select(region, supplysector, subsector) %>%
-      distinct()  %>%
-      filter(!region %in% ag_regions$region) ->
+      distinct() ->
       empty_ag_reg
 
 

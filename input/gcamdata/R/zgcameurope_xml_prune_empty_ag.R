@@ -21,7 +21,7 @@
 #' the generated outputs: \code{prune_empty_ag_EUR.xml}. (aglu XML).
 module_gcameurope_prune_empty_ag_xml <- function(command, ...) {
 
-  DATA_INPUTS <-
+  MODULE_INPUTS <-
     c("L2012.AgProduction_ag_irr_mgmt",
       # in case we prune so far that a region no longer has a crop to trade
       "L240.TechCoef_tra",
@@ -31,10 +31,8 @@ module_gcameurope_prune_empty_ag_xml <- function(command, ...) {
       "L202.StubTech_in_EUR",
       "L203.StubTech_demand_nonfood",
       "L2252.LN5_MgdAllocation_crop",
-      "L2252.LN5_MgdCarbon_crop")
-
-  MODULE_INPUTS <- c(DATA_INPUTS,
-                     FILE = "gcam-europe/mappings/ag_regions")
+      "L2252.LN5_MgdCarbon_crop",
+      "Europe_Single_Market_Regions")
 
   MODULE_OUTPUTS <-
     c(XML = "prune_empty_ag_EUR.xml")
@@ -50,10 +48,12 @@ module_gcameurope_prune_empty_ag_xml <- function(command, ...) {
     # Load required inputs ----
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
 
-    AG_REGIONS <- ag_regions %>% distinct(ag_region) %>% pull()
     TOTAL_CROPS <- c(paste0("total ", stringr::str_to_lower(aglu.TRADED_CROPS)), "total nuts_seeds", "total root_tuber")
+    Europe_Single_Market_Regions <- Europe_Single_Market_Regions %>%
+      filter(GCAMEU_region   != "Austria") %>%
+      pull(GCAMEU_region)
 
-    for (item in DATA_INPUTS[DATA_INPUTS != 'L240.TechCoef_tra']) {
+    for (item in MODULE_INPUTS[MODULE_INPUTS != 'L240.TechCoef_tra' & MODULE_INPUTS != 'Europe_Single_Market_Regions']) {
       assign(item, get(item) %>%
                filter_regions_europe())
     }
@@ -72,8 +72,7 @@ module_gcameurope_prune_empty_ag_xml <- function(command, ...) {
 
     # save the empty techs
     prune_agsupply %>%
-      filter(calOutputValue == 0,
-             !region %in% AG_REGIONS) %>%
+      filter(calOutputValue == 0) %>%
       select(-calOutputValue) ->
       empty_ag_tech
 
@@ -83,8 +82,7 @@ module_gcameurope_prune_empty_ag_xml <- function(command, ...) {
       prune_agsupply
     # save the empty subsectors
     prune_agsupply %>%
-      filter(calOutputValue == 0,
-             !region %in% AG_REGIONS) %>%
+      filter(calOutputValue == 0) %>%
       select(-calOutputValue) ->
       empty_ag_subsec
 
@@ -94,8 +92,7 @@ module_gcameurope_prune_empty_ag_xml <- function(command, ...) {
       prune_agsupply
     # save the empty sectors
     prune_agsupply %>%
-      filter(calOutputValue == 0, AgSupplySector != "FodderHerb",
-             !region %in% AG_REGIONS) %>%
+      filter(calOutputValue == 0, AgSupplySector != "FodderHerb") %>%
       select(-calOutputValue) ->
       empty_ag_sec
 
@@ -120,14 +117,11 @@ module_gcameurope_prune_empty_ag_xml <- function(command, ...) {
     # are left alone, although perhaps checking if those are empty too could lead to further
     # pruning but it is diminishing returns in terms of resources saved)
 
-    REGIONS <- ag_regions %>%
-      filter(region != ag_region) %>%
-      pull(region)
     L240.TechCoef_reg %>%
       inner_join(prune_agsupply, by=c("minicam.energy.input", "market.name")) %>%
       select(region, supplysector, subsector) %>%
       distinct() %>%
-      filter(!(region %in% REGIONS &
+      filter(!(region %in% Europe_Single_Market_Regions &
                  supplysector %in% TOTAL_CROPS)) ->
       empty_ag_reg
 
@@ -278,7 +272,7 @@ module_gcameurope_prune_empty_ag_xml <- function(command, ...) {
     # produce output ----
     create_xml("prune_empty_ag_EUR.xml") %>%
       # now call the function to recursively find the empty land node/leaf to prune
-      recursive_add_landnode_delete(prune_data %>% filter(!region %in% AG_REGIONS), ., LandNode_MaxDepth) %>%
+      recursive_add_landnode_delete(prune_data, ., LandNode_MaxDepth) %>%
       # add the LandNode rename table
       add_rename_landnode_xml() %>%
       # add on the tables from the Ag supply side
