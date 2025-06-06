@@ -85,7 +85,8 @@
 		<Value name = "land5">../input/gcamdata/xml/land_input_5_IRR_MGMT.xml</Value>
 		<Value name = "protected_land2">../input/gcamdata/xml/protected_land_input_2.xml</Value>
 		<Value name = "protected_land3">../input/gcamdata/xml/protected_land_input_3.xml</Value>
-		<Value name = "demand">../input/gcamdata/xml/ag_an_demand_input_multiple_consumers.xml</Value>
+		<Value name = "demand">../input/gcamdata/xml/ag_an_demand_input.xml</Value>
+		<!--Value name = "demand">../input/gcamdata/xml/ag_an_demand_input_multiple_consumers.xml</Value-->
 		<Value name = "demand_paper">../input/gcamdata/xml/paper_delete_ag_demand.xml</Value>
 		<!--Value name = "bio_trade">../input/gcamdata/xml/bio_trade.xml</Value-->
 		<Value name = "bio_trade_EUR">../input/gcamdata/xml/bio_trade_EUR.xml</Value>
@@ -153,7 +154,7 @@
         <Value name = "prune_ag">../input/gcamdata/xml/prune_empty_ag_EUR.xml</Value>
 
 		<Value name = "solver">../input/solution/cal_broyden_config.xml</Value>
-		
+
 	</ScenarioComponents>
 	<Strings>
 		<Value name="scenarioName">Reference</Value>
@@ -184,7 +185,7 @@
 		<Value name="climateOutputInterval">5</Value>
 		<Value name="parallel-grain-size">50</Value>
 		<Value name="stop-period">-1</Value>
-		<Value name="stop-year">2100</Value>
+		<Value name="stop-year">-1</Value>
 		<Value name="restart-period">-1</Value>
 		<Value name="restart-year">-1</Value>
 		<Value name="max-parallelism">-1</Value>
