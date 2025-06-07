@@ -1911,7 +1911,7 @@ element input {
                     <axis1 name="technology">technology</axis1>
                     <axis2 name="Year">physical-output[@vintage]</axis2>
                     <xPath buildList="true" dataName="output" group="false" sumAll="false">*[@type='sector' and (@name='gas processing')]/*[@type='subsector']/
-               *[@type='technology']/*[@type='output' (:collapse:)]/physical-output/node()</xPath>
+               *[@type='technology']/*[@type='output']/physical-output/node()</xPath>
                     <comments/>
                 </supplyDemandQuery>
                 <supplyDemandQuery title="gas production share-weights by subsector">
@@ -4428,7 +4428,7 @@ element input {
             <emissionsQueryBuilder title="CO2 emissions by sector (excluding resource production)">
                 <axis1 name="sector">sector</axis1>
                 <axis2 name="Year">emissions</axis2>
-                <xPath buildList="true" dataName="emissions" group="false" sumAll="false">*[@type='sector']//CO2/emissions/node()</xPath>
+                <xPath buildList="true" dataName="emissions" group="false" sumAll="false">*[@type='sector']//CO2[@type='GHG' (:collapse:) and @name='CO2']/emissions/node()</xPath>
                 <comments/>
             </emissionsQueryBuilder>
             <supplyDemandQuery title="CO2 emissions by sector (no bio) (excluding resource production)">
@@ -4461,13 +4461,20 @@ element input {
             <PrimaryFuelCO2Coef name="coal">27.3</PrimaryFuelCO2Coef>,
             <PrimaryFuelCO2Coef name="crude oil">19.6</PrimaryFuelCO2Coef>,
             <PrimaryFuelCO2Coef name="delivered biomass">23</PrimaryFuelCO2Coef>,
+            <PrimaryFuelCO2Coef name="delivered biomass industry">23</PrimaryFuelCO2Coef>,
             <PrimaryFuelCO2Coef name="delivered coal">27.3</PrimaryFuelCO2Coef>,
+            <PrimaryFuelCO2Coef name="delivered coal feedstocks">27.3</PrimaryFuelCO2Coef>,
+            <PrimaryFuelCO2Coef name="delivered coal industry">27.3</PrimaryFuelCO2Coef>,
             <PrimaryFuelCO2Coef name="delivered gas">14.2</PrimaryFuelCO2Coef>,
+            <PrimaryFuelCO2Coef name="delivered gas transport">14.2</PrimaryFuelCO2Coef>,
             <PrimaryFuelCO2Coef name="gas pipeline">14.2</PrimaryFuelCO2Coef>,
             <PrimaryFuelCO2Coef name="gas processing">14.2</PrimaryFuelCO2Coef>,
             <PrimaryFuelCO2Coef name="limestone">0.08</PrimaryFuelCO2Coef>,
             <PrimaryFuelCO2Coef name="natural gas">14.2</PrimaryFuelCO2Coef>,
             <PrimaryFuelCO2Coef name="refined liquids enduse">19.6</PrimaryFuelCO2Coef>,
+            <PrimaryFuelCO2Coef name="refined liquids bunkers">19.6</PrimaryFuelCO2Coef>,
+            <PrimaryFuelCO2Coef name="refined liquids bunkers av">19.6</PrimaryFuelCO2Coef>,
+            <PrimaryFuelCO2Coef name="refined liquids transport">19.6</PrimaryFuelCO2Coef>,
             <PrimaryFuelCO2Coef name="refined liquids industrial">19.6</PrimaryFuelCO2Coef>,
             <PrimaryFuelCO2Coef name="refining">19.6</PrimaryFuelCO2Coef>,
             <PrimaryFuelCO2Coef name="regional biomass">23</PrimaryFuelCO2Coef>,
@@ -4481,7 +4488,8 @@ element input {
             <PrimaryFuelCO2Coef name="traded unconventional oil">19.6</PrimaryFuelCO2Coef>,
             <PrimaryFuelCO2Coef name="unconventional oil">21.1</PrimaryFuelCO2Coef>,
             <PrimaryFuelCO2Coef name="unconventional oil production">19.6</PrimaryFuelCO2Coef>,
-            <PrimaryFuelCO2Coef name="wholesale gas">14.2</PrimaryFuelCO2Coef>),
+            <PrimaryFuelCO2Coef name="wholesale gas">14.2</PrimaryFuelCO2Coef>,
+            <PrimaryFuelCO2Coef name="wholesale gas feedstocks">14.2</PrimaryFuelCO2Coef>),
             $currCoef := $carbonCoefs[@name=$good]/text()
             return if(exists($currCoef)) then $currCoef else 0.0
             };
@@ -4596,7 +4604,7 @@ element input {
             $currEmissSectors := $currTree/*[@type='sector' and (@name='regional biomass' or @name='regional biomassOil' or @name='regional corn for ethanol' or @name='regional sugar for ethanol' or @name='regional sugarbeet for ethanol' or @name='regional woodpulp for energy')],
             $coefs := local:generate-sector-output-coefs(distinct-values($currEmissSectors/@name), $currTree, (), false()),
             $downstream_emiss := for $sectorName in distinct-values($currEmissSectors/@name)
-            return local:append-heirarchy($currTree, local:apply-coefs($sectorName, $currEmissSectors[@name=$sectorName]//CO2[@name='CO2']/emissions, $coefs))//text() 
+            return local:append-heirarchy($currTree, local:apply-coefs($sectorName, $currEmissSectors[@name=$sectorName]//CO2[@type='GHG' (:collapse:) and @name='CO2']/emissions, $coefs))//text() 
             return ($sector_emiss, $downstream_emiss )
             (:  } :)
             };
@@ -4729,7 +4737,7 @@ local:generate-sector-output-coefs(remove($inputNameQueue, 1), $currTree, $coefs
                  $coefs := local:generate-sector-output-coefs(distinct-values($currEmissSectors/@name), $currTree, (), false())
 				 return
 				    for $sectorName in distinct-values($currEmissSectors/@name)
-                    return local:append-heirarchy($currTree, local:apply-coefs($sectorName, $currEmissSectors[@name=$sectorName]//CO2/emissions, $coefs))//text()
+                    return local:append-heirarchy($currTree, local:apply-coefs($sectorName, $currEmissSectors[@name=$sectorName]//CO2[@type='GHG' (:collapse:) and @name='CO2']/emissions, $coefs))//text()
 			 	 } 
 	 	 };
 		 local:run-emiss-by-enduse((:scenarios:), (:regions:), (:collection:))
@@ -4751,34 +4759,16 @@ local:generate-sector-output-coefs(remove($inputNameQueue, 1), $currTree, $coefs
                         <rewrite from="comm heating" to="buildings"/>
                         <rewrite from="resid cooking modern EUR_d8" to="buildings"/>
                         <rewrite from="resid cooking modern EUR_d9" to="buildings"/>
-                        <rewrite from="subpeak generation" to="electricity"/>
                         <rewrite from="agricultural energy use" to="buildings"/>
-                        <rewrite from="FoodDemand_NonStaples" to="industry"/>
-                        <rewrite from="trn_pass_road_bus" to="transportation"/>
                         <rewrite from="trn_aviation_intl" to="intl bunkers"/>
                         <rewrite from="resid heating" to="buildings"/>
-                        <rewrite from="resid heating coal EUR_d9" to="buildings"/>
-                        <rewrite from="resid heating coal EUR_d8" to="buildings"/>
-                        <rewrite from="resid heating coal EUR_d7" to="buildings"/>
                         <rewrite from="resid heating modern EUR_d9" to="buildings"/>
-                        <rewrite from="resid heating coal EUR_d6" to="buildings"/>
-                        <rewrite from="resid heating coal EUR_d5" to="buildings"/>
-                        <rewrite from="resid heating coal EUR_d4" to="buildings"/>
-                        <rewrite from="resid heating coal EUR_d3" to="buildings"/>
                         <rewrite from="trn_shipping_intl" to="intl bunkers"/>
-                        <rewrite from="resid heating coal EUR_d2" to="buildings"/>
-                        <rewrite from="resid heating coal EUR_d1" to="buildings"/>
                         <rewrite from="resid heating modern EUR_d3" to="buildings"/>
-                        <rewrite from="resid others modern EUR_d6" to="buildings"/>
-                        <rewrite from="intermediate generation" to="electricity"/>
                         <rewrite from="resid heating modern EUR_d4" to="buildings"/>
-                        <rewrite from="resid others modern EUR_d7" to="buildings"/>
                         <rewrite from="resid heating modern EUR_d1" to="buildings"/>
-                        <rewrite from="resid others modern EUR_d8" to="buildings"/>
                         <rewrite from="trn_freight_road" to="transportation"/>
                         <rewrite from="resid heating modern EUR_d2" to="buildings"/>
-                        <rewrite from="resid others modern EUR_d9" to="buildings"/>
-                        <rewrite from="base load generation" to="electricity"/>
                         <rewrite from="resid heating modern EUR_d7" to="buildings"/>
                         <rewrite from="resid heating modern EUR_d8" to="buildings"/>
                         <rewrite from="resid cooking modern EUR_d10" to="buildings"/>
@@ -4786,60 +4776,109 @@ local:generate-sector-output-coefs(remove($inputNameQueue, 1), $currTree, $coefs
                         <rewrite from="resid heating modern EUR_d6" to="buildings"/>
                         <rewrite from="resid others modern EUR_d10" to="buildings"/>
                         <rewrite from="other industry" to="industry"/>
-                        <rewrite from="resid others modern EUR_d1" to="buildings"/>
                         <rewrite from="comm cooling EUR" to="buildings"/>
-                        <rewrite from="resid others modern EUR_d2" to="buildings"/>
-                        <rewrite from="resid others modern EUR_d3" to="buildings"/>
-                        <rewrite from="resid others modern EUR_d4" to="buildings"/>
-                        <rewrite from="resid others modern EUR_d5" to="buildings"/>
+                        <rewrite from="resid hot water coal EUR_d9" to="buildings"/>
+                        <rewrite from="resid cooling modern EUR_d10" to="buildings"/>
+                        <rewrite from="resid hot water coal EUR_d7" to="buildings"/>
+                        <rewrite from="resid hot water coal EUR_d8" to="buildings"/>
                         <rewrite from="chemical" to="industry"/>
-                        <rewrite from="FoodDemand_Staples" to="industry"/>
                         <rewrite from="N fertilizer" to="industry"/>
                         <rewrite from="unconventional oil production" to="industry"/>
+                        <rewrite from="resid hot water coal EUR_d1" to="buildings"/>
+                        <rewrite from="resid hot water coal EUR_d2" to="buildings"/>
                         <rewrite from="resid heating coal EUR_d10" to="buildings"/>
-                        <rewrite from="trn_pass_road_LDV_4W" to="transportation"/>
+                        <rewrite from="resid hot water coal EUR_d5" to="buildings"/>
+                        <rewrite from="resid hot water coal EUR_d6" to="buildings"/>
+                        <rewrite from="resid hot water coal EUR_d3" to="buildings"/>
+                        <rewrite from="resid hot water coal EUR_d4" to="buildings"/>
                         <rewrite from="mining energy use" to="industry"/>
                         <rewrite from="resid hot water modern EUR_d7" to="buildings"/>
-                        <rewrite from="comm cooling" to="buildings"/>
                         <rewrite from="resid hot water modern EUR_d8" to="buildings"/>
                         <rewrite from="resid hot water modern EUR_d9" to="buildings"/>
-                        <rewrite from="resid hot water modern EUR_d10" to="buildings"/>
-                        <rewrite from="peak generation" to="electricity"/>
                         <rewrite from="aluminum" to="industry"/>
-                        <rewrite from="trn_pass_road_LDV" to="transportation"/>
-                        <rewrite from="comm heating EUR" to="buildings"/>
                         <rewrite from="resid hot water modern EUR_d1" to="buildings"/>
                         <rewrite from="resid hot water modern EUR_d2" to="buildings"/>
-                        <rewrite from="paper" to="industry"/>
                         <rewrite from="resid hot water modern EUR_d3" to="buildings"/>
                         <rewrite from="municipal water" to="industry"/>
                         <rewrite from="resid hot water modern EUR_d4" to="buildings"/>
                         <rewrite from="resid hot water modern EUR_d5" to="buildings"/>
                         <rewrite from="resid hot water modern EUR_d6" to="buildings"/>
-                        <rewrite from="construction" to="industry"/>
-                        <rewrite from="trn_pass_road" to="transportation"/>
                         <rewrite from="trn_passenger" to="transportation"/>
                         <rewrite from="iron and steel" to="industry"/>
+                        <rewrite from="resid others" to="buildings"/>
+                        <rewrite from="backup_electricity" to="electricity"/>
+                        <rewrite from="resid cooling" to="buildings"/>
+                        <rewrite from="resid cooking coal EUR_d8" to="buildings"/>
+                        <rewrite from="resid cooking coal EUR_d7" to="buildings"/>
+                        <rewrite from="resid cooking coal EUR_d6" to="buildings"/>
+                        <rewrite from="resid cooking coal EUR_d5" to="buildings"/>
+                        <rewrite from="subpeak generation" to="electricity"/>
+                        <rewrite from="resid cooking coal EUR_d4" to="buildings"/>
+                        <rewrite from="resid cooking coal EUR_d3" to="buildings"/>
+                        <rewrite from="resid cooling modern EUR_d1" to="buildings"/>
+                        <rewrite from="FoodDemand_NonStaples" to="industry"/>
+                        <rewrite from="resid cooking coal EUR_d2" to="buildings"/>
+                        <rewrite from="resid cooking coal EUR_d1" to="buildings"/>
+                        <rewrite from="trn_pass_road_bus" to="transportation"/>
+                        <rewrite from="resid heating coal EUR_d9" to="buildings"/>
+                        <rewrite from="resid cooking coal EUR_d9" to="buildings"/>
+                        <rewrite from="resid heating coal EUR_d8" to="buildings"/>
+                        <rewrite from="resid heating coal EUR_d7" to="buildings"/>
+                        <rewrite from="resid heating coal EUR_d6" to="buildings"/>
+                        <rewrite from="resid heating coal EUR_d5" to="buildings"/>
+                        <rewrite from="resid heating coal EUR_d4" to="buildings"/>
+                        <rewrite from="resid heating coal EUR_d3" to="buildings"/>
+                        <rewrite from="resid heating coal EUR_d2" to="buildings"/>
+                        <rewrite from="resid heating coal EUR_d1" to="buildings"/>
+                        <rewrite from="resid others modern EUR_d6" to="buildings"/>
+                        <rewrite from="intermediate generation" to="electricity"/>
+                        <rewrite from="resid others modern EUR_d7" to="buildings"/>
+                        <rewrite from="resid others modern EUR_d8" to="buildings"/>
+                        <rewrite from="resid others modern EUR_d9" to="buildings"/>
+                        <rewrite from="base load generation" to="electricity"/>
+                        <rewrite from="resid others modern EUR_d1" to="buildings"/>
+                        <rewrite from="resid others modern EUR_d2" to="buildings"/>
+                        <rewrite from="resid others modern EUR_d3" to="buildings"/>
+                        <rewrite from="resid others modern EUR_d4" to="buildings"/>
+                        <rewrite from="resid others modern EUR_d5" to="buildings"/>
+                        <rewrite from="resid cooling modern EUR_d4" to="buildings"/>
+                        <rewrite from="resid cooling modern EUR_d5" to="buildings"/>
+                        <rewrite from="resid cooling modern EUR_d2" to="buildings"/>
+                        <rewrite from="resid cooling modern EUR_d3" to="buildings"/>
+                        <rewrite from="resid cooling modern EUR_d8" to="buildings"/>
+                        <rewrite from="resid cooling modern EUR_d9" to="buildings"/>
+                        <rewrite from="FoodDemand_Staples" to="industry"/>
+                        <rewrite from="resid cooling modern EUR_d6" to="buildings"/>
+                        <rewrite from="resid cooling modern EUR_d7" to="buildings"/>
+                        <rewrite from="trn_pass_road_LDV_4W" to="transportation"/>
+                        <rewrite from="resid cooking coal EUR_d10" to="buildings"/>
+                        <rewrite from="comm cooling" to="buildings"/>
+                        <rewrite from="resid hot water modern EUR_d10" to="buildings"/>
+                        <rewrite from="peak generation" to="electricity"/>
+                        <rewrite from="trn_pass_road_LDV" to="transportation"/>
+                        <rewrite from="comm heating EUR" to="buildings"/>
+                        <rewrite from="paper" to="industry"/>
+                        <rewrite from="construction" to="industry"/>
+                        <rewrite from="trn_pass_road" to="transportation"/>
                         <rewrite from="trn_freight" to="transportation"/>
                         <rewrite from="comm others" to="buildings"/>
                         <rewrite from="comm others EUR" to="buildings"/>
+                        <rewrite from="resid hot water coal EUR_d10" to="buildings"/>
                         <rewrite from="trn_pass" to="transportation"/>
-                        <rewrite from="resid others" to="buildings"/>
-                        <rewrite from="resid cooling" to="buildings"/>
                     </level>
                 </labelRewriteList>
             </supplyDemandQuery>
             <emissionsQueryBuilder title="CO2 emissions by subsector (excluding resource production)">
                 <axis1 name="subsector">subsector</axis1>
                 <axis2 name="Year">emissions</axis2>
-                <xPath buildList="true" dataName="emissions" group="false" sumAll="false">*[@type = 'sector' ]/*[@type='subsector']//CO2/emissions/node()</xPath>
+                <xPath buildList="true" dataName="emissions" group="false" sumAll="false">*[@type = 'sector' ]/*[@type='subsector']//CO2[@type='GHG' (:collapse:) and @name='CO2']/emissions/node()</xPath>
                 <comments/>
             </emissionsQueryBuilder>
             <emissionsQueryBuilder title="CO2 emissions by tech (excluding resource production)">
                 <axis1 name="technology">technology</axis1>
                 <axis2 name="Year">emissions</axis2>
                 <xPath buildList="true" dataName="emissions" group="false" sumAll="false">*[@type = 'sector' ]/*[@type='subsector']/*[@type='technology']//
-            CO2/emissions/node()</xPath>
+            CO2[@type='GHG' (:collapse:) and @name='CO2']/emissions/node()</xPath>
                 <comments/>
             </emissionsQueryBuilder>
             <emissionsQueryBuilder title="CO2 emissions by resource production ">
