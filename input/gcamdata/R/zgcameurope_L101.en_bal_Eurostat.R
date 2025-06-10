@@ -310,24 +310,24 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
     L101.GCAM_EUR_regions %>%
       add_title("ISO to GCAM region mapping for EUR regions with Eurostat data", overwrite = T) %>%
       add_units("") %>%
-      add_precursors("common/GCAM32_to_EU", "europe/nrg_bal_c") ->
+      add_precursors("common/GCAM32_to_EU", "gcam-europe/nrg_bal_c") ->
       L101.GCAM_EUR_regions
 
     L101.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       add_title("Eurostat (1990 - 2021) & IEA (1971 - 1989) energy balances by GCAM region / intermediate sector / intermediate fuel / historical year") %>%
       add_units("EJ") %>%
-      add_precursors("common/GCAM32_to_EU", "europe/nrg_bal_c", "europe/mappings/geo_to_iso_map",
-                     "europe/mappings/nrgbal_to_sector_map", "europe/mappings/siec_to_fuel_map",
-                     "energy/mappings/IEA_sector_fuel_modifications", "L1011.en_bal_EJ_R_Si_Fi_Yh") ->
+      add_precursors("common/GCAM32_to_EU", "gcam-europe/nrg_bal_c", "gcam-europe/mappings/geo_to_iso_map",
+                     "gcam-europe/mappings/nrgbal_to_sector_map", "gcam-europe/mappings/siec_to_fuel_map",
+                     "L1011.en_bal_EJ_R_Si_Fi_Yh") ->
       L101.en_bal_EJ_R_Si_Fi_Yh_EUR
 
     L101.in_EJ_R_trn_Fi_Yh_EUR %>%
       add_title("Eurostat (1990 - 2021) & IEA (1971 - 1989) transportation sector energy consumption by country / IEA mode / fuel / historical year") %>%
       add_units("EJ") %>%
       add_comments("Consumption of energy by the transport sector by fuel and historical year. Aggregated by fuel and country") %>%
-      add_precursors("common/GCAM32_to_EU", "europe/nrg_bal_c", "europe/mappings/geo_to_iso_map",
-                     "europe/mappings/nrgbal_to_sector_map", "europe/mappings/siec_to_fuel_map",
-                     "energy/mappings/IEA_sector_fuel_modifications", "gcam-europe/mappings/enduse_fuel_aggregation")  ->
+      add_precursors("common/GCAM32_to_EU", "gcam-europe/nrg_bal_c", "gcam-europe/mappings/geo_to_iso_map",
+                     "gcam-europe/mappings/nrgbal_to_sector_map", "gcam-europe/mappings/siec_to_fuel_map",
+                     "gcam-europe/mappings/enduse_fuel_aggregation")  ->
       L101.in_EJ_R_trn_Fi_Yh_EUR
 
     L101.in_EJ_R_bld_Fi_Yh_EUR %>%

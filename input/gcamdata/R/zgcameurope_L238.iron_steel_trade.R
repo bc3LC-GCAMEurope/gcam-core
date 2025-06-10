@@ -32,8 +32,7 @@ module_gcameurope_L238.iron_steel_trade <- function(command, ...) {
       "L238.TechCoef_reg") # done
       # "L238.Production_reg_imp", # no changes needed
       # "L238.Production_reg_dom") # no changes needed
-  MODULE_INPUTS <- c(FILE = "common/GCAM_region_names",
-                     "Europe_Single_Market_Regions",
+  MODULE_INPUTS <- c("Europe_Single_Market_Regions",
                      "LB1092.Single_Market_Trade_Steel",
                      "L238.Production_reg_imp",
                      OUTPUTS_TO_ADJUST)
@@ -182,6 +181,32 @@ module_gcameurope_L238.iron_steel_trade <- function(command, ...) {
 
 
     # Outputs ----------------------------------
+
+    L238.SubsectorAll_tra_EUR %>%
+      add_precursors("LB1092.Single_Market_Trade_Steel", "Europe_Single_Market_Regions") ->
+      L238.SubsectorAll_tra_EUR
+
+    L238.TechShrwt_tra_EUR %>%
+      add_precursors("LB1092.Single_Market_Trade_Steel", "Europe_Single_Market_Regions") ->
+      L238.TechShrwt_tra_EUR
+
+    L238.TechCost_tra_EUR %>%
+      add_precursors("LB1092.Single_Market_Trade_Steel", "Europe_Single_Market_Regions") ->
+      L238.TechCost_tra_EUR
+
+    L238.TechCoef_tra_EUR %>%
+      add_precursors("LB1092.Single_Market_Trade_Steel", "Europe_Single_Market_Regions") ->
+      L238.TechCoef_tra_EUR
+
+    L238.TechCoef_reg_EUR %>%
+      add_precursors("LB1092.Single_Market_Trade_Steel", "Europe_Single_Market_Regions") ->
+      L238.TechCoef_reg_EUR
+
+    L238.Production_tra_EUR %>%
+      add_precursors("LB1092.Single_Market_Trade_Steel", "Europe_Single_Market_Regions") ->
+      L238.Production_tra_EUR
+
+
     return_data(MODULE_OUTPUTS)
   } else {
     stop("Unknown command")
