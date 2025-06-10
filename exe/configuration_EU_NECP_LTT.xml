@@ -190,7 +190,7 @@
 	<Strings>
 		<Value name="scenarioName">EU_NECP_LTT</Value>
 		<Value name="debug-region">USA</Value>
-		<Value name="MAGICC-input-dir">../input/magicc/inputs</otherind>
+		<Value name="MAGICC-input-dir">../input/magicc/inputs</Value>
 		<Value name="MAGICC-output-dir">../output</Value>
 		<Value name="AbatedGasForCostCurves">CO2</Value>
 	</Strings>

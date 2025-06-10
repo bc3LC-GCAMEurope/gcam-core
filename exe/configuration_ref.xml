@@ -155,9 +155,12 @@
 
 		<Value name = "solver">../input/solution/cal_broyden_config.xml</Value>
 
+
+
+
 	</ScenarioComponents>
 	<Strings>
-		<Value name="scenarioName">Reference</Value>
+		<Value name="scenarioName">Ref</Value>
 		<Value name="debug-region">USA</Value>
 		<Value name="MAGICC-input-dir">../input/magicc/inputs</Value>
 		<Value name="MAGICC-output-dir">../output</Value>
