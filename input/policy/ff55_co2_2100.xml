@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?><scenario>
+    <world>
+        <region name="Austria">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+                <constraint year="2020">779.7150257</constraint>
+                <constraint year="2025">662.6922954</constraint>
+                <constraint year="2030">488.8720519</constraint>
+                <constraint year="2035">375.9818477</constraint>
+                <constraint year="2040">260.7375132</constraint>
+                <constraint year="2045">146.6726645</constraint>
+                <constraint year="2050">62.75141985</constraint>
+<fixedTax fillout="1" year="2055">600</fixedTax>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Belgium">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Bulgaria">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Croatia">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Cyprus">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Czech Republic">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Denmark">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Estonia">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Finland">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="France">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Germany">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Greece">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Hungary">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Ireland">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Italy">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Latvia">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Lithuania">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Luxembourg">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Malta">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Netherlands">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Poland">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Portugal">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Romania">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Slovakia">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Slovenia">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Spain">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Sweden">
+            <ghgpolicy name="CO2">
+                <market>EU</market>
+            </ghgpolicy>
+            <linked-ghg-policy name="CO2_FUG">
+                <price-adjust fillout="1" year="2020">1</price-adjust>
+                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <market>EU</market>
+                <linked-policy>CO2</linked-policy>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+    </world>
+</scenario>

@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="UTF-8"?><scenario>
+    <world>
+        <region name="Iceland">
+            <ghgpolicy name="CO2">
+                <market>European Free Trade Association</market>
+                <fixedTax year="2020">55.3</fixedTax>
+                <fixedTax year="2025">296.68</fixedTax>
+                <fixedTax year="2030">337.55</fixedTax>
+                <fixedTax year="2035">497.24</fixedTax>
+                <fixedTax year="2040">567.76</fixedTax>
+                <fixedTax year="2045">648.35</fixedTax>
+                <fixedTax fillout="1" year="2050">728.29</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Norway">
+            <ghgpolicy name="CO2">
+                <market>European Free Trade Association</market>
+                <fixedTax year="2020">55.3</fixedTax>
+                <fixedTax year="2025">296.68</fixedTax>
+                <fixedTax year="2030">337.55</fixedTax>
+                <fixedTax year="2035">497.24</fixedTax>
+                <fixedTax year="2040">567.76</fixedTax>
+                <fixedTax year="2045">648.35</fixedTax>
+                <fixedTax fillout="1" year="2050">728.29</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Switzerland">
+            <ghgpolicy name="CO2">
+                <market>European Free Trade Association</market>
+                <fixedTax year="2020">55.3</fixedTax>
+                <fixedTax year="2025">296.68</fixedTax>
+                <fixedTax year="2030">337.55</fixedTax>
+                <fixedTax year="2035">497.24</fixedTax>
+                <fixedTax year="2040">567.76</fixedTax>
+                <fixedTax year="2045">648.35</fixedTax>
+                <fixedTax fillout="1" year="2050">728.29</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="UK">
+            <ghgpolicy name="CO2">
+                <market>European Free Trade Association</market>
+                <fixedTax year="2020">55.3</fixedTax>
+                <fixedTax year="2025">296.68</fixedTax>
+                <fixedTax year="2030">337.55</fixedTax>
+                <fixedTax year="2035">497.24</fixedTax>
+                <fixedTax year="2040">567.76</fixedTax>
+                <fixedTax year="2045">648.35</fixedTax>
+                <fixedTax fillout="1" year="2050">728.29</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Belarus">
+            <ghgpolicy name="CO2">
+                <market>other_EUR</market>
+                <fixedTax year="2020">53.6919</fixedTax>
+                <fixedTax year="2025">42.1948</fixedTax>
+                <fixedTax year="2030">53.3899</fixedTax>
+                <fixedTax year="2035">94.56</fixedTax>
+                <fixedTax year="2040">222.23</fixedTax>
+                <fixedTax year="2045">309.51</fixedTax>
+                <fixedTax fillout="1" year="2050">366.83</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Moldova">
+            <ghgpolicy name="CO2">
+                <market>other_EUR</market>
+                <fixedTax year="2020">53.6919</fixedTax>
+                <fixedTax year="2025">42.1948</fixedTax>
+                <fixedTax year="2030">53.3899</fixedTax>
+                <fixedTax year="2035">94.56</fixedTax>
+                <fixedTax year="2040">222.23</fixedTax>
+                <fixedTax year="2045">309.51</fixedTax>
+                <fixedTax fillout="1" year="2050">366.83</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Ukraine">
+            <ghgpolicy name="CO2">
+                <market>other_EUR</market>
+                <fixedTax year="2020">53.6919</fixedTax>
+                <fixedTax year="2025">42.1948</fixedTax>
+                <fixedTax year="2030">53.3899</fixedTax>
+                <fixedTax year="2035">94.56</fixedTax>
+                <fixedTax year="2040">222.23</fixedTax>
+                <fixedTax year="2045">309.51</fixedTax>
+                <fixedTax fillout="1" year="2050">366.83</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Albania">
+            <ghgpolicy name="CO2">
+                <market>other_EUR</market>
+                <fixedTax year="2020">53.6919</fixedTax>
+                <fixedTax year="2025">42.1948</fixedTax>
+                <fixedTax year="2030">53.3899</fixedTax>
+                <fixedTax year="2035">94.56</fixedTax>
+                <fixedTax year="2040">222.23</fixedTax>
+                <fixedTax year="2045">309.51</fixedTax>
+                <fixedTax fillout="1" year="2050">366.83</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Bosnia and Herzegovina">
+            <ghgpolicy name="CO2">
+                <market>other_EUR</market>
+                <fixedTax year="2020">53.6919</fixedTax>
+                <fixedTax year="2025">42.1948</fixedTax>
+                <fixedTax year="2030">53.3899</fixedTax>
+                <fixedTax year="2035">94.56</fixedTax>
+                <fixedTax year="2040">222.23</fixedTax>
+                <fixedTax year="2045">309.51</fixedTax>
+                <fixedTax fillout="1" year="2050">366.83</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Macedonia">
+            <ghgpolicy name="CO2">
+                <market>other_EUR</market>
+                <fixedTax year="2020">53.6919</fixedTax>
+                <fixedTax year="2025">42.1948</fixedTax>
+                <fixedTax year="2030">53.3899</fixedTax>
+                <fixedTax year="2035">94.56</fixedTax>
+                <fixedTax year="2040">222.23</fixedTax>
+                <fixedTax year="2045">309.51</fixedTax>
+                <fixedTax fillout="1" year="2050">366.83</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Serbia and Montenegro">
+            <ghgpolicy name="CO2">
+                <market>other_EUR</market>
+                <fixedTax year="2020">53.6919</fixedTax>
+                <fixedTax year="2025">42.1948</fixedTax>
+                <fixedTax year="2030">53.3899</fixedTax>
+                <fixedTax year="2035">94.56</fixedTax>
+                <fixedTax year="2040">222.23</fixedTax>
+                <fixedTax year="2045">309.51</fixedTax>
+                <fixedTax fillout="1" year="2050">366.83</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Turkey">
+            <ghgpolicy name="CO2">
+                <market>other_EUR</market>
+                <fixedTax year="2020">53.6919</fixedTax>
+                <fixedTax year="2025">42.1948</fixedTax>
+                <fixedTax year="2030">53.3899</fixedTax>
+                <fixedTax year="2035">94.56</fixedTax>
+                <fixedTax year="2040">222.23</fixedTax>
+                <fixedTax year="2045">309.51</fixedTax>
+                <fixedTax fillout="1" year="2050">366.83</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Africa_Eastern">
+            <ghgpolicy name="CO2">
+                <market>ss_africa</market>
+                <fixedTax year="2020">0</fixedTax>
+                <fixedTax year="2025">25.34</fixedTax>
+                <fixedTax year="2030">88.3881</fixedTax>
+                <fixedTax year="2035">159.21</fixedTax>
+                <fixedTax year="2040">222.23</fixedTax>
+                <fixedTax year="2045">332.15</fixedTax>
+                <fixedTax fillout="1" year="2050">434.69</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Africa_Southern">
+            <ghgpolicy name="CO2">
+                <market>ss_africa</market>
+                <fixedTax year="2020">0</fixedTax>
+                <fixedTax year="2025">25.34</fixedTax>
+                <fixedTax year="2030">88.3881</fixedTax>
+                <fixedTax year="2035">159.21</fixedTax>
+                <fixedTax year="2040">222.23</fixedTax>
+                <fixedTax year="2045">332.15</fixedTax>
+                <fixedTax fillout="1" year="2050">434.69</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Africa_Western">
+            <ghgpolicy name="CO2">
+                <market>ss_africa</market>
+                <fixedTax year="2020">0</fixedTax>
+                <fixedTax year="2025">25.34</fixedTax>
+                <fixedTax year="2030">88.3881</fixedTax>
+                <fixedTax year="2035">159.21</fixedTax>
+                <fixedTax year="2040">222.23</fixedTax>
+                <fixedTax year="2045">332.15</fixedTax>
+                <fixedTax fillout="1" year="2050">434.69</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="South Africa">
+            <ghgpolicy name="CO2">
+                <market>ss_africa</market>
+                <fixedTax year="2020">0</fixedTax>
+                <fixedTax year="2025">25.34</fixedTax>
+                <fixedTax year="2030">88.3881</fixedTax>
+                <fixedTax year="2035">159.21</fixedTax>
+                <fixedTax year="2040">222.23</fixedTax>
+                <fixedTax year="2045">332.15</fixedTax>
+                <fixedTax fillout="1" year="2050">434.69</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Africa_Northern">
+            <ghgpolicy name="CO2">
+                <market>mena</market>
+                <fixedTax year="2020">0</fixedTax>
+                <fixedTax year="2025">78.1911</fixedTax>
+                <fixedTax year="2030">169.221</fixedTax>
+                <fixedTax year="2035">227.22</fixedTax>
+                <fixedTax year="2040">229.73</fixedTax>
+                <fixedTax year="2045">281.11</fixedTax>
+                <fixedTax fillout="1" year="2050">335.86</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Middle East">
+            <ghgpolicy name="CO2">
+                <market>mena</market>
+                <fixedTax year="2020">0</fixedTax>
+                <fixedTax year="2025">78.1911</fixedTax>
+                <fixedTax year="2030">169.221</fixedTax>
+                <fixedTax year="2035">227.22</fixedTax>
+                <fixedTax year="2040">229.73</fixedTax>
+                <fixedTax year="2045">281.11</fixedTax>
+                <fixedTax fillout="1" year="2050">335.86</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Argentina">
+            <ghgpolicy name="CO2">
+                <market>lam</market>
+                <fixedTax year="2020">25.7747</fixedTax>
+                <fixedTax year="2025">195.634</fixedTax>
+                <fixedTax year="2030">199.512</fixedTax>
+                <fixedTax year="2035">293.37</fixedTax>
+                <fixedTax year="2040">327.02</fixedTax>
+                <fixedTax year="2045">414.28</fixedTax>
+                <fixedTax fillout="1" year="2050">435.37</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Brazil">
+            <ghgpolicy name="CO2">
+                <market>lam</market>
+                <fixedTax year="2020">25.7747</fixedTax>
+                <fixedTax year="2025">195.634</fixedTax>
+                <fixedTax year="2030">199.512</fixedTax>
+                <fixedTax year="2035">293.37</fixedTax>
+                <fixedTax year="2040">327.02</fixedTax>
+                <fixedTax year="2045">414.28</fixedTax>
+                <fixedTax fillout="1" year="2050">435.37</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Central America and Caribbean">
+            <ghgpolicy name="CO2">
+                <market>lam</market>
+                <fixedTax year="2020">25.7747</fixedTax>
+                <fixedTax year="2025">195.634</fixedTax>
+                <fixedTax year="2030">199.512</fixedTax>
+                <fixedTax year="2035">293.37</fixedTax>
+                <fixedTax year="2040">327.02</fixedTax>
+                <fixedTax year="2045">414.28</fixedTax>
+                <fixedTax fillout="1" year="2050">435.37</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Colombia">
+            <ghgpolicy name="CO2">
+                <market>lam</market>
+                <fixedTax year="2020">25.7747</fixedTax>
+                <fixedTax year="2025">195.634</fixedTax>
+                <fixedTax year="2030">199.512</fixedTax>
+                <fixedTax year="2035">293.37</fixedTax>
+                <fixedTax year="2040">327.02</fixedTax>
+                <fixedTax year="2045">414.28</fixedTax>
+                <fixedTax fillout="1" year="2050">435.37</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Mexico">
+            <ghgpolicy name="CO2">
+                <market>lam</market>
+                <fixedTax year="2020">25.7747</fixedTax>
+                <fixedTax year="2025">195.634</fixedTax>
+                <fixedTax year="2030">199.512</fixedTax>
+                <fixedTax year="2035">293.37</fixedTax>
+                <fixedTax year="2040">327.02</fixedTax>
+                <fixedTax year="2045">414.28</fixedTax>
+                <fixedTax fillout="1" year="2050">435.37</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="South America_Northern">
+            <ghgpolicy name="CO2">
+                <market>lam</market>
+                <fixedTax year="2020">25.7747</fixedTax>
+                <fixedTax year="2025">195.634</fixedTax>
+                <fixedTax year="2030">199.512</fixedTax>
+                <fixedTax year="2035">293.37</fixedTax>
+                <fixedTax year="2040">327.02</fixedTax>
+                <fixedTax year="2045">414.28</fixedTax>
+                <fixedTax fillout="1" year="2050">435.37</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="South America_Southern">
+            <ghgpolicy name="CO2">
+                <market>lam</market>
+                <fixedTax year="2020">25.7747</fixedTax>
+                <fixedTax year="2025">195.634</fixedTax>
+                <fixedTax year="2030">199.512</fixedTax>
+                <fixedTax year="2035">293.37</fixedTax>
+                <fixedTax year="2040">327.02</fixedTax>
+                <fixedTax year="2045">414.28</fixedTax>
+                <fixedTax fillout="1" year="2050">435.37</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Canada">
+            <ghgpolicy name="CO2">
+                <market>us_can_aus</market>
+                <fixedTax year="2020">137.315</fixedTax>
+                <fixedTax year="2025">266.805</fixedTax>
+                <fixedTax year="2030">325.334</fixedTax>
+                <fixedTax year="2035">420.02</fixedTax>
+                <fixedTax year="2040">467.97</fixedTax>
+                <fixedTax year="2045">462.93</fixedTax>
+                <fixedTax fillout="1" year="2050">459.41</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Australia_NZ">
+            <ghgpolicy name="CO2">
+                <market>us_can_aus</market>
+                <fixedTax year="2020">137.315</fixedTax>
+                <fixedTax year="2025">266.805</fixedTax>
+                <fixedTax year="2030">325.334</fixedTax>
+                <fixedTax year="2035">420.02</fixedTax>
+                <fixedTax year="2040">467.97</fixedTax>
+                <fixedTax year="2045">462.93</fixedTax>
+                <fixedTax fillout="1" year="2050">459.41</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="USA">
+            <ghgpolicy name="CO2">
+                <market>us_can_aus</market>
+                <fixedTax year="2020">137.315</fixedTax>
+                <fixedTax year="2025">266.805</fixedTax>
+                <fixedTax year="2030">325.334</fixedTax>
+                <fixedTax year="2035">420.02</fixedTax>
+                <fixedTax year="2040">467.97</fixedTax>
+                <fixedTax year="2045">462.93</fixedTax>
+                <fixedTax fillout="1" year="2050">459.41</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Japan">
+            <ghgpolicy name="CO2">
+                <market>jap_kor</market>
+                <fixedTax year="2020">15.409</fixedTax>
+                <fixedTax year="2025">247.919</fixedTax>
+                <fixedTax year="2030">318.986</fixedTax>
+                <fixedTax year="2035">415.96</fixedTax>
+                <fixedTax year="2040">451.26</fixedTax>
+                <fixedTax year="2045">583.12</fixedTax>
+                <fixedTax fillout="1" year="2050">737.85</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="South Korea">
+            <ghgpolicy name="CO2">
+                <market>jap_kor</market>
+                <fixedTax year="2020">15.409</fixedTax>
+                <fixedTax year="2025">247.919</fixedTax>
+                <fixedTax year="2030">318.986</fixedTax>
+                <fixedTax year="2035">415.96</fixedTax>
+                <fixedTax year="2040">451.26</fixedTax>
+                <fixedTax year="2045">583.12</fixedTax>
+                <fixedTax fillout="1" year="2050">737.85</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="China">
+            <ghgpolicy name="CO2">
+                <market>chn</market>
+                <fixedTax year="2020">71.5696</fixedTax>
+                <fixedTax year="2025">60.9187</fixedTax>
+                <fixedTax year="2030">64.4857</fixedTax>
+                <fixedTax year="2035">161.95</fixedTax>
+                <fixedTax year="2040">221.67</fixedTax>
+                <fixedTax year="2045">284.26</fixedTax>
+                <fixedTax fillout="1" year="2050">400.89</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Taiwan">
+            <ghgpolicy name="CO2">
+                <market>chn</market>
+                <fixedTax year="2020">71.5696</fixedTax>
+                <fixedTax year="2025">60.9187</fixedTax>
+                <fixedTax year="2030">64.4857</fixedTax>
+                <fixedTax year="2035">161.95</fixedTax>
+                <fixedTax year="2040">221.67</fixedTax>
+                <fixedTax year="2045">284.26</fixedTax>
+                <fixedTax fillout="1" year="2050">400.89</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="India">
+            <ghgpolicy name="CO2">
+                <market>ind</market>
+                <fixedTax year="2020">2.31853</fixedTax>
+                <fixedTax year="2025">0</fixedTax>
+                <fixedTax year="2030">0</fixedTax>
+                <fixedTax year="2035">128.33</fixedTax>
+                <fixedTax year="2040">195.8</fixedTax>
+                <fixedTax year="2045">250.2</fixedTax>
+                <fixedTax fillout="1" year="2050">314.64</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="South Asia">
+            <ghgpolicy name="CO2">
+                <market>ind</market>
+                <fixedTax year="2020">2.31853</fixedTax>
+                <fixedTax year="2025">0</fixedTax>
+                <fixedTax year="2030">0</fixedTax>
+                <fixedTax year="2035">128.33</fixedTax>
+                <fixedTax year="2040">195.8</fixedTax>
+                <fixedTax year="2045">250.2</fixedTax>
+                <fixedTax fillout="1" year="2050">314.64</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Southeast Asia">
+            <ghgpolicy name="CO2">
+                <market>se asia</market>
+                <fixedTax year="2020">0</fixedTax>
+                <fixedTax year="2025">0</fixedTax>
+                <fixedTax year="2030">39.4733</fixedTax>
+                <fixedTax year="2035">166.59</fixedTax>
+                <fixedTax year="2040">252.12</fixedTax>
+                <fixedTax year="2045">313.33</fixedTax>
+                <fixedTax fillout="1" year="2050">347.82</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Indonesia">
+            <ghgpolicy name="CO2">
+                <market>se asia</market>
+                <fixedTax year="2020">0</fixedTax>
+                <fixedTax year="2025">0</fixedTax>
+                <fixedTax year="2030">39.4733</fixedTax>
+                <fixedTax year="2035">166.59</fixedTax>
+                <fixedTax year="2040">252.12</fixedTax>
+                <fixedTax year="2045">313.33</fixedTax>
+                <fixedTax fillout="1" year="2050">347.82</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Russia">
+            <ghgpolicy name="CO2">
+                <market>rus_ca</market>
+                <fixedTax year="2020">0</fixedTax>
+                <fixedTax year="2025">35.4544</fixedTax>
+                <fixedTax year="2030">65.1956</fixedTax>
+                <fixedTax year="2035">115.91</fixedTax>
+                <fixedTax year="2040">214.2</fixedTax>
+                <fixedTax year="2045">312.49</fixedTax>
+                <fixedTax fillout="1" year="2050">410.78</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Central Asia">
+            <ghgpolicy name="CO2">
+                <market>rus_ca</market>
+                <fixedTax year="2020">0</fixedTax>
+                <fixedTax year="2025">35.4544</fixedTax>
+                <fixedTax year="2030">65.1956</fixedTax>
+                <fixedTax year="2035">115.91</fixedTax>
+                <fixedTax year="2040">214.2</fixedTax>
+                <fixedTax year="2045">312.49</fixedTax>
+                <fixedTax fillout="1" year="2050">410.78</fixedTax>
+            </ghgpolicy>
+        </region>
+    </world>
+</scenario>
