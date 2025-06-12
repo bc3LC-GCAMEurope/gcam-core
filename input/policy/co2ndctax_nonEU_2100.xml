@@ -3,49 +3,50 @@
         <region name="Iceland">
             <ghgpolicy name="CO2">
                 <market>European Free Trade Association</market>
-                <fixedTax year="2020">55.3</fixedTax>
+                <fixedTax year="2020">75</fixedTax>
                 <fixedTax year="2025">296.68</fixedTax>
                 <fixedTax year="2030">337.55</fixedTax>
-                <fixedTax year="2035">497.24</fixedTax>
-                <fixedTax year="2040">567.76</fixedTax>
-                <fixedTax year="2045">648.35</fixedTax>
-                <fixedTax fillout="1" year="2050">728.29</fixedTax>
+                <fixedTax year="2035">393.042</fixedTax>
+                <fixedTax year="2040">435.012</fixedTax>
+                <fixedTax year="2045">504.813</fixedTax>
+                <fixedTax fillout="1" year="2050">559.435</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Norway">
             <ghgpolicy name="CO2">
                 <market>European Free Trade Association</market>
-                <fixedTax year="2020">55.3</fixedTax>
+                <fixedTax year="2020">75</fixedTax>
                 <fixedTax year="2025">296.68</fixedTax>
                 <fixedTax year="2030">337.55</fixedTax>
-                <fixedTax year="2035">497.24</fixedTax>
-                <fixedTax year="2040">567.76</fixedTax>
-                <fixedTax year="2045">648.35</fixedTax>
-                <fixedTax fillout="1" year="2050">728.29</fixedTax>
+                <fixedTax year="2035">393.042</fixedTax>
+                <fixedTax year="2040">435.012</fixedTax>
+                <fixedTax year="2045">504.813</fixedTax>
+                <fixedTax fillout="1" year="2050">559.435</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Switzerland">
             <ghgpolicy name="CO2">
                 <market>European Free Trade Association</market>
-                <fixedTax year="2020">55.3</fixedTax>
+                <fixedTax year="2020">75</fixedTax>
                 <fixedTax year="2025">296.68</fixedTax>
                 <fixedTax year="2030">337.55</fixedTax>
-                <fixedTax year="2035">497.24</fixedTax>
-                <fixedTax year="2040">567.76</fixedTax>
-                <fixedTax year="2045">648.35</fixedTax>
-                <fixedTax fillout="1" year="2050">728.29</fixedTax>
+                <fixedTax year="2035">393.042</fixedTax>
+                <fixedTax year="2040">435.012</fixedTax>
+                <fixedTax year="2045">504.813</fixedTax>
+                <fixedTax fillout="1" year="2050">559.435</fixedTax>
             </ghgpolicy>
         </region>
         <region name="UK">
             <ghgpolicy name="CO2">
                 <market>European Free Trade Association</market>
-                <fixedTax year="2020">55.3</fixedTax>
+                <fixedTax year="2020">75</fixedTax>
                 <fixedTax year="2025">296.68</fixedTax>
                 <fixedTax year="2030">337.55</fixedTax>
-                <fixedTax year="2035">497.24</fixedTax>
-                <fixedTax year="2040">567.76</fixedTax>
-                <fixedTax year="2045">648.35</fixedTax>
-                <fixedTax fillout="1" year="2050">728.29</fixedTax>
+                <fixedTax year="2035">393.042</fixedTax>
+                <fixedTax year="2040">435.012</fixedTax>
+                <fixedTax year="2045">504.813</fixedTax>
+                <fixedTax fillout="1" year="2050">559.435</fixedTax>
+
             </ghgpolicy>
         </region>
         <region name="Belarus">
