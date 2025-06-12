@@ -165,33 +165,30 @@
         <Value name = "prune_ag">../input/gcamdata/xml_policy/policy_ccap1_eu.xml</Value>
         <Value name = "prune_ag">../input/gcamdata/xml_policy/policy_ccap_eu_ets2.xml</Value>
         <Value name = "prune_ag">../input/gcamdata/xml_policy/policy_ccap_eu_2020.xml</Value>
-        <Value name = "prune_ag">../input/gcamdata/xml_policy/policy_ctax_eu_ETSdummy.xml</Value>
+        <Value name = "prune_ag">../input/gcamdata/xml_policy/policy_ctax_necp_ETSdummy.xml</Value>
 
         <Value name = "prune_ag">../input/gcamdata/xml_policy/policy_4Wfuel_po_eu.xml</Value>
         <Value name = "prune_ag">../input/gcamdata/xml_policy/policy_fuelst_mkt_eu_shwts.xml</Value>
 
-        <Value name = "prune_ag">../input/gcamdata/xml_policy/policy_coalPhaseout_eu_adp.xml</Value>
+        <Value name = "prune_ag">../input/policy/study10manual/policy_coalPhaseout_eu_adp.xml</Value>
         <Value name = "prune_ag">../input/gcamdata/xml_policy/policy_coalcogenPhaseout_eu.xml</Value>
-        <Value name = "prune_ag">../input/gcamdata/xml_policy/policy_coalshut_2020_eums_adp.xml</Value>
+        <Value name = "prune_ag">../input/policy/study10manual//policy_coalshut_2020_eums_adp.xml</Value>
 
-        <Value name = "prune_ag">../input/gcamdata/xml_policy/policy_fueltax_eums_fix2024_adp.xml</Value>
+        <Value name = "prune_ag">../input/policy/study10manual/policy_fueltax_eums_fix2024_adp.xml</Value>
 
-        <Value name = "prune_ag">../input/policy/study10manual/policy_fe_eu_2020-.xml</Value>
-        <Value name = "prune_ag">../input/policy/study10manual/policy_fe_eu_2020calibtax-.xml</Value>
-        <Value name = "prune_ag">../input/gcamdata/xml_policy/policy_fe_eu_2025.xml</Value>
+        <Value name = "prune_ag">../input/gcamdata/xml_policy/policy_fe_eu_necp.xml</Value>
         <Value name = "prune_ag">../input/gcamdata/xml_policy/policy_shell_ff55mixscn.xml</Value>
  
         <!--Value name = "prune_ag">../input/gcamdata/xml_policy/policy_feres_eu.xml</Value-->
-        <Value name = "prune_ag">../input/policy/study10manual/policy_feres_eu_calib2020-.xml</Value>
-        <Value name = "prune_ag">../input/gcamdata/xml_policy/policy_feres_eu_2025.xml</Value>
+        <Value name = "prune_ag">../input/gcamdata/xml_policy/policy_feres_eu_necp.xml</Value>
 
-        <Value name = "prune_ag">../input/gcamdata/xml_policy/ff55_ltt_2050.xml</Value>
+        <Value name = "prune_ag">../input/gcamdata/xml_policy/necp_ltt_2050.xml</Value>
 
 
 
 	</ScenarioComponents>
 	<Strings>
-		<Value name="scenarioName">EU_FF55_LTT</Value>
+		<Value name="scenarioName">EU_NECP_LTT</Value>
 		<Value name="debug-region">USA</Value>
 		<Value name="MAGICC-input-dir">../input/magicc/inputs</Value>
 		<Value name="MAGICC-output-dir">../output</Value>

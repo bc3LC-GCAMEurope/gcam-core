@@ -43,6 +43,18 @@ Relevant for the industrial sector, GCAM-Europe considers an European Single Mar
 These enhancements take advantage of the richer, more detailed data available for European countries, allowing for more accurate and granular modeling of energy consumption patterns and technology adoption in the building sector. The model operates over a run period from 1990 to 2100 in five-year increments, producing projections of future energy supply and demand. These outputs include associated greenhouse gas (GHG) emissions, radiative forcing, and climate impacts for 16 GHGs, aerosols, and short-lived climate forcers and depend on key scenario assumptions related to future population trends, economic development, technological change, and climate mitigation policies.
 
 
+## GCAM-Europe default scenarios
+
+We provide some scenarios for the community. You can find them in the `exe` folder. The scenarios are the following:
+
+| Scenario Name | Configuration File | Description           |
+|---------------|--------------------|------------------------|
+| Reference           | configuration_eur_ref.xml     | Runs until 2100 consistent mainly with the SSP2.  |
+| CLIM-POL           | configuration_eur_CLIMPOL.xml     | Runs until 2100 consistent mainly with the SSP2 while imposing a fossil CO2 constraint for the EU-27 compatible with the NDC and Net-Zero target.|
+| EU_FF55_LTT           | configuration_eur_EU_FF55_LTT.xml     | Runs until 2050 consistent mainly with the SSP2 while imposing the EU-wide FF55 policy measures.  |
+| EU_NECP_LTT           | configuration_eur_EU_NECP_LTT.xml     | Runs until 2050 consistent mainly with the SSP2 while imposing the country-specific NECP policy measures for the EU-27. |
+
+For the three policy scenarios, it is assumed that regions outside EU are also assumed to follow NDC and long term targets. To reproduce the policy files that characterize the FF55 and NECP policy packages, remove the `policy` tag in line 12 of the `constants.R` file. The other configuration files present in the `exe` folder are for the GCAM model and are not up-to-date with GCAM-Europe
 
 ## Useful links
 
