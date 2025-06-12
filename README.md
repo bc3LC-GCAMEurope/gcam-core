@@ -1,69 +1,72 @@
-# Global Change Analysis Model (GCAM)
+# Global Change Analysis Model - Europe (GCAM-Europe)
 
-The Joint Global Change Research Institute (JGCRI) is the home and
-primary development institution for GCAM, an integrated assessment
-tool for exploring consequences and responses to global
-change. Climate change is a global issue that impacts all regions of
-the world and all sectors of the global economy. Thus, any responses
-to the threat of climate change, such as policies or international
-agreements to limit greenhouse gas emissions, can have wide ranging
-consequences throughout the energy system as well as on land use and
-land cover. Integrated assessment models endeavor to represent all
-world regions and all sectors of the economy in an economic framework
-in order to explore interactions between sectors and understand the
-potential ramifications of climate mitigation actions.
+GCAM-Europe is an expansion of the Global Change Analysis Model (GCAM), a well-reputed IAM widely used in global scenario analysis (Calvin et al., 2019). This sophisticated integrated assessment model accounts with technology-rich representations of the economy, energy sector, land use, and water linked to a climate model that can be used to explore climate change mitigation policies including carbon taxes, carbon trading, regulations and accelerated deployment of energy technology. Regional population and labor productivity growth assumptions drive the energy, land-use and water systems employing numerous technology options to produce, transform, and provide energy services, as well as to produce agricultural and forest products and to determine land use and land cover. A full description of the GCAM model can be found in the [online documentation](https://github.com/JGCRI/gcam-core.com).
 
-GCAM has been developed at PNNL for over 20 years and is now a freely
-available community model and documented online (See below). The team
-at JGCRI is comprised of economists, engineers, energy experts, forest
-ecologists, agricultural scientists, and climate system scientists who
-develop the model and apply it to a range of science and policy
-questions and work closely with Earth system and ecosystem modelers to
-integrate the human decision components of GCAM into their analyses.
+GCAM-Europe’s geographical disaggregation is highly detailed for the European continent. GCAM, by default, divides the world in 32 regions, and the European continent is divided in five different regions: EU-12, EU-15, Europe Eastern, Europe-non-EU, and European Free Trade Association (EFTA). In GCAM-Europe, all 39 European countries are disaggregated into individual model regions (Figure 1). Having this level of detail allows exploring the country-level effects of European policy packages or transformational strategies, as well as the potential international effects (e.g., carbon leakage) for a representative set of non-European regions (27) over the world. 
 
-## Model Overview
+<p align="center">
+  <img 
+    src="https://raw.githubusercontent.com/bc3LC-GCAMEurope/gcam-core/GCAM-Europe_K/Readme_fig1.png"
+    title="Regional disaggregation in GCAM-Europe."
+    alt="Regional disaggregation in GCAM-Europe."
+    width="80%" 
+  />
+</p>
 
-GCAM is a dynamic-recursive model with technology-rich representations
-of the economy, energy sector, land use and water linked to a climate
-model that can be used to explore climate change mitigation policies
-including carbon taxes, carbon trading, regulations and accelerated
-deployment of energy technology. Regional population and labor
-productivity growth assumptions drive the energy and land-use systems
-employing numerous technology options to produce, transform, and
-provide energy services as well as to produce agriculture and forest
-products, and to determine land use and land cover. Using a run period
-extending from 1990 – 2100 at 5 year intervals, GCAM has been used to
-explore the potential role of emerging energy supply technologies and
-the greenhouse gas consequences of specific policy measures or energy
-technology adoption including; CO2 capture and storage, bioenergy,
-hydrogen systems, nuclear energy, renewable energy technology, and
-energy use technology in buildings, industry and the transportation
-sectors. GCAM is an Representative Concentration Pathway (RCP)-class
-model. This means it can be used to simulate scenarios, policies, and
-emission targets from various sources including the Intergovernmental
-Panel on Climate Change (IPCC). Output includes projections of future
-energy supply and demand and the resulting greenhouse gas emissions,
-radiative forcing and climate effects of 16 greenhouse gases, aerosols
-and short-lived species at 0.5×0.5 degree resolution, contingent on
-assumptions about future population, economy, technology, and climate
-mitigation policy.
+<p align="center">
+  <em>Figure 1: Regional disaggregation in GCAM-Europe. Yellow-to-red colors represent the regional groups that are explicitly disaggregated for this model. White-to-blue regions represent model regional groups that were part of the original model
+.</em>
+</p>
 
-## Documentation
+## Model main new features
+
+GCAM-Europe replaces the default (international) data sources for all newly defined European countries with Europe-specific data, such as energy statistics from Eurostat, whenever available. If certain countries lack coverage in these European datasets, alternative sources must be used—most commonly reverting to the default GCAM data, such as IEA energy statistics. In terms of sectoral and technological coverage, the model has been expanded across multiple dimensions, with a particular emphasis on building energy demand. This includes the introduction of new demand categories such as hot water, cooking, and various household appliances, as well as the integration of emerging technologies like heat pumps. Behind the overall sectoral representation, there is a further deep-dive in terms of consumer group representation, relying on country-specific data (when available) in residential sectors.
+
+
+Relevant for the industrial sector, GCAM-Europe considers an European Single Market, simulating the facility to trade certain goods between European countries. The electricity grid in GCAM-Europe is modeled as an interconnected system structured around grid regions, load segments, and inter-segment storage (Figure 2). This framework allows for a more realistic representation of electricity flows and flexibility within and between regions. The load segmentation is based on the ENTSO-E “National Trends” scenario (ENTSOE, 2024). This approach captures temporal variation in electricity demand and supply more accurately, while enabling the analysis of storage technologies and their role in balancing the grid across different segments and regions. Each grid region and cluster operates its own electricity market, with prices typically lowest during off-peak demand periods and highest during peak times. Price variations between clusters can incentivize investment in electricity storage, while differences between grid regions may promote cross-regional electricity trade.
+
+
+<p align="center">
+  <img 
+    src="https://raw.githubusercontent.com/bc3LC-GCAMEurope/gcam-core/GCAM-Europe_K/Readme_fig2.png"
+    title="Electricity grid regions in GCAM-Europe."
+    alt="Electricity grid regions in GCAM-Europe."
+    width="80%" 
+  />
+</p>
+
+<p align="center">
+  <em>Figure 2: Electricity grid regions in GCAM-Europe.</em>
+</p>
+
+
+These enhancements take advantage of the richer, more detailed data available for European countries, allowing for more accurate and granular modeling of energy consumption patterns and technology adoption in the building sector. The model operates over a run period from 1990 to 2100 in five-year increments, producing projections of future energy supply and demand. These outputs include associated greenhouse gas (GHG) emissions, radiative forcing, and climate impacts for 16 GHGs, aerosols, and short-lived climate forcers and depend on key scenario assumptions related to future population trends, economic development, technological change, and climate mitigation policies.
+
+
+
+## Useful links
 
 * [GCAM Documentation](http://jgcri.github.io/gcam-doc/)
-* [Getting Started with GCAM](http://jgcri.github.io/gcam-doc/user-guide.html)
+* [Getting Started with GCAM (also holds for GCAM-Europe)](http://jgcri.github.io/gcam-doc/user-guide.html)
 * [GCAM Community](https://gcims.pnnl.gov/community)
-* [GCAM Videos and Tutorial Slides](https://gcims.pnnl.gov/community)
-* [GCAM Citation and Co-authorship Guidelines](http://jgcri.github.io/gcam-doc/community-guide.html)
 
-## Selected Publications
+## How to cite/acknowledge
+
+GCAM-Europe is an open-source, community-driven model. Its development is primarily led by teams at BC3 in collaboration with partner organizations. Efforts are made to ensure that GCAM-Europe remains aligned with the latest GCAM core version. The broader research community is encouraged to use the most recent release of GCAM-Europe and its enhanced capabilities for scientific studies and publications.
+
+
+BC3, 2025. GCAM-Europe (Version 7.2.0). https://github.com/bc3LC-GCAMEurope/gcam-core. Basque Centre for Climate Change. ZENODO badge.
+
+
+
+## References and selected publications
+
+Sampedro, J., Horowitz, R., Rodés-Bachs, C., Van de Ven, DJ. GCAM-Europe v7.2.0: GCAM-Europe: Enhancing Policy-Relevant Climate Modelling Through Spatial and Sectoral Detail. In prep.
+
+Frilingou et al. Comparing cost-optimal scenarios for a decarbonised European energy system. In prep.
 
 Calvin, K., Patel, P., Clarke, L., Asrar, G., Bond-Lamberty, B., Cui, R. Y., Di Vittorio, A., Dorheim, K., Edmonds, J., Hartin, C., Hejazi, M., Horowitz, R., Iyer, G., Kyle, P., Kim, S., Link, R., McJeon, H., Smith, S. J., Snyder, A., Waldhoff, S., and Wise, M.: GCAM v5.1: representing the linkages between energy, water, land, climate, and economic systems, Geosci. Model Dev., 12, 677–698, https://doi.org/10.5194/gmd-12-677-2019, 2019.
 
-Edmonds, J., and J. Reilly (1985)Global Energy: Assessing the Future (Oxford University Press, New York) pp.317.
 
-Edmonds, J., M. Wise, H. Pitcher, R. Richels, T. Wigley, and C. MacCracken. (1997) “An Integrated Assessment of Climate Change and the Accelerated Introduction of Advanced Energy Technologies”, Mitigation and Adaptation Strategies for Global Change, 1, pp. 311-39
+ENTSO-E, & ENTSOG. (2024). TYNDP 2024 Scenarios Report – Main documents: Final TYNDP 2024 Scenarios Report. https://www.entsos-tyndp2024-scenarios.eu
 
-Kim, S.H., J. Edmonds, J. Lurz, S. J. Smith, and M. Wise (2006) “The ObjECTS Framework for Integrated Assessment: Hybrid Modeling of Transportation ” Energy Journal (Special Issue #2) pp 51-80.
-
-[Full list of GCAM publications](http://jgcri.github.io/gcam-doc/references.html)
