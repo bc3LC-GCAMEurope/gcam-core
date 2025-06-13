@@ -67,7 +67,8 @@ For the three policy scenarios, it is assumed that regions outside EU are also a
 GCAM-Europe is an open-source, community-driven model. Its development is primarily led by teams at BC3 in collaboration with partner organizations. Efforts are made to ensure that GCAM-Europe remains aligned with the latest GCAM core version. The broader research community is encouraged to use the most recent release of GCAM-Europe and its enhanced capabilities for scientific studies and publications.
 
 
-BC3, 2025. GCAM-Europe (Version 7.2.0). https://github.com/bc3LC-GCAMEurope/gcam-core. Basque Centre for Climate Change. ZENODO badge.
+BC3, 2025. GCAM-Europe (Version 7.2.0). https://github.com/bc3LC-GCAMEurope/gcam-core. Basque Centre for Climate Change. https://doi.org/10.5281/zenodo.15655567
+.
 
 
 
