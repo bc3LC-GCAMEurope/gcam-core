@@ -94,7 +94,7 @@
 			 	 	 $scenario_date := $scenario_split[last()],
 			 	 	 $currTree := collection($collection)/scenario[@name = $scenario_name and @date = $scenario_date]/world/*[@type = 'region' and @name=$region]
 			 	 	 return (: get renewables from electricity :)
-			 	 	 local:get-primary-renewable($currTree/*[@type='sector' (: collapse :) and (@name='electricity' or @name='elect_td_bld' or starts-with(@name,'elec_'))]//keyword[fn:exists(@primary-renewable)]/preceding-sibling::output-primary/physical-output, local:get-weighted-eff($currTree/*[@type='sector' (: collapse :) and (@name='electricity' or starts-with(@name, 'elec_'))]//keyword[fn:exists(@average-fossil-efficiency)]/preceding-sibling::output-primary)) 
+			 	 	 local:get-primary-renewable($currTree/*[@type='sector' (: collapse :) and (@name='electricity' or @name='elect_td_bld' or @name='base load generation' or @name='intermediate generation' or @name='subpeak generation' or @name='peak generation' or starts-with(@name,'elec_'))]//keyword[fn:exists(@primary-renewable)]/preceding-sibling::output-primary/physical-output, local:get-weighted-eff($currTree/*[@type='sector' (: collapse :) and (@name='electricity' or @name='base load generation' or @name='intermediate generation' or @name='subpeak generation' or @name='peak generation' or starts-with(@name, 'elec_'))]//keyword[fn:exists(@average-fossil-efficiency)]/preceding-sibling::output-primary)) 
 					 		 	| (: get renewables from H2ProdCS :)
 					 	 	 	local:get-primary-renewable($currTree/supplysector[@name='H2 central production'](: /*[@type='subsector' (: collapse :) and fn:not(@name='electrolysis')] :)//keyword[fn:exists(@primary-renewable)]/preceding-sibling::output-primary/physical-output, local:get-weighted-eff($currTree/supplysector[@name='H2 central production']//keyword[fn:exists(@average-fossil-efficiency)]/preceding-sibling::output-primary)) 
 					 	 	 	| (: get renewables from H2ProdDist :)
@@ -124,6 +124,7 @@
                         <rewrite from="solar-elect" to="h solar"/>
                         <rewrite from="woodpulp_energy" to="d biomass"/>
                         <rewrite from="elect_td_ind" to=""/>
+                        <rewrite from="elect_td_en" to=""/>
                         <rewrite from="traded EUR pipeline gas" to="b natural gas"/>
                         <rewrite from="total biomass" to="d biomass"/>
                         <rewrite from="traded oil" to="a oil"/>
@@ -141,6 +142,7 @@
                         <rewrite from="traded Afr_MidE pipeline gas" to="b natural gas"/>
                         <rewrite from="natural gas" to="b natural gas"/>
                         <rewrite from="wholesale gas" to=""/>
+                        <rewrite from="gas pipeline" to=""/>
                         <rewrite from="hydro-elect" to="f hydro"/>
                         <rewrite from="traded natural gas" to="b natural gas"/>
                         <rewrite from="regional biomass" to="d biomass"/>
@@ -197,11 +199,13 @@
 			 	 	 $scenario_date := $scenario_split[last()],
 			 	 	 $currTree := collection($collection)/scenario[@name = $scenario_name and @date = $scenario_date]/world/*[@type = 'region' and @name=$region]
 			 	 	 return (: get renewables from electricity :)
-					 	 	 	local:get-primary-renewable($currTree/*[@type='sector' (: collapse :) and (@name='electricity' or @name='elect_td_bld' or starts-with(@name,'elec_'))]//keyword[fn:exists(@primary-renewable)]/preceding-sibling::output-primary/physical-output)
+					 	 	 	local:get-primary-renewable($currTree/*[@type='sector' (: collapse :) and (@name='electricity' or @name='elect_td_bld' or @name='base load generation' or @name='intermediate generation' or @name='subpeak generation' or @name='peak generation' or starts-with(@name,'elec_'))]//keyword[fn:exists(@primary-renewable)]/preceding-sibling::output-primary/physical-output)
 					 		 	| (: get renewables from H2ProdCS :)
 					 	 	 	local:get-primary-renewable($currTree/supplysector[@name='H2 central production'](: /*[@type='subsector' (: collapse :) and fn:not(@name='electrolysis')] :)//keyword[fn:exists(@primary-renewable)]/preceding-sibling::output-primary/physical-output)
 					 	 	 	| (: get renewables from H2ProdDist :)
 					 	 	 	local:get-primary-renewable($currTree/supplysector[@name='H2 forecourt production'](: /*[@type='subsector' (: collapse :) and fn:not(@name='electrolysis')] :)//keyword[fn:exists(@primary-renewable)]/preceding-sibling::output-primary/physical-output)
+					 	 	 	| (: get renewables from building energy use :)
+					 	 	 	local:get-primary-renewable($currTree/*[@type='sector' (: collapse :) and (@name='comm heating EUR' or starts-with(@name,'resid heating modern EUR_') or starts-with(@name,'resid hot water modern EUR_'))]//keyword[fn:exists(@primary-renewable)]/preceding-sibling::output-primary/physical-output)
 					 	 	 	| (: get the primaries :)
 	 	 						$currTree//keyword[fn:exists(@primary-consumption)]/preceding-sibling::*[@type='input']/demand-physical/text()
                                 | (: get traditional biomass :)
@@ -228,6 +232,7 @@
                         <rewrite from="woodpulp_energy" to="d biomass"/>
                         <rewrite from="seawater" to=""/>
                         <rewrite from="elect_td_ind" to=""/>
+                        <rewrite from="elect_td_en" to=""/>
                         <rewrite from="traded EUR pipeline gas" to="b natural gas"/>
                         <rewrite from="water_td_pri_W" to=""/>
                         <rewrite from="total biomass" to="d biomass"/>
@@ -247,6 +252,7 @@
                         <rewrite from="traded Afr_MidE pipeline gas" to="b natural gas"/>
                         <rewrite from="natural gas" to="b natural gas"/>
                         <rewrite from="wholesale gas" to=""/>
+                        <rewrite from="gas pipeline" to=""/>
                         <rewrite from="traded natural gas" to="b natural gas"/>
                         <rewrite from="hydro-elect" to="f hydro"/>
                         <rewrite from="regional biomass" to="d biomass"/>
