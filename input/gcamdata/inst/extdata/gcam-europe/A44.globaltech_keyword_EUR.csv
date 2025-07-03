@@ -1,0 +1,16 @@
+# File: A44.globaltech_keyword_EUR.csv
+# Title: Building technology keywords
+# Units: Unitless
+# Column types: cccci 
+# ----------
+supplysector,subsector,technology,primary.renewable,average.fossil.efficiency
+resid heating modern EUR_d1,water heat pump,solar thermal,solar-thermal,
+resid heating modern EUR_d2,water heat pump,solar thermal,solar-thermal,
+resid heating modern EUR_d3,water heat pump,solar thermal,solar-thermal,
+resid heating modern EUR_d4,water heat pump,solar thermal,solar-thermal,
+resid heating modern EUR_d5,water heat pump,solar thermal,solar-thermal,
+resid heating modern EUR_d6,water heat pump,solar thermal,solar-thermal,
+resid heating modern EUR_d7,water heat pump,solar thermal,solar-thermal,
+resid heating modern EUR_d8,water heat pump,solar thermal,solar-thermal,
+resid heating modern EUR_d9,water heat pump,solar thermal,solar-thermal,
+resid heating modern EUR_d10,water heat pump,solar thermal,solar-thermal,

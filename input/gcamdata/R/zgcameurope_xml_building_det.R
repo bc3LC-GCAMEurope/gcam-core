@@ -37,6 +37,7 @@ module_gcameurope_building_det_xml <- function(command, ...) {
                      "L244.StubTechCalInput_bld_EUR",
                      "L244.StubTechIntGainOutputRatio_EUR",
                      "L244.GlobalTechShrwt_bld_EUR",
+                     "L244.PrimaryRenewKeyword_bld_EUR",
                      "L244.GlobalTechCost_bld_EUR",
                      "L244.GlobalTechTrackCapital_bld_EUR",
                      "L244.GlobalTechShrwt_bld",
@@ -111,6 +112,7 @@ module_gcameurope_building_det_xml <- function(command, ...) {
       add_xml_data(L244.StubTechCalInput_bld_EUR, "StubTechCalInput") %>%
       add_xml_data(L244.StubTechIntGainOutputRatio_EUR, "StubTechIntGainOutputRatio") %>%
       add_xml_data(L244.GlobalTechShrwt_bld_EUR, "GlobalTechShrwt") %>%
+      add_xml_data(L244.PrimaryRenewKeyword_bld_EUR, "PrimaryRenewKeyword") %>%
       add_node_equiv_xml("input") %>%
       add_xml_data(L244.GlobalTechTrackCapital_bld_EUR, "GlobalTechTrackCapital") %>%
       add_xml_data(L244.GlobalTechCost_bld_EUR, "GlobalTechCost") %>%
@@ -124,7 +126,7 @@ module_gcameurope_building_det_xml <- function(command, ...) {
                      "L244.DemandFunction_flsp_EUR", "L244.DemandFunction_serv_EUR",
                      "L244.Floorspace_EUR", "L244.SubregionalShares_EUR", "L244.SubsectorLogit_bld_EUR",
                      "L244.FuelPrefElast_bld_EUR", "L244.StubTech_bld_EUR", "L244.StubTechEff_bld_EUR",
-                     "L244.StubTechCalInput_bld_EUR", "L244.StubTechIntGainOutputRatio_EUR", "L244.GlobalTechShrwt_bld_EUR",
+                     "L244.StubTechCalInput_bld_EUR", "L244.StubTechIntGainOutputRatio_EUR", "L244.GlobalTechShrwt_bld_EUR", "L244.PrimaryRenewKeyword_bld_EUR",
                      "L244.GlobalTechCost_bld_EUR", "L244.DeleteThermalService_EUR", "L244.DeleteGenericService_EUR",
                      "L244.PriceExp_IntGains_EUR","L244.GenericServiceImpedance_EUR","L244.ThermalServiceImpedance_EUR",
                      "L244.GenericServiceAdder_EUR","L244.ThermalServiceAdder_EUR",

@@ -14,7 +14,7 @@
 #'\code{L244.ThermalServiceSatiation_EUR}, \code{L244.GenericServiceSatiation_EUR}, \code{L244.Intgains_scalar_EUR}, \code{L244.ShellConductance_bld_EUR},
 #' \code{L244.Supplysector_bld_EUR}, \code{L244.FinalEnergyKeyword_bld_EUR}, \code{L244.SubsectorShrwt_bld_EUR}, \code{L244.SubsectorShrwtFllt_bld_EUR}, \code{L244.SubsectorInterp_bld_EUR},
 #' \code{L244.SubsectorInterpTo_bld_EUR}, \code{L244.SubsectorLogit_bld_EUR}, \code{L244.FuelPrefElast_bld_EUR}, \code{L244.StubTech_bld_EUR}, \code{L244.StubTechEff_bld_EUR},
-#' \code{L244.StubTechCalInput_bld_EUR}, \code{L244.StubTechIntGainOutputRatio_EUR}, \code{L244.GlobalTechShrwt_bld_EUR}, \code{L244.GlobalTechCost_bld_EUR}, \code{L244.GlobalTechSCurve_bld_EUR},
+#' \code{L244.StubTechCalInput_bld_EUR}, \code{L244.StubTechIntGainOutputRatio_EUR}, \code{L244.GlobalTechShrwt_bld_EUR}, \code{L244.PrimaryRenewKeyword_bld_EUR}, \code{L244.GlobalTechCost_bld_EUR}, \code{L244.GlobalTechSCurve_bld_EUR},
 #' \code{L244.DeleteGenericService_EUR}, \code{L244.DeleteThermalService_EUR} and \code{L244.GompFnParam_EUR}, \code{L244.Satiation_impedance_EUR},
 #' \code{L244.GenericServiceImpedance_EUR}, \code{L244.GenericServiceAdder_EUR}, \code{L244.ThermalServiceImpedance_EUR}, \code{L244.ThermalServiceAdder_EUR}
 #' \code{L244.GenericTradFuelParams_EUR}, \code{L244.ThermalTradFuelParams_EUR}, \code{L244.GenericServiceCoef_EUR},\code{L244.ThermalServiceCoef_EUR},
@@ -32,6 +32,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
   MODULE_INPUTS <- c(
              FILE = "common/GCAM_region_names",
              FILE = "gcam-europe/calibrated_techs_bld_det_EUR",
+             FILE = "gcam-europe/A44.globaltech_keyword_EUR",
              FILE = "gcam-europe/A44.globaltech_retirement_EUR",
              FILE = "gcam-europe/A44.cost_efficiency_EUR",
              FILE = "energy/A_regions",
@@ -95,6 +96,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              "L244.StubTechCalInput_bld_EUR",
              "L244.StubTechIntGainOutputRatio_EUR",
              "L244.GlobalTechShrwt_bld_EUR",
+             "L244.PrimaryRenewKeyword_bld_EUR",
              "L244.GlobalTechCost_bld_EUR",
              "L244.GlobalTechTrackCapital_bld_EUR",
              "L244.GlobalTechSCurve_bld_EUR",
@@ -920,6 +922,18 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     # L244.StubTech_bld_EUR: Identification of stub technologies for buildings
     L244.StubTech_bld_EUR <- L244.Tech_bld %>%
       rename(stub.technology = technology)
+
+    # L244.PrimaryRenewKeyword_bld_EUR: Keywords of building renewable generation technologies
+    A44.globaltech_keyword_EUR %>%
+      repeat_add_columns(tibble(year = c(MODEL_BASE_YEARS, MODEL_FUTURE_YEARS))) %>%
+      rename(sector.name = supplysector, subsector.name = subsector) ->
+      L224.AllKeyword_h2
+
+    L224.AllKeyword_h2 %>%
+      filter(!is.na(primary.renewable)) %>%
+      select(LEVEL2_DATA_NAMES[["GlobalTechYr"]], "primary.renewable") ->
+      L244.PrimaryRenewKeyword_bld_EUR
+
 
     # L244.StubTechCalInput_bld_EUR: Calibrated energy consumption by buildings technologies
     L244.StubTechCalInput_bld_pre <- L144.in_EJ_R_bld_serv_tech_F_Yh_EUR %>%
@@ -2452,6 +2466,15 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_legacy_name("L244.GlobalTechShrwt_bld_EUR") %>%
       add_precursors("gcam-europe/A44.globaltech_shrwt_EUR") ->
       L244.GlobalTechShrwt_bld_EUR
+
+    L244.PrimaryRenewKeyword_bld_EUR %>%
+      add_title("Keywords of building renewable electric technologies") %>%
+      add_units("NA") %>%
+      add_comments("Identify Keywords of building renewable electric technologies for all model years") %>%
+      add_comments("can be multiple lines") %>%
+      add_legacy_name("L244.PrimaryRenewKeyword_bld_EUR") %>%
+      add_precursors("energy/A44.globaltech_keyword_EUR") ->
+      L244.PrimaryRenewKeyword_bld_EUR
 
     L244.GlobalTechCost_bld_EUR %>%
       add_title("Non-fuel costs of global building technologies") %>%
