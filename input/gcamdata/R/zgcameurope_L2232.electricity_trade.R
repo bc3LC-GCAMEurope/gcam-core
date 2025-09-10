@@ -415,7 +415,7 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
     # L2232.StubTechElecMarket_backup_EUR: electric sector name for states
     # Reset the electric sector market to the grid regions (for backup calculations)
     L223.GlobalIntTechBackup_elec %>%
-      distinct(supplysector = sector.name, subsector = subsector.name, stub.technology = technology) %>%
+      distinct(supplysector = sector.name, subsector = subsector.name, stub.technology = backup.intermittent.technology) %>%
       repeat_add_columns(select(grid_regions, region)) %>%
       repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
       left_join_error_no_match(select(grid_regions, electric.sector.market = grid_region, region),

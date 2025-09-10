@@ -31,6 +31,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
                      "L2233.GlobalIntTechEff_elec_cool",
                      "L2233.GlobalIntTechCoef_elec_cool",
                      "L2234.GlobalIntTechBackup_elecS_EUR",
+                     "L2234.GlobalIntTechValueFactor_elecS_EUR",
                      "L2234.GlobalIntTechCapital_elecS_EUR",
                      "L2234.GlobalIntTechEff_elecS_EUR",
                      "L2234.GlobalIntTechLifetime_elecS_EUR",
@@ -73,6 +74,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
                       "L2235.GlobalTechLifetime_elecS_cool_EUR",
                       "L2235.AvgFossilEffKeyword_elecS_cool_EUR",
                       "L2235.GlobalIntTechBackup_elecS_cool_EUR",
+                      "L2235.GlobalIntTechValueFactor_elecS_cool_EUR",
                       "L2235.GlobalIntTechCapital_elecS_cool_EUR",
                       "L2235.GlobalIntTechEff_elecS_cool_EUR",
                       "L2235.GlobalIntTechLifetime_elecS_cool_EUR",
@@ -609,6 +611,13 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       add_comments("Electricity Load Segments Intermittent Technology Backup Characteristics") %>%
       add_precursors("L2234.GlobalIntTechBackup_elecS_EUR") ->
       L2235.GlobalIntTechBackup_elecS_cool_EUR
+
+    L2235.GlobalIntTechValueFactor_elecS_cool_EUR %>%
+      add_title("New Electricity Load Segments Intermittent Technology Backup Characteristics") %>%
+      add_units("none") %>%
+      add_comments("Electricity Load Segments Intermittent Technology Backup Characteristics based on pcloe in GCAM-v7.3") %>%
+      add_precursors("L2234.GlobalIntTechValueFactor_elecS_EUR") ->
+      L2235.GlobalIntTechValueFactor_elecS_cool_EUR
 
     L2235.GlobalIntTechCapital_elecS_cool_EUR %>%
       add_title("Electricity Load Segments Intermittent Technology Capital Costs") %>%

@@ -25,7 +25,8 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
                           "L223.GlobalTechLifetime_elec", "L223.GlobalIntTechLifetime_elec",
                           "L223.GlobalTechSCurve_elec", "L223.GlobalTechProfitShutdown_elec",
                           "L223.GlobalTechCapture_elec",
-                          "L223.GlobalIntTechBackup_elec")
+                          "L223.GlobalIntTechBackup_elec",
+                          "L223.GlobalIntTechValueFactor_elec")
   MODULE_INPUTS <- c(FILE = "gcam-europe/mappings/grid_regions",
                      FILE = "common/GCAM_region_names",
                      FILE = "energy/A23.sector",
@@ -79,6 +80,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
                       "L2234.GlobalIntTechSCurve_elecS_EUR",
                       "L2234.GlobalTechCapture_elecS_EUR",
                       "L2234.GlobalIntTechBackup_elecS_EUR",
+                      "L2234.GlobalIntTechValueFactor_elecS_EUR",
                       "L2234.PassThroughSector_elecS_EUR",
                       "L2234.PassThroughTech_elecS_grid_EUR",
                       "L2234.StubTechEff_elecS_EUR",
@@ -116,6 +118,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       }
     }
 
+
     # 0. functions -------------------
     # Want to expand electricity supplysector to all segments, except for any present for same subsector/tech
     expand_globaldb <- function(df){
@@ -125,6 +128,9 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       } else if ("intermittent.technology" %in% names(df)){
         expand_to_segments(df, sector = "sector.name", group_by_cols = c("subsector.name", "intermittent.technology"), segments = L2234.load_segments) %>%
           tech_name_expansion(sector = "sector.name", tech = "intermittent.technology", mapping = A23.elecS_naming)
+      } else if ("backup.intermittent.technology" %in% names(df)){
+        expand_to_segments(df, sector = "sector.name", group_by_cols = c("subsector.name", "backup.intermittent.technology"), segments = L2234.load_segments) %>%
+          tech_name_expansion(sector = "sector.name", tech = "backup.intermittent.technology", mapping = A23.elecS_naming)
       } else {  warning("No technology column found") }
     }
 
