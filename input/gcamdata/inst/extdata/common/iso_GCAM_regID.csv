@@ -70,7 +70,9 @@ abw,Aruba,Latin America,9
 aia,Anguilla,Latin America,9
 ant,Netherlands Antilles,Latin America,9
 atg,Antigua & Barbuda,Latin America,9
+bes,"Bonaire, Sint Eustatius and Saba",Latin America,9
 bhs,Bahamas,Latin America,9
+blm,Saint Barthelemy,Latin America,9
 blz,Belize,Latin America,9
 bmu,Bermuda,Western Europe,9
 brb,Barbados,Latin America,9
@@ -88,6 +90,7 @@ hti,Haiti,Latin America,9
 jam,Jamaica,Latin America,9
 kna,Saint Kitts and Nevis,Latin America,9
 lca,Saint Lucia,Latin America,9
+maf,Saint Martin,Latin America,9
 msr,Montserrat,Latin America,9
 mtq,Martinique,Western Europe,9
 nic,Nicaragua,Latin America,9
@@ -231,6 +234,7 @@ mkd,"Macedonia, the former Yugoslav Republic of",Eastern Europe,59
 mda,"Moldova, Republic of",Former Soviet Union,60
 nor,Norway,Western Europe,61
 sjm,Svalbard and Jan Mayen Islands,Western Europe,61
+xkx,Kosovo,Eastern Europe,62
 mne,Montenegro,Eastern Europe,62
 srb,Serbia,Eastern Europe,62
 scg,Serbia and Montenegro,Eastern Europe,62

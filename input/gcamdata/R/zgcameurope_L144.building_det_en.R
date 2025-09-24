@@ -1481,7 +1481,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       ungroup() %>%
       rename(price = value) %>%
       # select historical years
-      filter(year <= max(MODEL_BASE_YEARS)) %>%
+      filter(year <= MODEL_FINAL_BASE_YEAR) %>%
       # filter EUR regions and add manually Iceland & Turkey for missing markets
       filter_regions_europe() %>%
       complete(nesting(region, GCAM_region_ID), market = unique(L144.base_service_EJ_serv_EUR$service),

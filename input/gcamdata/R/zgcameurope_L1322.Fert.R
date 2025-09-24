@@ -27,11 +27,11 @@ module_gcameurope_L1322.Fert <- function(command, ...) {
       FILE = "energy/IEA_Fert_fuel_data",
       "L142.ag_Fert_Prod_MtN_ctry_Y",
       FILE = "energy/H2A_Prod_Tech",
-      FILE = "energy/A10.rsrc_info",
       FILE = "energy/A21.globaltech_cost",
       FILE = "energy/A22.globaltech_cost",
       "L1321.in_EJ_R_indenergy_F_Yh_EUR",
-      "L132.in_EJ_R_indfeed_F_Yh_EUR"  )
+      "L132.in_EJ_R_indfeed_F_Yh_EUR",
+      "L210.rsrc_info")
 
   MODULE_OUTPUTS <-
     c("L1322.Fert_Prod_MtNH3_R_F_Y_EUR",
@@ -272,7 +272,7 @@ module_gcameurope_L1322.Fert <- function(command, ...) {
 
 
     # The processing steps below ensure that the base year for fertilizer prices is included
-    A10.rsrc_info %>%
+    L210.rsrc_info %>%
       filter(resource == "natural gas") %>%
       gather_years() %>%
       select(resource, year, value) %>%
@@ -280,8 +280,8 @@ module_gcameurope_L1322.Fert <- function(command, ...) {
       mutate(value = approx_fun(year, value)) %>%
       filter(year == aglu.FERT_PRICE_YEAR) %>%
       mutate(value = replace_na(value, 0)) %>%
-      pull(value) -> # Save cost as single number. Units are 1975 USD per GJ.
-      A10.rsrc_cost_aglu.FERT_PRICE_YEAR
+      pull(value) ->
+      A10.rsrc_cost_aglu.FERT_PRICE_YEAR # Save cost as single unique number. Units are 1975 USD per GJ.
 
 
     # A21.globaltech_cost and A22.globaltech_cost report costs on primary energy handling (A21) and transformation technologies (A22)
@@ -441,7 +441,7 @@ module_gcameurope_L1322.Fert <- function(command, ...) {
       add_comments("Gas with CCS, coal, and coal with CCS were calculated using H2A characteristics of hydrogen production technologies") %>%
       add_comments("Oil was set to generally balance the total net costs with natural gas steam reforming.") %>%
       add_legacy_name("L1322.Fert_NEcost_75USDkgNH3_F_EUR") %>%
-      add_precursors("energy/H2A_Prod_Tech","energy/A10.rsrc_info",
+      add_precursors("energy/H2A_Prod_Tech",
                      "energy/A21.globaltech_cost", "energy/A22.globaltech_cost") ->
       L1322.Fert_NEcost_75USDkgNH3_F_EUR
 

@@ -105,7 +105,7 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
     L2232.SubsectorShrwtInterp_elecS_grid_vertical_EUR <- L2232.SubsectorShrwtFllt_elecS_grid_vertical_EUR %>%
       distinct(region, supplysector, subsector) %>%
       mutate(apply.to = "share-weight",
-             from.year = max(MODEL_BASE_YEARS),
+             from.year = MODEL_FINAL_BASE_YEAR,
              to.year = max(MODEL_FUTURE_YEARS),
              interpolation.function = "fixed")
 
@@ -179,7 +179,7 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
     L2232.SubsectorShrwtFllt_EURelec %>%
       select(LEVEL2_DATA_NAMES[["Subsector"]]) %>%
       mutate(apply.to = "share-weight",
-             from.year = max(MODEL_BASE_YEARS),
+             from.year = MODEL_FINAL_BASE_YEAR,
              to.year = max(MODEL_YEARS),
              interpolation.function = "fixed") ->
       L2232.SubsectorInterp_EURelec
@@ -334,7 +334,7 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
     L2232.SubsectorShrwtFllt_elec_EUR_trade %>%
       select(LEVEL2_DATA_NAMES[["Subsector"]]) %>%
       mutate(apply.to = "share-weight",
-             from.year = max(MODEL_BASE_YEARS),
+             from.year = MODEL_FINAL_BASE_YEAR,
              to.year = max(MODEL_YEARS),
              interpolation.function = "fixed") ->
       L2232.SubsectorInterp_elec_EUR_trade
@@ -381,7 +381,7 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
                 by = c("region" = "grid_region", "year")) %>%
       group_by(region) %>%
       # Set future year own use coefficients the same as the base year coefficients
-      mutate(coefficient = replace(coefficient, year %in% MODEL_FUTURE_YEARS, coefficient[year == max(MODEL_BASE_YEARS)])) %>%
+      mutate(coefficient = replace(coefficient, year %in% MODEL_FUTURE_YEARS, coefficient[year == MODEL_FINAL_BASE_YEAR])) %>%
       ungroup %>%
       select(LEVEL2_DATA_NAMES[["TechCoef"]]) ->
       L2232.TechCoef_elecownuse_EUR_trade

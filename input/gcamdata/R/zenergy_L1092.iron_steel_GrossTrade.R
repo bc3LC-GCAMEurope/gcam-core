@@ -70,7 +70,7 @@ module_energy_L1092.iron_steel_GrossTrade <- function(command, ...){
     # Dividing consumption and imports based on 2015 GDP and then dividing exports
     Belg_prod_share_2015 <- 0.77
     Belg_GDP_share_2015 <- L201.GDP_Scen %>%
-      filter(scenario == paste0("g", socioeconomics.BASE_GDP_SCENARIO),
+      filter(scenario == socioeconomics.BASE_GDP_SCENARIO,
              year == MODEL_FINAL_BASE_YEAR,
              region %in% c("Belgium", "Luxembourg")) %>%
       mutate(share = GDP/sum(GDP)) %>%

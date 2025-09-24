@@ -369,7 +369,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
       rename(total = value.x,
              value = value.y) %>%
       mutate(share = value / total) %>%
-      filter(year == max(MODEL_BASE_YEARS)) %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
       mutate(fuelprefElasticity = 0) ->
       L232.indenergy_fuel_shares
 
@@ -430,7 +430,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
     # filters base years from original and then appends future years
     L232.globaltech_retirement_base %>%
       mutate(year = as.integer(year)) %>%
-      filter(year == max(MODEL_BASE_YEARS)) %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
       bind_rows(L232.globaltech_retirement_future) ->
       L232.globaltech_retirement
 
@@ -455,7 +455,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
       # Combine GCAM 3.0 with the SSPs, and subset only the relevant years
       mutate(scenario = 'GCAM3') %>%
       bind_rows(L102.pcgdp_thous90USD_Scen_R_Y) %>%
-      filter(year %in% c(max(MODEL_BASE_YEARS), MODEL_FUTURE_YEARS)) %>%
+      filter(year %in% c(MODEL_FINAL_BASE_YEAR, MODEL_FUTURE_YEARS)) %>%
       # Per-capita GDP ratios, which are used in the equation for demand growth
       group_by(GCAM_region_ID, scenario) %>%
       mutate(temp_lag = lag(value, 1),
@@ -471,7 +471,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
       select(GCAM_region_ID, scenario) %>%
       distinct %>%
       left_join_error_no_match(GCAM_region_names, by = 'GCAM_region_ID') %>%
-      mutate(year = max(MODEL_BASE_YEARS)) %>%
+      mutate(year = MODEL_FINAL_BASE_YEAR) %>%
       left_join_error_no_match(L232.BaseService_ind_EUR, by = c("year", "region")) %>%
       left_join_error_no_match(L101.Pop_thous_GCAM3_R_Y, by = c("year", "GCAM_region_ID")) %>%
       mutate(value = base.service * CONV_BIL_THOUS / value) %>%
@@ -481,7 +481,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
     # At each time, the output is equal to the prior period's output times the GDP ratio, raised to the elasticity
     # that corresponds to the output that was observed in the prior time period. This method prevents (ideally) runaway
     # industrial production.
-    elast_years <- c(max(MODEL_BASE_YEARS), MODEL_FUTURE_YEARS)
+    elast_years <- c(MODEL_FINAL_BASE_YEAR, MODEL_FUTURE_YEARS)
     for(i in seq_along(elast_years)[-1]) {
       L232.Output_ind %>%
         filter(year == elast_years[i - 1]) %>%

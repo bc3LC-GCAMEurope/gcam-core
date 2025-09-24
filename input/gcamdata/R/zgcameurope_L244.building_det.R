@@ -393,7 +393,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     L144.Satiation_impedance_pre<-L244.Satiation_flsp_EUR %>%
       left_join_error_no_match(A_regions %>% select(GCAM_region_ID,region),by="region") %>%
-      mutate(year = max(MODEL_BASE_YEARS)) %>%
+      mutate(year = MODEL_FINAL_BASE_YEAR) %>%
       # Add base floorspace
       left_join_error_no_match(L244.Floorspace_EUR,by=c("region","gcam.consumer","nodeInput","building.node.input","year")) %>%
       rename(flsp_bm2 = base.building.size) %>%
@@ -461,7 +461,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     L244.SatiationAdder_EUR<- L244.Satiation_flsp_EUR %>%
       mutate(satiation.level = satiation.level * 1E6) %>%
       left_join_error_no_match(L244.Satiation_impedance_EUR,by = c("region", "gcam.consumer", "nodeInput", "building.node.input")) %>%
-      mutate(year = max(MODEL_BASE_YEARS)) %>%
+      mutate(year = MODEL_FINAL_BASE_YEAR) %>%
       left_join_error_no_match(A_regions %>% select(GCAM_region_ID,region),by = "region") %>%
       left_join_error_no_match(L244.Floorspace_EUR,by=c("region","year","gcam.consumer", "nodeInput", "building.node.input")) %>%
       rename(observed_flsp_bm2 = base.building.size) %>%
@@ -684,7 +684,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     L244.flsp_bm2_R <- bind_rows(L144.flsp_bm2_R_res_Yh_EUR, L144.flsp_bm2_R_comm_Yh_EUR) %>%
       # Again, used to be energy.SATIATION_YEAR, changed to pass timeshift test
-      filter(year == max(MODEL_BASE_YEARS)) %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
       select(-year)
 
     L244.ServiceSatiation_DEU <- L244.ServiceSatiation_DEU_pre %>%
@@ -713,7 +713,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
                                  mutate(gcam.consumer= if_else(grepl("resid",nodeInput),"resid EUR","comm EUR"))
                                , by = c(LEVEL2_DATA_NAMES[["BldNodes"]], "year")) %>%
       mutate(service.per.flsp = base.service / base.building.size) %>%
-      filter(year == max(MODEL_BASE_YEARS)) %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
       select(LEVEL2_DATA_NAMES[["BldNodes"]], building.service.input, service.per.flsp)
 
     L244.GenericServiceSatiation2 <- L244.GenericServiceSatiation_EUR %>%
@@ -768,7 +768,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     DEU.serv.perFlsp.coal<-max(L244.tmp_pre_deu$service.per.flsp)
 
     L244.tmp<-L244.tmp_pre %>%
-      filter(year == max(MODEL_BASE_YEARS)) %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
       select(-base.service, - base.building.size, -year) %>%
       mutate(service.per.flsp = if_else(region == gcam.DEU_REGION & thermal.building.service.input == "resid heating coal EUR",DEU.serv.perFlsp.coal,service.per.flsp))
 
@@ -1013,14 +1013,14 @@ module_gcameurope_L244.building_det <- function(command, ...) {
                                     supplysector))
 
     L244.GlobalTechSCurve_bld_EUR <- L244.GlobalTechCost_bld_EUR %>%
-      filter(year %in% c(max(MODEL_BASE_YEARS), MODEL_FUTURE_YEARS),
+      filter(year %in% c(MODEL_FINAL_BASE_YEAR, MODEL_FUTURE_YEARS),
              sector.name %in% L244.globaltech_retirement_EUR$supplysector) %>%
       # Add lifetimes and steepness
       left_join_strict(L244.globaltech_retirement_EUR, by = c("sector.name" = "supplysector",
                                                                       "subsector.name" = "subsector",
                                                                       "technology")) %>%
       # Set steepness/halflife values to stock for base years, new for future years
-      mutate(steepness = if_else(year == max(MODEL_BASE_YEARS), steepness_stock, steepness_new)) %>%
+      mutate(steepness = if_else(year == MODEL_FINAL_BASE_YEAR, steepness_stock, steepness_new)) %>%
       select(LEVEL2_DATA_NAMES[["GlobalTechSCurve"]])
 
 

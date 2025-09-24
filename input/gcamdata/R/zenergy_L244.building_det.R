@@ -350,7 +350,7 @@ module_energy_L244.building_det <- function(command, ...) {
       rename(gdp_pc = pcGDP_thous90USD) %>%
       left_join_error_no_match(L101.Pop_thous_R_Yh_gr, by=c("GCAM_region_ID","year","gcam.consumer","region")) %>%
       mutate(flsp_pc_est = (`unadjust.satiation` + (-`land.density.param`*log(tot_dens))) * exp(-`b.param`
-                                                                                        * exp(-`income.param` * log(gdp_pc)))) %>%
+                                                                                                * exp(-`income.param` * log(gdp_pc)))) %>%
       mutate(flsp_est = flsp_pc_est * 1E-9 * pop_thous * 1E3) %>%
       # Manually adjust South Africa (error in data)
       mutate(flsp_est = if_else(region == "South Africa" & gcam.consumer == "resid_d1" & year == 1990, 0.024192971, flsp_est),
@@ -1360,7 +1360,7 @@ module_energy_L244.building_det <- function(command, ...) {
 
     # Heating:
     fit_coal_heat <- lm(log_en_EJ_flsp ~ log_pcgdp_thous  + GCAM_region_ID,
-                   data = serv_coal)
+                        data = serv_coal)
 
     b1_coal_heat <- as.numeric(fit_coal_heat$coefficients[1])
     b2_coal_heat <- as.numeric(fit_coal_heat$coefficients[2])
@@ -1368,7 +1368,7 @@ module_energy_L244.building_det <- function(command, ...) {
 
     # Non-thermal services
     fit_coal_oth <- lm(log_en_EJ_flsp ~ log_pcgdp_thous  + GCAM_region_ID,
-                        data = serv_coal_oth)
+                       data = serv_coal_oth)
 
     b1_coal_oth <- as.numeric(fit_coal_oth$coefficients[1])
     b2_coal_oth <- as.numeric(fit_coal_oth$coefficients[2])
@@ -1403,7 +1403,7 @@ module_energy_L244.building_det <- function(command, ...) {
 
     # Heating
     fit_tradBio_heat = lm(log_en_EJ_flsp ~ log_pcgdp_thous + log_sq_pcgdp_thous + GCAM_region_ID,
-                     data = serv_tradBio_heat)
+                          data = serv_tradBio_heat)
 
     b1_tradBio_heat <- as.numeric(fit_tradBio_heat$coefficients[1])
     b2_tradBio_heat <- as.numeric(fit_tradBio_heat$coefficients[2])
@@ -1411,7 +1411,7 @@ module_energy_L244.building_det <- function(command, ...) {
 
     # Non-thermal
     fit_tradBio_oth = lm(log_en_EJ_flsp ~ log_pcgdp_thous + log_sq_pcgdp_thous + GCAM_region_ID,
-                          data = serv_tradBio_oth)
+                         data = serv_tradBio_oth)
 
     b1_tradBio_oth <- as.numeric(fit_tradBio_oth$coefficients[1])
     b2_tradBio_oth <- as.numeric(fit_tradBio_oth$coefficients[2])
@@ -2018,14 +2018,14 @@ module_energy_L244.building_det <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["GenericServiceAdder"]])
 
 
-   L244.GenericServiceAdder<-bind_rows(L244.GenericServiceAdder_trad,L244.GenericServiceAdder_modern) %>%
-    # add commercial
-    bind_rows(L244.GenericShares_pre %>%
-                filter(year== MODEL_FINAL_BASE_YEAR) %>%
-                filter(grepl("comm",gcam.consumer)) %>%
-                mutate(bias.adder = 0) %>%
-                select(LEVEL2_DATA_NAMES[["GenericServiceAdder"]])) %>%
-     mutate(bias.adder = round(bias.adder,energy.DIGITS_BIAS_ADDER))
+    L244.GenericServiceAdder<-bind_rows(L244.GenericServiceAdder_trad,L244.GenericServiceAdder_modern) %>%
+      # add commercial
+      bind_rows(L244.GenericShares_pre %>%
+                  filter(year== MODEL_FINAL_BASE_YEAR) %>%
+                  filter(grepl("comm",gcam.consumer)) %>%
+                  mutate(bias.adder = 0) %>%
+                  select(LEVEL2_DATA_NAMES[["GenericServiceAdder"]])) %>%
+      mutate(bias.adder = round(bias.adder,energy.DIGITS_BIAS_ADDER))
 
 
     # 1.5- Generic services per SSP

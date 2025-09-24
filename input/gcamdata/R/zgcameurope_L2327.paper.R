@@ -231,7 +231,7 @@ module_gcameurope_L2327.paper <- function(command, ...) {
       mutate(output.ratio = elec_ratio * coefficient,
              output.ratio = round(output.ratio, energy.DIGITS_EFFICIENCY)) %>%
       # NOTE: holding the output ratio constant over time in future periods
-      left_join_error_no_match(select(filter(., year == max(MODEL_BASE_YEARS)), -coefficient, -elec_ratio),
+      left_join_error_no_match(select(filter(., year == MODEL_FINAL_BASE_YEAR), -coefficient, -elec_ratio),
                                by = c("supplysector", "subsector", "technology", "minicam.energy.input", "secondary.output")) %>%
       mutate(output.ratio = if_else(year.x %in% MODEL_BASE_YEARS, output.ratio.x, output.ratio.y)) %>%
       ungroup %>%
@@ -278,7 +278,7 @@ module_gcameurope_L2327.paper <- function(command, ...) {
     # filters base years from original and then appends future years
     L2327.globaltech_retirement_base %>%
       mutate(year = as.integer(year)) %>%
-      filter(year == max(MODEL_BASE_YEARS)) %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
       bind_rows(L2327.globaltech_retirement_future) ->
       L2327.globaltech_retirement
 

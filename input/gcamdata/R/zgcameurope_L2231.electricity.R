@@ -85,7 +85,7 @@ module_gcameurope_L2231.electricity_grid <- function(command, ...) {
     L2231.SubsectorShrwtFllt_elec_grid_EUR %>%
       select(LEVEL2_DATA_NAMES[["Subsector"]]) %>%
       mutate(apply.to = "share-weight",
-             from.year = max(MODEL_BASE_YEARS),
+             from.year = MODEL_FINAL_BASE_YEAR,
              to.year = max(MODEL_YEARS),
              interpolation.function = "fixed") ->
       L2231.SubsectorInterp_elec_grid_EUR

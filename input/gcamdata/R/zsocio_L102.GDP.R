@@ -36,7 +36,7 @@ module_socio_L102.GDP <- function(command, ...) {
       "L101.Pop_thous_GCAM3_R_Y",
       "L101.Pop_thous_GCAM3_ctry_Y",
       "L101.Pop_thous_R_Yh",
-      "L101.Pop_thous_Scen_R_Yfut")
+      "L101.Pop_thous_SSP_R_Yfut")
 
   MODULE_OUTPUTS <-
     c("L102.gdp_mil90usd_Scen_R_Y",
@@ -105,7 +105,7 @@ module_socio_L102.GDP <- function(command, ...) {
       gather_years()->
       SSP_gdp_0
 
-      # Using the Historical Reference scenario to fill history of SSPs
+    # Using the Historical Reference scenario to fill history of SSPs
     SSP_gdp_0 %>%
       filter(scenario != "Historical Reference") %>%
       left_join(
@@ -151,7 +151,7 @@ module_socio_L102.GDP <- function(command, ...) {
 
     ## 3.1 for SSP scenarios ----
     # join.gdp.ts hist and future
-    gdp.mil90usd.SSP.rgn.yr <-
+    gdp.mil90usd.scen.rgn.yr <-
       join.gdp.ts(
         # hist: gdp_mil90usd_rgn before socioeconomics.SSP_DB_BASEYEAR
         gdp_mil90usd_rgn %>% filter(year <= socioeconomics.SSP_DB_BASEYEAR),
@@ -162,28 +162,6 @@ module_socio_L102.GDP <- function(command, ...) {
         # where past = gdp_mil90usd_rgn %>% filter(year <= socioeconomics.SSP_DB_BASEYEAR)
         # where future = gdp_bilusd_rgn_Yfut
         EUR_data = EUR_gdp_gr_param)
-
-    ## 3.2 for gSSP scenarios ----
-
-    # join.gdp.ts hist and future
-    gdp.mil90usd.gSSP.rgn.yr <-
-      join.gdp.ts(
-        # hist: gdp_mil90usd_rgn before socioeconomics.SSP_DB_BASEYEAR
-        gdp_mil90usd_rgn,
-        # future: gdp_bilusd_rgn_Yfut
-        gdp_bilusd_rgn_Yfut,
-        grouping = 'GCAM_region_ID',
-        # assuming base year is 2020 (max(intersect(past$year, future$year)),
-        # where past = gdp_mil90usd_rgn %>% filter(year <= socioeconomics.SSP_DB_BASEYEAR)
-        # where future = gdp_bilusd_rgn_Yfut
-        EUR_data = EUR_gdp_gr_param) %>%
-      mutate(scenario = paste0('g', scenario))
-
-
-    # Step 4: Combine SSP and gSSP scenarios into a single table ----
-    #(this will be one of our final outputs)
-    gdp.mil90usd.scen.rgn.yr <-
-      bind_rows(gdp.mil90usd.SSP.rgn.yr, gdp.mil90usd.gSSP.rgn.yr)
 
     # Step 5: Additional adjustment for Venezuela (South Amer North) and Taiwan ----
 
@@ -216,7 +194,7 @@ module_socio_L102.GDP <- function(command, ...) {
       replace_na(list(gdp_g = 1)) %>%
       mutate(gdp_g_adj =  pmax(1, gdp_g),
              gdp_cum = cumprod(gdp_g_adj)
-             ) %>%
+      ) %>%
       mutate(gdp = gdp[year == socioeconomics.GDP_Adj_No_Neg_Growth_Year] * gdp_cum) %>% ungroup %>%
       select(names(gdp.mil90usd.scen.rgn.yr_1)) %>%
       bind_rows(
@@ -235,7 +213,7 @@ module_socio_L102.GDP <- function(command, ...) {
     ## we need. Add a scenario column to historical years, and combine the
     ## whole thing into a single table.
     pop.thous.fut <-
-      rename(L101.Pop_thous_Scen_R_Yfut, population = value) %>%
+      rename(L101.Pop_thous_SSP_R_Yfut, population = value) %>%
       filter(year %in% FUTURE_YEARS)
     pop.thous.hist <-
       rename(L101.Pop_thous_R_Yh, population = value) %>%
@@ -396,10 +374,8 @@ module_socio_L102.GDP <- function(command, ...) {
       mutate(year = as.integer(year)) %>%
       add_title("Gross Domestic Product (GDP) by scenario, region, and year.") %>%
       add_units("Millions of 1990 USD (MER)") %>%
-      add_comments("For the SSP scenarios, SSP GDP projections are scaled to match ") %>%
-      add_comments("historical values in the base year (2010).  For the gSSP scenarios ") %>%
-      add_comments("IMF growth projections are applied from 2010-2020, and the SSP projections ") %>%
-      add_comments("are scaled to match the 2020 values resulting from this process.") %>%
+      add_comments("SSP projections match historical values and are available beyond") %>%
+      add_comments("our final calibration period.") %>%
       add_legacy_name("L102.gdp_mil90usd_Scen_R_Y") %>%
       add_precursors("common/iso_GCAM_regID",
                      "socioeconomics/SSP/SSP_database_2024",
@@ -421,7 +397,7 @@ module_socio_L102.GDP <- function(command, ...) {
                      "socioeconomics/SSP/iso_SSP_regID",
                      "L100.gdp_mil90usd_ctry_Yh",
                      "L101.Pop_thous_R_Yh",
-                     "L101.Pop_thous_Scen_R_Yfut") ->
+                     "L101.Pop_thous_SSP_R_Yfut") ->
       L102.pcgdp_thous90USD_Scen_R_Y
 
     ppp.mer.rgn %>%
@@ -492,7 +468,7 @@ module_socio_L102.GDP <- function(command, ...) {
 
     return_data(MODULE_OUTPUTS)
 
-    } else {
+  } else {
     stop("Unknown command")
   }
 }

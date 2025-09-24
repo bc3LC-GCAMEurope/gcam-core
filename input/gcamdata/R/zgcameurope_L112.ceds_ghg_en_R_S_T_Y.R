@@ -569,7 +569,7 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
     # Get main combustion fuel in iron and steel in base year by region and technology
     # Non-CO2 emissions will be assigned to this fuel for iron and steel, since it can't be broken out by subsector, technology, and fuel
     L1323.in_EJ_R_iron_steel_F_Y_EUR %>%
-      filter(year == max(MODEL_BASE_YEARS),
+      filter(year == MODEL_FINAL_BASE_YEAR,
              # filter out electricity
              !fuel %in% emissions.ZERO_EM_TECH) %>%
       group_by(GCAM_region_ID, sector, technology) %>%

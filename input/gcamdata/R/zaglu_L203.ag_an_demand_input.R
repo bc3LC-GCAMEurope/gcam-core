@@ -1,3 +1,4 @@
+
 # Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
 
 #' module_aglu_L203.ag_an_demand_input
@@ -43,47 +44,50 @@ module_aglu_L203.ag_an_demand_input <- function(command, ...) {
       "L109.an_ALL_Mt_R_C_Y",
       "L110.For_ALL_bm3_R_Y",
       "L106.income_distributions",
-      "L201.Pop_gSSP2",
+      "L201.Pop_SSP2",
       FILE = "gcam-europe/mappings/ag_regions")
+
+  MODULE_OUTPUTS <-
+    c("L203.Supplysector_demand",
+      "L203.NestingSubsectorAll_demand_food",
+      "L203.SubsectorAll_demand_food",
+      "L203.SubsectorAll_demand_nonfood",
+      "L203.StubTech_demand_food",
+      "L203.StubTech_demand_nonfood",
+      "L203.SubregionalShares",
+      "L203.SubregionalShares_ConsumerGroups",
+      "L203.DemandFunction_food",
+      "L203.DemandFunction_food_ConsumerGroups",
+      "L203.DemandStapleParams",
+      "L203.DemandNonStapleParams",
+      "L203.DemandStapleParams_ConsumerGroups",
+      "L203.DemandNonStapleParams_ConsumerGroups",
+      "L203.DemandStapleRegBias",
+      "L203.DemandNonStapleRegBias",
+      "L203.StapleBaseService",
+      "L203.NonStapleBaseService",
+      "L203.StapleBaseService_ConsumerGroups",
+      "L203.NonStapleBaseService_ConsumerGroups",
+      "L203.GlobalTechCoef_demand",
+      "L203.GlobalTechShrwt_demand",
+      "L203.StubTechProd_food",
+      "L203.StubTechProd_nonfood_crop",
+      "L203.StubTechProd_nonfood_meat",
+      "L203.StubTechProd_For",
+      "L203.StubCalorieContent",
+      "L203.PerCapitaBased",
+      "L203.BaseService",
+      "L203.IncomeElasticity",
+      "L203.PriceElasticity",
+      "L203.FuelPrefElast_ssp1",
+      "L203.GlobalTechInterp_demand",
+      "L203.StubTechMarket")
 
 
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L203.Supplysector_demand",
-             "L203.NestingSubsectorAll_demand_food",
-             "L203.SubsectorAll_demand_food",
-             "L203.SubsectorAll_demand_nonfood",
-             "L203.StubTech_demand_food",
-             "L203.StubTech_demand_nonfood",
-             "L203.SubregionalShares",
-             "L203.SubregionalShares_ConsumerGroups",
-             "L203.DemandFunction_food",
-             "L203.DemandFunction_food_ConsumerGroups",
-             "L203.DemandStapleParams",
-             "L203.DemandNonStapleParams",
-             "L203.DemandStapleParams_ConsumerGroups",
-             "L203.DemandNonStapleParams_ConsumerGroups",
-             "L203.DemandStapleRegBias",
-             "L203.DemandNonStapleRegBias",
-             "L203.StapleBaseService",
-             "L203.NonStapleBaseService",
-             "L203.StapleBaseService_ConsumerGroups",
-             "L203.NonStapleBaseService_ConsumerGroups",
-             "L203.GlobalTechCoef_demand",
-             "L203.GlobalTechShrwt_demand",
-             "L203.StubTechProd_food",
-             "L203.StubTechProd_nonfood_crop",
-             "L203.StubTechProd_nonfood_meat",
-             "L203.StubTechProd_For",
-             "L203.StubCalorieContent",
-             "L203.PerCapitaBased",
-             "L203.BaseService",
-             "L203.IncomeElasticity",
-             "L203.PriceElasticity",
-             "L203.FuelPrefElast_ssp1",
-             "L203.GlobalTechInterp_demand",
-             "L203.StubTechMarket"))
+    return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -198,7 +202,7 @@ module_aglu_L203.ag_an_demand_input <- function(command, ...) {
       L203.GlobalTechShrwt_demand
 
     # Build L203.GlobalTechInterp_demand: Interpolation rule to fix initial shareweights
-     A_demand_technology %>%
+    A_demand_technology %>%
       filter(subsector != technology) %>%
       mutate(from.year = MODEL_FINAL_BASE_YEAR,
              to.year = max(MODEL_YEARS)) %>%
@@ -310,7 +314,7 @@ module_aglu_L203.ag_an_demand_input <- function(command, ...) {
       # For each region / commodity,
       group_by(region, subsector0, subsector, technology) %>%
       # Calorie content are held constant in the future, so set value for future years at the final base year value
-      mutate(efficiency = replace(efficiency, year > max(MODEL_BASE_YEARS), efficiency[year == max(MODEL_BASE_YEARS)])) %>%
+      mutate(efficiency = replace(efficiency, year > MODEL_FINAL_BASE_YEAR, efficiency[year == MODEL_FINAL_BASE_YEAR])) %>%
       ungroup() %>%
       select(c(LEVEL2_DATA_NAMES[["StubTechCalorieContent"]], "subsector0")) %>%
       filter(!region %in% aglu.NO_AGLU_REGIONS) ->          # Remove any regions for which agriculture and land use are not modeled
@@ -444,7 +448,7 @@ module_aglu_L203.ag_an_demand_input <- function(command, ...) {
     L203.StapleBaseService <- filter(L203.Demand, supplysector %in% A_demand_food_staples$staples.food.demand.input) %>%
       rename(staples.food.demand.input = supplysector) %>%
       left_join_error_no_match(select(L203.DemandStapleParams, region, gcam.consumer, nodeInput, staples.food.demand.input),
-                             by = c("region", "staples.food.demand.input")) %>%
+                               by = c("region", "staples.food.demand.input")) %>%
       select(LEVEL2_DATA_NAMES[["StapleBaseService"]])
 
     L203.NonStapleBaseService <- filter(L203.Demand, supplysector %in% A_demand_food_nonstaples$non.staples.food.demand.input) %>%
@@ -459,7 +463,7 @@ module_aglu_L203.ag_an_demand_input <- function(command, ...) {
 
     # Population
     # Separate by income group
-    L201.Pop_gSSP2 %>%
+    L201.Pop_SSP2 %>%
       filter(year %in% MODEL_BASE_YEARS) %>%
       left_join(L106.income_distributions, by = c("year", "region")) %>%
       select(-subregional.income.share) %>%
@@ -860,16 +864,7 @@ module_aglu_L203.ag_an_demand_input <- function(command, ...) {
       add_precursors("aglu/A_demand_food_nonstaples", "aglu/A_demand_food_base_service") ->
       L203.NonStapleBaseService_ConsumerGroups
 
-    return_data(L203.StubTechMarket, L203.Supplysector_demand, L203.NestingSubsectorAll_demand_food, L203.SubsectorAll_demand_food,
-                L203.SubsectorAll_demand_nonfood, L203.StubTech_demand_food, L203.StubTech_demand_nonfood,
-                L203.GlobalTechCoef_demand, L203.GlobalTechShrwt_demand, L203.GlobalTechInterp_demand, L203.StubTechProd_food,
-                L203.StubTechProd_nonfood_crop, L203.StubTechProd_nonfood_meat, L203.StubTechProd_For,
-                L203.StubCalorieContent, L203.PerCapitaBased, L203.BaseService,
-                L203.IncomeElasticity, L203.PriceElasticity, L203.FuelPrefElast_ssp1,
-                L203.SubregionalShares, L203.DemandFunction_food, L203.DemandStapleParams, L203.DemandNonStapleParams,
-                L203.DemandStapleRegBias, L203.DemandNonStapleRegBias, L203.StapleBaseService, L203.NonStapleBaseService,
-                L203.SubregionalShares_ConsumerGroups, L203.DemandFunction_food_ConsumerGroups, L203.DemandStapleParams_ConsumerGroups,
-                L203.DemandNonStapleParams_ConsumerGroups,L203.StapleBaseService_ConsumerGroups, L203.NonStapleBaseService_ConsumerGroups)
+    return_data(MODULE_OUTPUTS)
   } else {
     stop("Unknown command")
   }
