@@ -4,7 +4,7 @@
 \alias{add_title}
 \title{add_title}
 \usage{
-add_title(x, title, overwrite = FALSE)
+add_title(x, title, overwrite = TRUE)
 }
 \arguments{
 \item{x}{An object}

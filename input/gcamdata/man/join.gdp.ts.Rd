@@ -4,7 +4,7 @@
 \alias{join.gdp.ts}
 \title{join.gdp.ts}
 \usage{
-join.gdp.ts(past, future, grouping)
+join.gdp.ts(past, future, grouping, EUR_data = NULL)
 }
 \arguments{
 \item{past}{Tibble with the past time series (year, gdp, and grouping).}
@@ -14,6 +14,8 @@ grouping).}
 
 \item{grouping}{Name of the grouping column (generally either 'iso' or
 'GCAM_region_ID', but could be anything}
+
+\item{EUR_data}{GDP growth rates for the EUR region}
 }
 \value{
 Time series with the past and future joined as described in details.
@@ -52,4 +54,7 @@ time series.  For similar reasons, even if the two time series have different
 units (e.g., different dollar-years or PPP vs. MER), they can still be
 joined.  The units of the output time series will be the same as the units of
 \code{past}.
+
+NEW: if we have more detailed data for the EUR region, we substitute it for the
+available years. This data should be passed through the `EUR_data` as GDP growth rates
 }

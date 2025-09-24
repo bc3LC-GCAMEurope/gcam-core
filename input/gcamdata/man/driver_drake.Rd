@@ -14,9 +14,11 @@ driver_drake(
   return_plan_only = FALSE,
   write_xml = !return_data_map_only,
   xmldir = XML_DIR,
+  policyxmldir = POLICY_XML_DIR,
   quiet = FALSE,
   user_modifications = NULL,
   xml_suffix = NULL,
+  disable_pattern = NULL,
   ...
 )
 }
@@ -48,6 +50,8 @@ the other \code{return_*} parameters above}
 
 \item{xml_suffix}{A suffix to be appended at the end of all XML file name if not null.  Such a feature is
 useful when using \code{user_modifications} to generate alternative scenarios.}
+
+\item{disable_pattern}{Any functions containing this case-sensitive string will be disabled.}
 
 \item{...}{Additional arguments to be forwarded on to \code{make}}
 }
