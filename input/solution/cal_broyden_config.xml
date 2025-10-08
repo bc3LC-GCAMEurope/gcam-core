@@ -71,7 +71,7 @@
             <solution-info-filter>solvable-nr && !(has-market-flag="fully-calibrated")</solution-info-filter>
         </broyden-solver-component>
     </user-configurable-solver>
-    <user-configurable-solver year="2020" fillout="1">
+    <user-configurable-solver year="2025" fillout="1">
         <solution-tolerance>0.003</solution-tolerance>
         <solution-floor>0.0005</solution-floor>
         <calibration-tolerance>0.005</calibration-tolerance>
@@ -82,6 +82,14 @@
             <ftol>1.0e-2</ftol>
             <max-iterations>2</max-iterations>
         </preconditioner-solver-component>
+
+        <bisect-all-solver-component>
+            <bracket-interval>0.05</bracket-interval>
+            <max-bracket-iterations>20</max-bracket-iterations>
+            <max-iterations>10</max-iterations>
+            <use-secant-brackets>1</use-secant-brackets>
+			<solution-info-filter>unsolved && solvable && market-matches="negative_emiss_budget"</solution-info-filter>
+        </bisect-all-solver-component>
 
         <bisect-all-solver-component>
             <bracket-interval>0.05</bracket-interval>
@@ -117,6 +125,14 @@
             <ftol>1.0e-2</ftol>
             <max-iterations>2</max-iterations>
         </preconditioner-solver-component>
+
+        <bisect-all-solver-component>
+            <bracket-interval>0.05</bracket-interval>
+            <max-bracket-iterations>20</max-bracket-iterations>
+            <max-iterations>10</max-iterations>
+            <use-secant-brackets>1</use-secant-brackets>
+			<solution-info-filter>unsolved && solvable && market-matches="negative_emiss_budget"</solution-info-filter>
+        </bisect-all-solver-component>
 
         <bisect-all-solver-component>
             <bracket-interval>0.05</bracket-interval>

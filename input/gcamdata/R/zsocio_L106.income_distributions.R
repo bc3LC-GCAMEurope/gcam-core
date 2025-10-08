@@ -49,6 +49,15 @@ module_socio_L106.income_distributions <- function(command, ...) {
       stop("Income shares don't add up to 1")
     }
 
+    # Need to extend the shares to 2021:
+    L106.income_distributions <- L106.income_distributions %>%
+      complete(nesting(region, gcam.consumer), year = MODEL_BASE_YEARS) %>%
+      group_by(region, gcam.consumer) %>%
+      mutate(subregional.population.share = approx_fun(year, subregional.population.share, rule = 2),
+              subregional.income.share = approx_fun(year, subregional.income.share, rule = 2)) %>%
+      ungroup()
+
+
     # Produce outputs, add appropriate flags and comments
     tibble(L106.income_distributions) %>%
       add_units("None") %>%

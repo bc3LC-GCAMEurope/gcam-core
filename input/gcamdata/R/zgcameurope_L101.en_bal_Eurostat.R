@@ -82,7 +82,11 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
     L101.CHP_IO_EUR <- L101.Eurostat_en_bal_ctry_hist %>%
       filter(sector %in% c("out_chp_elec", "in_industry_chp"),
              product %in% c("Bioenergy", "Fossil energy")) %>%
-      gather_years() %>%
+      pivot_longer(
+        cols = `2021`:`1990`,
+        names_to = "year",
+        values_to = "value"
+      ) %>%
       filter(value != 0) %>%
       group_by(iso, year, product) %>%
       summarise(chp_coef = value[sector == "out_chp_elec"] / value[sector == "in_industry_chp"]) %>%
@@ -106,7 +110,11 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
    year_filters <- L101.Eurostat_en_bal_ctry_hist %>%
      group_by(iso) %>%
      summarise(across(matches(YEAR_PATTERN), ~all(is.na(.x)))) %>%
-     gather_years() %>%
+     pivot_longer(
+       cols = `2021`:`1990`,
+       names_to = "year",
+       values_to = "value"
+     ) %>%
      filter(value == TRUE, year <= MODEL_FINAL_BASE_YEAR) %>%
      left_join_error_no_match(GCAM32_to_EU %>% select(iso, GCAM_region_ID), by = "iso") %>%
      distinct(year, GCAM_region_ID)
@@ -133,7 +141,11 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       summarise_all(list(~ sum(., na.rm = T) / 1e6)) %>%
       ungroup %>%
       # at this point dataset is much smaller; go to long form
-      gather_years() %>%
+      pivot_longer(
+        cols = `2021`:`1990`,
+        names_to = "year",
+        values_to = "value"
+      ) %>%
       tidyr::replace_na(list(value = 0))
 
     # 1b. TPES Calculation ----------------
@@ -186,7 +198,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       summarise(value = sum(value)) %>%
       ungroup %>%
       filter(iso %in% L101.GCAM_EUR_regions$iso) %>%
-      mutate(sector = "TPES") %>%
+      mutate(sector = "TES") %>%
       left_join_error_no_match(L101.GCAM_EUR_regions, by = "iso") %>%
       group_by(GCAM_region_ID, sector, fuel, year) %>%
       summarise(value = sum(value)) %>%
@@ -197,10 +209,12 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
     # To do so, we need to limit to the years in IEA data
     L101.in_EJ_R_Fi_Yh_Eurostat_statdiff <- L101.in_EJ_R_TPES_Fi_Yh_Eurostat_unadj %>%
       filter(year %in% L1011.en_bal_EJ_R_Si_Fi_Yh$year) %>%
+      mutate(year = as.integer(year)) %>%
       left_join_error_no_match(L1011.en_bal_EJ_R_Si_Fi_Yh, by = c("fuel", "year", "sector", "GCAM_region_ID")) %>%
       mutate(value = value.y - value.x,
              sector = "IEA_TPES_diff") %>%
-      select(-value.x, -value.y)
+      select(-value.x, -value.y) %>%
+      mutate(year = as.character(year))
 
     # # Update TPES
     # L101.in_EJ_R_TPES_Fi_Yh_Eurostat <- L101.in_EJ_R_TPES_Fi_Yh_Eurostat_unadj %>%
@@ -228,19 +242,33 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
     # Update the L101.GCAM_EUR_regions mapping by removing iso codes whose data is not
     # available in Eurostat (e.g Switzerland) & add 0s to elec_solar CSP for the bld
     # sector from 1971 to 1989 to avoid further problems. Data start in 1990.
+    `%!in%` <- Negate(`%in%`)
     L101.GCAM_EUR_regions <- L101.GCAM_EUR_regions %>%
-      filter(GCAM_region_ID %in% L101.en_bal_EJ_R_Si_Fi_Yh_Eurostat$GCAM_region_ID)
+      filter(GCAM_region_ID %in% L101.en_bal_EJ_R_Si_Fi_Yh_Eurostat$GCAM_region_ID) %>%
+      # With the BYU, UK a nd Ukariane are treated as Switzerland due to lack of data:
+      filter(GCAMEU_region %!in% gcameurope.EUROSTAT_ADJCOUNTRIES)
+
 
     L101.en_bal_EJ_R_Si_Fi_Yh_EUR_replace_na_years <- L1011.en_bal_EJ_R_Si_Fi_Yh %>%
+      mutate(year = as.character(year)) %>%
       semi_join(year_filters, by = c("GCAM_region_ID", "year"))
 
     L101.en_bal_EJ_R_Si_Fi_Yh_EUR_tmp <- L101.en_bal_EJ_R_Si_Fi_Yh_Eurostat %>%
       anti_join(year_filters, by = c("GCAM_region_ID", "year")) %>%
       bind_rows(L1011.en_bal_EJ_R_Si_Fi_Yh %>%
+                  mutate(year = as.character(year)) %>%
                   filter(GCAM_region_ID %in% L101.GCAM_EUR_regions$GCAM_region_ID,
                          year < min(L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat$year)),
                 L101.en_bal_EJ_R_Si_Fi_Yh_EUR_replace_na_years
                 )
+
+    # For the final balance, we take out UK as it includes Eurostat data, but not for the entire timeframe
+    # The adjustment can be rolled back if data becomes available
+
+    gcameurope.EUROSTAT_ADJCOUNTRIES_ID <- GCAM32_to_EU %>%
+      filter(GCAMEU_region %in% gcameurope.EUROSTAT_ADJCOUNTRIES) %>%
+      pull(unique(GCAM_region_ID)) %>%
+      unique()
 
     L101.en_bal_EJ_R_Si_Fi_Yh_EUR <- L101.en_bal_EJ_R_Si_Fi_Yh_EUR_tmp %>%
       bind_rows(L101.en_bal_EJ_R_Si_Fi_Yh_EUR_tmp %>%
@@ -248,7 +276,9 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
                   complete(nesting(GCAM_region_ID, sector, fuel),
                            year = unique(L101.en_bal_EJ_R_Si_Fi_Yh_EUR_tmp$year),
                            fill = list(value = 0)) %>%
-                  filter(year <= MODEL_FINAL_BASE_YEAR)) # FINAL OUTPUT TABLE - temporally complete EUR data
+                      filter(year <= MODEL_FINAL_BASE_YEAR))  %>%
+      # UK needs to be taken out from balances, due to lack of data from final calibration year:
+      filter(GCAM_region_ID %!in% gcameurope.EUROSTAT_ADJCOUNTRIES_ID)# FINAL OUTPUT TABLE - temporally complete EUR data
 
     # 1c. Get ratio for feedstocks based on IEA -------------------
     # Eurostat has only industrial feedstocks, but IEA splits defines industrial, chemical, and construction
@@ -276,14 +306,18 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
 
     # then join in with IEA and apply proportions
     L101.feedstocks_Eurostat <- Eurostat_feedstocks %>%
+      mutate(year = as.integer(year)) %>%
       inner_join(L1011.feedstocks_IEA, by = c("GCAM_region_ID", "fuel", "year", "IEA_sector")) %>%
       tidyr::replace_na(list(proportion = 0)) %>%
       mutate(value = value * proportion) %>%
       select(-proportion, -sector) %>%
-      rename(sector = IEA_sector)
+      rename(sector = IEA_sector) %>%
+      mutate(year = as.character(year))
 
     L101.en_bal_EJ_R_Si_Fi_Yh_EUR <- L101.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
-      bind_rows(L101.feedstocks_Eurostat)
+      mutate(year = as.character(year)) %>%
+      bind_rows(L101.feedstocks_Eurostat) %>%
+      mutate(year = as.integer(year))
 
     #
     # 2. Building & Transport Downscale -----------

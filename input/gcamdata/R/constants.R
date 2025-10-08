@@ -24,7 +24,7 @@ FLAG_XML             <- "FLAG_XML"              # xml data
 
 # Historical years for level 1 data processing. All chunks that produce historical data
 # for model calibration are required to produce annual data covering this entire span.
-HISTORICAL_YEARS        <- 1971:2015
+HISTORICAL_YEARS        <- 1971:2021
 
 # Future years for level 1 data processing, for the few chunks that
 # produce future data (e.g., population projections)
@@ -35,7 +35,7 @@ MODEL_BASE_YEARS        <- unique(c(1975, 1990, 2005, 2010, 2015, max(HISTORICAL
 MODEL_FINAL_BASE_YEAR   <- max(MODEL_BASE_YEARS)
 
 # Future (not calibrated) model periods. Only level 2 chunks should reference these
-MODEL_FUTURE_YEARS      <- seq(2020, 2100, 5)
+MODEL_FUTURE_YEARS      <- seq(2025, 2100, 5)
 
 # Make sure years are consistent
 if (min(MODEL_FUTURE_YEARS) <= max(HISTORICAL_YEARS)) {
@@ -48,6 +48,16 @@ if (!(all(MODEL_FUTURE_YEARS %in% FUTURE_YEARS))) {
 
 # model time periods
 MODEL_YEARS             <- c(MODEL_BASE_YEARS, MODEL_FUTURE_YEARS)
+
+# Used in utility functions such as set_years or gather_years to allow users to set
+# years as the following constants which can then be automatically set the currently
+# configured values
+YEAR_RECODE <- c("start-year" =  min(MODEL_BASE_YEARS),
+                 "final-calibration-year" = MODEL_FINAL_BASE_YEAR,
+                 "final-historical-year" = as.numeric(max(HISTORICAL_YEARS)),
+                 "initial-future-year" = min(MODEL_FUTURE_YEARS),
+                 "initial-nonhistorical-year" = min(MODEL_YEARS[MODEL_YEARS > max(HISTORICAL_YEARS)]),
+                 "end-year" = max(MODEL_FUTURE_YEARS))
 
 
 # GCAM constants ======================================================================
@@ -205,13 +215,12 @@ SO2_SHIP_LIMIT_POLICY_MULTIPLIER <- 0.001 * 2
 # AgLU constants ======================================================================
 
 # Time
-aglu.MODEL_MEAN_PERIOD_LENGTH <- 5       # AgLU data use a moving average over this period length in LA.100
-aglu.MODEL_MEAN_PERIOD        <- (MODEL_FINAL_BASE_YEAR - floor(aglu.MODEL_MEAN_PERIOD_LENGTH/2)):(MODEL_FINAL_BASE_YEAR + floor(aglu.MODEL_MEAN_PERIOD_LENGTH/2)) # actual years for moving average period, consistent with aglu.MODEL_SUA_MEAN_PERIODS, MODEL_FINAL_BASE_YEAR, and aglu.MODEL_MEAN_PERIOD_LENGTH
-aglu.MODEL_PRICE_YEARS      <- aglu.MODEL_MEAN_PERIOD
-aglu.MODEL_MACRONUTRIENT_YEARS <- aglu.MODEL_MEAN_PERIOD  # consistent with aglu.MODEL_SUA_MEAN_PERIODS; FAO only has data for after 2010
+aglu.MODEL_MEAN_PERIOD_LENGTH <- 3       # AgLU data use a moving average over this period length in LA.100
+aglu.MODEL_PRICE_YEARS      <- 2020:2022 # consistent with aglu.MODEL_SUA_MEAN_PERIODS
+aglu.MODEL_MACRONUTRIENT_YEARS <- 2020:2022   # consistent with aglu.MODEL_SUA_MEAN_PERIODS; FAO only has data for after 2010
 aglu.MODEL_COST_YEARS       <- 2008:2016
 aglu.DEFLATOR_BASE_YEAR     <- MODEL_FINAL_BASE_YEAR      # year used as the basis for computing regional price deflators
-aglu.FALLOW_YEARS           <- aglu.MODEL_MEAN_PERIOD     # Years used for calculating the % of fallow land
+aglu.FALLOW_YEARS           <- 2020:2022 # Years used for calculating the % of fallow land
 aglu.AGLU_HISTORICAL_YEARS  <- 1973:MODEL_FINAL_BASE_YEAR
 aglu.BASE_YEAR_IFA          <- 2006       # Base year of International Fertilizer Industry Association (IFA) fertilizer application data
 aglu.BIO_START_YEAR         <- 2025       # Also set in aglu/A_bio_ghost_share
@@ -511,6 +520,13 @@ aglu.GRASSLAND_NODE_NAMES <- "Grassland"
 
 # Energy constants ======================================================================
 
+# IEA energy data flows
+energy.TPES_flow <- "TES" #IEA code for Total Primary Energy Supply
+
+# IEA Country Names
+energy.FSU_name <- "Former Soviet Union (if no detail)"
+energy.Former_Yug_name <- "Former Yugoslavia (if no detail)"
+
 # Time
 energy.CDIAC_CO2_HISTORICAL_YEARS <- HISTORICAL_YEARS[HISTORICAL_YEARS < 2010] # At present the CO2 emissions inventory from CDIAC stops at 2009
 energy.CLIMATE_NORMAL_YEARS       <- 1981:2000
@@ -645,7 +661,7 @@ energy.ATB_HISTORICAL_YEARS <- c(2017, 2019, 2021, 2022)
 # latest ATB year but the user can choose an ATB base year from recent history
 # (from 2015-energy.ATB_LATEST_YEAR)
 energy.ATB_BASE_YEAR <- max(energy.ATB_HISTORICAL_YEARS) - 2
-energy.ATB_LATEST_YEAR <- 2020
+energy.ATB_LATEST_YEAR <- MODEL_FINAL_BASE_YEAR
 energy.ATB_MID_YEAR <- 2035
 energy.ATB_TARGET_YEAR <- 2035
 gcamusa.STORAGE_TECH <- "battery"
@@ -699,14 +715,14 @@ socioeconomics.SSP_EUR <- TRUE  # used for using Population & GDP European SSP2 
 # Population years - note that these sequences shouldn't have any overlap,
 # and should contain all historical years used by other modules
 socioeconomics.MADDISON_HISTORICAL_YEARS <- seq(1700, 1900, 50) # Years for which to use Maddison data
-socioeconomics.UN_HISTORICAL_YEARS       <- c(1950, 1971:2015)  # Years for which to use UN data
+socioeconomics.UN_HISTORICAL_YEARS       <- c(1950, 1971:MODEL_FINAL_BASE_YEAR)  # Years for which to use UN data
 socioeconomics.PWT_CONSTANT_CURRENCY_YEAR <- 2011 # Currency base year in Penn World Table data
 
 # Final historical year, we use this because it's also the first year of the SSP database.
 # Using a different year if the final historical year in the UN historical years changes, this would result in
 # different SSP projections. (Because the SSP scenarios begin to diverge in 2015, so we'd have to reconsider how
 # we do the SSP scenarios if we update to UN 2015 population.)
-socioeconomics.FINAL_HIST_YEAR <- 2015
+socioeconomics.FINAL_HIST_YEAR <- MODEL_FINAL_BASE_YEAR
 
 # There will be an imblance of trade by region historically which is implicitly balanced by
 # capital flows.  We can phase this out by the year assumed below (linearly).  Note, setting a value
@@ -917,7 +933,7 @@ emissions.UNCONVENTIONAL.OIL.FUG.CH4.EMFACT <- 0.0882
 emissions.UNCONVENTIONAL.OIL.FUG.N2O.EMFACT <- 0.000000939
 
 # Time
-emissions.CEDS_YEARS              <- 1970:2019           # Year coverage for CEDS inventory.
+emissions.CEDS_YEARS              <- 1970:2022           # Year coverage for CEDS inventory.
 emissions.CTRL_BASE_YEAR          <- 1975                # Year to read in pollution controls
 emissions.DEFOREST_COEF_YEARS     <- c(2000, 2005)
 emissions.EDGAR_YEARS             <- 1971:2008
@@ -1027,13 +1043,6 @@ gcamusa.COAL_RETIRE_STEEPNESS <- 0.3
 # Profit shutdown parameters
 gcamusa.MEDIAN_SHUTDOWN_POINT <- -0.1
 gcamusa.PROFIT_SHUTDOWN_STEEPNESS <- 6
-
-# Define vintage bins and categories
-# These categories chosen for lifetime assumptions are such that capacity in each category is roughly same.
-# This is done to get a somewhat smooth behavior for coal retirements.
-gcamusa.COAL_VINTAGE_BREAKS <- c(0, seq(1950, 2015, 5))
-gcamusa.COAL_VINTAGE_LABELS <- c("before 1950", "1951-1955", "1956-1960", "1961-1965", "1966-1970", "1971-1975", "1976-1980",
-                                 "1981-1985", "1986-1990", "1991-1995", "1996-2000", "2001-2005", "2006-2010", "2011-2015")
 
 gcamusa.FIRST_NEW_COAL_YEAR <- 2035
 
@@ -1190,7 +1199,7 @@ gcamusa.TRAN_MODEL_FUTURE_YEARS <- seq(2020, 2100, 5)
 gcamusa.TRN_MARKAL_EMISSION_YEARS <- seq(2005,2050, 5)
 
 # defined for EF years in L271 gcam-usa chunk
-gcamusa.TRN_EMISSION_YEARS <- seq(2005,2100, 5)
+gcamusa.TRN_EMISSION_YEARS <- MODEL_YEARS[MODEL_YEARS >=2005]
 
 # emission factor timestep
 gcamusa.TRN_EF_TIMESTEP <- 5
@@ -1267,6 +1276,18 @@ gcam.COUNTRIES <- c("USA", "Africa_Eastern", "Africa_Northern", "Africa_Southern
                     "Norway", "Serbia and Montenegro", "Switzerland", "Turkey",
                     "UK", "Ukraine")
 
+gcameurope.COUNTRIES <- c("Austria",
+                          "Belgium", "Bulgaria", "Croatia", "Cyprus",
+                          "Czech Republic", "Denmark", "Estonia", "Finland",
+                          "France", "Germany", "Greece", "Hungary",
+                          "Ireland", "Italy", "Latvia", "Lithuania",
+                          "Luxembourg", "Malta", "Netherlands", "Poland",
+                          "Portugal", "Romania", "Slovakia", "Slovenia",
+                          "Spain", "Sweden", "Albania", "Belarus",
+                          "Bosnia and Herzegovina", "Iceland", "Macedonia", "Moldova",
+                          "Norway", "Serbia and Montenegro", "Switzerland", "Turkey",
+                          "UK", "Ukraine")
+
 gcameurope.EUROSTAT_COUNTRIES <- c("Albania", "Austria", "Belgium", "Bosnia and Herzegovina",
                                    "Bulgaria", "Croatia", "Cyprus", "Czech Republic",
                                    "Denmark", "Estonia", "Finland", "France", "Germany",
@@ -1275,18 +1296,18 @@ gcameurope.EUROSTAT_COUNTRIES <- c("Albania", "Austria", "Belgium", "Bosnia and 
                                    "Malta", "Moldova", "Netherlands", "Norway",
                                    "Poland", "Portugal", "Romania", "Serbia and Montenegro",
                                    "Slovakia", "Slovenia", "Spain", "Sweden",
-                                   "Turkey", "UK", "Ukraine")
+                                   "Turkey")
 
 gcameurope.EUROSTAT_ISO <- c("aut","bel","bgr","hrv","cyp","cze","dnk","fro",
                              "grl","est","fin","fra","mco","shn","spm","deu",
                              "grc","hun","irl","ita","smr","vat","lva","ltu",
                              "lux","mlt","nld","pol","prt","rom","rou","svk",
                              "svn","and","esp","swe","alb","bih","isl","mkd",
-                             "mda","nor","sjm","mne","srb","scg","tur","chi",
-                             "flk","gbr","ggy","gib","imn","jey","tca","vgb",
-                             "wlf","ukr")
+                             "mda","nor","sjm","mne","srb","scg","tur")
 
 gcameurope.TRADE_REGION <- "Austria"
+
+gcameurope.EUROSTAT_ADJCOUNTRIES <- c("UK", "Ukraine")
 
 
 # Time shift conditions

@@ -81,7 +81,7 @@ module_gcameurope_L102.en_emiss_CDIAC <- function(command, ...) {
 
     # subtracts the non-energy use of fuels (sequestered carbon) from the TPES to get only the emitting energy
     L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
-      filter(sector == "TPES", fuel %in% L102.CO2_Mt_R_F_Yh_EUR$fuel) %>%
+      filter(sector == "TES", fuel %in% L102.CO2_Mt_R_F_Yh_EUR$fuel) %>%
       filter(year <= max(L102.en_sequestered_EJ_R_Fi_Yh$year)) %>% # avoid NAs
       left_join_error_no_match(L102.en_sequestered_EJ_R_Fi_Yh, by = c("GCAM_region_ID", "fuel", "year")) %>%
       mutate(val_energy = value - val_non_energy) %>%

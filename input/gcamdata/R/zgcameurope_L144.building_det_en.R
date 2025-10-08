@@ -110,6 +110,13 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
 
     # Compute the service-fuel shares from the Eurostat data (estat_nrg_d_hhq_filtered_en) by iso & year
     # First aggregate detailed data to GCAM region, year, service
+    `%!in%` <- Negate(`%in%`)
+
+    gcameurope.EUROSTAT_ADJCOUNTRIES_ID <- get_data(all_data, "common/GCAM_region_names") %>%
+      filter(region %in% gcameurope.EUROSTAT_ADJCOUNTRIES) %>%
+      pull(GCAM_region_ID)
+
+
     EUR_hhEnergyConsum_R_Y_S <- estat_nrg_d_hhq_filtered_en %>%
       filter(freq == 'A') %>% # Annual frequency
       select(geo, year = TIME_PERIOD, value_eurostat = OBS_VALUE, nrg_bal, siec, unit) %>%
@@ -148,7 +155,9 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
                                        paste(service,'modern',sep=' ')))) %>%
       ungroup() %>%
       # add "EUR" to all services
-      mutate(service = paste(service, 'EUR'))
+      mutate(service = paste(service, 'EUR')) %>%
+      # Take Ukraine and UK out due to lack of latest Eurostat data
+      filter(GCAM_region_ID %!in% gcameurope.EUROSTAT_ADJCOUNTRIES_ID)
 
 
     # Some regions are missing resid others, so we calculate the average service share in the regions with resid others
@@ -196,7 +205,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       select(GCAM_region_ID, service, fuel, year, share_TFEbysector) %>%
       mutate(sector = 'bld_resid') %>%
       # select the closest year to 2015 for each region
-      complete(nesting(GCAM_region_ID, service, fuel, sector), year = 2015) %>%
+      complete(nesting(GCAM_region_ID, service, fuel, sector), year = MODEL_FINAL_BASE_YEAR) %>%
       mutate(year_diff = abs(year - MODEL_FINAL_BASE_YEAR))
 
     # find the closest available year for each group
@@ -212,11 +221,11 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       left_join_error_no_match(closest_year,
                                by = c('GCAM_region_ID', 'service', 'fuel', 'sector')) %>%
       group_by(GCAM_region_ID, service, fuel, sector) %>%
-      mutate(share_TFEbysector = ifelse(year == 2015 & is.na(share_TFEbysector),
+      mutate(share_TFEbysector = ifelse(year == MODEL_FINAL_BASE_YEAR & is.na(share_TFEbysector),
                                         share_TFEbysector[year == closest_year],
                                         share_TFEbysector)) %>%
       ungroup() %>%
-      filter(year == 2015) %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
       select(-year_diff, -closest_year, -year) %>%
       # update the fuel names
       left_join_keep_first_only(enduse_fuel_aggregation %>%
@@ -784,8 +793,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       # remove EU-27 and other aggregated regions
       filter(nchar(geo) == 2) %>%
       left_join_error_no_match(geo_to_climate_map, by = c('geo')) %>%
-      # delete Georgia (non EUR region)
-      filter(geo != 'GE') %>%
+      # delete Georgia (non EUR region),  and UK due to lack of recent Eurostat data:
+      filter(geo %!in% c("GE", "UK")) %>%
       mutate(technology = if_else(!tech %in% c('heat pump','geo-water pump'), paste(tech, climate_group), tech)) %>%
       group_by(unit, geo, year = TIME_PERIOD, subsector, technology) %>%
       summarise(value = sum(OBS_VALUE)) %>%
@@ -811,7 +820,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       mutate(growth_rate = if_else(is.na(growth_rate), 0, growth_rate)) %>%
       ungroup() %>%
       # 2. complete dataset
-      complete(nesting(GCAM_region_ID, subsector, technology, climate_group), year = c(1975, 1990, 2005, 2010, 2015)) %>%
+      complete(nesting(GCAM_region_ID, subsector, technology, climate_group), year = MODEL_BASE_YEARS) %>%
       # 3. fill growth rate and store the oldest (historically speaking) known year and corresponding value
       group_by(GCAM_region_ID, subsector, technology, climate_group) %>%
       mutate(
@@ -849,8 +858,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
         filter(freq == 'A') %>% # Annual frequency
         select(geo, year = TIME_PERIOD, value_eurostat = OBS_VALUE, nrg_bal, siec, unit)
     ) %>%
-      # Remove GEorgia, aggregation of regions, and UkrAine (null data for comm, and non-existing data for resid)
-      filter(!geo %in% c("EU27_2020","EA20",'GE','UA')) %>%
+      # Remove GEorgia, aggregation of regions, UK, and UkrAine (null data for comm, and non-existing data for resid)
+      filter(!geo %in% c("EU27_2020","EA20",'GE', 'UK', 'UA')) %>%
       # add GCAM regions
       left_join_error_no_match(geo_to_iso_map, by = "geo") %>%
       left_join(iso_GCAM_regID, by = 'iso') %>%
@@ -905,7 +914,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       mutate(growth_rate = mean(rate, na.rm = T)) %>%
       mutate(growth_rate = if_else(is.na(growth_rate), 0, growth_rate)) %>%
       # 2. complete dataset
-      complete(nesting(GCAM_region_ID, unit, service, fuel, climate_group, geo), year = c(1975, 1990, 2005, 2010, 2015)) %>%
+      complete(nesting(GCAM_region_ID, unit, service, fuel, climate_group, geo), year = MODEL_BASE_YEARS) %>%
       # 3. fill growth rate and store the oldest (historically speaking) known year and corresponding value
       mutate(
         growth_rate = mean(growth_rate, na.rm = T), # Fill the growth rate

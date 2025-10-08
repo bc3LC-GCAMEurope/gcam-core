@@ -77,7 +77,7 @@ module_gcameurope_L2011.ff_ALL_R_C_Y <- function(command, ...) {
     bind_rows(L1012.en_bal_EJ_R_Si_Fi_Yh,
               L121.in_EJ_R_TPES_crude_Yh,
               L121.in_EJ_R_TPES_unoil_Yh) %>%
-      filter(sector == "TPES",
+      filter(sector == "TES",
              year %in% HISTORICAL_YEARS,
              fuel %in% c("gas", "coal", "crude oil", "unconventional oil")) %>%
       #Unconventional oil is crude oil
@@ -128,7 +128,10 @@ module_gcameurope_L2011.ff_ALL_R_C_Y <- function(command, ...) {
     # We want to calculate trade between european market and globe
     # Since we only have Swiss data reported by other regions, we are going to subtract
     # reported EU trade from eurostat from the gross exports and imports reported in comstat
+    # Added: Repeat the adjustment for UK and Ukraine(as we are treating it like Switzerland)
     SWISS_ID <- GCAM_region_names %>% filter(region == "Switzerland") %>%  pull(GCAM_region_ID)
+    UK_ID <- GCAM_region_names %>% filter(region == "UK") %>%  pull(GCAM_region_ID)
+    Ukraine_ID <- GCAM_region_names %>% filter(region == "Ukraine") %>%  pull(GCAM_region_ID)
 
     # Swiss trade with other single market countries (eurostat)
     intraEU_Swiss_trade <- L1011.ff_trade_Europe_EJ_R_Y %>%
@@ -136,6 +139,24 @@ module_gcameurope_L2011.ff_ALL_R_C_Y <- function(command, ...) {
              import_ctry == "Switzerland" | export_ctry == "Switzerland",
              region_importer == SINGLE_MARKET_NAME & region_exporter == SINGLE_MARKET_NAME) %>%
       mutate(flow = if_else(import_ctry == "Switzerland", "GrossImp_EJ", "GrossExp_EJ")) %>%
+      group_by(GCAM_Commodity = fuel, year, flow) %>%
+      summarise(value_intraEU = sum(value)) %>%
+      ungroup
+
+    intraEU_UK_trade <- L1011.ff_trade_Europe_EJ_R_Y %>%
+      filter(fuel %in% L1011.ff_GrossTrade_EJ_R_C_Y$GCAM_Commodity,
+             import_ctry == "United Kingdom" | export_ctry == "United Kingdom",
+             region_importer == SINGLE_MARKET_NAME & region_exporter == SINGLE_MARKET_NAME) %>%
+      mutate(flow = if_else(import_ctry == "UK", "GrossImp_EJ", "GrossExp_EJ")) %>%
+      group_by(GCAM_Commodity = fuel, year, flow) %>%
+      summarise(value_intraEU = sum(value)) %>%
+      ungroup
+
+    intraEU_Ukraine_trade <- L1011.ff_trade_Europe_EJ_R_Y %>%
+      filter(fuel %in% L1011.ff_GrossTrade_EJ_R_C_Y$GCAM_Commodity,
+             import_ctry == "Ukraine" | export_ctry == "Ukraine",
+             region_importer == SINGLE_MARKET_NAME & region_exporter == SINGLE_MARKET_NAME) %>%
+      mutate(flow = if_else(import_ctry == "Ukraine", "GrossImp_EJ", "GrossExp_EJ")) %>%
       group_by(GCAM_Commodity = fuel, year, flow) %>%
       summarise(value_intraEU = sum(value)) %>%
       ungroup
@@ -150,14 +171,38 @@ module_gcameurope_L2011.ff_ALL_R_C_Y <- function(command, ...) {
       mutate(value = if_else(is.na(value_intraEU), value, value - value_intraEU)) %>%
       select(fuel = GCAM_Commodity, year, flow, value)
 
+    # total UK trade from comstat
+    extraEU_UK_trade <- L1011.ff_GrossTrade_EJ_R_C_Y %>%
+      filter(GCAM_region_ID == UK_ID) %>%
+      select(-net_trade) %>%
+      tidyr::pivot_longer(cols = c("GrossExp_EJ", "GrossImp_EJ"), names_to = "flow") %>%
+      # match in eurostat data
+      left_join(intraEU_UK_trade, by = c("GCAM_Commodity", "year", "flow")) %>%
+      mutate(value = if_else(is.na(value_intraEU), value, value - value_intraEU)) %>%
+      select(fuel = GCAM_Commodity, year, flow, value)
+
+    # total Ukraine trade from comstat
+    extraEU_Ukraine_trade <- L1011.ff_GrossTrade_EJ_R_C_Y %>%
+      filter(GCAM_region_ID == Ukraine_ID) %>%
+      select(-net_trade) %>%
+      tidyr::pivot_longer(cols = c("GrossExp_EJ", "GrossImp_EJ"), names_to = "flow") %>%
+      # match in eurostat data
+      left_join(intraEU_Ukraine_trade, by = c("GCAM_Commodity", "year", "flow")) %>%
+      mutate(value = if_else(is.na(value_intraEU), value, value - value_intraEU)) %>%
+      select(fuel = GCAM_Commodity, year, flow, value)
+
     # The european trade in Comtrade includes intra-european trade
     # So we need to replace it with the external trade from the eurostat data
     L1011.EUR_SingleMarket_Global_Trade <- L1011.ff_trade_Europe_EJ_R_Y %>%
       filter(fuel %in% L1011.ff_GrossTrade_EJ_R_C_Y$GCAM_Commodity,
              region_importer != region_exporter,
-             !(import_ctry == "Switzerland" | export_ctry == "Switzerland")) %>%
+             !(import_ctry == "Switzerland" | export_ctry == "Switzerland"),
+             !(import_ctry == "United Kingdom" | export_ctry == "United Kingdom"),
+             !(import_ctry == "Ukraine" | export_ctry == "Ukraine"),) %>%
       mutate(flow = if_else(region_importer == SINGLE_MARKET_NAME, "GrossImp_EJ", "GrossExp_EJ")) %>%
-      bind_rows(extraEU_Swiss_trade) %>%
+      bind_rows(extraEU_Swiss_trade,
+                extraEU_UK_trade,
+                extraEU_Ukraine_trade) %>%
       group_by(GCAM_Commodity = fuel, year, flow) %>%
       summarise(value = sum(value)) %>%
       ungroup %>%

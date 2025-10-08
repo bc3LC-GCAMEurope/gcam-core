@@ -13,9 +13,15 @@ module_aglu_L100.FAO_SUA_PrimaryEquivalent(command, ...)
 }
 \value{
 Depends on \code{command}: either a vector of required inputs, a vector of output names, or (if
+<<<<<<< HEAD
 \code{command} is "MAKE") all the generated outputs: \code{GCAM_AgLU_SUA_APE_1973_2019},
 \code{FAO_AgProd_Kt_All},\code{FAO_AgArea_Kha_All},\code{FAO_Food_Macronutrient_All_2010_2019},
 \code{FAO_Food_MacronutrientRate_2010_2019_MaxValue}
+=======
+  \code{command} is "MAKE") all the generated outputs: \code{GCAM_AgLU_SUA_APE_1973_2019},
+  \code{FAO_AgProd_Kt_All},\code{FAO_AgArea_Kha_All},\code{FAO_Food_Macronutrient_All_2010_2019},
+  \code{FAO_Food_MacronutrientRate_2010_2019_MaxValue}
+>>>>>>> gcam-v8.0
 }
 \description{
 Generate supply utilization balance in primary equivalent
@@ -30,6 +36,7 @@ be changed in corresponding mappings. The output data is not averaged over time.
 }
 \author{
 XZ 2022
+<<<<<<< HEAD
 Get extraction rate
 description Gross extraction rate is calculated for domestic, traded, and lagged values.
 By gross, it means sink items are aggregated.
@@ -49,6 +56,8 @@ return SUA DF
 Primary equivalent aggregation
 param DF_ALL Input supply-utilization accounting data frame with all levels of data nested which need to be primarized
 return A supply-utilization accounting data frame with all levels processed and aggregated to GCAM_commodity
+=======
+>>>>>>> gcam-v8.0
 # In some cases, prescale sink item SUA using output_specific_extraction_rate can improve the processing.
 # e.g., when coproduction shares are not fixed.
 }

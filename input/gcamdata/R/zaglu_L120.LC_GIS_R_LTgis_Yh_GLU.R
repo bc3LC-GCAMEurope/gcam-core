@@ -54,8 +54,6 @@ module_aglu_L120.LC_GIS_R_LTgis_Yh_GLU <- function(command, ...) {
 
     all_data <- list(...)[[1]]
 
-    # Load required inputs ----
-    get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
 
     # Load required inputs ----
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)

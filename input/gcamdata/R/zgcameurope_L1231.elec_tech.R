@@ -92,6 +92,10 @@ module_gcameurope_L1231.elec_tech <- function(command, ...) {
       mutate(efficiency_tech = approx_fun(year, efficiency_tech),
              improvement.max = approx_fun(year, improvement.max),
              improvement.rate = approx_fun(year, improvement.rate)) %>%
+      # Extend to 2021
+      mutate(efficiency_tech = approx_fun(year, efficiency_tech, rule  = 2),
+             improvement.max = approx_fun(year, improvement.max, rule  = 2),
+             improvement.rate = approx_fun(year, improvement.rate, rule  = 2)) %>%
       ungroup() -> L1231.eff_R_elec_gas_tech
 
     # Reset upper and lower bound efficiencies, as needed

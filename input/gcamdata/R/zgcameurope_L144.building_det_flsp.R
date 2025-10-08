@@ -169,7 +169,7 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
     # due to the bias.correction.adder incorporated to the floorspace demand.
 
     # First, define which is by default the final observed year and save the regions with observed data beyond that point (up to the final calibration year)
-    avg_fin_obs_year<-2005
+    avg_fin_obs_year <- MODEL_FINAL_BASE_YEAR
     iso_with_obs_data<-iso_GCAM_regID %>%
       filter(iso %in% list_iso_calc) %>%
       pull(GCAM_region_ID) %>%

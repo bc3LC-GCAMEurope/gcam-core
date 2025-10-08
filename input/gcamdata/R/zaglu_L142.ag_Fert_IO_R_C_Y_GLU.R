@@ -115,7 +115,7 @@ module_aglu_L142.ag_Fert_IO_R_C_Y_GLU <- function(command, ...) {
     # they only have one GLU, so production does not need to be spread between GLUs
     L100.FAO_isl_mlt_adjust <- L100.FAO_ag_Prod_t %>%
       filter(iso %in% c("isl", "mlt"), value > 0, year == aglu.GTAP_HISTORICAL_YEAR) %>%
-      left_join(select(FAO_ag_items_PRODSTAT, item, item_code, GTAP_crop), by = c("item", "item_code")) %>%
+      left_join(select(FAO_ag_items_PRODSTAT, item, item_code, GTAP_crop), by = c("item_code")) %>%
       # Dropping some leeks and misc veg production in Malta
       na.omit() %>%
       select(iso, GTAP_crop, value_FAO = value)

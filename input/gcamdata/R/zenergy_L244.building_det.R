@@ -1,3 +1,4 @@
+
 # Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
 
 #' module_energy_L244.building_det
@@ -614,7 +615,7 @@ module_energy_L244.building_det <- function(command, ...) {
       summarise(satiation.level = mean(satiation.level),
                 `satiation-impedance`= mean(`satiation-impedance`)) %>%
       ungroup() %>%
-      mutate(year = 2015) %>%
+      mutate(year = MODEL_FINAL_BASE_YEAR) %>%
       left_join_error_no_match(A_regions %>% select(GCAM_region_ID,region),by = "region") %>%
       left_join_error_no_match(bind_rows(L144.flsp_bm2_R_res_Yh %>% mutate(nodeInput = "resid"),
                                          L144.flsp_bm2_R_comm_Yh %>% mutate(nodeInput = "comm")),
@@ -666,7 +667,7 @@ module_energy_L244.building_det <- function(command, ...) {
       select(-satiation.level) %>%
       rename(satiation.level = value) %>%
       left_join_error_no_match(L244.Satiation_impedance_SSPs,by = c("region", "gcam.consumer", "nodeInput", "building.node.input","SSP")) %>%
-      mutate(year = 2015) %>%
+      mutate(year = MODEL_FINAL_BASE_YEAR) %>%
       rename(observed_flsp_bm2 = base.building.size) %>%
       mutate(observed_pcflsp = observed_flsp_bm2*1E9 / (pop_thous*1E3)) %>%
       mutate(est_pcflsp = satiation.level * (1-exp(-log(2)*pcGDP_thous90USD/`satiation-impedance`)),
@@ -1109,7 +1110,7 @@ module_energy_L244.building_det <- function(command, ...) {
     # Adjust interpolation rule to promote electricity penetration in developing economies
     # There are some regions in which electric heating needs to be promoted due to very low values in base years:
     elec_adj<-L144.base_service_EJ_serv_fuel %>%
-      filter(year == 2015, fuel == "electricity", grepl("resid heating", service)) %>%
+      filter(year == MODEL_FINAL_BASE_YEAR, fuel == "electricity", grepl("resid heating", service)) %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       left_join_error_no_match(L144.flsp_bm2_R_res_Yh %>% rename(flsp_bm2 = value),
                                by = c("GCAM_region_ID", "year", "region")) %>%

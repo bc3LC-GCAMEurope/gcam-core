@@ -40,7 +40,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
                      FILE = "gcam-europe/A23.elecS_stubtech_energy_inputs",
                      FILE = "gcam-europe/A23.elecS_naming",
                      FILE = "gcam-europe/elecS_time_fraction",
-                     "L113.elecS_globaltech_capital_battery_ATB",
+                     FILE = "gcam-europe/elecS_globaltech_capital_battery_ATB",
                      "L1239.R_elec_supply",
                      "L223.StubTechEff_elec_EUR",
                      "L223.StubTechCalInput_elec_EUR",
@@ -349,7 +349,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       distinct(supplysector,subsector, elecS_tech = technology)
 
 
-    L2234.elecS_globaltech_capital_battery_ATB <- L113.elecS_globaltech_capital_battery_ATB %>%
+    L2234.elecS_globaltech_capital_battery_ATB <- elecS_globaltech_capital_battery_ATB %>%
       left_join_error_no_match(grid_storage_elecS, by = c("supplysector", "subsector")) %>%
       select(-technology) %>%
       rename(technology = elecS_tech)
@@ -660,7 +660,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       add_units("unitless") %>%
       add_comments("Global capacity factors for electricity load segments generation technologies") %>%
       add_precursors("gcam-europe/elecS_time_fraction",
-                     "L113.elecS_globaltech_capital_battery_ATB",
+                     "gcam-europe/elecS_globaltech_capital_battery_ATB",
                      "L223.GlobalTechCapFac_elec") ->
       L2234.GlobalTechCapFac_elecS_EUR
 

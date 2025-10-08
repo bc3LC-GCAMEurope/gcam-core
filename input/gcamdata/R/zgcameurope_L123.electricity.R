@@ -144,7 +144,8 @@ module_gcameurope_L123.electricity <- function(command, ...) {
     L123.in_EJ_R_indchp_F_Yh_EUR <- L123.out_EJ_R_indchp_F_Yh_EUR %>%
       full_join(filter(A23.chp_elecratio, fuel != "hydrogen"), by = "fuel") %>%
       mutate(product = if_else(fuel == "biomass", "Bioenergy", "Fossil energy")) %>%
-      left_join(L101.CHP_IO_EUR, by = c("GCAM_region_ID", "year", "product")) %>%
+      left_join(L101.CHP_IO_EUR %>%
+                  mutate(year = as.numeric(year)), by = c("GCAM_region_ID", "year", "product")) %>%
       mutate(chp_coef = if_else(is.na(chp_coef), elec_ratio, chp_coef),
              # Limit to within +/-50% of default
              chp_coef_adj = if_else(chp_coef > elec_ratio, pmin(chp_coef, 1.5 * elec_ratio), chp_coef),
