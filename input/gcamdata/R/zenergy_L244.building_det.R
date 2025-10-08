@@ -1344,6 +1344,7 @@ module_energy_L244.building_det <- function(command, ...) {
       rename(pcgdp_thous = value) %>%
       select(GCAM_region_ID,fuel,service,year,pcgdp_thous,en_EJ) %>%
       arrange(en_EJ) %>%
+      left_join(L144.prices_bld %>% rename(service = market) %>% select(-region), by = c("GCAM_region_ID", "year","service"))
       left_join_error_no_match(L144.prices_bld %>% rename(service = market) %>% select(-region), by = c("GCAM_region_ID", "year","service")) %>%
       filter(price != 0) %>%
       left_join_error_no_match(L144.flsp_bm2_R_res_Yh, by = c("GCAM_region_ID", "year")) %>%
