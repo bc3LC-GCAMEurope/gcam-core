@@ -1,9 +1,9 @@
-# File: GCAM_region_pipeline_bloc_export.csv
-# Title: Mapping gas origin region to its corresponding pipeline trade bloc that it exports to
-# Source: NA (mapping file)
-# Units: NA
-# Column types: cc
-# ----------
+# File: GCAM_region_pipeline_bloc_export.csv,
+# Title: Mapping gas origin region to its corresponding pipeline trade bloc that it exports to,
+# Source: NA (mapping file),
+# Units: NA,
+# Column types: cc,
+# ----------,
 origin.region,pipeline.market
 USA,N.Amer
 Africa_Eastern,Afr_MidE

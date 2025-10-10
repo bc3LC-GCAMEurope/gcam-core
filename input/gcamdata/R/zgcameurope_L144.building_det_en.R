@@ -1469,18 +1469,15 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       L144.internal_gains_EUR # This is a final output table.
 
     # Create L144.prices_bld_EUR to calibrate satiation impedance (mu) at region level within the DS
-    # L144.prices_bld_EUR <- GCAM_region_names %>%
-    #   repeat_add_columns(tibble(market = unique(L144.base_service_EJ_serv_EUR$service))) %>%
-    #   repeat_add_columns(tibble(year = MODEL_BASE_YEARS)) %>%
-    #   mutate(value = 1) %>%
-    #   rename(price = value) %>%
-    #   # select historical years
-    #   filter(year <= max(MODEL_BASE_YEARS))
-
     L144.prices_bld_EUR <- A44.CalPrice_bld_EUR %>%
       left_join_error_no_match(GCAM_region_names,by="region") %>%
       gather_years() %>%
-      # Add 1975 and extrapolate prices using rule 2
+      # only residential will have cons.groups thus we expect NAs and set the fill flag accordingly
+      separate(market, c("market", "cons.groups"), sep = "_", fill = "right") %>%
+      group_by(region, GCAM_region_ID, market, year) %>%
+      # average out building energy service costs for consumer groups
+      summarise(value = mean(value)) %>%
+      # Add 1975 and fill prices using rule 2 (to copy terminal value)
       group_by(region,GCAM_region_ID,market) %>%
       complete(nesting(year = MODEL_BASE_YEARS)) %>%
       mutate(value = if_else(is.na(value),approx_fun(year, value, rule = 2),value)) %>%

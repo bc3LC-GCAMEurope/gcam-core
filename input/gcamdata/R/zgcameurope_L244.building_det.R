@@ -151,11 +151,22 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     L101.Pop_thous_R_Yh_EUR <- filter_regions_europe(L101.Pop_thous_R_Yh, region_ID_mapping = GCAM_region_names)
     L102.pcgdp_thous90USD_Scen_R_Y_EUR <- filter_regions_europe(L102.pcgdp_thous90USD_Scen_R_Y, region_ID_mapping = GCAM_region_names)
     L106.income_shares <- L106.income_distributions %>% filter_regions_europe()
-    n_groups<-nrow(unique(L106.income_shares %>%
-                            select(gcam.consumer)))
+    n_groups <- length(unique(L106.income_shares$gcam.consumer))
 
     # Add a deflator for harmonizing GDPpc with prices
     def9075<-gdp_deflator(1990, 1975)
+
+    # Check income shares are correct for all regions
+    check_income_shares <- L106.income_shares %>%
+      group_by(region, year) %>%
+      mutate(share_agg = sum(subregional.income.share)) %>%
+      ungroup()
+
+
+    if((sum(check_income_shares$share_agg) / nrow(check_income_shares))-1 > 0.01){
+      print("WARNING:income shares not correctly assigned")
+    }
+
 
     # ===================================================
     # Adjust gcam.consumer file to add the multiple consumers combining the raw file with multiple consumer information
@@ -272,7 +283,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     # Using the parameters estimated in module LA144.building_det_flsp, calculate the "estimated" residential floorspace
     # These estimations will be used for calibration and for the calculation of the regional bias adder (bias-adjust-parameter) in those regions with observed historical data
-    L244.Floorspace_resid_est<-L144.flsp_param_EUR %>%
+    L244.Floorspace_resid_est <- L144.flsp_param_EUR %>%
       repeat_add_columns(tibble(gcam.consumer=paste0("resid EUR_",unique(L106.income_shares$gcam.consumer)))) %>%
       left_join_error_no_match(GCAM_region_names, by="region") %>%
       repeat_add_columns(tibble(year=HISTORICAL_YEARS)) %>%
@@ -289,7 +300,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     # Calculate the regional bias adder as the difference between observed (L144.flsp_bm2_R_res_Yh_EUR) and estimated (L244.Floorspace_resid_est) data
     # Allocate the adder equally across multiple consumers
-    L244.Floorspace_resid_adder<-L244.Floorspace_resid_est %>%
+    L244.Floorspace_resid_adder <- L244.Floorspace_resid_est %>%
       group_by(region,year) %>%
       summarise(flsp_est = sum(flsp_est)) %>%
       ungroup() %>%
@@ -300,7 +311,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       repeat_add_columns(tibble(gcam.consumer=paste0("resid EUR_",unique(L106.income_shares$gcam.consumer))))
 
     # Combine observed data with the bias adder to obtain historical residential floorspace (BM2)
-    L244.Floorspace_resid<-L244.Floorspace_resid_est %>%
+    L244.Floorspace_resid <- L244.Floorspace_resid_est %>%
       select(region, gcam.consumer, year, flsp_est) %>%
       left_join_error_no_match(L244.Floorspace_resid_adder, by = c("region", "gcam.consumer","year")) %>%
       mutate(base.building.size = flsp_est + bias.adder,
@@ -429,7 +440,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     # At this point, with a single representative consumer in the commercial sector, the adder is going to be zero,
     # but this structure allows a future implementation of multiple consumers in the commercial sector
 
-    # First, check that at region level observed and estimated floorspace match in 2015: (satiation adder should be equal to zero)
+    # First, check that at region level observed and estimated floorspace match in 2021: (satiation adder should be equal to zero)
     L244.SatiationAdder_checkReg<- L244.Satiation_flsp_EUR %>%
       mutate(satiation.level = satiation.level * 1E6) %>%
       left_join_error_no_match(L244.Satiation_impedance_EUR,by = c("region", "gcam.consumer", "nodeInput", "building.node.input")) %>%
@@ -438,7 +449,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       summarise(satiation.level = mean(satiation.level),
                 `satiation-impedance`= mean(`satiation-impedance`)) %>%
       ungroup() %>%
-      mutate(year = 2015) %>%
+      mutate(year = MODEL_FINAL_BASE_YEAR) %>%
       left_join_error_no_match(A_regions %>% select(GCAM_region_ID,region),by = "region") %>%
       left_join_error_no_match(bind_rows(L144.flsp_bm2_R_res_Yh_EUR %>% mutate(nodeInput = "resid EUR"),
                                          L144.flsp_bm2_R_comm_Yh_EUR %>% mutate(nodeInput = "comm EUR")),
@@ -503,15 +514,20 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     n.cons.groups<-as.numeric(length(unique(A44.gcam_consumer_resid$gcam.consumer)))
 
     add.cg<-function(df){
-      df.res<-df %>% filter(grepl("resid",supplysector))
-      df.comm<-df %>% filter(grepl("comm",supplysector))
 
-      df<- df.res %>%
-        repeat_add_columns(tibble::tibble(cons.groups)) %>%
-        separate(cons.groups,c("sector","cons.groups"),sep="_") %>%
-        unite(supplysector,c(supplysector,cons.groups), sep="_") %>%
-        select(-sector) %>%
-        bind_rows(df.comm)
+      df.res <- df %>% filter(grepl("resid", supplysector))
+      df.comm <- df %>% filter(grepl("comm", supplysector))
+
+      # prevent circularity: only add multiple consumers if the residential sector doesn't already have them
+      if (!all(grepl(paste(sub("resid", "", cons.groups), collapse = "|"), df.res$supplysector))) {
+        df <- df.res %>%
+          repeat_add_columns(tibble::tibble(cons.groups)) %>%
+          separate(cons.groups,c("sector","cons.groups"),sep="_") %>%
+          unite(supplysector,c(supplysector,cons.groups), sep="_") %>%
+          select(-sector) %>%
+          bind_rows(df.comm)
+      }
+
       return(df)
     }
 

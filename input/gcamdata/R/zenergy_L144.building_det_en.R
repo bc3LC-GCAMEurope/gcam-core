@@ -557,20 +557,31 @@ module_energy_L144.building_det_en <- function(command, ...) {
 
 
     # 1G
+    # A44.Calprice_bld has regional data. The next code block will error if regional definitions change
+    # Stop with a warning by checking regions against GCAM_region_names
+    if (!all(A44.Calprice_bld$region %in% GCAM_region_names$region)) {
+      stop("Some regions in A44.Calprice_bld.csv do not match GCAM_region_names. More details in the chunk after this message line.")
+
+      # copy prices data from brokenout_FROM region to brokenout_TO, run GCAM reference, update A44.Calprice_bld.csv
+      # place the following sample code block before this conditional
+      if (!"brokenout_TO" %in% A44.Calprice_bld$region) {
+        A44.Calprice_bld %>%
+          filter(region == "brokenout_FROM") %>%
+          mutate(region = "brokenout_TO") %>%
+          bind_rows(A44.Calprice_bld) -> A44.Calprice_bld
+      }
+    }
+
     # Create L144.prices_bld to calibrate satiation impedance (mu) at region level within the DS
-    # L144.prices_bld <- GCAM_region_names %>%
-    #   repeat_add_columns(tibble(market = unique(L144.base_service_EJ_serv$service))) %>%
-    #   repeat_add_columns(tibble(year = MODEL_BASE_YEARS)) %>%
-    #   mutate(value = 1) %>%
-    #   rename(price = value) %>%
-    #   # select historical years
-    #   filter(year <= max(MODEL_BASE_YEARS))
-
-
-    L144.prices_bld<-A44.Calprice_bld %>%
-     left_join_error_no_match(GCAM_region_names,by="region") %>%
+    L144.prices_bld <- A44.Calprice_bld %>%
+      left_join_error_no_match(GCAM_region_names,by="region") %>%
       gather_years() %>%
-      # Add 1975 and extrapolate prices using rule 2
+      # only residential will have cons.groups thus we expect NAs and set the fill flag accordingly
+      separate(market, c("market", "cons.groups"), sep = "_", fill = "right") %>%
+      group_by(region, GCAM_region_ID, market, year) %>%
+      # average out building energy service costs for consumer groups
+      summarise(value = mean(value)) %>%
+      # Add 1975 and fill prices using rule 2 (to copy terminal value)
       group_by(region,GCAM_region_ID,market) %>%
       complete(nesting(year = MODEL_BASE_YEARS)) %>%
       mutate(value = if_else(is.na(value),approx_fun(year, value, rule = 2),value)) %>%
