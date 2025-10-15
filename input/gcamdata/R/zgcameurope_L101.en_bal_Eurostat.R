@@ -55,6 +55,8 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
     # EUR regions
     L101.GCAM_EUR_regions <- GCAM32_to_EU %>%
       filter(GCAMEU_region != GCAM32_region) %>%
+      # Adjust Ukraine, which is filtered out
+      bind_rows(GCAM32_to_EU %>% filter(GCAM32_region == "Ukraine")) %>%
       # remove Georgia: although it has data availabe in Eurostat, it belongs to the Former Soviet Union,Central Asia region
       filter(iso != 'geo')
 
