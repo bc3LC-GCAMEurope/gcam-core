@@ -75,7 +75,7 @@ module_energy_L120.offshore_wind <- function(command, ...) {
       left_join_error_no_match(NREL_wind_ctry, by = "IAM_country") %>%
       left_join_error_no_match(iso_GCAM_regID %>% select(iso, GCAM_region_ID), by = "iso" ) %>%
       select(-iso) %>%
-      gather(wind_class, resource.potential.PWh, -IAM_country, -GCAM_region_ID, -depth_class, -distance_to_shore) %>%
+      tidyr::gather(wind_class, resource.potential.PWh, -IAM_country, -GCAM_region_ID, -depth_class, -distance_to_shore) %>%
       mutate(resource.potential.EJ = resource.potential.PWh * 1000 * CONV_TWH_EJ ) %>%
       group_by(GCAM_region_ID, wind_class, depth_class) %>%
       summarise(resource.potential.EJ = sum(resource.potential.EJ)) %>%
