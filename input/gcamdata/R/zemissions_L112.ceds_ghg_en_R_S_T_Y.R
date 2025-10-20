@@ -504,7 +504,6 @@ module_emissions_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
 
     # Make a table that has oil_gas emissions for USA for the years and pollutants not in NEI
     # We will keep these from CEDS
-    `%!in%` <- Negate(`%in%`)
     L112.CEDS_GCAM_emissions_OG_USA_keep <- L112.CEDS_GCAM_emissions_comb %>%
       filter(CEDS_agg_sector == "oil_gas", GCAM_region_ID == 1,
              Non.CO2 %!in% unique(NEI_tg_oilgas_USA_Yb$Non.CO2) |

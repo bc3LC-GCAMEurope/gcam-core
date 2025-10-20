@@ -244,7 +244,6 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
     # Update the L101.GCAM_EUR_regions mapping by removing iso codes whose data is not
     # available in Eurostat (e.g Switzerland) & add 0s to elec_solar CSP for the bld
     # sector from 1971 to 1989 to avoid further problems. Data start in 1990.
-    `%!in%` <- Negate(`%in%`)
     L101.GCAM_EUR_regions <- L101.GCAM_EUR_regions %>%
       filter(GCAM_region_ID %in% L101.en_bal_EJ_R_Si_Fi_Yh_Eurostat$GCAM_region_ID) %>%
       # With the BYU, UK a nd Ukariane are treated as Switzerland due to lack of data:

@@ -1297,6 +1297,10 @@ gcameurope.EUROSTAT_COUNTRIES <- c("Albania", "Austria", "Belgium", "Bosnia and 
                                    "Slovakia", "Slovenia", "Spain", "Sweden",
                                    "Turkey")
 
+gcameurope.EUROSTAT_COUNTRIES_ID <- c(28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+                                       41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53,
+                                       54, 55, 57, 58, 59, 60, 61, 62, 64)
+
 gcameurope.EUROSTAT_ISO <- c("aut","bel","bgr","hrv","cyp","cze","dnk","fro",
                              "grl","est","fin","fra","mco","shn","spm","deu",
                              "grc","hun","irl","ita","smr","vat","lva","ltu",
@@ -1306,8 +1310,14 @@ gcameurope.EUROSTAT_ISO <- c("aut","bel","bgr","hrv","cyp","cze","dnk","fro",
 
 gcameurope.TRADE_REGION <- "Austria"
 
+gcameurope.Swiss_ID <- 63
+
 gcameurope.EUROSTAT_ADJCOUNTRIES <- c("UK", "Ukraine")
 
+gcameurope.EUROSTAT_ADJCOUNTRIES_ID <- c(65, 66)
+
+
+`%!in%` <- Negate(`%in%`)
 
 # Time shift conditions
 # ======================================================================

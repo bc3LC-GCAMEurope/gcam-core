@@ -110,8 +110,6 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
 
     # Compute the service-fuel shares from the Eurostat data (estat_nrg_d_hhq_filtered_en) by iso & year
     # First aggregate detailed data to GCAM region, year, service
-    `%!in%` <- Negate(`%in%`)
-
     gcameurope.EUROSTAT_ADJCOUNTRIES_ID <- get_data(all_data, "common/GCAM_region_names") %>%
       filter(region %in% gcameurope.EUROSTAT_ADJCOUNTRIES) %>%
       pull(GCAM_region_ID)

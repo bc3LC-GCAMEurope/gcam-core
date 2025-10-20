@@ -125,8 +125,6 @@ module_gcamusa_L131.enduse_noEFW <- function(command, ...) {
       select(-tot.bio)
 
     # Need an ancilary function
-    `%!in%` = Negate(`%in%`)
-
     L131.in_EJ_USA_Senduse_F_Yh_noEFW_bldAdj<-L131.in_EJ_USA_Senduse_F_Yh_noEFW %>%
       filter(grepl("bld", sector)) %>%
       anti_join(L131.in_EJ_USA_Senduse_F_Yh_noEFW_bldAdj_bio, by = c("GCAM_region_ID", "sector", "fuel", "year")) %>%
