@@ -103,7 +103,8 @@ module_gcameurope_L2391.gas_trade_flows <- function(command, ...) {
                fuel %in% L1011.ff_GrossTrade_EJ_R_Y_LNG$GCAM_Commodity) %>%
       tidyr::pivot_longer(cols = c(import_ctry, export_ctry), values_to = "region", names_to = "flow") %>%
       filter(region %in% Europe_Single_Market_Regions$GCAMEU_region,
-             region != "Switzerland") %>%
+             region != "Switzerland",
+             region %!in% gcameurope.EUROSTAT_ADJCOUNTRIES) %>%
       group_by(region, fuel, flow, year) %>%
       summarise(value = sum(value)) %>%
       ungroup %>%

@@ -274,10 +274,12 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
         exports = case_when(
           sign(net.exports.CAL) == sign(net_exports) ~ exports * net.exports.CAL / net_exports,
           net.exports.CAL > 0 & net_exports < 0 ~ exports + net.exports.CAL - net_exports,
+          net_exports == 0 & net.exports.CAL > 0 ~ net.exports.CAL,
           TRUE ~ exports),
         imports = case_when(
           sign(net.exports.CAL) == sign(net_exports) ~ imports * net.exports.CAL / net_exports,
           net.exports.CAL < 0 & net_exports > 0 ~ imports + net_exports - net.exports.CAL,
+          net_exports == 0 & net.exports.CAL < 0 ~ abs(net.exports.CAL),
           TRUE ~  imports),
         net_exports_recalc = exports - imports,
         # Calculate consumption from domestic sources: total consumption minus gross imports

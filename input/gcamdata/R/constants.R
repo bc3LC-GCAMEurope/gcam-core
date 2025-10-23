@@ -1314,6 +1314,10 @@ gcameurope.Swiss_ID <- 63
 
 gcameurope.EUROSTAT_ADJCOUNTRIES <- c("UK", "Ukraine")
 
+gcameurope.EUROSTAT_ADJISO <- c("chi",
+                                "flk","gbr","ggy","gib","imn","jey","tca","vgb",
+                                "wlf","ukr")
+
 gcameurope.EUROSTAT_ADJCOUNTRIES_ID <- c(65, 66)
 
 

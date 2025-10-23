@@ -64,8 +64,8 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
     # 1a. Energy Balance Mapping ----------------
     # Add mappings to energy balance
     L101.Eurostat_en_bal_ctry_hist <- nrg_bal_c %>%
-      # Remove GEorgia
-      filter(geo != "EU27_2020", geo != 'GE') %>%
+      # Remove GEorgia, Ukraine and UK
+      filter(geo != "EU27_2020", geo != 'GE', geo != "UA", geo != "UK") %>%
       left_join_error_no_match(geo_to_iso_map, by = "geo") %>%
       # Ok to have NAs
       left_join(nrgbal_to_sector_map, by = "nrg_bal") %>%
@@ -277,9 +277,10 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
                   complete(nesting(GCAM_region_ID, sector, fuel),
                            year = unique(L101.en_bal_EJ_R_Si_Fi_Yh_EUR_tmp$year),
                            fill = list(value = 0)) %>%
-                      filter(year <= MODEL_FINAL_BASE_YEAR))  %>%
-      # UK needs to be taken out from balances, due to lack of data from final calibration year:
-      filter(GCAM_region_ID %!in% gcameurope.EUROSTAT_ADJCOUNTRIES_ID)# FINAL OUTPUT TABLE - temporally complete EUR data
+                      filter(year <= MODEL_FINAL_BASE_YEAR))
+    # %>%
+    #   # UK needs to be taken out from balances, due to lack of data from final calibration year:
+    #   filter(GCAM_region_ID %!in% gcameurope.EUROSTAT_ADJCOUNTRIES_ID) # FINAL OUTPUT TABLE - temporally complete EUR data
 
     # 1c. Get ratio for feedstocks based on IEA -------------------
     # Eurostat has only industrial feedstocks, but IEA splits defines industrial, chemical, and construction
