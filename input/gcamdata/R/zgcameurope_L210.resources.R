@@ -14,7 +14,7 @@
 #' \code{L210.SmthRenewRsrcCurves_wind_EUR}, \code{L210.SmthRenewRsrcCurves_offshore_wind_EUR}, \code{L210.SmthRenewRsrcCurvesGdpElast_roofPV_EUR},
 #' \code{L210.GrdRenewRsrcCurves_geo_EUR}, \code{L210.GrdRenewRsrcMax_geo_EUR}, \code{L210.GrdRenewRsrcCurves_EGS_EUR}, \code{L210.GrdRenewRsrcMax_EGS_EUR},
 #' \code{L210.ResSubresourceProdLifetime_EUR}, \code{L210.ResReserveTechLifetime_EUR}, \code{L210.ResReserveTechDeclinePhase_EUR}, \code{L210.ResReserveTechProfitShutdown_EUR},
-#' \code{L210.ResTechShrwt_EUR}, \code{L210.ResTechShrwt_EGS_EUR}.
+#' \code{L210.ResTechShrwt_EUR}, \code{L210.ResTechShrwt_EGS_EUR}.\code{L210.GrdRenewRsrcCurves_tradbio_EUR}.\code{L210.GrdRenewRsrcMax_tradbio_EUR}.
 #' @details Resource market information, prices, TechChange parameters, supply curves, and environmental costs.
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr bind_rows distinct filter if_else mutate select semi_join
@@ -76,6 +76,8 @@ module_gcameurope_L210.resources <- function(command, ...) {
                     "L210.RenewRsrc",
                     "L210.RenewRsrcPrice",
                     "L210.ResTechShrwt",
+                    "L210.GrdRenewRsrcCurves_tradbio",
+                    "L210.GrdRenewRsrcMax_tradbio",
                     OUTPUTS_TO_COPY_FILTER)
   MODULE_OUTPUTS <- c("L210.RenewRsrc_EUR",
                       "L210.RenewRsrcPrice_EUR",
@@ -86,6 +88,8 @@ module_gcameurope_L210.resources <- function(command, ...) {
                       "L210.ResSubresourceProdLifetime_EUR",
                       "L210.RsrcFixOut_EUR",
                       "L210.RsrcExoShutdown_EUR",
+                      "L210.GrdRenewRsrcCurves_tradbio_EUR",
+                      "L210.GrdRenewRsrcMax_tradbio_EUR",
                       paste0(OUTPUTS_TO_COPY_FILTER, "_EUR"))
 
   if(command == driver.DECLARE_INPUTS) {
@@ -110,15 +114,29 @@ module_gcameurope_L210.resources <- function(command, ...) {
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
-    # Remove trad bio in EUR datasets
+    # Remove trad bio in EUR datasets, but not in UK and Ukraine
     L210.RenewRsrc_EUR <- L210.RenewRsrc %>%
+      filter(region %!in% gcameurope.EUROSTAT_ADJCOUNTRIES) %>%
       filter(renewresource != 'traditional biomass') %>%
+      bind_rows(
+        L210.RenewRsrc %>% filter(region %in% gcameurope.EUROSTAT_ADJCOUNTRIES)
+      )  %>%
       filter_regions_europe()
+
     L210.RenewRsrcPrice_EUR <- L210.RenewRsrcPrice %>%
+      filter(region %!in% gcameurope.EUROSTAT_ADJCOUNTRIES) %>%
       filter(renewresource != 'traditional biomass') %>%
+      bind_rows(
+        L210.RenewRsrcPrice %>% filter(region %in% gcameurope.EUROSTAT_ADJCOUNTRIES)
+      )  %>%
       filter_regions_europe()
+
     L210.ResTechShrwt <- L210.ResTechShrwt %>%
+      filter(region %!in% gcameurope.EUROSTAT_ADJCOUNTRIES) %>%
       filter(subresource != 'traditional biomass') %>%
+      bind_rows(
+        L210.ResTechShrwt %>% filter(region %in% gcameurope.EUROSTAT_ADJCOUNTRIES)
+      )  %>%
       filter_regions_europe()
 
     # Create outputs that are simply copied from main scripts and filtered to Eurostat regions
@@ -414,6 +432,16 @@ module_gcameurope_L210.resources <- function(command, ...) {
       left_join(no_hist_production, by = c("region", "resource", "year")) %>%
       mutate(lifetime = if_else(!is.na(lifetime.adj), lifetime.adj, lifetime)) %>%
       select(-lifetime.adj)
+
+
+    # Add tradBio curves in UK and Ukraine
+    L210.GrdRenewRsrcCurves_tradbio_EUR <- L210.GrdRenewRsrcCurves_tradbio %>%
+      filter(region %in% gcameurope.EUROSTAT_ADJCOUNTRIES)
+
+    L210.GrdRenewRsrcMax_tradbio_EUR <- L210.GrdRenewRsrcMax_tradbio %>%
+      filter(region %in% gcameurope.EUROSTAT_ADJCOUNTRIES)
+
+
     # Produce outputs ===================================================
     L210.RenewRsrc_EUR %>%
       add_title("Market information for renewable resources") %>%
@@ -459,6 +487,23 @@ module_gcameurope_L210.resources <- function(command, ...) {
       add_comments("is no competetion between technologies.") %>%
       add_precursors("common/GCAM_region_names", "gcam-europe/A10.subrsrc_info_EUR") ->
       L210.ResTechShrwt_EUR
+
+
+    L210.GrdRenewRsrcCurves_tradbio_EUR %>%
+      add_title("Graded supply curves of traditional biomass resources") %>%
+      add_units("available: EJ; extractioncost: 1975$/GJ") %>%
+      add_comments("Data from L117.RsrcCurves_EJ_R_tradbio") %>%
+      add_precursors("L210.GrdRenewRsrcCurves_tradbio") ->
+      L210.GrdRenewRsrcCurves_tradbio_EUR
+
+    L210.GrdRenewRsrcMax_tradbio_EUR %>%
+      add_title("Default max sub resource of traditional biomass resources") %>%
+      add_units("Unitless") %>%
+      add_comments("maxSubResource assumed to be 1 for all regions") %>%
+      same_precursors_as(L210.GrdRenewRsrcCurves_tradbio_EUR) ->
+      L210.GrdRenewRsrcMax_tradbio_EUR
+
+
 
     return_data(MODULE_OUTPUTS)
   } else {

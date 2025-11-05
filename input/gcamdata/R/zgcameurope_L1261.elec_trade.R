@@ -38,11 +38,6 @@ module_gcameurope_L1261.elec_trade <- function(command, ...) {
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
 
-    # 0. UK and Ukraine need to be filtered out from the eurostat trade balances (consistent with CH)
-     gcameurope.EUROSTAT_ADJCOUNTRIES_new <- c(gcameurope.EUROSTAT_ADJCOUNTRIES, "United Kingdom")
-
-    eurostat_elec_exports <- eurostat_elec_exports %>% filter(export_ctry %!in% gcameurope.EUROSTAT_ADJCOUNTRIES_new)
-    eurostat_elec_imports <- eurostat_elec_imports %>% filter(import_ctry %!in% gcameurope.EUROSTAT_ADJCOUNTRIES_new)
 
     # 0. Mappings to eurostat trade balance ----------------------
     # need to map grid regions to eurostat data
@@ -64,9 +59,7 @@ module_gcameurope_L1261.elec_trade <- function(command, ...) {
       bind_rows(tibble(grid_region = c("Iberian_Peninsula", "Central_Western_Europe"),
                        code = c("AD", "LI"),
                        region = c("Andorra", "Liechtenstein"))) %>%
-      mutate(code = if_else(region == "Switzerland", "CH", code),
-             code = if_else(region == "UK", "UK", code),
-             code = if_else(region == "Ukraine", "UA", code))
+      mutate(code = if_else(region == "Switzerland", "CH", code))
 
     L126.in_EJ_R_elecownuse_F_Yh_EUR_grid <- L126.in_EJ_R_elecownuse_F_Yh_EUR %>%
       filter_regions_europe(regions_to_keep_name = grid_regions$region, region_ID_mapping = GCAM_region_names)

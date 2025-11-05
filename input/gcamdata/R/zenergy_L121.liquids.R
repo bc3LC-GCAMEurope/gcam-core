@@ -259,7 +259,7 @@ module_energy_L121.liquids <- function(command, ...) {
 
       # JS 2025: Adjust European IO coefficients for soybean due to error in global balances
       eur_iso <- iso_GCAM_regID %>%
-        filter(country_name %in% gcameurope.COUNTRIES) %>%
+        filter(country_name %in% gcameurope.EUROSTAT_COUNTRIES) %>%
         pull(GCAM_region_ID) %>%
         unique()
 

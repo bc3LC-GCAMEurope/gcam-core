@@ -188,9 +188,12 @@ module_energy_L244.building_det <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>% filter_regions_europe(inverse = T)
+    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>% filter(region %!in% setdiff(gcameurope.EUROSTAT_COUNTRIES, gcameurope.EUROSTAT_ADJCOUNTRIES))
+
+    GCAM_region_names_adj_ID <- GCAM_region_names %>% pull(GCAM_region_ID)
+
     calibrated_techs_bld_det <- get_data(all_data, "energy/calibrated_techs_bld_det")
-    A_regions <- get_data(all_data, "energy/A_regions") %>% filter_regions_europe(inverse = T)
+    A_regions <- get_data(all_data, "energy/A_regions") %>% filter(region %!in% setdiff(gcameurope.EUROSTAT_COUNTRIES, gcameurope.EUROSTAT_ADJCOUNTRIES))
     A44.sector <- get_data(all_data, "energy/A44.sector", strip_attributes = TRUE)
     A44.subsector_interp <- get_data(all_data, "energy/A44.subsector_interp", strip_attributes = TRUE)
     A44.subsector_logit <- get_data(all_data, "energy/A44.subsector_logit", strip_attributes = TRUE)
@@ -206,22 +209,22 @@ module_energy_L244.building_det <- function(command, ...) {
     A44.satiation_flsp_SSPs <- get_data(all_data, "energy/A44.satiation_flsp_SSPs")
     A44.demand_satiation_mult <- get_data(all_data, "energy/A44.demand_satiation_mult")
     A44.demand_satiation_mult_SSPs <- get_data(all_data, "energy/A44.demand_satiation_mult_SSPs")
-    L144.flsp_bm2_R_res_Yh <- get_data(all_data, "L144.flsp_bm2_R_res_Yh", strip_attributes = TRUE) %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
-    L144.flsp_bm2_R_comm_Yh <- get_data(all_data, "L144.flsp_bm2_R_comm_Yh", strip_attributes = TRUE) %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
-    L144.base_service_EJ_serv <- get_data(all_data, "L144.base_service_EJ_serv", strip_attributes = TRUE) %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
-    L144.base_service_EJ_serv_fuel <- get_data(all_data, "L144.base_service_EJ_serv_fuel", strip_attributes = TRUE) %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
-    L144.in_EJ_R_bld_serv_F_Yh <- get_data(all_data, "L144.in_EJ_R_bld_serv_F_Yh") %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
-    L144.end_use_eff <- get_data(all_data, "L144.end_use_eff", strip_attributes = TRUE) %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
-    L144.shell_eff_R_Y <- get_data(all_data, "L144.shell_eff_R_Y", strip_attributes = TRUE) %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
+    L144.flsp_bm2_R_res_Yh <- get_data(all_data, "L144.flsp_bm2_R_res_Yh", strip_attributes = TRUE) %>% filter(GCAM_region_ID %in% GCAM_region_names_adj_ID)
+    L144.flsp_bm2_R_comm_Yh <- get_data(all_data, "L144.flsp_bm2_R_comm_Yh", strip_attributes = TRUE) %>% filter(GCAM_region_ID %in% GCAM_region_names_adj_ID)
+    L144.base_service_EJ_serv <- get_data(all_data, "L144.base_service_EJ_serv", strip_attributes = TRUE) %>% filter(GCAM_region_ID %in% GCAM_region_names_adj_ID)
+    L144.base_service_EJ_serv_fuel <- get_data(all_data, "L144.base_service_EJ_serv_fuel", strip_attributes = TRUE) %>% filter(GCAM_region_ID %in% GCAM_region_names_adj_ID)
+    L144.in_EJ_R_bld_serv_F_Yh <- get_data(all_data, "L144.in_EJ_R_bld_serv_F_Yh") %>% filter(GCAM_region_ID %in% GCAM_region_names_adj_ID)
+    L144.end_use_eff <- get_data(all_data, "L144.end_use_eff", strip_attributes = TRUE) %>% filter(GCAM_region_ID %in% GCAM_region_names_adj_ID)
+    L144.shell_eff_R_Y <- get_data(all_data, "L144.shell_eff_R_Y", strip_attributes = TRUE) %>% filter(GCAM_region_ID %in% GCAM_region_names_adj_ID)
     L144.NEcost_75USDGJ <- get_data(all_data, "L144.NEcost_75USDGJ", strip_attributes = TRUE)
-    L144.internal_gains <- get_data(all_data, "L144.internal_gains", strip_attributes = TRUE) %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
-    L143.HDDCDD_scen_R_Y <- get_data(all_data, "L143.HDDCDD_scen_R_Y") %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
-    L101.Pop_thous_R_Yh <- get_data(all_data, "L101.Pop_thous_R_Yh") %>% filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
+    L144.internal_gains <- get_data(all_data, "L144.internal_gains", strip_attributes = TRUE) %>% filter(GCAM_region_ID %in% GCAM_region_names_adj_ID)
+    L143.HDDCDD_scen_R_Y <- get_data(all_data, "L143.HDDCDD_scen_R_Y") %>% filter(GCAM_region_ID %in% GCAM_region_names_adj_ID)
+    L101.Pop_thous_R_Yh <- get_data(all_data, "L101.Pop_thous_R_Yh") %>% filter(GCAM_region_ID %in% GCAM_region_names_adj_ID)
     L102.pcgdp_thous90USD_Scen_R_Y <- get_data(all_data, "L102.pcgdp_thous90USD_Scen_R_Y") %>% # year comes in as double
-      filter_regions_europe(region_ID_mapping = A_regions, inverse = T)
-    L144.flsp_param <- get_data(all_data, "L144.flsp_param", strip_attributes = TRUE) %>% filter_regions_europe(inverse = T)
-    L144.prices_bld <- get_data(all_data, "L144.prices_bld", strip_attributes = TRUE) %>% filter_regions_europe(inverse = T)
-    L106.income_shares <- get_data(all_data, "L106.income_distributions", strip_attributes = TRUE)
+      filter(GCAM_region_ID %in% GCAM_region_names_adj_ID)
+    L144.flsp_param <- get_data(all_data, "L144.flsp_param", strip_attributes = TRUE) %>% filter(region %!in% setdiff(gcameurope.EUROSTAT_COUNTRIES, gcameurope.EUROSTAT_ADJCOUNTRIES))
+    L144.prices_bld <- get_data(all_data, "L144.prices_bld", strip_attributes = TRUE) %>% filter(region %!in% setdiff(gcameurope.EUROSTAT_COUNTRIES, gcameurope.EUROSTAT_ADJCOUNTRIES))
+    L106.income_shares <- get_data(all_data, "L106.income_distributions", strip_attributes = TRUE) %>% filter(region %!in% setdiff(gcameurope.EUROSTAT_COUNTRIES, gcameurope.EUROSTAT_ADJCOUNTRIES))
     n_groups <- length(unique(L106.income_shares$gcam.consumer))
 
     # Add a deflator for harmonizing GDPpc with prices

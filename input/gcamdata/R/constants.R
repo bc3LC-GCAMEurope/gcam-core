@@ -1275,18 +1275,6 @@ gcam.COUNTRIES <- c("USA", "Africa_Eastern", "Africa_Northern", "Africa_Southern
                     "Norway", "Serbia and Montenegro", "Switzerland", "Turkey",
                     "UK", "Ukraine")
 
-gcameurope.COUNTRIES <- c("Austria",
-                          "Belgium", "Bulgaria", "Croatia", "Cyprus",
-                          "Czech Republic", "Denmark", "Estonia", "Finland",
-                          "France", "Germany", "Greece", "Hungary",
-                          "Ireland", "Italy", "Latvia", "Lithuania",
-                          "Luxembourg", "Malta", "Netherlands", "Poland",
-                          "Portugal", "Romania", "Slovakia", "Slovenia",
-                          "Spain", "Sweden", "Albania", "Belarus",
-                          "Bosnia and Herzegovina", "Iceland", "Macedonia", "Moldova",
-                          "Norway", "Serbia and Montenegro", "Switzerland", "Turkey",
-                          "UK", "Ukraine")
-
 gcameurope.EUROSTAT_COUNTRIES <- c("Albania", "Austria", "Belgium", "Bosnia and Herzegovina",
                                    "Bulgaria", "Croatia", "Cyprus", "Czech Republic",
                                    "Denmark", "Estonia", "Finland", "France", "Germany",
@@ -1295,30 +1283,21 @@ gcameurope.EUROSTAT_COUNTRIES <- c("Albania", "Austria", "Belgium", "Bosnia and 
                                    "Malta", "Moldova", "Netherlands", "Norway",
                                    "Poland", "Portugal", "Romania", "Serbia and Montenegro",
                                    "Slovakia", "Slovenia", "Spain", "Sweden",
-                                   "Turkey")
-
-gcameurope.EUROSTAT_COUNTRIES_ID <- c(28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
-                                       41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53,
-                                       54, 55, 57, 58, 59, 60, 61, 62, 64)
+                                   "Turkey", "UK", "Ukraine")
 
 gcameurope.EUROSTAT_ISO <- c("aut","bel","bgr","hrv","cyp","cze","dnk","fro",
                              "grl","est","fin","fra","mco","shn","spm","deu",
                              "grc","hun","irl","ita","smr","vat","lva","ltu",
                              "lux","mlt","nld","pol","prt","rom","rou","svk",
                              "svn","and","esp","swe","alb","bih","isl","mkd",
-                             "mda","nor","sjm","mne","srb","scg","tur")
+                             "mda","nor","sjm","mne","srb","scg","tur","chi",
+                             "flk","gbr","ggy","gib","imn","jey","tca","vgb",
+                             "wlf","ukr")
 
 gcameurope.TRADE_REGION <- "Austria"
 
-gcameurope.Swiss_ID <- 63
-
+# Countries not in Eurostat to adjust the building sector in Europe
 gcameurope.EUROSTAT_ADJCOUNTRIES <- c("UK", "Ukraine")
-
-gcameurope.EUROSTAT_ADJISO <- c("chi",
-                                "flk","gbr","ggy","gib","imn","jey","tca","vgb",
-                                "wlf","ukr")
-
-gcameurope.EUROSTAT_ADJCOUNTRIES_ID <- c(65, 66)
 
 
 `%!in%` <- Negate(`%in%`)

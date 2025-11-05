@@ -64,14 +64,17 @@ module_gcameurope_L141.hfc_R_S_T_Y <- function(command, ...) {
 
 
     # Load required inputs
-    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>% filter_regions_europe()
-    GCAM32_to_EU <- get_data(all_data, "common/GCAM32_to_EU") %>% filter_regions_europe()
-    geo_to_climate_map <- get_data(all_data, "gcam-europe/mappings/geo_to_climate_map") %>% filter_regions_europe()
-    geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map") %>% filter_regions_europe()
+    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>% filter_regions_europe() %>% filter(region %!in% gcameurope.EUROSTAT_ADJCOUNTRIES)
+
+    gcameurope.EUROSTAT_ADJCOUNTRIES_ID <- GCAM_region_names %>% pull(GCAM_region_ID)
+
+    GCAM32_to_EU <- get_data(all_data, "common/GCAM32_to_EU") %>% filter_regions_europe() %>% filter(GCAMEU_region %!in% gcameurope.EUROSTAT_ADJCOUNTRIES)
+    geo_to_climate_map <- get_data(all_data, "gcam-europe/mappings/geo_to_climate_map") %>% filter_regions_europe() %>% filter(geo != "EU27_2020", geo != 'GE', geo != "UA", geo != "UK")
+    geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map") %>% filter_regions_europe() %>% filter(geo != "EU27_2020", geo != 'GE', geo != "UA", geo != "UK")
     gcam_fgas_tech_EUR <- get_data(all_data, "gcam-europe/gcam_fgas_tech_EUR", strip_attributes = TRUE)
     other_f_gases <- get_data(all_data, "emissions/other_f_gases")
     L144.in_EJ_R_bld_serv_F_Yh_EUR <- get_data(all_data, "L144.in_EJ_R_bld_serv_F_Yh_EUR")
-    iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID") %>% filter_regions_europe()
+    iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID") %>% filter_regions_europe() %>% filter(GCAM_region_ID %in% gcameurope.EUROSTAT_ADJCOUNTRIES_ID)
     EPA_HCFC22 <- get_data(all_data, "emissions/EPA/EPA_HCFC22")
     EPA_ODSS_Aerosols <- get_data(all_data, "emissions/EPA/EPA_ODSS_Aerosols")
     EPA_ODSS_FireExt <- get_data(all_data, "emissions/EPA/EPA_ODSS_FireExt")
@@ -95,6 +98,8 @@ module_gcameurope_L141.hfc_R_S_T_Y <- function(command, ...) {
     EDGAR_HFC32 <- get_data(all_data, "emissions/EDGAR/EDGAR_HFC32")
     EDGAR_HFC365mfc <- get_data(all_data, "emissions/EDGAR/EDGAR_HFC365mfc")
     EDGAR_HFC43 <- get_data(all_data, "emissions/EDGAR/EDGAR_HFC43")
+
+    iso_adj <- iso_GCAM_regID %>% pull(iso)
 
     . <- year <- value <- GCAM_region_ID <- sector <- fuel <- service <-
       IPCC_description <- agg_sector <- ISO_A3 <- iso <- EDGAR_agg_sector <-
@@ -127,7 +132,7 @@ module_gcameurope_L141.hfc_R_S_T_Y <- function(command, ...) {
         rename(EDGAR_agg_sector = agg_sector) %>% # rename agg_sector to EDGAR_agg_sector
         mutate(iso = tolower(ISO_A3), ISO_A3 = NULL) %>% # convert to Edgar ISO
         change_iso_code('rou', 'rom') %>% # Convert Romania iso code to pre-2002 value
-        filter_regions_europe(region_ID_mapping = GCAM_region_names) %>%
+        filter(iso %in% iso_adj) %>%
         left_join_error_no_match(iso_GCAM_regID, by = "iso") %>% # Map iso to GCAM region
         select(GCAM_region_ID, iso, EDGAR_agg_sector, Non.CO2, matches(YEAR_PATTERN)) %>%
         gather_years(value_col = "emissions") %>%
@@ -164,8 +169,7 @@ module_gcameurope_L141.hfc_R_S_T_Y <- function(command, ...) {
     iso_to_climate_group <- geo_to_iso_map %>%
       filter_regions_europe() %>%
       left_join_error_no_match(geo_to_climate_map, by = 'geo') %>%
-      left_join_error_no_match(GCAM32_to_EU %>%
-                                 filter(GCAMEU_region != GCAM32_region),
+      left_join_error_no_match(GCAM32_to_EU,
                                by = 'iso') %>%
       select(GCAM_region_ID, climate_group)
 

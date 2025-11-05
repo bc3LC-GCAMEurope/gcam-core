@@ -144,13 +144,17 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
-    GCAM_region_names <- filter_regions_europe(GCAM_region_names)
-    A_regions <- filter_regions_europe(A_regions)
+
+    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>% filter_regions_europe() %>% filter(region %!in% gcameurope.EUROSTAT_ADJCOUNTRIES)
+
+    gcameurope.EUROSTAT_ADJCOUNTRIES_ID <- GCAM_region_names %>% pull(GCAM_region_ID)
+
+    A_regions <- get_data(all_data, "energy/A_regions") %>% filter_regions_europe() %>% filter(region %!in% gcameurope.EUROSTAT_ADJCOUNTRIES)
     A44.globaltech_shrwt_EUR <- gather_years(A44.globaltech_shrwt_EUR)
-    L143.HDDCDD_scen_R_Y_EUR <-filter_regions_europe(L143.HDDCDD_scen_R_Y_EUR, region_ID_mapping = GCAM_region_names)
-    L101.Pop_thous_R_Yh_EUR <- filter_regions_europe(L101.Pop_thous_R_Yh, region_ID_mapping = GCAM_region_names)
-    L102.pcgdp_thous90USD_Scen_R_Y_EUR <- filter_regions_europe(L102.pcgdp_thous90USD_Scen_R_Y, region_ID_mapping = GCAM_region_names)
-    L106.income_shares <- L106.income_distributions %>% filter_regions_europe()
+    L143.HDDCDD_scen_R_Y_EUR <-filter_regions_europe(L143.HDDCDD_scen_R_Y_EUR, region_ID_mapping = GCAM_region_names) %>% filter(GCAM_region_ID %in% gcameurope.EUROSTAT_ADJCOUNTRIES_ID)
+    L101.Pop_thous_R_Yh_EUR <- filter_regions_europe(L101.Pop_thous_R_Yh, region_ID_mapping = GCAM_region_names) %>% filter(GCAM_region_ID %in% gcameurope.EUROSTAT_ADJCOUNTRIES_ID)
+    L102.pcgdp_thous90USD_Scen_R_Y_EUR <- filter_regions_europe(L102.pcgdp_thous90USD_Scen_R_Y, region_ID_mapping = GCAM_region_names) %>% filter(GCAM_region_ID %in% gcameurope.EUROSTAT_ADJCOUNTRIES_ID)
+    L106.income_shares <- L106.income_distributions %>% filter_regions_europe() %>% filter(region %!in% gcameurope.EUROSTAT_ADJCOUNTRIES)
     n_groups <- length(unique(L106.income_shares$gcam.consumer))
 
     # Add a deflator for harmonizing GDPpc with prices
@@ -1241,6 +1245,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     # 1-L244.GenericServiceImpedance_EUR
     L244.GenericServiceImpedance_allvars <- L244.GenericServiceSatiation_EUR %>%
+      filter(region %!in% gcameurope.EUROSTAT_ADJCOUNTRIES) %>%
       left_join_error_no_match(A_regions %>% select(region,GCAM_region_ID),by = "region") %>%
       # Only modern services use impedance
       # filter(!grepl("coal",building.service.input)) %>%

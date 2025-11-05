@@ -59,13 +59,15 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>% filter_regions_europe()
-    iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID") %>% filter_regions_europe()
-    GCAM32_to_EU <- get_data(all_data, "common/GCAM32_to_EU") %>% filter_regions_europe()
-    A_regions <- get_data(all_data, "energy/A_regions") %>% filter_regions_europe()
+    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>% filter_regions_europe() %>% filter(region %!in% gcameurope.EUROSTAT_ADJCOUNTRIES)
+
+    gcameurope.EUROSTAT_ADJCOUNTRIES_ID <- GCAM_region_names %>% pull(GCAM_region_ID)
+
+    iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID") %>% filter_regions_europe() %>% filter(GCAM_region_ID %in% gcameurope.EUROSTAT_ADJCOUNTRIES_ID)
+    GCAM32_to_EU <- get_data(all_data, "common/GCAM32_to_EU") %>% filter_regions_europe() %>% filter(GCAMEU_region %!in% gcameurope.EUROSTAT_ADJCOUNTRIES)
+    A_regions <- get_data(all_data, "energy/A_regions") %>% filter_regions_europe() %>% filter(region %!in% gcameurope.EUROSTAT_ADJCOUNTRIES)
     estat_nrg_ind_ahbtc_filtered_en <- get_data(all_data, "gcam-europe/estat_nrg_ind_ahbtc_filtered_en")  %>%  filter(geo != "EU27_2020", geo != 'GE', geo != "UA", geo != "UK")
     geo_to_climate_map <- get_data(all_data, "gcam-europe/mappings/geo_to_climate_map")
-    geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map")
     heatpump_to_tech_map <- get_data(all_data, "gcam-europe/mappings/heatpump_to_tech_map")
     heatpump_service_to_tech_map <- get_data(all_data, "gcam-europe/mappings/heatpump_service_to_tech_map")
     calibrated_techs_bld_det_EUR <- get_data(all_data, "gcam-europe/calibrated_techs_bld_det_EUR")
@@ -75,17 +77,20 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     A44.shell_eff_mult_RG3 <- get_data(all_data, "energy/A44.shell_eff_mult_RG3")
     A44.tech_eff_mult_RG3 <- get_data(all_data, "energy/A44.tech_eff_mult_RG3")
     A44.USA_TechChange_EUR <- get_data(all_data, "gcam-europe/A44.USA_TechChange_EUR")
-    A44.CalPrice_bld_EUR <- get_data(all_data, "gcam-europe/A44.CalPrice_bld_EUR") %>% filter_regions_europe()
+    A44.CalPrice_bld_EUR <- get_data(all_data, "gcam-europe/A44.CalPrice_bld_EUR") %>% filter_regions_europe() %>% filter(region %!in% gcameurope.EUROSTAT_ADJCOUNTRIES)
     enduse_fuel_aggregation <- get_data(all_data, "gcam-europe/mappings/enduse_fuel_aggregation")
     estat_nrg_d_hhq_filtered_en <- get_data(all_data, "gcam-europe/estat_nrg_d_hhq_filtered_en") %>%  filter(geo != "EU27_2020", geo != 'GE', geo != "UA", geo != "UK")
     nrgbal_to_service_map <- get_data(all_data, "gcam-europe/mappings/nrgbal_to_service_map")
     siec_to_fuel_map <- get_data(all_data, "gcam-europe/mappings/siec_to_fuel_map")
-    geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map") %>% filter_regions_europe()
+    geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map") %>% filter_regions_europe() %>% filter(geo != "EU27_2020", geo != 'GE', geo != "UA", geo != "UK")
     nrg_bal_c <- get_data(all_data, "gcam-europe/nrg_bal_c") %>%  filter(geo != "EU27_2020", geo != 'GE', geo != "UA", geo != "UK")
-    L101.in_EJ_R_bld_Fi_Yh_EUR <- get_data(all_data, "L101.in_EJ_R_bld_Fi_Yh_EUR")
-    L142.in_EJ_R_bld_F_Yh_EUR <- get_data(all_data, "L142.in_EJ_R_bld_F_Yh_EUR")
+    L101.in_EJ_R_bld_Fi_Yh_EUR <- get_data(all_data, "L101.in_EJ_R_bld_Fi_Yh_EUR") %>% filter_regions_europe() %>% filter(GCAM_region_ID %in% gcameurope.EUROSTAT_ADJCOUNTRIES_ID)
+    L142.in_EJ_R_bld_F_Yh_EUR <- get_data(all_data, "L142.in_EJ_R_bld_F_Yh_EUR") %>% filter_regions_europe() %>% filter(GCAM_region_ID %in% gcameurope.EUROSTAT_ADJCOUNTRIES_ID)
+
+    iso_adj <- get_data(all_data, "common/iso_GCAM_regID") %>% filter_regions_europe() %>% filter(GCAM_region_ID %!in% gcameurope.EUROSTAT_ADJCOUNTRIES_ID) %>% pull(iso)
+
     L143.HDDCDD_scen_RG3_Y <- get_data(all_data, "L143.HDDCDD_scen_RG3_Y") %>% filter_regions_europe()
-    L143.HDDCDD_scen_ctry_Y <- get_data(all_data, "L143.HDDCDD_scen_ctry_Y") %>% filter_regions_europe()
+    L143.HDDCDD_scen_ctry_Y <- get_data(all_data, "L143.HDDCDD_scen_ctry_Y") %>% filter_regions_europe() %>% filter(iso %!in% iso_adj)
 
     # ===================================================
 
@@ -460,7 +465,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     # For making the energy consumption table, start with the tech list that will be in each region,
     # and repeat by number of countries from IEA
     # First, create list of countries, which will be used to expand the table
-    list_iso <- gcameurope.EUROSTAT_ISO
+    list_iso <- setdiff(gcameurope.EUROSTAT_ISO, iso_adj)
 
     calibrated_techs_bld_det_EUR %>%
       select(sector, fuel, service) %>%
@@ -769,8 +774,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     iso_to_climate_group <- geo_to_iso_map %>%
       filter_regions_europe() %>%
       left_join_error_no_match(geo_to_climate_map, by = 'geo') %>%
-      left_join_error_no_match(GCAM32_to_EU %>%
-                                 filter(GCAMEU_region != GCAM32_region),
+      left_join_error_no_match(GCAM32_to_EU,
                                by = 'iso') %>%
       select(geo, GCAM_region_ID, climate_group)
 

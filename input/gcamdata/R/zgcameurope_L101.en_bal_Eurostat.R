@@ -65,7 +65,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
     # Add mappings to energy balance
     L101.Eurostat_en_bal_ctry_hist <- nrg_bal_c %>%
       # Remove GEorgia, Ukraine and UK
-      filter(geo != "EU27_2020", geo != 'GE', geo != "UA", geo != "UK") %>%
+      filter(geo != "EU27_2020", geo != 'GE') %>%
       left_join_error_no_match(geo_to_iso_map, by = "geo") %>%
       # Ok to have NAs
       left_join(nrgbal_to_sector_map, by = "nrg_bal") %>%
@@ -245,10 +245,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
     # available in Eurostat (e.g Switzerland) & add 0s to elec_solar CSP for the bld
     # sector from 1971 to 1989 to avoid further problems. Data start in 1990.
     L101.GCAM_EUR_regions <- L101.GCAM_EUR_regions %>%
-      filter(GCAM_region_ID %in% L101.en_bal_EJ_R_Si_Fi_Yh_Eurostat$GCAM_region_ID) %>%
-      # With the BYU, UK a nd Ukariane are treated as Switzerland due to lack of data:
-      filter(GCAMEU_region %!in% gcameurope.EUROSTAT_ADJCOUNTRIES)
-
+      filter(GCAM_region_ID %in% L101.en_bal_EJ_R_Si_Fi_Yh_Eurostat$GCAM_region_ID)
 
     L101.en_bal_EJ_R_Si_Fi_Yh_EUR_replace_na_years <- L1011.en_bal_EJ_R_Si_Fi_Yh %>%
       mutate(year = as.character(year)) %>%
@@ -266,11 +263,6 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
     # For the final balance, we take out UK as it includes Eurostat data, but not for the entire timeframe
     # The adjustment can be rolled back if data becomes available
 
-    gcameurope.EUROSTAT_ADJCOUNTRIES_ID <- GCAM32_to_EU %>%
-      filter(GCAMEU_region %in% gcameurope.EUROSTAT_ADJCOUNTRIES) %>%
-      pull(unique(GCAM_region_ID)) %>%
-      unique()
-
     L101.en_bal_EJ_R_Si_Fi_Yh_EUR <- L101.en_bal_EJ_R_Si_Fi_Yh_EUR_tmp %>%
       bind_rows(L101.en_bal_EJ_R_Si_Fi_Yh_EUR_tmp %>%
                   filter(fuel == 'elec_solar CSP', grepl('bld', sector)) %>%
@@ -278,9 +270,6 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
                            year = unique(L101.en_bal_EJ_R_Si_Fi_Yh_EUR_tmp$year),
                            fill = list(value = 0)) %>%
                       filter(year <= MODEL_FINAL_BASE_YEAR))
-    # %>%
-    #   # UK needs to be taken out from balances, due to lack of data from final calibration year:
-    #   filter(GCAM_region_ID %!in% gcameurope.EUROSTAT_ADJCOUNTRIES_ID) # FINAL OUTPUT TABLE - temporally complete EUR data
 
     # 1c. Get ratio for feedstocks based on IEA -------------------
     # Eurostat has only industrial feedstocks, but IEA splits defines industrial, chemical, and construction
