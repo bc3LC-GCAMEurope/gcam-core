@@ -20,7 +20,7 @@ the generated outputs: \code{L210.Rsrc_EUR}, \code{L210.RenewRsrc_EUR}, \code{L2
 \code{L210.SmthRenewRsrcCurves_wind_EUR}, \code{L210.SmthRenewRsrcCurves_offshore_wind_EUR}, \code{L210.SmthRenewRsrcCurvesGdpElast_roofPV_EUR},
 \code{L210.GrdRenewRsrcCurves_geo_EUR}, \code{L210.GrdRenewRsrcMax_geo_EUR}, \code{L210.GrdRenewRsrcCurves_EGS_EUR}, \code{L210.GrdRenewRsrcMax_EGS_EUR},
 \code{L210.ResSubresourceProdLifetime_EUR}, \code{L210.ResReserveTechLifetime_EUR}, \code{L210.ResReserveTechDeclinePhase_EUR}, \code{L210.ResReserveTechProfitShutdown_EUR},
-\code{L210.ResTechShrwt_EUR}, \code{L210.ResTechShrwt_EGS_EUR}.
+\code{L210.ResTechShrwt_EUR}, \code{L210.ResTechShrwt_EGS_EUR}.\code{L210.GrdRenewRsrcCurves_tradbio_EUR}.\code{L210.GrdRenewRsrcMax_tradbio_EUR}.
 }
 \description{
 Resource market information, prices, TechChange parameters, supply curves, and environmental costs.
