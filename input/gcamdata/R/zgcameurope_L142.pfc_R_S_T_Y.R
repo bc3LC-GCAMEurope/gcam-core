@@ -61,16 +61,13 @@ module_gcameurope_L142.pfc_R_S_T_Y <- function(command, ...) {
     gas <- adj_emissions  <- emiss_share <- supply <- emscalar <- tot_emissions <- MAC_type1 <- gwp <- EPA_emissions <- EPA_sector <- NULL
 
     # Load required inputs
-    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>% filter_regions_europe() %>% filter(region %!in% gcameurope.EUROSTAT_ADJCOUNTRIES)
-
-    gcameurope.EUROSTAT_ADJCOUNTRIES_ID <- GCAM_region_names %>% pull(GCAM_region_ID)
-
-    GCAM32_to_EU <- get_data(all_data, "common/GCAM32_to_EU") %>% filter_regions_europe() %>% filter(GCAMEU_region %!in% gcameurope.EUROSTAT_ADJCOUNTRIES)
-    geo_to_climate_map <- get_data(all_data, "gcam-europe/mappings/geo_to_climate_map") %>% filter_regions_europe() %>% filter(geo != "EU27_2020", geo != 'GE', geo != "UA", geo != "UK")
-    geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map") %>% filter_regions_europe() %>% filter(geo != "EU27_2020", geo != 'GE', geo != "UA", geo != "UK")
+    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>% filter_regions_europe()
+    GCAM32_to_EU <- get_data(all_data, "common/GCAM32_to_EU") %>% filter_regions_europe()
+    geo_to_climate_map <- get_data(all_data, "gcam-europe/mappings/geo_to_climate_map") %>% filter_regions_europe()
+    geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map") %>% filter_regions_europe()
     GCAM_tech <- get_data(all_data, "gcam-europe/gcam_fgas_tech_EUR")
     Other_F <- get_data(all_data, "emissions/other_f_gases")
-    iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID") %>% filter_regions_europe() %>% filter(GCAM_region_ID %in% gcameurope.EUROSTAT_ADJCOUNTRIES_ID)
+    iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID") %>% filter_regions_europe()
     EDGAR_sector <- get_data(all_data, "emissions/EDGAR/EDGAR_sector_fgas")
     GWP <- get_data(all_data, "emissions/A41.GWP")
 
@@ -94,9 +91,7 @@ module_gcameurope_L142.pfc_R_S_T_Y <- function(command, ...) {
     EPA_SF6_Semi <- get_data(all_data, "emissions/EPA/EPA_SF6_Semi")
     EPA_fgas_sector_map <- get_data(all_data, "emissions/EPA_fgas_sector_map")
     EPA_GWPs <- get_data(all_data, "emissions/EPA_GWPs")
-    EPA_country_map_EUR <- get_data(all_data, "gcam-europe/EPA_country_map_EUR") %>% filter_regions_europe() %>% filter(GCAM_region_ID %in% gcameurope.EUROSTAT_ADJCOUNTRIES_ID)
-
-    iso_adj <- iso_GCAM_regID %>% pull(iso)
+    EPA_country_map_EUR <- get_data(all_data, "gcam-europe/EPA_country_map_EUR") %>% filter_regions_europe()
 
     # This chunk maps EDGAR HFC emissions to GCAM technologies
     # First, create a table with all EDGAR HFCs, and prep "Other_F" table for use by renaming column.
@@ -118,7 +113,7 @@ module_gcameurope_L142.pfc_R_S_T_Y <- function(command, ...) {
       left_join_error_no_match(EDGAR_sector, by = "IPCC_description") %>%
       standardize_iso(col = "ISO_A3") %>%
       change_iso_code('rou', 'rom') %>% # Switch Romania iso code to its pre-2002 value
-      filter(iso %in% iso_adj) %>%
+      filter_regions_europe(region_ID_mapping = GCAM_region_names) %>%
       left_join_error_no_match(iso_GCAM_regID, by = "iso") %>%
       select(GCAM_region_ID, EDGAR_agg_sector = agg_sector, Non.CO2, year, value) %>%
       filter(year %in% HISTORICAL_YEARS) ->

@@ -655,3 +655,4 @@ if(USE_DRIVER_DRAKE) {
 }
 # Save these objects as external data (i.e. requires explicit call to `data()` to load)
 usethis::use_data(PREBUILT_DATA, overwrite = TRUE, internal = FALSE)
+

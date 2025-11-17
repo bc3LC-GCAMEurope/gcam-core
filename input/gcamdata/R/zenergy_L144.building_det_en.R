@@ -47,16 +47,9 @@ module_energy_L144.building_det_en <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>% filter(region %!in% setdiff(gcameurope.EUROSTAT_COUNTRIES, gcameurope.EUROSTAT_ADJCOUNTRIES))
-
-    GCAM_region_names_adj_ID <- GCAM_region_names %>% pull(GCAM_region_ID)
-
-    iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID") %>% filter(GCAM_region_ID %in% GCAM_region_names_adj_ID)
-
-    iso_adj <- iso_GCAM_regID %>% pull(iso)
-
-
-    A_regions <- get_data(all_data, "energy/A_regions") %>% filter(GCAM_region_ID %in% GCAM_region_names_adj_ID)
+    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>% filter_regions_europe(inverse = T)
+    iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID") %>% filter_regions_europe(inverse = T)
+    A_regions <- get_data(all_data, "energy/A_regions") %>% filter_regions_europe(inverse = T)
     calibrated_techs_bld_det <- get_data(all_data, "energy/calibrated_techs_bld_det")
     A44.cost_efficiency <- get_data(all_data, "energy/A44.cost_efficiency", strip_attributes = TRUE)
     A44.internal_gains <- get_data(all_data, "energy/A44.internal_gains")
@@ -64,11 +57,12 @@ module_energy_L144.building_det_en <- function(command, ...) {
     A44.shell_eff_mult_RG3 <- get_data(all_data, "energy/A44.shell_eff_mult_RG3")
     A44.tech_eff_mult_RG3 <- get_data(all_data, "energy/A44.tech_eff_mult_RG3")
     A44.USA_TechChange <- get_data(all_data, "energy/A44.USA_TechChange")
-    A44.Calprice_bld <- get_data(all_data, "energy/A44.CalPrice_bld") %>% filter(region %!in% setdiff(gcameurope.EUROSTAT_COUNTRIES, gcameurope.EUROSTAT_ADJCOUNTRIES))
-    L101.in_EJ_ctry_bld_Fi_Yh <- get_data(all_data, "L101.in_EJ_ctry_bld_Fi_Yh") %>% filter(iso %in% iso_adj)
-    L142.in_EJ_R_bld_F_Yh <- get_data(all_data, "L142.in_EJ_R_bld_F_Yh") %>% filter(GCAM_region_ID %in% GCAM_region_names_adj_ID)
+    A44.Calprice_bld <- get_data(all_data, "energy/A44.CalPrice_bld") %>% filter_regions_europe(inverse = T)
+    L101.in_EJ_ctry_bld_Fi_Yh <- get_data(all_data, "L101.in_EJ_ctry_bld_Fi_Yh") %>% filter_regions_europe(inverse = T)
+    L142.in_EJ_R_bld_F_Yh <- get_data(all_data, "L142.in_EJ_R_bld_F_Yh") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names,
+                                                                                                   inverse = T)
     L143.HDDCDD_scen_RG3_Y <- get_data(all_data, "L143.HDDCDD_scen_RG3_Y")
-    L143.HDDCDD_scen_ctry_Y <- get_data(all_data, "L143.HDDCDD_scen_ctry_Y") %>% filter(iso %in% iso_adj)
+    L143.HDDCDD_scen_ctry_Y <- get_data(all_data, "L143.HDDCDD_scen_ctry_Y") %>% filter_regions_europe(inverse = T)
 
     # ===================================================
 

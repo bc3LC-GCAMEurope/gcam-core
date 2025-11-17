@@ -46,26 +46,20 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>% filter_regions_europe() %>% filter(region %!in% gcameurope.EUROSTAT_ADJCOUNTRIES)
-
-    gcameurope.EUROSTAT_ADJCOUNTRIES_ID <- GCAM_region_names %>% pull(GCAM_region_ID)
-
-    iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID") %>% filter_regions_europe() %>%  filter(GCAM_region_ID %in% gcameurope.EUROSTAT_ADJCOUNTRIES_ID)
+    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>% filter_regions_europe()
+    iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID") %>% filter_regions_europe()
     A44.flsp_bm2_state_comm <- get_data(all_data, "energy/A44.flsp_bm2_state_comm")
     A44.pcflsp_default <- get_data(all_data, "energy/A44.pcflsp_default")
     A44.HouseholdSize <- get_data(all_data, "energy/A44.HouseholdSize")
-    EUR_avDwelling <- get_data(all_data, "gcam-europe/estat_ilc_hcmh02_filtered_en")  %>%  filter(geo != "EU27_2020", geo != 'GE', geo != "UA", geo != "UK")
-    EUR_avHousehold <- get_data(all_data, "gcam-europe/estat_ilc_lvph01_filtered_en") %>%  filter(geo != "EU27_2020", geo != 'GE', geo != "UA", geo != "UK")
-
-    iso_adj <- get_data(all_data, "common/iso_GCAM_regID") %>% filter_regions_europe() %>% filter(GCAM_region_ID %!in% gcameurope.EUROSTAT_ADJCOUNTRIES_ID) %>% pull(iso)
-
-    geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map") %>% filter_regions_europe() %>% filter(geo != "EU27_2020", geo != 'GE', geo != "UA", geo != "UK")
-    L100.Pop_thous_ctry_Yh <- get_data(all_data, "L100.Pop_thous_ctry_Yh") %>% filter_regions_europe() %>% filter(iso %!in% iso_adj)
+    EUR_avDwelling <- get_data(all_data, "gcam-europe/estat_ilc_hcmh02_filtered_en")  %>%  filter(geo != "EU27_2020")
+    EUR_avHousehold <- get_data(all_data, "gcam-europe/estat_ilc_lvph01_filtered_en") %>%  filter(geo != "EU27_2020")
+    geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map") %>% filter_regions_europe()
+    L100.Pop_thous_ctry_Yh <- get_data(all_data, "L100.Pop_thous_ctry_Yh") %>% filter_regions_europe()
     L102.gdp_mil90usd_GCAM3_R_Y <- get_data(all_data, "L102.gdp_mil90usd_GCAM3_R_Y") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
-    L102.pcgdp_thous90USD_Scen_R_Y <- get_data(all_data, "L102.pcgdp_thous90USD_Scen_R_Y") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names) %>% filter(GCAM_region_ID %in% gcameurope.EUROSTAT_ADJCOUNTRIES_ID)
-    L221.LN0_Land<-get_data(all_data, "L221.LN0_Land", strip_attributes = TRUE) %>% filter_regions_europe() %>% filter(region %!in% gcameurope.EUROSTAT_ADJCOUNTRIES)
-    L221.LN1_UnmgdAllocation<-get_data(all_data, "L221.LN1_UnmgdAllocation", strip_attributes = TRUE) %>% filter_regions_europe() %>% filter(region %!in% gcameurope.EUROSTAT_ADJCOUNTRIES)
-    L106.income_shares<-get_data(all_data, "L106.income_distributions") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names) %>% filter(region %!in% gcameurope.EUROSTAT_ADJCOUNTRIES)
+    L102.pcgdp_thous90USD_Scen_R_Y <- get_data(all_data, "L102.pcgdp_thous90USD_Scen_R_Y") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
+    L221.LN0_Land<-get_data(all_data, "L221.LN0_Land", strip_attributes = TRUE) %>% filter_regions_europe()
+    L221.LN1_UnmgdAllocation<-get_data(all_data, "L221.LN1_UnmgdAllocation", strip_attributes = TRUE) %>% filter_regions_europe()
+    L106.income_shares<-get_data(all_data, "L106.income_distributions") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
     n_groups<-nrow(unique(get_data(all_data, "L106.income_distributions") %>%
                             select(gcam.consumer)))
     # ===================================================
