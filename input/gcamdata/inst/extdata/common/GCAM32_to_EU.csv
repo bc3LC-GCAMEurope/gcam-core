@@ -1,13 +1,10 @@
-# File: GCAM32_to_EU.csv
-# Title: ISO to GCAM region mapping for EU and 32 regions
-# Units: NA
-# Description: Maps iso codes to GCAM regions (including composites as necessary)
-# Column types: cccicic
-# ----------
+# File: GCAM32_to_EU.csv,,,,,,
+# Title: ISO to GCAM region mapping for EU and 32 regions,,,,,,
+# Units: NA,,,,,,
+# Description: Maps iso codes to GCAM regions (including composites as necessary),,,,,,
+# Column types: cccicic,,,,,,
+# ----------,,,,,,
 iso,country_name,region_GCAM3,GCAM_region_ID,GCAMEU_region,GCAM32_region_ID,GCAM32_region
-pri,Puerto Rico,USA,1,USA,1,USA
-usa,United States of America,USA,1,USA,1,USA
-vir,"Virgin Islands, U.S.",Latin America,1,USA,1,USA
 bdi,Burundi,Africa,2,Africa_Eastern,2,Africa_Eastern
 com,Comoros,Africa,2,Africa_Eastern,2,Africa_Eastern
 dji,Djibouti,Africa,2,Africa_Eastern,2,Africa_Eastern
@@ -62,6 +59,7 @@ sle,Sierra Leone,Africa,5,Africa_Western,5,Africa_Western
 stp,Sao Tome and Principe,Africa,5,Africa_Western,5,Africa_Western
 tcd,Chad,Africa,5,Africa_Western,5,Africa_Western
 tgo,Togo,Africa,5,Africa_Western,5,Africa_Western
+arg,Argentina,Latin America,26,Argentina,31,Argentina
 aus,Australia,Australia_NZ,6,Australia_NZ,6,Australia_NZ
 nzl,New Zealand,Australia_NZ,6,Australia_NZ,6,Australia_NZ
 bra,Brazil,Latin America,7,Brazil,7,Brazil
@@ -107,6 +105,67 @@ uzb,Uzbekistan,Former Soviet Union,10,Central Asia,10,Central Asia
 chn,China,China,11,China,11,China
 hkg,Hong Kong,Southeast Asia,11,China,11,China
 mac,Macau,Southeast Asia,11,China,11,China
+col,Colombia,Latin America,27,Colombia,32,Colombia
+bgr,Bulgaria,Eastern Europe,30,Bulgaria,12,EU-12
+cyp,Cyprus,Western Europe,32,Cyprus,12,EU-12
+cze,Czech Republic,Eastern Europe,33,Czech Republic,12,EU-12
+est,Estonia,Former Soviet Union,35,Estonia,12,EU-12
+hun,Hungary,Eastern Europe,40,Hungary,12,EU-12
+lva,Latvia,Former Soviet Union,43,Latvia,12,EU-12
+ltu,Lithuania,Former Soviet Union,44,Lithuania,12,EU-12
+mlt,Malta,Western Europe,46,Malta,12,EU-12
+pol,Poland,Eastern Europe,48,Poland,12,EU-12
+rom,Romania,Eastern Europe,50,Romania,12,EU-12
+rou,Romania,Eastern Europe,50,Romania,12,EU-12
+svk,Slovakia,Eastern Europe,51,Slovakia,12,EU-12
+svn,Slovenia,Eastern Europe,52,Slovenia,12,EU-12
+aut,Austria,Western Europe,28,Austria,13,EU-15
+bel,Belgium,Western Europe,29,Belgium,13,EU-15
+dnk,Denmark,Western Europe,34,Denmark,13,EU-15
+fro,Faroe Islands,Western Europe,34,Denmark,13,EU-15
+grl,Greenland,Western Europe,34,Denmark,13,EU-15
+fin,Finland,Western Europe,36,Finland,13,EU-15
+fra,France,Western Europe,37,France,13,EU-15
+mco,Monaco,Western Europe,37,France,13,EU-15
+shn,Saint Helena,Africa,37,France,13,EU-15
+spm,Saint Pierre and Miquelon,Canada,37,France,13,EU-15
+deu,Germany,Western Europe,38,Germany,13,EU-15
+grc,Greece,Western Europe,39,Greece,13,EU-15
+irl,Ireland,Western Europe,41,Ireland,13,EU-15
+ita,Italy,Western Europe,42,Italy,13,EU-15
+smr,San Marino,Western Europe,42,Italy,13,EU-15
+vat,Vatican,Western Europe,42,Italy,13,EU-15
+lux,Luxembourg,Western Europe,45,Luxembourg,13,EU-15
+nld,Netherlands,Western Europe,47,Netherlands,13,EU-15
+prt,Portugal,Western Europe,49,Portugal,13,EU-15
+and,Andorra,Western Europe,53,Spain,13,EU-15
+esp,Spain,Western Europe,53,Spain,13,EU-15
+swe,Sweden,Western Europe,54,Sweden,13,EU-15
+chi,Channel Islands,Western Europe,65,UK,13,EU-15
+flk,Falkland Islands (Malvinas),Latin America,65,UK,13,EU-15
+gbr,United Kingdom,Western Europe,65,UK,13,EU-15
+ggy,Guernsey,Western Europe,65,UK,13,EU-15
+gib,Gibraltar,Western Europe,65,UK,13,EU-15
+imn,Isle of Man,Western Europe,65,UK,13,EU-15
+jey,Jersey,Western Europe,65,UK,13,EU-15
+tca,Turks and Caicos,Latin America,65,UK,13,EU-15
+vgb,"Virgin Islands, British",Latin America,65,UK,13,EU-15
+wlf,Wallis and Futuna,Australia_NZ,65,UK,13,EU-15
+blr,Belarus,Former Soviet Union,56,Belarus,15,Europe_Non_EU
+mda,"Moldova, Republic of",Former Soviet Union,60,Moldova,15,Europe_Non_EU
+hrv,Croatia,Eastern Europe,31,Croatia,15,Europe_Non_EU
+alb,Albania,Eastern Europe,55,Albania,15,Europe_Non_EU
+bih,Bosnia and Herzegovina,Eastern Europe,57,Bosnia and Herzegovina,15,Europe_Non_EU
+mkd,"Macedonia, the former Yugoslav Republic of",Eastern Europe,59,Macedonia,15,Europe_Non_EU
+mne,Montenegro,Eastern Europe,62,Serbia and Montenegro,15,Europe_Non_EU
+srb,Serbia,Eastern Europe,62,Serbia and Montenegro,15,Europe_Non_EU
+scg,Serbia and Montenegro,Eastern Europe,62,Serbia and Montenegro,15,Europe_Non_EU
+tur,Turkey,Western Europe,64,Turkey,15,Europe_Non_EU
+isl,Iceland,Western Europe,58,Iceland,16,European Free Trade Association
+nor,Norway,Western Europe,61,Norway,16,European Free Trade Association
+sjm,Svalbard and Jan Mayen Islands,Western Europe,61,Norway,16,European Free Trade Association
+che,Switzerland,Western Europe,63,Switzerland,16,European Free Trade Association
+lie,Liechtenstein,Western Europe,63,Switzerland,16,European Free Trade Association
 ind,India,India,12,India,17,India
 idn,Indonesia,Southeast Asia,13,Indonesia,18,Indonesia
 jpn,Japan,Japan,14,Japan,19,Japan
@@ -184,66 +243,7 @@ vnm,Viet Nam,China,24,Southeast Asia,29,Southeast Asia
 vut,Vanuatu,Southeast Asia,24,Southeast Asia,29,Southeast Asia
 wsm,Samoa,Southeast Asia,24,Southeast Asia,29,Southeast Asia
 twn,Taiwan,Southeast Asia,25,Taiwan,30,Taiwan
-arg,Argentina,Latin America,26,Argentina,31,Argentina
-col,Colombia,Latin America,27,Colombia,32,Colombia
-aut,Austria,Western Europe,28,Austria,13,EU-15
-bel,Belgium,Western Europe,29,Belgium,13,EU-15
-bgr,Bulgaria,Eastern Europe,30,Bulgaria,12,EU-12
-hrv,Croatia,Eastern Europe,31,Croatia,15,Europe_Non_EU
-cyp,Cyprus,Western Europe,32,Cyprus,12,EU-12
-cze,Czech Republic,Eastern Europe,33,Czech Republic,12,EU-12
-dnk,Denmark,Western Europe,34,Denmark,13,EU-15
-fro,Faroe Islands,Western Europe,34,Denmark,13,EU-15
-grl,Greenland,Western Europe,34,Denmark,13,EU-15
-est,Estonia,Former Soviet Union,35,Estonia,12,EU-12
-fin,Finland,Western Europe,36,Finland,13,EU-15
-fra,France,Western Europe,37,France,13,EU-15
-mco,Monaco,Western Europe,37,France,13,EU-15
-shn,Saint Helena,Africa,37,France,13,EU-15
-spm,Saint Pierre and Miquelon,Canada,37,France,13,EU-15
-deu,Germany,Western Europe,38,Germany,13,EU-15
-grc,Greece,Western Europe,39,Greece,13,EU-15
-hun,Hungary,Eastern Europe,40,Hungary,12,EU-12
-irl,Ireland,Western Europe,41,Ireland,13,EU-15
-ita,Italy,Western Europe,42,Italy,13,EU-15
-smr,San Marino,Western Europe,42,Italy,13,EU-15
-vat,Vatican,Western Europe,42,Italy,13,EU-15
-lva,Latvia,Former Soviet Union,43,Latvia,12,EU-12
-ltu,Lithuania,Former Soviet Union,44,Lithuania,12,EU-12
-lux,Luxembourg,Western Europe,45,Luxembourg,13,EU-15
-mlt,Malta,Western Europe,46,Malta,12,EU-12
-nld,Netherlands,Western Europe,47,Netherlands,13,EU-15
-pol,Poland,Eastern Europe,48,Poland,12,EU-12
-prt,Portugal,Western Europe,49,Portugal,13,EU-15
-rom,Romania,Eastern Europe,50,Romania,12,EU-12
-rou,Romania,Eastern Europe,50,Romania,12,EU-12
-svk,Slovakia,Eastern Europe,51,Slovakia,12,EU-12
-svn,Slovenia,Eastern Europe,52,Slovenia,12,EU-12
-and,Andorra,Western Europe,53,Spain,13,EU-15
-esp,Spain,Western Europe,53,Spain,13,EU-15
-swe,Sweden,Western Europe,54,Sweden,13,EU-15
-alb,Albania,Eastern Europe,55,Albania,15,Europe_Non_EU
-blr,Belarus,Former Soviet Union,56,Belarus,15,Europe_Eastern
-bih,Bosnia and Herzegovina,Eastern Europe,57,Bosnia and Herzegovina,15,Europe_Non_EU
-isl,Iceland,Western Europe,58,Iceland,16,European Free Trade Association
-mkd,"Macedonia, the former Yugoslav Republic of",Eastern Europe,59,Macedonia,15,Europe_Non_EU
-mda,"Moldova, Republic of",Former Soviet Union,60,Moldova,15,Europe_Eastern
-nor,Norway,Western Europe,61,Norway,16,European Free Trade Association
-sjm,Svalbard and Jan Mayen Islands,Western Europe,61,Norway,16,European Free Trade Association
-mne,Montenegro,Eastern Europe,62,Serbia and Montenegro,15,Europe_Non_EU
-srb,Serbia,Eastern Europe,62,Serbia and Montenegro,15,Europe_Non_EU
-scg,Serbia and Montenegro,Eastern Europe,62,Serbia and Montenegro,15,Europe_Non_EU
-che,Switzerland,Western Europe,63,Switzerland,16,European Free Trade Association
-lie,Liechtenstein,Western Europe,63,Switzerland,16,European Free Trade Association
-tur,Turkey,Western Europe,64,Turkey,15,Europe_Non_EU
-chi,Channel Islands,Western Europe,65,UK,13,EU-15
-flk,Falkland Islands (Malvinas),Latin America,65,UK,13,EU-15
-gbr,United Kingdom,Western Europe,65,UK,13,EU-15
-ggy,Guernsey,Western Europe,65,UK,13,EU-15
-gib,Gibraltar,Western Europe,65,UK,13,EU-15
-imn,Isle of Man,Western Europe,65,UK,13,EU-15
-jey,Jersey,Western Europe,65,UK,13,EU-15
-tca,Turks and Caicos,Latin America,65,UK,13,EU-15
-vgb,"Virgin Islands, British",Latin America,65,UK,13,EU-15
-wlf,Wallis and Futuna,Australia_NZ,65,UK,13,EU-15
 ukr,Ukraine,Former Soviet Union,66,Ukraine,14,Ukraine
+pri,Puerto Rico,USA,1,USA,1,USA
+usa,United States of America,USA,1,USA,1,USA
+vir,"Virgin Islands, U.S.",Latin America,1,USA,1,USA
