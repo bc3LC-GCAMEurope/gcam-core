@@ -363,7 +363,7 @@ module_gcameurope_L210.resources <- function(command, ...) {
     L210.RsrcCurves_fos_EUR <- L111.RsrcCurves_EJ_R_Ffos_EUR %>%
       # Add region name
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
-      mutate(available = round(available, energy.DIGITS_RESOURCE)) %>%
+      mutate(available = round(available, 6)) %>%
       select(region, resource = resource, subresource, grade, available, extractioncost)
 
     # 3. Shareweights ------------------
