@@ -26,6 +26,7 @@ module_aglu_L109.ag_an_ALL_R_C_Y <- function(command, ...) {
       "L108.ag_Feed_Mt_R_C_Y",
       "L108.ag_NetExp_Mt_R_FodderHerb_Y",
       "L122.in_Mt_R_C_Yh",
+      "L122.in_Mt_R_C_Yh_EUR",
       "L101.GrossTrade_Mt_R_C_Y",
       "L101.ag_Storage_Mt_R_C_Y")
 
@@ -49,6 +50,10 @@ module_aglu_L109.ag_an_ALL_R_C_Y <- function(command, ...) {
 
     # Load required inputs ----
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
+
+    L122.in_Mt_R_C_Yh <- L122.in_Mt_R_C_Yh %>%
+      anti_join(L122.in_Mt_R_C_Yh_EUR, by = c("GCAM_region_ID")) %>%
+      bind_rows(L122.in_Mt_R_C_Yh_EUR)
 
 
     # Balance elements
