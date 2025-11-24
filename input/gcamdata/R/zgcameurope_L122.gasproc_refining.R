@@ -342,6 +342,23 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
       filter(sector == "TES" , fuel == "gasified biomass") %>%
       mutate(sector = "gas processing", fuel = "biomass")
 
+    # JS 11/2025 In Iceland there gasified biomass values in 2021 is zero, with a positive value in previous years
+    # Need some gas for biofuel production, so taking copying the 2020 value to 2021:
+    ICE_ID <- GCAM_region_names %>%
+      filter(region == "Iceland") %>%
+      pull(GCAM_region_ID)
+
+    gasified_biomass_iceland_latest_nonzero <-
+      L122.out_EJ_R_gasproc_bio_Yh_EUR %>%
+      filter(GCAM_region_ID == ICE_ID,
+             value != 0) %>%
+      filter(year == max(year)) %>%
+      pull(value)
+
+    L122.out_EJ_R_gasproc_bio_Yh_EUR <- L122.out_EJ_R_gasproc_bio_Yh_EUR %>%
+      mutate(value = if_else(GCAM_region_ID == ICE_ID & year == MODEL_FINAL_BASE_YEAR,
+                             gasified_biomass_iceland_latest_nonzero, value))
+
     # Gas processing output from coal gasification is calculated from the input of coal
     L122.in_EJ_R_gasproc_coal_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(sector == "in_gas processing", fuel == "coal") %>%
