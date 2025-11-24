@@ -1,11 +1,11 @@
 # File: A23.elecS_globalinttech_shrwt.csv
 # Title: MLS Electricity Sector Intermittent Technology Shareweights
 # Units: unitless
-# Comments: USA multiple load segments electricity sector intermittent technology shareweight assumptions supplysector set to either segment or ""electricity"" to apply to all segments not listed"
+# Comments: USA multiple load segments electricity sector intermittent technology shareweight assumptions supplysector set to either segment or electricity to apply to all segments not listed
 # Source: None (GCAM assumptions)
 # Column types: cccnnnnnn
 # ----------
-supplysector,subsector,technology,1971,2015,2020,2021,2030,2100
+supplysector,subsector,technology,1971,final-calibration-year,initial-future-year,2026,2030,2100
 intermediate generation,wind,wind,1,1,1,1,0,0
 subpeak generation,wind,wind,1,1,1,1,0,0
 base load generation,wind,wind_base_offshore,0,0,0,0,1,1
