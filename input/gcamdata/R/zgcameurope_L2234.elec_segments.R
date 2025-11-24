@@ -255,7 +255,10 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
 
     L2234.StubTechProd_elecS_EUR <- L2234.StubTechProd_NA %>%
       tidyr::replace_na(list(fraction = 0)) %>%
-      mutate(calOutputValue = round(calOutputValue * fraction, energy.DIGITS_CALPRODUCTION)) %>%
+      # JS: Small adjustment for low production in Malta
+      mutate(calOutputValue = if_else(region == "Malta",
+                                      round(calOutputValue * fraction, 9),
+                                      round(calOutputValue * fraction, energy.DIGITS_CALPRODUCTION))) %>%
       mutate(share.weight = if_else(calOutputValue > 0, 1, 0))
 
     # 4b. L2234.StubTechCalInput_elecS_EUR ----------------------------
