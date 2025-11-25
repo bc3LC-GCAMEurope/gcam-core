@@ -1,246 +1,246 @@
-# File: A_InputTaxesSubsidies.csv,,,,,,,,,,,,,
-# Title: Taxes/Subsidies for Specific Technologies,,,,,,,,,,,,,
-# Units: 1975$/GJ,,,,,,,,,,,,,
-# Comments: Positive for tax, negative for subsidy,,,,,,,,,,,,
-# Column types: ccccccnnnnnnnn,,,,,,,,,,,,,
-# ----------,,,,,,,,,,,,,
-xml,region,supplysector,subsector,stub.technology,minicam.non.energy.input,2020,2025,2030,2035,2040,2045,2050,2100
-policy_fueltax_arg.xml,Argentina,delivered coal industry,delivered coal industry,delivered coal industry,fuel-tax,0.032,0.111,0.159,0.159,0.159,0.159,0.159,0.159
-policy_fueltax_arg.xml,Argentina,refined liquids enduse,refined liquids enduse,refined liquids enduse,fuel-tax,0.023,0.08,0.114,0.114,0.114,0.114,0.114,0.114
-policy_fueltax_arg.xml,Argentina,refined liquids industrial,refined liquids industrial,refined liquids industrial,fuel-tax,0.023,0.08,0.114,0.114,0.114,0.114,0.114,0.114
-policy_fueltax_arg.xml,Argentina,refined liquids transport,refined liquids transport,refined liquids transport,fuel-tax,0.023,0.08,0.114,0.114,0.114,0.114,0.114,0.114
-policy_fueltax_aus.xml,Australia_NZ,refined liquids transport,refined liquids transport,refined liquids transport,fuel-tax,3.340659341,3.340659341,3.340659341,3.340659341,3.340659341,3.340659341,3.340659341,3.340659341
-policy_fueltax_eu.xml,EU-15,refined liquids transport,refined liquids transport,refined liquids transport,fuel-tax,5.056995817,5.056995817,5.056995817,5.056995817,5.056995817,5.056995817,5.056995817,5.056995817
-policy_fueltax_eu.xml,EU-15,delivered gas transport,delivered gas transport,delivered gas transport,fuel-tax,1.073710891,1.073710891,1.073710891,1.073710891,1.073710891,1.073710891,1.073710891,1.073710891
-policy_fueltax_eu.xml,EU-12,refined liquids transport,refined liquids transport,refined liquids transport,fuel-tax,3.504124669,3.504124669,3.504124669,3.504124669,3.504124669,3.504124669,3.504124669,3.504124669
-policy_fueltax_eu.xml,EU-12,delivered gas transport,delivered gas transport,delivered gas transport,fuel-tax,0.504987073,0.504987073,0.504987073,0.504987073,0.504987073,0.504987073,0.504987073,0.504987073
-policy_fueltax_jap.xml,Japan,refined liquids transport,refined liquids transport,refined liquids transport,fuel-tax,3.188811189,3.188811189,3.188811189,3.188811189,3.188811189,3.188811189,3.188811189,3.188811189
-policy_fueltax_jap.xml,Japan,delivered gas transport,delivered gas transport,delivered gas transport,fuel-tax,0.844982542,0.844982542,0.844982542,0.844982542,0.844982542,0.844982542,0.844982542,0.844982542
-IRA_PTC,USA,electricity,biomass,biomass (conv),tax-credit,-0.86,-0.79,-0.79,-0.67,-0.67,-0.67,-0.67,-0.67
-IRA_PTC,USA,electricity,biomass,biomass (IGCC),tax-credit,-0.86,-0.79,-0.79,-0.67,-0.67,-0.67,-0.67,-0.67
-IRA_PTC,USA,electricity,geothermal,geothermal,tax-credit,-1.71,-1.58,-1.58,-1.33,-1.33,-1.33,-1.33,-1.33
-IRA_PTC,USA,electricity,nuclear,Gen_III,tax-credit,0,-0.98,-0.98,-0.39,-0.39,-0.39,-0.39,-0.39
-IRA_PTC,USA,electricity,solar,CSP,tax-credit,0,-1.58,-1.58,-1.33,-1.33,-1.33,-1.33,-1.33
-IRA_PTC,USA,electricity,solar,CSP_storage,tax-credit,0,-1.58,-1.58,-1.33,-1.33,-1.33,-1.33,-1.33
-IRA_PTC,USA,electricity,solar,PV,tax-credit,0,-1.58,-1.58,-1.33,-1.33,-1.33,-1.33,-1.33
-IRA_PTC,USA,electricity,solar,PV_storage,tax-credit,0,-1.58,-1.58,-1.33,-1.33,-1.33,-1.33,-1.33
-IRA_PTC,USA,electricity,wind,wind,tax-credit,-1.16,-1.58,-1.58,-1.33,-1.33,-1.33,-1.33,-1.33
-IRA_PTC,USA,electricity,wind,wind_storage,tax-credit,-1.16,-1.58,-1.58,-1.33,-1.33,-1.33,-1.33,-1.33
-IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Car,BEV,IRA_30D_EV_tax-credit_medium,,-0.007599,-0.015199,-0.00608,-0.00608,-0.00608,-0.00608,-0.00608
-IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Car,FCEV,IRA_30D_EV_tax-credit_medium,,-0.007599,-0.015199,-0.00608,-0.00608,-0.00608,-0.00608,-0.00608
-IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Large Car and Truck,BEV,IRA_30D_EV_tax-credit_medium,,-0.007599,-0.015199,-0.00608,-0.00608,-0.00608,-0.00608,-0.00608
-IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Large Car and Truck,FCEV,IRA_30D_EV_tax-credit_medium,,-0.007599,-0.015199,-0.00608,-0.00608,-0.00608,-0.00608,-0.00608
-IRA_transport_tax_credits,USA,trn_freight_road,Light truck,BEV,IRA_45W_light-truck_tax-credit,,-0.03352,-0.03352,-0.013408,-0.013408,-0.013408,-0.013408,-0.013408
-IRA_transport_tax_credits,USA,trn_freight_road,Medium truck,BEV,IRA_45W_medium-truck_tax-credit,,-0.030801,-0.030801,-0.01232,-0.01232,-0.01232,-0.01232,-0.01232
-IRA_transport_tax_credits,USA,trn_freight_road,Heavy truck,BEV,IRA_45W_heavy-truck_tax-credit,,-0.048775,-0.048775,-0.01951,-0.01951,-0.01951,-0.01951,-0.01951
-IRA_transport_tax_credits,USA,trn_pass_road,Bus,BEV,IRA_45W_bus_tax-credit,,-0.067676764,-0.067676764,-0.027071,-0.027071,-0.027071,-0.027071,-0.027071
-IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Car,BEV,IRA_alt_refuel_prop-credit_EV_charging,,-0.000793,-0.000793,-0.0003172,-0.0003172,-0.0003172,-0.0003172,-0.0003172
-IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Car,FCEV,IRA_alt_refuel_prop-credit_EV_charging,,-0.000793,-0.000793,-0.0003172,-0.0003172,-0.0003172,-0.0003172,-0.0003172
-IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Large Car and Truck,BEV,IRA_alt_refuel_prop-credit_EV_charging,,-0.000793,-0.000793,-0.0003172,-0.0003172,-0.0003172,-0.0003172,-0.0003172
-IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Large Car and Truck,FCEV,IRA_alt_refuel_prop-credit_EV_charging,,-0.000793,-0.000793,-0.0003172,-0.0003172,-0.0003172,-0.0003172,-0.0003172
-IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Car,BEV,state_EV_credits,,-0.0125,-0.0125,-0.0125,-0.0124,-0.0124,-0.0123,-0.0123
-IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Car,FCEV,state_EV_credits,,-0.0185,-0.0182,-0.0179,-0.0176,-0.0173,-0.017,-0.017
-IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Large Car and Truck,BEV,state_EV_credits,,-0.0157,-0.0156,-0.0155,-0.0155,-0.0154,-0.0154,-0.0154
-IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Large Car and Truck,FCEV,state_EV_credits,,-0.0226,-0.0222,-0.0218,-0.0215,-0.0211,-0.0208,-0.0208
-IRA_transport_tax_credits,USA,trn_pass_road,Bus,BEV,infra-cost,,-0.04934069,-0.04934069,-0.04934069,-0.04934069,-0.04934069,-0.04934069,-0.04934069
-IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Car,BEV,IIJA_charging,,-0.00365242,-0.00365242,-0.00365242,-0.00365242,-0.00365242,-0.00365242,-0.00365242
-IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Car,FCEV,IIJA_charging,,-0.00365242,-0.00365242,-0.00365242,-0.00365242,-0.00365242,-0.00365242,-0.00365242
-IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Large Car and Truck,BEV,IIJA_charging,,-0.00365242,-0.00365242,-0.00365242,-0.00365242,-0.00365242,-0.00365242,-0.00365242
-IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Large Car and Truck,FCEV,IIJA_charging,,-0.00365242,-0.00365242,-0.00365242,-0.00365242,-0.00365242,-0.00365242,-0.00365242
-IRA_transport_tax_credits,USA,trn_freight_road,Light truck,BEV,IIJA_charging,,-0.020580265,-0.020580265,-0.020580265,-0.020580265,-0.020580265,-0.020580265,-0.020580265
-IRA_transport_tax_credits,USA,trn_freight_road,Medium truck,BEV,IIJA_charging,,-0.03782092,-0.03782092,-0.03782092,-0.03782092,-0.03782092,-0.03782092,-0.03782092
-IRA_transport_tax_credits,USA,trn_freight_road,Heavy truck,BEV,IIJA_charging,,-0.01123,-0.01123,-0.01123,-0.01123,-0.01123,-0.01123,-0.01123
-IRA_H2_subsidy_mid,USA,H2 central production,biomass,biomass to H2,subsidy,,-4.102,-4.102,-4.102,-4.102,-4.102,-4.102,-4.102
-IRA_H2_subsidy_mid,USA,H2 central production,electricity,electrolysis,subsidy,,,,-1.0255,-1.0255,-1.0255,-1.0255,-1.0255
-IRA_H2_subsidy_mid,USA,H2 central production,nuclear,thermal splitting,subsidy,,-4.102,-4.102,-4.102,-4.102,-4.102,-4.102,-4.102
-IRA_H2_subsidy_mid,USA,H2 central production,solar,electrolysis,subsidy,,-4.102,-4.102,-4.102,-4.102,-4.102,-4.102,-4.102
-IRA_H2_subsidy_mid,USA,H2 central production,wind,electrolysis,subsidy,,-4.102,-4.102,-4.102,-4.102,-4.102,-4.102,-4.102
-IRA_H2_subsidy_mid,USA,H2 wholesale dispensing,forecourt production,electrolysis,subsidy,,,,-1.0255,-1.0255,-1.0255,-1.0255,-1.0255
-IRA_H2_subsidy_mid,USA,H2 industrial,forecourt production,electrolysis,subsidy,,,,-1.0255,-1.0255,-1.0255,-1.0255,-1.0255
-IRA_45Q,USA,carbon-storage,onshore carbon-storage,onshore carbon-storage,subsidy,,,-103.4462,-103.4462,-103.4462,-103.4462,-103.4462,-103.4462
-IRA_45Q,USA,carbon-storage,offshore carbon-storage,offshore carbon-storage,subsidy,,,-103.4462,-103.4462,-103.4462,-103.4462,-103.4462,-103.4462
-IRA_45Q,USA,CO2 removal,dac,hightemp DAC NG,subsidy,,,-0.0564,-0.0564,-0.0564,-0.0564,-0.0564,-0.0564
-IRA_45Q,USA,CO2 removal,dac,hightemp DAC elec,subsidy,,,-0.0564,-0.0564,-0.0564,-0.0564,-0.0564,-0.0564
-IRA_45Q,USA,CO2 removal,dac,lowtemp DAC heatpump,subsidy,,,-0.0564,-0.0564,-0.0564,-0.0564,-0.0564,-0.0564
-IRA_biofuels,USA,refining,biomass liquids,biodiesel,IRA subsidy,,-1.639,-1.639,-1.639,-1.639,-1.639,-1.639,-1.639
-IRA_biofuels,USA,refining,biomass liquids,cellulosic ethanol,IRA subsidy,,-1.8906,-1.8906,-1.8906,-1.8906,-1.8906,-1.8906,-1.8906
-IRA_biofuels,USA,refining,biomass liquids,FT biofuels,IRA subsidy,,-2.0849,-2.0849,-2.0849,-2.0849,-2.0849,-2.0849,-2.0849
-IRA_biofuels,USA,refining,biomass liquids,cellulosic ethanol CCS level 1,IRA subsidy,,-1.8906,-1.8906,-1.8906,-1.8906,-1.8906,-1.8906,-1.8906
-IRA_biofuels,USA,refining,biomass liquids,cellulosic ethanol CCS level 2,IRA subsidy,,-1.8906,-1.8906,-1.8906,-1.8906,-1.8906,-1.8906,-1.8906
-IRA_biofuels,USA,refining,biomass liquids,FT biofuels CCS level 1,IRA subsidy,,-2.9188,-2.9188,-2.9188,-2.9188,-2.9188,-2.9188,-2.9188
-IRA_biofuels,USA,refining,biomass liquids,FT biofuels CCS level 2,IRA subsidy,,-2.9188,-2.9188,-2.9188,-2.9188,-2.9188,-2.9188,-2.9188
-renewcorr_usa,USA,electricity,solar,PV,renew-calib,1,,,,,,,
-renewcorr_usa,USA,electricity,wind,wind,renew-calib,1,,,,,,,
-renewcorr_usa,USA,electricity,geothermal,geothermal,renew-calib,1,,,,,,,
-bldeleccorr_world,Africa_Eastern,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Africa_Northern,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Africa_Southern,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Africa_Western,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Argentina,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Australia_NZ,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Brazil,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Canada,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Central America and Caribbean,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Central Asia,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,China,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Colombia,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,EU-12,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,EU-15,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Europe_Eastern,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Europe_Non_EU,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,European Free Trade Association,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,India,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Indonesia,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Japan,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Mexico,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Middle East,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Pakistan,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Russia,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,South Africa,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,South America_Northern,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,South America_Southern,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,South Asia,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,South Korea,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Southeast Asia,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Taiwan,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,USA,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Africa_Eastern,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Africa_Northern,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Africa_Southern,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Africa_Western,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Argentina,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Australia_NZ,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Brazil,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Canada,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Central America and Caribbean,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Central Asia,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,China,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Colombia,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,EU-12,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,EU-15,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Europe_Eastern,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Europe_Non_EU,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,European Free Trade Association,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,India,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Indonesia,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Japan,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Mexico,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Middle East,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Pakistan,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Russia,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,South Africa,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,South America_Northern,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,South America_Southern,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,South Asia,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,South Korea,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Southeast Asia,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,Taiwan,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-bldeleccorr_world,USA,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4,1.4
-policy_fueltax_eums_fix2024,Poland,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.094406421,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.420386825
-policy_fueltax_eums_fix2024,Austria,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,1.242189754,0.067881317,0.067881317,0.067881317,0.067881317,0.067881317,0.067881317,1.319205519
-policy_fueltax_eums_fix2024,Belgium,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.444703932,1.603356713,1.603356713,1.603356713,1.603356713,1.603356713,1.603356713,0.167978836
-policy_fueltax_eums_fix2024,Bulgaria,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0,0,0,0,0,0,0,0.089705975
-policy_fueltax_eums_fix2024,Cyprus,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.828126503,0.339406586,0.339406586,0.339406586,0.339406586,0.339406586,0.339406586,0
-policy_fueltax_eums_fix2024,Czech Republic,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.091093915,0.078742328,0.078742328,0.078742328,0.078742328,0.078742328,0.078742328,0.091464916
-policy_fueltax_eums_fix2024,Germany,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,1.697659331,1.391567003,1.391567003,1.391567003,1.391567003,1.391567003,1.391567003,1.80291421
-policy_fueltax_eums_fix2024,Denmark,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,9.894455457,6.925930798,6.925930798,6.925930798,6.925930798,6.925930798,6.925930798,10.34872756
-policy_fueltax_eums_fix2024,Estonia,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.370172547,0.067881317,0.067881317,0.067881317,0.067881317,0.067881317,0.067881317,0.393123245
-policy_fueltax_eums_fix2024,Greece,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.414063251,0.339406586,0.339406586,0.339406586,0.339406586,0.339406586,0.339406586,0.193483476
-policy_fueltax_eums_fix2024,Spain,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.795001443,0.052268614,0.052268614,0.052268614,0.052268614,0.052268614,0.052268614,0.087947035
-policy_fueltax_eums_fix2024,Finland,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,1.865769011,1.529366077,1.529366077,1.529366077,1.529366077,1.529366077,1.529366077,1.98144669
-policy_fueltax_eums_fix2024,France,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,1.863284632,2.176275031,2.176275031,2.176275031,2.176275031,2.176275031,2.176275031,0.131920552
-policy_fueltax_eums_fix2024,Hungary,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.077015765,0.062450812,0.062450812,0.062450812,0.062450812,0.062450812,0.062450812,0.087947035
-policy_fueltax_eums_fix2024,Croatia,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.083640777,0.067881317,0.067881317,0.067881317,0.067881317,0.067881317,0.067881317,0.086188094
-policy_fueltax_eums_fix2024,Ireland,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.08281265,0.067881317,0.067881317,0.067881317,0.067881317,0.067881317,0.067881317,0.087947035
-policy_fueltax_eums_fix2024,Italy,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,1.879847162,1.540905901,1.540905901,1.540905901,1.540905901,1.540905901,1.540905901,1.996397686
-policy_fueltax_eums_fix2024,Lithuania,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.083640777,0.06856013,0.06856013,0.06856013,0.06856013,0.06856013,0.06856013,0.088826505
-policy_fueltax_eums_fix2024,Luxembourg,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.08281265,0.067881317,0.067881317,0.067881317,0.067881317,0.067881317,0.067881317,0.087947035
-policy_fueltax_eums_fix2024,Latvia,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.083640777,0.06856013,0.06856013,0.06856013,0.06856013,0.06856013,0.06856013,0.088826505
-policy_fueltax_eums_fix2024,Malta,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.124218975,0.101821976,0.101821976,0.101821976,0.101821976,0.101821976,0.101821976,0.131920552
-policy_fueltax_eums_fix2024,Netherlands,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,10.35158129,7.385487315,7.385487315,7.385487315,7.385487315,7.385487315,7.385487315,10.51846534
-policy_fueltax_eums_fix2024,Portugal,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.08281265,0.067881317,0.067881317,0.067881317,0.067881317,0.067881317,0.067881317,0.087947035
-policy_fueltax_eums_fix2024,Romania,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.088609536,0.092997405,0.092997405,0.092997405,0.092997405,0.092997405,0.092997405,0.094103327
-policy_fueltax_eums_fix2024,Sweden,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,2.705489285,2.508214672,2.508214672,2.508214672,2.508214672,2.508214672,2.508214672,2.764175298
-policy_fueltax_eums_fix2024,Slovenia,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.318828704,0.103179602,0.103179602,0.103179602,0.103179602,0.103179602,0.103179602,0.268238456
-policy_fueltax_eums_fix2024,Slovakia,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.109312698,0.089603339,0.089603339,0.089603339,0.089603339,0.089603339,0.089603339,0
-policy_fueltax_eums_fix2024,Austria,delivered gas,delivered gas,delivered gas,NG-tax,0.494888398,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.525571479
-policy_fueltax_eums_fix2024,Belgium,delivered gas,delivered gas,delivered gas,NG-tax,0.131175238,0.188167011,0.188167011,0.188167011,0.188167011,0.188167011,0.188167011,0.088650611
-policy_fueltax_eums_fix2024,Bulgaria,delivered gas,delivered gas,delivered gas,NG-tax,0,0,0,0,0,0,0,0
-policy_fueltax_eums_fix2024,Cyprus,delivered gas,delivered gas,delivered gas,NG-tax,0.775126407,0.635369129,0.635369129,0.635369129,0.635369129,0.635369129,0.635369129,0.823184244
-policy_fueltax_eums_fix2024,Czech Republic,delivered gas,delivered gas,delivered gas,NG-tax,0.098381429,0.08553046,0.08553046,0.08553046,0.08553046,0.08553046,0.08553046,0.098148891
-policy_fueltax_eums_fix2024,Germany,delivered gas,delivered gas,delivered gas,NG-tax,0.456132078,0.373890295,0.373890295,0.373890295,0.373890295,0.373890295,0.373890295,0.484412267
-policy_fueltax_eums_fix2024,Denmark,delivered gas,delivered gas,delivered gas,NG-tax,2.668223592,2.622119522,2.622119522,2.622119522,2.622119522,2.622119522,2.622119522,2.697511446
-policy_fueltax_eums_fix2024,Estonia,delivered gas,delivered gas,delivered gas,NG-tax,0.623082381,0.261478834,0.261478834,0.261478834,0.261478834,0.261478834,0.261478834,0.265951833
-policy_fueltax_eums_fix2024,Greece,delivered gas,delivered gas,delivered gas,NG-tax,0.089437662,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.474913987
-policy_fueltax_eums_fix2024,Spain,delivered gas,delivered gas,delivered gas,NG-tax,0.193781602,0.158842282,0.158842282,0.158842282,0.158842282,0.158842282,0.158842282,0.205796061
-policy_fueltax_eums_fix2024,Finland,delivered gas,delivered gas,delivered gas,NG-tax,1.711240606,1.429580541,1.429580541,1.429580541,1.429580541,1.429580541,1.429580541,1.358254003
-policy_fueltax_eums_fix2024,France,delivered gas,delivered gas,delivered gas,NG-tax,0.700595021,0.574275944,0.574275944,0.574275944,0.574275944,0.574275944,0.574275944,0.256453553
-policy_fueltax_eums_fix2024,Hungary,delivered gas,delivered gas,delivered gas,NG-tax,0.155025281,0.068424368,0.068424368,0.068424368,0.068424368,0.068424368,0.068424368,0.094982797
-policy_fueltax_eums_fix2024,Croatia,delivered gas,delivered gas,delivered gas,NG-tax,0.089437662,0.263922561,0.263922561,0.263922561,0.263922561,0.263922561,0.263922561,0.091816704
-policy_fueltax_eums_fix2024,Ireland,delivered gas,delivered gas,delivered gas,NG-tax,0.307069307,0.596269491,0.596269491,0.596269491,0.596269491,0.596269491,0.596269491,0.326107604
-policy_fueltax_eums_fix2024,Italy,delivered gas,delivered gas,delivered gas,NG-tax,0.354769394,0.290803563,0.290803563,0.290803563,0.290803563,0.290803563,0.290803563,0.376765096
-policy_fueltax_eums_fix2024,Lithuania,delivered gas,delivered gas,delivered gas,NG-tax,0.089437662,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0
-policy_fueltax_eums_fix2024,Luxembourg,delivered gas,delivered gas,delivered gas,NG-tax,0.089437662,0.552282397,0.552282397,0.552282397,0.552282397,0.552282397,0.552282397,0.094982797
-policy_fueltax_eums_fix2024,Latvia,delivered gas,delivered gas,delivered gas,NG-tax,0.137137749,0.112411461,0.112411461,0.112411461,0.112411461,0.112411461,0.112411461,0.145640289
-policy_fueltax_eums_fix2024,Malta,delivered gas,delivered gas,delivered gas,NG-tax,0.250425454,0.205273103,0.205273103,0.205273103,0.205273103,0.205273103,0.205273103,0.265951833
-policy_fueltax_eums_fix2024,Netherlands,delivered gas,delivered gas,delivered gas,NG-tax,3.479125064,4.501345909,4.501345909,4.501345909,4.501345909,4.501345909,4.501345909,1.719188633
-policy_fueltax_eums_fix2024,Portugal,delivered gas,delivered gas,delivered gas,NG-tax,0.304088052,0.847973415,0.847973415,0.847973415,0.847973415,0.847973415,0.847973415,0.186799502
-policy_fueltax_eums_fix2024,Romania,delivered gas,delivered gas,delivered gas,NG-tax,0.101362684,0.107524007,0.107524007,0.107524007,0.107524007,0.107524007,0.107524007,0.10764717
-policy_fueltax_eums_fix2024,Sweden,delivered gas,delivered gas,delivered gas,NG-tax,2.456554458,2.275110228,2.275110228,2.275110228,2.275110228,2.275110228,2.275110228,2.833653455
-policy_fueltax_eums_fix2024,Slovenia,delivered gas,delivered gas,delivered gas,NG-tax,0.551532251,0.180835829,0.180835829,0.180835829,0.180835829,0.180835829,0.180835829,0.449585241
-policy_fueltax_eums_fix2024,Slovakia,delivered gas,delivered gas,delivered gas,NG-tax,0.11030645,0.090417915,0.090417915,0.090417915,0.090417915,0.090417915,0.090417915,0.11714545
-policy_fueltax_eums_fix2024,Poland,delivered gas,delivered gas,delivered gas,NG-tax,0.086456407,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.098148891
-policy_fueltax_eums_fix2024,Austria,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.494888398,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.525571479
-policy_fueltax_eums_fix2024,Belgium,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.131175238,0.188167011,0.188167011,0.188167011,0.188167011,0.188167011,0.188167011,0.088650611
-policy_fueltax_eums_fix2024,Bulgaria,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0,0,0,0,0,0,0,0
-policy_fueltax_eums_fix2024,Cyprus,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.775126407,0.635369129,0.635369129,0.635369129,0.635369129,0.635369129,0.635369129,0.823184244
-policy_fueltax_eums_fix2024,Czech Republic,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.098381429,0.08553046,0.08553046,0.08553046,0.08553046,0.08553046,0.08553046,0.098148891
-policy_fueltax_eums_fix2024,Germany,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.456132078,0.373890295,0.373890295,0.373890295,0.373890295,0.373890295,0.373890295,0.484412267
-policy_fueltax_eums_fix2024,Denmark,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,2.668223592,2.622119522,2.622119522,2.622119522,2.622119522,2.622119522,2.622119522,2.697511446
-policy_fueltax_eums_fix2024,Estonia,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.623082381,0.261478834,0.261478834,0.261478834,0.261478834,0.261478834,0.261478834,0.265951833
-policy_fueltax_eums_fix2024,Greece,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.089437662,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.474913987
-policy_fueltax_eums_fix2024,Spain,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.193781602,0.158842282,0.158842282,0.158842282,0.158842282,0.158842282,0.158842282,0.205796061
-policy_fueltax_eums_fix2024,Finland,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,1.711240606,1.429580541,1.429580541,1.429580541,1.429580541,1.429580541,1.429580541,1.358254003
-policy_fueltax_eums_fix2024,France,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.700595021,0.574275944,0.574275944,0.574275944,0.574275944,0.574275944,0.574275944,0.256453553
-policy_fueltax_eums_fix2024,Hungary,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.155025281,0.068424368,0.068424368,0.068424368,0.068424368,0.068424368,0.068424368,0.094982797
-policy_fueltax_eums_fix2024,Croatia,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.089437662,0.263922561,0.263922561,0.263922561,0.263922561,0.263922561,0.263922561,0.091816704
-policy_fueltax_eums_fix2024,Ireland,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.307069307,0.596269491,0.596269491,0.596269491,0.596269491,0.596269491,0.596269491,0.326107604
-policy_fueltax_eums_fix2024,Italy,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.354769394,0.290803563,0.290803563,0.290803563,0.290803563,0.290803563,0.290803563,0.376765096
-policy_fueltax_eums_fix2024,Lithuania,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.089437662,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0
-policy_fueltax_eums_fix2024,Luxembourg,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.089437662,0.552282397,0.552282397,0.552282397,0.552282397,0.552282397,0.552282397,0.094982797
-policy_fueltax_eums_fix2024,Latvia,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.137137749,0.112411461,0.112411461,0.112411461,0.112411461,0.112411461,0.112411461,0.145640289
-policy_fueltax_eums_fix2024,Malta,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.250425454,0.205273103,0.205273103,0.205273103,0.205273103,0.205273103,0.205273103,0.265951833
-policy_fueltax_eums_fix2024,Netherlands,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,3.479125064,4.501345909,4.501345909,4.501345909,4.501345909,4.501345909,4.501345909,1.719188633
-policy_fueltax_eums_fix2024,Portugal,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.304088052,0.847973415,0.847973415,0.847973415,0.847973415,0.847973415,0.847973415,0.186799502
-policy_fueltax_eums_fix2024,Romania,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.101362684,0.107524007,0.107524007,0.107524007,0.107524007,0.107524007,0.107524007,0.10764717
-policy_fueltax_eums_fix2024,Sweden,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,2.456554458,2.275110228,2.275110228,2.275110228,2.275110228,2.275110228,2.275110228,2.833653455
-policy_fueltax_eums_fix2024,Slovenia,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.551532251,0.180835829,0.180835829,0.180835829,0.180835829,0.180835829,0.180835829,0.449585241
-policy_fueltax_eums_fix2024,Slovakia,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.11030645,0.090417915,0.090417915,0.090417915,0.090417915,0.090417915,0.090417915,0.11714545
-policy_fueltax_eums_fix2024,Poland,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.086456407,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.098148891
-policy_fueltax_eums_fix2024,Austria,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,3.586081308,2.939501659,2.939501659,2.939501659,2.939501659,2.939501659,2.939501659,3.808418349
-policy_fueltax_eums_fix2024,Belgium,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,4.868142259,3.990403735,3.990403735,3.990403735,3.990403735,3.990403735,3.990403735,4.546152336
-policy_fueltax_eums_fix2024,Bulgaria,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,2.820029581,2.311571021,2.311571021,2.311571021,2.311571021,2.311571021,2.311571021,2.991299184
-policy_fueltax_eums_fix2024,Cyprus,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,3.369383246,2.296451823,2.296451823,2.296451823,2.296451823,2.296451823,2.296451823,4.00900074
-policy_fueltax_eums_fix2024,Czech Republic,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,3.766684359,3.121550872,3.121550872,3.121550872,3.121550872,3.121550872,3.121550872,3.774206704
-policy_fueltax_eums_fix2024,Germany,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,4.607999671,3.777165523,3.777165523,3.777165523,3.777165523,3.777165523,3.777165523,4.893695651
-policy_fueltax_eums_fix2024,Denmark,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,4.351079014,3.894348947,3.894348947,3.894348947,3.894348947,3.894348947,3.894348947,4.440951507
-policy_fueltax_eums_fix2024,Estonia,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,4.300214199,3.147257661,3.147257661,3.147257661,3.147257661,3.147257661,3.147257661,3.521181014
-policy_fueltax_eums_fix2024,Greece,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,4.573879932,3.749197659,3.749197659,3.749197659,3.749197659,3.749197659,3.749197659,4.396865571
-policy_fueltax_eums_fix2024,Spain,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,3.611897561,2.960663175,2.960663175,2.960663175,2.960663175,2.960663175,2.960663175,3.279595617
-policy_fueltax_eums_fix2024,Finland,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,5.042272888,3.949942792,3.949942792,3.949942792,3.949942792,3.949942792,3.949942792,5.160544739
-policy_fueltax_eums_fix2024,France,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,5.200814741,4.263094516,4.263094516,4.263094516,4.263094516,4.263094516,4.263094516,4.745841815
-policy_fueltax_eums_fix2024,Hungary,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,2.860514976,2.532602641,2.532602641,2.532602641,2.532602641,2.532602641,2.532602641,3.301294712
-policy_fueltax_eums_fix2024,Croatia,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,3.813751767,2.804079873,2.804079873,2.804079873,2.804079873,2.804079873,2.804079873,3.702141642
-policy_fueltax_eums_fix2024,Ireland,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,4.473975475,3.783535468,3.783535468,3.783535468,3.783535468,3.783535468,3.783535468,4.623251548
-policy_fueltax_eums_fix2024,Italy,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,5.485743343,4.496649761,4.496649761,4.496649761,4.496649761,4.496649761,4.496649761,5.825859431
-policy_fueltax_eums_fix2024,Lithuania,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,3.422033455,2.923622485,2.923622485,2.923622485,2.923622485,2.923622485,2.923622485,3.32076126
-policy_fueltax_eums_fix2024,Luxembourg,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,3.383522305,3.311492503,3.311492503,3.311492503,3.311492503,3.311492503,3.311492503,3.491651336
-policy_fueltax_eums_fix2024,Latvia,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,3.767016713,3.087813947,3.087813947,3.087813947,3.087813947,3.087813947,3.087813947,3.225862922
-policy_fueltax_eums_fix2024,Malta,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,4.163162159,2.296451823,2.296451823,2.296451823,2.296451823,2.296451823,2.296451823,4.162848773
-policy_fueltax_eums_fix2024,Netherlands,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,5.362150724,4.39513637,4.39513637,4.39513637,4.39513637,4.39513637,4.39513637,5.450827681
-policy_fueltax_eums_fix2024,Poland,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,2.929778721,2.505152862,2.505152862,2.505152862,2.505152862,2.505152862,2.505152862,3.236408789
-policy_fueltax_eums_fix2024,Portugal,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,4.614869152,3.421403249,3.421403249,3.421403249,3.421403249,3.421403249,3.421403249,4.448092233
-policy_fueltax_eums_fix2024,Romania,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,2.909072759,2.593458725,2.593458725,2.593458725,2.593458725,2.593458725,2.593458725,3.82082574
-policy_fueltax_eums_fix2024,Sweden,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,4.323799056,2.868875107,2.868875107,2.868875107,2.868875107,2.868875107,2.868875107,5.162638852
-policy_fueltax_eums_fix2024,Slovenia,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,4.138945578,3.298901515,3.298901515,3.298901515,3.298901515,3.298901515,3.298901515,4.723021794
-policy_fueltax_eums_fix2024,Slovakia,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,3.789873584,2.961897605,2.961897605,2.961897605,2.961897605,2.961897605,2.961897605,4.078764539
+# File: A_InputTaxesSubsidies.csv,,,,,,,,,,,,
+# Title: Taxes/Subsidies for Specific Technologies,,,,,,,,,,,,
+# Units: 1975$/GJ,,,,,,,,,,,,
+# Comments: Positive for tax, negative for subsidy,,,,,,,,,,,
+# Column types: ccccccnnnnnnn,,,,,,,,,,,,
+# ----------,,,,,,,,,,,,
+xml,region,supplysector,subsector,stub.technology,minicam.non.energy.input,2025,2030,2035,2040,2045,2050,2100
+policy_fueltax_arg.xml,Argentina,delivered coal industry,delivered coal industry,delivered coal industry,fuel-tax,0.111,0.159,0.159,0.159,0.159,0.159,0.159
+policy_fueltax_arg.xml,Argentina,refined liquids enduse,refined liquids enduse,refined liquids enduse,fuel-tax,0.08,0.114,0.114,0.114,0.114,0.114,0.114
+policy_fueltax_arg.xml,Argentina,refined liquids industrial,refined liquids industrial,refined liquids industrial,fuel-tax,0.08,0.114,0.114,0.114,0.114,0.114,0.114
+policy_fueltax_arg.xml,Argentina,refined liquids transport,refined liquids transport,refined liquids transport,fuel-tax,0.08,0.114,0.114,0.114,0.114,0.114,0.114
+policy_fueltax_aus.xml,Australia_NZ,refined liquids transport,refined liquids transport,refined liquids transport,fuel-tax,3.340659341,3.340659341,3.340659341,3.340659341,3.340659341,3.340659341,3.340659341
+policy_fueltax_eu.xml,EU-15,refined liquids transport,refined liquids transport,refined liquids transport,fuel-tax,5.056995817,5.056995817,5.056995817,5.056995817,5.056995817,5.056995817,5.056995817
+policy_fueltax_eu.xml,EU-15,delivered gas transport,delivered gas transport,delivered gas transport,fuel-tax,1.073710891,1.073710891,1.073710891,1.073710891,1.073710891,1.073710891,1.073710891
+policy_fueltax_eu.xml,EU-12,refined liquids transport,refined liquids transport,refined liquids transport,fuel-tax,3.504124669,3.504124669,3.504124669,3.504124669,3.504124669,3.504124669,3.504124669
+policy_fueltax_eu.xml,EU-12,delivered gas transport,delivered gas transport,delivered gas transport,fuel-tax,0.504987073,0.504987073,0.504987073,0.504987073,0.504987073,0.504987073,0.504987073
+policy_fueltax_jap.xml,Japan,refined liquids transport,refined liquids transport,refined liquids transport,fuel-tax,3.188811189,3.188811189,3.188811189,3.188811189,3.188811189,3.188811189,3.188811189
+policy_fueltax_jap.xml,Japan,delivered gas transport,delivered gas transport,delivered gas transport,fuel-tax,0.844982542,0.844982542,0.844982542,0.844982542,0.844982542,0.844982542,0.844982542
+IRA_PTC,USA,electricity,biomass,biomass (conv),tax-credit,-0.79,-0.79,-0.67,-0.67,-0.67,-0.67,-0.67
+IRA_PTC,USA,electricity,biomass,biomass (IGCC),tax-credit,-0.79,-0.79,-0.67,-0.67,-0.67,-0.67,-0.67
+IRA_PTC,USA,electricity,geothermal,geothermal,tax-credit,-1.58,-1.58,-1.33,-1.33,-1.33,-1.33,-1.33
+IRA_PTC,USA,electricity,nuclear,Gen_III,tax-credit,-0.98,-0.98,-0.39,-0.39,-0.39,-0.39,-0.39
+IRA_PTC,USA,electricity,solar,CSP,tax-credit,-1.58,-1.58,-1.33,-1.33,-1.33,-1.33,-1.33
+IRA_PTC,USA,electricity,solar,CSP_storage,tax-credit,-1.58,-1.58,-1.33,-1.33,-1.33,-1.33,-1.33
+IRA_PTC,USA,electricity,solar,PV,tax-credit,-1.58,-1.58,-1.33,-1.33,-1.33,-1.33,-1.33
+IRA_PTC,USA,electricity,solar,PV_storage,tax-credit,-1.58,-1.58,-1.33,-1.33,-1.33,-1.33,-1.33
+IRA_PTC,USA,electricity,wind,wind,tax-credit,-1.58,-1.58,-1.33,-1.33,-1.33,-1.33,-1.33
+IRA_PTC,USA,electricity,wind,wind_storage,tax-credit,-1.58,-1.58,-1.33,-1.33,-1.33,-1.33,-1.33
+IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Car,BEV,IRA_30D_EV_tax-credit_medium,-0.007599,-0.015199,-0.00608,-0.00608,-0.00608,-0.00608,-0.00608
+IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Car,FCEV,IRA_30D_EV_tax-credit_medium,-0.007599,-0.015199,-0.00608,-0.00608,-0.00608,-0.00608,-0.00608
+IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Large Car and Truck,BEV,IRA_30D_EV_tax-credit_medium,-0.007599,-0.015199,-0.00608,-0.00608,-0.00608,-0.00608,-0.00608
+IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Large Car and Truck,FCEV,IRA_30D_EV_tax-credit_medium,-0.007599,-0.015199,-0.00608,-0.00608,-0.00608,-0.00608,-0.00608
+IRA_transport_tax_credits,USA,trn_freight_road,Light truck,BEV,IRA_45W_light-truck_tax-credit,-0.03352,-0.03352,-0.013408,-0.013408,-0.013408,-0.013408,-0.013408
+IRA_transport_tax_credits,USA,trn_freight_road,Medium truck,BEV,IRA_45W_medium-truck_tax-credit,-0.030801,-0.030801,-0.01232,-0.01232,-0.01232,-0.01232,-0.01232
+IRA_transport_tax_credits,USA,trn_freight_road,Heavy truck,BEV,IRA_45W_heavy-truck_tax-credit,-0.048775,-0.048775,-0.01951,-0.01951,-0.01951,-0.01951,-0.01951
+IRA_transport_tax_credits,USA,trn_pass_road,Bus,BEV,IRA_45W_bus_tax-credit,-0.067676764,-0.067676764,-0.027071,-0.027071,-0.027071,-0.027071,-0.027071
+IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Car,BEV,IRA_alt_refuel_prop-credit_EV_charging,-0.000793,-0.000793,-0.0003172,-0.0003172,-0.0003172,-0.0003172,-0.0003172
+IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Car,FCEV,IRA_alt_refuel_prop-credit_EV_charging,-0.000793,-0.000793,-0.0003172,-0.0003172,-0.0003172,-0.0003172,-0.0003172
+IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Large Car and Truck,BEV,IRA_alt_refuel_prop-credit_EV_charging,-0.000793,-0.000793,-0.0003172,-0.0003172,-0.0003172,-0.0003172,-0.0003172
+IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Large Car and Truck,FCEV,IRA_alt_refuel_prop-credit_EV_charging,-0.000793,-0.000793,-0.0003172,-0.0003172,-0.0003172,-0.0003172,-0.0003172
+IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Car,BEV,state_EV_credits,-0.0125,-0.0125,-0.0125,-0.0124,-0.0124,-0.0123,-0.0123
+IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Car,FCEV,state_EV_credits,-0.0185,-0.0182,-0.0179,-0.0176,-0.0173,-0.017,-0.017
+IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Large Car and Truck,BEV,state_EV_credits,-0.0157,-0.0156,-0.0155,-0.0155,-0.0154,-0.0154,-0.0154
+IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Large Car and Truck,FCEV,state_EV_credits,-0.0226,-0.0222,-0.0218,-0.0215,-0.0211,-0.0208,-0.0208
+IRA_transport_tax_credits,USA,trn_pass_road,Bus,BEV,infra-cost,-0.04934069,-0.04934069,-0.04934069,-0.04934069,-0.04934069,-0.04934069,-0.04934069
+IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Car,BEV,IIJA_charging,-0.00365242,-0.00365242,-0.00365242,-0.00365242,-0.00365242,-0.00365242,-0.00365242
+IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Car,FCEV,IIJA_charging,-0.00365242,-0.00365242,-0.00365242,-0.00365242,-0.00365242,-0.00365242,-0.00365242
+IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Large Car and Truck,BEV,IIJA_charging,-0.00365242,-0.00365242,-0.00365242,-0.00365242,-0.00365242,-0.00365242,-0.00365242
+IRA_transport_tax_credits,USA,trn_pass_road_LDV_4W,Large Car and Truck,FCEV,IIJA_charging,-0.00365242,-0.00365242,-0.00365242,-0.00365242,-0.00365242,-0.00365242,-0.00365242
+IRA_transport_tax_credits,USA,trn_freight_road,Light truck,BEV,IIJA_charging,-0.020580265,-0.020580265,-0.020580265,-0.020580265,-0.020580265,-0.020580265,-0.020580265
+IRA_transport_tax_credits,USA,trn_freight_road,Medium truck,BEV,IIJA_charging,-0.03782092,-0.03782092,-0.03782092,-0.03782092,-0.03782092,-0.03782092,-0.03782092
+IRA_transport_tax_credits,USA,trn_freight_road,Heavy truck,BEV,IIJA_charging,-0.01123,-0.01123,-0.01123,-0.01123,-0.01123,-0.01123,-0.01123
+IRA_H2_subsidy_mid,USA,H2 central production,biomass,biomass to H2,subsidy,-4.102,-4.102,-4.102,-4.102,-4.102,-4.102,-4.102
+IRA_H2_subsidy_mid,USA,H2 central production,electricity,electrolysis,subsidy,,,-1.0255,-1.0255,-1.0255,-1.0255,-1.0255
+IRA_H2_subsidy_mid,USA,H2 central production,nuclear,thermal splitting,subsidy,-4.102,-4.102,-4.102,-4.102,-4.102,-4.102,-4.102
+IRA_H2_subsidy_mid,USA,H2 central production,solar,electrolysis,subsidy,-4.102,-4.102,-4.102,-4.102,-4.102,-4.102,-4.102
+IRA_H2_subsidy_mid,USA,H2 central production,wind,electrolysis,subsidy,-4.102,-4.102,-4.102,-4.102,-4.102,-4.102,-4.102
+IRA_H2_subsidy_mid,USA,H2 wholesale dispensing,forecourt production,electrolysis,subsidy,,,-1.0255,-1.0255,-1.0255,-1.0255,-1.0255
+IRA_H2_subsidy_mid,USA,H2 industrial,forecourt production,electrolysis,subsidy,,,-1.0255,-1.0255,-1.0255,-1.0255,-1.0255
+IRA_45Q,USA,carbon-storage,onshore carbon-storage,onshore carbon-storage,subsidy,,-103.4462,-103.4462,-103.4462,-103.4462,-103.4462,-103.4462
+IRA_45Q,USA,carbon-storage,offshore carbon-storage,offshore carbon-storage,subsidy,,-103.4462,-103.4462,-103.4462,-103.4462,-103.4462,-103.4462
+IRA_45Q,USA,CO2 removal,dac,hightemp DAC NG,subsidy,,-0.0564,-0.0564,-0.0564,-0.0564,-0.0564,-0.0564
+IRA_45Q,USA,CO2 removal,dac,hightemp DAC elec,subsidy,,-0.0564,-0.0564,-0.0564,-0.0564,-0.0564,-0.0564
+IRA_45Q,USA,CO2 removal,dac,lowtemp DAC heatpump,subsidy,,-0.0564,-0.0564,-0.0564,-0.0564,-0.0564,-0.0564
+IRA_biofuels,USA,refining,biomass liquids,biodiesel,IRA subsidy,-1.639,-1.639,-1.639,-1.639,-1.639,-1.639,-1.639
+IRA_biofuels,USA,refining,biomass liquids,cellulosic ethanol,IRA subsidy,-1.8906,-1.8906,-1.8906,-1.8906,-1.8906,-1.8906,-1.8906
+IRA_biofuels,USA,refining,biomass liquids,FT biofuels,IRA subsidy,-2.0849,-2.0849,-2.0849,-2.0849,-2.0849,-2.0849,-2.0849
+IRA_biofuels,USA,refining,biomass liquids,cellulosic ethanol CCS level 1,IRA subsidy,-1.8906,-1.8906,-1.8906,-1.8906,-1.8906,-1.8906,-1.8906
+IRA_biofuels,USA,refining,biomass liquids,cellulosic ethanol CCS level 2,IRA subsidy,-1.8906,-1.8906,-1.8906,-1.8906,-1.8906,-1.8906,-1.8906
+IRA_biofuels,USA,refining,biomass liquids,FT biofuels CCS level 1,IRA subsidy,-2.9188,-2.9188,-2.9188,-2.9188,-2.9188,-2.9188,-2.9188
+IRA_biofuels,USA,refining,biomass liquids,FT biofuels CCS level 2,IRA subsidy,-2.9188,-2.9188,-2.9188,-2.9188,-2.9188,-2.9188,-2.9188
+renewcorr_usa_2025dummy,USA,electricity,solar,PV,renew-calib,1,,,,,,
+renewcorr_usa_2025dummy,USA,electricity,wind,wind,renew-calib,1,,,,,,
+renewcorr_usa_2025dummy,USA,electricity,geothermal,geothermal,renew-calib,1,,,,,,
+bldeleccorr_world,Africa_Eastern,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Africa_Northern,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Africa_Southern,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Africa_Western,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Argentina,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Australia_NZ,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Brazil,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Canada,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Central America and Caribbean,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Central Asia,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,China,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Colombia,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,EU-12,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,EU-15,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Europe_Eastern,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Europe_Non_EU,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,European Free Trade Association,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,India,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Indonesia,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Japan,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Mexico,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Middle East,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Pakistan,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Russia,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,South Africa,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,South America_Northern,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,South America_Southern,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,South Asia,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,South Korea,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Southeast Asia,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Taiwan,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,USA,elect_td_bld,elect_td_bld,elect_td_bld,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Africa_Eastern,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Africa_Northern,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Africa_Southern,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Africa_Western,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Argentina,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Australia_NZ,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Brazil,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Canada,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Central America and Caribbean,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Central Asia,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,China,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Colombia,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,EU-12,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,EU-15,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Europe_Eastern,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Europe_Non_EU,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,European Free Trade Association,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,India,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Indonesia,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Japan,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Mexico,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Middle East,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Pakistan,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Russia,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,South Africa,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,South America_Northern,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,South America_Southern,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,South Asia,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,South Korea,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Southeast Asia,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,Taiwan,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+bldeleccorr_world,USA,elect_td_bld,rooftop_pv,rooftop_pv,elec-bld-calib,1.4,1.4,1.4,1.4,1.4,1.4,1.4
+policy_fueltax_eums_fix2024,Poland,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.420386825
+policy_fueltax_eums_fix2024,Austria,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.067881317,0.067881317,0.067881317,0.067881317,0.067881317,0.067881317,1.319205519
+policy_fueltax_eums_fix2024,Belgium,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,1.603356713,1.603356713,1.603356713,1.603356713,1.603356713,1.603356713,0.167978836
+policy_fueltax_eums_fix2024,Bulgaria,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0,0,0,0,0,0,0.089705975
+policy_fueltax_eums_fix2024,Cyprus,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.339406586,0.339406586,0.339406586,0.339406586,0.339406586,0.339406586,0
+policy_fueltax_eums_fix2024,Czech Republic,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.078742328,0.078742328,0.078742328,0.078742328,0.078742328,0.078742328,0.091464916
+policy_fueltax_eums_fix2024,Germany,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,1.391567003,1.391567003,1.391567003,1.391567003,1.391567003,1.391567003,1.80291421
+policy_fueltax_eums_fix2024,Denmark,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,6.925930798,6.925930798,6.925930798,6.925930798,6.925930798,6.925930798,10.34872756
+policy_fueltax_eums_fix2024,Estonia,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.067881317,0.067881317,0.067881317,0.067881317,0.067881317,0.067881317,0.393123245
+policy_fueltax_eums_fix2024,Greece,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.339406586,0.339406586,0.339406586,0.339406586,0.339406586,0.339406586,0.193483476
+policy_fueltax_eums_fix2024,Spain,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.052268614,0.052268614,0.052268614,0.052268614,0.052268614,0.052268614,0.087947035
+policy_fueltax_eums_fix2024,Finland,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,1.529366077,1.529366077,1.529366077,1.529366077,1.529366077,1.529366077,1.98144669
+policy_fueltax_eums_fix2024,France,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,2.176275031,2.176275031,2.176275031,2.176275031,2.176275031,2.176275031,0.131920552
+policy_fueltax_eums_fix2024,Hungary,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.062450812,0.062450812,0.062450812,0.062450812,0.062450812,0.062450812,0.087947035
+policy_fueltax_eums_fix2024,Croatia,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.067881317,0.067881317,0.067881317,0.067881317,0.067881317,0.067881317,0.086188094
+policy_fueltax_eums_fix2024,Ireland,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.067881317,0.067881317,0.067881317,0.067881317,0.067881317,0.067881317,0.087947035
+policy_fueltax_eums_fix2024,Italy,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,1.540905901,1.540905901,1.540905901,1.540905901,1.540905901,1.540905901,1.996397686
+policy_fueltax_eums_fix2024,Lithuania,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.06856013,0.06856013,0.06856013,0.06856013,0.06856013,0.06856013,0.088826505
+policy_fueltax_eums_fix2024,Luxembourg,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.067881317,0.067881317,0.067881317,0.067881317,0.067881317,0.067881317,0.087947035
+policy_fueltax_eums_fix2024,Latvia,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.06856013,0.06856013,0.06856013,0.06856013,0.06856013,0.06856013,0.088826505
+policy_fueltax_eums_fix2024,Malta,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.101821976,0.101821976,0.101821976,0.101821976,0.101821976,0.101821976,0.131920552
+policy_fueltax_eums_fix2024,Netherlands,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,7.385487315,7.385487315,7.385487315,7.385487315,7.385487315,7.385487315,10.51846534
+policy_fueltax_eums_fix2024,Portugal,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.067881317,0.067881317,0.067881317,0.067881317,0.067881317,0.067881317,0.087947035
+policy_fueltax_eums_fix2024,Romania,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.092997405,0.092997405,0.092997405,0.092997405,0.092997405,0.092997405,0.094103327
+policy_fueltax_eums_fix2024,Sweden,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,2.508214672,2.508214672,2.508214672,2.508214672,2.508214672,2.508214672,2.764175298
+policy_fueltax_eums_fix2024,Slovenia,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.103179602,0.103179602,0.103179602,0.103179602,0.103179602,0.103179602,0.268238456
+policy_fueltax_eums_fix2024,Slovakia,elect_td_bld,elect_td_bld,elect_td_bld,elec-tax,0.089603339,0.089603339,0.089603339,0.089603339,0.089603339,0.089603339,0
+policy_fueltax_eums_fix2024,Austria,delivered gas,delivered gas,delivered gas,NG-tax,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.525571479
+policy_fueltax_eums_fix2024,Belgium,delivered gas,delivered gas,delivered gas,NG-tax,0.188167011,0.188167011,0.188167011,0.188167011,0.188167011,0.188167011,0.088650611
+policy_fueltax_eums_fix2024,Bulgaria,delivered gas,delivered gas,delivered gas,NG-tax,0,0,0,0,0,0,0
+policy_fueltax_eums_fix2024,Cyprus,delivered gas,delivered gas,delivered gas,NG-tax,0.635369129,0.635369129,0.635369129,0.635369129,0.635369129,0.635369129,0.823184244
+policy_fueltax_eums_fix2024,Czech Republic,delivered gas,delivered gas,delivered gas,NG-tax,0.08553046,0.08553046,0.08553046,0.08553046,0.08553046,0.08553046,0.098148891
+policy_fueltax_eums_fix2024,Germany,delivered gas,delivered gas,delivered gas,NG-tax,0.373890295,0.373890295,0.373890295,0.373890295,0.373890295,0.373890295,0.484412267
+policy_fueltax_eums_fix2024,Denmark,delivered gas,delivered gas,delivered gas,NG-tax,2.622119522,2.622119522,2.622119522,2.622119522,2.622119522,2.622119522,2.697511446
+policy_fueltax_eums_fix2024,Estonia,delivered gas,delivered gas,delivered gas,NG-tax,0.261478834,0.261478834,0.261478834,0.261478834,0.261478834,0.261478834,0.265951833
+policy_fueltax_eums_fix2024,Greece,delivered gas,delivered gas,delivered gas,NG-tax,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.474913987
+policy_fueltax_eums_fix2024,Spain,delivered gas,delivered gas,delivered gas,NG-tax,0.158842282,0.158842282,0.158842282,0.158842282,0.158842282,0.158842282,0.205796061
+policy_fueltax_eums_fix2024,Finland,delivered gas,delivered gas,delivered gas,NG-tax,1.429580541,1.429580541,1.429580541,1.429580541,1.429580541,1.429580541,1.358254003
+policy_fueltax_eums_fix2024,France,delivered gas,delivered gas,delivered gas,NG-tax,0.574275944,0.574275944,0.574275944,0.574275944,0.574275944,0.574275944,0.256453553
+policy_fueltax_eums_fix2024,Hungary,delivered gas,delivered gas,delivered gas,NG-tax,0.068424368,0.068424368,0.068424368,0.068424368,0.068424368,0.068424368,0.094982797
+policy_fueltax_eums_fix2024,Croatia,delivered gas,delivered gas,delivered gas,NG-tax,0.263922561,0.263922561,0.263922561,0.263922561,0.263922561,0.263922561,0.091816704
+policy_fueltax_eums_fix2024,Ireland,delivered gas,delivered gas,delivered gas,NG-tax,0.596269491,0.596269491,0.596269491,0.596269491,0.596269491,0.596269491,0.326107604
+policy_fueltax_eums_fix2024,Italy,delivered gas,delivered gas,delivered gas,NG-tax,0.290803563,0.290803563,0.290803563,0.290803563,0.290803563,0.290803563,0.376765096
+policy_fueltax_eums_fix2024,Lithuania,delivered gas,delivered gas,delivered gas,NG-tax,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0
+policy_fueltax_eums_fix2024,Luxembourg,delivered gas,delivered gas,delivered gas,NG-tax,0.552282397,0.552282397,0.552282397,0.552282397,0.552282397,0.552282397,0.094982797
+policy_fueltax_eums_fix2024,Latvia,delivered gas,delivered gas,delivered gas,NG-tax,0.112411461,0.112411461,0.112411461,0.112411461,0.112411461,0.112411461,0.145640289
+policy_fueltax_eums_fix2024,Malta,delivered gas,delivered gas,delivered gas,NG-tax,0.205273103,0.205273103,0.205273103,0.205273103,0.205273103,0.205273103,0.265951833
+policy_fueltax_eums_fix2024,Netherlands,delivered gas,delivered gas,delivered gas,NG-tax,4.501345909,4.501345909,4.501345909,4.501345909,4.501345909,4.501345909,1.719188633
+policy_fueltax_eums_fix2024,Portugal,delivered gas,delivered gas,delivered gas,NG-tax,0.847973415,0.847973415,0.847973415,0.847973415,0.847973415,0.847973415,0.186799502
+policy_fueltax_eums_fix2024,Romania,delivered gas,delivered gas,delivered gas,NG-tax,0.107524007,0.107524007,0.107524007,0.107524007,0.107524007,0.107524007,0.10764717
+policy_fueltax_eums_fix2024,Sweden,delivered gas,delivered gas,delivered gas,NG-tax,2.275110228,2.275110228,2.275110228,2.275110228,2.275110228,2.275110228,2.833653455
+policy_fueltax_eums_fix2024,Slovenia,delivered gas,delivered gas,delivered gas,NG-tax,0.180835829,0.180835829,0.180835829,0.180835829,0.180835829,0.180835829,0.449585241
+policy_fueltax_eums_fix2024,Slovakia,delivered gas,delivered gas,delivered gas,NG-tax,0.090417915,0.090417915,0.090417915,0.090417915,0.090417915,0.090417915,0.11714545
+policy_fueltax_eums_fix2024,Poland,delivered gas,delivered gas,delivered gas,NG-tax,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.098148891
+policy_fueltax_eums_fix2024,Austria,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.525571479
+policy_fueltax_eums_fix2024,Belgium,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.188167011,0.188167011,0.188167011,0.188167011,0.188167011,0.188167011,0.088650611
+policy_fueltax_eums_fix2024,Bulgaria,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0,0,0,0,0,0,0
+policy_fueltax_eums_fix2024,Cyprus,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.635369129,0.635369129,0.635369129,0.635369129,0.635369129,0.635369129,0.823184244
+policy_fueltax_eums_fix2024,Czech Republic,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.08553046,0.08553046,0.08553046,0.08553046,0.08553046,0.08553046,0.098148891
+policy_fueltax_eums_fix2024,Germany,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.373890295,0.373890295,0.373890295,0.373890295,0.373890295,0.373890295,0.484412267
+policy_fueltax_eums_fix2024,Denmark,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,2.622119522,2.622119522,2.622119522,2.622119522,2.622119522,2.622119522,2.697511446
+policy_fueltax_eums_fix2024,Estonia,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.261478834,0.261478834,0.261478834,0.261478834,0.261478834,0.261478834,0.265951833
+policy_fueltax_eums_fix2024,Greece,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.474913987
+policy_fueltax_eums_fix2024,Spain,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.158842282,0.158842282,0.158842282,0.158842282,0.158842282,0.158842282,0.205796061
+policy_fueltax_eums_fix2024,Finland,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,1.429580541,1.429580541,1.429580541,1.429580541,1.429580541,1.429580541,1.358254003
+policy_fueltax_eums_fix2024,France,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.574275944,0.574275944,0.574275944,0.574275944,0.574275944,0.574275944,0.256453553
+policy_fueltax_eums_fix2024,Hungary,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.068424368,0.068424368,0.068424368,0.068424368,0.068424368,0.068424368,0.094982797
+policy_fueltax_eums_fix2024,Croatia,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.263922561,0.263922561,0.263922561,0.263922561,0.263922561,0.263922561,0.091816704
+policy_fueltax_eums_fix2024,Ireland,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.596269491,0.596269491,0.596269491,0.596269491,0.596269491,0.596269491,0.326107604
+policy_fueltax_eums_fix2024,Italy,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.290803563,0.290803563,0.290803563,0.290803563,0.290803563,0.290803563,0.376765096
+policy_fueltax_eums_fix2024,Lithuania,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0
+policy_fueltax_eums_fix2024,Luxembourg,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.552282397,0.552282397,0.552282397,0.552282397,0.552282397,0.552282397,0.094982797
+policy_fueltax_eums_fix2024,Latvia,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.112411461,0.112411461,0.112411461,0.112411461,0.112411461,0.112411461,0.145640289
+policy_fueltax_eums_fix2024,Malta,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.205273103,0.205273103,0.205273103,0.205273103,0.205273103,0.205273103,0.265951833
+policy_fueltax_eums_fix2024,Netherlands,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,4.501345909,4.501345909,4.501345909,4.501345909,4.501345909,4.501345909,1.719188633
+policy_fueltax_eums_fix2024,Portugal,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.847973415,0.847973415,0.847973415,0.847973415,0.847973415,0.847973415,0.186799502
+policy_fueltax_eums_fix2024,Romania,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.107524007,0.107524007,0.107524007,0.107524007,0.107524007,0.107524007,0.10764717
+policy_fueltax_eums_fix2024,Sweden,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,2.275110228,2.275110228,2.275110228,2.275110228,2.275110228,2.275110228,2.833653455
+policy_fueltax_eums_fix2024,Slovenia,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.180835829,0.180835829,0.180835829,0.180835829,0.180835829,0.180835829,0.449585241
+policy_fueltax_eums_fix2024,Slovakia,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.090417915,0.090417915,0.090417915,0.090417915,0.090417915,0.090417915,0.11714545
+policy_fueltax_eums_fix2024,Poland,delivered gas transport,delivered gas transport,delivered gas transport,NG-tax,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.073311823,0.098148891
+policy_fueltax_eums_fix2024,Austria,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,2.939501659,2.939501659,2.939501659,2.939501659,2.939501659,2.939501659,3.808418349
+policy_fueltax_eums_fix2024,Belgium,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,3.990403735,3.990403735,3.990403735,3.990403735,3.990403735,3.990403735,4.546152336
+policy_fueltax_eums_fix2024,Bulgaria,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,2.311571021,2.311571021,2.311571021,2.311571021,2.311571021,2.311571021,2.991299184
+policy_fueltax_eums_fix2024,Cyprus,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,2.296451823,2.296451823,2.296451823,2.296451823,2.296451823,2.296451823,4.00900074
+policy_fueltax_eums_fix2024,Czech Republic,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,3.121550872,3.121550872,3.121550872,3.121550872,3.121550872,3.121550872,3.774206704
+policy_fueltax_eums_fix2024,Germany,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,3.777165523,3.777165523,3.777165523,3.777165523,3.777165523,3.777165523,4.893695651
+policy_fueltax_eums_fix2024,Denmark,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,3.894348947,3.894348947,3.894348947,3.894348947,3.894348947,3.894348947,4.440951507
+policy_fueltax_eums_fix2024,Estonia,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,3.147257661,3.147257661,3.147257661,3.147257661,3.147257661,3.147257661,3.521181014
+policy_fueltax_eums_fix2024,Greece,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,3.749197659,3.749197659,3.749197659,3.749197659,3.749197659,3.749197659,4.396865571
+policy_fueltax_eums_fix2024,Spain,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,2.960663175,2.960663175,2.960663175,2.960663175,2.960663175,2.960663175,3.279595617
+policy_fueltax_eums_fix2024,Finland,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,3.949942792,3.949942792,3.949942792,3.949942792,3.949942792,3.949942792,5.160544739
+policy_fueltax_eums_fix2024,France,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,4.263094516,4.263094516,4.263094516,4.263094516,4.263094516,4.263094516,4.745841815
+policy_fueltax_eums_fix2024,Hungary,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,2.532602641,2.532602641,2.532602641,2.532602641,2.532602641,2.532602641,3.301294712
+policy_fueltax_eums_fix2024,Croatia,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,2.804079873,2.804079873,2.804079873,2.804079873,2.804079873,2.804079873,3.702141642
+policy_fueltax_eums_fix2024,Ireland,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,3.783535468,3.783535468,3.783535468,3.783535468,3.783535468,3.783535468,4.623251548
+policy_fueltax_eums_fix2024,Italy,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,4.496649761,4.496649761,4.496649761,4.496649761,4.496649761,4.496649761,5.825859431
+policy_fueltax_eums_fix2024,Lithuania,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,2.923622485,2.923622485,2.923622485,2.923622485,2.923622485,2.923622485,3.32076126
+policy_fueltax_eums_fix2024,Luxembourg,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,3.311492503,3.311492503,3.311492503,3.311492503,3.311492503,3.311492503,3.491651336
+policy_fueltax_eums_fix2024,Latvia,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,3.087813947,3.087813947,3.087813947,3.087813947,3.087813947,3.087813947,3.225862922
+policy_fueltax_eums_fix2024,Malta,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,2.296451823,2.296451823,2.296451823,2.296451823,2.296451823,2.296451823,4.162848773
+policy_fueltax_eums_fix2024,Netherlands,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,4.39513637,4.39513637,4.39513637,4.39513637,4.39513637,4.39513637,5.450827681
+policy_fueltax_eums_fix2024,Poland,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,2.505152862,2.505152862,2.505152862,2.505152862,2.505152862,2.505152862,3.236408789
+policy_fueltax_eums_fix2024,Portugal,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,3.421403249,3.421403249,3.421403249,3.421403249,3.421403249,3.421403249,4.448092233
+policy_fueltax_eums_fix2024,Romania,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,2.593458725,2.593458725,2.593458725,2.593458725,2.593458725,2.593458725,3.82082574
+policy_fueltax_eums_fix2024,Sweden,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,2.868875107,2.868875107,2.868875107,2.868875107,2.868875107,2.868875107,5.162638852
+policy_fueltax_eums_fix2024,Slovenia,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,3.298901515,3.298901515,3.298901515,3.298901515,3.298901515,3.298901515,4.723021794
+policy_fueltax_eums_fix2024,Slovakia,refined liquids transport,refined liquids transport,refined liquids transport,trnfuel-tax,2.961897605,2.961897605,2.961897605,2.961897605,2.961897605,2.961897605,4.078764539

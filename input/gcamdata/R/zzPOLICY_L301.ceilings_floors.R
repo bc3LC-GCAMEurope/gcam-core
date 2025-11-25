@@ -66,7 +66,7 @@ module_policy_L301.ceilings_floors <- function(command, ...) {
     # Load required inputs -------------------------
     get_data_list(all_data, MODULE_INPUTS)
 
-    A_energy_constraints <- A_energy_constraints %>%
+  A_energy_constraints <- A_energy_constraints %>%
       left_join(market_region_mappings, by = "market") %>%
       mutate(region = if_else(is.na(region), market, region))
     A_renewable_energy_standards <- A_renewable_energy_standards %>%
@@ -193,7 +193,7 @@ module_policy_L301.ceilings_floors <- function(command, ...) {
       left_join(policy_tech_mappings, by = "tech_mapping") %>%
       # Default output is always 1
       # If that changes we'll need to rethink this part
-      repeat_add_columns(tibble(year = seq(2015, 2100, 5), output.ratio = 1))
+      repeat_add_columns(tibble(year = c(2015, 2021, seq(2025, 2100, 5)), output.ratio = 1))
 
     # Need to drop techs that don't exist, write them out here
     tech_remove <- L301.RES_secout %>%
@@ -253,9 +253,9 @@ module_policy_L301.ceilings_floors <- function(command, ...) {
       stopifnot(dplyr::n_groups(group_by(electd_coefs, region, year)) == nrow(electd_coefs))
 
       secout_elec_losses <- secout_elec_losses %>%
-        left_join_error_no_match(elecownuse_coefs,
+        left_join(elecownuse_coefs,
                                  by = c("region", "year")) %>%
-        left_join_error_no_match(electd_coefs,
+        left_join(electd_coefs,
                                  by = c("region", "year")) %>%
         mutate(output.ratio = 1 / (coefficient.x * coefficient.y)) %>%
         select(-coefficient.x, -coefficient.y)

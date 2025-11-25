@@ -1,184 +1,181 @@
-# File: A_energy_constraints.csv,,,,,,,,,,,,,,,,,,,,,,
-# Title: Policy floors/ceilings for tax/subsidy policies,,,,,,,,,,,,,,,,,,,,,,
-# Comments: If using GDP intensity base year  in GDPIntensity_BaseYear column (must be historical year); then percent change in year columns,,,,,,,,,,,,,,,,,,,,,,
-# Units: EJ (fe-constraint),,,,,,,,,,,,,,,,,,,,,,
-# Column types: ccccicnnnnnnnnnnnnnnnnn,,,,,,,,,,,,,,,,,,,,,,
-# ----------,,,,,,,,,,,,,,,,,,,,,,
-xml,market,policy.portfolio.standard,policyType,GDPIntensity_BaseYear,tech_mapping,2020,2025,2030,2035,2040,2045,2050,2055,2060,2065,2070,2075,2080,2085,2090,2095,2100
-policy_tpes_aus,Australia_NZ,energy-constraint,tax,2015,PRIMARY_ENERGY,,,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6
-policy_ind_chn,China,ind-constraint,tax,2015,IND_EN,-18,,,,,,,,,,,,,,,,
-policy_greenH2_chn.xml,China,green_H2,subsidy,,GREEN_H2,,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315
-policy_tpes_chn,China,energy-constraint,tax,2015,PRIMARY_ENERGY,-15,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24
-policy_NUC_chn,China,nuclear-target,subsidy,,ELEC_NUCLEAR,,1.99,1.99,1.99,1.99,1.99,1.99,1.99,1.99,1.99,1.99,1.99,1.99,1.99,1.99,1.99,1.99
-policy_fe_eu,EU,fe-constraint,tax,,FE_EED_noDH,38.9,37,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127
-policy_tpes_eu,EU,energy-constraint,tax,,PRIMARY_ENERGY,,,41.57,41.57,41.57,41.57,41.57,41.57,41.57,41.57,41.57,41.57,41.57,41.57,41.57,41.57,41.57
-policy_RE_targets_EU,EU,PV-target,subsidy,,ELEC_PV,0.5,1.81,3.41,3.41,3.41,3.41,3.41,3.41,3.41,3.41,3.41,3.41,3.41,3.41,3.41,3.41,3.41
-policy_RE_targets_EU,EU,offshore-target,subsidy,,ELEC_WIND_OFFSHORE,0.24,0.5,0.76,1.515,2.27,3.025,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78
-policy_RE_targets_EU,EU,wind-target,subsidy,,ELEC_WIND_ONSHORE,2.19,3.3,4.47,4.47,4.47,4.47,4.47,4.47,4.47,4.47,4.47,4.47,4.47,4.47,4.47,4.47,4.47
-policy_oilcrop_eu,EU,palmoil-constraint,tax,,PALMOIL_IMP,35,30,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20
-policy_RE_targets_ind,India,wind-target,subsidy,,ELEC_WIND_ALL,,0.55,1.08,1.08,1.08,1.08,1.08,1.08,1.08,1.08,1.08,1.08,1.08,1.08,1.08,1.08,1.08
-policy_RE_targets_ind,India,nuclear-target,subsidy,,ELEC_NUCLEAR,,0.39,0.56,0.56,0.56,0.56,0.56,0.56,0.56,0.56,0.56,0.56,0.56,0.56,0.56,0.56,0.56
-policy_RE_targets_ind,India,solar-target,subsidy,,ELEC_SOLAR_ALL,,1.1,2.18,2.18,2.18,2.18,2.18,2.18,2.18,2.18,2.18,2.18,2.18,2.18,2.18,2.18,2.18
-policy_H2_targets_ind,India,H2-target,subsidy,,GREEN_H2_ELECTROLYSIS,,0.2,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6
-policy_RE_targets_idn,Indonesia,geo-target,subsidy,,ELEC_GEO,,0.0760172,0.1020344,0.1020344,0.1020344,0.1020344,0.1020344,0.1020344,0.1020344,0.1020344,0.1020344,0.1020344,0.1020344,0.1020344,0.1020344,0.1020344,0.1020344
-policy_RE_targets_idn,Indonesia,PV-target,subsidy,,ELEC_PV,,,0.026679456,0.026679456,0.026679456,0.026679456,0.026679456,0.026679456,0.026679456,0.026679456,0.026679456,0.026679456,0.026679456,0.026679456,0.026679456,0.026679456,0.026679456
-policy_fe_japan,Japan,fe-constraint,tax,,FE_NO_PV,,,13.1558332,13.1558332,13.1558332,13.1558332,13.1558332,13.1558332,13.1558332,13.1558332,13.1558332,13.1558332,13.1558332,13.1558332,13.1558332,13.1558332,13.1558332
-policy_ind_jpn,Japan,ind-constraint,tax,,IND_EN,6.021587591,5.726469884,5.445815881,5.445815881,5.445815881,5.445815881,5.445815881,5.445815881,5.445815881,5.445815881,5.445815881,5.445815881,5.445815881,5.445815881,5.445815881,5.445815881,5.445815881
-policy_H2_jpn,Japan,H2-target,subsidy,,H2_ALL,,,0.36,0.72,1.44,1.44,1.44,1.44,1.44,1.44,1.44,1.44,1.44,1.44,1.44,1.44,1.44
-policy_RE_targets_jpn,Japan,offshore-target,subsidy,,ELEC_WIND_OFFSHORE,,,0.079,0.079,0.079,0.079,0.079,0.079,0.079,0.079,0.079,0.079,0.079,0.079,0.079,0.079,0.079
-policy_RE_targets_jpn_UNUSED,Japan,solar-target,subsidy,,ELEC_PV,,,0.582,0.582,0.582,0.582,0.582,0.582,0.582,0.582,0.582,0.582,0.582,0.582,0.582,0.582,0.582
-policy_tpes_mex,Mexico,energy-constraint,tax,,PRIMARY_ENERGY,8.595182,,,,,,,,,,,,,,,,
-policy_resfix_rus,Russia,PV-target,subsidy,,ELEC_PV,0.03054972,0.04502064,0.04502064,0.04502064,0.04502064,0.04502064,0.04502064,0.04502064,0.04502064,0.04502064,0.04502064,0.04502064,0.04502064,0.04502064,0.04502064,0.04502064,0.04502064
-policy_resfix_rus,Russia,wind-target,subsidy,,ELEC_WIND_ONSHORE,0.09486306,0.090119907,0.090119907,0.090119907,0.090119907,0.090119907,0.090119907,0.090119907,0.090119907,0.090119907,0.090119907,0.090119907,0.090119907,0.090119907,0.090119907,0.090119907,0.090119907
-policy_tpes_rus,Russia,energy-constraint,tax,,PRIMARY_ENERGY,,29.70669853,29.05596155,29.05596155,29.05596155,29.05596155,29.05596155,29.05596155,29.05596155,29.05596155,29.05596155,29.05596155,29.05596155,29.05596155,29.05596155,29.05596155,29.05596155
-policy_fe_korea,South Korea,fe-constraint,tax,,FE_NO_PV,6.52,6.52,6.52,6.52,6.52,6.52,6.52,6.52,6.52,6.52,6.52,6.52,6.52,6.52,6.52,6.52,6.52
-policy_H2_korea,South Korea,H2-target,subsidy,,H2_ALL,,0.0789,0.1578,0.3156,0.6312,0.6312,0.6312,0.6312,0.6312,0.6312,0.6312,0.6312,0.6312,0.6312,0.6312,0.6312,0.6312
-policy_RE_targets_kor,South Korea,PV-target,subsidy,,ELEC_PV,0.0326239912536443<,0.050938483,0.069252974,0.069252974,0.069252974,0.069252974,0.069252974,0.069252974,0.069252974,0.069252974,0.069252974,0.069252974,0.069252974,0.069252974,0.069252974,0.069252974,0.069252974
-policy_RE_targets_kor,South Korea,wind-target,subsidy,,ELEC_WIND_ONSHORE,,,0.007064064,0.007064064,0.007064064,0.007064064,0.007064064,0.007064064,0.007064064,0.007064064,0.007064064,0.007064064,0.007064064,0.007064064,0.007064064,0.007064064,0.007064064
-policy_RE_targets_kor,South Korea,biom-target,subsidy,,ELEC_BIO,,,0.00536112,0.00536112,0.00536112,0.00536112,0.00536112,0.00536112,0.00536112,0.00536112,0.00536112,0.00536112,0.00536112,0.00536112,0.00536112,0.00536112,0.00536112
-policy_RE_targets_kor,South Korea,offshore-target,subsidy,,ELEC_WIND_OFFSHORE,0.00336384,0.00672768,0.01009152,0.01009152,0.01009152,0.01009152,0.01009152,0.01009152,0.01009152,0.01009152,0.01009152,0.01009152,0.01009152,0.01009152,0.01009152,0.01009152,0.01009152
-policy_RE_targets_saf,South Africa,PV-target,subsidy,,ELEC_PV,,0.01,0.04,0.04,0.04,0.04,0.04,0.04,0.04,0.04,0.04,0.04,0.04,0.04,0.04,0.04,0.04
-policy_RE_targets_saf,South Africa,wind-target,subsidy,,ELEC_WIND_ALL,,0.05,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15
-policy_coal_cap_saf,South Africa,coal-cap,tax,,ELEC_COAL_NO_CCS,0.822134,0.822134,0.822134,0.822134,0.822134,0.822134,0.822134,0.822134,0.822134,0.822134,0.822134,0.822134,0.822134,0.822134,0.822134,0.822134,0.822134
-ELEC_coal_constraint_EIR,USA,coal_ceiling_EIR,tax,,ELEC_COAL_NO_CCS,,1.918,0.788,0.788,0.788,0.788,0.788,0.788,0.788,0.788,0.788,0.788,0.788,0.788,0.788,0.788,0.788
-policy_RE_targets_usa,USA,offshore-target,subsidy,,ELEC_WIND_OFFSHORE,,,,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43
-policy_RE_targets_usa,USA,biodiesel-target-OLD,subsidy,,BIODIESEL,0.25418326,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405
-policy_RE_targets_usa,USA,biofuel-target-OLD,subsidy,,BIOFUEL_ALL,1.23772801,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635
-resid_calib_world,World,elec-calib,tax,,ELEC_BLD,43.4503,,,,,,,,,,,,,,,,
-constraint_bio_efta,European Free Trade Association,Bio_Policy,tax,,TPES_BIO,,1.15,1.4,1.6,1.8,1.9,2,2.1,2.2,2.3,2.4,2.5,2.6,2.7,2.8,2.9,3
-policy_fe_eu_necp,Austria,fe-constraint,tax,,FE_EED_noDH,1.112,1.035223851,0.904,0.904,0.904,0.904,0.904,0.904,0.904,0.904,0.904,0.904,0.904,0.904,0.904,0.904,0.904
-policy_fe_eu_necp,Belgium,fe-constraint,tax,,FE_EED_noDH,1.398,1.344190896,1.252,1.252,1.252,1.252,1.252,1.252,1.252,1.252,1.252,1.252,1.252,1.252,1.252,1.252,1.252
-policy_fe_eu_necp,Bulgaria,fe-constraint,tax,,FE_EED_noDH,0.416,0.398478079,0.369,0.369,0.369,0.369,0.369,0.369,0.369,0.369,0.369,0.369,0.369,0.369,0.369,0.369,0.369
-policy_fe_eu_necp,Croatia,fe-constraint,tax,,FE_EED_noDH,0.283,0.269641103,0.246,0.246,0.246,0.246,0.246,0.246,0.246,0.246,0.246,0.246,0.246,0.246,0.246,0.246,0.246
-policy_fe_eu_necp,Cyprus,fe-constraint,tax,,FE_EED_noDH,0.071,0.072399324,0.075,0.075,0.075,0.075,0.075,0.075,0.075,0.075,0.075,0.075,0.075,0.075,0.075,0.075,0.075
-policy_fe_eu_necp,Czech Republic,fe-constraint,tax,,FE_EED_noDH,1.029,0.961220259,0.846,0.846,0.846,0.846,0.846,0.846,0.846,0.846,0.846,0.846,0.846,0.846,0.846,0.846,0.846
-policy_fe_eu_necp,Denmark,fe-constraint,tax,,FE_EED_noDH,0.58,0.577903207,0.575,0.575,0.575,0.575,0.575,0.575,0.575,0.575,0.575,0.575,0.575,0.575,0.575,0.575,0.575
-policy_fe_eu_necp,Estonia,fe-constraint,tax,,FE_EED_noDH,0.117,0.118237436,0.12,0.12,0.12,0.12,0.12,0.12,0.12,0.12,0.12,0.12,0.12,0.12,0.12,0.12,0.12
-policy_fe_eu_necp,Finland,fe-constraint,tax,,FE_EED_noDH,0.997,0.980811452,0.954,0.954,0.954,0.954,0.954,0.954,0.954,0.954,0.954,0.954,0.954,0.954,0.954,0.954,0.954
-policy_fe_eu_necp,France,fe-constraint,tax,,FE_EED_noDH,5.641,5.210623327,4.475,4.475,4.475,4.475,4.475,4.475,4.475,4.475,4.475,4.475,4.475,4.475,4.475,4.475,4.475
-policy_fe_eu_necp,Germany,fe-constraint,tax,,FE_EED_noDH,8.383,7.692366358,6.512,6.512,6.512,6.512,6.512,6.512,6.512,6.512,6.512,6.512,6.512,6.512,6.512,6.512,6.512
-policy_fe_eu_necp,Greece,fe-constraint,tax,,FE_EED_noDH,0.623,0.627713685,0.636,0.636,0.636,0.636,0.636,0.636,0.636,0.636,0.636,0.636,0.636,0.636,0.636,0.636,0.636
-policy_fe_eu_necp,Hungary,fe-constraint,tax,,FE_EED_noDH,0.771,0.75942068,0.74,0.74,0.74,0.74,0.74,0.74,0.74,0.74,0.74,0.74,0.74,0.74,0.74,0.74,0.74
-policy_fe_eu_necp,Ireland,fe-constraint,tax,,FE_EED_noDH,0.474,0.460667275,0.438,0.438,0.438,0.438,0.438,0.438,0.438,0.438,0.438,0.438,0.438,0.438,0.438,0.438,0.438
-policy_fe_eu_necp,Italy,fe-constraint,tax,,FE_EED_noDH,4.665,4.658338829,4.647,4.647,4.647,4.647,4.647,4.647,4.647,4.647,4.647,4.647,4.647,4.647,4.647,4.647,4.647
-policy_fe_eu_necp,Latvia,fe-constraint,tax,,FE_EED_noDH,0.166,0.161511053,0.153,0.153,0.153,0.153,0.153,0.153,0.153,0.153,0.153,0.153,0.153,0.153,0.153,0.153,0.153
-policy_fe_eu_necp,Lithuania,fe-constraint,tax,,FE_EED_noDH,0.231,0.225526551,0.216,0.216,0.216,0.216,0.216,0.216,0.216,0.216,0.216,0.216,0.216,0.216,0.216,0.216,0.216
-policy_fe_eu_necp,Luxembourg,fe-constraint,tax,,FE_EED_noDH,0.166,0.15368138,0.133,0.133,0.133,0.133,0.133,0.133,0.133,0.133,0.133,0.133,0.133,0.133,0.133,0.133,0.133
-policy_fe_eu_necp,Malta,fe-constraint,tax,,FE_EED_noDH,0.025,0.026176656,0.029,0.029,0.029,0.029,0.029,0.029,0.029,0.029,0.029,0.029,0.029,0.029,0.029,0.029,0.029
-policy_fe_eu_necp,Netherlands,fe-constraint,tax,,FE_EED_noDH,1.871,1.774487832,1.609,1.609,1.609,1.609,1.609,1.609,1.609,1.609,1.609,1.609,1.609,1.609,1.609,1.609,1.609
-policy_fe_eu_necp,Poland,fe-constraint,tax,,FE_EED_noDH,3.045,2.825208496,2.449,2.449,2.449,2.449,2.449,2.449,2.449,2.449,2.449,2.449,2.449,2.449,2.449,2.449,2.449
-policy_fe_eu_necp,Portugal,fe-constraint,tax,,FE_EED_noDH,0.645,0.628459576,0.601,0.601,0.601,0.601,0.601,0.601,0.601,0.601,0.601,0.601,0.601,0.601,0.601,0.601,0.601
-policy_fe_eu_necp,Romania,fe-constraint,tax,,FE_EED_noDH,1.031,0.997777806,0.941,0.941,0.941,0.941,0.941,0.941,0.941,0.941,0.941,0.941,0.941,0.941,0.941,0.941,0.941
-policy_fe_eu_necp,Slovakia,fe-constraint,tax,,FE_EED_noDH,0.423,0.397779316,0.354,0.354,0.354,0.354,0.354,0.354,0.354,0.354,0.354,0.354,0.354,0.354,0.354,0.354,0.354
-policy_fe_eu_necp,Slovenia,fe-constraint,tax,,FE_EED_noDH,0.193,0.188384906,0.181,0.181,0.181,0.181,0.181,0.181,0.181,0.181,0.181,0.181,0.181,0.181,0.181,0.181,0.181
-policy_fe_eu_necp,Spain,fe-constraint,tax,,FE_EED_noDH,3.245,3.155050987,3.002,3.002,3.002,3.002,3.002,3.002,3.002,3.002,3.002,3.002,3.002,3.002,3.002,3.002,3.002
-policy_fe_eu_necp,Sweden,fe-constraint,tax,,FE_EED_noDH,1.281,1.272951251,1.26,1.26,1.26,1.26,1.26,1.26,1.26,1.26,1.26,1.26,1.26,1.26,1.26,1.26,1.26
-policy_fe_eu_2030taxnecp,Austria,fe-constraint1,tax,,COALDUMMY,,,2.36297,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,Belgium,fe-constraint1,tax,,COALDUMMY,,,3.87667,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,Bulgaria,fe-constraint1,tax,,COALDUMMY,,,0.974972,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,Croatia,fe-constraint1,tax,,COALDUMMY,,,2.092,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,Cyprus,fe-constraint1,tax,,COALDUMMY,,,0.0275839,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,Czech Republic,fe-constraint1,tax,,COALDUMMY,,,1.86287,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,Denmark,fe-constraint1,tax,,COALDUMMY,,,0.78813,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,Estonia,fe-constraint1,tax,,COALDUMMY,,,0.59121,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,Finland,fe-constraint1,tax,,COALDUMMY,,,0,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,France,fe-constraint1,tax,,COALDUMMY,,,6.48438,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,Germany,fe-constraint1,tax,,COALDUMMY,,,4.99069,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,Greece,fe-constraint1,tax,,COALDUMMY,,,0,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,Hungary,fe-constraint1,tax,,COALDUMMY,,,0.496827,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,Ireland,fe-constraint1,tax,,COALDUMMY,,,8.30915,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,Italy,fe-constraint1,tax,,COALDUMMY,,,0,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,Latvia,fe-constraint1,tax,,COALDUMMY,,,0,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,Lithuania,fe-constraint1,tax,,COALDUMMY,,,1.72269,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,Luxembourg,fe-constraint1,tax,,COALDUMMY,,,17.9085,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,Malta,fe-constraint1,tax,,COALDUMMY,,,3.85703,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,Netherlands,fe-constraint1,tax,,COALDUMMY,,,5.91032,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,Poland,fe-constraint1,tax,,COALDUMMY,,,2.66833,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,Portugal,fe-constraint1,tax,,COALDUMMY,,,1.0374,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,Romania,fe-constraint1,tax,,COALDUMMY,,,0.931117,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,Slovakia,fe-constraint1,tax,,COALDUMMY,,,1.90422,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,Slovenia,fe-constraint1,tax,,COALDUMMY,,,1.65686,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,Spain,fe-constraint1,tax,,COALDUMMY,,,2.09831,,,,,,,,,,,,,,
-policy_fe_eu_2030taxnecp,Sweden,fe-constraint1,tax,,COALDUMMY,,,0.372023,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Austria,FE_RES1,tax,,COALDUMMY,1.14081,2.42185,4.58258,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Belgium,FE_RES1,tax,,COALDUMMY,2.0109,1.87786,3.17398,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Bulgaria,FE_RES1,tax,,COALDUMMY,1.09007,1.44004,2.71131,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Croatia,FE_RES1,tax,,COALDUMMY,2.19838,1.97957,2.83201,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Cyprus,FE_RES1,tax,,COALDUMMY,3.08287,1.19575,3.49321,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Czech Republic,FE_RES1,tax,,COALDUMMY,0.110684,0.583061,2.73508,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Denmark,FE_RES1,tax,,COALDUMMY,2.86029,2.33512,2.86738,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Estonia,FE_RES1,tax,,COALDUMMY,2.08854,3.13114,3.3653,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Finland,FE_RES1,tax,,COALDUMMY,3.69759,2.80117,3.36325,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,France,FE_RES1,tax,,COALDUMMY,0,0,3.66573,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Germany,FE_RES1,tax,,COALDUMMY,0.244526,1.35549,3.08183,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Greece,FE_RES1,tax,,COALDUMMY,1.90565,2.19074,3.21376,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Hungary,FE_RES1,tax,,COALDUMMY,0,0.649531,3.14732,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Ireland,FE_RES1,tax,,COALDUMMY,1.34724,1.83847,2.66319,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Italy,FE_RES1,tax,,COALDUMMY,1.18834,1.07814,1.69688,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Latvia,FE_RES1,tax,,COALDUMMY,1.48084,2.28699,4.23097,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Lithuania,FE_RES1,tax,,COALDUMMY,0.76155,2.85903,3.70426,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Luxembourg,FE_RES1,tax,,COALDUMMY,5.20486,5.34455,5.72432,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Malta,FE_RES1,tax,,COALDUMMY,3.34258,1.55427,3.16166,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Netherlands,FE_RES1,tax,,COALDUMMY,2.22209,2.9424,3.81834,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Poland,FE_RES1,tax,,COALDUMMY,0.981058,1.26396,3.02953,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Portugal,FE_RES1,tax,,COALDUMMY,2.17679,3.04907,3.85647,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Romania,FE_RES1,tax,,COALDUMMY,0,0.289128,2.2525,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Slovakia,FE_RES1,tax,,COALDUMMY,1.29799,0.935666,1.62881,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Slovenia,FE_RES1,tax,,COALDUMMY,0.16102,0.135076,2.41788,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Spain,FE_RES1,tax,,COALDUMMY,0.901797,3.36724,4.06333,,,,,,,,,,,,,,
-policy_feres_eu_2030taxnecp,Sweden,FE_RES1,tax,,COALDUMMY,2.11054,0.469686,2.40416,,,,,,,,,,,,,,
-policy_fe_eu_2020,Austria,fe-constraint2020,tax,,FE_EED_noDH,1.112,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,Belgium,fe-constraint2020,tax,,FE_EED_noDH,1.398,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,Bulgaria,fe-constraint2020,tax,,FE_EED_noDH,0.416,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,Croatia,fe-constraint2020,tax,,FE_EED_noDH,0.283,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,Cyprus,fe-constraint2020,tax,,FE_EED_noDH,0.071,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,Czech Republic,fe-constraint2020,tax,,FE_EED_noDH,1.029,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,Denmark,fe-constraint2020,tax,,FE_EED_noDH,0.580,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,Estonia,fe-constraint2020,tax,,FE_EED_noDH,0.117,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,Finland,fe-constraint2020,tax,,FE_EED_noDH,0.997,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,France,fe-constraint2020,tax,,FE_EED_noDH,5.641,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,Germany,fe-constraint2020,tax,,FE_EED_noDH,8.383,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,Greece,fe-constraint2020,tax,,FE_EED_noDH,0.623,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,Hungary,fe-constraint2020,tax,,FE_EED_noDH,0.771,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,Ireland,fe-constraint2020,tax,,FE_EED_noDH,0.474,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,Italy,fe-constraint2020,tax,,FE_EED_noDH,4.665,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,Latvia,fe-constraint2020,tax,,FE_EED_noDH,0.166,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,Lithuania,fe-constraint2020,tax,,FE_EED_noDH,0.231,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,Luxembourg,fe-constraint2020,tax,,FE_EED_noDH,0.166,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,Malta,fe-constraint2020,tax,,FE_EED_noDH,0.025,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,Netherlands,fe-constraint2020,tax,,FE_EED_noDH,1.871,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,Poland,fe-constraint2020,tax,,FE_EED_noDH,3.045,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,Portugal,fe-constraint2020,tax,,FE_EED_noDH,0.645,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,Romania,fe-constraint2020,tax,,FE_EED_noDH,1.031,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,Slovakia,fe-constraint2020,tax,,FE_EED_noDH,0.423,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,Slovenia,fe-constraint2020,tax,,FE_EED_noDH,0.193,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,Spain,fe-constraint2020,tax,,FE_EED_noDH,3.245,,,,,,,,,,,,,,,,
-policy_fe_eu_2020,Sweden,fe-constraint2020,tax,,FE_EED_noDH,1.281,,,,,,,,,,,,,,,,
-policy_fe_eu_2025,EU,fe-constraint,tax,,FE_EED_noDH,,37,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127
-policy_fe_eu_2020calibtax,Austria,fe-constraint2020calibtax,tax,,FE_EED_noDH,,0,0,0,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,Belgium,fe-constraint2020calibtax,tax,,FE_EED_noDH,,1.78003,1.78003,0.890015,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,Bulgaria,fe-constraint2020calibtax,tax,,FE_EED_noDH,,0,0,0,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,Croatia,fe-constraint2020calibtax,tax,,FE_EED_noDH,,0,0,0,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,Cyprus,fe-constraint2020calibtax,tax,,FE_EED_noDH,,0,0,0,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,Czech Republic,fe-constraint2020calibtax,tax,,FE_EED_noDH,,0.163942,0.163942,0.081971,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,Denmark,fe-constraint2020calibtax,tax,,FE_EED_noDH,,0,0,0,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,Estonia,fe-constraint2020calibtax,tax,,FE_EED_noDH,,0.6,0.6,0.3,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,Finland,fe-constraint2020calibtax,tax,,FE_EED_noDH,,0,0,0,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,France,fe-constraint2020calibtax,tax,,FE_EED_noDH,,0.692934,0.692934,0.346467,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,Germany,fe-constraint2020calibtax,tax,,FE_EED_noDH,,0.680951,0.680951,0.3404755,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,Greece,fe-constraint2020calibtax,tax,,FE_EED_noDH,,0,0,0,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,Hungary,fe-constraint2020calibtax,tax,,FE_EED_noDH,,0,0,0,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,Ireland,fe-constraint2020calibtax,tax,,FE_EED_noDH,,3.04094,3.04094,1.52047,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,Italy,fe-constraint2020calibtax,tax,,FE_EED_noDH,,0,0,0,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,Latvia,fe-constraint2020calibtax,tax,,FE_EED_noDH,,0,0,0,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,Lithuania,fe-constraint2020calibtax,tax,,FE_EED_noDH,,0.448806,0.448806,0.224403,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,Luxembourg,fe-constraint2020calibtax,tax,,FE_EED_noDH,,1.40863,1.40863,0.704315,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,Malta,fe-constraint2020calibtax,tax,,FE_EED_noDH,,0.336503,0.336503,0.1682515,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,Netherlands,fe-constraint2020calibtax,tax,,FE_EED_noDH,,1.72238,1.72238,0.86119,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,Poland,fe-constraint2020calibtax,tax,,FE_EED_noDH,,0,0,0,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,Portugal,fe-constraint2020calibtax,tax,,FE_EED_noDH,,0.40421,0.40421,0.202105,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,Romania,fe-constraint2020calibtax,tax,,FE_EED_noDH,,0,0,0,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,Slovakia,fe-constraint2020calibtax,tax,,FE_EED_noDH,,0,0,0,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,Slovenia,fe-constraint2020calibtax,tax,,FE_EED_noDH,,0,0,0,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,Spain,fe-constraint2020calibtax,tax,,FE_EED_noDH,,0.762199,0.762199,0.3810995,,,,,,,,,,,,,
-policy_fe_eu_2020calibtax,Sweden,fe-constraint2020calibtax,tax,,FE_EED_noDH,,0,0,0,,,,,,,,,,,,,
+# File: A_energy_constraints.csv,,,,,,,,,,,,,,,,,,,,,
+# Title: Policy floors/ceilings for tax/subsidy policies,,,,,,,,,,,,,,,,,,,,,
+# Comments: If using GDP intensity base year  in GDPIntensity_BaseYear column (must be historical year); then percent change in year columns,,,,,,,,,,,,,,,,,,,,,
+# Units: EJ (fe-constraint),,,,,,,,,,,,,,,,,,,,,
+# Column types: ccccicnnnnnnnnnnnnnnnn,,,,,,,,,,,,,,,,,,,,,
+# ----------,,,,,,,,,,,,,,,,,,,,,
+xml,market,policy.portfolio.standard,policyType,GDPIntensity_BaseYear,tech_mapping,2025,2030,2035,2040,2045,2050,2055,2060,2065,2070,2075,2080,2085,2090,2095,2100
+policy_tpes_aus,Australia_NZ,energy-constraint,tax,2021,PRIMARY_ENERGY,,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6
+policy_greenH2_chn.xml,China,green_H2,subsidy,,GREEN_H2,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315
+policy_tpes_chn,China,energy-constraint,tax,2021,PRIMARY_ENERGY,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24,-24
+policy_NUC_chn,China,nuclear-target,subsidy,,ELEC_NUCLEAR,1.99,1.99,1.99,1.99,1.99,1.99,1.99,1.99,1.99,1.99,1.99,1.99,1.99,1.99,1.99,1.99
+policy_fe_eu,EU,fe-constraint,tax,,FE_EED_noDH,37,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127
+policy_tpes_eu,EU,energy-constraint,tax,,PRIMARY_ENERGY,,41.57,41.57,41.57,41.57,41.57,41.57,41.57,41.57,41.57,41.57,41.57,41.57,41.57,41.57,41.57
+policy_RE_targets_EU,EU,PV-target,subsidy,,ELEC_PV,1.81,3.41,3.41,3.41,3.41,3.41,3.41,3.41,3.41,3.41,3.41,3.41,3.41,3.41,3.41,3.41
+policy_RE_targets_EU,EU,offshore-target,subsidy,,ELEC_WIND_OFFSHORE,0.5,0.76,1.515,2.27,3.025,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78,3.78
+policy_RE_targets_EU,EU,wind-target,subsidy,,ELEC_WIND_ONSHORE,3.3,4.47,4.47,4.47,4.47,4.47,4.47,4.47,4.47,4.47,4.47,4.47,4.47,4.47,4.47,4.47
+policy_oilcrop_eu,EU,palmoil-constraint,tax,,PALMOIL_IMP,30,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20
+policy_RE_targets_ind,India,wind-target,subsidy,,ELEC_WIND_ALL,0.55,1.08,1.08,1.08,1.08,1.08,1.08,1.08,1.08,1.08,1.08,1.08,1.08,1.08,1.08,1.08
+policy_RE_targets_ind,India,nuclear-target,subsidy,,ELEC_NUCLEAR,0.39,0.56,0.56,0.56,0.56,0.56,0.56,0.56,0.56,0.56,0.56,0.56,0.56,0.56,0.56,0.56
+policy_RE_targets_ind,India,solar-target,subsidy,,ELEC_SOLAR_ALL,1.1,2.18,2.18,2.18,2.18,2.18,2.18,2.18,2.18,2.18,2.18,2.18,2.18,2.18,2.18,2.18
+policy_H2_targets_ind,India,H2-target,subsidy,,GREEN_H2_ELECTROLYSIS,0.2,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6,0.6
+policy_RE_targets_idn,Indonesia,geo-target,subsidy,,ELEC_GEO,0.0760172,0.1020344,0.1020344,0.1020344,0.1020344,0.1020344,0.1020344,0.1020344,0.1020344,0.1020344,0.1020344,0.1020344,0.1020344,0.1020344,0.1020344,0.1020344
+policy_RE_targets_idn,Indonesia,PV-target,subsidy,,ELEC_PV,,0.026679456,0.026679456,0.026679456,0.026679456,0.026679456,0.026679456,0.026679456,0.026679456,0.026679456,0.026679456,0.026679456,0.026679456,0.026679456,0.026679456,0.026679456
+policy_fe_japan,Japan,fe-constraint,tax,,FE_NO_PV,,13.1558332,13.1558332,13.1558332,13.1558332,13.1558332,13.1558332,13.1558332,13.1558332,13.1558332,13.1558332,13.1558332,13.1558332,13.1558332,13.1558332,13.1558332
+policy_ind_jpn,Japan,ind-constraint,tax,,IND_EN,5.726469884,5.445815881,5.445815881,5.445815881,5.445815881,5.445815881,5.445815881,5.445815881,5.445815881,5.445815881,5.445815881,5.445815881,5.445815881,5.445815881,5.445815881,5.445815881
+policy_H2_jpn,Japan,H2-target,subsidy,,H2_ALL,,0.36,0.72,1.44,1.44,1.44,1.44,1.44,1.44,1.44,1.44,1.44,1.44,1.44,1.44,1.44
+policy_RE_targets_jpn,Japan,offshore-target,subsidy,,ELEC_WIND_OFFSHORE,,0.079,0.079,0.079,0.079,0.079,0.079,0.079,0.079,0.079,0.079,0.079,0.079,0.079,0.079,0.079
+policy_RE_targets_jpn_UNUSED,Japan,solar-target,subsidy,,ELEC_PV,,0.582,0.582,0.582,0.582,0.582,0.582,0.582,0.582,0.582,0.582,0.582,0.582,0.582,0.582,0.582
+policy_resfix_rus,Russia,PV-target,subsidy,,ELEC_PV,0.04502064,0.04502064,0.04502064,0.04502064,0.04502064,0.04502064,0.04502064,0.04502064,0.04502064,0.04502064,0.04502064,0.04502064,0.04502064,0.04502064,0.04502064,0.04502064
+policy_resfix_rus,Russia,wind-target,subsidy,,ELEC_WIND_ONSHORE,0.090119907,0.090119907,0.090119907,0.090119907,0.090119907,0.090119907,0.090119907,0.090119907,0.090119907,0.090119907,0.090119907,0.090119907,0.090119907,0.090119907,0.090119907,0.090119907
+policy_tpes_rus,Russia,energy-constraint,tax,,PRIMARY_ENERGY,29.70669853,29.05596155,29.05596155,29.05596155,29.05596155,29.05596155,29.05596155,29.05596155,29.05596155,29.05596155,29.05596155,29.05596155,29.05596155,29.05596155,29.05596155,29.05596155
+policy_fe_korea,South Korea,fe-constraint,tax,,FE_NO_PV,6.52,6.52,6.52,6.52,6.52,6.52,6.52,6.52,6.52,6.52,6.52,6.52,6.52,6.52,6.52,6.52
+policy_H2_korea,South Korea,H2-target,subsidy,,H2_ALL,0.0789,0.1578,0.3156,0.6312,0.6312,0.6312,0.6312,0.6312,0.6312,0.6312,0.6312,0.6312,0.6312,0.6312,0.6312,0.6312
+policy_RE_targets_kor,South Korea,PV-target,subsidy,,ELEC_PV,0.050938483,0.069252974,0.069252974,0.069252974,0.069252974,0.069252974,0.069252974,0.069252974,0.069252974,0.069252974,0.069252974,0.069252974,0.069252974,0.069252974,0.069252974,0.069252974
+policy_RE_targets_kor,South Korea,wind-target,subsidy,,ELEC_WIND_ONSHORE,,0.007064064,0.007064064,0.007064064,0.007064064,0.007064064,0.007064064,0.007064064,0.007064064,0.007064064,0.007064064,0.007064064,0.007064064,0.007064064,0.007064064,0.007064064
+policy_RE_targets_kor,South Korea,biom-target,subsidy,,ELEC_BIO,,0.00536112,0.00536112,0.00536112,0.00536112,0.00536112,0.00536112,0.00536112,0.00536112,0.00536112,0.00536112,0.00536112,0.00536112,0.00536112,0.00536112,0.00536112
+policy_RE_targets_kor,South Korea,offshore-target,subsidy,,ELEC_WIND_OFFSHORE,0.00672768,0.01009152,0.01009152,0.01009152,0.01009152,0.01009152,0.01009152,0.01009152,0.01009152,0.01009152,0.01009152,0.01009152,0.01009152,0.01009152,0.01009152,0.01009152
+policy_RE_targets_saf,South Africa,PV-target,subsidy,,ELEC_PV,0.01,0.04,0.04,0.04,0.04,0.04,0.04,0.04,0.04,0.04,0.04,0.04,0.04,0.04,0.04,0.04
+policy_RE_targets_saf,South Africa,wind-target,subsidy,,ELEC_WIND_ALL,0.05,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15,0.15
+policy_coal_cap_saf,South Africa,coal-cap,tax,,ELEC_COAL_NO_CCS,0.822134,0.822134,0.822134,0.822134,0.822134,0.822134,0.822134,0.822134,0.822134,0.822134,0.822134,0.822134,0.822134,0.822134,0.822134,0.822134
+ELEC_coal_constraint_EIR,USA,coal_ceiling_EIR,tax,,ELEC_COAL_NO_CCS,1.918,0.788,0.788,0.788,0.788,0.788,0.788,0.788,0.788,0.788,0.788,0.788,0.788,0.788,0.788,0.788
+policy_RE_targets_usa,USA,offshore-target,subsidy,,ELEC_WIND_OFFSHORE,,,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43,0.43
+policy_RE_targets_usa,USA,biodiesel-target-OLD,subsidy,,BIODIESEL,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405,0.3405
+policy_RE_targets_usa,USA,biofuel-target-OLD,subsidy,,BIOFUEL_ALL,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635,1.635
+resid_calib_world_2025dummy,World,elec-calib,tax,,ELEC_BLD,43.4503,,,,,,,,,,,,,,,
+policy_fe_eu_necp,Austria,fe-constraint,tax,,FE_EED_noDH,1.035223851,0.904,0.904,0.904,0.904,0.904,0.904,0.904,0.904,0.904,0.904,0.904,0.904,0.904,0.904,0.904
+policy_fe_eu_necp,Belgium,fe-constraint,tax,,FE_EED_noDH,1.344190896,1.252,1.252,1.252,1.252,1.252,1.252,1.252,1.252,1.252,1.252,1.252,1.252,1.252,1.252,1.252
+policy_fe_eu_necp,Bulgaria,fe-constraint,tax,,FE_EED_noDH,0.398478079,0.369,0.369,0.369,0.369,0.369,0.369,0.369,0.369,0.369,0.369,0.369,0.369,0.369,0.369,0.369
+policy_fe_eu_necp,Croatia,fe-constraint,tax,,FE_EED_noDH,0.269641103,0.246,0.246,0.246,0.246,0.246,0.246,0.246,0.246,0.246,0.246,0.246,0.246,0.246,0.246,0.246
+policy_fe_eu_necp,Cyprus,fe-constraint,tax,,FE_EED_noDH,0.072399324,0.075,0.075,0.075,0.075,0.075,0.075,0.075,0.075,0.075,0.075,0.075,0.075,0.075,0.075,0.075
+policy_fe_eu_necp,Czech Republic,fe-constraint,tax,,FE_EED_noDH,0.961220259,0.846,0.846,0.846,0.846,0.846,0.846,0.846,0.846,0.846,0.846,0.846,0.846,0.846,0.846,0.846
+policy_fe_eu_necp,Denmark,fe-constraint,tax,,FE_EED_noDH,0.577903207,0.575,0.575,0.575,0.575,0.575,0.575,0.575,0.575,0.575,0.575,0.575,0.575,0.575,0.575,0.575
+policy_fe_eu_necp,Estonia,fe-constraint,tax,,FE_EED_noDH,0.118237436,0.12,0.12,0.12,0.12,0.12,0.12,0.12,0.12,0.12,0.12,0.12,0.12,0.12,0.12,0.12
+policy_fe_eu_necp,Finland,fe-constraint,tax,,FE_EED_noDH,0.980811452,0.954,0.954,0.954,0.954,0.954,0.954,0.954,0.954,0.954,0.954,0.954,0.954,0.954,0.954,0.954
+policy_fe_eu_necp,France,fe-constraint,tax,,FE_EED_noDH,5.210623327,4.475,4.475,4.475,4.475,4.475,4.475,4.475,4.475,4.475,4.475,4.475,4.475,4.475,4.475,4.475
+policy_fe_eu_necp,Germany,fe-constraint,tax,,FE_EED_noDH,7.692366358,6.512,6.512,6.512,6.512,6.512,6.512,6.512,6.512,6.512,6.512,6.512,6.512,6.512,6.512,6.512
+policy_fe_eu_necp,Greece,fe-constraint,tax,,FE_EED_noDH,0.627713685,0.636,0.636,0.636,0.636,0.636,0.636,0.636,0.636,0.636,0.636,0.636,0.636,0.636,0.636,0.636
+policy_fe_eu_necp,Hungary,fe-constraint,tax,,FE_EED_noDH,0.75942068,0.74,0.74,0.74,0.74,0.74,0.74,0.74,0.74,0.74,0.74,0.74,0.74,0.74,0.74,0.74
+policy_fe_eu_necp,Ireland,fe-constraint,tax,,FE_EED_noDH,0.460667275,0.438,0.438,0.438,0.438,0.438,0.438,0.438,0.438,0.438,0.438,0.438,0.438,0.438,0.438,0.438
+policy_fe_eu_necp,Italy,fe-constraint,tax,,FE_EED_noDH,4.658338829,4.647,4.647,4.647,4.647,4.647,4.647,4.647,4.647,4.647,4.647,4.647,4.647,4.647,4.647,4.647
+policy_fe_eu_necp,Latvia,fe-constraint,tax,,FE_EED_noDH,0.161511053,0.153,0.153,0.153,0.153,0.153,0.153,0.153,0.153,0.153,0.153,0.153,0.153,0.153,0.153,0.153
+policy_fe_eu_necp,Lithuania,fe-constraint,tax,,FE_EED_noDH,0.225526551,0.216,0.216,0.216,0.216,0.216,0.216,0.216,0.216,0.216,0.216,0.216,0.216,0.216,0.216,0.216
+policy_fe_eu_necp,Luxembourg,fe-constraint,tax,,FE_EED_noDH,0.15368138,0.133,0.133,0.133,0.133,0.133,0.133,0.133,0.133,0.133,0.133,0.133,0.133,0.133,0.133,0.133
+policy_fe_eu_necp,Malta,fe-constraint,tax,,FE_EED_noDH,0.026176656,0.029,0.029,0.029,0.029,0.029,0.029,0.029,0.029,0.029,0.029,0.029,0.029,0.029,0.029,0.029
+policy_fe_eu_necp,Netherlands,fe-constraint,tax,,FE_EED_noDH,1.774487832,1.609,1.609,1.609,1.609,1.609,1.609,1.609,1.609,1.609,1.609,1.609,1.609,1.609,1.609,1.609
+policy_fe_eu_necp,Poland,fe-constraint,tax,,FE_EED_noDH,2.825208496,2.449,2.449,2.449,2.449,2.449,2.449,2.449,2.449,2.449,2.449,2.449,2.449,2.449,2.449,2.449
+policy_fe_eu_necp,Portugal,fe-constraint,tax,,FE_EED_noDH,0.628459576,0.601,0.601,0.601,0.601,0.601,0.601,0.601,0.601,0.601,0.601,0.601,0.601,0.601,0.601,0.601
+policy_fe_eu_necp,Romania,fe-constraint,tax,,FE_EED_noDH,0.997777806,0.941,0.941,0.941,0.941,0.941,0.941,0.941,0.941,0.941,0.941,0.941,0.941,0.941,0.941,0.941
+policy_fe_eu_necp,Slovakia,fe-constraint,tax,,FE_EED_noDH,0.397779316,0.354,0.354,0.354,0.354,0.354,0.354,0.354,0.354,0.354,0.354,0.354,0.354,0.354,0.354,0.354
+policy_fe_eu_necp,Slovenia,fe-constraint,tax,,FE_EED_noDH,0.188384906,0.181,0.181,0.181,0.181,0.181,0.181,0.181,0.181,0.181,0.181,0.181,0.181,0.181,0.181,0.181
+policy_fe_eu_necp,Spain,fe-constraint,tax,,FE_EED_noDH,3.155050987,3.002,3.002,3.002,3.002,3.002,3.002,3.002,3.002,3.002,3.002,3.002,3.002,3.002,3.002,3.002
+policy_fe_eu_necp,Sweden,fe-constraint,tax,,FE_EED_noDH,1.272951251,1.26,1.26,1.26,1.26,1.26,1.26,1.26,1.26,1.26,1.26,1.26,1.26,1.26,1.26,1.26
+policy_fe_eu_2030taxnecp,Austria,fe-constraint1,tax,,COALDUMMY,,2.36297,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,Belgium,fe-constraint1,tax,,COALDUMMY,,3.87667,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,Bulgaria,fe-constraint1,tax,,COALDUMMY,,0.974972,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,Croatia,fe-constraint1,tax,,COALDUMMY,,2.092,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,Cyprus,fe-constraint1,tax,,COALDUMMY,,0.0275839,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,Czech Republic,fe-constraint1,tax,,COALDUMMY,,1.86287,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,Denmark,fe-constraint1,tax,,COALDUMMY,,0.78813,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,Estonia,fe-constraint1,tax,,COALDUMMY,,0.59121,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,Finland,fe-constraint1,tax,,COALDUMMY,,0,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,France,fe-constraint1,tax,,COALDUMMY,,6.48438,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,Germany,fe-constraint1,tax,,COALDUMMY,,4.99069,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,Greece,fe-constraint1,tax,,COALDUMMY,,0,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,Hungary,fe-constraint1,tax,,COALDUMMY,,0.496827,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,Ireland,fe-constraint1,tax,,COALDUMMY,,8.30915,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,Italy,fe-constraint1,tax,,COALDUMMY,,0,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,Latvia,fe-constraint1,tax,,COALDUMMY,,0,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,Lithuania,fe-constraint1,tax,,COALDUMMY,,1.72269,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,Luxembourg,fe-constraint1,tax,,COALDUMMY,,17.9085,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,Malta,fe-constraint1,tax,,COALDUMMY,,3.85703,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,Netherlands,fe-constraint1,tax,,COALDUMMY,,5.91032,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,Poland,fe-constraint1,tax,,COALDUMMY,,2.66833,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,Portugal,fe-constraint1,tax,,COALDUMMY,,1.0374,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,Romania,fe-constraint1,tax,,COALDUMMY,,0.931117,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,Slovakia,fe-constraint1,tax,,COALDUMMY,,1.90422,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,Slovenia,fe-constraint1,tax,,COALDUMMY,,1.65686,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,Spain,fe-constraint1,tax,,COALDUMMY,,2.09831,,,,,,,,,,,,,,
+policy_fe_eu_2030taxnecp,Sweden,fe-constraint1,tax,,COALDUMMY,,0.372023,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Austria,FE_RES1,tax,,COALDUMMY,2.42185,4.58258,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Belgium,FE_RES1,tax,,COALDUMMY,1.87786,3.17398,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Bulgaria,FE_RES1,tax,,COALDUMMY,1.44004,2.71131,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Croatia,FE_RES1,tax,,COALDUMMY,1.97957,2.83201,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Cyprus,FE_RES1,tax,,COALDUMMY,1.19575,3.49321,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Czech Republic,FE_RES1,tax,,COALDUMMY,0.583061,2.73508,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Denmark,FE_RES1,tax,,COALDUMMY,2.33512,2.86738,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Estonia,FE_RES1,tax,,COALDUMMY,3.13114,3.3653,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Finland,FE_RES1,tax,,COALDUMMY,2.80117,3.36325,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,France,FE_RES1,tax,,COALDUMMY,0,3.66573,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Germany,FE_RES1,tax,,COALDUMMY,1.35549,3.08183,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Greece,FE_RES1,tax,,COALDUMMY,2.19074,3.21376,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Hungary,FE_RES1,tax,,COALDUMMY,0.649531,3.14732,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Ireland,FE_RES1,tax,,COALDUMMY,1.83847,2.66319,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Italy,FE_RES1,tax,,COALDUMMY,1.07814,1.69688,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Latvia,FE_RES1,tax,,COALDUMMY,2.28699,4.23097,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Lithuania,FE_RES1,tax,,COALDUMMY,2.85903,3.70426,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Luxembourg,FE_RES1,tax,,COALDUMMY,5.34455,5.72432,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Malta,FE_RES1,tax,,COALDUMMY,1.55427,3.16166,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Netherlands,FE_RES1,tax,,COALDUMMY,2.9424,3.81834,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Poland,FE_RES1,tax,,COALDUMMY,1.26396,3.02953,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Portugal,FE_RES1,tax,,COALDUMMY,3.04907,3.85647,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Romania,FE_RES1,tax,,COALDUMMY,0.289128,2.2525,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Slovakia,FE_RES1,tax,,COALDUMMY,0.935666,1.62881,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Slovenia,FE_RES1,tax,,COALDUMMY,0.135076,2.41788,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Spain,FE_RES1,tax,,COALDUMMY,3.36724,4.06333,,,,,,,,,,,,,,
+policy_feres_eu_2030taxnecp,Sweden,FE_RES1,tax,,COALDUMMY,0.469686,2.40416,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Austria,fe-constraint2020,tax,,FE_EED_noDH,1.035223851,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Belgium,fe-constraint2020,tax,,FE_EED_noDH,1.344190896,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Bulgaria,fe-constraint2020,tax,,FE_EED_noDH,0.398478079,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Croatia,fe-constraint2020,tax,,FE_EED_noDH,0.269641103,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Cyprus,fe-constraint2020,tax,,FE_EED_noDH,0.072399324,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Czech Republic,fe-constraint2020,tax,,FE_EED_noDH,0.961220259,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Denmark,fe-constraint2020,tax,,FE_EED_noDH,0.577903207,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Estonia,fe-constraint2020,tax,,FE_EED_noDH,0.118237436,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Finland,fe-constraint2020,tax,,FE_EED_noDH,0.980811452,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,France,fe-constraint2020,tax,,FE_EED_noDH,5.210623327,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Germany,fe-constraint2020,tax,,FE_EED_noDH,7.692366358,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Greece,fe-constraint2020,tax,,FE_EED_noDH,0.627713685,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Hungary,fe-constraint2020,tax,,FE_EED_noDH,0.75942068,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Ireland,fe-constraint2020,tax,,FE_EED_noDH,0.460667275,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Italy,fe-constraint2020,tax,,FE_EED_noDH,4.658338829,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Latvia,fe-constraint2020,tax,,FE_EED_noDH,0.161511053,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Lithuania,fe-constraint2020,tax,,FE_EED_noDH,0.225526551,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Luxembourg,fe-constraint2020,tax,,FE_EED_noDH,0.15368138,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Malta,fe-constraint2020,tax,,FE_EED_noDH,0.026176656,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Netherlands,fe-constraint2020,tax,,FE_EED_noDH,1.774487832,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Poland,fe-constraint2020,tax,,FE_EED_noDH,2.825208496,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Portugal,fe-constraint2020,tax,,FE_EED_noDH,0.628459576,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Romania,fe-constraint2020,tax,,FE_EED_noDH,0.997777806,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Slovakia,fe-constraint2020,tax,,FE_EED_noDH,0.397779316,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Slovenia,fe-constraint2020,tax,,FE_EED_noDH,0.188384906,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Spain,fe-constraint2020,tax,,FE_EED_noDH,3.155050987,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,Sweden,fe-constraint2020,tax,,FE_EED_noDH,1.272951251,,,,,,,,,,,,,,,
+policy_fe_eu_2025dummy,EU,fe-constraint,tax,,FE_EED_noDH,37,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127,33.88429127
+policy_fe_eu_2020calibtax,Austria,fe-constraint2020calibtax,tax,,FE_EED_noDH,0,0,0,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,Belgium,fe-constraint2020calibtax,tax,,FE_EED_noDH,1.78003,1.78003,0.890015,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,Bulgaria,fe-constraint2020calibtax,tax,,FE_EED_noDH,0,0,0,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,Croatia,fe-constraint2020calibtax,tax,,FE_EED_noDH,0,0,0,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,Cyprus,fe-constraint2020calibtax,tax,,FE_EED_noDH,0,0,0,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,Czech Republic,fe-constraint2020calibtax,tax,,FE_EED_noDH,0.163942,0.163942,0.081971,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,Denmark,fe-constraint2020calibtax,tax,,FE_EED_noDH,0,0,0,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,Estonia,fe-constraint2020calibtax,tax,,FE_EED_noDH,0.6,0.6,0.3,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,Finland,fe-constraint2020calibtax,tax,,FE_EED_noDH,0,0,0,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,France,fe-constraint2020calibtax,tax,,FE_EED_noDH,0.692934,0.692934,0.346467,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,Germany,fe-constraint2020calibtax,tax,,FE_EED_noDH,0.680951,0.680951,0.3404755,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,Greece,fe-constraint2020calibtax,tax,,FE_EED_noDH,0,0,0,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,Hungary,fe-constraint2020calibtax,tax,,FE_EED_noDH,0,0,0,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,Ireland,fe-constraint2020calibtax,tax,,FE_EED_noDH,3.04094,3.04094,1.52047,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,Italy,fe-constraint2020calibtax,tax,,FE_EED_noDH,0,0,0,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,Latvia,fe-constraint2020calibtax,tax,,FE_EED_noDH,0,0,0,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,Lithuania,fe-constraint2020calibtax,tax,,FE_EED_noDH,0.448806,0.448806,0.224403,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,Luxembourg,fe-constraint2020calibtax,tax,,FE_EED_noDH,1.40863,1.40863,0.704315,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,Malta,fe-constraint2020calibtax,tax,,FE_EED_noDH,0.336503,0.336503,0.1682515,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,Netherlands,fe-constraint2020calibtax,tax,,FE_EED_noDH,1.72238,1.72238,0.86119,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,Poland,fe-constraint2020calibtax,tax,,FE_EED_noDH,0,0,0,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,Portugal,fe-constraint2020calibtax,tax,,FE_EED_noDH,0.40421,0.40421,0.202105,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,Romania,fe-constraint2020calibtax,tax,,FE_EED_noDH,0,0,0,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,Slovakia,fe-constraint2020calibtax,tax,,FE_EED_noDH,0,0,0,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,Slovenia,fe-constraint2020calibtax,tax,,FE_EED_noDH,0,0,0,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,Spain,fe-constraint2020calibtax,tax,,FE_EED_noDH,0.762199,0.762199,0.3810995,,,,,,,,,,,,,
+policy_fe_eu_2020calibtax,Sweden,fe-constraint2020calibtax,tax,,FE_EED_noDH,0,0,0,,,,,,,,,,,,,
