@@ -66,10 +66,10 @@ FoodDemandInput::FoodDemandInput()
 FoodDemandInput::~FoodDemandInput() {
 }
 
-void FoodDemandInput::completeInit( const string& aRegionName,
-                             const string& aSectorName,
-                             const string& aSubsectorName,
-                             const string& aTechName,
+void FoodDemandInput::completeInit( const gcamstr& aRegionName,
+                             const gcamstr& aSectorName,
+                             const gcamstr& aSubsectorName,
+                             const gcamstr& aTechName,
                              const IInfo* aTechInfo)
 {
     // Indicate that this sector depends on the service this input represents.
@@ -81,7 +81,7 @@ void FoodDemandInput::completeInit( const string& aRegionName,
     mSectorName = aTechName;
    
     // Set up trial share markets
-    string trialShareMarketName = SectorUtils::getTrialMarketName( getTrialShareMarketName() );
+    gcamstr trialShareMarketName(SectorUtils::getTrialMarketName( getTrialShareMarketName() ));
     bool isNew = SectorUtils::createTrialSupplyMarket( aRegionName, getTrialShareMarketName(),
                                                        "unitless", aRegionName );
     if( !isNew ) {
@@ -110,8 +110,8 @@ void FoodDemandInput::completeInit( const string& aRegionName,
     
 }
 
-void FoodDemandInput::initCalc( const string& aRegionName,
-                         const string& aSectorName,
+void FoodDemandInput::initCalc( const gcamstr& aRegionName,
+                         const gcamstr& aSectorName,
                          const bool aIsNewInvestmentPeriod,
                          const bool aIsTrade,
                          const IInfo* aTechInfo,
@@ -125,8 +125,8 @@ void FoodDemandInput::initCalc( const string& aRegionName,
     // We need to save these values here as we won't have access to the socioeconomic
     // drivers when calculating demands. We will need to income to run the food demand
     // equations and the population to convert from per capita demands to total.
-    mSubregionalPopulation[ aPeriod ] = aTechInfo->getDouble( "subregional-population", true );
-    mCurrentSubregionalIncomeShare = aTechInfo->getDouble( "subregional-income-share", true );
+    mSubregionalPopulation[ aPeriod ] = aTechInfo->getDouble( gcamstr("subregional-population"), true );
+    mCurrentSubregionalIncomeShare = aTechInfo->getDouble( gcamstr("subregional-income-share"), true );
     
     if( aPeriod == ( scenario->getModeltime()->getFinalCalibrationPeriod() + 1 ) ) {        
         // Fill in regional bias values for future model periods which may just copy
@@ -138,9 +138,10 @@ void FoodDemandInput::initCalc( const string& aRegionName,
     if (aPeriod > 0 && getXMLName() == NonStaplesFoodDemandInput::getXMLNameStatic()) {
         // we are in non-staples
         // "calculate" the name of the staples budget share market name
-        string otherBudgetName = mName + mSectorName + "-budget-fraction";
-        otherBudgetName.erase(otherBudgetName.find("Non"), 3);
+        string tmpOtherBudgetName = mName.get() + mSectorName.get() + "-budget-fraction";
+        tmpOtherBudgetName.erase(tmpOtherBudgetName.find("Non"), 3);
         // look up the budget share for staples from the market for last period
+        gcamstr otherBudgetName(tmpOtherBudgetName);
         double otherBudgetShare = SectorUtils::getTrialSupply(aRegionName, otherBudgetName, aPeriod - 1);
         // we can just get the share for non-staples from the member variable and add the shares together
         double totalBudget = mShare[aPeriod - 1] + otherBudgetShare;
@@ -197,7 +198,7 @@ void FoodDemandInput::toDebugXML( const int aPeriod, ostream& aOut, Tabs* aTabs 
 }
 
 //! Get the name of the input
-const string& FoodDemandInput::getName() const {
+const gcamstr& FoodDemandInput::getName() const {
     return mName;
 }
 
@@ -218,7 +219,7 @@ double FoodDemandInput::getPhysicalDemand( const int aPeriod ) const {
 }
 
 //! Set Physical Demand.
-void FoodDemandInput::setPhysicalDemand( double aPhysicalDemand, const string& aRegionName, const int aPeriod )
+void FoodDemandInput::setPhysicalDemand( double aPhysicalDemand, const gcamstr& aRegionName, const int aPeriod )
 {
     // Quantity conversion factor on output.  Output quantities are in
     // Kcal/day (per capita).  We need to convert to Pcal/year (also per
@@ -253,7 +254,7 @@ void FoodDemandInput::setPhysicalDemand( double aPhysicalDemand, const string& a
  * \param aPeriod Period to find the price in.
  * \return The market or unadjusted price.
  */
-double FoodDemandInput::getPrice( const string& aRegionName, const int aPeriod ) const {
+double FoodDemandInput::getPrice( const gcamstr& aRegionName, const int aPeriod ) const {
     // Price conversion factor.  Input prices are in 1975$ per Mcal.
     // In the food demand equations the Price * Quantity should be in units of
     // thousands of dollars per year. Since Quantity is in Mcal/day, that means
@@ -264,7 +265,7 @@ double FoodDemandInput::getPrice( const string& aRegionName, const int aPeriod )
         priceUnitConversionFactor;
 }
 
-void FoodDemandInput::setPrice( const string& aRegionName,
+void FoodDemandInput::setPrice( const gcamstr& aRegionName,
                          const double aPrice,
                          const int aPeriod )
 {
@@ -275,7 +276,7 @@ void FoodDemandInput::setPrice( const string& aRegionName,
  * \param aRegionName Name of the containing region.
  * \param aPeriod Model period.
  */
-double FoodDemandInput::getPricePaid( const string& aRegionName, const int aPeriod ) const{
+double FoodDemandInput::getPricePaid( const gcamstr& aRegionName, const int aPeriod ) const{
     return getPrice( aRegionName, aPeriod );
 }
 
@@ -322,15 +323,15 @@ double FoodDemandInput::getAnnualDemandConversionFactor( const int aPeriod ) con
  * \return Subregional income that has been set from
  *           the consumer.
  */
-double FoodDemandInput::getSubregionalIncome( const string& aRegionName, const int aPeriod ) const {
+double FoodDemandInput::getSubregionalIncome( const gcamstr& aRegionName, const int aPeriod ) const {
     return mCurrentSubregionalIncomeShare * SectorUtils::getGDPPPP( aRegionName, aPeriod ) / mSubregionalPopulation[ aPeriod ];
 }
 
 /*!
  * \brief Generates an appropriate name to use for the trial share market name.
  */
-std::string FoodDemandInput::getTrialShareMarketName() const {
-    return mName + mSectorName + "-budget-fraction";
+gcamstr FoodDemandInput::getTrialShareMarketName() const {
+    return gcamstr(mName.get() + mSectorName.get() + "-budget-fraction");
 }
 
 /*!
@@ -340,7 +341,7 @@ std::string FoodDemandInput::getTrialShareMarketName() const {
  * \param aPeriod The current model period.
  * \return The trial share.
  */
-double FoodDemandInput::getTrialShare( const string& aRegionName,
+double FoodDemandInput::getTrialShare( const gcamstr& aRegionName,
                                        const int aPeriod ) const
 {
     // ensure the trial share is between zero and one
@@ -354,7 +355,7 @@ double FoodDemandInput::getTrialShare( const string& aRegionName,
  * \param aPeriod The current model period.
  */
 void FoodDemandInput::setActualShare( double aShare,
-                                      const string& aRegionName,
+                                      const gcamstr& aRegionName,
                                       const int aPeriod )
 {
     mShare[ aPeriod ] = aShare;
@@ -400,7 +401,7 @@ double FoodDemandInput::getScaleParam() const {
  */
 double FoodDemandInput::calcPriceExponent( const FoodDemandInput* aOther,
                                            double aAdjIncome,
-                                           const string& aRegionName,
+                                           const gcamstr& aRegionName,
                                            const int aPeriod ) const
 {
     return getPriceElasticity( aOther, aRegionName, aPeriod ) -
@@ -449,7 +450,7 @@ void StaplesFoodDemandInput::copy( const StaplesFoodDemandInput& aInput ) {
  * \return The value for the price elasticity.
  */
 double StaplesFoodDemandInput::getPriceElasticity( const FoodDemandInput* aOther,
-                                                   const string& aRegionName,
+                                                   const gcamstr& aRegionName,
                                                    const int aPeriod ) const
 {
     return this == aOther ? mSelfPriceElasticity : mCrossPriceElasticity;
@@ -576,7 +577,7 @@ void NonStaplesFoodDemandInput::copy( const NonStaplesFoodDemandInput& aInput ) 
  * \return The value for the price elasticity.
  */
 double NonStaplesFoodDemandInput::getPriceElasticity( const FoodDemandInput* aOther,
-                                                      const string& aRegionName,
+                                                      const gcamstr& aRegionName,
                                                       const int aPeriod ) const
 {
     if( this == aOther ) {

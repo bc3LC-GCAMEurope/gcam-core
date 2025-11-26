@@ -725,15 +725,12 @@
     <ClCompile Include="..\..\technologies\source\unmanaged_land_technology.cpp" />
     <ClCompile Include="..\..\technologies\source\variable_production_state.cpp" />
     <ClCompile Include="..\..\technologies\source\vintage_production_state.cpp" />
-    <ClCompile Include="..\..\util\base\source\atom.cpp" />
-    <ClCompile Include="..\..\util\base\source\atom_registry.cpp" />
     <ClCompile Include="..\..\util\base\source\calibrate_resource_visitor.cpp" />
     <ClCompile Include="..\..\util\base\source\calibrate_share_weight_visitor.cpp" />
     <ClCompile Include="..\..\util\base\source\configuration.cpp" />
     <ClCompile Include="..\..\util\base\source\fixed_interpolation_function.cpp" />
     <ClCompile Include="..\..\util\base\source\gcam_fusion.cpp" />
     <ClCompile Include="..\..\util\base\source\initialize_tech_vector_helper.cpp" />
-    <ClCompile Include="..\..\util\base\source\input_finder.cpp" />
     <ClCompile Include="..\..\util\base\source\interpolation_rule.cpp" />
     <ClCompile Include="..\..\util\base\source\linear_interpolation_function.cpp" />
     <ClCompile Include="..\..\util\base\source\manage_state_variables.cpp" />
