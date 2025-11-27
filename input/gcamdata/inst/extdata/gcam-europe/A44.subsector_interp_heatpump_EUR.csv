@@ -1,8 +1,8 @@
-# File:A44.subsector_interp_heatpump_EUR.csv,,,,,,,
-# Title: Adust shareweights for Heatpumps in Europe (based on previous testing runs),,,,,,,
-# Units: NA,,,,,,,
-# Column types: cccccinc,,,,,,,
-# ----------,,,,,,,
+# File:A44.subsector_interp_heatpump_EUR.csv
+# Title: Adust shareweights for Heatpumps in Europe (based on previous testing runs)
+# Units: NA
+# Column types: cccccinc
+# ----------
 region,supplysector,subsector,apply.to,from.year,to.year,to.value,interpolation.function
 Albania,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear
 Austria,comm heating EUR,water heat pump,share-weight,final-calibration-year,2030,,linear

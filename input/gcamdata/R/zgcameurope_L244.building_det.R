@@ -43,6 +43,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              FILE = "gcam-europe/A44.subsector_shrwt_EUR",
              FILE = "gcam-europe/A44.fuelprefElasticity_EUR",
              FILE = "gcam-europe/A44.globaltech_shrwt_EUR",
+             FILE = "gcam-europe/A44.globaltech_interp_EUR",
              FILE = "gcam-europe/A44.gcam_consumer_EUR",
              FILE = "gcam-europe/A44.demandFn_serv_EUR",
              FILE = "gcam-europe/A44.demandFn_flsp_EUR",
@@ -96,6 +97,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              "L244.StubTechCalInput_bld_EUR",
              "L244.StubTechIntGainOutputRatio_EUR",
              "L244.GlobalTechShrwt_bld_EUR",
+             "L244.GlobalTechInterp_bld_EUR",
              "L244.PrimaryRenewKeyword_bld_EUR",
              "L244.GlobalTechCost_bld_EUR",
              "L244.GlobalTechTrackCapital_bld_EUR",
@@ -536,6 +538,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     A44.fuelprefElasticity_EUR<-add.cg(A44.fuelprefElasticity_EUR)
 
     A44.globaltech_shrwt_EUR<-add.cg(A44.globaltech_shrwt_EUR)
+    A44.globaltech_interp_EUR<-add.cg(A44.globaltech_interp_EUR)
     A44.internal_gains_EUR<-add.cg(A44.internal_gains_EUR)
     A44.sector_EUR<-add.cg(A44.sector_EUR)
     A44.subsector_interp_EUR<-add.cg(A44.subsector_interp_EUR)
@@ -994,6 +997,14 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       rename(sector.name = supplysector,
              subsector.name = subsector) %>%
       select(LEVEL2_DATA_NAMES[["GlobalTechYr"]], share.weight)
+
+    # L244.GlobalTechInterp_bld_EUR: Default shareweight interpolation for heatpump building technologies
+    L244.GlobalTechInterp_bld_EUR <- A44.globaltech_interp_EUR %>%
+      set_years() %>%
+      rename(sector.name = supplysector, subsector.name = subsector) %>%
+      # included to strip attributes from assumption file
+      mutate(sector.name = sector.name)
+
 
     # L244.GlobalTechCost_bld_EUR: Non-fuel costs of global building technologies
     L244.GlobalTechCost_bld_EUR <- add.cg(L144.NEcost_75USDGJ_EUR) %>%
@@ -2483,6 +2494,14 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_legacy_name("L244.GlobalTechShrwt_bld_EUR") %>%
       add_precursors("gcam-europe/A44.globaltech_shrwt_EUR") ->
       L244.GlobalTechShrwt_bld_EUR
+
+    L244.GlobalTechInterp_bld_EUR %>%
+      add_title("Technology shareweight interpolation for heatpump building technologies") %>%
+      add_units("Unitless") %>%
+      add_comments("fills out model years in A44.globaltech_interp_EUR") %>%
+      add_legacy_name("L244.GlobalTechInterp_bld_EUR") %>%
+      add_precursors("gcam-europe/A44.globaltech_interp_EUR") ->
+      L244.GlobalTechInterp_bld_EUR
 
     L244.PrimaryRenewKeyword_bld_EUR %>%
       add_title("Keywords of building renewable electric technologies") %>%
