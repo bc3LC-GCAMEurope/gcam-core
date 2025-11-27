@@ -1,9 +1,9 @@
-# File: A44.globaltech_interp_EUR,,,,,,
-# Title: electricity and heat pump technology interpolation,,,,,,
-# Units: N/A,,,,,,
-# Description: characteristics of interpolation functions for techs that may have calibrated values in subsectors with multiple calibrated technologies,,,,,,
-# Column types: ccccccc ,,,,,,
-# ----------,,,,,,
+# File: A44.globaltech_interp_EUR.csv
+# Title: electricity and heat pump technology interpolation
+# Units: N/A
+# Description: characteristics of interpolation functions for techs that may have calibrated values in subsectors with multiple calibrated technologies
+# Column types: ccccccc 
+# ----------
 supplysector,subsector,technology,apply.to,from.year,to.year,interpolation.function
 resid heating modern EUR,electricity,resistance,share-weight,final-calibration-year,end-year,linear
 resid heating modern EUR,electricity,air-air pump south,share-weight,final-calibration-year,end-year,linear
