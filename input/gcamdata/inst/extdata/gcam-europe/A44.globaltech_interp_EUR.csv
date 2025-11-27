@@ -16,3 +16,16 @@ resid heating modern EUR,water heat pump,air-water pump middle north,share-weigh
 resid heating modern EUR,water heat pump,air-water pump north,share-weight,final-calibration-year,end-year,linear
 resid heating modern EUR,water heat pump,geo-water pump,share-weight,final-calibration-year,end-year,linear
 resid heating modern EUR,water heat pump,solar thermal,share-weight,final-calibration-year,end-year,linear
+comm heating EUR,electricity,resistance,share-weight,final-calibration-year,end-year,linear
+comm heating EUR,electricity,air-air pump south,share-weight,final-calibration-year,end-year,linear
+comm heating EUR,electricity,air-air pump middle south,share-weight,final-calibration-year,end-year,linear
+comm heating EUR,electricity,air-air pump middle north,share-weight,final-calibration-year,end-year,linear
+comm heating EUR,electricity,air-air pump north,share-weight,final-calibration-year,end-year,linear
+comm heating EUR,water heat pump,air-water pump south,share-weight,final-calibration-year,end-year,linear
+comm heating EUR,water heat pump,air-water pump middle south,share-weight,final-calibration-year,end-year,linear
+comm heating EUR,water heat pump,air-water pump middle north,share-weight,final-calibration-year,end-year,linear
+comm heating EUR,water heat pump,air-water pump north,share-weight,final-calibration-year,end-year,linear
+comm heating EUR,water heat pump,geo-water pump,share-weight,final-calibration-year,end-year,linear
+comm heating EUR,water heat pump,solar thermal,share-weight,final-calibration-year,end-year,linear
+resid hot water modern EUR,water heat pump,solar thermal,share-weight,final-calibration-year,end-year,linear
+resid hot water modern EUR,water heat pump,heat pump,share-weight,final-calibration-year,end-year,linear
