@@ -8,8 +8,7 @@
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
-#' the generated outputs: \code{L100.GTAP_LV_milUSD}, \code{L100.GTAP_capital_stock},
-#' \code{L100.GTAPCostShare_ResourceRefine_GCAMReg_share}. The corresponding file in the
+#' the generated outputs: \code{L100.GTAP_LV_milUSD}. The corresponding file in the
 #' original data system was \code{LA100.GTAP_downscale_ctry.R} (aglu level1).
 #' @details This chunk downscales the GTAP region-level land value to all countries
 #' based on production share by GLU and GTAP commodity class.
@@ -32,8 +31,7 @@ module_aglu_L100.GTAP_downscale_ctry <- function(command, ...) {
       OPTIONAL_FILE = "socioeconomics/GTAP/GTAPv10_baseview_SF01_VFA")
 
   MODULE_OUTPUTS <-
-    c("L100.GTAP_LV_milUSD",
-      "L100.GTAP_capital_stock")
+    c("L100.GTAP_LV_milUSD")
 
     if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -51,8 +49,10 @@ module_aglu_L100.GTAP_downscale_ctry <- function(command, ...) {
 
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
 
-
-
+    # Note that the GTAP land values processed here and later in
+    # module_aglu_L131.LV_R_GLU are optional in
+    # module_aglu_L221.land_input_1 when processing L221.LN1_ValueLogit
+    # where a shadow rental profit for unmanaged land is defined
 
     # Capital stock and cost shares ----
     if(!is.null(GTAPv10_baseview_SF01_VFA) && !is.null(GTAPv10_basedata_VKB_SAVE_VDEP)) {

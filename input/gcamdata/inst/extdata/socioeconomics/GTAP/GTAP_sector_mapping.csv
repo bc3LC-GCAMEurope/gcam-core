@@ -1,4 +1,4 @@
-# File: GTAP_sector_aggregation_mapping.csv
+# File: GTAP_sector_mapping.csv
 # Title: GTAP_Power to aggregated GCAM sector names
 # Units: NA
 # Description: Maps sectors in GTAP_Power (VFA items and CGDS) to GCAM _macro sectors
