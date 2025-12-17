@@ -48,7 +48,8 @@ module_aglu_L100.FAO_SUA_PrimaryEquivalent <- function(command, ...) {
       "FAO_AgArea_Kha_All",
       "FAO_Food_Macronutrient_All",
       "FAO_Food_MacronutrientRate_MaxValue",
-      "EuroSingleMarket_BiTrade_Ag")
+      "EuroSingleMarket_BiTrade_Ag_crops",
+      "EuroSingleMarket_BiTrade_Ag_noncrops")
 
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -131,7 +132,7 @@ module_aglu_L100.FAO_SUA_PrimaryEquivalent <- function(command, ...) {
 
     # Filter to only trade involving european single market regions to later define double armington market for ag
     # also to calculate inter-regional trade for any grouped ag regions
-    EuroSingleMarket_BiTrade_Ag <- GCAMFAOSTAT_BiTrade_regID %>%
+    EuroSingleMarket_BiTrade_Ag_crops <- GCAMFAOSTAT_BiTrade_regID %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       left_join_error_no_match(GCAM_region_names %>% rename(source_region = region),
                                by = c("source_GCAM_region_ID" = "GCAM_region_ID")) %>%
@@ -158,7 +159,42 @@ module_aglu_L100.FAO_SUA_PrimaryEquivalent <- function(command, ...) {
       na.omit() %>%
       group_by(import_trade_region, export_trade_region, GCAM_commodity, year) %>%
       summarise(value = sum(value)) %>%
-      ungroup
+      ungroup() %>%
+      filter( GCAM_commodity %in% aglu.TRADED_CROPS)
+
+    EuroSingleMarket_BiTrade_Ag_noncrops <- GCAMFAOSTAT_BiTrade_regID %>%
+      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
+      left_join_error_no_match(GCAM_region_names %>% rename(source_region = region),
+                               by = c("source_GCAM_region_ID" = "GCAM_region_ID")) %>%
+      left_join(ag_regions %>% select(region, trade_region), by = "region") %>%
+      left_join(ag_regions %>% select(source_region = region, source_trade_region = trade_region),
+                by = "source_region") %>%
+      filter(!is.na(trade_region) | !is.na(source_trade_region),
+             year %in% MODEL_BASE_YEARS) %>%
+      # group all non-single market regions into 1
+      # but then also need to adjust in future if trade_region and source_trade_region are different
+      mutate(import_trade_region = if_else(is.na(trade_region), "ROW", trade_region),
+             export_trade_region = if_else(is.na(source_trade_region), "ROW", source_region)) %>%
+      group_by(region, import_trade_region, export_trade_region, item_code, year) %>%
+      summarise(value = sum(value)) %>%
+      ungroup %>%
+      left_join_error_no_match(SUA_item_code_map, by = "item_code") %>%
+      left_join(Mapping_SUA_PrimaryEquivalent %>% distinct(GCAM_commodity, item = source_item), by = "item") %>%
+      left_join(Mapping_SUA_PrimaryEquivalent %>% distinct(GCAM_commodity, item = sink_item, extraction_rate_world2019),
+                by = "item") %>%
+      mutate(GCAM_commodity = if_else(is.na(GCAM_commodity.x), GCAM_commodity.y, GCAM_commodity.x)) %>%
+      select(-GCAM_commodity.x, -GCAM_commodity.y) %>%
+      tidyr::replace_na(list(extraction_rate_world2019 = 1)) %>%
+      mutate(value = value / extraction_rate_world2019) %>%
+      na.omit() %>%
+      group_by(region, import_trade_region, export_trade_region, GCAM_commodity, year) %>%
+      summarise(value = sum(value)) %>%
+      ungroup() %>%
+      filter( GCAM_commodity %in% aglu.TRADED_MEATS) %>%
+      mutate(region = if_else(import_trade_region == "ROW", "ROW", region)) %>%
+      group_by(region, import_trade_region, export_trade_region, GCAM_commodity, year) %>%
+      summarise(value = sum(value)) %>%
+      ungroup()
 
     # SUA has fewer items and years than the bilateral data set and in addition
     # there are some small discrepancies zero import/export in SUA vs tiny amounts of trade
