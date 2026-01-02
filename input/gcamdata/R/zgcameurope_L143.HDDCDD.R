@@ -125,10 +125,10 @@ module_gcameurope_L143.HDDCDD <- function(command, ...) {
     }
 
     # Extend population data to all years
-    iso_list <- tibble(iso = Pop_thous_Scen_ctry_Y$iso %>% unique())
+    iso_list <- tibble(iso = L100.Pop_thous_Scen_ctry_Y$iso %>% unique())
     all_years <- tibble(year = seq(min(HISTORICAL_YEARS), max(FUTURE_YEARS)))
     GCAM3_population_df <- repeat_add_columns(iso_list, all_years) %>%
-      left_join(Pop_thous_Scen_ctry_Y, by = c("iso", "year")) %>%
+      left_join(L100.Pop_thous_Scen_ctry_Y, by = c("iso", "year")) %>%
       group_by(iso) %>%
       mutate(population = approx_fun(year, population)) %>%
       ungroup()
