@@ -18,6 +18,7 @@ module_socio_L100.GTAP <- function(command, ...) {
 
   MODULE_INPUTS <-
     c(FILE = "common/iso_GCAM_regID",
+      FILE = "common/GCAM32_to_EU",
       FILE = "common/GCAM_region_names",
       FILE = "socioeconomics/GTAP/GTAP_region_mapping",
       FILE = "socioeconomics/GTAP/GTAP_sector_mapping",
@@ -120,7 +121,36 @@ module_socio_L100.GTAP <- function(command, ...) {
 
     } else {
       # If missing source GTAP data, prebuilt data is read here
-      L100.GTAP_capital_stock <- extract_prebuilt_data("L100.GTAP_capital_stock")
+      L100.GTAP_capital_stock <- extract_prebuilt_data("L100.GTAP_capital_stock") %>%
+        # fix GCAM-Europe regions
+        mutate(region_GCAM = if_else(region_GCAM == 'Europe_Non_EU' & region_GTAP == 'xee',
+                                    'Moldova',region_GCAM)) %>%
+        mutate(region_GCAM = if_else(region_GCAM == 'European Free Trade Association' & region_GTAP == 'xef',
+                                    'Iceland',region_GCAM)) %>%
+        mutate(region_GCAM = if_else(region_GCAM == 'Russian Federation' & region_GTAP == 'rus',
+                                    'Russia',region_GCAM))
+
+      # XER regions
+      L100.GTAP_capital_stock_xer <- L100.GTAP_capital_stock %>%
+        filter(region_GTAP == 'xer')
+
+      L100.GTAP_capital_stock <- L100.GTAP_capital_stock %>%
+        filter(region_GTAP != 'xer') %>%
+        rbind(L100.GTAP_capital_stock_xer %>% mutate(region_GCAM = 'Bosnia and Herzegovina'),
+              L100.GTAP_capital_stock_xer %>% mutate(region_GCAM = 'Macedonia'),
+              L100.GTAP_capital_stock_xer %>% mutate(region_GCAM = 'Serbia and Montenegro')
+        ) %>%
+
+      # EU-12 & EU-15 regions
+        left_join(GCAM32_to_EU %>%
+                    select(GCAMEU_region, region_GCAM = GCAM32_region, region_GTAP = iso) %>%
+                    filter(region_GCAM %in% c('EU-12','EU-15','Europe_Non_EU','European Free Trade Association')),
+                  by = c('region_GCAM','region_GTAP'), relationship = 'many-to-many') %>%
+
+      # clean
+        mutate(region_GCAM = if_else(!is.na(GCAMEU_region), GCAMEU_region, region_GCAM)) %>%
+        select(-GCAMEU_region)
+
     }
 
 

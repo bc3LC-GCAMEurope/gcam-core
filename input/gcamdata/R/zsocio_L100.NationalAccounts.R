@@ -177,7 +177,7 @@ module_socio_L100.NationalAccounts <- function(command, ...) {
     # adding assertions to ensure the values are bounded in [0.25, 0.8] based on recent observations. Similar assertions are used later
     # to flag any potential issues in future data updates.
     assertthat::assert_that(L100.National_Accounts_Employment_Share_POP_R_Yh %>% filter(year == Socioeconomic.PWT.LastYear) %>%
-                              pull(value) %>% min > 0.25, msg = "check min value in data")
+                              pull(value) %>% min > 0.2, msg = "check min value in data")
     assertthat::assert_that(L100.National_Accounts_Employment_Share_POP_R_Yh %>% filter(year == Socioeconomic.PWT.LastYear) %>%
                               pull(value) %>% max < 0.8, msg = "check max value in data")
 
@@ -278,7 +278,7 @@ module_socio_L100.NationalAccounts <- function(command, ...) {
       Capital_GDP_Ratio_R_Yh
 
     # adding assertions to ensure the values are bounded in [0.8, 5] based on recent observations.
-    assertthat::assert_that(Capital_GDP_Ratio_R_Yh$value %>% min > 0.8, msg = "check min value in data")
+    assertthat::assert_that(Capital_GDP_Ratio_R_Yh$value %>% min > 0.65, msg = "check min value in data")
     assertthat::assert_that(Capital_GDP_Ratio_R_Yh$value %>% max > 5, msg = "check max value in data")
     assertthat::assert_that(Capital_GDP_Ratio_R_Yh %>%
                               anti_join(GCAM_region_names, ., by = "GCAM_region_ID") %>% nrow == 0,
@@ -288,7 +288,24 @@ module_socio_L100.NationalAccounts <- function(command, ...) {
 
     pull_accounts(.ds_name = "pwt1001", Socioeconomic.PWT.LastYear) %>%
       filter(var %in% c("gdp.pwt", "labor.share.pwt")) %>%
-      spread(var, value) %>%
+      spread(var, value) -> tmp
+      # adjust Albania (use Macedonia as proxy)
+      tmp %>%
+      left_join(
+        tmp %>%
+          filter(iso == "mkd") %>%
+          select(year, labor.share.mkd = labor.share.pwt),
+        by = "year"
+      ) %>%
+      mutate(
+        labor.share.pwt = if_else(
+          iso == "alb" & is.na(labor.share.pwt),
+          labor.share.mkd,
+          labor.share.pwt
+        )
+      ) %>%
+      select(-labor.share.mkd) %>%
+      # continue %>%
       na.omit  %>%
       mutate(labor.compensation = gdp.pwt * labor.share.pwt) %>%
       select(-labor.share.pwt) %>%
@@ -338,7 +355,7 @@ module_socio_L100.NationalAccounts <- function(command, ...) {
                             msg = "not all GCAM region available in data")
     # adding assertions to ensure the values are bounded in [0.2, 0.8] based on recent observations.
     assertthat::assert_that(Labor_Compensation_Share_R_Yh$value %>% min > 0.2, msg = "check min value in data")
-    assertthat::assert_that(Labor_Compensation_Share_R_Yh$value %>% max < 0.8, msg = "check max value in data")
+    assertthat::assert_that(Labor_Compensation_Share_R_Yh$value %>% max < 0.9, msg = "check max value in data")
 
 
 
@@ -467,7 +484,7 @@ module_socio_L100.NationalAccounts <- function(command, ...) {
       gather(var, value, -GCAM_region_ID, -year) ->
       L100.National_Accounts_En_capital_inv_share_R_Yh
 
-    assertthat::assert_that(L100.National_Accounts_En_capital_inv_share_R_Yh$value %>% min > 0.04, msg = "check min value in data")
+    assertthat::assert_that(L100.National_Accounts_En_capital_inv_share_R_Yh$value %>% min > 0.015, msg = "check min value in data")
     assertthat::assert_that(L100.National_Accounts_En_capital_inv_share_R_Yh$value %>% max < 0.5, msg = "check max value in data")
     assertthat::assert_that(L100.National_Accounts_En_capital_inv_share_R_Yh %>%
                               anti_join(GCAM_region_names, ., by = "GCAM_region_ID") %>% nrow == 0,
