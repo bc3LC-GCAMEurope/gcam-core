@@ -42,8 +42,7 @@ module_gcameurope_L2321.cement <- function(command, ...) {
              "L1321.out_Mt_R_cement_Yh_EUR",
              "L1321.IO_GJkg_R_cement_F_Yh_EUR",
              "L1321.in_EJ_R_cement_F_Y_EUR",
-             "L101.Pop_thous_GCAM3_R_Y",
-             "L102.pcgdp_thous90USD_GCAM3_R_Y",
+             "L101.Pop_thous_Scen_R_Y",
              "L102.pcgdp_thous90USD_Scen_R_Y"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L2321.Supplysector_cement_EUR",
@@ -91,8 +90,7 @@ module_gcameurope_L2321.cement <- function(command, ...) {
     L1321.IO_GJkg_R_cement_F_Yh_EUR <- get_data(all_data, "L1321.IO_GJkg_R_cement_F_Yh_EUR", strip_attributes = TRUE)
     L1321.in_EJ_R_cement_F_Y_EUR <- get_data(all_data, "L1321.in_EJ_R_cement_F_Y_EUR", strip_attributes = TRUE)
     A321.inc_elas_output <- get_data(all_data, "socioeconomics/A321.inc_elas_output", strip_attributes = TRUE)
-    L101.Pop_thous_GCAM3_R_Y <- get_data(all_data, "L101.Pop_thous_GCAM3_R_Y")
-    L102.pcgdp_thous90USD_GCAM3_R_Y <- get_data(all_data, "L102.pcgdp_thous90USD_GCAM3_R_Y")
+    L101.Pop_thous_Scen_R_Y <- get_data(all_data, "L101.Pop_thous_Scen_R_Y")
     L102.pcgdp_thous90USD_Scen_R_Y <- get_data(all_data, "L102.pcgdp_thous90USD_Scen_R_Y")
 
     # ===================================================
@@ -389,10 +387,7 @@ module_gcameurope_L2321.cement <- function(command, ...) {
 
     # L2321.IncomeElasticity_cement_scen: income elasticity of cement (scenario-specific)
     # First, calculate the per-capita GDP pathways of every GDP scenario and combine
-    L102.pcgdp_thous90USD_GCAM3_R_Y %>%
-      # Combine GCAM 3.0 with the SSPs, and subset only the relevant years
-      mutate(scenario = "GCAM3") %>%
-      bind_rows(L102.pcgdp_thous90USD_Scen_R_Y) %>%
+    L102.pcgdp_thous90USD_Scen_R_Y %>%
       filter(year %in% c(MODEL_FINAL_BASE_YEAR, MODEL_FUTURE_YEARS)) %>%
       # Per-capita GDP ratios, which are used in the equation for demand growth
       group_by(GCAM_region_ID, scenario) %>%
@@ -413,7 +408,7 @@ module_gcameurope_L2321.cement <- function(command, ...) {
       left_join_error_no_match(GCAM_region_names, by = 'GCAM_region_ID') %>%
       mutate(year = MODEL_FINAL_BASE_YEAR) %>%
       left_join_error_no_match(L2321.BaseService_cement_EUR, by = c("year", "region")) %>%
-      left_join_error_no_match(L101.Pop_thous_GCAM3_R_Y, by = c("year", "GCAM_region_ID")) %>%
+      left_join_error_no_match(L101.Pop_thous_Scen_R_Y, by = c("year", "GCAM_region_ID")) %>%
       mutate(value = base.service * CONV_MIL_THOUS / value) %>%
       select(-base.service, -energy.final.demand) ->
       L2321.Output_cement # intermediate tibble

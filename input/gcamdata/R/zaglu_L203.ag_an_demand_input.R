@@ -44,7 +44,7 @@ module_aglu_L203.ag_an_demand_input <- function(command, ...) {
       "L109.an_ALL_Mt_R_C_Y",
       "L110.For_ALL_bm3_R_Y",
       "L106.income_distributions",
-      "L201.Pop_SSP2",
+      "L201.Pop_Scen",
       FILE = "gcam-europe/mappings/ag_regions")
 
   MODULE_OUTPUTS <-
@@ -463,8 +463,8 @@ module_aglu_L203.ag_an_demand_input <- function(command, ...) {
 
     # Population
     # Separate by income group
-    L201.Pop_SSP2 %>%
-      filter(year %in% MODEL_BASE_YEARS) %>%
+    L201.Pop_Scen %>%
+      filter(year %in% MODEL_BASE_YEARS, scenario == 'SSP2') %>%
       left_join(L106.income_distributions, by = c("year", "region")) %>%
       select(-subregional.income.share) %>%
       # Convert from thous people to total people to later calculate per capita results

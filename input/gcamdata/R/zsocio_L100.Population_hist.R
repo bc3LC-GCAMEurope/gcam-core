@@ -19,7 +19,7 @@ module_socio_L100.Population_hist <- function(command, ...) {
   MODULE_INPUTS <-
     c(FILE = "socioeconomics/POP/iso_ctry_Maddison",
       FILE = "socioeconomics/POP/Maddison_population",
-      FILE = "socioeconomics/SSP/SSP_database_2024",
+      FILE = "socioeconomics/SSP/SSP_database_2025",
       FILE = "socioeconomics/SSP/iso_SSP_regID",
       FILE = "socioeconomics/POP/UN_popTot",
       FILE = "gcam-europe/A01.popgdp_EUR",
@@ -274,7 +274,7 @@ module_socio_L100.Population_hist <- function(command, ...) {
     # Second, generate ratios of future population to base year for all SSPs. The ratios will be applied to the historical year populations so there are no jumps/inconsistencies.
 
     # use the IIASA-WiC POP model from the SSP database; IIASA-WiC is the official SSP population data set
-    SSP_database_2024 %>%
+    SSP_database_2025 %>%
       # make variable names lower case
       dplyr::rename_all(tolower) %>%
       # remove aggregated regions

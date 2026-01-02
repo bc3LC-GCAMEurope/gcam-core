@@ -1,36 +1,7 @@
-# Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
-
-#' module_socio_L102.GDP
-#'
-#' Prepare historical and future GDP time series.  On the historical side, this
-#' amounts to aggregating country-level GDP to GCAM regions.  On the future side
-#' we create a time series for each of a variety of future scenarios.  The
-#' outputs include GDP, pcGDP, and the PPP-MER conversion factor, all tabulated
-#' by GCAM region.
-#'
-#' The scenarios generated include the SSPs and the gSSPs (SSPs modified by
-#' near-term IMF projections).  GDP outputs are in millions of 1990 USD, Market
-#' Exchange Rate (measured in 2010) is used for foreign currency.  Per-capita
-#' values are in thousands of 1990 USD.
-#'
-#' @param command API command to execute
-#' @param ... other optional parameters, depending on command
-#' @return Depends on \code{command}: either a vector of required inputs,
-#' a vector of output names, or (if \code{command} is "MAKE") all
-#' the generated outputs: \code{L102.gdp_mil90usd_Scen_R_Y},
-#' \code{L102.pcgdp_thous90USD_Scen_R_Y}, \code{L102.pcgdp_thous90USD_ctry_Yh},
-#' \code{L102.PPP_MER_R}.
-#' @importFrom assertthat assert_that
-#' @importFrom dplyr arrange bind_rows distinct filter full_join if_else intersect group_by left_join mutate one_of select summarise transmute
-#' @importFrom tidyr complete gather nesting replace_na
-#' @author RPL March 2017
 module_socio_L102.GDP <- function(command, ...) {
 
   MODULE_INPUTS <-
     c(FILE = "common/iso_GCAM_regID",
-      FILE = "socioeconomics/SSP/SSP_database_2024",
-      FILE = "socioeconomics/SSP/iso_SSP_regID",
-      FILE = "socioeconomics/GDP/GCAM3_GDP",
       FILE = "gcam-europe/A01.popgdp_EUR",
       FILE = "gcam-europe/mappings/geo_to_iso_map",
       "L100.gdp_mil90usd_ctry_Yh",
@@ -91,33 +62,7 @@ module_socio_L102.GDP <- function(command, ...) {
     ## Step 2: Prepare future GDP projections ----
     # Note that the base year or PPP/MER doesn't matter here
     # We will apply growth rates to historical values
-
-    SSP_database_2024 %>%
-      # make variable names lower case
-      dplyr::rename_all(tolower) %>%
-      # remove aggregated regions
-      filter(!grepl("\\(|World", region)) %>%
-      filter(model == 'OECD ENV-Growth 2023' & variable == 'GDP|PPP') %>%
-      left_join_error_no_match(
-        iso_SSP_regID %>% distinct(iso, region = ssp_country_name),
-        by = "region") %>%
-      gather_years()->
-      SSP_gdp_0
-
-    # Using the Historical Reference scenario to fill history of SSPs
-    SSP_gdp_0 %>%
-      filter(scenario != "Historical Reference") %>%
-      left_join(
-        SSP_gdp_0 %>% filter(scenario == "Historical Reference") %>% select(-scenario) %>%
-          rename(hist = value),
-        by = c("model", "region", "variable", "unit", "iso", "year")
-      ) %>%
-      # new ssp data starts 2020 (socioeconomics.SSP_DB_BASEYEAR)
-      mutate(value = if_else(year < socioeconomics.SSP_DB_BASEYEAR, hist, value)) %>%
-      select(iso, scenario, year, gdp = value) ->
-      gdp_bilusd_ctry_Yfut_0
-
-    gdp_bilusd_ctry_Yfut_0 %>%
+    L100.GDP_bilusd_SSP_ctry_Yfut_raw %>%
       left_join_error_no_match(iso_region32_lookup, by = 'iso') %>%
       group_by(scenario, GCAM_region_ID, year) %>%
       summarize(gdp = sum(gdp, na.rm = T)) %>%
@@ -134,12 +79,11 @@ module_socio_L102.GDP <- function(command, ...) {
 
     # all regions currently GDP up to 2023 (FAOSTAT)
     # SSP scenarios use 2025-2100 growth rate from SSP
-    # gSSP scenarios use 2023-2100 growth rate from SSP
 
     # update annual growth rates to growth rates with respect to 2020
-    A01.gdp_gr_EUR <- gdp_bilusd_rgn_Yfut %>%
+    A01.gdp_gr_EUR <- gdp_bilusd_rgn_Yfut %>% dplyr::filter(GCAM_region_ID == '28') %>%
       filter_regions_europe(region_ID_mapping = iso_GCAM_regID) %>%
-      left_join(A01.popgdp_EUR %>%
+      left_join(A01.popgdp_EUR %>% dplyr::filter(GCAM_region_ID == '28') %>%
                   select(GCAM_region_ID, scenario, year, gdp_gr),
                 by = c('scenario','GCAM_region_ID','year')) %>%
       group_by(scenario, GCAM_region_ID) %>%
@@ -169,7 +113,7 @@ module_socio_L102.GDP <- function(command, ...) {
     GDP_Adj_Moving_Average_GCAM_region_ID <-
       iso_GCAM_regID$GCAM_region_ID[iso_GCAM_regID$iso %in% socioeconomics.GDP_ADJ_MOVING_AVERAGE_ISO]
 
-    # use socioeconomics.GDP_ADG_MOVING_AVERAGE_DURATION (15-year) moving average for South Amer North (25)
+    # use socioeconomics.GDP_Adj_Moving_Average_Duration (15-year) moving average for South Amer North (25)
     gdp.mil90usd.scen.rgn.yr %>%
       filter(GCAM_region_ID %in% GDP_Adj_Moving_Average_GCAM_region_ID) %>%
       group_by(GCAM_region_ID, scenario) %>%
@@ -184,7 +128,7 @@ module_socio_L102.GDP <- function(command, ...) {
     GDP_Adj_No_Neg_Growth_GCAM_region_ID <-
       iso_GCAM_regID$GCAM_region_ID[iso_GCAM_regID$iso %in% socioeconomics.GDP_ADJ_NO_NEG_GROWTH_ISO]
 
-    # No negative after socioeconomics.GDP_ADJ_NO_NEG_GROWTH_YEAR (2025)
+    # No negative after socioeconomics.GDP_Adj_No_Neg_Growth_Year (2025)
     gdp.mil90usd.scen.rgn.yr_1 %>%
       filter(GCAM_region_ID %in% GDP_Adj_No_Neg_Growth_GCAM_region_ID,
              year >= socioeconomics.GDP_ADJ_NO_NEG_GROWTH_YEAR) %>%
@@ -205,46 +149,25 @@ module_socio_L102.GDP <- function(command, ...) {
       gdp.mil90usd.scen.rgn.yr
 
 
-    # *******************----
-    # Derive ppp.mer.rgn ----
-    ## Construct a table of population by scenario, region, and year. We have a
-    ## table of historical population, and a table of future population by
-    ## scenario, both in wide form. Convert to long form and filter to the years
-    ## we need. Add a scenario column to historical years, and combine the
-    ## whole thing into a single table.
-    pop.thous.fut <-
-      rename(L101.Pop_thous_SSP_R_Yfut, population = value) %>%
-      filter(year %in% FUTURE_YEARS)
-    pop.thous.hist <-
-      rename(L101.Pop_thous_R_Yh, population = value) %>%
-      filter(year %in% HISTORICAL_YEARS) %>%
-      tidyr::crossing(scenario = unique(pop.thous.fut[['scenario']]))
-    pop.thous.scen.rgn.yr <-
-      bind_rows(pop.thous.hist, pop.thous.fut) %>%
-      mutate(year = as.integer(year),
-             population = as.numeric(population)) %>%
-      select(scenario, GCAM_region_ID, year, population)
 
-    # TODELETE-------------------
     # 2 create L102.pcgdp_thous90USD_ctry_Yh ----
 
-    # L102.pcgdp_thous90USD_ctry_Yh <-
-    #   L100.gdp_mil90usd_ctry_Yh %>%
-    #   rename(gdp = value) %>%
-    #   # left join (not LJENM) here as NA expected (mainly due to tiny island area diff)
-    #   left_join(L100.Pop_thous_ctry_Yh %>%
-    #               rename(population = value),
-    #     by = c("iso", "year")) %>%
-    #   filter(year <= max(MODEL_BASE_YEARS)) %>%
-    #   mutate(value = gdp / population) %>%
-    #   select(iso, year, value) %>%
-    #   filter(!is.na(value))
+    L102.pcgdp_thous90USD_ctry_Yh <-
+      L100.gdp_mil90usd_ctry_Yh %>%
+      rename(gdp = value) %>%
+      # left join (not LJENM) here as NA expected (mainly due to tiny island area diff)
+      left_join(L100.Pop_thous_ctry_Yh %>%
+                  rename(population = value),
+                by = c("iso", "year")) %>%
+      filter(year <= max(MODEL_BASE_YEARS)) %>%
+      mutate(value = gdp / population) %>%
+      select(iso, year, value) %>%
+      filter(!is.na(value))
 
-    # L101.Pop_thous_Scen_R_Y %>%
-    #   filter(year >= min(HISTORICAL_YEARS)) %>%
-    #   rename(population = value) ->
-    #   pop.thous.scen.rgn.yr
-    # END TODELETE-------------------
+    L101.Pop_thous_Scen_R_Y %>%
+      filter(year >= min(HISTORICAL_YEARS)) %>%
+      rename(population = value) ->
+      pop.thous.scen.rgn.yr
 
     ## calculate per-capita GDP.  This is another final output
     pcgdp.thous90usd.scen.rgn.yr <-
@@ -271,20 +194,8 @@ module_socio_L102.GDP <- function(command, ...) {
     # PPP dollar year is SSP data base dollar year
     PPP.dollar.year <- 2017
 
-    ## The future data is given by SSP scenario, but the final table is scenario
-    ## independent, as it should be, since this base year is meant to be a
-    ## historical year.  Likewise, the GDP in the PPP/MER base year should also
-    ## be scenario-independent, and mostly it is, except for the region containing
-    ## the Palestinian Territories, which has four slightly different values across
-    ## the 5 SSPs. (It's SSP 2 and 4 that are the same).  The value
-    ## actually used in the old data system is the one for SSP1, so that's the
-    ## one we'll use here. Arguably we should average the values over the 5
-    ## scenarios, but the differences are only 1 part in 10^4, so we can just
-    ## let it slide.
-
     ppp.rgn <-
       gdp_bilusd_rgn_Yfut %>%
-      ungroup %>%
       # any SSP is fine here as historical year is used
       filter(year == PPP.MER.baseyr, scenario == 'SSP1') %>%
       # convert to 1990 $
@@ -307,8 +218,6 @@ module_socio_L102.GDP <- function(command, ...) {
              PPP_MER = PPP / MER) ->
       ppp.mer.rgn
 
-
-    # ===================================================
     # Produce outputs ----
     gdp.mil90usd.scen.rgn.yr %>%
       ungroup %>%

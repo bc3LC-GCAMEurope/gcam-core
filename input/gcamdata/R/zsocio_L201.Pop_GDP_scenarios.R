@@ -23,8 +23,6 @@ module_socio_L201.Pop_GDP_scenarios <- function(command, ...) {
       FILE = "common/GCAM32_to_EU",
       "L101.Pop_thous_R_Yh",
       "L101.Pop_thous_SSP_R_Yfut",
-      "L101.Pop_thous_GCAM3_R_Y",
-      "L102.gdp_mil90usd_GCAM3_R_Y",
       "L101.Pop_thous_Scen_R_Y",
       "L102.gdp_mil90usd_Scen_R_Y",
       "L102.PPP_MER_R",
@@ -43,10 +41,9 @@ module_socio_L201.Pop_GDP_scenarios <- function(command, ...) {
              FILE = "common/GCAM32_to_EU",
              "L101.Pop_thous_R_Yh",
              "L101.Pop_thous_SSP_R_Yfut",
-             "L102.gdp_mil90usd_Scen_R_Y",
              "L102.PPP_MER_R",
-             "L101.Pop_thous_GCAM3_R_Y",
-             "L102.gdp_mil90usd_GCAM3_R_Y"))
+             "L101.Pop_thous_Scen_R_Y",
+             "L102.gdp_mil90usd_Scen_R_Y"))
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(MODULE_OUTPUTS)
