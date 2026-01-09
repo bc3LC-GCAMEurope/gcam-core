@@ -107,7 +107,7 @@ module_socio_L100.NationalAccounts <- function(command, ...) {
       # complete years
       # note that there was no Taiwan after 2000
       # no Russia or Ukraine before 1990
-      # we simply filld them be extending the data
+      # we simply fill them be extending the data
       complete(GCAM_region_ID, year = tidyr::full_seq(year, 1) ) %>%
       fill(everything(), .direction = "downup") %>%
       ungroup %>%

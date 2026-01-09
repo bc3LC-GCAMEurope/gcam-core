@@ -160,7 +160,7 @@ CONV_T_MT           <- 1e-6           # t to Mt
 CONV_THA_KGM2       <- 0.1            # tons C/ha -> kg C/m2
 CONV_TON_MEGATON    <- 1e-6
 CONV_COALTONNE_GJ   <- 34.12          # https://www.convertunits.com/from/tonne+of+coal+equivalent/to/gigajoule  [Accessed 4/7/2023]
-
+CONV_TONNE_GJ_RFO   <- 40.87          # tons to GJ residual fuel oil
 
 # Time
 CONV_YEAR_HOURS <- 24 * 365.25

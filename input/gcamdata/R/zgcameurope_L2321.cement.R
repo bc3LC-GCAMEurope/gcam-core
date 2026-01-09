@@ -13,13 +13,12 @@
 #' \code{L2321.SubsectorInterp_cement_EUR}, \code{L2321.StubTech_cement_EUR}, \code{L2321.GlobalTechShrwt_cement_EUR}, \code{L2321.GlobalTechCoef_cement_EUR},
 #' \code{L2321.GlobalTechCost_cement_EUR}, \code{L2321.GlobalTechCapture_cement_EUR}, \code{L2321.StubTechProd_cement_EUR}, \code{L2321.StubTechCalInput_cement_heat_EUR},
 #' \code{L2321.StubTechCoef_cement_EUR}, \code{L2321.PerCapitaBased_cement_EUR}, \code{L2321.BaseService_cement_EUR}, \code{L2321.PriceElasticity_cement_EUR},
-#' \code{object}. The corresponding file in the
-#' original data system was \code{L2321.cement.R} (energy level2).
+#' \code{L2321.IncomeElasticity_cement_Scen_EUR}, \code{object}. The corresponding file in the original data system was \code{L2321.cement.R} (energy level2).
 #' @details The chunk provides final energy keyword, supplysector/subsector information, supplysector/subsector interpolation information, global technology share weight, global technology efficiency, global technology coefficients, global technology cost, price elasticity, stub technology information, stub technology interpolation information, stub technology calibrated inputs, and etc for cement sector.
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr arrange bind_rows distinct filter if_else group_by lag left_join mutate pull select
 #' @importFrom tidyr complete nesting
-#' @author LF October 2017
+#' @author CR 2026 Jan
 module_gcameurope_L2321.cement <- function(command, ...) {
 
   if(command == driver.DECLARE_INPUTS) {
@@ -65,7 +64,8 @@ module_gcameurope_L2321.cement <- function(command, ...) {
              "L2321.StubTechCoef_cement_EUR",
              "L2321.PerCapitaBased_cement_EUR",
              "L2321.BaseService_cement_EUR",
-             "L2321.PriceElasticity_cement_EUR"))
+             "L2321.PriceElasticity_cement_EUR",
+             "L2321.IncomeElasticity_cement_Scen_EUR"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -90,7 +90,7 @@ module_gcameurope_L2321.cement <- function(command, ...) {
     L1321.IO_GJkg_R_cement_F_Yh_EUR <- get_data(all_data, "L1321.IO_GJkg_R_cement_F_Yh_EUR", strip_attributes = TRUE)
     L1321.in_EJ_R_cement_F_Y_EUR <- get_data(all_data, "L1321.in_EJ_R_cement_F_Y_EUR", strip_attributes = TRUE)
     A321.inc_elas_output <- get_data(all_data, "socioeconomics/A321.inc_elas_output", strip_attributes = TRUE)
-    L101.Pop_thous_Scen_R_Y <- get_data(all_data, "L101.Pop_thous_Scen_R_Y")
+    L101.Pop_thous_Scen_R_Y <- get_data(all_data, "L101.Pop_thous_Scen_R_Y") %>% filter(scenario == 'SSP2') %>% select(-scenario)
     L102.pcgdp_thous90USD_Scen_R_Y <- get_data(all_data, "L102.pcgdp_thous90USD_Scen_R_Y")
 
     # ===================================================
@@ -100,7 +100,7 @@ module_gcameurope_L2321.cement <- function(command, ...) {
       remove.fraction <- minicam.non.energy.input <- input.cost <- PrimaryFuelCO2Coef.name <-
       PrimaryFuelCO2Coef <- calibration <- calOutputValue <- subs.share.weight <- region <-
       calibrated.value <- . <- scenario <- temp_lag <- base.service <- energy.final.demand <-
-      value.x <- value.y <- parameter <- year.x <- year.y <- NULL
+      value.x <- value.y <- parameter <- year.x <- year.y <- L2321.IncomeElasticity_cement_Scen_EUR <- NULL
 
     # ===================================================
     # 1. Perform computations
@@ -385,7 +385,7 @@ module_gcameurope_L2321.cement <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["PriceElasticity"]]) ->
       L2321.PriceElasticity_cement_EUR
 
-    # L2321.IncomeElasticity_cement_scen: income elasticity of cement (scenario-specific)
+    # L2321.IncomeElasticity_cement_Scen_EUR: income elasticity of cement (scenario-specific)
     # First, calculate the per-capita GDP pathways of every GDP scenario and combine
     L102.pcgdp_thous90USD_Scen_R_Y %>%
       filter(year %in% c(MODEL_FINAL_BASE_YEAR, MODEL_FUTURE_YEARS)) %>%
@@ -436,8 +436,30 @@ module_gcameurope_L2321.cement <- function(command, ...) {
         L2321.Output_cement
     }
 
+    # Now that we have cement output, we can back out the appropriate income elasticities
+    L2321.Output_cement %>%
+      filter(year %in% MODEL_FUTURE_YEARS) %>%
+      mutate(value = approx( x = A321.inc_elas_output[["pc.output_t"]],
+                             y = A321.inc_elas_output[["inc_elas"]],
+                             xout = value, rule = 2)[["y"]],
+             value = round(value, energy.DIGITS_INCELAS_IND)) %>%
+      rename(income.elasticity = value) %>%
+      mutate(energy.final.demand = A321.demand[["energy.final.demand"]]) ->
+      L2321.IncomeElasticity_cement_Scen_EUR # intermediate tibble
+
+
     # ===================================================
     # Produce outputs
+
+    L2321.IncomeElasticity_cement_Scen_EUR %>%
+      add_title(paste("Income elasticity of cement - SSPs")) %>%
+      add_units("Unitless") %>%
+      add_comments("First calculate cement output as the base-year cement output times the GDP ratio raised to the income elasticity") %>%
+      add_comments("Then back out the appropriate income elasticities from cement output") %>%
+      add_legacy_name("L2321.IncomeElasticity_cement_Scen_EUR") %>%
+      add_precursors("L101.Pop_thous_R_Yh", "L102.pcgdp_thous90USD_Scen_R_Y", "common/GCAM_region_names", "energy/A321.demand", "energy/calibrated_techs",
+                     "L1321.out_Mt_R_cement_Yh", "socioeconomics/A321.inc_elas_output") ->
+      L2321.IncomeElasticity_cement_Scen_EUR
 
     L2321.Supplysector_cement_EUR %>%
       add_title("Supply sector information for cement sector") %>%
@@ -633,7 +655,7 @@ module_gcameurope_L2321.cement <- function(command, ...) {
 
     return_data(L2321.Supplysector_cement_EUR, L2321.FinalEnergyKeyword_cement_EUR, L2321.SubsectorLogit_cement_EUR,
                 L2321.SubsectorShrwtFllt_cement_EUR, L2321.SubsectorInterp_cement_EUR,
-                L2321.StubTech_cement_EUR, L2321.GlobalTechShrwt_cement_EUR,
+                L2321.StubTech_cement_EUR, L2321.GlobalTechShrwt_cement_EUR, L2321.IncomeElasticity_cement_Scen_EUR,
                 L2321.GlobalTechCoef_cement_EUR, L2321.GlobalTechCost_cement_EUR, L2321.GlobalTechCapture_cement_EUR,
                 L2321.StubTechProd_cement_EUR, L2321.StubTechCalInput_cement_heat_EUR, L2321.StubTechCoef_cement_EUR,
                 L2321.PerCapitaBased_cement_EUR, L2321.BaseService_cement_EUR,L2321.GlobalTechShutdown_en_EUR,

@@ -1,6 +1,6 @@
 # Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
 
-#' module_socio_bld_agg_xml
+#' module_socio_IncomeElasticity_xml
 #'
 #' Construct XML data structure for \code{bld_agg.xml} and all the SSP ones as well.
 #'
@@ -64,6 +64,8 @@ module_socio_IncomeElasticity_xml <- function(command, ...) {
         add_xml_data(L2327.IncomeElasticity_paper_Scen %>% filter(scenario == iei), "IncomeElasticity") %>%
         ## Other ind ----
         add_xml_data(L232.IncomeElasticity_ind_Scen %>% filter(scenario == iei), "IncomeElasticity") %>%
+        ## remove non EUR regions
+        remove_regions_xml(gcameurope.EUROSTAT_COUNTRIES) %>%
         add_precursors(
           "L2321.IncomeElasticity_cement_Scen",
           "L2323.IncomeElasticity_iron_steel_Scen",

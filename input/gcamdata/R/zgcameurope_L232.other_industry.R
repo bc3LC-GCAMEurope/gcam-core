@@ -13,7 +13,7 @@
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr anti_join arrange bind_rows distinct filter if_else group_by lag left_join mutate right_join select summarise
 #' @importFrom tidyr complete nesting
-#' @author LF October 2017
+#' @author CR 2026 Jan
 module_gcameurope_L232.other_industry <- function(command, ...) {
   GLOBAL_TECH_COGEN <- c("L232.GlobalTechEff_ind",
                          "L232.GlobalTechShrwt_ind",
@@ -520,8 +520,6 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
     # Produce outputs
 
     L232.IncomeElasticity_ind_Scen_EUR %>%
-      filter(scenario == ieo) %>%
-      select(LEVEL2_DATA_NAMES[["IncomeElasticity"]]) %>%
       add_title("Income elasticity of other industry - SSPs") %>%
       add_units("Unitless") %>%
       add_comments("First calculate industrial output as the base-year industrial output times the GDP ratio raised to the income elasticity") %>%
