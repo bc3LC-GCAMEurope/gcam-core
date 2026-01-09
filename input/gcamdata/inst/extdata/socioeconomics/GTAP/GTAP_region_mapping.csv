@@ -58,43 +58,46 @@ jam,Jamaica,Central America and Caribbean
 pri,Puerto Rico,USA
 tto,Trinidad and Tobago,Central America and Caribbean
 xcb,Caribbean,Central America and Caribbean
-aut,Austria,EU-15
-bel,Belgium,EU-15
-bgr,Bulgaria,EU-12
-hrv,Croatia,Europe_Non_EU
-cyp,Cyprus,EU-12
-cze,Czech Republic,EU-12
-dnk,Denmark,EU-15
-est,Estonia,EU-12
-fin,Finland,EU-15
-fra,France,EU-15
-deu,Germany,EU-15
-grc,Greece,EU-15
-hun,Hungary,EU-12
-irl,Ireland,EU-15
-ita,Italy,EU-15
-lva,Latvia,EU-12
-ltu,Lithuania,EU-12
-lux,Luxembourg,EU-15
-mlt,Malta,EU-12
-nld,Netherlands,EU-15
-pol,Poland,EU-12
-prt,Portugal,EU-15
-rou,Romania,EU-12
-svk,Slovakia,EU-12
-svn,Slovenia,EU-12
-esp,Spain,EU-15
-swe,Sweden,EU-15
-gbr,United Kingdom,EU-15
-che,Switzerland,European Free Trade Association
-nor,Norway,European Free Trade Association
-xef,Rest of EFTA,European Free Trade Association
-alb,Albania,Europe_Non_EU
-blr,Belarus,Europe_Non_EU
+aut,Austria,Austria
+bel,Belgium,Belgium
+bgr,Bulgaria,Bulgaria
+hrv,Croatia,Croatia
+cyp,Cyprus,Cyprus
+cze,Czech Republic,Czech Republic
+dnk,Denmark,Denmark
+est,Estonia,Estonia
+fin,Finland,Finland
+fra,France,France
+deu,Germany,Germany
+grc,Greece,Greece
+hun,Hungary,Hungary
+irl,Ireland,Ireland
+ita,Italy,Italy
+lva,Latvia,Latvia
+ltu,Lithuania,Lithuania
+lux,Luxembourg,Luxembourg
+mlt,Malta,Malta
+nld,Netherlands,Netherlands
+pol,Poland,Poland
+prt,Portugal,Portugal
+rou,Romania,Romania
+svk,Slovakia,Slovakia
+svn,Slovenia,Slovenia
+esp,Spain,Spain
+swe,Sweden,Sweden
+gbr,United Kingdom,UK
+che,Switzerland,Switzerland
+nor,Norway,Norway
+xef,Rest of EFTA,Iceland
+alb,Albania,Albania
+blr,Belarus,Belarus
 rus,Russian Federation,Russia
 ukr,Ukraine,Ukraine
-xee,Rest of Eastern Europe,Europe_Non_EU
-xer,Rest of Europe,Europe_Non_EU
+xee,Rest of Eastern Europe,Moldova
+xer,Rest of Europe,Bosnia and Herzegovina
+xer,Rest of Europe,North Macedonia
+xer,Rest of Europe,Macedonia
+xer,Rest of Europe,Serbia and Montenegro
 kaz,Kazakhstan,Central Asia
 kgz,Kyrgyzstan,Central Asia
 tjk,Tajikistan,Central Asia
@@ -110,7 +113,7 @@ kwt,Kuwait,Middle East
 omn,Oman,Middle East
 qat,Qatar,Middle East
 sau,Saudi Arabia,Middle East
-tur,Turkey,Europe_Non_EU
+tur,Turkey,Turkey
 are,United Arab Emirates,Middle East
 xws,Rest of Western Asia,Middle East
 egy,Egypt,Africa_Northern
