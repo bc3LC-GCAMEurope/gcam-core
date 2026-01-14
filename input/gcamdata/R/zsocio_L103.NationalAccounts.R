@@ -252,7 +252,7 @@ module_socio_L103.NationalAccounts <- function(command, ...) {
       add_title("National accounts data: employment share across SSPs") %>%
       add_units("shares") %>%
       add_comments("employment over population; derived by stitching PWT and SSP and assuming fixed future participation and unemployment rates") %>%
-      add_legacy_name("LaborForceShare_Scen_R_Y") %>%
+      add_legacy_name("L103.LaborForceShare_Scen_R_Y") %>%
       add_precursors("L100.LaborForce_mil_SSP_ctry_Yfut_raw",
                      "L100.National_Accounts_Employment_Share_POP_R_Yh") ->
       L103.LaborForceShare_Scen_R_Y

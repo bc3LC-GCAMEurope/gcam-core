@@ -25,9 +25,10 @@ module_socio_L201.Pop_GDP_scenarios <- function(command, ...) {
       "L101.Pop_thous_SSP_R_Yfut",
       "L101.Pop_thous_Scen_R_Y",
       "L102.gdp_mil90usd_Scen_R_Y",
-      "L102.PPP_MER_R")
-  # ,
-  # "L103.LaborForceShare_Scen_R_Y"
+      "L102.PPP_MER_R",
+      "L103.LaborForceShare_Scen_R_Y")
+
+
 
   MODULE_OUTPUTS <-
     c("L201.GDP_Scen",
@@ -44,7 +45,8 @@ module_socio_L201.Pop_GDP_scenarios <- function(command, ...) {
              "L101.Pop_thous_SSP_R_Yfut",
              "L102.PPP_MER_R",
              "L101.Pop_thous_Scen_R_Y",
-             "L102.gdp_mil90usd_Scen_R_Y"))
+             "L102.gdp_mil90usd_Scen_R_Y",
+             "L103.LaborForceShare_Scen_R_Y"))
     return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(MODULE_OUTPUTS)
