@@ -86,18 +86,18 @@ module_socio_L103.NationalAccounts <- function(command, ...) {
              cons_scaler = cons_adj / cons) ->
       L103.National_Accounts_mil90usd_R_Yh_1_1
 
-    # # check adjustments in final base year
-    # assertthat::assert_that(
-    #   L103.National_Accounts_mil90usd_R_Yh_1_1 %>%
-    #     filter(year == MODEL_FINAL_BASE_YEAR) %>%
-    #     # assert imbal_rel and cons_scaler were small and
-    #     # trade imbal in base year < 5%  (it was ~1% in 2021)
-    #     # it is fine to be larger
-    #     filter(abs(imbal_rel - 1) < 0.05,
-    #            abs(cons_scaler - 1) < 0.05) %>%
-    #     nrow() == length(unique(L103.National_Accounts_mil90usd_R_Yh_1_1$GCAM_region_ID)),
-    #   msg = "The adjustments in trade or consumption in some regions were larger than the thredhold"
-    # )
+    # check adjustments in final base year
+    if(
+      L103.National_Accounts_mil90usd_R_Yh_1_1 %>%
+        filter(year == MODEL_FINAL_BASE_YEAR) %>%
+        # assert imbal_rel and cons_scaler were small and
+        # trade imbal in base year < 5%  (it was ~1% in 2021)
+        # it is fine to be larger
+        filter(abs(imbal_rel - 1) < 0.05,
+               abs(cons_scaler - 1) < 0.05) %>%
+        nrow() != length(unique(L103.National_Accounts_mil90usd_R_Yh_1_1$GCAM_region_ID))) {
+      cat("The adjustments in trade or consumption in some regions were larger than the thredhold")
+    }
 
     # generate other related variables
     # capital.net.export = -net.export
