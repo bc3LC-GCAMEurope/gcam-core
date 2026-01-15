@@ -97,7 +97,7 @@ module_socio_L100.NationalAccounts <- function(command, ...) {
         filter(year >= min(HISTORICAL_YEARS), year <= .lastyear) %>%
         select(any_of(names(rename_map))) %>%
         dplyr::rename_with(~ rename_map[.x], .cols = everything()) %>%
-        gather(var, value, -iso, -year) %>%
+        tidyr::gather(var, value, -iso, -year) %>%
         mutate(iso = tolower(iso))
     }
 
@@ -139,7 +139,7 @@ module_socio_L100.NationalAccounts <- function(command, ...) {
       complete(GCAM_region_ID, year = tidyr::full_seq(year, 1) ) %>%
       fill(everything(), .direction = "downup") %>%
       ungroup %>%
-      gather(var, value, -GCAM_region_ID, -year) %>%
+      tidyr::gather(var, value, -GCAM_region_ID, -year) %>%
       # calcualte shares
       group_by(GCAM_region_ID, year) %>%
       mutate(value = value / value [var == "ngdp.gmd"]) %>%
@@ -195,7 +195,7 @@ module_socio_L100.NationalAccounts <- function(command, ...) {
       ungroup %>%
       mutate(employed.share.pwt = emp.pwt / pop.pwt) %>%
       select(-emp.pwt, -pop.pwt) %>%
-      gather(var, value, employed.share.pwt)->
+      tidyr::gather(var, value, employed.share.pwt)->
       L100.National_Accounts_Employment_Share_POP_R_Yh
 
 
@@ -251,7 +251,7 @@ module_socio_L100.NationalAccounts <- function(command, ...) {
       ungroup %>%
       mutate(depreciation.rate.pwt = depreciation / capital.stock.pwt) %>%
       select(-capital.stock.pwt, -depreciation) %>%
-      gather(var, value, depreciation.rate.pwt)->
+      tidyr::gather(var, value, depreciation.rate.pwt)->
       L100.National_Accounts_Depreciation_Rate_R_Yh
 
     assertthat::assert_that(L100.National_Accounts_Depreciation_Rate_R_Yh$value %>% min > 0.01, msg = "check min value in data")
@@ -304,7 +304,7 @@ module_socio_L100.NationalAccounts <- function(command, ...) {
       ungroup %>%
       mutate(capital_GDP_ratio.pwt = capital.stock.pwt / gdp.pwt) %>%
       select(-capital.stock.pwt, -gdp.pwt) %>%
-      gather(var, value, capital_GDP_ratio.pwt)->
+      tidyr::gather(var, value, capital_GDP_ratio.pwt)->
       Capital_GDP_Ratio_R_Yh
 
     # adding assertions to ensure the values are bounded in [0.8, 5] based on recent observations.
@@ -364,7 +364,7 @@ module_socio_L100.NationalAccounts <- function(command, ...) {
       ungroup %>%
       mutate(labor.share.pwt = labor.compensation / gdp.pwt) %>%
       select(-labor.compensation, -gdp.pwt) %>%
-      gather(var, value, labor.share.pwt)->
+      tidyr::gather(var, value, labor.share.pwt)->
       Labor_Compensation_Share_R_Yh
 
     # Pakistan was missing; replace with India data
@@ -427,12 +427,12 @@ module_socio_L100.NationalAccounts <- function(command, ...) {
       mutate(capital.share.pwt = capital.reward / gdp.pwt,
              irr.pwt = capital.reward / capital.stock.pwt) %>%
       select(-capital.stock.pwt, -gdp.pwt, -capital.reward) %>%
-      gather(var, value, capital.share.pwt, irr.pwt)->
+      tidyr::gather(var, value, capital.share.pwt, irr.pwt)->
       Capital_Compensation_Share_R_Yh
 
-    # Pakistan was missing for both variables; replace with India data
-    if (Capital_Compensation_Share_R_Yh %>%
-        anti_join(GCAM_region_names, ., by = "GCAM_region_ID") %>% pull(region) == "Pakistan") {
+    # Pakistan and Albania are missing for both variables; replace with India and Croatia data
+    Capital_Compensation_Share_R_Yh <- bind_rows(
+      Capital_Compensation_Share_R_Yh,
 
       Capital_Compensation_Share_R_Yh %>%
         left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
@@ -440,13 +440,23 @@ module_socio_L100.NationalAccounts <- function(command, ...) {
         mutate(region = "Pakistan") %>%
         select(-GCAM_region_ID) %>%
         left_join_error_no_match(GCAM_region_names, by = "region") %>%
-        select(-region) %>%
-        # add back non Pakistan regions
-        bind_rows(Capital_Compensation_Share_R_Yh) ->
-        Capital_Compensation_Share_R_Yh
+        select(-region),
+
+      Capital_Compensation_Share_R_Yh %>%
+        left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
+        filter(region == "Croatia") %>%
+        mutate(region = "Albania") %>%
+        select(-GCAM_region_ID) %>%
+        left_join_error_no_match(GCAM_region_names, by = "region") %>%
+        select(-region)
+    )
+
+    miss_rgn <- Capital_Compensation_Share_R_Yh %>%
+      anti_join(GCAM_region_names, by = "GCAM_region_ID")
+
+    if (nrow(miss_rgn) != 0) {
+      stop("Error adjusting Capital Compensation shares")
     }
-
-
 
     ## Updated 3.3 derive/aggregate capital reward share in GDP using PWT IRR ----
     # We use 1 - labor share = capital share  (land is in capital)
@@ -519,7 +529,7 @@ module_socio_L100.NationalAccounts <- function(command, ...) {
              en_stock_share.gtap = approx_fun(year, en_stock_share.gtap, rule = 2),
              en_capital_compensation_share.gtap = approx_fun(year, en_capital_compensation_share.gtap, rule = 2)) %>%
       ungroup() %>%
-      gather(var, value, -GCAM_region_ID, -year) ->
+      tidyr::gather(var, value, -GCAM_region_ID, -year) ->
       L100.National_Accounts_En_capital_inv_share_R_Yh
 
     assertthat::assert_that(L100.National_Accounts_En_capital_inv_share_R_Yh %>%
