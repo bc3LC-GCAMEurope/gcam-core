@@ -140,13 +140,6 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
 
     adj_animal <- function(df) {
       df %>%
-        filter(
-          !(
-            grepl("global", subsector, ignore.case = TRUE) &
-              region == SINGLE_MARKET_NAME &
-              supplysector %in% TRADED_NON_CROP
-          )
-        ) %>%
 
         filter(
           !(
@@ -154,7 +147,21 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
               region == gcam.USA_REGION &
               supplysector %in% TRADED_NON_CROP
           )
+        ) %>%
+        bind_rows(
+          df %>%
+            filter(region == SINGLE_MARKET_NAME & supplysector %in% TRADED_NON_CROP) %>%
+            mutate(region = gcam.USA_REGION)
+        ) %>%
+
+        filter(
+          !(
+            grepl("global", subsector, ignore.case = TRUE) &
+              region %in% c(SINGLE_MARKET_NAME, gcam.USA_REGION) &
+              supplysector %in% TRADED_NON_CROP
+          )
         )
+
 
     }
     #
@@ -188,7 +195,8 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
     # 1c: Add euro market to techs ----------------------
     L240.TechShrwt_tra_EUR <- add_single_market(L240.TechShrwt_tra) %>% filter_euro_mkt() %>% adj_animal()
     L240.TechCost_tra_EUR <- add_single_market(L240.TechCost_tra) %>% filter_euro_mkt() %>% adj_animal()
-    L240.TechCoef_tra_EUR <- add_single_market(L240.TechCoef_tra)  %>% adj_animal() %>%
+    L240.TechCoef_tra_EUR <- add_single_market(L240.TechCoef_tra)  %>%
+      adj_animal() %>%
       filter_euro_mkt() %>%
       mutate(market.name = stringr::str_extract(subsector, ".*(?= traded)"),
              market.name = if_else(grepl("global", subsector), gcam.USA_REGION, market.name),
@@ -218,20 +226,18 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
 
     L240.TechCoef_reg_EUR <- bind_rows(L240.TechCoef_reg_EUR_noEU, L240.TechCoef_reg_EUR_EU)
 
-    # Adjust supplysector files with new animal structure:
-    L240.SubsectorAll_tra_EUR <- L240.SubsectorAll_tra_EUR %>% adj_animal()
-
-    L240.SubsectorAll_tra_EUR_tmp <- L240.SubsectorAll_tra_EUR %>%
-      filter(region == SINGLE_MARKET_NAME & supplysector %in% TRADED_NON_CROP) %>%
-      mutate(region = gcam.USA_REGION)
-
-    L240.SubsectorAll_tra_EUR <- bind_rows(
-      L240.SubsectorAll_tra_EUR,
-      L240.SubsectorAll_tra_EUR_tmp
-    )
+    # # Adjust supplysector files with new animal structure:
+    # L240.SubsectorAll_tra_EUR_tmp <- L240.SubsectorAll_tra_EUR %>%
+    #   filter(region == SINGLE_MARKET_NAME & supplysector %in% TRADED_NON_CROP) %>%
+    #   mutate(region = gcam.USA_REGION)
+    #
+    # L240.SubsectorAll_tra_EUR <- bind_rows(
+    #   L240.SubsectorAll_tra_EUR,
+    #   L240.SubsectorAll_tra_EUR_tmp
+    # )
 
     # Add new subsectors distinguishing between EEA and non-EEA trade
-    Europe_regions <- ag_regions  %>% pull(region)
+    Europe_regions <- ag_regions %>% filter(trade_region == SINGLE_MARKET_NAME) %>% pull(region)
 
     L240.SubsectorAll_reg_tmp <- L240.SubsectorAll_reg %>%
       filter(region %in% Europe_regions, supplysector %in% TOTAL_NON_CROP, grepl("imported", subsector)) %>%
@@ -320,8 +326,6 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
       Europe_net_trade_FAO_crops <- bind_rows(df, Europe_net_trade_FAO_crops)
     }
 
-    European_Single_Market_rg <- ag_regions %>% filter(trade_region == "European_Single_Market") %>% pull(region)
-    Europe_Eastern_Market_rg <- ag_regions %>% filter(trade_region == "Europe_Eastern_Market") %>% pull(region)
 
     # TODO: Avoid hard coding of markets
     # markets <- unique(ag_regions$trade_region)
@@ -329,7 +333,7 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
     #   select(region, trade_region)
 
     Europe_net_trade_FAO_noncrops <- tibble()
-    for (TRADE_RGN in unique(EuroSingleMarket_BiTrade_Ag_noncrops$region)){
+    for (TRADE_RGN in Europe_regions){
 
       df <- EuroSingleMarket_BiTrade_Ag_noncrops %>%
         filter(region == TRADE_RGN | export_trade_region == TRADE_RGN,
@@ -468,7 +472,7 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
 
     # Adjust Europe_net_trade_GCAM_noncrops_adj to have EEA vs nonEEA prior to 2010
     Europe_net_trade_GCAM_noncrops_adj <- Europe_net_trade_GCAM_noncrops %>%
-      filter(region != "ROW") %>%
+      filter(region %in% Europe_regions) %>%
       # use left_join fro some missing data
       left_join(shares_Europe_net_trade_GCAM_noncrops, by = c("region", "sector")) %>%
       # there is no data for some region (Belarus) so assume everything is outside EEA. TODO: Wood products
@@ -623,7 +627,7 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
             supplysector %in% TOTAL_CROPS)
 
     L240.Production_reg_imp_noEU_noncrops <- L240.Production_reg_imp %>%
-      filter(region %!in% ag_regions$region,
+      filter(region %!in% Europe_regions,
              supplysector %in% TOTAL_NON_CROP)
 
     # EEA import consumption is from previously calculated trade in Europe_net_trade_calib
@@ -659,6 +663,7 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
       mutate(subs.share.weight = if_else(calOutputValue > 0, 1, 0),
              tech.share.weight = subs.share.weight) %>%
       mutate(technology = subsector) %>%
+      filter(region %in% Europe_regions) %>%
       bind_rows(L240.Production_reg_imp_noEU_noncrops) %>%
       rename(market.name = trade_region) %>%
       mutate(market.name = if_else(grepl("non_Europe", subsector), "USA", market.name),
@@ -686,7 +691,7 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
 
     #L240.TechShrwt_reg_EUR
     L240.TechShrwt_reg_EUR_adj <- L240.TechShrwt_reg_EUR %>%
-      filter(region %in% unique(ag_regions$region),
+      filter(region %in% Europe_regions,
              supplysector %in% TOTAL_NON_CROP,
              !grepl("domestic", subsector))
 
@@ -702,7 +707,7 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
 
   #L240.TechCoef_reg
     L240.TechCoef_reg_EUR_adj <- L240.TechCoef_reg_EUR %>%
-      filter(region %in% unique(ag_regions$region),
+      filter(region %in% Europe_regions,
              supplysector %in% TOTAL_NON_CROP,
              !grepl("domestic", subsector))
 
