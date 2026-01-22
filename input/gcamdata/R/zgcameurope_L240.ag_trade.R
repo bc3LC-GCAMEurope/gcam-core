@@ -342,7 +342,7 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
         mutate(flow = if_else(region == TRADE_RGN, "imports", "exports"))
 
       market_rgn_import <- ag_regions %>%
-        rbind(c("ROW", "ROW", "ROW")) %>%
+        # rbind(c("ROW", "ROW", "ROW")) %>%
         filter(region == TRADE_RGN) %>%
         pull(trade_region)
 
@@ -366,13 +366,13 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
         tidyr::pivot_wider(names_from = "flow", values_from = "value") %>%
         mutate(region = TRADE_RGN)
 
-      if (TRADE_RGN == "ROW") {
-        df <- df %>%
-          mutate(
-            exports_Europe = 0,
-            imports_Europe = 0
-          )
-      }
+      # if (TRADE_RGN == "ROW") {
+      #   df <- df %>%
+      #     mutate(
+      #       exports_Europe = 0,
+      #       imports_Europe = 0
+      #     )
+      # }
 
       df <- df %>%
         tidyr::replace_na(list(
@@ -392,9 +392,7 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
         mutate(share_exp_europe = exports_Europe / exports,
                share_exp_non_Europe = exports_non_Europe / exports,
                share_imp_europe = imports_Europe / imports,
-               share_imp_non_Europe = imports_non_Europe / imports,
-               share_netexp_europe = net_exports_Europe / net_exports,
-               share_netexp_europe = net_exports_non_Europe / net_exports)
+               share_imp_non_Europe = imports_non_Europe / imports)
 
       Europe_net_trade_FAO_noncrops <- bind_rows(df, Europe_net_trade_FAO_noncrops)
     }
@@ -418,7 +416,6 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
       select(sector, region, year, exports, imports)
 
     Europe_net_trade_calib_calc_noncrops <- Europe_net_trade_FAO_noncrops %>%
-      filter(region != "ROW") %>%
       select(
         GCAM_commodity, year, region,
         exports, imports, net_exports,
@@ -442,8 +439,8 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
              net_exports_new = exports - imports) %>%
       mutate(imports_europe = imports * share_imp_europe,
              imports_non_Europe = imports * share_imp_non_Europe,
-             exports_europe = imports * share_exp_europe,
-             exports_non_Europe = imports * share_exp_non_Europe) %>%
+             exports_europe = exports * share_exp_europe,
+             exports_non_Europe = exports * share_exp_non_Europe) %>%
       select(sector, region, year, imports_europe, imports_non_Europe, exports_europe, exports_non_Europe)
 
     # add in any years we don't have in FAO with the GCAM net export values
@@ -465,13 +462,14 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
     # Create shares for non-crop disaggregation
     shares_Europe_net_trade_GCAM_noncrops <- Europe_net_trade_FAO_noncrops %>%
       filter(year == min(year)) %>%
-      select(GCAM_commodity, region, starts_with("share"), -share_netexp_europe) %>%
+      select(GCAM_commodity, region, starts_with("share")) %>%
       mutate(across(everything(), ~replace_na(., 0)),
              sector = tolower(GCAM_commodity)) %>%
       select(-GCAM_commodity)
 
     # Adjust Europe_net_trade_GCAM_noncrops_adj to have EEA vs nonEEA prior to 2010
     Europe_net_trade_GCAM_noncrops_adj <- Europe_net_trade_GCAM_noncrops %>%
+      #filter(year < unique(min(Europe_net_trade_FAO_noncrops$year))) %>%
       filter(region %in% Europe_regions) %>%
       # use left_join fro some missing data
       left_join(shares_Europe_net_trade_GCAM_noncrops, by = c("region", "sector")) %>%
@@ -486,20 +484,47 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
         imports_europe = imports_GCAM * share_imp_europe,
         imports_non_Europe = imports_GCAM * share_imp_non_Europe,
         exports_europe = exports_GCAM * share_exp_europe,
-        exports_non_Europe = imports_GCAM * share_exp_non_Europe,
+        exports_non_Europe = exports_GCAM * share_exp_non_Europe,
       )
 
 
-    Europe_net_trade_calib_noncrops <- Europe_net_trade_calib_calc_noncrops %>%
+    Europe_net_trade_calib_noncrops_pre <- Europe_net_trade_calib_calc_noncrops %>%
       left_join_error_no_match(ag_regions, by = "region") %>%
       select(-ag_region) %>%
       bind_rows(Europe_net_trade_GCAM_noncrops_adj %>%
                   left_join_error_no_match(ag_regions, by = "region") %>%
                   select(-ag_region) %>%
-                  mutate(exports = if_else(net_exports_GCAM > 0, net_exports_GCAM, 0),
-                         imports = if_else(net_exports_GCAM < 0, -net_exports_GCAM, 0)) %>%
                   select(names(Europe_net_trade_calib_calc_noncrops), "trade_region") %>%
-                  anti_join(Europe_net_trade_calib_calc_noncrops, by = c("sector", "year", "region"))) %>%
+                  anti_join(Europe_net_trade_calib_calc_noncrops, by = c("sector", "year", "region")))
+
+    Europe_net_trade_calib_noncrops_pre_agg <- Europe_net_trade_calib_noncrops_pre %>%
+      group_by(sector, year) %>%
+      summarise(imports_europe = sum(imports_europe),
+                exports_europe = sum(exports_europe)) %>%
+      ungroup() %>%
+      mutate(mean_imp_ex = (imports_europe + exports_europe) / 2,
+             diff_mean_imp_eur = imports_europe / mean_imp_ex,
+             diff_mean_exp_eur = exports_europe / mean_imp_ex) %>%
+      mutate(across(everything(), ~ ifelse(is.na(.), 1, .))) %>%
+      select(sector, year, starts_with("diff"))
+
+
+    Europe_net_trade_calib_noncrops <- Europe_net_trade_calib_noncrops_pre %>%
+      left_join_error_no_match(Europe_net_trade_calib_noncrops_pre_agg, by = c("sector", "year")) %>%
+      mutate(imports_europe_adj = imports_europe / diff_mean_imp_eur,
+             exports_europe_adj = exports_europe / diff_mean_exp_eur,
+             imports_non_Europe_adj = imports_non_Europe + (imports_europe - imports_europe_adj),
+             exports_non_Europe_adj = exports_non_Europe + (exports_europe - exports_europe_adj)) %>%
+      select(-starts_with("diff"), -any_of(c(
+        "imports_europe", "exports_europe",
+        "imports_non_Europe", "exports_non_Europe"
+      ))) %>%
+      rename(
+        imports_europe = imports_europe_adj,
+        exports_europe = exports_europe_adj,
+        imports_non_Europe = imports_non_Europe_adj,
+        exports_non_Europe = exports_non_Europe_adj
+      ) %>%
       tidyr::pivot_longer(cols = c(exports_europe, exports_non_Europe, imports_europe, imports_non_Europe), names_to = "flow", values_to = "value") %>%
       mutate(subsector = if_else(flow == "imports_europe",
                                  paste0("imported ", sector, " Europe"),
