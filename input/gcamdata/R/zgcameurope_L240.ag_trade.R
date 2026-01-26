@@ -426,21 +426,22 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
       ) %>%
       left_join_error_no_match(commodity_input_map, by = "GCAM_commodity") %>%
       left_join_error_no_match(Europe_net_trade_GCAM_noncrops, by = c("year", "sector", "region")) %>%
-      mutate(scalar = net_exports_GCAM / net_exports,
-             # if the scalar is negative, we are just going to add to imports/exports to reach net_exports
-             exports = if_else(scalar > 0, exports * scalar,
-                               if_else(net_exports_GCAM > 0, net_exports_GCAM + imports, exports)),
-             imports = if_else(scalar > 0, imports * scalar,
-                               if_else(net_exports_GCAM < 0, -net_exports_GCAM + exports, imports)),
-             # the limit of the exports is the sum of the exports from each region
-             # technically this is not necessary, but prevents explicit re-exportation (ie of oil palm)
-             imports = if_else(exports > exports_GCAM, imports_GCAM, imports),
-             exports = if_else(exports > exports_GCAM, exports_GCAM, exports),
-             net_exports_new = exports - imports) %>%
-      mutate(imports_europe = imports * share_imp_europe,
-             imports_non_Europe = imports * share_imp_non_Europe,
-             exports_europe = exports * share_exp_europe,
-             exports_non_Europe = exports * share_exp_non_Europe) %>%
+      # mutate(
+      #   scalar = net_exports_GCAM / net_exports,
+      #        # if the scalar is negative, we are just going to add to imports/exports to reach net_exports
+      #        exports = if_else(scalar > 0, exports * scalar,
+      #                          if_else(net_exports_GCAM > 0, net_exports_GCAM + imports, exports)),
+      #        imports = if_else(scalar > 0, imports * scalar,
+      #                          if_else(net_exports_GCAM < 0, -net_exports_GCAM + exports, imports)),
+      #        # the limit of the exports is the sum of the exports from each region
+      #        # technically this is not necessary, but prevents explicit re-exportation (ie of oil palm)
+      #        imports = if_else(exports > exports_GCAM, imports_GCAM, imports),
+      #        exports = if_else(exports > exports_GCAM, exports_GCAM, exports),
+      #        net_exports_new = exports - imports) %>%
+      mutate(imports_europe = imports_GCAM * share_imp_europe,
+             imports_non_Europe = imports_GCAM * share_imp_non_Europe,
+             exports_europe = exports_GCAM * share_exp_europe,
+             exports_non_Europe = exports_GCAM * share_exp_non_Europe) %>%
       select(sector, region, year, imports_europe, imports_non_Europe, exports_europe, exports_non_Europe)
 
     # add in any years we don't have in FAO with the GCAM net export values
@@ -480,6 +481,23 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
         share_imp_europe = 0,
         share_imp_non_Europe = 1
       )) %>%
+      # Adjust pork and diary shares for 1990 to avoid calibration errors:
+      mutate(
+        share_imp_europe = if_else(sector %in% c("pork", "dairy") & year == 1990,
+                                   0, share_imp_europe),
+        share_imp_non_Europe = if_else(sector %in% c("pork", "dairy") & year == 1990,
+                                   1, share_imp_non_Europe),
+        share_exp_europe = if_else(sector %in% c("pork", "dairy") & year == 1990,
+                                   0, share_exp_europe),
+        share_exp_non_Europe = if_else(sector %in% c("pork", "dairy") & year == 1990,
+                                   1, share_exp_non_Europe)
+      ) %>%
+      # mutate(
+      #   share_imp_europe = 0,
+      #   share_imp_non_Europe = 1,
+      #   share_exp_europe = 0,
+      #   share_exp_non_Europe = 1
+      # ) %>%
       mutate(
         imports_europe = imports_GCAM * share_imp_europe,
         imports_non_Europe = imports_GCAM * share_imp_non_Europe,
@@ -512,13 +530,34 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
     Europe_net_trade_calib_noncrops <- Europe_net_trade_calib_noncrops_pre %>%
       left_join_error_no_match(Europe_net_trade_calib_noncrops_pre_agg, by = c("sector", "year")) %>%
       mutate(imports_europe_adj = imports_europe / diff_mean_imp_eur,
-             exports_europe_adj = exports_europe / diff_mean_exp_eur,
-             imports_non_Europe_adj = imports_non_Europe + (imports_europe - imports_europe_adj),
-             exports_non_Europe_adj = exports_non_Europe + (exports_europe - exports_europe_adj)) %>%
-      select(-starts_with("diff"), -any_of(c(
-        "imports_europe", "exports_europe",
-        "imports_non_Europe", "exports_non_Europe"
-      ))) %>%
+             exports_europe_adj = exports_europe / diff_mean_exp_eur) %>%
+      mutate(imports_Europe_absdiff = imports_europe - imports_europe_adj,
+             exports_Europe_absdiff = exports_europe - exports_europe_adj) %>%
+      mutate(imports_Europe_absdiff_adj = if_else(-imports_Europe_absdiff > imports_non_Europe, -(0.75 * imports_non_Europe), imports_Europe_absdiff),
+             exports_Europe_absdiff_adj = if_else(-exports_Europe_absdiff > exports_non_Europe, -(0.75 * exports_non_Europe), exports_Europe_absdiff))  %>%
+      mutate(imports_non_Europe_adj = imports_non_Europe + imports_Europe_absdiff_adj,
+             exports_non_Europe_adj = exports_non_Europe + exports_Europe_absdiff_adj) %>%
+      mutate(imports_sct_yr_cor_rg = imports_Europe_absdiff - imports_Europe_absdiff_adj,
+             exports_sct_yr_cor_rg = exports_Europe_absdiff - exports_Europe_absdiff_adj) %>%
+      mutate(imports_europe_adj = imports_europe_adj + imports_sct_yr_cor_rg,
+             exports_europe_adj = exports_europe_adj + exports_sct_yr_cor_rg) %>%
+      group_by(sector, year) %>%
+      mutate(imports_sct_yr_cor = sum(imports_sct_yr_cor_rg),
+             exports_sct_yr_cor = sum(exports_sct_yr_cor_rg)) %>%
+      ungroup() %>%
+      group_by(sector, year) %>%
+      mutate(imports_non_Europe_tot = sum(imports_non_Europe_adj),
+             exports_non_Europe_tot = sum(exports_non_Europe_adj)) %>%
+      ungroup() %>%
+      mutate(share_imports_non_Europe = imports_non_Europe_adj / imports_non_Europe_tot,
+             share_exports_non_Europe = exports_non_Europe_adj / exports_non_Europe_tot) %>%
+      mutate(abs_share_imports_sct_yr_cor = imports_sct_yr_cor * share_imports_non_Europe,
+             abs_share_exports_sct_yr_cor = exports_sct_yr_cor * share_exports_non_Europe) %>%
+      mutate(imports_non_Europe_adj = imports_non_Europe_adj + abs_share_imports_sct_yr_cor,
+             imports_europe_adj = imports_europe_adj - abs_share_imports_sct_yr_cor,
+             exports_non_Europe_adj = exports_non_Europe_adj + abs_share_exports_sct_yr_cor,
+             exports_europe_adj = exports_europe_adj - abs_share_exports_sct_yr_cor) %>%
+      select(sector, region, trade_region, year, imports_europe_adj, exports_europe_adj, imports_non_Europe_adj, exports_non_Europe_adj) %>%
       rename(
         imports_europe = imports_europe_adj,
         exports_europe = exports_europe_adj,
