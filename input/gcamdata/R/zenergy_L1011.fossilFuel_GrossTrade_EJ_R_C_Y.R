@@ -70,8 +70,13 @@ module_energy_L1011.ff_GrossTrade <- function(command, ...) {
     # We use an additional file transformed to "comtrade format" (comtrade_ff_trade_adjEUR).
     # This file can be periodically updated as new updated data becomes available
 
-    # comtrade_ff_trade <- comtrade_ff_trade %>%
-    #   bind_rows(comtrade_ff_trade_adjEUR)
+    comtrade_ff_trade <- comtrade_ff_trade %>%
+      anti_join(comtrade_ff_trade_adjEUR %>%
+                  mutate(Trade_Flow_Code = as.character(Trade_Flow_Code)),
+                by = c("Year", "Reporter_Code", "Reporter_iso", "Trade_Flow_Code",
+                       "Trade", "Partner_Code", "Partner_iso",
+                       "Commodity_Code", "Quantity_Unit_Code", "Qty_unit_abbr")) %>%
+      bind_rows(comtrade_ff_trade_adjEUR)
 
     # 1: Filter and prepare the bi-lateral trade flow volume data by country and comtrade commodity
     # Select columns, filter to the import and export quantity variables, and filter to traded GCAM commodities
