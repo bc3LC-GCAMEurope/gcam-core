@@ -35,10 +35,12 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
              FILE = "gcam-europe/mappings/enduse_fuel_aggregation",
              FILE = "gcam-europe/A44.USA_TechChange_EUR",
              FILE = "gcam-europe/estat_nrg_d_hhq_filtered_en",
+             FILE = "gcam-europe/estat_nrg_d_hhq_filtered_en_corrSE",
              FILE = "gcam-europe/mappings/geo_to_iso_map",
              FILE = "gcam-europe/mappings/nrgbal_to_service_map",
              FILE = "gcam-europe/mappings/siec_to_fuel_map",
              FILE = "gcam-europe/nrg_bal_c",
+             FILE = "gcam-europe/nrg_bal_c_corrSE",
              "L101.in_EJ_R_bld_Fi_Yh_EUR",
              "L142.in_EJ_R_bld_F_Yh_EUR",
              "L143.HDDCDD_scen_RG3_Y",
@@ -77,10 +79,12 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     A44.CalPrice_bld_EUR <- get_data(all_data, "gcam-europe/A44.CalPrice_bld_EUR") %>% filter_regions_europe()
     enduse_fuel_aggregation <- get_data(all_data, "gcam-europe/mappings/enduse_fuel_aggregation")
     estat_nrg_d_hhq_filtered_en <- get_data(all_data, "gcam-europe/estat_nrg_d_hhq_filtered_en") %>%  filter(geo != "EU27_2020", geo != 'GE')
+    estat_nrg_d_hhq_filtered_en_corrSE <- get_data(all_data, "gcam-europe/estat_nrg_d_hhq_filtered_en_corrSE")
     nrgbal_to_service_map <- get_data(all_data, "gcam-europe/mappings/nrgbal_to_service_map")
     siec_to_fuel_map <- get_data(all_data, "gcam-europe/mappings/siec_to_fuel_map")
     geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map") %>% filter_regions_europe()
     nrg_bal_c <- get_data(all_data, "gcam-europe/nrg_bal_c") %>%  filter(geo != "EU27_2020", geo != 'GE')
+    nrg_bal_c_corrSE <- get_data(all_data, "gcam-europe/nrg_bal_c_corrSE")
     L101.in_EJ_R_bld_Fi_Yh_EUR <- get_data(all_data, "L101.in_EJ_R_bld_Fi_Yh_EUR")
     L142.in_EJ_R_bld_F_Yh_EUR <- get_data(all_data, "L142.in_EJ_R_bld_F_Yh_EUR")
     L143.HDDCDD_scen_RG3_Y <- get_data(all_data, "L143.HDDCDD_scen_RG3_Y") %>% filter_regions_europe()
@@ -112,6 +116,18 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     # gcameurope.EUROSTAT_ADJCOUNTRIES_ID <- get_data(all_data, "common/GCAM_region_names") %>%
     #   filter(region %in% gcameurope.EUROSTAT_ADJCOUNTRIES) %>%
     #   pull(GCAM_region_ID)
+
+    # JS 2026: Adjust balances with improved data for Sweden (SE)
+    estat_nrg_d_hhq_filtered_en <- estat_nrg_d_hhq_filtered_en %>%
+      anti_join(estat_nrg_d_hhq_filtered_en_corrSE %>%
+                  mutate(TIME_PERIOD = as.numeric(TIME_PERIOD),
+                         OBS_FLAG = as.character(OBS_FLAG)),
+                by = c("STRUCTURE", "STRUCTURE_ID","nrg_bal", "siec", "freq", "unit", "geo", "TIME_PERIOD")) %>%
+      bind_rows(estat_nrg_d_hhq_filtered_en_corrSE)
+
+    nrg_bal_c <- nrg_bal_c %>%
+      anti_join(nrg_bal_c_corrSE, by = c("nrg_bal", "siec", "unit", "geo")) %>%
+      bind_rows(nrg_bal_c_corrSE)
 
 
     EUR_hhEnergyConsum_R_Y_S <- estat_nrg_d_hhq_filtered_en %>%
@@ -1538,7 +1554,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       add_precursors("energy/A_regions", "L142.in_EJ_R_bld_F_Yh_EUR", "gcam-europe/A44.share_serv_fuel_EUR", "L101.in_EJ_R_bld_Fi_Yh_EUR",
                      "L143.HDDCDD_scen_RG3_Y", "L143.HDDCDD_scen_ctry_Y", "common/GCAM32_to_EU", "gcam-europe/estat_nrg_ind_ahbtc_filtered_en",
                      "gcam-europe/mappings/geo_to_climate_map", "gcam-europe/mappings/geo_to_iso_map", "gcam-europe/mappings/heatpump_to_tech_map",
-                     "gcam-europe/calibrated_techs_bld_det_EUR", "gcam-europe/A44.cost_efficiency_EUR") ->
+                     "gcam-europe/calibrated_techs_bld_det_EUR", "gcam-europe/A44.cost_efficiency_EUR",
+                     "gcam-europe/nrg_bal_c", "gcam-europe/nrg_bal_c_corrSE") ->
       L144.in_EJ_R_bld_serv_F_Yh_EUR
 
     L144.in_EJ_R_bld_serv_tech_F_Yh_EUR %>%

@@ -19,6 +19,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/GCAM32_to_EU",
              FILE = "gcam-europe/nrg_bal_c",
+             FILE = "gcam-europe/nrg_bal_c_corrSE",
              FILE = "gcam-europe/mappings/geo_to_iso_map",
              FILE = "gcam-europe/mappings/nrgbal_to_sector_map",
              FILE = "gcam-europe/mappings/siec_to_fuel_map",
@@ -38,11 +39,17 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
     # Load required inputs ----------------
     GCAM32_to_EU <- get_data(all_data, "common/GCAM32_to_EU")
     nrg_bal_c <- get_data(all_data, "gcam-europe/nrg_bal_c")
+    nrg_bal_c_corrSE <- get_data(all_data, "gcam-europe/nrg_bal_c_corrSE")
     geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map")
     nrgbal_to_sector_map <- get_data(all_data, "gcam-europe/mappings/nrgbal_to_sector_map")
     siec_to_fuel_map <- get_data(all_data, "gcam-europe/mappings/siec_to_fuel_map")
     Eurostat_sector_fuel_modifications <- get_data(all_data, "gcam-europe/mappings/Eurostat_sector_fuel_modifications")
     enduse_fuel_aggregation <- get_data(all_data, "gcam-europe/mappings/enduse_fuel_aggregation")
+
+    # JS 2026: Adjust balances with improved data for Sweden (SE)
+    nrg_bal_c <- nrg_bal_c %>%
+      anti_join(nrg_bal_c_corrSE, by = c("nrg_bal", "siec", "unit", "geo")) %>%
+      bind_rows(nrg_bal_c_corrSE)
 
     L1011.en_bal_EJ_R_Si_Fi_Yh <- get_data(all_data, "L1011.en_bal_EJ_R_Si_Fi_Yh") %>%
       # set biomass_tradbio as biomass
@@ -335,7 +342,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
     L101.GCAM_EUR_regions %>%
       add_title("ISO to GCAM region mapping for EUR regions with Eurostat data", overwrite = T) %>%
       add_units("") %>%
-      add_precursors("common/GCAM32_to_EU", "gcam-europe/nrg_bal_c") ->
+      add_precursors("common/GCAM32_to_EU", "gcam-europe/nrg_bal_c","gcam-europe/nrg_bal_c_corrSE") ->
       L101.GCAM_EUR_regions
 
     L101.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
