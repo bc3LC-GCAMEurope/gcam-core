@@ -82,4 +82,3 @@ Calvin, K., Patel, P., Clarke, L., Asrar, G., Bond-Lamberty, B., Cui, R. Y., Di 
 
 
 ENTSO-E, & ENTSOG. (2024). TYNDP 2024 Scenarios Report – Main documents: Final TYNDP 2024 Scenarios Report. https://www.entsos-tyndp2024-scenarios.eu
-
