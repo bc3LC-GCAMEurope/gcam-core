@@ -13,7 +13,7 @@
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr anti_join arrange bind_rows distinct filter if_else group_by lag left_join mutate right_join select summarise
 #' @importFrom tidyr complete nesting
-#' @author LF October 2017
+#' @author CR 2026 Jan
 module_gcameurope_L232.other_industry <- function(command, ...) {
   GLOBAL_TECH_COGEN <- c("L232.GlobalTechEff_ind",
                          "L232.GlobalTechShrwt_ind",
@@ -49,14 +49,9 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
                      "L1324.in_EJ_R_indfeed_F_Yh_EUR",
                      "L1324.in_EJ_R_indfeed_F_Yh",
                      FILE = "socioeconomics/A32.inc_elas_output",
-                     "L101.Pop_thous_GCAM3_R_Y",
-                     "L102.pcgdp_thous90USD_GCAM3_R_Y",
+                     "L101.Pop_thous_R_Yh",
                      "L102.pcgdp_thous90USD_Scen_R_Y",
                      GLOBAL_TECH_COGEN)
-
-  INCOME_ELASTICITY_OUTPUTS <- c("GCAM3",
-                                 paste0("gSSP", 1:5),
-                                 paste0("SSP", 1:5))
 
   MODULE_OUTPUTS <- c("L232.Supplysector_ind_EUR",
                       "L232.SubsectorLogit_ind_EUR",
@@ -77,7 +72,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
                       "L232.PriceElasticity_ind_EUR",
                       "L232.BaseService_ind_EUR",
                       paste0(GLOBAL_TECH_COGEN, "_EUR"),
-                      paste("L232.IncomeElasticity_ind_EUR", tolower(INCOME_ELASTICITY_OUTPUTS), sep = "_"))
+                      "L232.IncomeElasticity_ind_Scen_EUR")
 
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -91,8 +86,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
     get_data_list(all_data, MODULE_INPUTS)
     GCAM_region_names <- GCAM_region_names %>% filter_regions_europe(regions_to_keep_name = unique(c(grid_regions$region, gcameurope.EUROSTAT_COUNTRIES)))
     A_regions <- A_regions %>% filter_regions_europe(regions_to_keep_name = unique(c(grid_regions$region, gcameurope.EUROSTAT_COUNTRIES)))
-    L101.Pop_thous_GCAM3_R_Y <- L101.Pop_thous_GCAM3_R_Y %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
-    L102.pcgdp_thous90USD_GCAM3_R_Y <- L102.pcgdp_thous90USD_GCAM3_R_Y %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
+    L101.Pop_thous_R_Yh <- L101.Pop_thous_R_Yh %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
     L102.pcgdp_thous90USD_Scen_R_Y <- L102.pcgdp_thous90USD_Scen_R_Y %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
 
     # Add in segment regions not in Eurostat
@@ -115,12 +109,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
       calOutputValue <- subs.share.weight <- calOutputValue.x <- calOutputValue.y <-
       output_tot <- value.x <- value.y <- total <- fuelprefElasticity <-
       terminal_coef <- criteria <- scenario <- temp_lag <- base.service <- energy.final.demand <-
-      parameter <- income.elasticity <- L232.IncomeElasticity_ind_EUR_gcam3 <-
-      L232.IncomeElasticity_ind_EUR_gssp1 <- L232.IncomeElasticity_ind_EUR_gssp2 <-
-      L232.IncomeElasticity_ind_EUR_gssp3 <- L232.IncomeElasticity_ind_EUR_gssp4 <-
-      L232.IncomeElasticity_ind_EUR_gssp5 <- L232.IncomeElasticity_ind_EUR_ssp1 <-
-      L232.IncomeElasticity_ind_EUR_ssp2 <- L232.IncomeElasticity_ind_EUR_ssp3 <-
-      L232.IncomeElasticity_ind_EUR_ssp4 <- L232.IncomeElasticity_ind_EUR_ssp5 <-
+      parameter <- income.elasticity <- L232.IncomeElasticity_ind_Scen_EUR <-
       market.name <- stub.technology <- year.y <- NULL
 
     # ===================================================
@@ -451,10 +440,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
       L232.BaseService_ind_EUR
 
     # L232.IncomeElasticity_ind_EUR_scen: income elasticity of industry (scenario-specific)
-    L102.pcgdp_thous90USD_GCAM3_R_Y %>%
-      # Combine GCAM 3.0 with the SSPs, and subset only the relevant years
-      mutate(scenario = 'GCAM3') %>%
-      bind_rows(L102.pcgdp_thous90USD_Scen_R_Y) %>%
+    L102.pcgdp_thous90USD_Scen_R_Y %>%
       filter(year %in% c(MODEL_FINAL_BASE_YEAR, MODEL_FUTURE_YEARS)) %>%
       # Per-capita GDP ratios, which are used in the equation for demand growth
       group_by(GCAM_region_ID, scenario) %>%
@@ -473,7 +459,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
       left_join_error_no_match(GCAM_region_names, by = 'GCAM_region_ID') %>%
       mutate(year = MODEL_FINAL_BASE_YEAR) %>%
       left_join_error_no_match(L232.BaseService_ind_EUR, by = c("year", "region")) %>%
-      left_join_error_no_match(L101.Pop_thous_GCAM3_R_Y, by = c("year", "GCAM_region_ID")) %>%
+      left_join_error_no_match(L101.Pop_thous_R_Yh, by = c("year", "GCAM_region_ID")) %>%
       mutate(value = base.service * CONV_BIL_THOUS / value) %>%
       select(-base.service, -energy.final.demand) ->
       L232.Output_ind
@@ -507,15 +493,15 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
       mutate(value = round(value, energy.DIGITS_INCELAS_IND)) %>%
       rename(income.elasticity = value) %>%
       mutate(energy.final.demand = A32.demand[["energy.final.demand"]]) ->
-      L232.IncomeElasticity_ind_EUR # intermediate tibble
+      L232.IncomeElasticity_ind_Scen_EUR # intermediate tibble
 
     # KVC: SSP1 needs lower income elasticities. Storyline has limited growth in energy-related industries
     # because of warm fuzzy feelings about environment. We are hard-coding this for a while.
-    L232.IncomeElasticity_ind_EUR %>%
+    L232.IncomeElasticity_ind_Scen_EUR %>%
       filter(scenario == "SSP1") %>%
       mutate(income.elasticity = income.elasticity * 0.75) %>%
-      bind_rows(filter(L232.IncomeElasticity_ind_EUR, scenario != "SSP1")) ->
-      L232.IncomeElasticity_ind_EUR
+      bind_rows(filter(L232.IncomeElasticity_ind_Scen_EUR, scenario != "SSP1")) ->
+      L232.IncomeElasticity_ind_Scen_EUR
 
     # COGEN RENAMING ---------------------
     # Create global tech for grid region specific cogen
@@ -532,21 +518,17 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
 
     # ===================================================
     # Produce outputs
-    # Extract GCAM3, SSP, and gSSP data and assign to separate tables
-    for(ieo in INCOME_ELASTICITY_OUTPUTS) {
-      L232.IncomeElasticity_ind_EUR %>%
-        filter(scenario == ieo) %>%
-        select(LEVEL2_DATA_NAMES[["IncomeElasticity"]]) %>%
-        add_title(paste("Income elasticity of industry -", ieo)) %>%
-        add_units("Unitless") %>%
-        add_comments("First calculate industrial output as the base-year industrial output times the GDP ratio raised to the income elasticity") %>%
-        add_comments("Then back out the appropriate income elasticities from industrial output") %>%
-        add_comments("Note lower income elasticities for SSP1 are hard-coded.") %>%
-        add_legacy_name(paste0("L232.IncomeElasticity_ind_EUR_", tolower(ieo))) %>%
-        add_precursors("L102.pcgdp_thous90USD_GCAM3_R_Y", "L102.pcgdp_thous90USD_Scen_R_Y", "common/GCAM_region_names", "L1328.in_EJ_R_indenergy_F_Yh_EUR", "L127.in_EJ_R_indchp_F_Yh_EUR", "energy/calibrated_techs", "L1324.in_EJ_R_indfeed_F_Yh_EUR", "energy/A32.globaltech_eff", "energy/A32.globaltech_shrwt", "energy/A32.demand", "L101.Pop_thous_GCAM3_R_Y", "socioeconomics/A32.inc_elas_output") ->
-        x
-      assign(paste0("L232.IncomeElasticity_ind_EUR_", tolower(ieo)), x)
-    }
+
+    L232.IncomeElasticity_ind_Scen_EUR %>%
+      add_title("Income elasticity of other industry - SSPs") %>%
+      add_units("Unitless") %>%
+      add_comments("First calculate industrial output as the base-year industrial output times the GDP ratio raised to the income elasticity") %>%
+      add_comments("Then back out the appropriate income elasticities from industrial output") %>%
+      add_comments("Note lower income elasticities for SSP1 are hard-coded.") %>%
+      add_legacy_name("L232.IncomeElasticity_ind_EUR") %>%
+      add_precursors("L102.pcgdp_thous90USD_Scen_R_Y", "common/GCAM_region_names", "L1328.in_EJ_R_indenergy_F_Yh_EUR", "L127.in_EJ_R_indchp_F_Yh_EUR", "energy/calibrated_techs", "L1324.in_EJ_R_indfeed_F_Yh_EUR", "energy/A32.globaltech_eff", "energy/A32.globaltech_shrwt", "energy/A32.demand", "L101.Pop_thous_R_Yh", "socioeconomics/A32.inc_elas_output") ->
+      L232.IncomeElasticity_ind_Scen_EUR
+
 
     L232.Supplysector_ind_EUR %>%
       add_title("Supply sector information for industry sector") %>%

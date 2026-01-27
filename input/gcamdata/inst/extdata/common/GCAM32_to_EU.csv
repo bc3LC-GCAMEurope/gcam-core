@@ -1,9 +1,9 @@
-# File: GCAM32_to_EU.csv,,,,,,
-# Title: ISO to GCAM region mapping for EU and 32 regions,,,,,,
-# Units: NA,,,,,,
-# Description: Maps iso codes to GCAM regions (including composites as necessary),,,,,,
-# Column types: cccicic,,,,,,
-# ----------,,,,,,
+# File: GCAM32_to_EU.csv
+# Title: ISO to GCAM region mapping for EU and 32 regions
+# Units: NA
+# Description: Maps iso codes to GCAM regions (including composites as necessary)
+# Column types: cccicic
+# ----------
 iso,country_name,region_GCAM3,GCAM_region_ID,GCAMEU_region,GCAM32_region_ID,GCAM32_region
 bdi,Burundi,Africa,2,Africa_Eastern,2,Africa_Eastern
 com,Comoros,Africa,2,Africa_Eastern,2,Africa_Eastern

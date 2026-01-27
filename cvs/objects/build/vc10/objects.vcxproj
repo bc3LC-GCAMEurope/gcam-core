@@ -1019,8 +1019,6 @@
     <ClInclude Include="..\..\technologies\include\variable_production_state.h" />
     <ClInclude Include="..\..\technologies\include\vintage_production_state.h" />
     <ClInclude Include="..\..\util\base\include\aparsable.h" />
-    <ClInclude Include="..\..\util\base\include\atom.h" />
-    <ClInclude Include="..\..\util\base\include\atom_registry.h" />
     <ClInclude Include="..\..\util\base\include\auto_file.h" />
     <ClInclude Include="..\..\util\base\include\calibrate_resource_visitor.h" />
     <ClInclude Include="..\..\util\base\include\calibrate_share_weight_visitor.h" />
@@ -1038,7 +1036,6 @@
     <ClInclude Include="..\..\util\base\include\iinterpolation_function.h" />
     <ClInclude Include="..\..\util\base\include\inamed.h" />
     <ClInclude Include="..\..\util\base\include\initialize_tech_vector_helper.hpp" />
-    <ClInclude Include="..\..\util\base\include\input_finder.h" />
     <ClInclude Include="..\..\util\base\include\interpolation_rule.h" />
     <ClInclude Include="..\..\util\base\include\ivisitable.h" />
     <ClInclude Include="..\..\util\base\include\ivisitor.h" />
