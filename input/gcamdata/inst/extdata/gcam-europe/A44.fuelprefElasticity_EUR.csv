@@ -10,7 +10,7 @@ resid heating modern EUR,electricity,0
 resid heating modern EUR,gas,0
 resid heating modern EUR,refined liquids,0
 resid heating modern EUR,district heat,-0.5
-resid heating modern EUR,water heat pump,0
+resid heating modern EUR,water heat pump,-0.5
 resid cooling modern EUR,electricity,0
 resid cooling modern EUR,gas,-1
 resid cooking modern EUR,biomass,-1
@@ -25,7 +25,7 @@ resid hot water modern EUR,electricity,0
 resid hot water modern EUR,gas,0
 resid hot water modern EUR,refined liquids,-0.5
 resid hot water modern EUR,district heat,-0.5
-resid hot water modern EUR,water heat pump,0
+resid hot water modern EUR,water heat pump,-0.5
 resid others modern EUR,biomass,-1
 resid others coal EUR,coal,-1
 resid others modern EUR,electricity,0
@@ -37,7 +37,7 @@ comm heating EUR,electricity,0
 comm heating EUR,gas,0
 comm heating EUR,refined liquids,0
 comm heating EUR,district heat,-0.5
-comm heating EUR,water heat pump,0
+comm heating EUR,water heat pump,-0.5
 comm cooling EUR,electricity,0
 comm cooling EUR,gas,-1
 comm others EUR,biomass,-1
