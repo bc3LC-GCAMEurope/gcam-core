@@ -14,14 +14,14 @@
 #' @importFrom dplyr bind_rows distinct filter if_else left_join mutate select
 #' @author RLH April 20123
 module_policy_L300.elasticity <- function(command, ...) {
-  INDUSTRY_INCELAS <- c(inputs_of("module_energy_iron_steel_incelas_SSP_xml"),
-              inputs_of("module_energy_aluminum_incelas_SSP_xml"),
-              inputs_of("module_energy_cement_incelas_SSP_xml"),
-              inputs_of("module_energy_chemical_incelas_SSP_xml"),
-              inputs_of("module_energy_other_industry_incelas_SSP_xml"),
-              inputs_of("module_energy_paper_incelas_SSP_xml"),
-              inputs_of("module_energy_Off_road_incelas_SSP_xml")
-              )
+  INDUSTRY_INCELAS <- c("L2321.IncomeElasticity_cement_Scen",
+                        "L2323.IncomeElasticity_iron_steel_Scen",
+                        "L2324.IncomeElasticity_Off_road_Scen",
+                        "L2325.IncomeElasticity_chemical_Scen",
+                        "L2326.IncomeElasticity_aluminum_Scen",
+                        "L2327.IncomeElasticity_paper_Scen",
+                        "L232.IncomeElasticity_ind_Scen")
+
   MODULE_INPUTS <- c(FILE = "policy/A_elasticity",
                      FILE = "policy/mappings/market_region_mappings",
                      "L254.IncomeElasticity_trn",
@@ -61,12 +61,17 @@ module_policy_L300.elasticity <- function(command, ...) {
 
     # Load all industry incelas -------------------------------
     for (nm in INDUSTRY_INCELAS){
-      nm_sce <- tail(strsplit(nm, "_")[[1]], 1)
       tmp <- get_data(all_data, nm) %>%
-        tidyr::pivot_longer(income.elasticity, names_to = "elasticity.type") %>%
-        mutate(sce = toupper(nm_sce))
+        tidyr::pivot_longer(
+          income.elasticity,
+          names_to = "elasticity.type"
+        ) %>%
+        rename(sce = scenario)
+
       L300.all_incelas <- bind_rows(L300.all_incelas, tmp)
     }
+    L300.all_incelas <- L300.all_incelas %>%
+      select(-GCAM_REGION_ID)
 
     # Convert to long format and interpolate any missing years -------------------
     if (any(is.na(A_elasticity$SSP))){

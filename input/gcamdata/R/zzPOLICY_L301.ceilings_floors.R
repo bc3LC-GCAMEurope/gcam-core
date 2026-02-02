@@ -43,7 +43,6 @@ module_policy_L301.ceilings_floors <- function(command, ...) {
                      "L222.GlobalTechCoef_en",
                      "L2232.TechCoef_elecownuse_EUR_trade",
                      "L201.GDP_Scen",
-                     "L201.GDP_GCAM3",
                      FILE = "policy/GCAM_results/OutputsByTech",
                      "L239.PrimaryConsKeyword_en",
                      "L2392.PrimaryConsKeyword_en_NG",
@@ -106,7 +105,9 @@ module_policy_L301.ceilings_floors <- function(command, ...) {
         filter(!is.na(GDPIntensity_BaseYear))
 
       # First calculate GDP series - we have baseGDP, growth rate in perCapitaGDP and population
-      L301.GDP <- L201.GDP_GCAM3
+      L301.GDP <- L201.GDP_Scen %>%
+        filter(scenario  == "SSP2") %>%
+        select(-scenario)
 
       # Next get the energy technologies that we want to constraint
       L301.energy_consumption <- select(GDP_Intensity_targets, region, policy.portfolio.standard, GDPIntensity_BaseYear, tech_mapping) %>%
