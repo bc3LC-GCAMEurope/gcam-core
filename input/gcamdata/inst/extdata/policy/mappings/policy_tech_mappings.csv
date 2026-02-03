@@ -856,3 +856,10 @@ ELEC_RES_NOM,peak generation,biomass (IGCC CCS)_peak,biomass (IGCC CCS) (seawate
 ELEC_RES_NOM,peak generation,biomass (IGCC CCS)_peak,biomass (IGCC CCS) (recirculating)
 ELEC_RES_NOM,peak generation,biomass (IGCC CCS)_peak,biomass (IGCC CCS) (dry cooling)
 COALDUMMY,delivered coal,delivered coal,delivered coal
+ALL_BIO,regional biomass,regional biomass,regional biomass
+ALL_BIO,regional biomassOil,regional biomassOil,OilCrop
+ALL_BIO,regional biomassOil,regional biomassOil,OilPalm
+ALL_BIO,regional biomassOil,regional biomassOil,Soybean
+ALL_BIO,regional corn for ethanol,regional corn for ethanol,regional corn for ethanol
+ALL_BIO,regional sugar for ethanol,regional sugar for ethanol,regional sugar for ethanol
+ALL_BIO,regional woodpulp for energy,regional woodpulp for energy,regional woodpulp for energy

@@ -1,75 +1,75 @@
-# File: A22.SubsectorShrwtFllt_en_R.csv
-# Title: Region-specific refining subsector shareweights interpolation rules 
-# Descreption: adjust biomass liquid share weight for a few regions with palm biodiesel to lower values. This is needed due to data updates. Currently, the same assumption is used across all regions, e.g. same with A22.subsector_shrwt
-# Units: Unitless share-weights
-# Date of last update: 2024-02-26 (XZ)
-# Comment:note that for regions not included (e.g., new regions) USA assumptions are used by default.
-# Column types: cccnn
-# ----------
+# File: A22.SubsectorShrwtFllt_en_R.csv,,,,
+# Title: Region-specific refining subsector shareweights interpolation rules ,,,,
+# Descreption: adjust biomass liquid share weight for a few regions with palm biodiesel to lower values. This is needed due to data updates. Currently, the same assumption is used across all regions, e.g. same with A22.subsector_shrwt,,
+# Units: Unitless share-weights,,,,
+# Date of last update: 2024-02-26 (XZ),,,,
+# Comment:note that for regions not included (e.g., new regions) USA assumptions are used by default.,,,
+# Column types: cccnn,,,,
+# ----------,,,,
 region,supplysector,subsector,year.fillout,share.weight
-USA,refining,biomass liquids,2030,1
-Africa_Eastern,refining,biomass liquids,2030,1
-Africa_Northern,refining,biomass liquids,2030,1
-Africa_Southern,refining,biomass liquids,2030,1
-Africa_Western,refining,biomass liquids,2030,1
-Australia_NZ,refining,biomass liquids,2030,1
-Brazil,refining,biomass liquids,2030,1
-Canada,refining,biomass liquids,2030,1
-Central America and Caribbean,refining,biomass liquids,2030,1
-Central Asia,refining,biomass liquids,2030,1
-China,refining,biomass liquids,2030,1
-India,refining,biomass liquids,2030,1
-Indonesia,refining,biomass liquids,2030,1
-Japan,refining,biomass liquids,2030,1
-Mexico,refining,biomass liquids,2030,1
-Middle East,refining,biomass liquids,2030,1
-Pakistan,refining,biomass liquids,2030,1
-Russia,refining,biomass liquids,2030,1
-South Africa,refining,biomass liquids,2030,1
-South America_Northern,refining,biomass liquids,2030,1
-South America_Southern,refining,biomass liquids,2030,1
-South Asia,refining,biomass liquids,2030,1
-South Korea,refining,biomass liquids,2030,1
-Southeast Asia,refining,biomass liquids,2030,1
-Taiwan,refining,biomass liquids,2030,1
-Argentina,refining,biomass liquids,2030,1
-Colombia,refining,biomass liquids,2030,1
-Austria,refining,biomass liquids,2030,1
-Belgium,refining,biomass liquids,2030,1
-Bulgaria,refining,biomass liquids,2030,1
-Croatia,refining,biomass liquids,2030,1
-Cyprus,refining,biomass liquids,2030,1
-Czech Republic,refining,biomass liquids,2030,1
-Denmark,refining,biomass liquids,2030,1
-Estonia,refining,biomass liquids,2030,1
-Finland,refining,biomass liquids,2030,1
-France,refining,biomass liquids,2030,1
-Germany,refining,biomass liquids,2030,1
-Greece,refining,biomass liquids,2030,1
-Hungary,refining,biomass liquids,2030,1
-Ireland,refining,biomass liquids,2030,1
-Italy,refining,biomass liquids,2030,1
-Latvia,refining,biomass liquids,2030,1
-Lithuania,refining,biomass liquids,2030,1
-Luxembourg,refining,biomass liquids,2030,1
-Malta,refining,biomass liquids,2030,1
-Netherlands,refining,biomass liquids,2030,1
-Poland,refining,biomass liquids,2030,1
-Portugal,refining,biomass liquids,2030,1
-Romania,refining,biomass liquids,2030,1
-Slovakia,refining,biomass liquids,2030,1
-Slovenia,refining,biomass liquids,2030,1
-Spain,refining,biomass liquids,2030,1
-Sweden,refining,biomass liquids,2030,1
-Albania,refining,biomass liquids,2030,1
-Belarus,refining,biomass liquids,2030,1
-Bosnia and Herzegovina,refining,biomass liquids,2030,1
-Iceland,refining,biomass liquids,2030,1
-Macedonia,refining,biomass liquids,2030,1
-Moldova,refining,biomass liquids,2030,1
-Norway,refining,biomass liquids,2030,1
-Serbia and Montenegro,refining,biomass liquids,2030,1
-Switzerland,refining,biomass liquids,2030,1
-Turkey,refining,biomass liquids,2030,1
-UK,refining,biomass liquids,2030,1
-Ukraine,refining,biomass liquids,2030,1
+USA,refining,biomass liquids,2100,0.25
+Africa_Eastern,refining,biomass liquids,2100,0.25
+Africa_Northern,refining,biomass liquids,2100,0.25
+Africa_Southern,refining,biomass liquids,2100,0.25
+Africa_Western,refining,biomass liquids,2100,0.25
+Australia_NZ,refining,biomass liquids,2100,0.25
+Brazil,refining,biomass liquids,2100,0.25
+Canada,refining,biomass liquids,2100,0.25
+Central America and Caribbean,refining,biomass liquids,2100,0.25
+Central Asia,refining,biomass liquids,2100,0.25
+China,refining,biomass liquids,2100,0.25
+India,refining,biomass liquids,2100,0.25
+Indonesia,refining,biomass liquids,2100,0.25
+Japan,refining,biomass liquids,2100,0.25
+Mexico,refining,biomass liquids,2100,0.25
+Middle East,refining,biomass liquids,2100,0.25
+Pakistan,refining,biomass liquids,2100,0.25
+Russia,refining,biomass liquids,2100,0.25
+South Africa,refining,biomass liquids,2100,0.25
+South America_Northern,refining,biomass liquids,2100,0.25
+South America_Southern,refining,biomass liquids,2100,0.25
+South Asia,refining,biomass liquids,2100,0.25
+South Korea,refining,biomass liquids,2100,0.25
+Southeast Asia,refining,biomass liquids,2100,0.25
+Taiwan,refining,biomass liquids,2100,0.25
+Argentina,refining,biomass liquids,2100,0.25
+Colombia,refining,biomass liquids,2100,0.25
+Austria,refining,biomass liquids,2100,0.25
+Belgium,refining,biomass liquids,2100,0.25
+Bulgaria,refining,biomass liquids,2100,0.25
+Croatia,refining,biomass liquids,2100,0.25
+Cyprus,refining,biomass liquids,2100,0.25
+Czech Republic,refining,biomass liquids,2100,0.25
+Denmark,refining,biomass liquids,2100,0.25
+Estonia,refining,biomass liquids,2100,0.25
+Finland,refining,biomass liquids,2100,0.25
+France,refining,biomass liquids,2100,0.25
+Germany,refining,biomass liquids,2100,0.25
+Greece,refining,biomass liquids,2100,0.25
+Hungary,refining,biomass liquids,2100,0.25
+Ireland,refining,biomass liquids,2100,0.25
+Italy,refining,biomass liquids,2100,0.25
+Latvia,refining,biomass liquids,2100,0.25
+Lithuania,refining,biomass liquids,2100,0.25
+Luxembourg,refining,biomass liquids,2100,0.25
+Malta,refining,biomass liquids,2100,0.25
+Netherlands,refining,biomass liquids,2100,0.25
+Poland,refining,biomass liquids,2100,0.25
+Portugal,refining,biomass liquids,2100,0.25
+Romania,refining,biomass liquids,2100,0.25
+Slovakia,refining,biomass liquids,2100,0.25
+Slovenia,refining,biomass liquids,2100,0.25
+Spain,refining,biomass liquids,2100,0.25
+Sweden,refining,biomass liquids,2100,0.25
+Albania,refining,biomass liquids,2100,0.25
+Belarus,refining,biomass liquids,2100,0.25
+Bosnia and Herzegovina,refining,biomass liquids,2100,0.25
+Iceland,refining,biomass liquids,2100,0.25
+Macedonia,refining,biomass liquids,2100,0.25
+Moldova,refining,biomass liquids,2100,0.25
+Norway,refining,biomass liquids,2100,0.25
+Serbia and Montenegro,refining,biomass liquids,2100,0.25
+Switzerland,refining,biomass liquids,2100,0.25
+Turkey,refining,biomass liquids,2100,0.25
+UK,refining,biomass liquids,2100,0.25
+Ukraine,refining,biomass liquids,2100,0.25
