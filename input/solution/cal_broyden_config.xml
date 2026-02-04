@@ -238,6 +238,6 @@
 		<solution-tolerance fillout="1" region="Albania" period="3" market-type="crude oil">0.05</solution-tolerance>
         <!-- applies to all regions since region attribute is not included -->
         <max-price-change fillout="1" market-type="Trial-Value" period="1">10</max-price-change>
-		<!--solution-tolerance fillout="1" period="10" market-type="Trial-Value">2</solution-tolerance-->
+		<solution-tolerance fillout="1" period="10" market-type="Trial-Value">0.05</solution-tolerance>
     </solution-info-param-parser>
 </scenario>
