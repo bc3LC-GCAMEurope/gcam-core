@@ -37,10 +37,11 @@
          terms of both supply and demand are not included into the solution algorithm or else
          they will fail.
       -->
-    <user-configurable-solver year="1975" fillout="1">
-        <solution-tolerance>0.02</solution-tolerance>
-        <solution-floor>0.0005</solution-floor>
-        <calibration-tolerance>0.05</calibration-tolerance>
+    
+<user-configurable-solver year="1975" fillout="1">
+        <solution-tolerance>0.005</solution-tolerance>
+        <solution-floor>0.0001</solution-floor>
+        <calibration-tolerance>0.028</calibration-tolerance>
         <max-model-calcs>3000</max-model-calcs>
 
         <preconditioner-solver-component>
@@ -71,7 +72,6 @@
             <solution-info-filter>solvable-nr && !(has-market-flag="fully-calibrated")</solution-info-filter>
         </broyden-solver-component>
     </user-configurable-solver>
-
 
 <user-configurable-solver year="2015" fillout="1">
         <solution-tolerance>0.005</solution-tolerance>
@@ -107,7 +107,6 @@
             <solution-info-filter>solvable-nr && !(has-market-flag="fully-calibrated")</solution-info-filter>
         </broyden-solver-component>
     </user-configurable-solver>
-
 
 
     <user-configurable-solver year="2025" fillout="1">
@@ -216,6 +215,21 @@
     -->
     <solution-info-param-parser>
 		<solution-tolerance fillout="1" region="Iceland" market-type="Pasture">0.03</solution-tolerance>
+		<solution-tolerance fillout="1" region="Cyprus" market-type="Pasture">0.03</solution-tolerance>
+		<solution-tolerance fillout="1" region="Cyprus" market-type="FodderGrass">0.03</solution-tolerance>
+
+		<solution-tolerance fillout="1" region="Canada" period="1" market-type="natural gas">0.03</solution-tolerance>
+		<solution-tolerance fillout="1" region="Indonesia" period="1" market-type="natural gas">0.03</solution-tolerance>
+		<solution-tolerance fillout="1" region="Croatia" period="1" market-type="natural gas">0.03</solution-tolerance>
+
+		<solution-tolerance fillout="1" region="Croatia" period="2" market-type="natural gas">0.03</solution-tolerance>
+		<solution-tolerance fillout="1" region="Poland" period="2" market-type="natural gas">0.03</solution-tolerance>
+		<solution-tolerance fillout="1" region="Romania" period="2" market-type="natural gas">0.03</solution-tolerance>
+		<solution-tolerance fillout="1" region="Ukraine" period="2" market-type="natural gas">0.03</solution-tolerance>
+
+		<solution-tolerance fillout="1" region="Croatia" period="3" market-type="natural gas">0.03</solution-tolerance>
+		<solution-tolerance fillout="1" region="Ukraine" period="3" market-type="natural gas">0.03</solution-tolerance>
+
 		<solution-floor fillout="1" region="USA" market-type="gas trade statistical differences">0.01</solution-floor>
 		<solution-floor fillout="1" region="Sweden" market-type="district heat">0.01</solution-floor>
 		<solution-floor fillout="1" region="Belgium" market-type="district heat">0.01</solution-floor>
@@ -224,6 +238,6 @@
 		<solution-tolerance fillout="1" region="Albania" period="3" market-type="crude oil">0.05</solution-tolerance>
         <!-- applies to all regions since region attribute is not included -->
         <max-price-change fillout="1" market-type="Trial-Value" period="1">10</max-price-change>
-		<solution-tolerance fillout="1" market-type="energy net export">0.05</solution-tolerance>
+		<!--solution-tolerance fillout="1" period="10" market-type="Trial-Value">2</solution-tolerance-->
     </solution-info-param-parser>
 </scenario>
