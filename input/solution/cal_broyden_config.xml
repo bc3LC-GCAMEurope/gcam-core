@@ -236,8 +236,21 @@
 		<solution-floor fillout="1" region="Greece" market-type="district heat">0.01</solution-floor>
 		<solution-floor fillout="1" region="Germany" market-type="district heat">0.01</solution-floor>
 		<solution-tolerance fillout="1" region="Albania" period="3" market-type="crude oil">0.05</solution-tolerance>
+
+
         <!-- applies to all regions since region attribute is not included -->
-        <max-price-change fillout="1" market-type="Trial-Value" period="1">10</max-price-change>
-		<solution-tolerance fillout="1" period="10" market-type="Trial-Value">0.05</solution-tolerance>
+        <!--max-price-change fillout="1" market-type="Trial-Value" period="1">10</max-price-change>
+		<solution-tolerance fillout="1" period="6" market-type="Trial-Value">0.05</solution-tolerance-->
+
+
+    <!-- Single, robust tolerance for all trial value markets -->
+    <solution-tolerance fillout="1" market-type="Trial-Value">0.025</solution-tolerance>
+    
+    <!-- Consistent solution floor to prevent numerical issues -->
+    <solution-floor fillout="1" market-type="Trial-Value">0.001</solution-floor>
+    
+    <!-- Moderate price change limit to prevent oscillations -->
+    <max-price-change fillout="1" market-type="Trial-Value">8</max-price-change>
+
     </solution-info-param-parser>
 </scenario>
