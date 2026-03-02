@@ -45,7 +45,7 @@ module_gcameurope_L254.transportation_UCD <- function(command, ...) {
              FILE = "energy/A54.tranSubsector_shrwt_revised",
              FILE = "energy/A54.tranSubsector_logit_revised",
              FILE = "energy/A54.globaltranTech_retire_revised",
-             FILE = "energy/A54.globaltranTech_shrwt_revised",
+             FILE = "gcam-europe/A54.globaltranTech_shrwt_revised_EUR",
              FILE=  "energy/A54.globaltranTech_interp_revised",
              FILE = "energy/A54.globaltech_passthru",
              FILE = "energy/A54.globaltech_passthru_revised",
@@ -138,7 +138,7 @@ module_gcameurope_L254.transportation_UCD <- function(command, ...) {
       A54.tranSubsector_VOTT<- bind_rows(A54.tranSubsector_VOTT,A54.tranSubsector_VOTT_SSP1)
 
       A54.globaltranTech_retire <- get_data(all_data, "energy/A54.globaltranTech_retire_revised",strip_attributes = TRUE)
-      A54.globaltranTech_shrwt <- get_data(all_data, "energy/A54.globaltranTech_shrwt_revised",strip_attributes = TRUE)
+      A54.globaltranTech_shrwt <- get_data(all_data, "gcam-europe/A54.globaltranTech_shrwt_revised_EUR",strip_attributes = TRUE)
       A54.globaltranTech_interp <- get_data(all_data, "energy/A54.globaltranTech_interp_revised",strip_attributes = TRUE)
       A54.globaltech_passthru <- get_data(all_data, "energy/A54.globaltech_passthru_revised",strip_attributes = TRUE)
     } else {
