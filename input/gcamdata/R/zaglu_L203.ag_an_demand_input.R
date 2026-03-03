@@ -37,7 +37,6 @@ module_aglu_L203.ag_an_demand_input <- function(command, ...) {
       FILE = "aglu/A_demand_technology",
       FILE = "aglu/A_fuelprefElasticity_ssp1",
       FILE = "aglu/A_diet_bias",
-      FILE = "socioeconomics/Base_pcGDP_PPP",
       FILE = "aglu/A_demand_base_food_prices",
       "L101.CropMeat_Food_Pcal_R_C_Y",
       "L109.ag_ALL_Mt_R_C_Y",
@@ -45,6 +44,7 @@ module_aglu_L203.ag_an_demand_input <- function(command, ...) {
       "L110.For_ALL_bm3_R_Y",
       "L106.income_distributions",
       "L201.Pop_Scen",
+      "L102.pcgdp_thous90USD_Scen_R_Y",
       FILE = "gcam-europe/mappings/ag_regions")
 
   MODULE_OUTPUTS <-
@@ -473,6 +473,13 @@ module_aglu_L203.ag_an_demand_input <- function(command, ...) {
     # per capita GDP PPP (from GCAM output)
     # TODO: Get this from gcamdata object?
     # Fix pc GDP to reflect income groups by multiplying by income share and dividing by population share
+    Base_pcGDP_PPP <- L102.pcgdp_thous90USD_Scen_R_Y %>%
+      filter(scenario == socioeconomics.BASE_GDP_SCENARIO) %>%
+      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
+      mutate(Units = "Thous90US$/per") %>%
+      select(-scenario, -GCAM_region_ID) %>%
+      filter(year %in% MODEL_BASE_YEARS)
+
     Base_pcGDP_PPP %>%
       left_join(L106.income_distributions, by = c("year", "region")) %>%
       mutate(pc_GDP_groups = value*subregional.income.share/subregional.population.share) %>%
@@ -853,7 +860,7 @@ module_aglu_L203.ag_an_demand_input <- function(command, ...) {
       add_units("PCal/yr") %>%
       add_comments("FAO demand quantities multiplied by caloric content and added by demand category") %>%
       same_precursors_as(L203.BaseService) %>%
-      add_precursors("aglu/A_demand_food_staples", "aglu/A_demand_food_base_service") ->
+      add_precursors("aglu/A_demand_food_staples", "aglu/A_demand_food_base_service", "L102.pcgdp_thous90USD_Scen_R_Y") ->
       L203.StapleBaseService_ConsumerGroups
 
     L203.NonStapleBaseService_ConsumerGroups %>%
