@@ -5,18 +5,6 @@
 # Column types: cccccc
 EPA_sector,EPA_agg_sector,supplysector,subsector,stub.technology,EDGAR_agg_sector
 ODS Substitutes: Refrigeration / Air Conditioning,Industrial Processes,cooling,electricity,electricity,refrigeration
-ODS Substitutes: Refrigeration / Air Conditioning,Industrial Processes,cooling,electricity,resistance,refrigeration
-ODS Substitutes: Refrigeration / Air Conditioning,Industrial Processes,cooling,electricity,air-air pump south,refrigeration
-ODS Substitutes: Refrigeration / Air Conditioning,Industrial Processes,cooling,electricity,air-air pump middle south,refrigeration
-ODS Substitutes: Refrigeration / Air Conditioning,Industrial Processes,cooling,electricity,air-air pump middle north,refrigeration
-ODS Substitutes: Refrigeration / Air Conditioning,Industrial Processes,cooling,electricity,air-air pump north,refrigeration
-ODS Substitutes: Refrigeration / Air Conditioning,Industrial Processes,cooling,water heat pump,air-water pump south,refrigeration
-ODS Substitutes: Refrigeration / Air Conditioning,Industrial Processes,cooling,water heat pump,air-water pump middle south,refrigeration
-ODS Substitutes: Refrigeration / Air Conditioning,Industrial Processes,cooling,water heat pump,air-water pump middle north,refrigeration
-ODS Substitutes: Refrigeration / Air Conditioning,Industrial Processes,cooling,water heat pump,air-water pump north,refrigeration
-ODS Substitutes: Refrigeration / Air Conditioning,Industrial Processes,cooling,water heat pump,geo-water pump,refrigeration
-ODS Substitutes: Refrigeration / Air Conditioning,Industrial Processes,cooling,water heat pump,solar thermal,refrigeration
-ODS Substitutes: Refrigeration / Air Conditioning,Industrial Processes,cooling,water heat pump,heat pump,refrigeration
 ODS Substitutes: Foam Blowing,Industrial Processes,industrial processes,foams,foams,foams
 ODS Substitutes: Solvents,Industrial Processes,industrial processes,solvents,solvents,solvents
 ODS Substitutes: MDI Aerosols,Industrial Processes,urban processes,aerosols,aerosols,aerosols
