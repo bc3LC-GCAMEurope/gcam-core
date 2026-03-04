@@ -19,11 +19,7 @@ module_socio_L100.Population_hist <- function(command, ...) {
   MODULE_INPUTS <-
     c(FILE = "socioeconomics/POP/iso_ctry_Maddison",
       FILE = "socioeconomics/POP/Maddison_population",
-      FILE = "socioeconomics/SSP/SSP_database_2025",
-      FILE = "socioeconomics/SSP/iso_SSP_regID",
-      FILE = "socioeconomics/POP/UN_popTot",
-      FILE = "gcam-europe/A01.popgdp_EUR",
-      FILE = "gcam-europe/mappings/geo_to_iso_map")
+      FILE = "socioeconomics/POP/UN_popTot")
 
   MODULE_OUTPUTS <-
     c("L100.Pop_thous_ctry_Yh")
@@ -47,12 +43,9 @@ module_socio_L100.Population_hist <- function(command, ...) {
     # Load required inputs ----
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
 
-    A01.popgdp_EUR <- A01.popgdp_EUR %>%
-      left_join_error_no_match(geo_to_iso_map,
-                               by = 'geo') %>%
-      mutate(pop = pop / 1e6) # Units: to Million people
 
     # Historical population by country ----
+
     Maddison_population %>%
       select(-deleteme) %>%
       gather_years %>%
@@ -158,14 +151,14 @@ module_socio_L100.Population_hist <- function(command, ...) {
              iso = replace(iso, iso == "glp", "blm"), #Create Saint Barthelemy iso using Guadalupe pop ratio
              iso = replace(iso, iso == "shn", "flk"), #Create the Falkland Islands iso using Saint Helena, Ascension and Tristan da Cunha pop ratio
              iso = replace(iso, iso == "nru", "niu")  #Create Niue iso using the Republic of Nauru pop ratio
-             ) %>%
+      ) %>%
       bind_rows(filter(maddison_hist_ratio, iso %in% c("scg", "chi", "ant", "glp", "nru"))) %>%
       mutate(iso = replace(iso, iso == "scg", "srb"), #Create Serbia iso using Serbia & Montenegro pop ratio
              iso = replace(iso, iso == "chi", "ggy"), #Create Guernsey iso using the Channel Islands pop ratio
              iso = replace(iso, iso == "ant", "cuw"), #Create Curacao iso using Netherlands Antilles pop ratio
              iso = replace(iso, iso == "glp", "maf"), #Create Saint Martin iso using Guadalupe pop ratio
              iso = replace(iso, iso == "nru", "tkl")  #Create Tokelau iso using the Republic of Nauru pop ratio
-             ) %>%
+      ) %>%
       bind_rows(filter(maddison_hist_ratio, iso %in% c("ant"))) %>%
       mutate(iso = replace(iso, iso == "ant", "sxm"))  #Create Sint Maarten iso using Netherlands Antilles pop ratio
 
@@ -214,7 +207,7 @@ module_socio_L100.Population_hist <- function(command, ...) {
              iso = gsub("bes", "ant", iso),
              iso = gsub("cuw", "ant", iso),
              iso = gsub("sxm", "ant", iso)#Aggregating Netherlands Antilles islands (broken out in newer UN Population Data)
-             ) %>%
+      ) %>%
       group_by(iso, year) %>%
       mutate(value = sum(value)) %>%
       ungroup() %>%
@@ -253,114 +246,7 @@ module_socio_L100.Population_hist <- function(command, ...) {
       # Meaning the final Historical Year output will be a subset (out to the max base year) of the Historical Population Years
     }
 
-    # Interpolate and/or extrapolate to fill NAs
-    # If there are no NAs, this will not do anything but change the dataframe name
-    L100.Pop_thous_ctry_UNpopYh_NAs %>%
-      group_by(iso) %>%
-      mutate(value = approx_fun(year, value, rule = 2)) %>%
-      ungroup() ->
-      L100.Pop_thous_ctry_UNpopYh
-    # L100.Pop_thous_ctry_UNpopYh - NOTE: _popYh indicates data set is for historical(h), population(pop) years (Y).
-    # This distinction  is important because the population data is updated to a more recent year than the GCAM base year.
-    # Meaning the final Historical Year output will be a subset (out to the max base year) of the Historical Population Years
-
-    ## (2) SSP population projections by country
-
-    # First, extract the final historical population from UN
-    pop_final_hist <- filter(L100.Pop_thous_ctry_Yh, year == socioeconomics.FINAL_HIST_YEAR) %>%
-      rename(pop_final_hist = value) %>%
-      select(-year)
-
-    # Second, generate ratios of future population to base year for all SSPs. The ratios will be applied to the historical year populations so there are no jumps/inconsistencies.
-
-    # use the IIASA-WiC POP model from the SSP database; IIASA-WiC is the official SSP population data set
-    SSP_database_2025 %>%
-      # make variable names lower case
-      dplyr::rename_all(tolower) %>%
-      # remove aggregated regions
-      filter(!grepl("\\(|World", region)) %>%
-      filter(model == "IIASA-WiC POP 2023", variable == "Population") %>%
-      left_join_error_no_match(
-        iso_SSP_regID %>% distinct(iso, region = ssp_country_name),
-        by = "region") %>%
-      gather_years() ->
-      SSP_pop_0
-
-    # Using the Historical Reference scenario to fill history of SSPs
-    SSP_pop_0 %>%
-      filter(scenario != "Historical Reference") %>%
-      left_join(
-        SSP_pop_0 %>% filter(scenario == "Historical Reference") %>% select(-scenario) %>%
-          rename(hist = value),
-        by = c("model", "region", "variable", "unit", "iso", "year")
-      ) %>%
-      # new ssp data starts 2020 (socioeconomics.SSP_DB_BASEYEAR)
-      mutate(value = if_else(year < socioeconomics.SSP_DB_BASEYEAR, hist, value)) %>%
-      select(iso, scenario, year, pop = value) ->
-      L100.Pop_thous_SSP_ctry_Yfut_0
-
-    # # Compute the population ratio change from the Last historical year
-    # if (socioeconomics.SSP_EUR) {
-    #   # If detailed data for EUR decided to use, substitute the
-    #   # available EUR population data (from 2022 to 2070, SSP2)
-    #   L100.Pop_thous_SSP_ctry_Yfut_1 <-
-    #     L100.Pop_thous_SSP_ctry_Yfut_0 %>%
-    #     complete(nesting(scenario, iso), year = c(socioeconomics.FINAL_HIST_YEAR, FUTURE_YEARS)) %>%
-    #     filter(year %in% c(socioeconomics.FINAL_HIST_YEAR, FUTURE_YEARS)) %>%
-    #     left_join(A01.popgdp_EUR %>%
-    #                 select(scenario, year, pop_EUR = pop, iso),
-    #               by = c('scenario','year','iso')) %>%
-    #     mutate(pop = ifelse(!is.na(pop_EUR), pop_EUR, pop)) %>%
-    #     select(-pop_EUR) %>%
-    #     group_by(scenario, iso) %>%
-    #     mutate(pop = approx_fun(year, pop),
-    #            ratio_iso_ssp = pop / pop[year == socioeconomics.FINAL_HIST_YEAR]) %>%  # Calculate population ratios to final historical year (2015), no units
-    #     select(-pop) %>%
-    #     ungroup()
-    # } else {
-    #   # Otherwise, stick to standard SSP2 data
-    #   L100.Pop_thous_SSP_ctry_Yfut_1 <-
-    #     L100.Pop_thous_SSP_ctry_Yfut_0 %>%
-    #     complete(nesting(scenario, iso), year = c(socioeconomics.FINAL_HIST_YEAR, FUTURE_YEARS)) %>%
-    #     filter(year %in% c(socioeconomics.FINAL_HIST_YEAR, FUTURE_YEARS)) %>%
-    #     group_by(scenario, iso) %>%
-    #     mutate(pop = approx_fun(year, pop),
-    #            ratio_iso_ssp = pop / pop[year == socioeconomics.FINAL_HIST_YEAR]) %>%  # Calculate population ratios to final historical year (2015), no units
-    #     select(-pop) %>%
-    #     ungroup()
-    # }
-
-    L100.Pop_thous_SSP_ctry_Yfut <-
-      L100.Pop_thous_SSP_ctry_Yfut_0 %>%
-      # need to have socioeconomics.SSP_DB_BASEYEAR in the data as the initial point for interpolation
-      # otherwise 2021:2024 could be the same with 2025 (rule = 2 below)
-      complete(nesting(scenario, iso),
-               year = c(socioeconomics.SSP_DB_BASEYEAR:max(FUTURE_YEARS))) %>%
-      filter(year %in% c(socioeconomics.SSP_DB_BASEYEAR:max(FUTURE_YEARS))) %>%
-      group_by(scenario, iso) %>%
-      # Data is in five year intervals, so interpolate so get data for the base-year before calculating ratios
-      mutate(pop = approx_fun(year, pop, rule = 2),
-             ratio_iso_ssp = pop / pop[year == socioeconomics.FINAL_HIST_YEAR]) %>%  # Calculate population ratios to final historical year (2010), no units
-      select(-pop) %>%
-      filter(year >= socioeconomics.FINAL_HIST_YEAR) %>%
-      # Third, project country population values using SSP ratios and final historical year populations.
-      # Not all countries in the UN data are in SSP data. Create complete tibble with all UN countries & SSP years.
-      ungroup() %>%
-      complete(scenario = unique(scenario),
-               year = unique(year),
-               iso = unique(L100.Pop_thous_ctry_Yh$iso)) %>%
-      # For these countries, the ratio will be set to 1 (per the old data system).
-      replace_na(list(ratio_iso_ssp = 1)) %>%
-      ## Note: In the old data system, Taiwan is in this category and has constant population. Issue has been opened to deal with this later. ##
-      right_join(pop_final_hist, by = "iso") %>% # Join with final historic period population
-      mutate(value = pop_final_hist * ratio_iso_ssp) %>%  # Units are 1000 persons (UN 2010 value is in thousands)
-      filter(year != socioeconomics.FINAL_HIST_YEAR) %>% # Keep only SSP future years
-      select(-pop_final_hist, -ratio_iso_ssp)
-
-
-    # ===================================================
-
-    # Produce outputs
+    # Produce outputs ----
     L100.Pop_thous_ctry_Yh %>%
       add_title("Population by country, 1700-2010") %>%
       add_units("thousand") %>%

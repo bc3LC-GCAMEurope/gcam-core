@@ -1,9 +1,31 @@
+# Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
+
+#' module_socio_L102.GDP
+#'
+#' Prepare historical and future GDP time series.  On the historical side, this
+#' amounts to aggregating country-level GDP to GCAM regions.  On the future side
+#' we create a time series for each of a variety of future scenarios.  The
+#' outputs include GDP, pcGDP, and the PPP-MER conversion factor, all tabulated
+#' by GCAM region.
+#'
+#' The scenarios generated include the SSPs.  GDP outputs are in millions of 1990 USD.
+#' Per-capita values are in thousands of 1990 USD.
+#'
+#' @param command API command to execute
+#' @param ... other optional parameters, depending on command
+#' @return Depends on \code{command}: either a vector of required inputs,
+#' a vector of output names, or (if \code{command} is "MAKE") all
+#' the generated outputs: \code{L102.gdp_mil90usd_Scen_R_Y},
+#' \code{L102.pcgdp_thous90USD_Scen_R_Y}, \code{L102.pcgdp_thous90USD_ctry_Yh},
+#' \code{L102.PPP_MER_R}.
+#' @importFrom assertthat assert_that
+#' @importFrom dplyr arrange bind_rows distinct filter full_join if_else intersect group_by left_join mutate one_of select summarise transmute
+#' @importFrom tidyr complete gather nesting replace_na
+#' @author RPL March 2017
 module_socio_L102.GDP <- function(command, ...) {
 
   MODULE_INPUTS <-
     c(FILE = "common/iso_GCAM_regID",
-      FILE = "gcam-europe/A01.popgdp_EUR",
-      FILE = "gcam-europe/mappings/geo_to_iso_map",
       "L100.gdp_mil90usd_ctry_Yh",
       "L100.GDP_bilusd_SSP_ctry_Yfut_raw",
       "L100.Pop_thous_ctry_Yh",
@@ -31,12 +53,7 @@ module_socio_L102.GDP <- function(command, ...) {
     # Load required inputs ----
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
 
-    A01.popgdp_EUR <- A01.popgdp_EUR %>%
-      left_join_error_no_match(geo_to_iso_map,
-                               by = 'geo') %>%
-      left_join_error_no_match(select(iso_GCAM_regID, iso, GCAM_region_ID), by = 'iso') %>%
-      mutate(gdp_gr = 1 + gdp_gr / 100,       # from percentage to growth rate
-             gdppc_gr = 1 + gdppc_gr / 100)   # from percentage to growth rate
+
 
     # 1. Stitch GDP projections to historical values  ----
     ## Step 1: Get historical GDP data & mapping ready ----
@@ -80,18 +97,6 @@ module_socio_L102.GDP <- function(command, ...) {
     # all regions currently GDP up to 2023 (FAOSTAT)
     # SSP scenarios use 2025-2100 growth rate from SSP
 
-    # update annual growth rates to growth rates with respect to 2020
-    A01.gdp_gr_EUR <- gdp_bilusd_rgn_Yfut %>% dplyr::filter(GCAM_region_ID == '28') %>%
-      filter_regions_europe(region_ID_mapping = iso_GCAM_regID) %>%
-      left_join(A01.popgdp_EUR %>% dplyr::filter(GCAM_region_ID == '28') %>%
-                  select(GCAM_region_ID, scenario, year, gdp_gr),
-                by = c('scenario','GCAM_region_ID','year')) %>%
-      group_by(scenario, GCAM_region_ID) %>%
-      mutate(adj_gdp = lag(gdp) * gdp_gr) %>%
-      ungroup()
-
-    EUR_gdp_gr_param <- if (socioeconomics.SSP_EUR) A01.gdp_gr_EUR else NULL
-
     # join.gdp.ts hist and future
     gdp.mil90usd.scen.rgn.yr <-
       join.gdp.ts(
@@ -99,11 +104,7 @@ module_socio_L102.GDP <- function(command, ...) {
         gdp_mil90usd_rgn,
         # future: gdp_bilusd_rgn_Yfut
         gdp_bilusd_rgn_Yfut,
-        grouping = 'GCAM_region_ID',
-        # assuming base year is 2020 (max(intersect(past$year, future$year)),
-        # where past = gdp_mil90usd_rgn %>% filter(year <= socioeconomics.SSP_DB_BASEYEAR)
-        # where future = gdp_bilusd_rgn_Yfut
-        EUR_data = EUR_gdp_gr_param)
+        grouping = 'GCAM_region_ID')
 
     ## Step 4: Additional adjustment  for Venezuela (South Amer North) and Taiwan ----
 

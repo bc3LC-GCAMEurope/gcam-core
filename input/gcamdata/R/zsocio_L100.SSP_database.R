@@ -12,7 +12,7 @@
 #'  \code{L100.LaborForce_mil_SSP_ctry_Yfut_raw}, \code{L100.GDP_bilusd_SSP_ctry_Yfut_raw}
 #' @details preprocess SSP database for population, GDP, and labor force
 #' @importFrom assertthat assert_that
-#' @importFrom dplyr bind_rows filter full_join if_else group_by left_join mutate order_by select summarize bind_rows
+#' @importFrom dplyr bind_rows filter full_join if_else group_by left_join mutate order_by select summarize bind_rows reframe
 #' @importFrom tidyr complete nesting replace_na spread
 #' @author XZ 2025
 module_socio_L100.SSP_database <- function(command, ...) {
@@ -21,7 +21,10 @@ module_socio_L100.SSP_database <- function(command, ...) {
     c(FILE = "socioeconomics/SSP/SSP_database_2025",
       FILE = "socioeconomics/SSP/iso_SSP_regID",
       FILE = "socioeconomics/SSP/pop_laborforce_variable",
-      FILE = "common/iso_GCAM_regID")
+      FILE = "common/iso_GCAM_regID",
+      FILE = "gcam-europe/A01.popgdp_EUR",
+      FILE = "gcam-europe/mappings/geo_to_iso_map",
+      "L100.gdp_mil90usd_ctry_Yh") # to calibrate the GDP from the EUR Aging Report
 
   MODULE_OUTPUTS <-
     c("L100.LaborForce_mil_SSP_ctry_Yfut_raw",
@@ -81,6 +84,36 @@ module_socio_L100.SSP_database <- function(command, ...) {
       transmute(scenario, iso, var = "pop", unit, year, value) ->
       pop.ssp
 
+    ## adapt EU regions SSP2 following the EU Aging report if `socioeconomic.SSP_EUR`
+    ## set to TRUE. In this case, substitute EUR population data from 2022.
+    ## NOTE: since data is still in 5-yr time step, no jumps will appear
+    if (socioeconomics.SSP_EUR) {
+
+      # preprocess A01.popgdp_EUR
+      A01.popgdp_EUR_pop <- A01.popgdp_EUR %>%
+        # consider iso3 codes
+        left_join_error_no_match(geo_to_iso_map,
+                                 by = 'geo') %>%
+        # set units to Million people
+        mutate(pop = pop / 1e6) %>%
+        # filter to only SSP2
+        filter(scenario == 'SSP2') %>%
+        # filter to only 5-yr time steps (the only years that appear in pop.ssp)
+        filter(year %in% unique(pop.ssp$year)) %>%
+        # select relevant columns
+        select(scenario, iso, year, value_agR = pop)
+
+
+      # substitute preprocessed data to pop.ssp dataset
+      pop.ssp <- pop.ssp %>%
+        left_join(A01.popgdp_EUR_pop,
+                  by = c('scenario','year','iso')) %>%
+        mutate(value = ifelse(!is.na(value_agR), value_agR, value)) %>%
+        select(-value_agR)
+
+    }
+
+
     ## (1.1) population ----
     pop.ssp %>%
       select(iso, scenario, year, pop = value) %>%
@@ -89,7 +122,9 @@ module_socio_L100.SSP_database <- function(command, ...) {
       add_comments("The implied growth ratios will be applied to historical values from UN or other sources") %>%
       add_legacy_name("L100.Pop_thous_SSP_ctry_Yfut_raw") %>%
       add_precursors("socioeconomics/SSP/SSP_database_2025",
-                     "socioeconomics/SSP/iso_SSP_regID") ->
+                     "socioeconomics/SSP/iso_SSP_regID",
+                     "gcam-europe/A01.popgdp_EUR",
+                     "gcam-europe/mappings/geo_to_iso_map") ->
       L100.Pop_thous_SSP_ctry_Yfut_raw
 
 
@@ -133,7 +168,7 @@ module_socio_L100.SSP_database <- function(command, ...) {
     # (2) SSP GDP billions of 2017$ ----
 
     assertthat::assert_that("billion USD_2017/yr" %in%
-                              c(SSP_database_2025 %>%  dplyr::rename_all(tolower) %>%
+                              c(SSP_database_2025 %>% dplyr::rename_all(tolower) %>%
                                   distinct(unit) %>% pull))
 
     SSP_database_2025 %>%
@@ -167,6 +202,104 @@ module_socio_L100.SSP_database <- function(command, ...) {
       mutate(value = if_else(year < socioeconomics.SSP_DB_BASEYEAR, hist, value)) %>%
       select(iso, scenario, year, gdp = value) ->
       L100.GDP_bilusd_SSP_ctry_Yfut_raw
+
+
+
+    ## adapt EU regions SSP2 following the EU Aging report if `socioeconomic.SSP_EUR`
+    ## set to TRUE. In this case, substitute EUR GDP data from 2022.
+    ## PROCEDURE: compute the GDP growth rate (gdp_gr) from L100.GDP_bilusd_SSP_ctry_Yfut_raw
+    ## and substitute it from 2022 onwards. Recompute the GDP value
+    ## NOTE: since data is still in 5-yr time step, no jumps will appear
+    if (socioeconomics.SSP_EUR) {
+
+      # preprocess A01.popgdp_EUR
+      A01.popgdp_EUR_gdp <- A01.popgdp_EUR %>%
+        # remove unnecessary columns
+        select(-gdppc_gr, -pop) %>%
+        # remove years without GDP data
+        filter(rowSums(is.na(.)) == 0) %>%
+        # complete years (to include 2020 and 2021)
+        group_by(scenario, geo) %>%
+        complete(year = seq(2019, max(year), by = 1)) %>%
+        # consider iso3 codes
+        left_join_error_no_match(geo_to_iso_map,
+                                 by = 'geo') %>%
+        # define periods by 5-yr time steps
+        mutate(period_start = floor(year / 5) * 5) %>%
+        # add historical GDP when available
+        left_join(L100.gdp_mil90usd_ctry_Yh %>%
+                    rename(gdp = value),
+                  by = c('iso','year')) %>%
+        # # compute %growth for those years
+        # mutate(gdp_gr = ifelse(is.na(gdp_gr), (gdp - lag(gdp)) / lag(gdp) * 100, gdp_gr)) %>%
+        # filter to only SSP2
+        filter(scenario == 'SSP2') %>%
+        # estimate gdp from last non-NA gdp and gdp_gr
+        group_by(iso, scenario) %>%
+        arrange(year, .by_group = TRUE) %>%
+        mutate(
+          # convert gdp_gr to a multiplier
+          multiplier = ifelse(year <= max(year[!is.na(gdp)]), 1, 1 + (gdp_gr/100)),
+          # get the LAST known historical GDP
+          anchor_gdp = tail(na.omit(gdp), 1),
+          # multiply the LAST known historical GDP value by the growth multiplier
+          recovered_gdp = ifelse(year <= max(year[!is.na(gdp)]), gdp, anchor_gdp * cumprod(multiplier))
+        ) %>%
+        ungroup() %>%
+        # filter to only 5-yr time steps
+        filter(year %% 5 == 0) %>%
+        # compute cumulative %growth for 5-yr time steps
+        group_by(scenario, iso) %>%
+        arrange(year, .by_group = TRUE) %>%
+        mutate(gdp_gr_agR = (recovered_gdp - lag(recovered_gdp)) / lag(recovered_gdp)) %>%
+        ungroup() %>%
+        # select relevant columns
+        select(scenario, iso, year, gdp_gr_agR)
+
+
+      L100.GDP_bilusd_SSP_ctry_Yfut_raw <- L100.GDP_bilusd_SSP_ctry_Yfut_raw %>%
+
+        ## -- compute gdp_gr by scenario and iso code
+        group_by(iso, scenario) %>%
+        # arrange by year to ensure t-1 is actually the previous year
+        arrange(year, .by_group = TRUE) %>%
+        # calculate growth rate
+        mutate(gdp_gr = (gdp - lag(gdp)) / lag(gdp)) %>%
+        ungroup() %>%
+
+        ## -- substitute with preprocess data
+        left_join(A01.popgdp_EUR_gdp,
+                  by = c('scenario','year','iso')) %>%
+        mutate(gdp_gr = ifelse(!is.na(gdp_gr_agR), gdp_gr_agR, gdp_gr)) %>%
+
+        ## -- compute the GDP values based on the updated gdp_gr
+        group_by(iso, scenario) %>%
+        arrange(year, .by_group = TRUE) %>%
+        mutate(
+          # get index of the first row that has a new growth rate
+          first_new_rate_idx = which(!is.na(gdp_gr_agR))[1],
+          # get the GDP value IMMEDIATELY before that index
+          anchor_gdp = gdp[first_new_rate_idx - 1],
+          # transform the gdp_gr into a multiplier (e.g., gdp_gr == 0.178 -> multiplier = 1.178)
+          raw_multiplier = ifelse(!is.na(gdp_gr), 1 + gdp_gr, 1),
+          # compute cumulative growth starting FROM the anchor
+          growth_cum = cumprod(raw_multiplier),
+          # recover GDP (for historical years, original gdp; for future, anchor * growth_cum)
+          recovered_gdp = ifelse(year < year[first_new_rate_idx],
+                                 gdp,
+                                 anchor_gdp * growth_cum)
+        ) %>%
+        ungroup() %>%
+
+        ## -- clean data
+        mutate(gdp = ifelse(is.na(recovered_gdp), gdp, recovered_gdp)) %>%
+        select(iso, scenario, year, gdp)
+
+    }
+
+
+
+
 
     ## Units are billions of 2017$ but relative ratio will be used when connecting to historical data
 
