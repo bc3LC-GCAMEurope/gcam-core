@@ -281,7 +281,7 @@ module_socio_L100.SSP_database <- function(command, ...) {
           # get the GDP value IMMEDIATELY before that index
           anchor_gdp = gdp[first_new_rate_idx - 1],
           # transform the gdp_gr into a multiplier (e.g., gdp_gr == 0.178 -> multiplier = 1.178)
-          raw_multiplier = ifelse(!is.na(gdp_gr), 1 + gdp_gr, 1),
+          raw_multiplier = ifelse(year < year[first_new_rate_idx], 1, 1 + gdp_gr),
           # compute cumulative growth starting FROM the anchor
           growth_cum = cumprod(raw_multiplier),
           # recover GDP (for historical years, original gdp; for future, anchor * growth_cum)
