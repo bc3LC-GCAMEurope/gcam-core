@@ -121,6 +121,14 @@
             <max-iterations>2</max-iterations>
         </preconditioner-solver-component>
 
+    <bisect-all-solver-component>
+        <bracket-interval>0.1</bracket-interval>  <!-- Wider bracket for energy markets -->
+        <max-bracket-iterations>40</max-bracket-iterations>
+        <max-iterations>30</max-iterations>
+        <use-secant-brackets>1</use-secant-brackets>
+        <solution-info-filter>unsolved && solvable && market-matches="energy net export"</solution-info-filter>
+    </bisect-all-solver-component>
+
         <bisect-all-solver-component>
             <bracket-interval>0.05</bracket-interval>
             <max-bracket-iterations>20</max-bracket-iterations>
