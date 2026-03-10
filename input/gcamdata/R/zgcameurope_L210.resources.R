@@ -26,11 +26,11 @@ module_gcameurope_L210.resources <- function(command, ...) {
                                "L210.UnlimitRsrcPrice",
                                "L210.RsrcTechChange",
                                "L210.SmthRenewRsrcTechChange",
-                               "L210.SmthRenewRsrcTechChange_offshore_wind",
+                               # "L210.SmthRenewRsrcTechChange_offshore_wind",  commented out for modifications
                                "L210.RsrcCurves_U",
                                "L210.SmthRenewRsrcCurves_MSW",
                                "L210.SmthRenewRsrcCurves_wind",
-                               "L210.SmthRenewRsrcCurves_offshore_wind",
+                               # "L210.SmthRenewRsrcCurves_offshore_wind",  commented out for modifications
                                "L210.SmthRenewRsrcCurvesGdpElast_roofPV",
                                "L210.GrdRenewRsrcCurves_geo",
                                "L210.GrdRenewRsrcMax_geo",
@@ -70,8 +70,8 @@ module_gcameurope_L210.resources <- function(command, ...) {
                     "L115.RsrcCurves_EJ_R_roofPV",
                     "L116.RsrcCurves_EJ_R_geo",
                     "L116.RsrcCurves_EJ_R_EGS",
-                    "L120.RsrcCurves_EJ_R_offshore_wind",
-                    "L120.TechChange_offshore_wind",
+                    "L120.RsrcCurves_EJ_R_offshore_wind_EUR", #modified for _EUR
+                    "L120.TechChange_offshore_wind_EUR", #modified for _EUR
                     "L102.pcgdp_thous90USD_Scen_R_Y",
                     "L210.RenewRsrc",
                     "L210.RenewRsrcPrice",
@@ -86,6 +86,8 @@ module_gcameurope_L210.resources <- function(command, ...) {
                       "L210.ResSubresourceProdLifetime_EUR",
                       "L210.RsrcFixOut_EUR",
                       "L210.RsrcExoShutdown_EUR",
+                      "L210.SmthRenewRsrcTechChange_offshore_wind_EUR",  #new output
+                      "L210.SmthRenewRsrcCurves_offshore_wind_EUR",  #new output
                       paste0(OUTPUTS_TO_COPY_FILTER, "_EUR"))
 
   if(command == driver.DECLARE_INPUTS) {
@@ -463,6 +465,49 @@ module_gcameurope_L210.resources <- function(command, ...) {
       add_comments("is no competetion between technologies.") %>%
       add_precursors("common/GCAM_region_names", "gcam-europe/A10.subrsrc_info_EUR") ->
       L210.ResTechShrwt_EUR
+
+    # From now on all added for modifications:
+
+    # Need to define no offshore regions first.
+    no_offshore_wind_regions <- GCAM_region_names %>%
+      anti_join(L120.RsrcCurves_EJ_R_offshore_wind_EUR, by = "GCAM_region_ID") %>%
+      pull(region)
+
+    # L210.SmthRenewRsrcTechChange_offshore_wind_EUR: technological change for offshore wind
+    L210.SmthRenewRsrcTechChange_offshore_wind_EUR <- write_to_all_regions(L120.TechChange_offshore_wind_EUR, c("region", "year","tech.change"), GCAM_region_names)
+    L210.SmthRenewRsrcTechChange_offshore_wind_EUR %>%
+      filter_regions_europe() %>%
+      filter(!(region %in% no_offshore_wind_regions)) %>%
+      mutate(renewresource = "offshore wind resource", smooth.renewable.subresource = "offshore wind resource") %>%
+      select(region,renewresource, smooth.renewable.subresource, year.fillout = year, techChange = tech.change)  -> L210.SmthRenewRsrcTechChange_offshore_wind_EUR
+
+    # Title, comments, units of L210.SmthRenewRsrcTechChange_offshore_wind_EUR
+    L210.SmthRenewRsrcTechChange_offshore_wind_EUR %>%
+      add_title("Technological change parameter for offshore wind resource") %>%
+      add_units("Unitless") %>%
+      add_comments("Data from L120.TechChange_offshore_wind_EUR added to all regions") %>%
+      same_precursors_as(L210.RsrcTechChange) %>%
+      add_precursors("L120.TechChange_offshore_wind_EUR") ->
+      L210.SmthRenewRsrcTechChange_offshore_wind_EUR
+
+
+    # L210.SmthRenewRsrcCurves_offshore_wind_EUR: supply curves of offshore wind resources
+    L210.SmthRenewRsrcCurves_offshore_wind_EUR <- L120.RsrcCurves_EJ_R_offshore_wind_EUR %>%
+      # Add region name
+      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
+      mutate(maxSubResource = round(maxSubResource, energy.DIGITS_MAX_SUB_RESOURCE),
+             mid.price = round(mid.price, energy.DIGITS_MID_PRICE),
+             curve.exponent = round(curve.exponent, energy.DIGITS_CURVE_EXPONENT),
+             year.fillout = min(MODEL_BASE_YEARS)) %>%
+      select(region, renewresource = resource, smooth.renewable.subresource = subresource, year.fillout, maxSubResource, mid.price, curve.exponent)
+
+    L210.SmthRenewRsrcCurves_offshore_wind_EUR %>%
+      add_title("Supply curves of offshore wind resources") %>%
+      add_units("maxSubResource: EJ; mid.price: $1975/GJ") %>%
+      add_comments("Data from L120.RsrcCurves_EJ_R_offshore_wind_EUR") %>%
+      add_precursors("L120.RsrcCurves_EJ_R_offshore_wind", "common/GCAM_region_names") ->
+      L210.SmthRenewRsrcCurves_offshore_wind_EUR
+
 
 
     return_data(MODULE_OUTPUTS)
