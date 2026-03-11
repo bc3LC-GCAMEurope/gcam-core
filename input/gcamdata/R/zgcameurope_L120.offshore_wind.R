@@ -138,9 +138,9 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
     # This models the increase in costs as more optimal locations are used first.
 
     L120.offshore_wind_matrix %>%
-      group_by(GCAM_region_ID) %>%
+      group_by(GCAM_region_ID, resource) %>%
       filter(dplyr::n() > 1) %>% # if there is only one entry (slovenia), we can't calculate curves
-      arrange(GCAM_region_ID, price) %>%
+      arrange(GCAM_region_ID, resource, price) %>%
       mutate(base.price = min(price),
              Pvar = price - base.price,
              maxSubResource = round(max(supply), energy.DIGITS_MAX_SUB_RESOURCE)) %>%
