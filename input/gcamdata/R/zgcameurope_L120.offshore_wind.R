@@ -111,13 +111,15 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
              OM.fixed = L120.offshore_wind_OMfixed) %>%
       mutate(price = fcr * capital.overnight / CF / CONV_YEAR_HOURS / CONV_KWH_GJ +
                OM.fixed / CF / CONV_YEAR_HOURS / CONV_KWH_GJ) %>%
-      # poner  if depth_clss
-      group_by(GCAM_region_ID) %>%
+      mutate(resource = if_else(depth_class %in% c("shallow", "transitional"),
+                                "fixed offshore wind resource",
+                                "floating offshore wind resource")) %>%
+      group_by(GCAM_region_ID, resource) %>%
       mutate(CFmax = max(CF)) %>%
-      arrange(GCAM_region_ID, price) %>%
+      arrange(GCAM_region_ID, resource, price) %>%
       mutate(supply = cumsum(resource.potential.EJ)) %>%
       ungroup() %>%
-      select(GCAM_region_ID, price, supply, CFmax) -> L120.offshore_wind_matrix
+      select(GCAM_region_ID, resource, price, supply, CFmax) -> L120.offshore_wind_matrix
 
     # Assigning additional resource to the USA because the global dataset does not include any resource for Alaska,
     # even though initial estimates suggest that its resource potential could be very large.
@@ -152,29 +154,29 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
     # Calculating P1 and Q1
     L120.offshore_wind_curve %>%
       mutate(percent.supply = supply/maxSubResource) %>%
-      group_by(GCAM_region_ID) %>%
+      group_by(GCAM_region_ID, resource) %>%
       filter(percent.supply <= energy.WIND_CURVE_MIDPOINT) %>%
       # filter for highest price point below 50% of total resource
       filter(Pvar == max(Pvar)) %>%
       ungroup() %>%
-      select(GCAM_region_ID, P1 = Pvar, Q1 = supply, maxSubResource) -> L120.mid.price_1
+      select(GCAM_region_ID, resource, P1 = Pvar, Q1 = supply, maxSubResource) -> L120.mid.price_1
 
     # Calculating P2 and Q2
     L120.offshore_wind_curve %>%
       mutate(percent.supply = supply/maxSubResource) %>%
-      group_by(GCAM_region_ID) %>%
+      group_by(GCAM_region_ID, resource) %>%
       filter(percent.supply >= energy.WIND_CURVE_MIDPOINT) %>%
       # filter for lowest price point above 50% of total resource
       filter(Pvar == min(Pvar)) %>%
       ungroup() %>%
-      select(GCAM_region_ID, P2 = Pvar, Q2 = supply) -> L120.mid.price_2
+      select(GCAM_region_ID, resource, P2 = Pvar, Q2 = supply) -> L120.mid.price_2
 
     # Calculating mid.price
     L120.mid.price_1 %>%
       left_join_error_no_match(L120.mid.price_2, by = "GCAM_region_ID") %>%
       mutate(mid.price = round(((P2 - P1) * maxSubResource + 2 * Q2 * P1 - 2 * Q1 * P2) / (2 * (Q2 - Q1)),
                                energy.DIGITS_MAX_SUB_RESOURCE)) %>%
-      select(GCAM_region_ID, mid.price) -> L120.mid.price
+      select(GCAM_region_ID, resource, mid.price) -> L120.mid.price
 
     L120.offshore_wind_curve %>%
       left_join_error_no_match(L120.mid.price, by = c("GCAM_region_ID")) -> L120.offshore_wind_curve

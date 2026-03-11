@@ -77,9 +77,9 @@ module_gcameurope_L210.resources <- function(command, ...) {
                     "L210.RenewRsrcPrice",
                     "L210.ResTechShrwt",
                     OUTPUTS_TO_COPY_FILTER)
-  MODULE_OUTPUTS <- c("L210.RenewRsrc_EUR",
-                      "L210.RenewRsrcPrice_EUR",
-                      "L210.ResTechShrwt_EUR",
+  MODULE_OUTPUTS <- c("L210.RenewRsrc_EUR", #contains wind
+                      "L210.RenewRsrcPrice_EUR", #contains wind
+                      "L210.ResTechShrwt_EUR", #contains wind
                       "L210.RsrcCurves_fos_EUR",
                       "L210.ReserveCalReserve_EUR",
                       "L210.RsrcCalProd_EUR",
