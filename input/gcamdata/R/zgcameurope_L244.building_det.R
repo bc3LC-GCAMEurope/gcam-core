@@ -14,7 +14,8 @@
 #'\code{L244.ThermalServiceSatiation_EUR}, \code{L244.GenericServiceSatiation_EUR}, \code{L244.Intgains_scalar_EUR}, \code{L244.ShellConductance_bld_EUR},
 #' \code{L244.Supplysector_bld_EUR}, \code{L244.FinalEnergyKeyword_bld_EUR}, \code{L244.SubsectorShrwt_bld_EUR}, \code{L244.SubsectorShrwtFllt_bld_EUR}, \code{L244.SubsectorInterp_bld_EUR},
 #' \code{L244.SubsectorInterpTo_bld_EUR}, \code{L244.SubsectorLogit_bld_EUR}, \code{L244.FuelPrefElast_bld_EUR}, \code{L244.StubTech_bld_EUR}, \code{L244.StubTechEff_bld_EUR},
-#' \code{L244.StubTechCalInput_bld_EUR}, \code{L244.StubTechIntGainOutputRatio_EUR}, \code{L244.GlobalTechShrwt_bld_EUR}, \code{L244.PrimaryRenewKeyword_bld_EUR}, \code{L244.GlobalTechCost_bld_EUR}, \code{L244.GlobalTechShutdown_bld_EUR}, \code{L244.GlobalTechProfitShutdown_bld_EUR},
+#' \code{L244.StubTechCalInput_bld_EUR}, \code{L244.StubTechIntGainOutputRatio_EUR}, \code{L244.GlobalTechShrwt_bld_EUR}, \code{L244.PrimaryRenewKeyword_bld_EUR},
+#' \code{L244.GlobalTechCost_bld_EUR}, \code{L244.GlobalTechSCurve_bld_EUR}, \code{L244.GlobalTechProfitShutdown_bld_EUR}, \code{L244.GlobalTechLifetime_bld_EUR},
 #' \code{L244.DeleteGenericService_EUR}, \code{L244.DeleteThermalService_EUR} and \code{L244.GompFnParam_EUR}, \code{L244.Satiation_impedance_EUR},
 #' \code{L244.GenericServiceImpedance_EUR}, \code{L244.GenericServiceAdder_EUR}, \code{L244.ThermalServiceImpedance_EUR}, \code{L244.ThermalServiceAdder_EUR}
 #' \code{L244.GenericTradFuelParams_EUR}, \code{L244.ThermalTradFuelParams_EUR}, \code{L244.GenericServiceCoef_EUR},\code{L244.ThermalServiceCoef_EUR},
@@ -101,8 +102,9 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              "L244.PrimaryRenewKeyword_bld_EUR",
              "L244.GlobalTechCost_bld_EUR",
              "L244.GlobalTechTrackCapital_bld_EUR",
-             "L244.GlobalTechShutdown_bld_EUR",
+             "L244.GlobalTechSCurve_bld_EUR",
              "L244.GlobalTechProfitShutdown_bld_EUR",
+             "L244.GlobalTechLifetime_bld_EUR",
              "L244.DeleteGenericService_EUR",
              "L244.DeleteThermalService_EUR",
              "L244.HDDCDD_A2_CCSM3x_EUR",
@@ -1029,23 +1031,29 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
 
     # Retirement for building technologies
-    # Create GlobalTechShutdown table
-    L244.GlobalTechShutdown_bld_EUR <- A44.cost_efficiency_EUR %>%
-      # Select relevant columns and rename shutdown.rate
-      select(supplysector, subsector, technology, lifetime, shutdown.rate) %>%
-      # Expand to include all GCAM consumers (for residential technologies)
-      tidyr::expand_grid(unique(L106.income_shares %>% select(gcam.consumer))) %>%
-      # Modify supplysector for residential technologies (add consumer suffix)
-      mutate(supplysector = if_else(grepl('resid', supplysector),
+    # L244.GlobalTechSCurve_bld_EUR: Retirement rates for building technologies
+    L244.globaltech_retirement_EUR <- A44.globaltech_retirement_EUR %>%
+      left_join(A44.cost_efficiency_EUR %>%
+                  select(supplysector, subsector, technology, lifetime_ok = lifetime),
+                by = c('supplysector', 'subsector', 'technology')) %>%  # Join on all relevant columns
+      mutate(lifetime = lifetime_ok) %>%
+      mutate(half.life = lifetime / 2) %>%
+      tidyr::expand_grid(unique(L106.income_shares %>%
+                                  select(gcam.consumer))) %>%
+      mutate(supplysector = if_else(grepl('resid',supplysector),
                                     paste(supplysector, gcam.consumer, sep = '_'),
-                                    supplysector)) %>%
-      # Add year column (only final calibration year)
+                                    supplysector))
+
+    L244.GlobalTechSCurve_bld_EUR <- L244.GlobalTechCost_bld_EUR %>%
+      filter(year %in% MODEL_FINAL_BASE_YEAR,
+             sector.name %in% L244.globaltech_retirement_EUR$supplysector) %>%
+      left_join(L244.globaltech_retirement_EUR,
+                by = c("sector.name" = "supplysector",
+                       "subsector.name" = "subsector",
+                       "technology")) %>%
+      filter(!is.na(lifetime)) %>%
       mutate(year = MODEL_FINAL_BASE_YEAR) %>%
-      # Rename columns to match what LEVEL2_DATA_NAMES[["GlobalTechShutdown"]] expects
-      rename(sector.name = supplysector,
-             subsector.name = subsector) %>%
-      # Select columns in the order expected by LEVEL2_DATA_NAMES
-      select(LEVEL2_DATA_NAMES[["GlobalTechShutdown"]])
+      select(any_of(LEVEL2_DATA_NAMES[["GlobalTechSCurve"]]))
 
     #===============================================================================
     # 2. GlobalTechProfitShutdown - Profit shutdown parameters for building technologies
@@ -1061,9 +1069,9 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     # Get all model years (base + future)
     all_years <- c(MODEL_FINAL_BASE_YEAR, MODEL_FUTURE_YEARS)
 
-    # Create the profit shutdown table using the inputs from A44.cost_efficiency_EUR
-    L244.GlobalTechProfitShutdown_bld_EUR <- A44.cost_efficiency_EUR %>%
-      # Select relevant columns (now including the new profit shutdown parameters)
+    # Create the profit shutdown table using the inputs from A44.globaltech_retirement_EUR
+    L244.GlobalTechProfitShutdown_bld_EUR <- A44.globaltech_retirement_EUR %>%
+      # Select relevant columns (profit shutdown parameters from retirement file)
       select(supplysector, subsector, technology,
              median.shutdown.point, profit.shutdown.steepness) %>%
       # Expand to include all GCAM consumers (for residential technologies)
@@ -1080,6 +1088,31 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       # Select columns in the order expected by LEVEL2_DATA_NAMES
       select(LEVEL2_DATA_NAMES[["GlobalTechProfitShutdown"]])
 
+    #===============================================================================
+    # 3. GlobalTechLifetime - Lifetime values for building technologies
+    #    Applied to all model years (base and future)
+    #===============================================================================
+
+    # Get all model years (base + future)
+    all_years <- c(MODEL_FINAL_BASE_YEAR, MODEL_FUTURE_YEARS)
+
+    # Create the lifetime table
+    L244.GlobalTechLifetime_bld_EUR <- A44.cost_efficiency_EUR %>%
+      # Select relevant columns including lifetime
+      select(supplysector, subsector, technology, lifetime) %>%
+      # Expand to include all GCAM consumers (for residential technologies)
+      tidyr::expand_grid(unique(L106.income_shares %>% select(gcam.consumer))) %>%
+      # Modify supplysector for residential technologies (add consumer suffix)
+      mutate(supplysector = if_else(grepl('resid', supplysector),
+                                    paste(supplysector, gcam.consumer, sep = '_'),
+                                    supplysector)) %>%
+      # Expand to include all years
+      tidyr::expand_grid(year = all_years) %>%
+      # Rename columns to match what LEVEL2_DATA_NAMES[["GlobalTechLifetime"]] expects
+      rename(sector.name = supplysector,
+             subsector.name = subsector) %>%
+      # Select columns in the order expected by LEVEL2_DATA_NAMES
+      select(LEVEL2_DATA_NAMES[["GlobalTechLifetime"]])
 
     # L244.StubTechIntGainOutputRatio_EUR: Output ratios of internal gain energy from non-thermal building services
     L244.StubTechIntGainOutputRatio_pre <- L144.internal_gains_EUR %>%
@@ -2588,13 +2621,13 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       same_precursors_as(L244.GlobalTechCost_bld_EUR) ->
       L244.GlobalTechTrackCapital_bld_EUR
 
-    L244.GlobalTechShutdown_bld_EUR %>%
+    L244.GlobalTechSCurve_bld_EUR %>%
       add_title("Retirement rates for building technologies") %>%
-      add_units("annual rate") %>%
-      add_comments("Lifetime and shutdown rate from A44.cost_efficiency_EUR") %>%
-      add_legacy_name("L244.GlobalTechShutdown_bld_EUR") %>%
-      add_precursors("gcam-europe/A44.cost_efficiency_EUR") ->
-      L244.GlobalTechShutdown_bld_EUR
+      add_units("Lifetime in years, half-life in years") %>%
+      add_comments("Lifetime, half.life and steepness from A44.globaltech_retirement_EUR") %>%
+      add_legacy_name("L244.GlobalTechSCurve_bld_EUR") %>%
+      add_precursors("gcam-europe/A44.globaltech_retirement_EUR") ->
+      L244.GlobalTechSCurve_bld_EUR
 
       L244.GlobalTechProfitShutdown_bld_EUR %>%
         add_title("Global tech profit shutdown decider and parameters") %>%
@@ -2603,6 +2636,14 @@ module_gcameurope_L244.building_det <- function(command, ...) {
         add_legacy_name("L244.GlobalTechProfitShutdown_bld_EUR") %>%
         add_precursors("gcam-europe/A44.cost_efficiency_EUR") ->
         L244.GlobalTechProfitShutdown_bld_EUR
+
+      L244.GlobalTechLifetime_bld_EUR %>%
+        add_title("Global tech lifetime for any technology with no retirement function") %>%
+        add_units("Lifetime in years") %>%
+        add_comments("Adds lifetime for all techs") %>%
+        add_legacy_name("L244.GlobalTechLifetime_bld_EUR") %>%
+        add_precursors("gcam-europe/A44.cost_efficiency_EUR") ->
+        L244.GlobalTechLifetime_bld_EUR
 
     if(exists("L244.DeleteGenericService_EUR")) {
       L244.DeleteGenericService_EUR %>%
