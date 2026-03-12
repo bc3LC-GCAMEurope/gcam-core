@@ -155,7 +155,7 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
     L120.offshore_wind_curve %>%
       mutate(percent.supply = supply/maxSubResource) %>%
       group_by(GCAM_region_ID, resource) %>%
-      filter(percent.supply <= energy.WIND_CURVE_MIDPOINT) %>%
+      filter(percent.supply <= energy.WIND_CURVE_MIDPOINT ) %>%
       # filter for highest price point below 50% of total resource
       filter(Pvar == max(Pvar)) %>%
       ungroup() %>%
@@ -173,13 +173,13 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
 
     # Calculating mid.price
     L120.mid.price_1 %>%
-      left_join_error_no_match(L120.mid.price_2, by = "GCAM_region_ID") %>%
+      left_join_error_no_match(L120.mid.price_2, by = c("GCAM_region_ID","resource")) %>%
       mutate(mid.price = round(((P2 - P1) * maxSubResource + 2 * Q2 * P1 - 2 * Q1 * P2) / (2 * (Q2 - Q1)),
                                energy.DIGITS_MAX_SUB_RESOURCE)) %>%
       select(GCAM_region_ID, resource, mid.price) -> L120.mid.price
 
     L120.offshore_wind_curve %>%
-      left_join_error_no_match(L120.mid.price, by = c("GCAM_region_ID")) -> L120.offshore_wind_curve
+      left_join_error_no_match(L120.mid.price, by = c("GCAM_region_ID", "resource")) -> L120.offshore_wind_curve
 
     # Defining variables to be used later.
     region_list <- unique(L120.offshore_wind_curve$GCAM_region_ID)
@@ -191,7 +191,7 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
         filter(GCAM_region_ID == L120.region) -> L120.offshore_wind_curve_region
 
       L120.offshore_wind_curve_region %>%
-        select(price, supply) -> L120.supply_points_region
+        select(price, resource, supply) -> L120.supply_points_region
 
       L120.error_min_curve.exp <- optimize(f = smooth_res_curve_approx_error, interval=c(1.0,9.0),
                                            L120.offshore_wind_curve_region$mid.price,
@@ -201,7 +201,7 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
 
       L120.offshore_wind_curve_region$curve.exponent <-  round(L120.error_min_curve.exp$minimum,energy.DIGITS_MAX_SUB_RESOURCE)
       L120.offshore_wind_curve_region %>%
-        distinct(GCAM_region_ID, curve.exponent) -> L120.curve.exponent_region
+        distinct(GCAM_region_ID, resource, curve.exponent) -> L120.curve.exponent_region
 
       L120.curve.exponent %>%
         bind_rows(L120.curve.exponent_region) -> L120.curve.exponent
@@ -209,7 +209,7 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
     }
 
     L120.offshore_wind_curve %>%
-      left_join_error_no_match(L120.curve.exponent, by = "GCAM_region_ID") -> L120.offshore_wind_curve
+      left_join_error_no_match(L120.curve.exponent, by = c("resource","GCAM_region_ID")) -> L120.offshore_wind_curve
 
     # Prepare supply curve for output
     L120.offshore_wind_curve %>%
