@@ -121,22 +121,13 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
       ungroup() %>%
       select(GCAM_region_ID, resource, price, supply, CFmax) -> L120.offshore_wind_matrix
 
-    # Assigning additional resource to the USA because the global dataset does not include any resource for Alaska,
-    # even though initial estimates suggest that its resource potential could be very large.
-    # Each supply point is simply increased by 5% (specified in offshore_wind_potential_scaler); thus, Alaska's resource is assumed to be a representative
-    # sample of the total USA resource.
-    # L120.offshore_wind_matrix %>%
-    #   left_join_error_no_match(offshore_wind_potential_scaler %>%
-    #                              select(-reason),
-    #                            by = "GCAM_region_ID") %>%
-    #   mutate(supply = supply * scaler) -> L120.offshore_wind_matrix
-
     # Calculate maxSubResource, base.price, and Pvar.
     # base.price represents the minimum cost of generating electricity from the resource.
     # base.price comprises of the cost of generating power at the most optimal location.
     # Pvar represents costs that are expected to increase from base.price as deployment increases.
     # This models the increase in costs as more optimal locations are used first.
 
+    # Remove regions with only one point:
     L120.offshore_wind_matrix %>%
       group_by(GCAM_region_ID, resource) %>%
       filter(dplyr::n() > 1) %>% # if there is only one entry (slovenia), we can't calculate curves
@@ -147,7 +138,8 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
               maxSubResource = round(max(supply), energy.DIGITS_MAX_SUB_RESOURCE)) %>%
       ungroup() -> L120.offshore_wind_curve
 
-    # Identify region/resource pairs that have no points below the midpoint
+    # Extrapolate to the left in regions with all data >midpoint (30, 37, 55, 62):
+    # First identify region/resource pairs that have no points below the midpoint
     L120.offshore_wind_curve %>%
       mutate(percent.supply = supply / maxSubResource) %>%
       group_by(GCAM_region_ID, resource) %>%
@@ -191,7 +183,7 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
       left_join(L120.point2, by = c("GCAM_region_ID","resource")) ->
       L120.two_points
 
-    #Extrapolate:
+    #Extrapolate to a point right before the midpoint:
     L120.two_points %>%
       group_by(GCAM_region_ID, resource) %>%
       mutate(
@@ -207,7 +199,7 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
                 by = c("GCAM_region_ID", "resource")) ->
       L120.extrapolated_points
 
-    # Append extrapolated rows
+    # Append extrapolated rows and calculate base and Pvar:
     L120.offshore_wind_curve %>%
       bind_rows(L120.extrapolated_points) %>%
       arrange(GCAM_region_ID, resource, price) %>%
@@ -253,7 +245,7 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
 
     # Defining variables to be used later.
     region_list <- unique(L120.offshore_wind_curve$GCAM_region_ID)
-    resource_list <- unique(L120.offshore_wind_curve_region$resource)
+    resource_list <- unique(L120.offshore_wind_curve$resource)
     L120.curve.exponent <- tibble()
 
     # First loop by regions
