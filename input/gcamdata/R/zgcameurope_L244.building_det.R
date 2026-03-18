@@ -1069,9 +1069,9 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     # Get all model years (base + future)
     all_years <- c(MODEL_FINAL_BASE_YEAR, MODEL_FUTURE_YEARS)
 
-    # Create the profit shutdown table using the inputs from A44.globaltech_retirement_EUR
-    L244.GlobalTechProfitShutdown_bld_EUR <- A44.globaltech_retirement_EUR %>%
-      # Select relevant columns (profit shutdown parameters from retirement file)
+    # Create the profit shutdown table using the inputs from A44.cost_efficiency_EUR
+    L244.GlobalTechProfitShutdown_bld_EUR <- A44.cost_efficiency_EUR %>%
+      # Select relevant columns (now including the new profit shutdown parameters)
       select(supplysector, subsector, technology,
              median.shutdown.point, profit.shutdown.steepness) %>%
       # Expand to include all GCAM consumers (for residential technologies)
@@ -2623,7 +2623,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     L244.GlobalTechSCurve_bld_EUR %>%
       add_title("Retirement rates for building technologies") %>%
-      add_units("Lifetime in years, half-life in years") %>%
+      add_units("annual rate") %>%
       add_comments("Lifetime, half.life and steepness from A44.globaltech_retirement_EUR") %>%
       add_legacy_name("L244.GlobalTechSCurve_bld_EUR") %>%
       add_precursors("gcam-europe/A44.globaltech_retirement_EUR") ->
