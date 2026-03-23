@@ -33,10 +33,10 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
              "L113.globaltech_capital_ATB",
              "L113.globaltech_OMfixed_ATB"))
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L120.RsrcCurves_EJ_R_offshore_wind_EUR", #modified for _EUR
-             "L120.TechChange_offshore_wind_EUR", #modified for _EUR
-             "L120.GridCost_offshore_wind_EUR", #modified for _EUR
-             "L120.RegCapFactor_offshore_wind_EUR")) #modified for _EUR
+    return(c("L120.RsrcCurves_EJ_R_offshore_wind_EUR",
+             "L120.TechChange_offshore_wind_EUR",
+             "L120.GridCost_offshore_wind_EUR",
+             "L120.RegCapFactor_offshore_wind_EUR"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -286,7 +286,7 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
     # Prepare supply curve for output
     L120.offshore_wind_curve %>%
       mutate(subresource = resource) %>%
-      distinct(GCAM_region_ID, resource, subresource, maxSubResource, mid.price, curve.exponent) -> L120.RsrcCurves_EJ_R_offshore_wind_EUR #modified for _EUR
+      distinct(GCAM_region_ID, resource, subresource, maxSubResource, mid.price, curve.exponent) -> L120.RsrcCurves_EJ_R_offshore_wind_EUR
 
     # Technological change in the supply curve is related to assumed improvements in capital cost.
     # If capital cost changes from CC to a.CC, then every price point of the curve will scale by a factor a' given as follows:
@@ -317,7 +317,7 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
              tech.change = round(abs(1 - (tech.change.period) ^ ( 1 / time.change)), energy.DIGITS_TECHCHANGE)) %>%
       select(year, tech.change) %>%
       filter(!is.na(tech.change),
-             year > max(MODEL_BASE_YEARS)) -> L120.TechChange_offshore_wind_EUR #modified for _EUR
+             year > max(MODEL_BASE_YEARS)) -> L120.TechChange_offshore_wind_EUR
 
     # Creating region-specific capacity factors to be used for levelizing grid connection costs. This is calculated by
     # getting the maximum possible capacity factor for a region. Since offshore wind resource utilization is pretty low, it is
@@ -390,16 +390,16 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
 
     # Set grid connection cost for all regions
     L120.grid.cost %>%
-      select(region, grid.cost) -> L120.GridCost_offshore_wind_EUR #modified for _EUR
+      select(region, grid.cost) -> L120.GridCost_offshore_wind_EUR
 
     L120.offshore_wind_curve %>%
       distinct(GCAM_region_ID, CFmax) %>%
-      filter(!is.na(CFmax)) -> L120.RegCapFactor_offshore_wind_EUR #modified for _EUR
+      filter(!is.na(CFmax)) -> L120.RegCapFactor_offshore_wind_EUR
 
     # -----------------------------------------------------------------------------
     # Produce outputs
 
-    L120.RsrcCurves_EJ_R_offshore_wind_EUR %>% #modified for _EUR
+    L120.RsrcCurves_EJ_R_offshore_wind_EUR %>%
       add_title("Offshore wind resource curve") %>%
       add_units("EJ") %>%
       add_comments("Offshore wind resource curve by region") %>%
@@ -407,35 +407,35 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
                      "energy/A20.wind_class_CFs", "L113.globaltech_capital_ATB",
                      "L113.globaltech_OMfixed_ATB", "energy/A20.offshore_wind_depth_cap_cost",
                      "energy/offshore_wind_potential_scaler", "energy/mappings/NREL_wind_ctry") ->
-      L120.RsrcCurves_EJ_R_offshore_wind_EUR #modified for _EUR
+      L120.RsrcCurves_EJ_R_offshore_wind_EUR
 
-    L120.TechChange_offshore_wind_EUR %>% #modified for _EUR
+    L120.TechChange_offshore_wind_EUR %>%
       add_title("Technological Change Offshore Wind") %>%
       add_units("Unitless") %>%
       add_comments("Technological Change associated with offshore wind by year") %>%
       add_precursors("L113.globaltech_capital_ATB", "L113.globaltech_OMfixed_ATB") ->
-      L120.TechChange_offshore_wind_EUR #modified for _EUR
+      L120.TechChange_offshore_wind_EUR
 
-    L120.GridCost_offshore_wind_EUR %>% #modified for _EUR
+    L120.GridCost_offshore_wind_EUR %>%
       add_title("Grid connectivity cost adder for offshore wind") %>%
       add_units("$1975/GJ") %>%
       add_comments("Adder by GCAM Region") %>%
       add_precursors("common/iso_GCAM_regID", "common/GCAM_region_names", "energy/NREL_offshore_energy",
                      "energy/A20.wind_class_CFs", "L113.globaltech_capital_ATB",
                      "energy/offshore_wind_grid_cost", "energy/NREL_wind_energy_distance_range") ->
-      L120.GridCost_offshore_wind_EUR #modified for _EUR
+      L120.GridCost_offshore_wind_EUR
 
-    L120.RegCapFactor_offshore_wind_EUR %>% #modified for _EUR
+    L120.RegCapFactor_offshore_wind_EUR %>%
       add_title("Region-specific capacity factors for offshore wind") %>%
       add_units("Unitless") %>%
       add_comments("Region-specific maximum capacity factor") %>%
-      same_precursors_as(L120.RsrcCurves_EJ_R_offshore_wind_EUR) -> #modified for _EUR
-      L120.RegCapFactor_offshore_wind_EUR #modified for _EUR
+      same_precursors_as(L120.RsrcCurves_EJ_R_offshore_wind_EUR) ->
+      L120.RegCapFactor_offshore_wind_EUR
 
-    return_data(L120.RsrcCurves_EJ_R_offshore_wind_EUR, #modified for _EUR
-                L120.TechChange_offshore_wind_EUR, #modified for _EUR
-                L120.GridCost_offshore_wind_EUR, #modified for _EUR
-                L120.RegCapFactor_offshore_wind_EUR) #modified for _EUR
+    return_data(L120.RsrcCurves_EJ_R_offshore_wind_EUR,
+                L120.TechChange_offshore_wind_EUR,
+                L120.GridCost_offshore_wind_EUR,
+                L120.RegCapFactor_offshore_wind_EUR)
   } else {
     stop("Unknown command")
   }
