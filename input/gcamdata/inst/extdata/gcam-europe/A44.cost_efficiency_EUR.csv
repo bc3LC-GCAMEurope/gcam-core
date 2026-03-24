@@ -1,72 +1,72 @@
-# File: A44.cost_efficiency_EUR.csv,,,,,,,,,,
-# Title: Base costs and efficiencies of building technologies,,,,,,,,,,
-# Units: lifetime in years; costs in 2020euro; unitless for efficiency and rate,,,,,,,,,,
-# Comments: UEC = unit energy consumption. Before efficiency correction e.g. 60 units useful energy for heating devices,,,,,,,,,,
-# Column types: cccniinnnnn ,,,,,,,,,,
-# ----------,,,,,,,,,,
-supplysector,subsector,technology,installed cost,lifetime,O&M cost,efficiency,UEC,shutdown.rate,median.shutdown.point,profit.shutdown.steepness
-resid heating modern EUR,biomass,biomass,2452.095808,15,100,0.72,83.33333333,0.015,-0.1,6
-resid heating coal EUR,coal,coal,2452.095808,15,100,0.72,83.33333333,0.015,-0.1,6
-resid heating modern EUR,gas,gas,1500,20,50,0.79,75.94936709,0.015,-0.1,6
-resid heating modern EUR,gas,hydrogen,1650,20,50,0.79,75.94936709,0.015,-0.1,6
-resid heating modern EUR,electricity,resistance,538.9221557,20,50,0.99,60.60606061,0.015,-0.1,6
-resid heating modern EUR,electricity,air-air pump south,7041.916168,20,100,2.65,20.6185567,0.015,-0.1,6
-resid heating modern EUR,electricity,air-air pump middle south,7041.916168,20,100,2.38,22.98850575,0.015,-0.1,6
-resid heating modern EUR,electricity,air-air pump middle north,7041.916168,20,100,2.17,25.3164557,0.015,-0.1,6
-resid heating modern EUR,electricity,air-air pump north,7041.916168,20,100,1.98,27.64976959,0.015,-0.1,6
-resid heating modern EUR,water heat pump,air-water pump south,10526.94611,20,100,4.06,14.77832512,0.015,-0.1,6
-resid heating modern EUR,water heat pump,air-water pump middle south,10526.94611,20,100,3.64,16.48351648,0.015,-0.1,6
-resid heating modern EUR,water heat pump,air-water pump middle north,10526.94611,20,100,3.32,18.07228916,0.015,-0.1,6
-resid heating modern EUR,water heat pump,air-water pump north,10526.94611,20,100,3.03,19.8019802,0.015,-0.1,6
-resid heating modern EUR,water heat pump,geo-water pump,12179.64072,20,100,3.6,16.66666667,0.015,-0.1,6
-resid heating modern EUR,water heat pump,solar thermal,11227.54491,25,100,0.58,60,0.015,-0.1,6
-resid heating modern EUR,refined liquids,refined liquids,1553.892216,15,100,0.77,77.92207792,0.015,-0.1,6
-resid heating modern EUR,district heat,district heat,961.0778443,20,20,0.72,83.33333333,0.015,-0.1,6
-resid cooling modern EUR,electricity,electricity,2000,15,100,2.63,7.0092,0.015,-0.1,6
-resid cooling modern EUR,gas,gas,2500,15,100,0.83,15.6626506,0.015,-0.1,6
-resid hot water coal EUR,coal,coal,750,15,75,0.5,84,0.015,-0.1,6
-resid hot water modern EUR,gas,gas,1500,15,45,0.77,54.54545455,0.015,-0.1,6
-resid hot water modern EUR,electricity,resistance,875.7961783,15,50,0.9,46.66666667,0.015,-0.1,6
-resid hot water modern EUR,refined liquids,refined liquids,2720.276008,15,75,0.7,60,0.015,-0.1,6
-resid hot water modern EUR,district heat,district heat,676.7515924,20,20,0.72,58.33333333,0.015,-0.1,6
-resid hot water modern EUR,biomass,biomass,2000,15,150,0.4,260,0.015,-0.1,6
-resid hot water modern EUR,water heat pump,heat pump,2527.866242,20,90,2.4,17.5,0.015,-0.1,6
-resid hot water modern EUR,water heat pump,solar thermal,2022.3,20,90,0.58,17.5,0.015,-0.1,6
-resid other appliance modern EUR,electricity,electricity,2000,15,50,0.95,50,0.015,-0.1,6
-resid cooking modern EUR,biomass,biomass,2000,15,150,0.4,260,0.015,-0.1,6
-resid cooking coal EUR,coal,coal,750,15,75,0.5,100,0.015,-0.1,6
-resid cooking modern EUR,electricity,electricity,2000,15,50,0.95,50,0.015,-0.1,6
-resid cooking modern EUR,gas,gas,1500,15,45,0.7,60,0.015,-0.1,6
-resid cooking modern EUR,refined liquids,refined liquids,1500,10,75,0.7,60,0.015,-0.1,6
-resid others modern EUR,biomass,biomass,1000,10,25,0.3,66.66666667,0.015,-0.1,6
-resid others coal EUR,coal,coal,1000,10,25,0.4,75,0.015,-0.1,6
-resid others modern EUR,gas,gas,1500,10,20,0.6,50,0.015,-0.1,6
-resid others modern EUR,gas,hydrogen,1650,10,20,0.6,50,0.015,-0.1,6
-resid others modern EUR,electricity,electricity,1500,10,20,0.95,36.84210526,0.015,-0.1,6
-resid others modern EUR,refined liquids,refined liquids,1500,10,50,0.6,50,0.015,-0.1,6
-comm heating EUR,biomass,biomass,2000,20,200,0.4,450,0.015,-0.1,6
-comm heating EUR,coal,coal,2000,20,200,0.5,360,0.015,-0.1,6
-comm heating EUR,gas,gas,5000,25,200,0.79,227.8481013,0.015,-0.1,6
-comm heating EUR,gas,hydrogen,5500,25,200,0.79,227.8481013,0.015,-0.1,6
-comm heating EUR,electricity,resistance,5000,25,200,0.95,189.4736842,0.015,-0.1,6
-comm heating EUR,electricity,air-air pump south,18691.29001,25,400,2.65,61.90966992,0.015,-0.1,6
-comm heating EUR,electricity,air-air pump middle south,18691.29001,25,400,2.38,69.06193969,0.015,-0.1,6
-comm heating EUR,electricity,air-air pump middle north,18691.29001,25,400,2.17,75.79716151,0.015,-0.1,6
-comm heating EUR,electricity,air-air pump north,18691.29001,25,400,1.98,83.07692308,0.015,-0.1,6
-comm heating EUR,water heat pump,air-water pump south,24702.35546,25,400,3.891525787,46.25435109,0.015,-0.1,6
-comm heating EUR,water heat pump,air-water pump middle south,24702.35546,25,400,3.488507245,51.59800092,0.015,-0.1,6
-comm heating EUR,water heat pump,air-water pump middle north,24702.35546,25,400,3.178523735,56.6300632,0.015,-0.1,6
-comm heating EUR,water heat pump,air-water pump north,24702.35546,25,400,2.9,62.06896552,0.015,-0.1,6
-comm heating EUR,water heat pump,geo-water pump,37932.90507,25,400,3.6,50,0.015,-0.1,6
-comm heating EUR,water heat pump,solar thermal,26346.36888,25,400,0.58,150,0.015,-0.1,6
-comm heating EUR,refined liquids,refined liquids,5179.640719,25,200,0.77,233.7662338,0.015,-0.1,6
-comm heating EUR,district heat,district heat,3437.544611,20,20,0.72,250,0.015,-0.1,6
-comm cooling EUR,gas,gas,4000,15,200,0.83,60.24096386,0.015,-0.1,6
-comm cooling EUR,electricity,electricity,4450,15,153,2.73,35.046,0.015,-0.1,6
-comm others EUR,biomass,biomass,2000,10,50,0.3,133.3333333,0.015,-0.1,6
-comm others EUR,coal,coal,2000,10,50,0.4,150,0.015,-0.1,6
-comm others EUR,gas,gas,3000,10,100,0.6,108.3333333,0.015,-0.1,6
-comm others EUR,gas,hydrogen,3300,10,100,0.6,108.3333333,0.015,-0.1,6
-comm others EUR,electricity,electricity,3000,10,50,0.95,73.68421053,0.015,-0.1,6
-comm others EUR,refined liquids,refined liquids,3000,10,100,0.6,100,0.015,-0.1,6
-comm others EUR,district heat,district heat,2000,20,50,0.9,66.66666667,0.015,-0.1,6
+# File: A44.cost_efficiency_EUR.csv
+# Title: Base costs and efficiencies of building technologies
+# Units: lifetime in years; costs in 2020euro; unitless for efficiency and rate
+# Comments: UEC = unit energy consumption. Before efficiency correction e.g. 60 units useful energy for heating devices
+# Column types: cccniinnnn 
+# ----------
+supplysector,subsector,technology,installed cost,lifetime,O&M cost,efficiency,UEC,median.shutdown.point,profit.shutdown.steepness
+resid heating modern EUR,biomass,biomass,2452.095808,15,100,0.72,83.33333333,-0.5,6
+resid heating coal EUR,coal,coal,2452.095808,15,100,0.72,83.33333333,-0.5,6
+resid heating modern EUR,gas,gas,1500,20,50,0.79,75.94936709,-0.5,6
+resid heating modern EUR,gas,hydrogen,1650,20,50,0.79,75.94936709,-0.5,6
+resid heating modern EUR,electricity,resistance,538.9221557,20,50,0.99,60.60606061,-0.5,6
+resid heating modern EUR,electricity,air-air pump south,7041.916168,20,100,2.65,20.6185567,-0.5,6
+resid heating modern EUR,electricity,air-air pump middle south,7041.916168,20,100,2.38,22.98850575,-0.5,6
+resid heating modern EUR,electricity,air-air pump middle north,7041.916168,20,100,2.17,25.3164557,-0.5,6
+resid heating modern EUR,electricity,air-air pump north,7041.916168,20,100,1.98,27.64976959,-0.5,6
+resid heating modern EUR,water heat pump,air-water pump south,10526.94611,20,100,4.06,14.77832512,-0.5,6
+resid heating modern EUR,water heat pump,air-water pump middle south,10526.94611,20,100,3.64,16.48351648,-0.5,6
+resid heating modern EUR,water heat pump,air-water pump middle north,10526.94611,20,100,3.32,18.07228916,-0.5,6
+resid heating modern EUR,water heat pump,air-water pump north,10526.94611,20,100,3.03,19.8019802,-0.5,6
+resid heating modern EUR,water heat pump,geo-water pump,12179.64072,20,100,3.6,16.66666667,-0.5,6
+resid heating modern EUR,water heat pump,solar thermal,11227.54491,25,100,0.58,60,-0.5,6
+resid heating modern EUR,refined liquids,refined liquids,1553.892216,15,100,0.77,77.92207792,-0.5,6
+resid heating modern EUR,district heat,district heat,961.0778443,20,20,0.72,83.33333333,-0.5,6
+resid cooling modern EUR,electricity,electricity,2000,15,100,2.63,7.0092,-0.5,6
+resid cooling modern EUR,gas,gas,2500,15,100,0.83,15.6626506,-0.5,6
+resid hot water coal EUR,coal,coal,750,15,75,0.5,84,-0.5,6
+resid hot water modern EUR,gas,gas,1500,15,45,0.77,54.54545455,-0.5,6
+resid hot water modern EUR,electricity,resistance,875.7961783,15,50,0.9,46.66666667,-0.5,6
+resid hot water modern EUR,refined liquids,refined liquids,2720.276008,15,75,0.7,60,-0.5,6
+resid hot water modern EUR,district heat,district heat,676.7515924,20,20,0.72,58.33333333,-0.5,6
+resid hot water modern EUR,biomass,biomass,2000,15,150,0.4,260,-0.5,6
+resid hot water modern EUR,water heat pump,heat pump,2527.866242,20,90,2.4,17.5,-0.5,6
+resid hot water modern EUR,water heat pump,solar thermal,2022.3,20,90,0.58,17.5,-0.5,6
+resid other appliance modern EUR,electricity,electricity,2000,15,50,0.95,50,-0.5,6
+resid cooking modern EUR,biomass,biomass,2000,15,150,0.4,260,-0.5,6
+resid cooking coal EUR,coal,coal,750,15,75,0.5,100,-0.5,6
+resid cooking modern EUR,electricity,electricity,2000,15,50,0.95,50,-0.5,6
+resid cooking modern EUR,gas,gas,1500,15,45,0.7,60,-0.5,6
+resid cooking modern EUR,refined liquids,refined liquids,1500,10,75,0.7,60,-0.5,6
+resid others modern EUR,biomass,biomass,1000,10,25,0.3,66.66666667,-0.5,6
+resid others coal EUR,coal,coal,1000,10,25,0.4,75,-0.5,6
+resid others modern EUR,gas,gas,1500,10,20,0.6,50,-0.5,6
+resid others modern EUR,gas,hydrogen,1650,10,20,0.6,50,-0.5,6
+resid others modern EUR,electricity,electricity,1500,10,20,0.95,36.84210526,-0.5,6
+resid others modern EUR,refined liquids,refined liquids,1500,10,50,0.6,50,-0.5,6
+comm heating EUR,biomass,biomass,2000,20,200,0.4,450,-0.5,6
+comm heating EUR,coal,coal,2000,20,200,0.5,360,-0.5,6
+comm heating EUR,gas,gas,5000,25,200,0.79,227.8481013,-0.5,6
+comm heating EUR,gas,hydrogen,5500,25,200,0.79,227.8481013,-0.5,6
+comm heating EUR,electricity,resistance,5000,25,200,0.95,189.4736842,-0.5,6
+comm heating EUR,electricity,air-air pump south,18691.29001,25,400,2.65,61.90966992,-0.5,6
+comm heating EUR,electricity,air-air pump middle south,18691.29001,25,400,2.38,69.06193969,-0.5,6
+comm heating EUR,electricity,air-air pump middle north,18691.29001,25,400,2.17,75.79716151,-0.5,6
+comm heating EUR,electricity,air-air pump north,18691.29001,25,400,1.98,83.07692308,-0.5,6
+comm heating EUR,water heat pump,air-water pump south,24702.35546,25,400,3.891525787,46.25435109,-0.5,6
+comm heating EUR,water heat pump,air-water pump middle south,24702.35546,25,400,3.488507245,51.59800092,-0.5,6
+comm heating EUR,water heat pump,air-water pump middle north,24702.35546,25,400,3.178523735,56.6300632,-0.5,6
+comm heating EUR,water heat pump,air-water pump north,24702.35546,25,400,2.9,62.06896552,-0.5,6
+comm heating EUR,water heat pump,geo-water pump,37932.90507,25,400,3.6,50,-0.5,6
+comm heating EUR,water heat pump,solar thermal,26346.36888,25,400,0.58,150,-0.5,6
+comm heating EUR,refined liquids,refined liquids,5179.640719,25,200,0.77,233.7662338,-0.5,6
+comm heating EUR,district heat,district heat,3437.544611,20,20,0.72,250,-0.5,6
+comm cooling EUR,gas,gas,4000,15,200,0.83,60.24096386,-0.5,6
+comm cooling EUR,electricity,electricity,4450,15,153,2.73,35.046,-0.5,6
+comm others EUR,biomass,biomass,2000,10,50,0.3,133.3333333,-0.5,6
+comm others EUR,coal,coal,2000,10,50,0.4,150,-0.5,6
+comm others EUR,gas,gas,3000,10,100,0.6,108.3333333,-0.5,6
+comm others EUR,gas,hydrogen,3300,10,100,0.6,108.3333333,-0.5,6
+comm others EUR,electricity,electricity,3000,10,50,0.95,73.68421053,-0.5,6
+comm others EUR,refined liquids,refined liquids,3000,10,100,0.6,100,-0.5,6
+comm others EUR,district heat,district heat,2000,20,50,0.9,66.66666667,-0.5,6

@@ -11,113 +11,113 @@
 # Column types: ccccicnnni 
 # ----------
 supplysector,subsector,technology,year,lifetime,shutdown.rate,half.life,steepness,median.shutdown.point,profit.shutdown.steepness
-comm cooling EUR,electricity,electricity,final-calibration-year,,,,,-0.1,6
-comm cooling EUR,gas,gas,final-calibration-year,,,,,-0.1,6
-comm heating EUR,biomass,biomass,final-calibration-year,,,,,-0.1,6
-comm heating EUR,coal,coal,final-calibration-year,,,,,-0.1,6
-comm heating EUR,district heat,district heat,final-calibration-year,,,,,-0.1,6
-comm heating EUR,electricity,air-air pump middle north,final-calibration-year,,,,,-0.1,6
-comm heating EUR,electricity,resistance,final-calibration-year,,,,,-0.1,6
-comm heating EUR,gas,gas,final-calibration-year,,,,,-0.1,6
-comm heating EUR,gas,hydrogen,final-calibration-year,,,,,-0.1,6
-comm heating EUR,refined liquids,refined liquids,final-calibration-year,,,,,-0.1,6
-comm heating EUR,water heat pump,air-water pump middle north,final-calibration-year,,,,,-0.1,6
-comm heating EUR,water heat pump,geo-water pump,final-calibration-year,,,,,-0.1,6
-comm heating EUR,water heat pump,solar thermal,final-calibration-year,,,,,-0.1,6
-comm heating EUR,electricity,air-air pump south,final-calibration-year,,,,,-0.1,6
-comm heating EUR,water heat pump,air-water pump south,final-calibration-year,,,,,-0.1,6
-comm heating EUR,electricity,air-air pump middle south,final-calibration-year,,,,,-0.1,6
-comm heating EUR,water heat pump,air-water pump middle south,final-calibration-year,,,,,-0.1,6
-comm heating EUR,electricity,air-air pump north,final-calibration-year,,,,,-0.1,6
-comm heating EUR,water heat pump,air-water pump north,final-calibration-year,,,,,-0.1,6
-comm others EUR,biomass,biomass,final-calibration-year,,,,,-0.1,6
-comm others EUR,coal,coal,final-calibration-year,,,,,-0.1,6
-comm others EUR,district heat,district heat,final-calibration-year,,,,,-0.1,6
-comm others EUR,electricity,electricity,final-calibration-year,,,,,-0.1,6
-comm others EUR,gas,gas,final-calibration-year,,,,,-0.1,6
-comm others EUR,gas,hydrogen,final-calibration-year,,,,,-0.1,6
-comm others EUR,refined liquids,refined liquids,final-calibration-year,,,,,-0.1,6
-resid cooking modern EUR,electricity,electricity,final-calibration-year,,,,,-0.1,6
-resid cooking modern EUR,gas,gas,final-calibration-year,,,,,-0.1,6
-resid cooling modern EUR,electricity,electricity,final-calibration-year,,,,,-0.1,6
-resid cooling modern EUR,gas,gas,final-calibration-year,,,,,-0.1,6
-resid heating coal EUR,coal,coal,final-calibration-year,,,,,-0.1,6
-resid heating modern EUR,biomass,biomass,final-calibration-year,,,,,-0.1,6
-resid heating modern EUR,district heat,district heat,final-calibration-year,,,,,-0.1,6
-resid heating modern EUR,electricity,air-air pump middle north,final-calibration-year,,,,,-0.1,6
-resid heating modern EUR,electricity,resistance,final-calibration-year,,,,,-0.1,6
-resid heating modern EUR,gas,gas,final-calibration-year,,,,,-0.1,6
-resid heating modern EUR,gas,hydrogen,final-calibration-year,,,,,-0.1,6
-resid heating modern EUR,refined liquids,refined liquids,final-calibration-year,,,,,-0.1,6
-resid heating modern EUR,water heat pump,air-water pump middle north,final-calibration-year,,,,,-0.1,6
-resid heating modern EUR,water heat pump,geo-water pump,final-calibration-year,,,,,-0.1,6
-resid heating modern EUR,water heat pump,solar thermal,final-calibration-year,,,,,-0.1,6
-resid heating modern EUR,electricity,air-air pump south,final-calibration-year,,,,,-0.1,6
-resid heating modern EUR,water heat pump,air-water pump south,final-calibration-year,,,,,-0.1,6
-resid heating modern EUR,electricity,air-air pump middle south,final-calibration-year,,,,,-0.1,6
-resid heating modern EUR,water heat pump,air-water pump middle south,final-calibration-year,,,,,-0.1,6
-resid heating modern EUR,electricity,air-air pump north,final-calibration-year,,,,,-0.1,6
-resid heating modern EUR,water heat pump,air-water pump north,final-calibration-year,,,,,-0.1,6
-resid hot water modern EUR,biomass,biomass,final-calibration-year,,,,,-0.1,6
-resid hot water modern EUR,district heat,district heat,final-calibration-year,,,,,-0.1,6
-resid hot water modern EUR,electricity,resistance,final-calibration-year,,,,,-0.1,6
-resid hot water modern EUR,gas,gas,final-calibration-year,,,,,-0.1,6
-resid hot water modern EUR,refined liquids,refined liquids,final-calibration-year,,,,,-0.1,6
-resid hot water modern EUR,water heat pump,heat pump,final-calibration-year,,,,,-0.1,6
-resid hot water modern EUR,water heat pump,solar thermal,final-calibration-year,,,,,-0.1,6
-resid other appliance modern EUR,electricity,electricity,final-calibration-year,,,,,-0.1,6
-comm cooling EUR,electricity,electricity,initial-future-year,,,,,-0.1,6
-comm cooling EUR,gas,gas,initial-future-year,,,,,-0.1,6
-comm heating EUR,biomass,biomass,initial-future-year,,,,,-0.1,6
-comm heating EUR,coal,coal,initial-future-year,,,,,-0.1,6
-comm heating EUR,district heat,district heat,initial-future-year,,,,,-0.1,6
-comm heating EUR,electricity,air-air pump middle north,initial-future-year,,,,,-0.1,6
-comm heating EUR,electricity,resistance,initial-future-year,,,,,-0.1,6
-comm heating EUR,gas,gas,initial-future-year,,,,,-0.1,6
-comm heating EUR,gas,hydrogen,initial-future-year,,,,,-0.1,6
-comm heating EUR,refined liquids,refined liquids,initial-future-year,,,,,-0.1,6
-comm heating EUR,water heat pump,air-water pump middle north,initial-future-year,,,,,-0.1,6
-comm heating EUR,water heat pump,geo-water pump,initial-future-year,,,,,-0.1,6
-comm heating EUR,water heat pump,solar thermal,initial-future-year,,,,,-0.1,6
-comm heating EUR,electricity,air-air pump south,initial-future-year,,,,,-0.1,6
-comm heating EUR,water heat pump,air-water pump south,initial-future-year,,,,,-0.1,6
-comm heating EUR,electricity,air-air pump middle south,initial-future-year,,,,,-0.1,6
-comm heating EUR,water heat pump,air-water pump middle south,initial-future-year,,,,,-0.1,6
-comm heating EUR,electricity,air-air pump north,initial-future-year,,,,,-0.1,6
-comm heating EUR,water heat pump,air-water pump north,initial-future-year,,,,,-0.1,6
-comm others EUR,biomass,biomass,initial-future-year,,,,,-0.1,6
-comm others EUR,coal,coal,initial-future-year,,,,,-0.1,6
-comm others EUR,district heat,district heat,initial-future-year,,,,,-0.1,6
-comm others EUR,electricity,electricity,initial-future-year,,,,,-0.1,6
-comm others EUR,gas,gas,initial-future-year,,,,,-0.1,6
-comm others EUR,gas,hydrogen,initial-future-year,,,,,-0.1,6
-comm others EUR,refined liquids,refined liquids,initial-future-year,,,,,-0.1,6
-resid cooking modern EUR,electricity,electricity,initial-future-year,,,,,-0.1,6
-resid cooking modern EUR,gas,gas,initial-future-year,,,,,-0.1,6
-resid cooling modern EUR,electricity,electricity,initial-future-year,,,,,-0.1,6
-resid cooling modern EUR,gas,gas,initial-future-year,,,,,-0.1,6
-resid heating coal EUR,coal,coal,initial-future-year,,,,,-0.1,6
-resid heating modern EUR,biomass,biomass,initial-future-year,,,,,-0.1,6
-resid heating modern EUR,district heat,district heat,initial-future-year,,,,,-0.1,6
-resid heating modern EUR,electricity,air-air pump middle north,initial-future-year,,,,,-0.1,6
-resid heating modern EUR,electricity,resistance,initial-future-year,,,,,-0.1,6
-resid heating modern EUR,gas,gas,initial-future-year,,,,,-0.1,6
-resid heating modern EUR,gas,hydrogen,initial-future-year,,,,,-0.1,6
-resid heating modern EUR,refined liquids,refined liquids,initial-future-year,,,,,-0.1,6
-resid heating modern EUR,water heat pump,air-water pump middle north,initial-future-year,,,,,-0.1,6
-resid heating modern EUR,water heat pump,geo-water pump,initial-future-year,,,,,-0.1,6
-resid heating modern EUR,water heat pump,solar thermal,initial-future-year,,,,,-0.1,6
-resid heating modern EUR,electricity,air-air pump south,initial-future-year,,,,,-0.1,6
-resid heating modern EUR,water heat pump,air-water pump south,initial-future-year,,,,,-0.1,6
-resid heating modern EUR,electricity,air-air pump middle south,initial-future-year,,,,,-0.1,6
-resid heating modern EUR,water heat pump,air-water pump middle south,initial-future-year,,,,,-0.1,6
-resid heating modern EUR,electricity,air-air pump north,initial-future-year,,,,,-0.1,6
-resid heating modern EUR,water heat pump,air-water pump north,initial-future-year,,,,,-0.1,6
-resid hot water modern EUR,biomass,biomass,initial-future-year,,,,,-0.1,6
-resid hot water modern EUR,district heat,district heat,initial-future-year,,,,,-0.1,6
-resid hot water modern EUR,electricity,resistance,initial-future-year,,,,,-0.1,6
-resid hot water modern EUR,gas,gas,initial-future-year,,,,,-0.1,6
-resid hot water modern EUR,refined liquids,refined liquids,initial-future-year,,,,,-0.1,6
-resid hot water modern EUR,water heat pump,heat pump,initial-future-year,,,,,-0.1,6
-resid hot water modern EUR,water heat pump,solar thermal,initial-future-year,,,,,-0.1,6
-resid other appliance modern EUR,electricity,electricity,initial-future-year,,,,,-0.1,6
+comm cooling EUR,electricity,electricity,final-calibration-year,,,,0.1219,-0.5,6
+comm cooling EUR,gas,gas,final-calibration-year,,,,0.1219,-0.5,6
+comm heating EUR,biomass,biomass,final-calibration-year,,,,0.1219,-0.5,6
+comm heating EUR,coal,coal,final-calibration-year,,,,0.1219,-0.5,6
+comm heating EUR,district heat,district heat,final-calibration-year,,,,0.1219,-0.5,6
+comm heating EUR,electricity,air-air pump middle north,final-calibration-year,,,,0.1219,-0.5,6
+comm heating EUR,electricity,resistance,final-calibration-year,,,,0.1219,-0.5,6
+comm heating EUR,gas,gas,final-calibration-year,,,,0.1219,-0.5,6
+comm heating EUR,gas,hydrogen,final-calibration-year,,,,0.1219,-0.5,6
+comm heating EUR,refined liquids,refined liquids,final-calibration-year,,,,0.1219,-0.5,6
+comm heating EUR,water heat pump,air-water pump middle north,final-calibration-year,,,,0.1219,-0.5,6
+comm heating EUR,water heat pump,geo-water pump,final-calibration-year,,,,0.1219,-0.5,6
+comm heating EUR,water heat pump,solar thermal,final-calibration-year,,,,0.1219,-0.5,6
+comm heating EUR,electricity,air-air pump south,final-calibration-year,,,,0.1219,-0.5,6
+comm heating EUR,water heat pump,air-water pump south,final-calibration-year,,,,0.1219,-0.5,6
+comm heating EUR,electricity,air-air pump middle south,final-calibration-year,,,,0.1219,-0.5,6
+comm heating EUR,water heat pump,air-water pump middle south,final-calibration-year,,,,0.1219,-0.5,6
+comm heating EUR,electricity,air-air pump north,final-calibration-year,,,,0.1219,-0.5,6
+comm heating EUR,water heat pump,air-water pump north,final-calibration-year,,,,0.1219,-0.5,6
+comm others EUR,biomass,biomass,final-calibration-year,,,,0.1219,-0.5,6
+comm others EUR,coal,coal,final-calibration-year,,,,0.1219,-0.5,6
+comm others EUR,district heat,district heat,final-calibration-year,,,,0.1219,-0.5,6
+comm others EUR,electricity,electricity,final-calibration-year,,,,0.1219,-0.5,6
+comm others EUR,gas,gas,final-calibration-year,,,,0.1219,-0.5,6
+comm others EUR,gas,hydrogen,final-calibration-year,,,,0.1219,-0.5,6
+comm others EUR,refined liquids,refined liquids,final-calibration-year,,,,0.1219,-0.5,6
+resid cooking modern EUR,electricity,electricity,final-calibration-year,,,,0.1219,-0.5,6
+resid cooking modern EUR,gas,gas,final-calibration-year,,,,0.1219,-0.5,6
+resid cooling modern EUR,electricity,electricity,final-calibration-year,,,,0.1219,-0.5,6
+resid cooling modern EUR,gas,gas,final-calibration-year,,,,0.1219,-0.5,6
+resid heating coal EUR,coal,coal,final-calibration-year,,,,0.1219,-0.5,6
+resid heating modern EUR,biomass,biomass,final-calibration-year,,,,0.1219,-0.5,6
+resid heating modern EUR,district heat,district heat,final-calibration-year,,,,0.1219,-0.5,6
+resid heating modern EUR,electricity,air-air pump middle north,final-calibration-year,,,,0.1219,-0.5,6
+resid heating modern EUR,electricity,resistance,final-calibration-year,,,,0.1219,-0.5,6
+resid heating modern EUR,gas,gas,final-calibration-year,,,,0.1219,-0.5,6
+resid heating modern EUR,gas,hydrogen,final-calibration-year,,,,0.1219,-0.5,6
+resid heating modern EUR,refined liquids,refined liquids,final-calibration-year,,,,0.1219,-0.5,6
+resid heating modern EUR,water heat pump,air-water pump middle north,final-calibration-year,,,,0.1219,-0.5,6
+resid heating modern EUR,water heat pump,geo-water pump,final-calibration-year,,,,0.1219,-0.5,6
+resid heating modern EUR,water heat pump,solar thermal,final-calibration-year,,,,0.1219,-0.5,6
+resid heating modern EUR,electricity,air-air pump south,final-calibration-year,,,,0.1219,-0.5,6
+resid heating modern EUR,water heat pump,air-water pump south,final-calibration-year,,,,0.1219,-0.5,6
+resid heating modern EUR,electricity,air-air pump middle south,final-calibration-year,,,,0.1219,-0.5,6
+resid heating modern EUR,water heat pump,air-water pump middle south,final-calibration-year,,,,0.1219,-0.5,6
+resid heating modern EUR,electricity,air-air pump north,final-calibration-year,,,,0.1219,-0.5,6
+resid heating modern EUR,water heat pump,air-water pump north,final-calibration-year,,,,0.1219,-0.5,6
+resid hot water modern EUR,biomass,biomass,final-calibration-year,,,,0.1219,-0.5,6
+resid hot water modern EUR,district heat,district heat,final-calibration-year,,,,0.1219,-0.5,6
+resid hot water modern EUR,electricity,resistance,final-calibration-year,,,,0.1219,-0.5,6
+resid hot water modern EUR,gas,gas,final-calibration-year,,,,0.1219,-0.5,6
+resid hot water modern EUR,refined liquids,refined liquids,final-calibration-year,,,,0.1219,-0.5,6
+resid hot water modern EUR,water heat pump,heat pump,final-calibration-year,,,,0.1219,-0.5,6
+resid hot water modern EUR,water heat pump,solar thermal,final-calibration-year,,,,0.1219,-0.5,6
+resid other appliance modern EUR,electricity,electricity,final-calibration-year,,,,0.1219,-0.5,6
+comm cooling EUR,electricity,electricity,initial-future-year,,,,0.1219,-0.5,6
+comm cooling EUR,gas,gas,initial-future-year,,,,0.1219,-0.5,6
+comm heating EUR,biomass,biomass,initial-future-year,,,,0.1219,-0.5,6
+comm heating EUR,coal,coal,initial-future-year,,,,0.1219,-0.5,6
+comm heating EUR,district heat,district heat,initial-future-year,,,,0.1219,-0.5,6
+comm heating EUR,electricity,air-air pump middle north,initial-future-year,,,,0.1219,-0.5,6
+comm heating EUR,electricity,resistance,initial-future-year,,,,0.1219,-0.5,6
+comm heating EUR,gas,gas,initial-future-year,,,,0.1219,-0.5,6
+comm heating EUR,gas,hydrogen,initial-future-year,,,,0.1219,-0.5,6
+comm heating EUR,refined liquids,refined liquids,initial-future-year,,,,0.1219,-0.5,6
+comm heating EUR,water heat pump,air-water pump middle north,initial-future-year,,,,0.1219,-0.5,6
+comm heating EUR,water heat pump,geo-water pump,initial-future-year,,,,0.1219,-0.5,6
+comm heating EUR,water heat pump,solar thermal,initial-future-year,,,,0.1219,-0.5,6
+comm heating EUR,electricity,air-air pump south,initial-future-year,,,,0.1219,-0.5,6
+comm heating EUR,water heat pump,air-water pump south,initial-future-year,,,,0.1219,-0.5,6
+comm heating EUR,electricity,air-air pump middle south,initial-future-year,,,,0.1219,-0.5,6
+comm heating EUR,water heat pump,air-water pump middle south,initial-future-year,,,,0.1219,-0.5,6
+comm heating EUR,electricity,air-air pump north,initial-future-year,,,,0.1219,-0.5,6
+comm heating EUR,water heat pump,air-water pump north,initial-future-year,,,,0.1219,-0.5,6
+comm others EUR,biomass,biomass,initial-future-year,,,,0.1219,-0.5,6
+comm others EUR,coal,coal,initial-future-year,,,,0.1219,-0.5,6
+comm others EUR,district heat,district heat,initial-future-year,,,,0.1219,-0.5,6
+comm others EUR,electricity,electricity,initial-future-year,,,,0.1219,-0.5,6
+comm others EUR,gas,gas,initial-future-year,,,,0.1219,-0.5,6
+comm others EUR,gas,hydrogen,initial-future-year,,,,0.1219,-0.5,6
+comm others EUR,refined liquids,refined liquids,initial-future-year,,,,0.1219,-0.5,6
+resid cooking modern EUR,electricity,electricity,initial-future-year,,,,0.1219,-0.5,6
+resid cooking modern EUR,gas,gas,initial-future-year,,,,0.1219,-0.5,6
+resid cooling modern EUR,electricity,electricity,initial-future-year,,,,0.1219,-0.5,6
+resid cooling modern EUR,gas,gas,initial-future-year,,,,0.1219,-0.5,6
+resid heating coal EUR,coal,coal,initial-future-year,,,,0.1219,-0.5,6
+resid heating modern EUR,biomass,biomass,initial-future-year,,,,0.1219,-0.5,6
+resid heating modern EUR,district heat,district heat,initial-future-year,,,,0.1219,-0.5,6
+resid heating modern EUR,electricity,air-air pump middle north,initial-future-year,,,,0.1219,-0.5,6
+resid heating modern EUR,electricity,resistance,initial-future-year,,,,0.1219,-0.5,6
+resid heating modern EUR,gas,gas,initial-future-year,,,,0.1219,-0.5,6
+resid heating modern EUR,gas,hydrogen,initial-future-year,,,,0.1219,-0.5,6
+resid heating modern EUR,refined liquids,refined liquids,initial-future-year,,,,0.1219,-0.5,6
+resid heating modern EUR,water heat pump,air-water pump middle north,initial-future-year,,,,0.1219,-0.5,6
+resid heating modern EUR,water heat pump,geo-water pump,initial-future-year,,,,0.1219,-0.5,6
+resid heating modern EUR,water heat pump,solar thermal,initial-future-year,,,,0.1219,-0.5,6
+resid heating modern EUR,electricity,air-air pump south,initial-future-year,,,,0.1219,-0.5,6
+resid heating modern EUR,water heat pump,air-water pump south,initial-future-year,,,,0.1219,-0.5,6
+resid heating modern EUR,electricity,air-air pump middle south,initial-future-year,,,,0.1219,-0.5,6
+resid heating modern EUR,water heat pump,air-water pump middle south,initial-future-year,,,,0.1219,-0.5,6
+resid heating modern EUR,electricity,air-air pump north,initial-future-year,,,,0.1219,-0.5,6
+resid heating modern EUR,water heat pump,air-water pump north,initial-future-year,,,,0.1219,-0.5,6
+resid hot water modern EUR,biomass,biomass,initial-future-year,,,,0.1219,-0.5,6
+resid hot water modern EUR,district heat,district heat,initial-future-year,,,,0.1219,-0.5,6
+resid hot water modern EUR,electricity,resistance,initial-future-year,,,,0.1219,-0.5,6
+resid hot water modern EUR,gas,gas,initial-future-year,,,,0.1219,-0.5,6
+resid hot water modern EUR,refined liquids,refined liquids,initial-future-year,,,,0.1219,-0.5,6
+resid hot water modern EUR,water heat pump,heat pump,initial-future-year,,,,0.1219,-0.5,6
+resid hot water modern EUR,water heat pump,solar thermal,initial-future-year,,,,0.1219,-0.5,6
+resid other appliance modern EUR,electricity,electricity,initial-future-year,,,,0.1219,-0.5,6

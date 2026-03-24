@@ -2,74 +2,74 @@
 # Title: Region-specific refining subsector shareweights interpolation rules 
 # Description: adjust biomass liquid share weight for few regions with palm biodiesel to lower values. This is needed due to data update.
 # Units: Unitless share-weights
-# Date of last update: 2024-02-26 (XZ)
-# Comment:note that for regions not included (e.g. new regions) USA assumptions are used by default. Currently, the same assumption is used across all regions, e.g., same with A22.subsector_interp.csv
+# Date of last update: 2026-03-19 (DV)
+# Comment:note that for regions not included (e.g. new regions) USA assumptions are used by default. Currently, the same assumption is used across all regions, e.g., same with A22.subsector_interp.csv,,,
 # Column types: cccccnc
 # ----------
 region,supplysector,subsector,apply.to,from.year,to.year,interpolation.function
-USA,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Africa_Eastern,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Africa_Northern,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Africa_Southern,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Africa_Western,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Australia_NZ,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Brazil,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Canada,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Central America and Caribbean,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Central Asia,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-China,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-India,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Indonesia,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Japan,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Mexico,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Middle East,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Pakistan,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Russia,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-South Africa,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-South America_Northern,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-South America_Southern,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-South Asia,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-South Korea,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Southeast Asia,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Taiwan,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Argentina,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Colombia,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Austria,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Belgium,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Bulgaria,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Croatia,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Cyprus,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Czech Republic,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Denmark,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Estonia,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Finland,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-France,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Germany,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Greece,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Hungary,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Ireland,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Italy,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Latvia,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Lithuania,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Luxembourg,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Malta,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Netherlands,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Poland,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Portugal,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Romania,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Slovakia,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Slovenia,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Spain,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Sweden,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Albania,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Belarus,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Bosnia and Herzegovina,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Iceland,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Macedonia,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Moldova,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Norway,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Serbia and Montenegro,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Switzerland,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Turkey,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-UK,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
-Ukraine,refining,biomass liquids,share-weight,final-calibration-year,2030,linear
+USA,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Africa_Eastern,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Africa_Northern,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Africa_Southern,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Africa_Western,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Australia_NZ,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Brazil,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Canada,refining,biomass liquids,share-weight,final-calibration-year,2100,fixed
+Central America and Caribbean,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Central Asia,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+China,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+India,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Indonesia,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Japan,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Mexico,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Middle East,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Pakistan,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Russia,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+South Africa,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+South America_Northern,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+South America_Southern,refining,biomass liquids,share-weight,final-calibration-year,2100,fixed
+South Asia,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+South Korea,refining,biomass liquids,share-weight,final-calibration-year,2100,fixed
+Southeast Asia,refining,biomass liquids,share-weight,final-calibration-year,2100,fixed
+Taiwan,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Argentina,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Colombia,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Austria,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Belgium,refining,biomass liquids,share-weight,final-calibration-year,2100,fixed
+Bulgaria,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Croatia,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Cyprus,refining,biomass liquids,share-weight,final-calibration-year,2100,fixed
+Czech Republic,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Denmark,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Estonia,refining,biomass liquids,share-weight,final-calibration-year,2100,fixed
+Finland,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+France,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Germany,refining,biomass liquids,share-weight,final-calibration-year,2100,fixed
+Greece,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Hungary,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Ireland,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Italy,refining,biomass liquids,share-weight,final-calibration-year,2100,fixed
+Latvia,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Lithuania,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Luxembourg,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Malta,refining,biomass liquids,share-weight,final-calibration-year,2100,fixed
+Netherlands,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Poland,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Portugal,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Romania,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Slovakia,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Slovenia,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Spain,refining,biomass liquids,share-weight,final-calibration-year,2100,fixed
+Sweden,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Albania,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Belarus,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Bosnia and Herzegovina,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Iceland,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Macedonia,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Moldova,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Norway,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Serbia and Montenegro,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+Switzerland,refining,biomass liquids,share-weight,final-calibration-year,2100,fixed
+Turkey,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
+UK,refining,biomass liquids,share-weight,final-calibration-year,2100,fixed
+Ukraine,refining,biomass liquids,share-weight,final-calibration-year,2100,linear
