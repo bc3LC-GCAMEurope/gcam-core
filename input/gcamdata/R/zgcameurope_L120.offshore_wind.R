@@ -53,8 +53,8 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
     # Load required inputs
     iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID")
     GCAM_region_names <- get_data(all_data, "common/GCAM_region_names", strip_attributes = TRUE)
-    L113.globaltech_capital_ATB <- get_data(all_data, "L113.globaltech_capital_ATB")
-    L113.globaltech_OMfixed_ATB <- get_data(all_data, "L113.globaltech_OMfixed_ATB")
+    L113.globaltech_capital_ATB_EUR <- get_data(all_data, "L113.globaltech_capital_ATB")
+    L113.globaltech_OMfixed_ATB_EUR <- get_data(all_data, "L113.globaltech_OMfixed_ATB")
     A20.wind_class_CFs <- get_data(all_data, "energy/A20.wind_class_CFs")
     A20.offshore_wind_depth_cap_cost <- get_data(all_data, "energy/A20.offshore_wind_depth_cap_cost")
     NREL_wind_ctry <- get_data(all_data, "energy/mappings/NREL_wind_ctry") %>%
