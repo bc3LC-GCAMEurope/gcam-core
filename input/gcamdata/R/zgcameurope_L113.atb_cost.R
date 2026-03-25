@@ -67,13 +67,13 @@ module_gcameurope_L113.atb_cost <- function(command, ...) {
 
     # Load required inputs
     # A23. shell files
-    A23.globaltech_capital <- get_data(all_data, "gcam-europe/A23.globaltech_capital_EUR", strip_attributes = TRUE)
-    A23.globaltech_capital_adv <- get_data(all_data, "gcam-europe/A23.globaltech_capital_adv_EUR", strip_attributes = TRUE)
-    A23.globaltech_capital_low <- get_data(all_data, "gcam-europe/A23.globaltech_capital_low_EUR", strip_attributes = TRUE)
+    A23.globaltech_capital_EUR <- get_data(all_data, "gcam-europe/A23.globaltech_capital_EUR", strip_attributes = TRUE)
+    A23.globaltech_capital_adv_EUR <- get_data(all_data, "gcam-europe/A23.globaltech_capital_adv_EUR", strip_attributes = TRUE)
+    A23.globaltech_capital_low_EUR <- get_data(all_data, "gcam-europe/A23.globaltech_capital_low_EUR", strip_attributes = TRUE)
     A23.elecS_globaltech_non_energy_inputs <- get_data(all_data, "gcam-usa/A23.elecS_globaltech_non_energy_inputs",
                                                        strip_attributes = TRUE)
-    A23.globaltech_OMfixed <- get_data(all_data, "gcam-europe/A23.globaltech_OMfixed_EUR", strip_attributes = TRUE)
-    A23.globaltech_OMvar <- get_data(all_data, "gcam-europe/A23.globaltech_OMvar_EUR", strip_attributes = TRUE)
+    A23.globaltech_OMfixed_EUR <- get_data(all_data, "gcam-europe/A23.globaltech_OMfixed_EUR", strip_attributes = TRUE)
+    A23.globaltech_OMvar_EUR <- get_data(all_data, "gcam-europe/A23.globaltech_OMvar_EUR", strip_attributes = TRUE)
 
     # Legacy (Muratori) assumptions
     Muratori_globaltech_capital <- get_data(all_data, "energy/Muratori_globaltech_capital")
@@ -333,7 +333,7 @@ module_gcameurope_L113.atb_cost <- function(command, ...) {
    # Establish some year constants for data processing
     ATB_years <- unique(NREL_ATB_cost_assumptions$year)
 
-    A23_years <- A23.globaltech_capital %>%
+    A23_years <- A23.globaltech_capital_EUR %>%
       gather_years() %>%
       distinct(year)
     # Captures all the historical years
@@ -526,19 +526,19 @@ module_gcameurope_L113.atb_cost <- function(command, ...) {
 
     # Extract technologies from the original A23 file that have a valid 2015 data (i.e. not NAs).
     # These technologies will take priority over ATB technologies if there's a conflict.
-    A23.globaltech_capital %>%
+    A23.globaltech_capital_EUR %>%
       rename(input = 'input-capital') %>%
       mutate(case = energy.COSTS_MID_CASE) %>%
-      bind_rows(A23.globaltech_capital_adv  %>%
+      bind_rows(A23.globaltech_capital_adv_EUR  %>%
                   rename(input = 'input-capital') %>%
                   mutate(case = energy.COSTS_ADV_CASE),
-                A23.globaltech_capital_low  %>%
+                A23.globaltech_capital_low_EUR  %>%
                   rename(input = 'input-capital') %>%
                   mutate(case = energy.COSTS_LOW_CASE),
-                A23.globaltech_OMfixed  %>%
+                A23.globaltech_OMfixed_EUR  %>%
                   rename(input = input.OM.fixed) %>%
                   mutate(case = energy.COSTS_MID_CASE),
-                A23.globaltech_OMvar %>%
+                A23.globaltech_OMvar_EUR %>%
                   rename(input = input.OM.var) %>%
                   mutate(case = energy.COSTS_MID_CASE)) %>%
       gather_years() -> A23.globaltech_cost
@@ -607,35 +607,35 @@ module_gcameurope_L113.atb_cost <- function(command, ...) {
       filter(input == energy.CAPITAL_INPUT,
              case == energy.COSTS_MID_CASE) %>%
       rename('input-capital' = input) %>%
-      select(-case) -> L113.globaltech_capital_ATB
+      select(-case) -> L113.globaltech_capital_ATB_EUR
 
     L113.globaltech_cost  %>%
       # Filter for correct cost case
       filter(input == energy.CAPITAL_INPUT,
              case == energy.COSTS_ADV_CASE) %>%
       rename('input-capital' = input) %>%
-      select(-case) -> L113.globaltech_capital_ATB_adv
+      select(-case) -> L113.globaltech_capital_ATB_adv_EUR
 
     L113.globaltech_cost %>%
       # Filter for correct cost case
       filter(input == energy.CAPITAL_INPUT,
              case == energy.COSTS_LOW_CASE) %>%
       rename('input-capital' = input) %>%
-      select(-case) -> L113.globaltech_capital_ATB_low
+      select(-case) -> L113.globaltech_capital_ATB_low_EUR
 
     L113.globaltech_cost %>%
       # Filter for correct cost case
       filter(input == energy.OM_FIXED_INPUT,
              case == energy.COSTS_MID_CASE) %>%
       rename(input.OM.fixed = input) %>%
-      select(-case) -> L113.globaltech_OMfixed_ATB
+      select(-case) -> L113.globaltech_OMfixed_ATB_EUR
 
     L113.globaltech_cost %>%
       # Filter for correct cost case
       filter(input == energy.OM_VAR_INPUT,
              case == energy.COSTS_MID_CASE) %>%
       rename(input.OM.var = input) %>%
-      select(-case) -> L113.globaltech_OMvar_ATB
+      select(-case) -> L113.globaltech_OMvar_ATB_EUR
 
     # Filter out battery technology data
     L113.globaltech_cost_atb %>%
@@ -673,43 +673,43 @@ module_gcameurope_L113.atb_cost <- function(command, ...) {
       tidyr::fill(lifetime, steepness, half.life, fcr, capacity.factor, .direction = "up") %>%
       filter(year %in% MODEL_YEARS) %>%
       left_join_error_no_match(A23.globaltech_capital_atb_battery,
-                               by = c("technology", "period")) -> L113.elecS_globaltech_capital_battery_ATB
+                               by = c("technology", "period")) -> L113.elecS_globaltech_capital_battery_ATB_EUR
 
 
     # ===================================================
     # Produce outputs
 
-    L113.globaltech_capital_ATB %>%
+    L113.globaltech_capital_ATB_EUR %>%
       add_title("2019 ATB-based capital cost structure for GCAM") %>%
       add_units("1975$/kW") %>%
-      add_comments("Will be used in place of A23.globaltech_capital by relevant chunks") %>%
-      add_precursors("energy/A23.globaltech_capital",
+      add_comments("Will be used in place of A23.globaltech_capital_EUR by relevant chunks") %>%
+      add_precursors("gcam-europe/A23.globaltech_capital_EUR",
                      "energy/Muratori_globaltech_capital",
                      "energy/NREL_ATB_capital_2017",
                      "energy/NREL_ATB_capital_2019",
                      "energy/NREL_ATB_capital_2021",
                      "energy/NREL_ATB_capital_2022",
                      "energy/mappings/atb_gcam_mapping") ->
-      L113.globaltech_capital_ATB
+      L113.globaltech_capital_ATB_EUR
 
-    L113.globaltech_capital_ATB_adv %>%
+    L113.globaltech_capital_ATB_adv_EUR %>%
       add_title("2019 ATB-based capital cost structure for GCAM - Advanced improvement scenario") %>%
       add_units("1975$/kW") %>%
-      add_comments("Will be used in place of A23.globaltech_capital_adv by relevant chunks") %>%
-      add_precursors("energy/A23.globaltech_capital_adv",
+      add_comments("Will be used in place of A23.globaltech_capital_adv_EUR by relevant chunks") %>%
+      add_precursors("gcam-europe/A23.globaltech_capital_adv_EUR",
                      "energy/Muratori_globaltech_capital_adv",
                      "energy/NREL_ATB_capital_2017",
                      "energy/NREL_ATB_capital_2019",
                      "energy/NREL_ATB_capital_2021",
                      "energy/NREL_ATB_capital_2022",
                      "energy/mappings/atb_gcam_mapping") ->
-      L113.globaltech_capital_ATB_adv
+      L113.globaltech_capital_ATB_adv_EUR
 
-    L113.globaltech_capital_ATB_low %>%
+    L113.globaltech_capital_ATB_low_EUR %>%
       add_title("2019 ATB-based capital cost structure for GCAM - Low improvement scenario") %>%
       add_units("1975$/kW") %>%
-      add_comments("Will be used in place of A23.globaltech_capital_low by relevant chunks") %>%
-      add_precursors("energy/A23.globaltech_capital_low",
+      add_comments("Will be used in place of A23.globaltech_capital_low_EUR by relevant chunks") %>%
+      add_precursors("gcam-europe/A23.globaltech_capital_low_EUR",
                      "energy/Muratori_globaltech_capital_low",
                      "energy/NREL_ATB_capital_2017",
                      "energy/NREL_ATB_capital_2019",
@@ -717,9 +717,9 @@ module_gcameurope_L113.atb_cost <- function(command, ...) {
                      "energy/NREL_ATB_capital_2022",
                      "energy/mappings/atb_gcam_mapping",
                      "energy/mappings/ATB_tech_mapping") ->
-      L113.globaltech_capital_ATB_low
+      L113.globaltech_capital_ATB_low_EUR
 
-    L113.elecS_globaltech_capital_battery_ATB %>%
+    L113.elecS_globaltech_capital_battery_ATB_EUR %>%
       add_title("Battery technology costs to be used by GCAM USA") %>%
       add_units("1975$/kW") %>%
       add_comments("Will be used in place of A23.elecS_globaltech_non_energy_inputs by relevant chunks") %>%
@@ -730,13 +730,13 @@ module_gcameurope_L113.atb_cost <- function(command, ...) {
                      "energy/NREL_ATB_capital_2022",
                      "energy/mappings/atb_gcam_mapping",
                      "energy/mappings/ATB_tech_mapping") ->
-      L113.elecS_globaltech_capital_battery_ATB
+      L113.elecS_globaltech_capital_battery_ATB_EUR
 
-    L113.globaltech_OMfixed_ATB %>%
+    L113.globaltech_OMfixed_ATB_EUR %>%
       add_title("2019 ATB-based capital cost structure for GCAM - Advanced improvement scenario") %>%
       add_units("1975$/kW") %>%
-      add_comments("Will be used in place of A23.globaltech_capital_adv by relevant chunks") %>%
-      add_precursors("energy/A23.globaltech_OMfixed",
+      add_comments("Will be used in place of A23.globaltech_capital_adv_EUR by relevant chunks") %>%
+      add_precursors("gcam-europe/A23.globaltech_OMfixed_EUR",
                      "energy/Muratori_globaltech_OMfixed",
                      "energy/NREL_ATB_OMfixed_2017",
                      "energy/NREL_ATB_OMfixed_2019",
@@ -744,13 +744,13 @@ module_gcameurope_L113.atb_cost <- function(command, ...) {
                      "energy/NREL_ATB_OMfixed_2022",
                      "energy/mappings/atb_gcam_mapping",
                      "energy/mappings/ATB_tech_mapping") ->
-      L113.globaltech_OMfixed_ATB
+      L113.globaltech_OMfixed_ATB_EUR
 
-    L113.globaltech_OMvar_ATB %>%
+    L113.globaltech_OMvar_ATB_EUR %>%
       add_title("2019 ATB-based capital cost structure for GCAM - Advanced improvement scenario") %>%
       add_units("1975$/kW") %>%
-      add_comments("Will be used in place of A23.globaltech_capital_adv by relevant chunks") %>%
-      add_precursors("energy/A23.globaltech_OMvar",
+      add_comments("Will be used in place of A23.globaltech_capital_adv_EUR by relevant chunks") %>%
+      add_precursors("gcam-europe/A23.globaltech_OMvar_EUR",
                      "energy/Muratori_globaltech_OMvar",
                      "energy/NREL_ATB_OMvar_2017",
                      "energy/NREL_ATB_OMvar_2019",
@@ -758,7 +758,7 @@ module_gcameurope_L113.atb_cost <- function(command, ...) {
                      "energy/NREL_ATB_OMvar_2022",
                      "energy/mappings/atb_gcam_mapping",
                      "energy/mappings/ATB_tech_mapping") ->
-      L113.globaltech_OMvar_ATB
+      L113.globaltech_OMvar_ATB_EUR
 
     return_data(L113.globaltech_capital_ATB_EUR,
                 L113.globaltech_capital_ATB_adv_EUR,
