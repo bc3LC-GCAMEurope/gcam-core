@@ -88,6 +88,10 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
     L113.globaltech_capital_ATB_EUR %>%
       filter(technology %in% c("wind_offshore_floating", "wind_offshore_fixed")) %>%
       rename(resource = technology) %>%
+      mutate(resource = case_when(
+        resource == "wind_offshore_fixed"    ~ "fixed offshore wind",
+        resource == "wind_offshore_floating" ~ "floating offshore wind",
+        TRUE ~ resource)) %>%
       select(resource, fixed.charge.rate) -> L120.offshore_wind_fcr
 
     L113.globaltech_OMfixed_ATB_EUR %>%
@@ -96,6 +100,10 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
              year == max(HISTORICAL_YEARS)) %>%
       rename(OM.fixed = value) %>%
       rename(resource = technology) %>%
+      mutate(resource = case_when(
+        resource == "wind_offshore_fixed"    ~ "fixed offshore wind",
+        resource == "wind_offshore_floating" ~ "floating offshore wind",
+        TRUE ~ resource)) %>%
       select(resource, OM.fixed) -> L120.offshore_wind_OMfixed
 
     # NOTE that the process for calculating supply/ price is different for offshore wind (vs. onshore wind).  For offshore wind, we
@@ -109,8 +117,8 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
       left_join_error_no_match(A20.wind_class_CFs, by = c("wind_class")) %>%
       left_join_error_no_match(L120.offshore_wind_capital, by = c("depth_class")) %>%
       mutate(resource = if_else(depth_class %in% c("shallow", "transitional"),
-                                "wind_offshore_fixed",
-                                "wind_offshore_floating")) %>%
+                                "fixed offshore wind",
+                                "floating offshore wind")) %>%
       left_join_error_no_match(L120.offshore_wind_fcr, by = c("resource")) %>%
       left_join_error_no_match(L120.offshore_wind_OMfixed, by = c("resource")) %>%
       rename(fcr = fixed.charge.rate) %>%
@@ -312,6 +320,10 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
       select(year, capital.overnight, intermittent.technology) %>%
       mutate(capital.tech.change.period = lag(capital.overnight, 1) / capital.overnight,
              time.change = year - lag(year)) %>%
+      mutate(intermittent.technology = case_when(
+        intermittent.technology == "wind_offshore_fixed"    ~ "fixed offshore wind",
+        intermittent.technology == "wind_offshore_floating" ~ "floating offshore wind",
+        TRUE ~ intermittent.technology)) %>%
       left_join_error_no_match(L120.offshore_wind_fcr, by = c("intermittent.technology" = "resource")) %>%
       left_join_error_no_match(L120.offshore_wind_OMfixed, by = c("intermittent.technology" = "resource")) %>%
       mutate(k1 = fixed.charge.rate / (CONV_YEAR_HOURS * CONV_KWH_GJ),
@@ -328,24 +340,29 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
     # not expected that regions would be able to exhaust the potential offered by the highest capacity class available.
     NREL_offshore_energy %>%
       select(-distance_to_shore,-total) %>%
+      filter_regions_europe() %>%
       left_join_error_no_match(NREL_wind_ctry, by = "IAM_country") %>%
       left_join_error_no_match(iso_GCAM_regID %>% select(iso, GCAM_region_ID), by = "iso") %>%
       left_join_error_no_match(GCAM_region_names, by = c("GCAM_region_ID")) %>%
       select(-c(IAM_country, iso, GCAM_region_ID)) %>%
       gather(class,potential,-region, -depth_class) %>%
       mutate(resource = if_else(depth_class %in% c("shallow", "transitional"),
-                                "wind_offshore_fixed",
-                                "wind_offshore_floating")) %>%
+                                "offshore_wind_fixed",
+                                "offshore_wind_floating")) %>%
       group_by(region, class, resource) %>%
       summarise(potential = sum(potential)) %>%
+      #mutate(supply = cumsum(resource.potential.EJ)) %>%
       ungroup() %>%
       left_join_error_no_match(A20.wind_class_CFs,
                                by = c("class" = "wind_class")) %>%
-    #  filter(potential != 0) %>%
       select(-class, -potential, -depth_class) %>%
       group_by(region, resource) %>%
       mutate(CF = max(CF)) %>%
       ungroup() %>%
+      mutate(resource = case_when(
+        resource == "offshore_wind_fixed"    ~ "fixed offshore wind",
+        resource == "offshore_wind_floating" ~ "floating offshore wind",
+        TRUE ~ resource)) %>%
       unique() -> L120.offshore_wind_CF
 
     # Grid connection costs are read in as fixed non-energy cost adders (in $/GJ). This is calculated using three things:
@@ -362,10 +379,11 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
       left_join_error_no_match(NREL_wind_ctry, by = "IAM_country") %>%
       left_join_error_no_match(iso_GCAM_regID %>% select(iso, GCAM_region_ID), by = "iso") %>%
       left_join_error_no_match(GCAM_region_names, by = c("GCAM_region_ID")) %>%
+      filter_regions_europe() %>%
       select(-c(IAM_country, iso, GCAM_region_ID)) %>%
       mutate(technology = if_else(depth_class %in% c("shallow", "transitional"),
-                                "wind_offshore_fixed",
-                                "wind_offshore_floating")) %>%
+                                "fixed offshore wind",
+                                "floating offshore wind")) %>%
       group_by(region, technology, distance_to_shore) %>%
       summarise(total = sum(total)) %>%
       ungroup() %>%
@@ -399,6 +417,10 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
       left_join_error_no_match(L120.offshore_wind_fcr, by = c("technology" = "resource")) %>%
       rename(fcr = fixed.charge.rate) %>%
       mutate(grid.cost = fcr * cost / (CONV_YEAR_HOURS * CF* CONV_KWH_GJ) * gdp_deflator(1975, 2013)) -> L120.grid.cost
+
+    # Make sure no NaNs introduced because of the additional regions with no offshore wind added
+    L120.grid.cost %>%
+      tidyr::replace_na(list(grid.cost=0)) -> L120.grid.cost
 
     # Set grid connection cost for all regions
     L120.grid.cost %>%
