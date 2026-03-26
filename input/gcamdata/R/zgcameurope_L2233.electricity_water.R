@@ -23,10 +23,10 @@
 module_gcameurope_L2233.electricity_water <- function(command, ...) {
   MODULE_INPUTS <- c(FILE = "common/GCAM_region_names",
                      FILE = "energy/calibrated_techs",
-                     FILE = "energy/A23.globalinttech",
-                     FILE = "energy/A23.globaltech_shrwt",
+                     FILE = "gcam-europe/A23.globalinttech_EUR",
+                     FILE = "gcam-europe/A23.globaltech_shrwt_EUR",
                      FILE = "energy/A23.sector",
-                     FILE = "water/elec_tech_water_map",
+                     FILE = "gcam-europe/elec_tech_water_map_EUR",
                      FILE = "water/water_td_sectors",
                      FILE = "water/A23.CoolingSystemCosts",
                      FILE = "water/Macknick_elec_water_m3MWh",
@@ -77,9 +77,43 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
 
     GCAM_region_names <- GCAM_region_names %>%  filter(region %in% gcameurope.EUROSTAT_COUNTRIES)
 
+    # Function to distinguish between floating and fixed offshore technologies
+    expand_offshore_wind <- function(df) {
+      # Check if the dataframe has either of the relevant columns
+      if ("backup.intermittent.technology" %in% colnames(df)) {
+        tech_col <- "backup.intermittent.technology"
+      } else if ("intermittent.technology" %in% colnames(df)) {
+        tech_col <- "intermittent.technology"
+      } else {
+        # If neither column exists, return the dataframe unchanged
+        return(df)
+      }
+
+      # Check if wind_offshore exists in the technology column
+      if ("wind_offshore" %in% df[[tech_col]]) {
+        # Create rows for floating and fixed offshore wind
+        floating_rows <- df[df[[tech_col]] == "wind_offshore", ]
+        fixed_rows <- df[df[[tech_col]] == "wind_offshore", ]
+
+        # Replace technology names
+        floating_rows[[tech_col]] <- "wind_offshore_floating"
+        fixed_rows[[tech_col]] <- "wind_offshore_fixed"
+
+        # Bind the original data (without wind_offshore) with the new rows
+        df <- rbind(df[df[[tech_col]] != "wind_offshore", ],
+                    floating_rows,
+                    fixed_rows)
+      }
+
+      return(df)
+    }
+
+    # Apply the function to all dataframes in the list
+    L223.GlobalIntTechCapital_elec <- expand_offshore_wind(L223.GlobalIntTechCapital_elec)
+
     ## BUILD TWO TABLES WITH ALL POSSIBLE TECHNOLOGIES FROM THE OLD AND NEW STRUCTURES -----------------
     # First table (L2233.TechMap) includes all technologies
-    elec_tech_water_map %>%
+    elec_tech_water_map_EUR %>%
       select(from.supplysector, from.subsector, from.technology,
              to.supplysector, to.subsector, to.technology) -> L2233.TechMap
 
@@ -141,9 +175,9 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
 
     L2233.TechMap %>%
       select(from.supplysector, from.subsector, from.technology, to.supplysector) %>%
-      filter(from.supplysector %in% A23.globalinttech$supplysector,
-             from.subsector %in% A23.globalinttech$subsector,
-             from.technology %in% A23.globalinttech$technology) %>%
+      filter(from.supplysector %in% A23.globalinttech_EUR$supplysector,
+             from.subsector %in% A23.globalinttech_EUR$subsector,
+             from.technology %in% A23.globalinttech_EUR$intermittent.technology) %>%
       select(to.supplysector) %>% unique -> L2233.elec_cool_Int_supplysectors
 
     L2233.supplysector_info %>%
@@ -154,7 +188,7 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["ElecReserve"]]) ->
       L2233.ElecReserve_elec_cool_EUR # --OUTPUT--
 
-    elec_tech_water_map %>%
+    elec_tech_water_map_EUR %>%
       select(to.supplysector, to.subsector) %>%
       unique %>%
       rename(supplysector = to.supplysector, subsector = to.subsector) ->
@@ -210,7 +244,7 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
     L1233.shrwt_R_elec_cool_Yf_EUR %>%
       filter(year %in% MODEL_FUTURE_YEARS) %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
-      left_join_error_no_match(elec_tech_water_map,
+      left_join_error_no_match(elec_tech_water_map_EUR,
                                by = c("sector", "fuel", "technology", "cooling_system", "water_type")) %>%
       select(-from.supplysector, -from.subsector, -from.technology, -plant_type, -minicam.energy.input) %>%
       rename(share.weight = value,supplysector = to.supplysector,
@@ -242,7 +276,7 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
     L1233.out_EJ_R_elec_F_tech_Yh_cool_EUR %>%
       filter(year %in% MODEL_BASE_YEARS) %>% rename(calOutputValue = value) %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
-      left_join_error_no_match(select(elec_tech_water_map,
+      left_join_error_no_match(select(elec_tech_water_map_EUR,
                                       -from.supplysector, -from.subsector, -from.technology, -minicam.energy.input),
                                by = c("sector", "fuel", "technology", "cooling_system", "water_type", "plant_type")) %>%
       rename(supplysector = to.supplysector, subsector = to.subsector, stub.technology = to.technology) %>%

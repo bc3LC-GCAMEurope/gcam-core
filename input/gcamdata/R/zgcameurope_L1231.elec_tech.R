@@ -18,7 +18,7 @@
 
 module_gcameurope_L1231.elec_tech <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "energy/A23.globaltech_eff",
+    return(c(FILE = "gcam-europe/A23.globaltech_eff_EUR",
              FILE = "energy/calibrated_techs",
              "L123.in_EJ_R_elec_F_Yh_EUR",
              "L123.out_EJ_R_elec_F_Yh_EUR",
@@ -39,7 +39,7 @@ module_gcameurope_L1231.elec_tech <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    A23.globaltech_eff <- get_data(all_data, "energy/A23.globaltech_eff")
+    A23.globaltech_eff <- get_data(all_data, "gcam-europe/A23.globaltech_eff_EUR")
     calibrated_techs <- get_data(all_data, "energy/calibrated_techs")
     L123.in_EJ_R_elec_F_Yh_EUR <- get_data(all_data, "L123.in_EJ_R_elec_F_Yh_EUR", strip_attributes = TRUE)
     L123.out_EJ_R_elec_F_Yh_EUR <- get_data(all_data, "L123.out_EJ_R_elec_F_Yh_EUR", strip_attributes = TRUE)
@@ -205,21 +205,21 @@ module_gcameurope_L1231.elec_tech <- function(command, ...) {
       add_title("Inputs to electricity by Region / fuel / technology") %>%
       add_units("EJ") %>%
       add_comments("Inputs are calculated based on L123.in_EJ_R_elec_F_Yh_EUR and calibrated_techs. For gas technologies, the share of each has was estimated") %>%
-      add_precursors("energy/A23.globaltech_eff", "energy/calibrated_techs", "L123.in_EJ_R_elec_F_Yh_EUR", "L123.out_EJ_R_elec_F_Yh_EUR", "L123.eff_R_elec_F_Yh_EUR") ->
+      add_precursors("gcam-europe/A23.globaltech_eff_EUR", "energy/calibrated_techs", "L123.in_EJ_R_elec_F_Yh_EUR", "L123.out_EJ_R_elec_F_Yh_EUR", "L123.eff_R_elec_F_Yh_EUR") ->
       L1231.in_EJ_R_elec_F_tech_Yh_EUR
 
     L1231.out_EJ_R_elec_F_tech_Yh_EUR %>%
       add_title("Outputs of electricity by by Region / fuel / technology") %>%
       add_units("EJ") %>%
       add_comments("Outputs by fuel and coresponding technologies are adjusted based on the efficiency and input estimates")%>%
-      add_precursors("energy/A23.globaltech_eff", "energy/calibrated_techs", "L123.in_EJ_R_elec_F_Yh_EUR", "L123.out_EJ_R_elec_F_Yh_EUR", "L123.eff_R_elec_F_Yh_EUR") ->
+      add_precursors("gcam-europe/A23.globaltech_eff_EUR", "energy/calibrated_techs", "L123.in_EJ_R_elec_F_Yh_EUR", "L123.out_EJ_R_elec_F_Yh_EUR", "L123.eff_R_elec_F_Yh_EUR") ->
       L1231.out_EJ_R_elec_F_tech_Yh_EUR
 
     L1231.eff_R_elec_F_tech_Yh_EUR %>%
       add_title("Electricity efficiency by by Region / fuel / technology") %>%
       add_units("Unitless") %>%
       add_comments("Efficiencies for technologies other than gas technologies are based on L123.eff_R_elec_F_Yh_EUR. For gas technologies, their efficiences were adjusted when the average efficiency was outside of the range of the two technologies") %>%
-      add_precursors("energy/A23.globaltech_eff", "energy/calibrated_techs", "L123.in_EJ_R_elec_F_Yh_EUR", "L123.out_EJ_R_elec_F_Yh_EUR", "L123.eff_R_elec_F_Yh_EUR") ->
+      add_precursors("gcam-europe/A23.globaltech_eff_EUR", "energy/calibrated_techs", "L123.in_EJ_R_elec_F_Yh_EUR", "L123.out_EJ_R_elec_F_Yh_EUR", "L123.eff_R_elec_F_Yh_EUR") ->
       L1231.eff_R_elec_F_tech_Yh_EUR
 
     return_data(L1231.in_EJ_R_elec_F_tech_Yh_EUR, L1231.out_EJ_R_elec_F_tech_Yh_EUR, L1231.eff_R_elec_F_tech_Yh_EUR)
