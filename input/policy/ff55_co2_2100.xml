@@ -3,9 +3,9 @@
         <region name="Austria">
             <ghgpolicy name="CO2">
                 <market>EU</market>
-                <constraint year="2020">779.7150257</constraint>
+
                 <constraint year="2025">662.6922954</constraint>
-                <constraint year="2030">488.8720519</constraint>
+                <constraint year="2030">500</constraint>
                 <constraint year="2035">375.9818477</constraint>
                 <constraint year="2040">260.7375132</constraint>
                 <constraint year="2045">146.6726645</constraint>
@@ -13,8 +13,8 @@
 <fixedTax fillout="1" year="2055">600</fixedTax>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -26,8 +26,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -39,8 +39,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -52,8 +52,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -65,8 +65,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -78,8 +78,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -91,8 +91,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -104,8 +104,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -117,8 +117,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -130,8 +130,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -143,8 +143,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -156,8 +156,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -169,8 +169,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -182,8 +182,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -195,8 +195,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -208,8 +208,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -221,8 +221,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -234,8 +234,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -247,8 +247,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -260,8 +260,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -273,8 +273,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -286,8 +286,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -299,8 +299,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -312,8 +312,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -325,8 +325,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -338,8 +338,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
@@ -351,8 +351,8 @@
                 <market>EU</market>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
-                <price-adjust fillout="1" year="2020">1</price-adjust>
-                <demand-adjust fillout="1" year="2020">1</demand-adjust>
+                <price-adjust fillout="1" year="2025">1</price-adjust>
+                <demand-adjust fillout="1" year="2025">1</demand-adjust>
                 <market>EU</market>
                 <linked-policy>CO2</linked-policy>
                 <price-unit>1990$/tC</price-unit>
