@@ -30,7 +30,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
   MODULE_INPUTS <- c(FILE = "gcam-europe/mappings/grid_regions",
                      FILE = "common/GCAM_region_names",
                      FILE = "energy/A23.sector",
-                     FILE = "gcam-europe/A23.globaltech_shrwt",
+                     FILE = "gcam-europe/A23.globaltech_shrwt_EUR",
                      FILE = "gcam-europe/A23.elecS_subsector_logit",
                      FILE = "gcam-europe/A23.elecS_subsector_shrwt",
                      FILE = "gcam-europe/A23.elecS_subsector_shrwt_interp",
@@ -111,12 +111,70 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
     L2234.R_elec_supply <- L1239.R_elec_supply %>% left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       select(region, supplysector = segment, subsector = fuel, year, fraction)
 
+    # ----------------------------
+    # DEVELOPMENT OF THE OFFSHORE TECHNOLOGIES
+
+  # Function to distinguish between floating and fixed offshore technologies
+    expand_offshore_wind <- function(df) {
+      # Check if the dataframe has either of the relevant columns
+      if ("backup.intermittent.technology" %in% colnames(df)) {
+        tech_col <- "backup.intermittent.technology"
+      } else if ("intermittent.technology" %in% colnames(df)) {
+        tech_col <- "intermittent.technology"
+      } else {
+        # If neither column exists, return the dataframe unchanged
+        return(df)
+      }
+
+      # Check if wind_offshore exists in the technology column
+      if ("wind_offshore" %in% df[[tech_col]]) {
+        # Create rows for floating and fixed offshore wind
+        floating_rows <- df[df[[tech_col]] == "wind_offshore", ]
+        fixed_rows <- df[df[[tech_col]] == "wind_offshore", ]
+
+        # Replace technology names
+        floating_rows[[tech_col]] <- "wind_offshore_floating"
+        fixed_rows[[tech_col]] <- "wind_offshore_fixed"
+
+        # Bind the original data (without wind_offshore) with the new rows
+        df <- rbind(df[df[[tech_col]] != "wind_offshore", ],
+                    floating_rows,
+                    fixed_rows)
+      }
+
+      return(df)
+    }
+
+    # Apply the function to all dataframes in the list
+    L223.GlobalIntTechCapital_elec <- expand_offshore_wind(L223.GlobalIntTechCapital_elec)
+    L223.GlobalIntTechOMfixed_elec <- expand_offshore_wind(L223.GlobalIntTechOMfixed_elec)
+    L223.GlobalIntTechOMvar_elec <- expand_offshore_wind(L223.GlobalIntTechOMvar_elec)
+    L223.GlobalIntTechEff_elec <- expand_offshore_wind(L223.GlobalIntTechEff_elec)
+    L223.GlobalIntTechLifetime_elec <- expand_offshore_wind(L223.GlobalIntTechLifetime_elec)
+    L223.GlobalIntTechBackup_elec <- expand_offshore_wind(L223.GlobalIntTechBackup_elec)
+    L223.GlobalIntTechValueFactor_elec <- expand_offshore_wind(L223.GlobalIntTechValueFactor_elec)
+
+    # Adjust some of the dataframes
+
+    # Adjust resources
+    L223.GlobalIntTechEff_elec <- L223.GlobalIntTechEff_elec %>%
+      mutate(minicam.energy.input = if_else(grepl("floating", intermittent.technology), paste0("floating ", minicam.energy.input), minicam.energy.input),
+             minicam.energy.input = if_else(grepl("fixed", intermittent.technology), paste0("fixed ", minicam.energy.input), minicam.energy.input))
+
+    # Adjust trial market: TODO check if needs to be defined by technology. If so, adjust also L223.GlobalIntTechValueFactor_elec
+    L223.GlobalIntTechBackup_elec <- L223.GlobalIntTechBackup_elec %>%
+      mutate(trial.market.name = if_else(grepl("offshore", backup.intermittent.technology), "wind_offshore", trial.market.name))
+
+
+    # ----------------------------
+
     # filter all stub tech inputs to only grid region countries
     for(input_nm in MODULE_INPUTS){
       if(grepl("StubTech", input_nm)){
         assign(input_nm, get(input_nm) %>% filter(region %in% grid_regions$region))
       }
     }
+
 
 
     # 0. functions -------------------
@@ -181,7 +239,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
     # 3. Global Technology information -----------------------------------------------------------------------------
     # 3a. Shareweights ----------------
     # combine core assumptions with elecS adjustments
-    L2234.GlobalTechShrwt_elecS_EUR <- A23.globaltech_shrwt %>%
+    L2234.GlobalTechShrwt_elecS_EUR <- A23.globaltech_shrwt_EUR %>%
       anti_join(A23.elecS_globaltech_shrwt, by = c("supplysector", "subsector", "technology")) %>%
       bind_rows(A23.elecS_globaltech_shrwt) %>%
       expand_to_segments(group_by_cols = c("subsector", "technology"), segments = L2234.load_segments) %>%
@@ -335,8 +393,13 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
     L2234.StubTechCost_offshore_wind_elecS_EUR <- L2234.StubTechCapFactor_elecS_EUR %>%
       filter(grepl("_offshore", stub.technology)) %>%
       select(-capacity.factor) %>%
-      left_join_error_no_match(L223.StubTechCost_offshore_wind_EUR %>% select(-supplysector, -stub.technology),
-                               by = c("region", "subsector", "year"))
+      rename(stub.technology.adj = stub.technology) %>%
+      mutate(stub.technology = if_else(grepl("floating", stub.technology.adj), "wind_offshore_floating", "a"),
+             stub.technology = if_else(grepl("fixed", stub.technology.adj), "wind_offshore_fixed", stub.technology)) %>%
+      left_join_error_no_match(L223.StubTechCost_offshore_wind_EUR %>% select(-supplysector),
+                               by = c("region", "subsector", "stub.technology", "year")) %>%
+      select(-stub.technology) %>%
+      rename(stub.technology = stub.technology.adj)
 
     # 4f. Backup markets --------------
     L2234.StubTechElecMarket_backup_elecS_EUR <- L2234.StubTechCapFactor_elecS_EUR %>%

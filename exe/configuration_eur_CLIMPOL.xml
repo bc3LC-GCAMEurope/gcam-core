@@ -7,10 +7,9 @@
 		<Value name="GHGInputFileName">../input/magicc/inputs/input_gases.emk</Value>
 		<Value write-output="1" append-scenario-name="0" name="xmldb-location">../output/database_basexdb</Value>
 		<Value write-output="1" append-scenario-name="0" name="restart">./restart/restart</Value>
-		<Value write-output="0" append-scenario-name="1" name="xmlDebugFileName">debug.xml</Value>
-		<Value write-output="1" append-scenario-name="0" name="climatFileName">gas.emk</Value>
+		<Value write-output="1" append-scenario-name="1" name="xmlDebugFileName">debug.xml</Value>
+		<Value write-output="1" append-scenario-name="0" name="hector-output">../output/gcam-hector-outputstream.csv</Value>
 		<Value write-output="1" append-scenario-name="1" name="costCurvesOutputFileName">cost_curves.xml</Value>
-		<Value write-output="1" append-scenario-name="0" name="batchCSVOutputFile">batch-csv-out.csv</Value>
 		<Value write-output="0" append-scenario-name="0" name="supplyDemandOutputFileName">SDCurves.csv</Value>
 		<Value write-output="0" append-scenario-name="0" name="flow-graph">gcam-flow-graph.dot</Value>
 		<Value write-output="0" append-scenario-name="0" name="dependencyGraphName">DependencyGraph.dot</Value>
@@ -18,6 +17,7 @@
 	</Files>
 	<ScenarioComponents>
         <Value name = "climate">../input/gcamdata/xml/hector.xml</Value>
+		<Value name = "socioeconomics">../input/gcamdata/xml/socioeconomics_CORE.xml</Value>
 		<Value name = "socioeconomics_income_elas">../input/gcamdata/xml/socioeconomics_incelas_ssp2.xml</Value>
 		<Value name = "socioeconomics_income_elas">../input/gcamdata/xml/socioeconomics_incelas_ssp2_EUR.xml</Value>
 		<Value name = "resources">../input/gcamdata/xml/resources.xml</Value>
@@ -79,8 +79,8 @@
 		<Value name = "land5">../input/gcamdata/xml/land_input_5_IRR_MGMT.xml</Value>
 		<Value name = "protected_land2">../input/gcamdata/xml/protected_land_input_2.xml</Value>
 		<Value name = "protected_land3">../input/gcamdata/xml/protected_land_input_3.xml</Value>
-		<Value name = "demand">../input/gcamdata/xml/ag_an_demand_input.xml</Value>
-		<!--Value name = "demand">../input/gcamdata/xml/ag_an_demand_input_multiple_consumers.xml</Value-->
+		<!--Value name = "demand">../input/gcamdata/xml/ag_an_demand_input.xml</Value-->
+		<Value name = "demand">../input/gcamdata/xml/ag_an_demand_input_multiple_consumers.xml</Value>
 		<Value name = "demand_paper">../input/gcamdata/xml/paper_delete_ag_demand.xml</Value>
 		<!--Value name = "bio_trade">../input/gcamdata/xml/bio_trade.xml</Value-->
 		<Value name = "bio_trade_EUR">../input/gcamdata/xml/bio_trade_EUR.xml</Value>
@@ -149,19 +149,16 @@
 
 		<Value name = "solver">../input/solution/cal_broyden_config.xml</Value>
 
-		<Value name = "DAC">../input/gcamdata/xml/dac_ssp2.xml</Value>
 
         <Value name = "prune_ag">../input/policy/co2ndctax_nonEU_2100.xml</Value>
         <Value name = "prune_ag">../input/policy/ff55_co2_2100.xml</Value>
 
-
+        <Value name = "prune_ag">../input/policy/bio_constraint_140.xml</Value>
 
 	</ScenarioComponents>
 	<Strings>
-		<Value name="scenarioName">CLIM-POL</Value>
+		<Value name="scenarioName">Ref_8p7_CLIMPOL_test</Value>
 		<Value name="debug-region">USA</Value>
-		<Value name="MAGICC-input-dir">../input/magicc/inputs</Value>
-		<Value name="MAGICC-output-dir">../output</Value>
 		<Value name="AbatedGasForCostCurves">CO2</Value>
 	</Strings>
 	<Bools>
@@ -172,6 +169,7 @@
 		<Value name="find-path">0</Value>
 		<Value name="createCostCurve">0</Value>
 		<Value name="debugChecking">0</Value>
+		<Value name="verbose-parse-warnings">0</Value>
 		<Value name="simulActive">1</Value>
 		<Value name="PrintValuesOnGraphs">1</Value>
 		<Value name="ShowNullPaths">0</Value>
@@ -183,12 +181,11 @@
 		<Value name="numPointsForSD">21</Value>
 		<Value name="numPointsForCO2CostCurve">5</Value>
 		<Value name="carbon-output-start-year">1705</Value>
-		<Value name="climateOutputInterval">5</Value>
-		<Value name="parallel-grain-size">50</Value>
 		<Value name="stop-period">-1</Value>
 		<Value name="stop-year">-1</Value>
 		<Value name="restart-period">-1</Value>
 		<Value name="restart-year">-1</Value>
+		<Value name="xmldb-buffer-size">100</Value>
 		<Value name="max-parallelism">-1</Value>
 	</Ints>
 	<Doubles>

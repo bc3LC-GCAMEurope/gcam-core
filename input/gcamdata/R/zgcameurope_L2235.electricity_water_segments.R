@@ -16,7 +16,7 @@
 #' @importFrom tidyr complete nesting replace_na
 #' @author NTG May 2020
 module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
-  MODULE_INPUTS <- c(FILE = "water/elec_tech_water_map",
+  MODULE_INPUTS <- c(FILE = "gcam-europe/elec_tech_water_map_EUR",
                      FILE = "gcam-europe/A23.elecS_naming",
                      FILE = "common/GCAM_region_names",
                      FILE = "gcam-europe/mappings/grid_regions",
@@ -114,6 +114,44 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
     # 0a. Load required inputs ---------------
     get_data_list(all_data, MODULE_INPUTS)
 
+    # Function to distinguish between floating and fixed offshore technologies
+    expand_offshore_wind <- function(df) {
+      # Check if the dataframe has either of the relevant columns
+      if ("technology" %in% colnames(df)) {
+        tech_col <- "technology"
+      } else if ("backup.intermittent.technology" %in% colnames(df)) {
+        tech_col <- "backup.intermittent.technology"
+      } else if ("intermittent.technology" %in% colnames(df)) {
+        tech_col <- "intermittent.technology"
+      } else {
+        # If neither column exists, return the dataframe unchanged
+        return(df)
+      }
+
+      # Check if wind_offshore exists in the technology column
+      if ("wind_offshore" %in% df[[tech_col]]) {
+        # Create rows for floating and fixed offshore wind
+        floating_rows <- df[df[[tech_col]] == "wind_offshore", ]
+        fixed_rows <- df[df[[tech_col]] == "wind_offshore", ]
+
+        # Replace technology names
+        floating_rows[[tech_col]] <- "wind_offshore_floating"
+        fixed_rows[[tech_col]] <- "wind_offshore_fixed"
+
+        # Bind the original data (without wind_offshore) with the new rows
+        df <- rbind(df[df[[tech_col]] != "wind_offshore", ],
+                    floating_rows,
+                    fixed_rows)
+      }
+
+      return(df)
+    }
+
+    # Apply the function to all dataframes in the list
+    L2233.GlobalIntTechEff_elec_cool <- expand_offshore_wind(L2233.GlobalIntTechEff_elec_cool) %>%
+      mutate(minicam.energy.input = if_else(grepl("floating", technology), paste0("floating ", minicam.energy.input), minicam.energy.input),
+             minicam.energy.input = if_else(grepl("fixed", technology), paste0("fixed ", minicam.energy.input), minicam.energy.input))
+
     # Define countries that have access to offshore wind as allowing for seawater cooling
     seawater_countries <- unique(L2234.StubTechCost_offshore_wind_elecS_EUR$region)
 
@@ -125,7 +163,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       mutate(technology = "battery") %>%
       bind_rows(battery_mapping)
 
-    elec_cool_expansion <- distinct(elec_tech_water_map, subsector.name = from.subsector,
+    elec_cool_expansion <- distinct(elec_tech_water_map_EUR, subsector.name = from.subsector,
                                     technology = to.subsector, to.technology, from.technology) %>%
       repeat_add_columns(distinct(A23.elecS_naming, name_adder)) %>%
       # storage, wind , and solar tech names need to be taken from from.technology, other techs from.technology col
@@ -195,7 +233,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
              value = add_global_cooling_techs(get(input_nm)) %>%
                add_title(paste0(attributes(get(input_nm))$title, " - european grid regions"), overwrite = T) %>%
                add_units(attributes(get(input_nm))$unit) %>%
-               add_precursors(c(input_nm, "gcam-europe/A23.elecS_naming", "water/elec_tech_water_map")),
+               add_precursors(c(input_nm, "gcam-europe/A23.elecS_naming", "gcam-europe/elec_tech_water_map_EUR")),
              envir = globalenv() )})
 
     # 1b. Adds in data from L2233 cooling data if needed -----------------
