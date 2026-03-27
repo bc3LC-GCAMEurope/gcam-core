@@ -46,9 +46,9 @@ module_gcameurope_L210.resources <- function(command, ...) {
                                "L210.ResTechCost")
   MODULE_INPUTS <- c(FILE = "common/GCAM_region_names",
                     FILE = "energy/A_regions",
-                    FILE = "energy/A10.rsrc_info_fossils",
-                    FILE = "energy/A10.rsrc_info_renewables_others",
-                    FILE = "energy/A10.rsrc_info_uranium",
+                    FILE = "energy/A10.rsrc_info_fossils",  # Carga estos tres pero realmente aquí no los utiliza
+                    FILE = "energy/A10.rsrc_info_renewables_others", #
+                    FILE = "energy/A10.rsrc_info_uranium", #
                     FILE = "gcam-europe/A10.subrsrc_info_EUR",
                     FILE = "energy/A10.TechChange",
                     FILE = "energy/A10.TechChange_SSPs",
@@ -73,13 +73,13 @@ module_gcameurope_L210.resources <- function(command, ...) {
                     "L120.RsrcCurves_EJ_R_offshore_wind_EUR", #modified for _EUR
                     "L120.TechChange_offshore_wind_EUR", #modified for _EUR
                     "L102.pcgdp_thous90USD_Scen_R_Y",
-                    "L210.RenewRsrc",
-                    "L210.RenewRsrcPrice",
-                    "L210.ResTechShrwt",
+                    "L210.RenewRsrc",  # Utiliza este del global para sacar el de EUR solo filtrando regiones
+                    "L210.RenewRsrcPrice", # Lo mismo con este
+                    "L210.ResTechShrwt", # Lo mismo con este
                     OUTPUTS_TO_COPY_FILTER)
-  MODULE_OUTPUTS <- c("L210.RenewRsrc_EUR", #contains wind
-                      "L210.RenewRsrcPrice_EUR", #contains wind
-                      "L210.ResTechShrwt_EUR", #contains wind
+  MODULE_OUTPUTS <- c("L210.RenewRsrc_EUR", # Copia el RenewRsrc y filtra regiones
+                      "L210.RenewRsrcPrice_EUR", # Copia el RenewRsrcPrice y filtra regiones
+                      "L210.ResTechShrwt_EUR", # Copia el RenewRsrcTechShrwt y filtra regiones
                       "L210.RsrcCurves_fos_EUR",
                       "L210.ReserveCalReserve_EUR",
                       "L210.RsrcCalProd_EUR",
@@ -110,18 +110,83 @@ module_gcameurope_L210.resources <- function(command, ...) {
 
     all_data <- list(...)[[1]]
 
+
+    # Function to distinguish between floating and fixed offshore technologies
+    expand_offshore_wind <- function(df) {
+
+      # Case 1: one column with resource exist (for RenewRsrc and RenewRsrcPrice)
+      if ("renewresource" %in% colnames(df)) {
+        tech_col <- "renewresource"
+
+      # Check if offshore wind resource exists in the technology column
+      if ("offshore wind resource" %in% df[[tech_col]]) {
+
+        # Create rows for floating and fixed offshore wind
+        floating_rows <- df[df[[tech_col]] == "offshore wind resource", ]
+        fixed_rows <- df[df[[tech_col]] == "offshore wind resource", ]
+
+        # Replace technology names
+        floating_rows[[tech_col]] <- "floating offshore wind"
+        fixed_rows[[tech_col]] <- "fixed offshore wind"
+
+        # Bind the original data (without wind_offshore) with the new rows
+        df <- rbind(df[df[[tech_col]] != "offshore wind resource", ],
+                    floating_rows,
+                    fixed_rows)
+      }
+
+      # Case 2: three columns exist (for ResTechShrwt)
+    } else if (all(c("resource", "subresource", "technology") %in% colnames(df))) {
+
+      rows_to_expand <- df[
+        df$resource == "offshore wind resource" &
+          df$subresource == "offshore wind resource" &
+          df$technology == "offshore wind resource", ]
+
+      if (nrow(rows_to_expand) > 0) {
+
+        floating_rows <- rows_to_expand
+        fixed_rows    <- rows_to_expand
+
+        floating_rows$resource    <- "floating offshore wind"
+        floating_rows$subresource <- "floating offshore wind"
+        floating_rows$technology  <- "floating offshore wind"
+
+        fixed_rows$resource    <- "fixed offshore wind"
+        fixed_rows$subresource <- "fixed offshore wind"
+        fixed_rows$technology  <- "fixed offshore wind"
+
+        df <- rbind(
+          df[!(df$resource == "offshore wind resource" &
+                 df$subresource == "offshore wind resource" &
+                 df$technology == "offshore wind resource"), ],
+          floating_rows,
+          fixed_rows
+        )
+      }
+
+    } else {
+      return(df)
+    }
+
+      return(df)
+    }
+
+
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
-    # Remove trad bio in EUR datasets
-    L210.RenewRsrc_EUR <- L210.RenewRsrc %>%
+
+
+    # Copy from global, add rows for offshore_wind_fixed and offshore_wind_floating, filter EUR and remove trad bio:
+    L210.RenewRsrc_EUR <- expand_offshore_wind(L210.RenewRsrc) %>%
       filter(renewresource != 'traditional biomass') %>%
       filter_regions_europe()
 
-    L210.RenewRsrcPrice_EUR <- L210.RenewRsrcPrice %>%
+    L210.RenewRsrcPrice_EUR <- expand_offshore_wind(L210.RenewRsrcPrice) %>%
       filter(renewresource != 'traditional biomass') %>%
       filter_regions_europe()
 
-    L210.ResTechShrwt <- L210.ResTechShrwt %>%
+    L210.ResTechShrwt_EUR <- expand_offshore_wind(L210.ResTechShrwt) %>%
       filter(subresource != 'traditional biomass') %>%
       filter_regions_europe()
 
@@ -372,6 +437,8 @@ module_gcameurope_L210.resources <- function(command, ...) {
 
     # We need to make sure we have at least a shell technology for ALL resources
     # and so we will just use the share weight table to facilatate doing that.
+
+    # All this block is not used:
     A10.subrsrc_info_EUR %>%
       filter(resource %in% unique(L210.RsrcCalProd_EUR$resource)) %>%
       repeat_add_columns(GCAM_region_names %>%  filter_regions_europe) %>%
@@ -390,7 +457,9 @@ module_gcameurope_L210.resources <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["ResTechShrwt"]]) ->
       L210.ResTechShrwt_EUR
 
+    # We copy form global and filter
     L210.ResTechShrwt_EUR <- L210.ResTechShrwt %>%
+      expand_offshore_wind() %>%
       filter_regions_europe() %>%
       anti_join(L210.ResTechShrwt_EUR, by = c("region", "resource", "subresource", "technology", "year")) %>%
       bind_rows(L210.ResTechShrwt_EUR)
