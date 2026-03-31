@@ -32,4 +32,4 @@ electricity,solar,CSP_storage,capital,0.13,,,,,,,,
 electricity,geothermal,geothermal,capital,0.13,,,,,,,,
 elect_td_bld,rooftop_pv,rooftop_pv,capital,0.1,,,,,,,,
 electricity,wind,wind_offshore_floating,capital,0.13,,,,,,,,wind
-electricity,wind,wind_offshore_fixed,capital,0.13,,,,,,,,
+electricity,wind,wind_offshore_fixed,capital,0.13,,,,,,,,wind
