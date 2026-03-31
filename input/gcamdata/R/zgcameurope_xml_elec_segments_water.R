@@ -52,16 +52,26 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
                      "L2235.GlobalTechLifetime_elecS_cool_EUR",
                      "L2235.AvgFossilEffKeyword_elecS_cool_EUR",
                      "L2235.GlobalIntTechBackup_elecS_cool_EUR",
+                     "L2235.GlobalIntTechBackup_elecS_cool_EUR_nosgmnt",
                      "L2235.GlobalIntTechValueFactor_elecS_cool_EUR",
+                     "L2235.GlobalIntTechValueFactor_elecS_cool_EUR_nosgmnt",
                      "L2235.GlobalIntTechCapital_elecS_cool_EUR",
+                     "L2235.GlobalIntTechCapital_elecS_cool_EUR_nosgmnt",
                      "L2235.GlobalIntTechEff_elecS_cool_EUR",
+                     "L2235.GlobalIntTechEff_elecS_cool_EUR_nosgmnt",
                      "L2235.GlobalIntTechLifetime_elecS_cool_EUR",
+                     "L2235.GlobalIntTechLifetime_elecS_cool_EUR_nosgmnt",
                      "L2235.GlobalIntTechOMfixed_elecS_cool_EUR",
+                     "L2235.GlobalIntTechOMfixed_elecS_cool_EUR_nosgmnt",
                      "L2235.GlobalIntTechOMvar_elecS_cool_EUR",
+                     "L2235.GlobalIntTechOMvar_elecS_cool_EUR_nosgmnt",
                      "L2235.GlobalIntTechCoef_elecS_cool_EUR",
+                     "L2235.GlobalIntTechCoef_elecS_cool_EUR_nosgmnt",
                      "L2235.GlobalIntTechSCurve_elecS_cool_EUR",
+                     "L2235.GlobalIntTechSCurve_elecS_cool_EUR_nosgmnt",
                      "L2235.PrimaryRenewKeyword_elecS_cool_EUR",
                      "L2235.PrimaryRenewKeywordInt_elecS_cool_EUR",
+                     "L2235.PrimaryRenewKeywordInt_elecS_cool_EUR_nosgmnt",
                      "L2235.StubTech_elecS_cool_EUR",
                      "L2235.StubTechEff_elecS_cool_EUR",
                      # "L2235.StubTechCoef_elecS_cool_EUR",
@@ -154,21 +164,28 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
       add_xml_data(L2235.GlobalTechCapital_elecS_cool_EUR, "GlobalTechCapital") %>%
       # add_xml_data(L2235.GlobalIntTechCapital_elecS_EUR, "GlobalIntTechCapital") %>%
       add_xml_data(L2235.GlobalIntTechCapital_elecS_cool_EUR, "GlobalIntTechCapital") %>%
+      add_xml_data(L2235.GlobalIntTechCapital_elecS_cool_EUR_nosgmnt, "GlobalIntTechCapital") %>%
       add_xml_data(L2235.GlobalTechOMfixed_elecS_cool_EUR, "GlobalTechOMfixed") %>%
       add_xml_data(L2235.GlobalIntTechOMfixed_elecS_cool_EUR, "GlobalIntTechOMfixed") %>%
+      add_xml_data(L2235.GlobalIntTechOMfixed_elecS_cool_EUR_nosgmnt, "GlobalIntTechOMfixed") %>%
       add_xml_data(L2235.GlobalTechOMvar_elecS_cool_EUR, "GlobalTechOMvar") %>%
       add_xml_data(L2235.GlobalIntTechOMvar_elecS_cool_EUR, "GlobalIntTechOMvar") %>%
+      add_xml_data(L2235.GlobalIntTechOMvar_elecS_cool_EUR_nosgmnt, "GlobalIntTechOMvar") %>%
       add_xml_data(L2235.GlobalTechCapFac_elecS_cool_EUR, "GlobalTechCapFac") %>%
       add_xml_data(L2235.GlobalTechEff_elecS_cool_EUR, "GlobalTechEff") %>%
       add_xml_data(L2235.GlobalTechCoef_elecS_cool_EUR, "GlobalTechCoef") %>%
       # add_xml_data(L2235.GlobalIntTechEff_elecS_EUR, "GlobalIntTechEff") %>%
       add_xml_data(L2235.GlobalIntTechEff_elecS_cool_EUR, "GlobalIntTechEff") %>%
+      add_xml_data(L2235.GlobalIntTechEff_elecS_cool_EUR_nosgmnt, "GlobalIntTechEff") %>%
       add_xml_data(L2235.GlobalIntTechCoef_elecS_cool_EUR %>% rename(technology = intermittent.technology),
                    "GlobalIntTechCoef") %>%
+      add_xml_data(L2235.GlobalIntTechCoef_elecS_cool_EUR_nosgmnt, "GlobalIntTechCoef") %>%
       add_xml_data(L2235.GlobalIntTechLifetime_elecS_cool_EUR, "GlobalIntTechLifetime") %>%
+      add_xml_data(L2235.GlobalIntTechLifetime_elecS_cool_EUR_nosgmnt, "GlobalIntTechLifetime") %>%
       add_xml_data(L2235.GlobalTechProfitShutdown_elecS_cool_EUR, "GlobalTechProfitShutdown") %>%
       add_xml_data(L2235.GlobalTechSCurve_elecS_cool_EUR, "GlobalTechSCurve") %>%
       add_xml_data(L2235.GlobalIntTechSCurve_elecS_cool_EUR, "GlobalIntTechSCurve") %>%
+      add_xml_data(L2235.GlobalIntTechSCurve_elecS_cool_EUR_nosgmnt, "GlobalIntTechSCurve") %>%
       add_xml_data(L2235.GlobalTechCapture_elecS_cool_EUR, "GlobalTechCapture") %>%
       add_xml_data(L2235.GlobalTechLifetime_elecS_cool_EUR, "GlobalTechLifetime") ->
       elec_segments_water_EUR.xml
@@ -177,6 +194,7 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
     if(energy.ELEC_USE_BACKUP) {
       elec_segments_water_EUR.xml %>%
         add_xml_data(L2235.GlobalIntTechBackup_elecS_cool_EUR, "GlobalIntTechBackup") %>%
+        add_xml_data(L2235.GlobalIntTechBackup_elecS_cool_EUR_nosgmnt, "GlobalIntTechBackup") %>%
         add_xml_data_generate_levels(L2235.StubTechMarket_backup_elecS_cool_EUR,
                                      "StubTechMarket","subsector","nesting-subsector",1,FALSE) %>%
         add_precursors("L2235.GlobalIntTechBackup_elecS_cool_EUR",
@@ -185,6 +203,7 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
     } else {
       elec_segments_water_EUR.xml %>%
         add_xml_data(L2235.GlobalIntTechValueFactor_elecS_cool_EUR, "GlobalIntTechValueFactor") %>%
+        add_xml_data(L2235.GlobalIntTechValueFactor_elecS_cool_EUR_nosgmnt, "GlobalIntTechValueFactor") %>%
         add_precursors("L2235.GlobalIntTechValueFactor_elecS_cool_EUR") ->
         elec_segments_water_EUR.xml
     }
@@ -233,6 +252,7 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
       add_xml_data(rename(L2235.SubsectorShrwtInterpTo_elecS_EUR, subsector = subsector0), "SubsectorInterpTo") %>%
       add_xml_data(L2235.PrimaryRenewKeyword_elecS_cool_EUR, "PrimaryRenewKeyword") %>%
       add_xml_data(rename(L2235.PrimaryRenewKeywordInt_elecS_cool_EUR, technology = intermittent.technology), "PrimaryRenewKeywordInt") %>%
+      add_xml_data(L2235.PrimaryRenewKeywordInt_elecS_cool_EUR_nosgmnt, "PrimaryRenewKeywordInt") %>%
       add_xml_data(L2234.TechShrwt_elecS_grid_EUR, "TechShrwt") %>%
       add_xml_data(L2234.TechCoef_elecS_grid_EUR, "TechCoef") %>%
       add_xml_data(L2234.TechProd_elecS_grid_EUR, "Production") %>%

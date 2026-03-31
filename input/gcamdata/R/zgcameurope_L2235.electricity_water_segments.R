@@ -74,16 +74,26 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
                       "L2235.GlobalTechLifetime_elecS_cool_EUR",
                       "L2235.AvgFossilEffKeyword_elecS_cool_EUR",
                       "L2235.GlobalIntTechBackup_elecS_cool_EUR",
+                      "L2235.GlobalIntTechBackup_elecS_cool_EUR_nosgmnt",
                       "L2235.GlobalIntTechValueFactor_elecS_cool_EUR",
+                      "L2235.GlobalIntTechValueFactor_elecS_cool_EUR_nosgmnt",
                       "L2235.GlobalIntTechCapital_elecS_cool_EUR",
+                      "L2235.GlobalIntTechCapital_elecS_cool_EUR_nosgmnt",
                       "L2235.GlobalIntTechEff_elecS_cool_EUR",
+                      "L2235.GlobalIntTechEff_elecS_cool_EUR_nosgmnt",
                       "L2235.GlobalIntTechLifetime_elecS_cool_EUR",
+                      "L2235.GlobalIntTechLifetime_elecS_cool_EUR_nosgmnt",
                       "L2235.GlobalIntTechOMfixed_elecS_cool_EUR",
+                      "L2235.GlobalIntTechOMfixed_elecS_cool_EUR_nosgmnt",
                       "L2235.GlobalIntTechOMvar_elecS_cool_EUR",
+                      "L2235.GlobalIntTechOMvar_elecS_cool_EUR_nosgmnt",
                       "L2235.GlobalIntTechCoef_elecS_cool_EUR",
+                      "L2235.GlobalIntTechCoef_elecS_cool_EUR_nosgmnt",
                       "L2235.GlobalIntTechSCurve_elecS_cool_EUR",
+                      "L2235.GlobalIntTechSCurve_elecS_cool_EUR_nosgmnt",
                       "L2235.PrimaryRenewKeyword_elecS_cool_EUR",
                       "L2235.PrimaryRenewKeywordInt_elecS_cool_EUR",
+                      "L2235.PrimaryRenewKeywordInt_elecS_cool_EUR_nosgmnt",
                       "L2235.StubTech_elecS_cool_EUR",
                       "L2235.StubTechEff_elecS_cool_EUR",
                       # "L2235.StubTechCoef_elecS_cool_EUR",
@@ -531,7 +541,71 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       mutate(apply.to = gcamusa.INTERP_APPLY_TO) %>%
       select(LEVEL2_DATA_NAMES[["StubTechInterp"]], subsector0)
 
-    #
+    # Adjustments to create wind offshore technologies for no segment regions (Turkey and Iceland)
+    L2235.GlobalIntTechBackup_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechBackup_elecS_cool_EUR %>%
+      filter(grepl("offshore", subsector.name)) %>%
+      mutate(sector.name = "electricity",
+             subsector.name = "wind") %>%
+      select(LEVEL2_DATA_NAMES[["GlobalIntTechBackup"]])
+
+
+    L2235.GlobalIntTechValueFactor_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechValueFactor_elecS_cool_EUR %>%
+      filter(grepl("offshore", subsector.name)) %>%
+      mutate(sector.name = "electricity",
+             subsector.name = "wind") %>%
+      select(LEVEL2_DATA_NAMES[["GlobalIntTechValueFactor"]])
+
+    L2235.GlobalIntTechCapital_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechCapital_elecS_cool_EUR %>%
+      filter(grepl("offshore", subsector.name)) %>%
+      mutate(sector.name = "electricity",
+             subsector.name = "wind") %>%
+      select(LEVEL2_DATA_NAMES[["GlobalIntTechCapital"]])
+
+    L2235.GlobalIntTechEff_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechEff_elecS_cool_EUR %>%
+      filter(grepl("offshore", subsector.name)) %>%
+      mutate(sector.name = "electricity",
+             subsector.name = "wind") %>%
+      select(LEVEL2_DATA_NAMES[["GlobalIntTechEff"]])
+
+    L2235.GlobalIntTechLifetime_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechLifetime_elecS_cool_EUR %>%
+      filter(grepl("offshore", subsector.name)) %>%
+      mutate(sector.name = "electricity",
+             subsector.name = "wind") %>%
+      select(LEVEL2_DATA_NAMES[["GlobalIntTechLifetime"]])
+
+    L2235.GlobalIntTechOMfixed_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechOMfixed_elecS_cool_EUR %>%
+      filter(grepl("offshore", subsector.name)) %>%
+      mutate(sector.name = "electricity",
+             subsector.name = "wind") %>%
+      select(LEVEL2_DATA_NAMES[["GlobalIntTechOMfixed"]])
+
+    L2235.GlobalIntTechOMvar_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechOMvar_elecS_cool_EUR %>%
+      filter(grepl("offshore", subsector.name)) %>%
+      mutate(sector.name = "electricity",
+             subsector.name = "wind") %>%
+      select(LEVEL2_DATA_NAMES[["GlobalIntTechOMvar"]])
+
+    L2235.GlobalIntTechCoef_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechCoef_elecS_cool_EUR %>%
+      filter(grepl("offshore", subsector.name)) %>%
+      mutate(sector.name = "electricity",
+             subsector.name = "wind") %>%
+      rename(technology = intermittent.technology) %>%
+      select(LEVEL2_DATA_NAMES[["GlobalIntTechCoef"]])
+
+    L2235.GlobalIntTechSCurve_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechSCurve_elecS_cool_EUR %>%
+      filter(grepl("offshore", subsector.name)) %>%
+      mutate(sector.name = "electricity",
+             subsector.name = "wind") %>%
+      select(LEVEL2_DATA_NAMES[["GlobalIntTechSCurve"]])
+
+    L2235.PrimaryRenewKeywordInt_elecS_cool_EUR_nosgmnt <- L2235.PrimaryRenewKeywordInt_elecS_cool_EUR %>%
+      filter(grepl("offshore", subsector.name)) %>%
+      mutate(sector.name = "electricity",
+             subsector.name = "wind") %>%
+      rename(technology = intermittent.technology) %>%
+      select(LEVEL2_DATA_NAMES[["PrimaryRenewKeywordInt"]])
+
+
     # Produce outputs ===================================================
     L2234.Supplysector_elecS_EUR %>%
       add_title("Supply Sector Information for Electricity Load Segments", overwrite = T) %>%
@@ -650,12 +724,27 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       add_precursors("L2234.GlobalIntTechBackup_elecS_EUR") ->
       L2235.GlobalIntTechBackup_elecS_cool_EUR
 
+    L2235.GlobalIntTechBackup_elecS_cool_EUR_nosgmnt %>%
+      add_title("Electricity Intermittent Technology Backup Characteristics") %>%
+      add_units("none") %>%
+      add_comments("Electricity Intermittent Technology Backup Characteristics") %>%
+      add_precursors("L2234.GlobalIntTechBackup_elecS_EUR") ->
+      L2235.GlobalIntTechBackup_elecS_cool_EUR_nosgmnt
+
     L2235.GlobalIntTechValueFactor_elecS_cool_EUR %>%
       add_title("New Electricity Load Segments Intermittent Technology Backup Characteristics") %>%
       add_units("none") %>%
       add_comments("Electricity Load Segments Intermittent Technology Backup Characteristics based on pcloe in GCAM-v7.3") %>%
       add_precursors("L2234.GlobalIntTechValueFactor_elecS_EUR") ->
       L2235.GlobalIntTechValueFactor_elecS_cool_EUR
+
+    L2235.GlobalIntTechValueFactor_elecS_cool_EUR_nosgmnt %>%
+      add_title("New Electricity Intermittent Technology Backup Characteristics") %>%
+      add_units("none") %>%
+      add_comments("Electricity Intermittent Technology Backup Characteristics based on pcloe in GCAM-v7.3") %>%
+      add_precursors("L2234.GlobalIntTechValueFactor_elecS_EUR") ->
+      L2235.GlobalIntTechValueFactor_elecS_cool_EUR_nosgmnt
+
 
     L2235.GlobalIntTechCapital_elecS_cool_EUR %>%
       add_title("Electricity Load Segments Intermittent Technology Capital Costs") %>%
@@ -665,6 +754,14 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
                      "L2233.GlobalIntTechCapital_elec_cool") ->
       L2235.GlobalIntTechCapital_elecS_cool_EUR
 
+    L2235.GlobalIntTechCapital_elecS_cool_EUR_nosgmnt %>%
+      add_title("Electricity Intermittent Technology Capital Costs") %>%
+      add_units("none") %>%
+      add_comments("Electricity Load Segments Intermittent Technology Capital Costs") %>%
+      add_precursors("L2234.GlobalIntTechCapital_elecS_EUR",
+                     "L2233.GlobalIntTechCapital_elec_cool") ->
+      L2235.GlobalIntTechCapital_elecS_cool_EUR_nosgmnt
+
     L2235.GlobalIntTechEff_elecS_cool_EUR %>%
       add_title("Electricity Load Segments Intermittent Technology Efficiencies") %>%
       add_units("none") %>%
@@ -673,12 +770,27 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
                      "L2233.GlobalIntTechEff_elec_cool") ->
       L2235.GlobalIntTechEff_elecS_cool_EUR
 
+    L2235.GlobalIntTechEff_elecS_cool_EUR_nosgmnt %>%
+      add_title("Electricity Intermittent Technology Efficiencies") %>%
+      add_units("none") %>%
+      add_comments("Electricity Load Segments Intermittent Technology Efficiencies") %>%
+      add_precursors("L2234.GlobalIntTechEff_elecS_EUR",
+                     "L2233.GlobalIntTechEff_elec_cool") ->
+      L2235.GlobalIntTechEff_elecS_cool_EUR_nosgmnt
+
     L2235.GlobalIntTechLifetime_elecS_cool_EUR %>%
       add_title("Electricity Load Segments Intermittent Technology Lifetimes") %>%
       add_units("none") %>%
       add_comments("Electricity Load Segments Intermittent Technology Lifetimes") %>%
       add_precursors("L2234.GlobalIntTechLifetime_elecS_EUR") ->
       L2235.GlobalIntTechLifetime_elecS_cool_EUR
+
+    L2235.GlobalIntTechLifetime_elecS_cool_EUR_nosgmnt %>%
+      add_title("Electricity Intermittent Technology Lifetimes") %>%
+      add_units("none") %>%
+      add_comments("Electricity Load Segments Intermittent Technology Lifetimes") %>%
+      add_precursors("L2234.GlobalIntTechLifetime_elecS_EUR") ->
+      L2235.GlobalIntTechLifetime_elecS_cool_EUR_nosgmnt
 
     L2235.GlobalIntTechOMfixed_elecS_cool_EUR %>%
       add_title("Electricity Load Segments Intermittent Technology Fixed OM Costs") %>%
@@ -687,6 +799,13 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       add_precursors("L2234.GlobalIntTechOMfixed_elecS_EUR") ->
       L2235.GlobalIntTechOMfixed_elecS_cool_EUR
 
+    L2235.GlobalIntTechOMfixed_elecS_cool_EUR_nosgmnt %>%
+      add_title("Electricity Intermittent Technology Fixed OM Costs") %>%
+      add_units("none") %>%
+      add_comments("Electricity Load Segments Intermittent Technology Fixed OM Costs") %>%
+      add_precursors("L2234.GlobalIntTechOMfixed_elecS_EUR") ->
+      L2235.GlobalIntTechOMfixed_elecS_cool_EUR_nosgmnt
+
     L2235.GlobalIntTechOMvar_elecS_cool_EUR %>%
       add_title("Electricity Load Segments Intermittent Technology Variable OM Costs") %>%
       add_units("none") %>%
@@ -694,12 +813,26 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       add_precursors("L2234.GlobalIntTechOMvar_elecS_EUR") ->
       L2235.GlobalIntTechOMvar_elecS_cool_EUR
 
+    L2235.GlobalIntTechOMvar_elecS_cool_EUR_nosgmnt %>%
+      add_title("Electricity Intermittent Technology Variable OM Costs") %>%
+      add_units("none") %>%
+      add_comments("Electricity Load Segments Intermittent Technology Variable OM Costs") %>%
+      add_precursors("L2234.GlobalIntTechOMvar_elecS_EUR") ->
+      L2235.GlobalIntTechOMvar_elecS_cool_EUR_nosgmnt
+
     L2235.GlobalIntTechCoef_elecS_cool_EUR %>%
       add_title("Water demand coefs for int techs") %>%
       add_units("none") %>%
       add_comments("Water demand coefs for int techs") %>%
       add_precursors("L2233.GlobalIntTechCoef_elec_cool") ->
       L2235.GlobalIntTechCoef_elecS_cool_EUR
+
+    L2235.GlobalIntTechCoef_elecS_cool_EUR_nosgmnt %>%
+      add_title("Water demand coefs for int techs") %>%
+      add_units("none") %>%
+      add_comments("Water demand coefs for int techs") %>%
+      add_precursors("L2233.GlobalIntTechCoef_elec_cool") ->
+      L2235.GlobalIntTechCoef_elecS_cool_EUR_nosgmnt
 
     L2235.PrimaryRenewKeyword_elecS_cool_EUR %>%
       add_title("Primary Renewable Keywords for Electricity Load Segments Technologies") %>%
@@ -714,6 +847,13 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       add_comments("Primary Renewable Keywords for Electricity Load Segments Intermittent Technologies") %>%
       add_precursors("L2234.PrimaryRenewKeywordInt_elecS_EUR") ->
       L2235.PrimaryRenewKeywordInt_elecS_cool_EUR
+
+    L2235.PrimaryRenewKeywordInt_elecS_cool_EUR_nosgmnt %>%
+      add_title("Primary Renewable Keywords for Electricity Intermittent Technologies") %>%
+      add_units("none") %>%
+      add_comments("Primary Renewable Keywords for Electricity Intermittent Technologies") %>%
+      add_precursors("L2234.PrimaryRenewKeywordInt_elecS_EUR") ->
+      L2235.PrimaryRenewKeywordInt_elecS_cool_EUR_nosgmnt
 
     L2235.StubTechEff_elecS_cool_EUR %>%
       add_title("Electricity Load Segments Base Year Efficiencies") %>%

@@ -153,6 +153,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
     L223.GlobalIntTechLifetime_elec <- expand_offshore_wind(L223.GlobalIntTechLifetime_elec)
     L223.GlobalIntTechBackup_elec <- expand_offshore_wind(L223.GlobalIntTechBackup_elec)
     L223.GlobalIntTechValueFactor_elec <- expand_offshore_wind(L223.GlobalIntTechValueFactor_elec)
+    L223.PrimaryRenewKeywordInt_elec <- expand_offshore_wind(L223.PrimaryRenewKeywordInt_elec)
 
     # Adjust some of the dataframes
 
