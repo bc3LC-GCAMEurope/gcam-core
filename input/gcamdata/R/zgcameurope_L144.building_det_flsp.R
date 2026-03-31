@@ -285,7 +285,7 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
       repeat_add_columns(tibble(gcam.consumer= unique(L106.income_shares$gcam.consumer))) %>%
       left_join_error_no_match(L106.income_shares %>%
                                  left_join_error_no_match(GCAM_region_names, by = 'region'),
-                               by = c("GCAM_region_ID", "year","gcam.consumer")) %>%
+                               by = c("GCAM_region_ID", "region", "year","gcam.consumer")) %>%
       mutate(gdp_gr = gdp * subregional.income.share,
              pop_gr = pop/n_groups,
              pc_gdp_thous_gr = (gdp_gr/pop_gr)/1E3) %>%
