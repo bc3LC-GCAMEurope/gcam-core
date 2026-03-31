@@ -246,9 +246,9 @@ module_gcameurope_L223.electricity <- function(command, ...) {
     }
 
     # Apply the function to all dataframes in the list
-    L223.StubTechCapFactor_elec_EUR <- expand_offshore_wind(L223.StubTechCapFactor_elec)
-    L223.StubTechCost_offshore_wind_EUR <- expand_offshore_wind(L223.StubTechCost_offshore_wind)
-    L223.StubTech_elec_EUR <- expand_offshore_wind(L223.StubTech_elec)
+    L223.StubTechCapFactor_elec_EUR <- expand_offshore_wind(L223.StubTechCapFactor_elec) %>% filter_regions_europe()
+    L223.StubTechCost_offshore_wind_EUR <- expand_offshore_wind(L223.StubTechCost_offshore_wind) %>% filter_regions_europe()
+    L223.StubTech_elec_EUR <- expand_offshore_wind(L223.StubTech_elec) %>% filter_regions_europe()
 
 
 
