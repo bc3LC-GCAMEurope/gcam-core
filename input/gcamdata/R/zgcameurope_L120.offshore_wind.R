@@ -74,7 +74,7 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
       select(-total) %>%
       left_join_error_no_match(NREL_wind_ctry, by = "IAM_country") %>%
       left_join_error_no_match(iso_GCAM_regID %>% select(iso, GCAM_region_ID), by = "iso") %>%
-      filter_regions_europe() %>%   #new line!!
+      filter_regions_europe() %>%
       select(-iso) %>%
       gather(wind_class, resource.potential.PWh, -IAM_country, -GCAM_region_ID, -depth_class, -distance_to_shore) %>%
       mutate(resource.potential.EJ = resource.potential.PWh * 1000 * CONV_TWH_EJ ) %>%
@@ -83,14 +83,36 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
       ungroup() %>%
       filter(resource.potential.EJ != 0) -> L120.offshore_wind_potential_EJ
 
+    # assign zeroes when remaining broken out region countries do not have offshore wind (as per NREL_offshore_energy)
+    unique_regions <- unique(L120.offshore_wind_potential_EJ$GCAM_region_ID)
+
+    europe_regions <- iso_GCAM_regID %>%
+      filter_regions_europe() %>%
+      pull(GCAM_region_ID) %>%
+      unique()
+
+    missing_regions <- europe_regions[!europe_regions %in% unique_regions]
+
+    missing_regions_df <- L120.offshore_wind_potential_EJ %>%
+      unique() %>%
+      dplyr::select(wind_class,depth_class) %>%
+      cross_join(data.frame(GCAM_region_ID=missing_regions))
+
+    if(nrow(missing_regions_df)>0){
+      L120.offshore_wind_potential_EJ %>%
+        dplyr::bind_rows(missing_regions_df) %>%
+        tidyr::replace_na(list(resource.potential.EJ=0))->
+        L120.offshore_wind_potential_EJ}
+
+
     L120.offshore_wind_capital <- A20.offshore_wind_depth_cap_cost
 
     L113.globaltech_capital_ATB_EUR %>%
       filter(technology %in% c("wind_offshore_floating", "wind_offshore_fixed")) %>%
       rename(resource = technology) %>%
       mutate(resource = case_when(
-        resource == "wind_offshore_fixed"    ~ "fixed offshore wind",
-        resource == "wind_offshore_floating" ~ "floating offshore wind",
+        resource == "wind_offshore_fixed"    ~ "fixed offshore wind resource",
+        resource == "wind_offshore_floating" ~ "floating offshore wind resource",
         TRUE ~ resource)) %>%
       select(resource, fixed.charge.rate) -> L120.offshore_wind_fcr
 
@@ -101,8 +123,8 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
       rename(OM.fixed = value) %>%
       rename(resource = technology) %>%
       mutate(resource = case_when(
-        resource == "wind_offshore_fixed"    ~ "fixed offshore wind",
-        resource == "wind_offshore_floating" ~ "floating offshore wind",
+        resource == "wind_offshore_fixed"    ~ "fixed offshore wind resource",
+        resource == "wind_offshore_floating" ~ "floating offshore wind resource",
         TRUE ~ resource)) %>%
       select(resource, OM.fixed) -> L120.offshore_wind_OMfixed
 
@@ -117,8 +139,8 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
       left_join_error_no_match(A20.wind_class_CFs, by = c("wind_class")) %>%
       left_join_error_no_match(L120.offshore_wind_capital, by = c("depth_class")) %>%
       mutate(resource = if_else(depth_class %in% c("shallow", "transitional"),
-                                "fixed offshore wind",
-                                "floating offshore wind")) %>%
+                                "fixed offshore wind resource",
+                                "floating offshore wind resource")) %>%
       left_join_error_no_match(L120.offshore_wind_fcr, by = c("resource")) %>%
       left_join_error_no_match(L120.offshore_wind_OMfixed, by = c("resource")) %>%
       rename(fcr = fixed.charge.rate) %>%
@@ -251,6 +273,25 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
                                energy.DIGITS_MAX_SUB_RESOURCE)) %>%
       select(GCAM_region_ID, resource, mid.price) -> L120.mid.price
 
+    # Add regions with no offshore wind back to L120.mid.price:
+    all_regions <- iso_GCAM_regID %>%
+      filter_regions_europe() %>%
+      pull(GCAM_region_ID) %>%
+      unique()
+    # Find missing ones
+    missing_regions <- setdiff(all_regions, L120.mid.price$GCAM_region_ID)
+    # If any are missing, add them back with zero values
+    if(length(missing_regions) > 0) {
+
+      missing_df <- expand.grid(
+        GCAM_region_ID = missing_regions,
+        resource = unique(L120.mid.price$resource)
+      ) %>%
+        mutate(mid.price = 0)
+
+      L120.mid.price <- bind_rows(L120.mid.price, missing_df)
+    }
+
     L120.offshore_wind_curve %>%
       left_join_error_no_match(L120.mid.price, by = c("GCAM_region_ID", "resource")) -> L120.offshore_wind_curve
 
@@ -321,8 +362,8 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
       mutate(capital.tech.change.period = lag(capital.overnight, 1) / capital.overnight,
              time.change = year - lag(year)) %>%
       mutate(intermittent.technology = case_when(
-        intermittent.technology == "wind_offshore_fixed"    ~ "fixed offshore wind",
-        intermittent.technology == "wind_offshore_floating" ~ "floating offshore wind",
+        intermittent.technology == "wind_offshore_fixed"    ~ "fixed offshore wind resource",
+        intermittent.technology == "wind_offshore_floating" ~ "floating offshore wind resource",
         TRUE ~ intermittent.technology)) %>%
       left_join_error_no_match(L120.offshore_wind_fcr, by = c("intermittent.technology" = "resource")) %>%
       left_join_error_no_match(L120.offshore_wind_OMfixed, by = c("intermittent.technology" = "resource")) %>%
@@ -360,8 +401,8 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
       mutate(CF = max(CF)) %>%
       ungroup() %>%
       mutate(resource = case_when(
-        resource == "offshore_wind_fixed"    ~ "fixed offshore wind",
-        resource == "offshore_wind_floating" ~ "floating offshore wind",
+        resource == "offshore_wind_fixed"    ~ "fixed offshore wind resource",
+        resource == "offshore_wind_floating" ~ "floating offshore wind resource",
         TRUE ~ resource)) %>%
       unique() -> L120.offshore_wind_CF
 
@@ -382,8 +423,8 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
       filter_regions_europe() %>%
       select(-c(IAM_country, iso, GCAM_region_ID)) %>%
       mutate(technology = if_else(depth_class %in% c("shallow", "transitional"),
-                                "fixed offshore wind",
-                                "floating offshore wind")) %>%
+                                "fixed offshore wind resource",
+                                "floating offshore wind resource")) %>%
       group_by(region, technology, distance_to_shore) %>%
       summarise(total = sum(total)) %>%
       ungroup() %>%

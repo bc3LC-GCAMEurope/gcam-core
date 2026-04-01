@@ -126,8 +126,8 @@ module_gcameurope_L210.resources <- function(command, ...) {
         fixed_rows <- df[df[[tech_col]] == "offshore wind resource", ]
 
         # Replace technology names
-        floating_rows[[tech_col]] <- "floating offshore wind"
-        fixed_rows[[tech_col]] <- "fixed offshore wind"
+        floating_rows[[tech_col]] <- "floating offshore wind resource"
+        fixed_rows[[tech_col]] <- "fixed offshore wind resource"
 
         # Bind the original data (without wind_offshore) with the new rows
         df <- rbind(df[df[[tech_col]] != "offshore wind resource", ],
@@ -148,13 +148,13 @@ module_gcameurope_L210.resources <- function(command, ...) {
         floating_rows <- rows_to_expand
         fixed_rows    <- rows_to_expand
 
-        floating_rows$resource    <- "floating offshore wind"
-        floating_rows$subresource <- "floating offshore wind"
-        floating_rows$technology  <- "floating offshore wind"
+        floating_rows$resource    <- "floating offshore wind resource"
+        floating_rows$subresource <- "floating offshore wind resource"
+        floating_rows$technology  <- "floating offshore wind resource"
 
-        fixed_rows$resource    <- "fixed offshore wind"
-        fixed_rows$subresource <- "fixed offshore wind"
-        fixed_rows$technology  <- "fixed offshore wind"
+        fixed_rows$resource    <- "fixed offshore wind resource"
+        fixed_rows$subresource <- "fixed offshore wind resource"
+        fixed_rows$technology  <- "fixed offshore wind resource"
 
         df <- rbind(
           df[!(df$resource == "offshore wind resource" &
@@ -505,7 +505,7 @@ module_gcameurope_L210.resources <- function(command, ...) {
       filter_regions_europe() %>%
       filter(!(region %in% no_offshore_wind_regions)) %>%
       mutate(renewresource = intermittent.technology, smooth.renewable.subresource = intermittent.technology) %>%
-      select(region,renewresource, smooth.renewable.subresource, year.fillout = year, techChange = tech.change)  -> L210.SmthRenewRsrcTechChange_offshore_wind_EUR
+      select(region, renewresource, smooth.renewable.subresource, year.fillout = year, techChange = tech.change)  -> L210.SmthRenewRsrcTechChange_offshore_wind_EUR
 
     # L210.SmthRenewRsrcCurves_offshore_wind_EUR: supply curves of offshore wind resources
     L210.SmthRenewRsrcCurves_offshore_wind_EUR <- L120.RsrcCurves_EJ_R_offshore_wind_EUR %>%
