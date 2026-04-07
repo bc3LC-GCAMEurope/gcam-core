@@ -31,7 +31,8 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
              FILE = "energy/offshore_wind_grid_cost",
              FILE = "energy/offshore_wind_potential_scaler",
              "L113.globaltech_capital_ATB_EUR",
-             "L113.globaltech_OMfixed_ATB_EUR"))
+             "L113.globaltech_OMfixed_ATB_EUR",
+             "L120.RsrcCurves_EJ_R_offshore_wind"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L120.RsrcCurves_EJ_R_offshore_wind_EUR",
              "L120.TechChange_offshore_wind_EUR",
@@ -55,6 +56,7 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
     GCAM_region_names <- get_data(all_data, "common/GCAM_region_names", strip_attributes = TRUE)
     L113.globaltech_capital_ATB_EUR <- get_data(all_data, "L113.globaltech_capital_ATB_EUR")
     L113.globaltech_OMfixed_ATB_EUR <- get_data(all_data, "L113.globaltech_OMfixed_ATB_EUR")
+    L120.RsrcCurves_EJ_R_offshore_wind <- get_data(all_data, "L120.RsrcCurves_EJ_R_offshore_wind")
     A20.wind_class_CFs <- get_data(all_data, "energy/A20.wind_class_CFs")
     A20.offshore_wind_depth_cap_cost <- get_data(all_data, "energy/A20.offshore_wind_depth_cap_cost")
     NREL_wind_ctry <- get_data(all_data, "energy/mappings/NREL_wind_ctry") %>%
@@ -273,28 +275,33 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
                                energy.DIGITS_MAX_SUB_RESOURCE)) %>%
       select(GCAM_region_ID, resource, mid.price) -> L120.mid.price
 
-    # Add regions with no offshore wind back to L120.mid.price:
+
+    # Add regions AND missing resources back to L120.mid.price:
     all_regions <- iso_GCAM_regID %>%
       filter_regions_europe() %>%
       pull(GCAM_region_ID) %>%
       unique()
-    # Find missing ones
-    missing_regions <- setdiff(all_regions, L120.mid.price$GCAM_region_ID)
-    # If any are missing, add them back with zero values
-    if(length(missing_regions) > 0) {
-
-      missing_df <- expand.grid(
-        GCAM_region_ID = missing_regions,
-        resource = unique(L120.mid.price$resource)
-      ) %>%
+    # Define all expected resources explicitly
+    all_resources <- c("fixed offshore wind resource",
+                       "floating offshore wind resource")
+    # Create full combination
+    full_grid <- expand.grid(
+      GCAM_region_ID = all_regions,
+      resource = all_resources
+    )
+    # Find missing region-resource combinations
+    missing_combos <- full_grid %>%
+      dplyr::anti_join(L120.mid.price,
+                       by = c("GCAM_region_ID", "resource"))
+    # Add them with zero values
+    if(nrow(missing_combos) > 0) {
+      missing_combos <- missing_combos %>%
         mutate(mid.price = 0)
 
-      L120.mid.price <- bind_rows(L120.mid.price, missing_df)
+      L120.mid.price <- bind_rows(L120.mid.price, missing_combos)
     }
 
-    L120.offshore_wind_curve %>%
-      left_join_error_no_match(L120.mid.price, by = c("GCAM_region_ID", "resource")) -> L120.offshore_wind_curve
-
+    # Finding the curve exponent:
     # Defining variables to be used later.
     region_list <- unique(L120.offshore_wind_curve$GCAM_region_ID)
     resource_list <- unique(L120.offshore_wind_curve$resource)
@@ -330,7 +337,33 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
         L120.curve.exponent %>%
           bind_rows(L120.curve.exponent_region) -> L120.curve.exponent
 
-    }}
+      }}
+
+    # Add default value for no-resource rows:
+    missing_exp <- L120.mid.price %>%
+      distinct(GCAM_region_ID, resource) %>%
+      anti_join(L120.curve.exponent,
+                by = c("GCAM_region_ID", "resource")) %>%
+      mutate(curve.exponent = 1)
+
+    L120.curve.exponent <- bind_rows(L120.curve.exponent, missing_exp)
+
+    # Before joining with curve, we need to add rows  with zero resource back to the main curve so values are not lost.
+    # Find missing region-resource combinations
+    missing_combos_2 <- full_grid %>%
+      dplyr::anti_join(L120.offshore_wind_curve,
+                       by = c("GCAM_region_ID", "resource"))
+    # Add them with zero values
+    if(nrow(missing_combos_2) > 0) {
+      missing_combos_2 <- missing_combos_2 %>%
+        mutate(price = 10, supply = 0, CFmax= 0.36, maxSubResource = 0, base.price = 15, Pvar = 0)
+
+      L120.offshore_wind_curve <- bind_rows(L120.offshore_wind_curve, missing_combos_2)
+    }
+
+    # Now we can join the mid price and curve exponents:
+    L120.offshore_wind_curve %>%
+      left_join_error_no_match(L120.mid.price, by = c("GCAM_region_ID", "resource")) -> L120.offshore_wind_curve
 
     L120.offshore_wind_curve %>%
       left_join_error_no_match(L120.curve.exponent, by = c("resource","GCAM_region_ID")) -> L120.offshore_wind_curve
@@ -339,7 +372,17 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
     L120.offshore_wind_curve %>%
       mutate(subresource = resource) %>%
       ungroup() %>%
+      arrange(GCAM_region_ID) %>%
       distinct(GCAM_region_ID, resource, subresource, maxSubResource, mid.price, curve.exponent) -> L120.RsrcCurves_EJ_R_offshore_wind_EUR
+
+    # Return to original values for Turkey and Iceland (no fixed/floating):
+    Turkey_Iceland <- L120.RsrcCurves_EJ_R_offshore_wind %>%
+      filter(GCAM_region_ID %in% c("64", "58"))
+
+    L120.RsrcCurves_EJ_R_offshore_wind_EUR %>%
+      filter(!(GCAM_region_ID %in% c("64", "58"))) %>%
+      bind_rows(Turkey_Iceland) %>%
+      arrange(GCAM_region_ID) -> L120.RsrcCurves_EJ_R_offshore_wind_EUR
 
     # Technological change in the supply curve is related to assumed improvements in capital cost.
     # If capital cost changes from CC to a.CC, then every price point of the curve will scale by a factor a' given as follows:
