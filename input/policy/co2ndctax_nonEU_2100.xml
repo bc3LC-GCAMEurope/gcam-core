@@ -10,6 +10,8 @@
                 <fixedTax year="2040">435.012</fixedTax>
                 <fixedTax year="2045">504.813</fixedTax>
                 <fixedTax fillout="1" year="2050">559.435</fixedTax>
+<fixedTax fillout="1" year="2055">580</fixedTax>
+<fixedTax fillout="1" year="2060">600</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Norway">
@@ -22,6 +24,8 @@
                 <fixedTax year="2040">435.012</fixedTax>
                 <fixedTax year="2045">504.813</fixedTax>
                 <fixedTax fillout="1" year="2050">559.435</fixedTax>
+<fixedTax fillout="1" year="2055">580</fixedTax>
+<fixedTax fillout="1" year="2060">600</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Switzerland">
@@ -34,6 +38,8 @@
                 <fixedTax year="2040">435.012</fixedTax>
                 <fixedTax year="2045">504.813</fixedTax>
                 <fixedTax fillout="1" year="2050">559.435</fixedTax>
+<fixedTax fillout="1" year="2055">580</fixedTax>
+<fixedTax fillout="1" year="2060">600</fixedTax>
             </ghgpolicy>
         </region>
         <region name="UK">
@@ -46,6 +52,8 @@
                 <fixedTax year="2040">435.012</fixedTax>
                 <fixedTax year="2045">504.813</fixedTax>
                 <fixedTax fillout="1" year="2050">559.435</fixedTax>
+<fixedTax fillout="1" year="2055">580</fixedTax>
+<fixedTax fillout="1" year="2060">600</fixedTax>
 
             </ghgpolicy>
         </region>
@@ -59,6 +67,8 @@
                 <fixedTax year="2040">222.23</fixedTax>
                 <fixedTax year="2045">309.51</fixedTax>
                 <fixedTax fillout="1" year="2050">366.83</fixedTax>
+<fixedTax fillout="1" year="2055">415</fixedTax>
+<fixedTax fillout="1" year="2060">450</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Moldova">
@@ -71,6 +81,8 @@
                 <fixedTax year="2040">222.23</fixedTax>
                 <fixedTax year="2045">309.51</fixedTax>
                 <fixedTax fillout="1" year="2050">366.83</fixedTax>
+<fixedTax fillout="1" year="2055">415</fixedTax>
+<fixedTax fillout="1" year="2060">450</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Ukraine">
@@ -83,6 +95,8 @@
                 <fixedTax year="2040">222.23</fixedTax>
                 <fixedTax year="2045">309.51</fixedTax>
                 <fixedTax fillout="1" year="2050">366.83</fixedTax>
+<fixedTax fillout="1" year="2055">415</fixedTax>
+<fixedTax fillout="1" year="2060">450</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Albania">
@@ -95,6 +109,8 @@
                 <fixedTax year="2040">222.23</fixedTax>
                 <fixedTax year="2045">309.51</fixedTax>
                 <fixedTax fillout="1" year="2050">366.83</fixedTax>
+<fixedTax fillout="1" year="2055">415</fixedTax>
+<fixedTax fillout="1" year="2060">450</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Bosnia and Herzegovina">
@@ -107,6 +123,8 @@
                 <fixedTax year="2040">222.23</fixedTax>
                 <fixedTax year="2045">309.51</fixedTax>
                 <fixedTax fillout="1" year="2050">366.83</fixedTax>
+<fixedTax fillout="1" year="2055">415</fixedTax>
+<fixedTax fillout="1" year="2060">450</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Macedonia">
@@ -119,6 +137,8 @@
                 <fixedTax year="2040">222.23</fixedTax>
                 <fixedTax year="2045">309.51</fixedTax>
                 <fixedTax fillout="1" year="2050">366.83</fixedTax>
+<fixedTax fillout="1" year="2055">415</fixedTax>
+<fixedTax fillout="1" year="2060">450</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Serbia and Montenegro">
@@ -131,6 +151,8 @@
                 <fixedTax year="2040">222.23</fixedTax>
                 <fixedTax year="2045">309.51</fixedTax>
                 <fixedTax fillout="1" year="2050">366.83</fixedTax>
+<fixedTax fillout="1" year="2055">415</fixedTax>
+<fixedTax fillout="1" year="2060">450</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Turkey">
@@ -143,6 +165,8 @@
                 <fixedTax year="2040">222.23</fixedTax>
                 <fixedTax year="2045">309.51</fixedTax>
                 <fixedTax fillout="1" year="2050">366.83</fixedTax>
+<fixedTax fillout="1" year="2055">415</fixedTax>
+<fixedTax fillout="1" year="2060">450</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Africa_Eastern">
@@ -155,6 +179,8 @@
                 <fixedTax year="2040">222.23</fixedTax>
                 <fixedTax year="2045">332.15</fixedTax>
                 <fixedTax fillout="1" year="2050">434.69</fixedTax>
+<fixedTax fillout="1" year="2055">475</fixedTax>
+<fixedTax fillout="1" year="2060">520</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Africa_Southern">
@@ -167,6 +193,8 @@
                 <fixedTax year="2040">222.23</fixedTax>
                 <fixedTax year="2045">332.15</fixedTax>
                 <fixedTax fillout="1" year="2050">434.69</fixedTax>
+<fixedTax fillout="1" year="2055">475</fixedTax>
+<fixedTax fillout="1" year="2060">520</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Africa_Western">
@@ -179,6 +207,8 @@
                 <fixedTax year="2040">222.23</fixedTax>
                 <fixedTax year="2045">332.15</fixedTax>
                 <fixedTax fillout="1" year="2050">434.69</fixedTax>
+<fixedTax fillout="1" year="2055">475</fixedTax>
+<fixedTax fillout="1" year="2060">520</fixedTax>
             </ghgpolicy>
         </region>
         <region name="South Africa">
@@ -191,6 +221,8 @@
                 <fixedTax year="2040">222.23</fixedTax>
                 <fixedTax year="2045">332.15</fixedTax>
                 <fixedTax fillout="1" year="2050">434.69</fixedTax>
+<fixedTax fillout="1" year="2055">475</fixedTax>
+<fixedTax fillout="1" year="2060">520</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Africa_Northern">
@@ -203,6 +235,8 @@
                 <fixedTax year="2040">229.73</fixedTax>
                 <fixedTax year="2045">281.11</fixedTax>
                 <fixedTax fillout="1" year="2050">335.86</fixedTax>
+<fixedTax fillout="1" year="2055">380</fixedTax>
+<fixedTax fillout="1" year="2060">420</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Middle East">
@@ -215,6 +249,8 @@
                 <fixedTax year="2040">229.73</fixedTax>
                 <fixedTax year="2045">281.11</fixedTax>
                 <fixedTax fillout="1" year="2050">335.86</fixedTax>
+<fixedTax fillout="1" year="2055">380</fixedTax>
+<fixedTax fillout="1" year="2060">420</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Argentina">
@@ -227,6 +263,8 @@
                 <fixedTax year="2040">327.02</fixedTax>
                 <fixedTax year="2045">414.28</fixedTax>
                 <fixedTax fillout="1" year="2050">435.37</fixedTax>
+<fixedTax fillout="1" year="2055">450</fixedTax>
+<fixedTax fillout="1" year="2060">475</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Brazil">
@@ -239,6 +277,8 @@
                 <fixedTax year="2040">327.02</fixedTax>
                 <fixedTax year="2045">414.28</fixedTax>
                 <fixedTax fillout="1" year="2050">435.37</fixedTax>
+<fixedTax fillout="1" year="2055">450</fixedTax>
+<fixedTax fillout="1" year="2060">475</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Central America and Caribbean">
@@ -251,6 +291,8 @@
                 <fixedTax year="2040">327.02</fixedTax>
                 <fixedTax year="2045">414.28</fixedTax>
                 <fixedTax fillout="1" year="2050">435.37</fixedTax>
+<fixedTax fillout="1" year="2055">450</fixedTax>
+<fixedTax fillout="1" year="2060">475</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Colombia">
@@ -263,6 +305,8 @@
                 <fixedTax year="2040">327.02</fixedTax>
                 <fixedTax year="2045">414.28</fixedTax>
                 <fixedTax fillout="1" year="2050">435.37</fixedTax>
+<fixedTax fillout="1" year="2055">450</fixedTax>
+<fixedTax fillout="1" year="2060">475</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Mexico">
@@ -275,6 +319,8 @@
                 <fixedTax year="2040">327.02</fixedTax>
                 <fixedTax year="2045">414.28</fixedTax>
                 <fixedTax fillout="1" year="2050">435.37</fixedTax>
+<fixedTax fillout="1" year="2055">450</fixedTax>
+<fixedTax fillout="1" year="2060">475</fixedTax>
             </ghgpolicy>
         </region>
         <region name="South America_Northern">
@@ -287,6 +333,8 @@
                 <fixedTax year="2040">327.02</fixedTax>
                 <fixedTax year="2045">414.28</fixedTax>
                 <fixedTax fillout="1" year="2050">435.37</fixedTax>
+<fixedTax fillout="1" year="2055">450</fixedTax>
+<fixedTax fillout="1" year="2060">475</fixedTax>
             </ghgpolicy>
         </region>
         <region name="South America_Southern">
@@ -299,6 +347,8 @@
                 <fixedTax year="2040">327.02</fixedTax>
                 <fixedTax year="2045">414.28</fixedTax>
                 <fixedTax fillout="1" year="2050">435.37</fixedTax>
+<fixedTax fillout="1" year="2055">450</fixedTax>
+<fixedTax fillout="1" year="2060">475</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Canada">
@@ -311,6 +361,8 @@
                 <fixedTax year="2040">467.97</fixedTax>
                 <fixedTax year="2045">462.93</fixedTax>
                 <fixedTax fillout="1" year="2050">459.41</fixedTax>
+<fixedTax fillout="1" year="2055">480</fixedTax>
+<fixedTax fillout="1" year="2060">500</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Australia_NZ">
@@ -323,6 +375,8 @@
                 <fixedTax year="2040">467.97</fixedTax>
                 <fixedTax year="2045">462.93</fixedTax>
                 <fixedTax fillout="1" year="2050">459.41</fixedTax>
+<fixedTax fillout="1" year="2055">480</fixedTax>
+<fixedTax fillout="1" year="2060">500</fixedTax>
             </ghgpolicy>
         </region>
         <region name="USA">
@@ -334,7 +388,9 @@
                 <fixedTax year="2035">420.02</fixedTax>
                 <fixedTax year="2040">467.97</fixedTax>
                 <fixedTax year="2045">462.93</fixedTax>
-                <fixedTax fillout="1" year="2050">459.41</fixedTax>
+                <fixedTax fillout="1" year="2050">459.41</fixedTax> 
+<fixedTax fillout="1" year="2055">480</fixedTax>
+<fixedTax fillout="1" year="2060">500</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Japan">
@@ -347,6 +403,8 @@
                 <fixedTax year="2040">451.26</fixedTax>
                 <fixedTax year="2045">583.12</fixedTax>
                 <fixedTax fillout="1" year="2050">737.85</fixedTax>
+<fixedTax fillout="1" year="2055">750</fixedTax>
+<fixedTax fillout="1" year="2060">775</fixedTax>
             </ghgpolicy>
         </region>
         <region name="South Korea">
@@ -359,6 +417,8 @@
                 <fixedTax year="2040">451.26</fixedTax>
                 <fixedTax year="2045">583.12</fixedTax>
                 <fixedTax fillout="1" year="2050">737.85</fixedTax>
+<fixedTax fillout="1" year="2055">750</fixedTax>
+<fixedTax fillout="1" year="2060">775</fixedTax>
             </ghgpolicy>
         </region>
         <region name="China">
@@ -371,6 +431,8 @@
                 <fixedTax year="2040">221.67</fixedTax>
                 <fixedTax year="2045">284.26</fixedTax>
                 <fixedTax fillout="1" year="2050">400.89</fixedTax>
+<fixedTax fillout="1" year="2055">450</fixedTax>
+<fixedTax fillout="1" year="2060">500</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Taiwan">
@@ -383,6 +445,8 @@
                 <fixedTax year="2040">221.67</fixedTax>
                 <fixedTax year="2045">284.26</fixedTax>
                 <fixedTax fillout="1" year="2050">400.89</fixedTax>
+<fixedTax fillout="1" year="2055">450</fixedTax>
+<fixedTax fillout="1" year="2060">500</fixedTax>
             </ghgpolicy>
         </region>
         <region name="India">
@@ -395,6 +459,8 @@
                 <fixedTax year="2040">195.8</fixedTax>
                 <fixedTax year="2045">250.2</fixedTax>
                 <fixedTax fillout="1" year="2050">314.64</fixedTax>
+<fixedTax fillout="1" year="2055">365</fixedTax>
+<fixedTax fillout="1" year="2060">420</fixedTax>
             </ghgpolicy>
         </region>
         <region name="South Asia">
@@ -407,6 +473,8 @@
                 <fixedTax year="2040">195.8</fixedTax>
                 <fixedTax year="2045">250.2</fixedTax>
                 <fixedTax fillout="1" year="2050">314.64</fixedTax>
+<fixedTax fillout="1" year="2055">365</fixedTax>
+<fixedTax fillout="1" year="2060">420</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Southeast Asia">
@@ -419,6 +487,8 @@
                 <fixedTax year="2040">252.12</fixedTax>
                 <fixedTax year="2045">313.33</fixedTax>
                 <fixedTax fillout="1" year="2050">347.82</fixedTax>
+<fixedTax fillout="1" year="2055">389</fixedTax>
+<fixedTax fillout="1" year="2060">430</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Indonesia">
@@ -431,6 +501,8 @@
                 <fixedTax year="2040">252.12</fixedTax>
                 <fixedTax year="2045">313.33</fixedTax>
                 <fixedTax fillout="1" year="2050">347.82</fixedTax>
+<fixedTax fillout="1" year="2055">389</fixedTax>
+<fixedTax fillout="1" year="2060">430</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Russia">
@@ -443,6 +515,8 @@
                 <fixedTax year="2040">214.2</fixedTax>
                 <fixedTax year="2045">312.49</fixedTax>
                 <fixedTax fillout="1" year="2050">410.78</fixedTax>
+<fixedTax fillout="1" year="2055">455</fixedTax>
+<fixedTax fillout="1" year="2060">500</fixedTax>
             </ghgpolicy>
         </region>
         <region name="Central Asia">
@@ -455,6 +529,8 @@
                 <fixedTax year="2040">214.2</fixedTax>
                 <fixedTax year="2045">312.49</fixedTax>
                 <fixedTax fillout="1" year="2050">410.78</fixedTax>
+<fixedTax fillout="1" year="2055">455</fixedTax>
+<fixedTax fillout="1" year="2060">500</fixedTax>
             </ghgpolicy>
         </region>
     </world>
