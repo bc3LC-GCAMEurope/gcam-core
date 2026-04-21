@@ -462,7 +462,8 @@ module_gcameurope_L210.resources <- function(command, ...) {
       expand_offshore_wind() %>%
       filter_regions_europe() %>%
       anti_join(L210.ResTechShrwt_EUR, by = c("region", "resource", "subresource", "technology", "year")) %>%
-      bind_rows(L210.ResTechShrwt_EUR)
+      bind_rows(L210.ResTechShrwt_EUR) %>%
+      filter(resource != 'traditional biomass')
 
     # Resource-reserve assumptions which just need to get copied to all regions and years
     A10.ResSubresourceProdLifetime %>%
