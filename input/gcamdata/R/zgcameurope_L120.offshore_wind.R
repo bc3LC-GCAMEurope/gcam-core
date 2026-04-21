@@ -373,16 +373,25 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
       mutate(subresource = resource) %>%
       ungroup() %>%
       arrange(GCAM_region_ID) %>%
-      distinct(GCAM_region_ID, resource, subresource, maxSubResource, mid.price, curve.exponent) -> L120.RsrcCurves_EJ_R_offshore_wind_EUR
+      distinct(GCAM_region_ID, resource, subresource, maxSubResource, mid.price, curve.exponent) %>%
+      mutate(
+        mid.price = if_else(maxSubResource == 0, 10, mid.price),
+        maxSubResource = if_else(maxSubResource == 0, 0.001, maxSubResource)
+      ) ->
+      L120.RsrcCurves_EJ_R_offshore_wind_EUR
+
 
     # Return to original values for Turkey and Iceland (no fixed/floating):
-    Turkey_Iceland <- L120.RsrcCurves_EJ_R_offshore_wind %>%
-      filter(GCAM_region_ID %in% c("64", "58"))
+    # Turkey_Iceland <- L120.RsrcCurves_EJ_R_offshore_wind %>%
+    #   filter(GCAM_region_ID %in% c("64", "58"))
+    #
+    # L120.RsrcCurves_EJ_R_offshore_wind_EUR %>%
+    #   filter(!(GCAM_region_ID %in% c("64", "58"))) %>%
+    #   bind_rows(Turkey_Iceland) %>%
+    #   arrange(GCAM_region_ID) -> L120.RsrcCurves_EJ_R_offshore_wind_EUR
 
-    L120.RsrcCurves_EJ_R_offshore_wind_EUR %>%
-      filter(!(GCAM_region_ID %in% c("64", "58"))) %>%
-      bind_rows(Turkey_Iceland) %>%
-      arrange(GCAM_region_ID) -> L120.RsrcCurves_EJ_R_offshore_wind_EUR
+
+
 
     # Technological change in the supply curve is related to assumed improvements in capital cost.
     # If capital cost changes from CC to a.CC, then every price point of the curve will scale by a factor a' given as follows:
