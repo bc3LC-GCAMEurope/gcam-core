@@ -287,7 +287,13 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       distinct(supplysector = sector.name, subsector0 = subsector.name0,
                subsector = subsector.name, stub.technology = technology) %>%
       repeat_add_columns(grid_regions %>% distinct(region)) %>%
-      filter(!(grepl("seawater|wind_offshore", stub.technology) & !region %in% seawater_countries))
+      filter(!(grepl("seawater|wind_offshore", stub.technology) & !region %in% seawater_countries)) %>%
+      # Adjust Switzerland
+      mutate(subsector = if_else(region == "Switzerland", gsub("_floating", "", subsector), subsector),
+             subsector = if_else(region == "Switzerland", gsub("_fixed", "", subsector), subsector),
+             stub.technology = if_else(region == "Switzerland", gsub("_floating", "", stub.technology), stub.technology),
+             stub.technology = if_else(region == "Switzerland", gsub("_fixed", "", stub.technology), stub.technology)) %>%
+      distinct()
 
     # Efficiencies do not change with the addition of cooling techs
     L2235.StubTechEff_elecS_cool_EUR <- add_global_cooling_techs(L2234.StubTechEff_elecS_EUR) %>%
@@ -337,16 +343,26 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
     # 2b. StubTech simply add cooling tech -------------------
     L2235.StubTechFixOut_elecS_cool_EUR <- add_global_cooling_techs(L2234.StubTechFixOut_elecS_EUR)
     L2235.StubTechFixOut_hydro_elecS_cool_EUR <-  add_global_cooling_techs(L2234.StubTechFixOut_hydro_elecS_EUR)
-    L2235.StubTechCost_offshore_wind_elecS_cool_EUR <-  add_global_cooling_techs(L2234.StubTechCost_offshore_wind_elecS_EUR)
-    L2235.StubTechCapFactor_elecS_cool_EUR <-  add_global_cooling_techs(L2234.StubTechCapFactor_elecS_EUR)
-    L2235.StubTechElecMarket_backup_elecS_cool_EUR <-  add_global_cooling_techs(L2234.StubTechElecMarket_backup_elecS_EUR)
+    L2235.StubTechCost_offshore_wind_elecS_cool_EUR <-  add_global_cooling_techs(L2234.StubTechCost_offshore_wind_elecS_EUR) %>%
+      # Adjust Switzerland
+      mutate(stub.technology = if_else(is.na(stub.technology), "wind_offshore", stub.technology))
+    L2235.StubTechCapFactor_elecS_cool_EUR <-  add_global_cooling_techs(L2234.StubTechCapFactor_elecS_EUR) %>%
+      # Adjust Switzerland
+      mutate(stub.technology = if_else(is.na(stub.technology), "wind_offshore", stub.technology))
+    L2235.StubTechElecMarket_backup_elecS_cool_EUR <-  add_global_cooling_techs(L2234.StubTechElecMarket_backup_elecS_EUR) %>%
+      # Adjust Switzerland
+      mutate(stub.technology = if_else(is.na(stub.technology), "wind_offshore", stub.technology))
 
     # 2c. Logits -----------------------------------
     L2235.SubsectorLogit_elecS_EUR <- L2234.SubsectorLogit_elecS_EUR %>% rename(subsector0 = subsector)
 
     L2235.SubsectorLogit_elecS_cool_EUR <- L2235.StubTech_elecS_cool_EUR %>%
       distinct(region, supplysector, subsector0, subsector) %>%
-      left_join_error_no_match(L2235.SubsectorLogit_elecS_EUR, by = c("region", "supplysector", "subsector0"))
+      left_join_error_no_match(L2235.SubsectorLogit_elecS_EUR, by = c("region", "supplysector", "subsector0")) %>%
+      # Adjust Switzerland
+      mutate(subsector = if_else(region == "Switzerland", gsub("_floating", "", subsector), subsector)) %>%
+      mutate(subsector = if_else(region == "Switzerland", gsub("_fixed", "", subsector), subsector)) %>%
+      distinct()
     #
     # 2d. Coefs -------------
     # L2235.StubTechCoef_elecS_cool_EUR <- L2235.StubTechEff_elecS_cool_EUR %>%
@@ -409,7 +425,12 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
 
 
     L2235.SubsectorShrwt_elecS_cool_EUR <- bind_rows(L2235.SubsectorShrwt_elecS_cool_EUR_hist,
-                                                     L2235.SubsectorShrwt_elecS_cool_EUR_fut)
+                                                     L2235.SubsectorShrwt_elecS_cool_EUR_fut) %>%
+      # Adjust Switzerland
+      mutate(subsector = if_else(region == "Switzerland", gsub("_floating", "", subsector), subsector)) %>%
+      mutate(subsector = if_else(region == "Switzerland", gsub("_fixed", "", subsector), subsector)) %>%
+      distinct()
+
 
     # 2f. Technology Shareweights ----------------------
 

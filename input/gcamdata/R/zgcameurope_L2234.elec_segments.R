@@ -395,7 +395,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       filter(grepl("_offshore", stub.technology)) %>%
       select(-capacity.factor) %>%
       rename(stub.technology.adj = stub.technology) %>%
-      mutate(stub.technology = if_else(grepl("floating", stub.technology.adj), "wind_offshore_floating", "a"),
+      mutate(stub.technology = if_else(grepl("floating", stub.technology.adj), "wind_offshore_floating", "wind_offshore"),
              stub.technology = if_else(grepl("fixed", stub.technology.adj), "wind_offshore_fixed", stub.technology)) %>%
       left_join_error_no_match(L223.StubTechCost_offshore_wind_EUR %>% select(-supplysector),
                                by = c("region", "subsector", "stub.technology", "year")) %>%
