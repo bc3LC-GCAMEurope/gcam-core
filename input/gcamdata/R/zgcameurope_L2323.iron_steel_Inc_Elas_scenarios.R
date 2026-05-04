@@ -63,24 +63,6 @@ module_gcameurope_L2323.iron_steel_Inc_Elas_scenarios <- function(command, ...) 
       mutate(year = as.integer(year)) %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID")
 
-    steel_cons_Yfut <- LB1092.Tradebalance_iron_steel_Mt_R_Y %>%
-      filter(metric=="consumption_reval")%>%
-      group_by(GCAM_region,year) %>%
-      summarise(steel_hist = sum(value))%>%
-      rename(region=GCAM_region)%>%
-      left_join(GCAM_region_names,by=c("region"))%>%
-      ungroup() %>%
-      filter(year == MODEL_FINAL_BASE_YEAR) %>%
-      mutate(year = min(MODEL_FUTURE_YEARS)) %>%
-      select(GCAM_region_ID,year,steel_hist)
-
-    pcgdp_Yfut <- L102.pcgdp_thous90USD_Scen_R_Y_EUR %>%
-      filter(year == MODEL_FINAL_BASE_YEAR) %>%
-      mutate(pcgdp_90thousUSD_Yfut = pcgdp_90thousUSD, year = min(MODEL_FUTURE_YEARS)) %>%
-      select(scenario, GCAM_region_ID, year,pcgdp_90thousUSD_Yfut)
-
-
-
     # Create one population dataset to pass timeshift tests ----
     # This is required because L101.Pop_thous_SSP_R_Yfut uses FUTURE_YEARS,
     # but here we want to create a dataset from MODEL_FUTURE_YEARS, which may start before FUTURE_YEARS
@@ -90,36 +72,31 @@ module_gcameurope_L2323.iron_steel_Inc_Elas_scenarios <- function(command, ...) 
 
     #First calculate the per capita steel consumption
     L2323.pcgdp_thous90USD_Scen_R_Y  <- L102.pcgdp_thous90USD_Scen_R_Y_EUR %>%
-      filter(year %in%  MODEL_FUTURE_YEARS) %>%
+      filter(year %in% c(MODEL_FINAL_BASE_YEAR, MODEL_FUTURE_YEARS)) %>%
       left_join_error_no_match(L101_Pop_hist_and_fut, by = c("scenario", "GCAM_region_ID", "year", "region")) %>%
       left_join_error_no_match(A323.inc_elas_parameter, by = c( "region")) %>%
       mutate(per_capita_steel = a * exp(b/(pcgdp_90thousUSD * 1000)) * (1-m) ^ (year - 1990),
              steel_cons = per_capita_steel * population * 0.000001)
 
-
+    yyears <- c(MODEL_FINAL_BASE_YEAR, MODEL_FUTURE_YEARS)
     #Rebuild a new tibble save the previous year value
     L2323.pcgdp_thous90USD_Scen_R_Y_5_before <- L2323.pcgdp_thous90USD_Scen_R_Y %>%
       # essentially year + 5, but gets the next year dynamically without assuming + 5 year increments
-      mutate(year = sapply(year, function(y) MODEL_FUTURE_YEARS[which(MODEL_FUTURE_YEARS > y)[1]]),
+      mutate(year = sapply(year, function(y) yyears[which(yyears > y)[1]]),
              pcgdp_90thousUSD_before = pcgdp_90thousUSD,
              steel_cons_before = steel_cons) %>%
       select(scenario,GCAM_region_ID,region, year, pcgdp_90thousUSD_before, steel_cons_before)
 
     L2323.pcgdp_thous90USD_Scen_R_Y %>%
       left_join(L2323.pcgdp_thous90USD_Scen_R_Y_5_before, by = c("scenario", "GCAM_region_ID", "year","region"))%>%
-      #Add 2015 data
-      left_join(steel_cons_Yfut, by = c("GCAM_region_ID", "year")) %>%
-      left_join(pcgdp_Yfut, by = c("scenario", "GCAM_region_ID", "year")) %>%
+      filter(year %in% MODEL_FUTURE_YEARS) %>%
       mutate(pcgdp_90thousUSD_before = replace_na(pcgdp_90thousUSD_before,0),
              steel_cons_before  = replace_na(steel_cons_before ,0),
-             steel_hist  = replace_na(steel_hist,0),
-             pcgdp_90thousUSD_Yfut = replace_na(pcgdp_90thousUSD_Yfut,0),
-             pcgdp_90thousUSD_before = pcgdp_90thousUSD_before + pcgdp_90thousUSD_Yfut,
-             steel_cons_before = steel_cons_before + steel_hist,
              #cal
              inc_elas = log(steel_cons / steel_cons_before)/log(pcgdp_90thousUSD/pcgdp_90thousUSD_before),
-             income.elasticity = inc_elas,energy.final.demand = "regional iron and steel") %>%
-      select(scenario, region, energy.final.demand, year, income.elasticity) %>%
+             income.elasticity = inc_elas,
+             energy.final.demand = "regional iron and steel") %>%
+      select(scenario, region, energy.final.demand, year, income.elasticity,) %>%
       arrange(year) %>%
       #replace those huge number
       mutate(income.elasticity = replace(income.elasticity,income.elasticity > 10 , 10),
