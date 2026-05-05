@@ -562,67 +562,219 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       mutate(apply.to = gcamusa.INTERP_APPLY_TO) %>%
       select(LEVEL2_DATA_NAMES[["StubTechInterp"]], subsector0)
 
+    # Create a function to add back the wind_offshore tech
+
+    duplicate_offshore <- function(df) {
+
+      if ("backup.intermittent.technology" %in% names(df)) {
+
+        new_rows <- df %>%
+          filter(backup.intermittent.technology == "wind_offshore_floating") %>%
+          mutate(
+            backup.intermittent.technology = gsub("_floating", "", backup.intermittent.technology),
+            subsector.name = gsub("_floating", "", subsector.name)
+          ) %>%
+          {
+            if ("minicam.energy.input" %in% names(.)) {
+              mutate(., minicam.energy.input = "offshore wind resource")
+            } else .
+          }
+
+        bind_rows(df, new_rows)
+
+      } else if ("intermittent.technology" %in% names(df)) {
+
+        new_rows <- df %>%
+          filter(intermittent.technology == "wind_offshore_floating") %>%
+          mutate(
+            intermittent.technology = gsub("_floating", "", intermittent.technology),
+            subsector.name = gsub("_floating", "", subsector.name)
+          ) %>%
+          {
+            if ("minicam.energy.input" %in% names(.)) {
+              mutate(., minicam.energy.input = "offshore wind resource")
+            } else .
+          }
+
+        bind_rows(df, new_rows)
+
+      } else {
+        df
+      }
+    }
+
     # Adjustments to create wind offshore technologies for no segment regions (Turkey and Iceland)
+
     L2235.GlobalIntTechBackup_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechBackup_elecS_cool_EUR %>%
       filter(grepl("offshore", subsector.name)) %>%
-      mutate(sector.name = "electricity",
-             subsector.name = "wind") %>%
+      duplicate_offshore() %>%
+      mutate(
+        sector.name = if_else(
+          backup.intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "electricity",
+          sector.name
+        ),
+        subsector.name = if_else(
+          backup.intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "wind",
+          subsector.name
+        )
+      ) %>%
       select(LEVEL2_DATA_NAMES[["GlobalIntTechBackup"]])
 
 
     L2235.GlobalIntTechValueFactor_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechValueFactor_elecS_cool_EUR %>%
       filter(grepl("offshore", subsector.name)) %>%
-      mutate(sector.name = "electricity",
-             subsector.name = "wind") %>%
+      duplicate_offshore() %>%
+      mutate(
+        sector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "electricity",
+          sector.name
+        ),
+        subsector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "wind",
+          subsector.name
+        )
+      ) %>%
       select(LEVEL2_DATA_NAMES[["GlobalIntTechValueFactor"]])
 
     L2235.GlobalIntTechCapital_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechCapital_elecS_cool_EUR %>%
       filter(grepl("offshore", subsector.name)) %>%
-      mutate(sector.name = "electricity",
-             subsector.name = "wind") %>%
+      duplicate_offshore() %>%
+      mutate(
+        sector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "electricity",
+          sector.name
+        ),
+        subsector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "wind",
+          subsector.name
+        )
+      ) %>%
       select(LEVEL2_DATA_NAMES[["GlobalIntTechCapital"]])
 
     L2235.GlobalIntTechEff_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechEff_elecS_cool_EUR %>%
       filter(grepl("offshore", subsector.name)) %>%
-      mutate(sector.name = "electricity",
-             subsector.name = "wind") %>%
+      duplicate_offshore() %>%
+      mutate(
+        sector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "electricity",
+          sector.name
+        ),
+        subsector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "wind",
+          subsector.name
+        )
+      ) %>%
       select(LEVEL2_DATA_NAMES[["GlobalIntTechEff"]])
 
     L2235.GlobalIntTechLifetime_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechLifetime_elecS_cool_EUR %>%
       filter(grepl("offshore", subsector.name)) %>%
-      mutate(sector.name = "electricity",
-             subsector.name = "wind") %>%
+      duplicate_offshore() %>%
+      mutate(
+        sector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "electricity",
+          sector.name
+        ),
+        subsector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "wind",
+          subsector.name
+        )
+      ) %>%
       select(LEVEL2_DATA_NAMES[["GlobalIntTechLifetime"]])
 
     L2235.GlobalIntTechOMfixed_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechOMfixed_elecS_cool_EUR %>%
       filter(grepl("offshore", subsector.name)) %>%
-      mutate(sector.name = "electricity",
-             subsector.name = "wind") %>%
+      duplicate_offshore() %>%
+      mutate(
+        sector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "electricity",
+          sector.name
+        ),
+        subsector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "wind",
+          subsector.name
+        )
+      ) %>%
       select(LEVEL2_DATA_NAMES[["GlobalIntTechOMfixed"]])
 
     L2235.GlobalIntTechOMvar_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechOMvar_elecS_cool_EUR %>%
       filter(grepl("offshore", subsector.name)) %>%
-      mutate(sector.name = "electricity",
-             subsector.name = "wind") %>%
+      duplicate_offshore() %>%
+      mutate(
+        sector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "electricity",
+          sector.name
+        ),
+        subsector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "wind",
+          subsector.name
+        )
+      ) %>%
       select(LEVEL2_DATA_NAMES[["GlobalIntTechOMvar"]])
 
     L2235.GlobalIntTechCoef_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechCoef_elecS_cool_EUR %>%
       filter(grepl("offshore", subsector.name)) %>%
-      mutate(sector.name = "electricity",
-             subsector.name = "wind") %>%
+      duplicate_offshore() %>%
+      mutate(
+        sector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "electricity",
+          sector.name
+        ),
+        subsector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "wind",
+          subsector.name
+        )
+      ) %>%
       rename(technology = intermittent.technology) %>%
       select(LEVEL2_DATA_NAMES[["GlobalIntTechCoef"]])
 
     L2235.GlobalIntTechSCurve_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechSCurve_elecS_cool_EUR %>%
       filter(grepl("offshore", subsector.name)) %>%
-      mutate(sector.name = "electricity",
-             subsector.name = "wind") %>%
+      duplicate_offshore() %>%
+      mutate(
+        sector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "electricity",
+          sector.name
+        ),
+        subsector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "wind",
+          subsector.name
+        )
+      ) %>%
       select(LEVEL2_DATA_NAMES[["GlobalIntTechSCurve"]])
 
     L2235.PrimaryRenewKeywordInt_elecS_cool_EUR_nosgmnt <- L2235.PrimaryRenewKeywordInt_elecS_cool_EUR %>%
       filter(grepl("offshore", subsector.name)) %>%
-      mutate(sector.name = "electricity",
-             subsector.name = "wind") %>%
+      duplicate_offshore() %>%
+      mutate(
+        sector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "electricity",
+          sector.name
+        ),
+        subsector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "wind",
+          subsector.name
+        )
+      ) %>%
       rename(technology = intermittent.technology) %>%
       select(LEVEL2_DATA_NAMES[["PrimaryRenewKeywordInt"]])
 
