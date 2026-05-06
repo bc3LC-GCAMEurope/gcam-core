@@ -41,6 +41,7 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
                          "L2233.StubTechShrwt_elec_cool_EUR")
   MODULE_INPUTS <- c("L2235.GlobalTechEff_elecS_cool_EUR",
                      "L2235.GlobalTechShrwt_elecS_cool_EUR",
+                     "L2235.GlobalTechShrwt_elecS_cool_EUR_nosgmnt",
                      "L2235.GlobalTechProfitShutdown_elecS_cool_EUR",
                      "L2235.GlobalTechOMvar_elecS_cool_EUR",
                      "L2235.GlobalTechOMfixed_elecS_cool_EUR",
@@ -211,6 +212,7 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
 
     elec_segments_water_EUR.xml %>%
       add_xml_data(L2235.GlobalTechShrwt_elecS_cool_EUR, "GlobalTechShrwt")  %>%
+      add_xml_data(L2235.GlobalTechShrwt_elecS_cool_EUR_nosgmnt, "GlobalTechShrwt") %>%
       # add_xml_data(L2235.GlobalIntTechShrwt_elecS_cool_EUR, "GlobalIntTechShrwt")
     # %>%
       add_logit_tables_xml_generate_levels(L2235.SubsectorLogit_elecS_cool_EUR,

@@ -63,6 +63,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
                      "L2234.StubTechCost_offshore_wind_elecS_EUR")
   MODULE_OUTPUTS <- c("L2235.GlobalTechEff_elecS_cool_EUR",
                       "L2235.GlobalTechShrwt_elecS_cool_EUR",
+                      "L2235.GlobalTechShrwt_elecS_cool_EUR_nosgmnt",
                       "L2235.GlobalTechProfitShutdown_elecS_cool_EUR",
                       "L2235.GlobalTechOMvar_elecS_cool_EUR",
                       "L2235.GlobalTechOMfixed_elecS_cool_EUR",
@@ -598,12 +599,46 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
 
         bind_rows(df, new_rows)
 
+      } else if ("technology" %in% names(df)) {
+
+        new_rows <- df %>%
+          filter(technology == "wind_offshore_floating") %>%
+          mutate(
+            technology = gsub("_floating", "", technology),
+            subsector.name = gsub("_floating", "", subsector.name)
+          ) %>%
+          {
+            if ("minicam.energy.input" %in% names(.)) {
+              mutate(., minicam.energy.input = "offshore wind resource")
+            } else .
+          }
+
+        bind_rows(df, new_rows)
+
       } else {
         df
       }
     }
 
     # Adjustments to create wind offshore technologies for no segment regions (Turkey and Iceland)
+
+    L2235.GlobalTechShrwt_elecS_cool_EUR_nosgmnt <- L2235.GlobalTechShrwt_elecS_cool_EUR %>%
+      filter(grepl("offshore", subsector.name)) %>%
+      duplicate_offshore() %>%
+      mutate(
+        sector.name = if_else(
+          technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "electricity",
+          sector.name
+        ),
+        subsector.name = if_else(
+          technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "wind",
+          subsector.name
+        )
+      ) %>%
+      select(LEVEL2_DATA_NAMES[["GlobalTechShrwt"]])
+
 
     L2235.GlobalIntTechBackup_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechBackup_elecS_cool_EUR %>%
       filter(grepl("offshore", subsector.name)) %>%
@@ -805,7 +840,17 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
                      "L2241.GlobalTechShrwt_coal_vintage_EUR",
                      "L2241.GlobalTechShrwt_elec_coalret_EUR",
                      "L2233.GlobalTechShrwt_elec_cool") ->
-      L2235.GlobalTechShrwt_elec_cool_EUR
+      L2235.GlobalTechShrwt_elecS_cool_EUR
+
+    L2235.GlobalTechShrwt_elecS_cool_EUR_nosgmnt %>%
+      add_title("Electricity Technology Shareweights") %>%
+      add_units("none") %>%
+      add_comments("Electricity Technology Shareweights") %>%
+      add_precursors("L2234.GlobalTechShrwt_elecS_EUR",
+                     "L2241.GlobalTechShrwt_coal_vintage_EUR",
+                     "L2241.GlobalTechShrwt_elec_coalret_EUR",
+                     "L2233.GlobalTechShrwt_elec_cool") ->
+      L2235.GlobalTechShrwt_elecS_cool_EUR_nosgmnt
 
     L2235.GlobalTechProfitShutdown_elecS_cool_EUR %>%
       add_title("Electricity Load Segments Technology Profit Shutdown Decider") %>%
