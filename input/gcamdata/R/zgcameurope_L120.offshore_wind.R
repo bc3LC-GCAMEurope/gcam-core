@@ -301,6 +301,10 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
       L120.mid.price <- bind_rows(L120.mid.price, missing_combos)
     }
 
+    # Join to curve df:
+    L120.offshore_wind_curve %>%
+      left_join_error_no_match(L120.mid.price, by = c("GCAM_region_ID", "resource")) -> L120.offshore_wind_curve
+
     # Finding the curve exponent:
     # Defining variables to be used later.
     region_list <- unique(L120.offshore_wind_curve$GCAM_region_ID)
@@ -376,7 +380,7 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
       distinct(GCAM_region_ID, resource, subresource, maxSubResource, mid.price, curve.exponent) %>%
       mutate(
         mid.price = if_else(maxSubResource == 0, 10, mid.price),
-        maxSubResource = if_else(maxSubResource == 0, 0.001, maxSubResource)
+        maxSubResource = if_else(maxSubResource == 0, 0.000001, maxSubResource)
       ) ->
       L120.RsrcCurves_EJ_R_offshore_wind_EUR
 
