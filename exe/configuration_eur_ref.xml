@@ -79,8 +79,8 @@
 		<Value name = "land5">../input/gcamdata/xml/land_input_5_IRR_MGMT.xml</Value>
 		<Value name = "protected_land2">../input/gcamdata/xml/protected_land_input_2.xml</Value>
 		<Value name = "protected_land3">../input/gcamdata/xml/protected_land_input_3.xml</Value>
-		<Value name = "demand">../input/gcamdata/xml/ag_an_demand_input.xml</Value>
-		<!--Value name = "demand">../input/gcamdata/xml/ag_an_demand_input_multiple_consumers.xml</Value-->
+		<!--Value name = "demand">../input/gcamdata/xml/ag_an_demand_input.xml</Value-->
+		<Value name = "demand">../input/gcamdata/xml/ag_an_demand_input_multiple_consumers.xml</Value>
 		<Value name = "demand_paper">../input/gcamdata/xml/paper_delete_ag_demand.xml</Value>
 		<!--Value name = "bio_trade">../input/gcamdata/xml/bio_trade.xml</Value-->
 		<Value name = "bio_trade_EUR">../input/gcamdata/xml/bio_trade_EUR.xml</Value>
