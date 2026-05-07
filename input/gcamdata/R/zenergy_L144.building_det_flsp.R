@@ -622,7 +622,7 @@ module_energy_L144.building_det_flsp <- function(command, ...) {
       add_precursors("common/iso_GCAM_regID","common/GCAM_region_names", "energy/A44.pcflsp_default",
                      "energy/A44.HouseholdSize", "energy/CEDB_ResFloorspace_chn", "energy/Other_pcflsp_m2_ctry_Yh",
                      "energy/IEA_PCResFloorspace", "energy/Odyssee_ResFloorspacePerHouse",
-                     "L100.Pop_thous_ctry_Yh", "energy/RECS_ResFloorspace_usa","L102.pcgdp_thous90USD_Scen_R_Y","socioeconomics/income_shares") ->
+                     "L100.Pop_thous_ctry_Yh", "energy/RECS_ResFloorspace_usa","L102.pcgdp_thous90USD_Scen_R_Y") ->
       L144.flsp_bm2_R_res_Yh
 
     L144.flsp_bm2_R_comm_Yh %>%
