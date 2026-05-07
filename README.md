@@ -56,6 +56,15 @@ We provide some scenarios for the community. You can find them in the `exe` fold
 
 For the three policy scenarios, it is assumed that regions outside EU are also assumed to follow NDC and long term targets. To reproduce the policy files that characterize the FF55 and NECP policy packages, remove the `policy` tag in line 12 of the `constants.R` file. The other configuration files present in the `exe` folder are for the GCAM model and are not up-to-date with GCAM-Europe
 
+## R version and package dependencies
+
+To ensure the `gcamdata` system and the policies extension run correctly, please adhere to the following version requirements:
+
+* **R Version**: Use R 4.1. Other versions may trigger unexpected execution errors within the `gcamdata` framework.
+* **tidyr Version**: Use `tidyr 1.1.3` to run the policy chunks. If you are not using `renv`, you may want to install this version of `tidyr` 
+with `devtools::install_version("tidyr", version = "1.1.3")`.
+
+
 ## Useful links
 
 * [GCAM Documentation](http://jgcri.github.io/gcam-doc/)
