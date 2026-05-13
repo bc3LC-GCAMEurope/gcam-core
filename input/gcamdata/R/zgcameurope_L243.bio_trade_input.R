@@ -24,7 +24,12 @@ module_gcameurope_L243.bio_trade_input <- function(command, ...) {
                         "L243.SubsectorShrwtFllt_TradedBio",
                         "L243.StubTechCoef_ImportedBio",
                         "L243.TechCoef_TradedBio",
-                        "L243.TechShrwt_TradedBio")
+                        "L243.TechShrwt_TradedBio",
+                        "L243.SubsectorShrwt_TotBio",
+                        "L243.GlobalTechCoef_TotBio",
+                        "L243.GlobalTechShrwt_TotBio",
+                        "L243.StubTech_TotBio",
+                        "L243.StubTechShrwt_TotBio")
   MODULE_INPUTS <- c(FILE = "common/GCAM_region_names",
                      FILE = "common/GCAM32_to_EU",
                      FILE = "gcam-europe/trade_balances/estat_nrg_ti_bio",
@@ -114,6 +119,180 @@ module_gcameurope_L243.bio_trade_input <- function(command, ...) {
     L243.TechCoef_TradedBio_EUR <- change_region_to_EUR(L243.TechCoef_TradedBio)
     L243.TechShrwt_TradedBio_EUR <- change_region_to_EUR(L243.TechShrwt_TradedBio)
 
+
+    # ADJUST EEA vs NON-EEA -----------------
+
+    # 1-L243.SubsectorLogit_Bio_EUR
+    # Keep non-imported subsectors for EU regions
+    L243.SubsectorLogit_Bio_EUR_nonimp <- L243.SubsectorLogit_Bio_EUR %>%
+      filter(region %in% unique(Europe_Single_Market_Regions$GCAMEU_region),
+             !grepl("imported", subsector))
+
+    # Process imported subsectors for EU regions
+    L243.SubsectorLogit_Bio_EUR_imp_eu <- L243.SubsectorLogit_Bio_EUR %>%
+      filter(region %in% unique(Europe_Single_Market_Regions$GCAMEU_region),
+             grepl("imported", subsector)) %>%
+      repeat_add_columns(tibble(adj = c("_Europe", "_non_Europe"))) %>%
+      mutate(subsector = paste0(subsector, adj)) %>%
+      select(-adj)
+
+    # Keep original imported subsectors for non-EU regions
+    L243.SubsectorLogit_Bio_EUR_nonEU <- L243.SubsectorLogit_Bio_EUR %>%
+      filter(!region %in% unique(Europe_Single_Market_Regions$GCAMEU_region))
+
+    # Combine everything
+    L243.SubsectorLogit_Bio_EUR <- bind_rows(
+      L243.SubsectorLogit_Bio_EUR_nonimp,
+      L243.SubsectorLogit_Bio_EUR_imp_eu,
+      L243.SubsectorLogit_Bio_EUR_nonEU
+    ) %>%
+      filter(!grepl("European_Single_Market", subsector),
+             !grepl("global", subsector))
+
+    # Duplicate traded biomass for EU regions
+    L243.SubsectorLogit_Bio_EUR_esm <- L243.SubsectorLogit_Bio_EUR %>%
+      filter(supplysector == "traded biomass", region == SINGLE_MARKET_NAME) %>%
+      mutate(region = "USA")
+
+    L243.SubsectorLogit_Bio_EUR <- bind_rows(
+      L243.SubsectorLogit_Bio_EUR,
+      L243.SubsectorLogit_Bio_EUR_esm
+    )
+
+    # --------
+    # 2-L243.StubTechCoef_ImportedBio_EUR
+    # Keep non-imported subsectors for EU regions
+
+    # Process imported subsectors for EU regions
+    L243.StubTechCoef_ImportedBio_EUR_imp_eu <- L243.StubTechCoef_ImportedBio_EUR %>%
+      filter(region %in% unique(Europe_Single_Market_Regions$GCAMEU_region)) %>%
+      repeat_add_columns(tibble(adj = c("_Europe", "_non_Europe"))) %>%
+      mutate(subsector = paste0(subsector, adj),
+             stub.technology = paste0(stub.technology, adj)) %>%
+      select(-adj)
+
+    # Keep original imported subsectors for non-EU regions
+    L243.StubTechCoef_ImportedBio_EUR_nonEU <- L243.StubTechCoef_ImportedBio_EUR %>%
+      filter(!region %in% unique(Europe_Single_Market_Regions$GCAMEU_region))
+
+    # Combine everything
+    L243.StubTechCoef_ImportedBio_EUR <- bind_rows(
+      L243.StubTechCoef_ImportedBio_EUR_imp_eu,
+      L243.StubTechCoef_ImportedBio_EUR_nonEU
+    ) %>%
+      mutate(market = if_else(grepl("non_Europe", subsector), "USA", market))
+
+
+    # --------
+    # 3- L243.TechCoef_TradedBio_EUR
+    L243.TechCoef_TradedBio_EUR <- L243.TechCoef_TradedBio_EUR %>%
+      filter(!grepl("global", subsector),
+              !(region == "USA" & market.name == "European_Single_Market"))
+    # Duplicate traded biomass for EU regions
+    L243.TechCoef_TradedBio_EUR_esm <- L243.TechCoef_TradedBio_EUR %>%
+      filter(supplysector == "traded biomass", region == SINGLE_MARKET_NAME) %>%
+      mutate(region = "USA")
+
+    L243.TechCoef_TradedBio_EUR <- bind_rows(
+      L243.TechCoef_TradedBio_EUR,
+      L243.TechCoef_TradedBio_EUR_esm
+    )
+
+
+    # --------
+    # 4- L243.TechShrwt_TradedBio_EUR
+    L243.TechShrwt_TradedBio_EUR <- L243.TechShrwt_TradedBio_EUR %>%
+      filter(!grepl("global", subsector),
+             !(region == "USA" & subsector == "European_Single_Market traded biomass"))
+    # Duplicate traded biomass for EU regions
+    L243.TechShrwt_TradedBio_EUR_esm <- L243.TechShrwt_TradedBio_EUR %>%
+      filter(supplysector == "traded biomass", region == SINGLE_MARKET_NAME) %>%
+      mutate(region = "USA")
+
+    L243.TechShrwt_TradedBio_EUR <- bind_rows(
+      L243.TechShrwt_TradedBio_EUR,
+      L243.TechShrwt_TradedBio_EUR_esm
+    )
+
+
+
+    # --------
+    # 5 Adjust some dfs from global
+    # "L243.GlobalTechCoef_TotBio",
+    # "L243.GlobalTechShrwt_TotBio",
+    # "L243.StubTech_TotBio",
+    # "L243.StubTechShrwt_TotBio"
+    # L243.SubsectorShrwt_TotBio
+
+    L243.GlobalTechCoef_TotBio_adj <- L243.GlobalTechCoef_TotBio %>%
+      filter(grepl("imported", subsector.name)) %>%
+      repeat_add_columns(tibble(adj = c("_Europe", "_non_Europe"))) %>%
+      mutate(subsector.name = paste0(subsector.name, adj),
+             technology = paste0(technology, adj)) %>%
+      select(-adj)
+
+    L243.GlobalTechCoef_TotBio_EUR <- bind_rows(
+      L243.GlobalTechCoef_TotBio,
+      L243.GlobalTechCoef_TotBio_adj
+    )
+
+
+    L243.GlobalTechShrwt_TotBio_adj <- L243.GlobalTechShrwt_TotBio %>%
+      filter(grepl("imported", subsector.name)) %>%
+      repeat_add_columns(tibble(adj = c("_Europe", "_non_Europe"))) %>%
+      mutate(subsector.name = paste0(subsector.name, adj),
+             technology = paste0(technology, adj)) %>%
+      select(-adj)
+
+    L243.GlobalTechShrwt_TotBio_EUR <- bind_rows(
+      L243.GlobalTechShrwt_TotBio,
+      L243.GlobalTechShrwt_TotBio_adj
+    )
+
+
+    L243.StubTech_TotBio_imp_eu <- L243.StubTech_TotBio %>%
+      filter(region %in% Europe_Single_Market_Regions$GCAMEU_region,
+             grepl("imported", subsector)) %>%
+      repeat_add_columns(tibble(adj = c("_Europe", "_non_Europe"))) %>%
+      mutate(subsector = paste0(subsector, adj),
+             stub.technology = paste0(stub.technology, adj)) %>%
+      select(-adj)
+
+    L243.StubTech_TotBio_EUR <- L243.StubTech_TotBio %>%
+      filter(!(region %in% Europe_Single_Market_Regions$GCAMEU_region &
+                 grepl("imported", subsector))) %>%
+      bind_rows(L243.StubTech_TotBio_imp_eu)
+
+
+    L243.StubTechShrwt_TotBio_imp_eu <- L243.StubTechShrwt_TotBio %>%
+      filter(region %in% Europe_Single_Market_Regions$GCAMEU_region,
+             grepl("imported", subsector)) %>%
+      repeat_add_columns(tibble(adj = c("_Europe", "_non_Europe"))) %>%
+      mutate(subsector = paste0(subsector, adj),
+             stub.technology = paste0(stub.technology, adj)) %>%
+      select(-adj)
+
+    L243.StubTechShrwt_TotBio_EUR <- L243.StubTechShrwt_TotBio %>%
+      filter(!(region %in% Europe_Single_Market_Regions$GCAMEU_region &
+                 grepl("imported", subsector))) %>%
+      bind_rows(L243.StubTechShrwt_TotBio_imp_eu)
+
+
+
+    L243.SubsectorShrwt_TotBio_imp_eu <- L243.SubsectorShrwt_TotBio %>%
+      filter(region %in% Europe_Single_Market_Regions$GCAMEU_region,
+             grepl("imported", subsector)) %>%
+      repeat_add_columns(tibble(adj = c("_Europe", "_non_Europe"))) %>%
+      mutate(subsector = paste0(subsector, adj)) %>%
+      select(-adj)
+
+    L243.SubsectorShrwt_TotBio_EUR <- L243.SubsectorShrwt_TotBio %>%
+      filter(!(region %in% Europe_Single_Market_Regions$GCAMEU_region &
+                 grepl("imported", subsector))) %>%
+      bind_rows(L243.SubsectorShrwt_TotBio_imp_eu)
+
+#-----------------------------
+
     # Adjust country mapping-------------
     GCAM32_to_EU_adj <- GCAM32_to_EU %>%
       distinct(country_name, GCAMEU_region) %>%
@@ -126,13 +305,24 @@ module_gcameurope_L243.bio_trade_input <- function(command, ...) {
     L243.SubsectorShrwtFllt_TradedBio_EUR_unadj <- L243.SubsectorShrwtFllt_TradedBio %>%
       select(-share.weight) %>%
       change_region_to_EUR() %>%
-      left_join(L243.SubsectorShrwtFllt_TradedBio %>%  select(-region), by = c("supplysector", "subsector", "year.fillout"))
+      left_join(L243.SubsectorShrwtFllt_TradedBio %>%  select(-region), by = c("supplysector", "subsector", "year.fillout")) %>%
+      filter(complete.cases(.))
+    # Duplicate traded biomass for EU regions
+    L243.SubsectorShrwtFllt_TradedBio_EUR_unadj_esm <- L243.SubsectorShrwtFllt_TradedBio_EUR_unadj %>%
+      filter(supplysector == "traded biomass", region == SINGLE_MARKET_NAME) %>%
+      mutate(region = "USA")
+
+    L243.SubsectorShrwtFllt_TradedBio_EUR_unadj <- bind_rows(
+      L243.SubsectorShrwtFllt_TradedBio_EUR_unadj_esm,
+      L243.SubsectorShrwtFllt_TradedBio_EUR_unadj
+    )
+
 
     # original shareweights are based on cropland area
     # For european exports to global market, sum original european shareweights
-    europe_to_global_shrwt <- L243.SubsectorShrwtFllt_TradedBio_EUR_unadj %>%
-      filter(region == SINGLE_MARKET_NAME) %>%
-      summarise(share.weight = sum(share.weight, na.rm = T)) %>%  pull
+    # europe_to_global_shrwt <- L243.SubsectorShrwtFllt_TradedBio_EUR_unadj %>%
+    #   filter(region == SINGLE_MARKET_NAME) %>%
+    #   summarise(share.weight = sum(share.weight, na.rm = T)) %>%  pull
 
     # for european market, base global and country shareweights on import shares in 2015
     L243.eur_shareweights_calculated <- estat_nrg_ti_bio %>%
@@ -152,8 +342,7 @@ module_gcameurope_L243.bio_trade_input <- function(command, ...) {
     L243.SubsectorShrwtFllt_TradedBio_EUR <- L243.SubsectorShrwtFllt_TradedBio_EUR_unadj %>%
       mutate(region_export = stringr::str_extract(subsector, ".*(?= traded)")) %>%
       left_join(L243.eur_shareweights_calculated, by = "region_export") %>%
-      mutate(share.weight = if_else(is.na(share.weight.y), share.weight.x, share.weight.y),
-             share.weight = if_else(region_export == SINGLE_MARKET_NAME, europe_to_global_shrwt, share.weight)) %>%
+      mutate(share.weight = if_else(region == SINGLE_MARKET_NAME, share.weight.y, share.weight.x)) %>%
       select(names(L243.SubsectorShrwtFllt_TradedBio))
 
     return_data(MODULE_OUTPUTS)

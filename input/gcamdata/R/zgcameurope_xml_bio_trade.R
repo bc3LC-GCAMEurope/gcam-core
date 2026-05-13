@@ -17,12 +17,12 @@ module_gcameurope_bio_trade_xml <- function(command, ...) {
                      "L243.Supplysector_Bio_EUR",
                      "L243.SectorUseTrialMarket_Bio_EUR",
                      "L243.SubsectorLogit_Bio_EUR",
-                     "L243.SubsectorShrwt_TotBio",
+                     "L243.SubsectorShrwt_TotBio_EUR",
                      "L243.SubsectorShrwtFllt_TradedBio_EUR",
-                     "L243.GlobalTechCoef_TotBio",
-                     "L243.GlobalTechShrwt_TotBio",
-                     "L243.StubTech_TotBio",
-                     "L243.StubTechShrwt_TotBio",
+                     "L243.GlobalTechCoef_TotBio_EUR",
+                     "L243.GlobalTechShrwt_TotBio_EUR",
+                     "L243.StubTech_TotBio_EUR",
+                     "L243.StubTechShrwt_TotBio_EUR",
                      "L243.StubTechCoef_ImportedBio_EUR",
                      "L243.StubTechCoef_DomesticBio",
                      "L243.TechCoef_TradedBio_EUR",
@@ -55,14 +55,14 @@ module_gcameurope_bio_trade_xml <- function(command, ...) {
       add_logit_tables_xml(L243.Supplysector_Bio_EUR, "Supplysector") %>%
       add_xml_data(L243.SectorUseTrialMarket_Bio_EUR, "SectorUseTrialMarket") %>%
       add_logit_tables_xml(L243.SubsectorLogit_Bio_EUR, "SubsectorLogit") %>%
-      add_xml_data(L243.SubsectorShrwt_TotBio, "SubsectorShrwt") %>%
+      add_xml_data(L243.SubsectorShrwt_TotBio_EUR, "SubsectorShrwt") %>%
       add_xml_data(L243.SubsectorShrwtFllt_TradedBio_EUR, "SubsectorShrwtFllt") %>%
       add_node_equiv_xml("input") %>%
       add_xml_data(L281.GlobalTechAccountInput_entrade, "GlobalTechAccountInput") %>%
-      add_xml_data(L243.GlobalTechCoef_TotBio, "GlobalTechCoef") %>%
-      add_xml_data(L243.GlobalTechShrwt_TotBio, "GlobalTechShrwt") %>%
-      add_xml_data(L243.StubTech_TotBio, "StubTech") %>%
-      add_xml_data(L243.StubTechShrwt_TotBio, "StubTechShrwt") %>%
+      add_xml_data(L243.GlobalTechCoef_TotBio_EUR, "GlobalTechCoef") %>%
+      add_xml_data(L243.GlobalTechShrwt_TotBio_EUR, "GlobalTechShrwt") %>%
+      add_xml_data(L243.StubTech_TotBio_EUR, "StubTech") %>%
+      add_xml_data(L243.StubTechShrwt_TotBio_EUR, "StubTechShrwt") %>%
       add_xml_data(L243.StubTechCoef_ImportedBio_EUR, "StubTechCoef") %>%
       add_xml_data(L243.StubTechCoef_DomesticBio, "StubTechCoef") %>%
       add_xml_data(L243.TechCoef_TradedBio_EUR, "TechCoef") %>%
