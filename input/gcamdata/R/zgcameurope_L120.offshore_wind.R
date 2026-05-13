@@ -293,6 +293,7 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
     missing_combos <- full_grid %>%
       dplyr::anti_join(L120.mid.price,
                        by = c("GCAM_region_ID", "resource"))
+
     # Add them with zero values
     if(nrow(missing_combos) > 0) {
       missing_combos <- missing_combos %>%
@@ -365,9 +366,7 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
       L120.offshore_wind_curve <- bind_rows(L120.offshore_wind_curve, missing_combos_2)
     }
 
-    # Now we can join the mid price and curve exponents:
-    L120.offshore_wind_curve %>%
-      left_join_error_no_match(L120.mid.price, by = c("GCAM_region_ID", "resource")) -> L120.offshore_wind_curve
+    # Now we can join the curve exponents:
 
     L120.offshore_wind_curve %>%
       left_join_error_no_match(L120.curve.exponent, by = c("resource","GCAM_region_ID")) -> L120.offshore_wind_curve

@@ -158,7 +158,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       return(df)
     }
 
-    # Apply the function to all dataframes in the list
+    # Apply the function to dataframe
     L2233.GlobalIntTechEff_elec_cool <- expand_offshore_wind(L2233.GlobalIntTechEff_elec_cool) %>%
       mutate(minicam.energy.input = if_else(grepl("floating", technology), paste0("floating ", minicam.energy.input), minicam.energy.input),
              minicam.energy.input = if_else(grepl("fixed", technology), paste0("fixed ", minicam.energy.input), minicam.energy.input))
@@ -273,6 +273,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       rename(intermittent.technology = technology) %>%
       bind_rows(L2235.GlobalIntTechCapital_elecS_cool_EUR)
 
+
     # efficiency
     L2235.GlobalIntTechEff_elecS_cool_EUR <- add_segments_to_cooling(L2233.GlobalIntTechEff_elec_cool) %>%
       rename(intermittent.technology = technology) %>%
@@ -302,17 +303,26 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       bind_rows(add_global_cooling_techs(L2234.StubTechEff_battery_elecS_EUR))
 
     # Get shares of each cooling tech within subsector
-    L1233.out_EJ_R_elecS_F_tech_cool_EUR_share <- L1233.out_EJ_R_elecS_F_tech_cool_EUR %>%
+    # We need to duplicate rows for fixed offshore wind, different for Switzerland
+    L1233.out_EJ_R_elecS_F_tech_cool_EUR_share <- bind_rows(L1233.out_EJ_R_elecS_F_tech_cool_EUR,
+      L1233.out_EJ_R_elecS_F_tech_cool_EUR %>%
+        filter(year %in% MODEL_BASE_YEARS) %>%
+        filter(technology == "wind") %>%
+        mutate(technology = if_else(GCAM_region_ID == 63, "wind_offshore", "wind_offshore_fixed"),
+               subsector = if_else(GCAM_region_ID == 63, gsub("^wind_", "wind_offshore_", subsector), gsub("^wind_", "wind_offshore_fixed_", subsector))))
+
+    L1233.out_EJ_R_elecS_F_tech_cool_EUR_share <- L1233.out_EJ_R_elecS_F_tech_cool_EUR_share %>%
       filter(year %in% MODEL_BASE_YEARS) %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       rename(subsector0 = fuel) %>%
       mutate(subsector0 = if_else(grepl("solar", subsector0), "solar", subsector0)) %>%
       group_by(region, year, supplysector, subsector0, subsector) %>%
       mutate(share = value / sum(value)) %>%
-      ungroup
+      ungroup()
 
     # Apply shares to renewable production
     L2235.StubTechProd_elecS_cool_EUR <- add_global_cooling_techs(L2234.StubTechProd_elecS_EUR) %>%
+      mutate(stub.technology = if_else(region == "Switzerland" & is.na(stub.technology), "wind_offshore", stub.technology)) %>%
       left_join(L1233.out_EJ_R_elecS_F_tech_cool_EUR_share,
                 by = c("region", "supplysector", "subsector", "year", "subsector0", "stub.technology" = "technology")) %>%
       filter(!(!region %in% seawater_countries & grepl("seawater", stub.technology) & is.na(share)))

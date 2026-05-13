@@ -41,6 +41,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
                      FILE = "gcam-europe/A23.elecS_naming",
                      FILE = "gcam-europe/elecS_time_fraction",
                      FILE = "gcam-europe/elecS_globaltech_capital_battery_ATB",
+                     FILE = "gcam-europe/eurostat_offshore_caloutputs_EUR",
                      "L1239.R_elec_supply",
                      "L223.StubTechEff_elec_EUR",
                      "L223.StubTechCalInput_elec_EUR",
@@ -303,7 +304,41 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
              subs.share.weight = 0,
              share.weight = 0)
 
-    L2234.StubTechProd_NA <- L223.StubTechProd_elec_EUR %>%
+    # Need to create new rows for wind offshore fixed and floating. We load a df obtained from eurostat with the percentage of wind that is offshore fixed out of the total.
+    # segments regions: floating and fixed (EUR27), considering Switzerland (only wind_offshore)
+    L223.StubTechProd_elec_EUR_cal <- bind_rows(
+      L223.StubTechProd_elec_EUR,
+      L223.StubTechProd_elec_EUR %>%
+        filter(stub.technology == "wind") %>%
+        mutate(
+          stub.technology = if_else(
+            region == "Switzerland",
+            "wind_offshore",
+            "wind_offshore_fixed")))
+
+    # Transform eurostat cal outputs percent df to long format
+      eurostat_offshore_caloutputs <- eurostat_offshore_caloutputs_EUR %>%
+        pivot_longer(
+          cols = -country_name,
+          names_to = "year",
+          values_to = "percentualCalOutput"
+        ) %>%
+        mutate(year = as.integer(year))
+
+    # Join with df
+      L223.StubTechProd_elec_EUR_cal <- L223.StubTechProd_elec_EUR_cal %>%
+        left_join_error_no_match(eurostat_offshore_caloutputs, by = c("region" = "country_name", "year"))
+
+    # Multiply and keep only relevant columns
+      L223.StubTechProd_elec_EUR_cal <- L223.StubTechProd_elec_EUR_cal %>%
+        mutate(
+          calOutputValue = case_when(stub.technology == "wind" ~ calOutputValue * (1 - percentualCalOutput / 100),
+                                    stub.technology %in% c("wind_offshore_fixed", "wind_offshore") ~ calOutputValue * (percentualCalOutput / 100),
+                                    TRUE ~ calOutputValue)) %>%
+        select(-percentualCalOutput)
+
+    # Now format result
+    L2234.StubTechProd_NA <- L223.StubTechProd_elec_EUR_cal %>%
       bind_rows(elect_td_bld_StubTech) %>%
       expand_stubtech %>%
       # using left_join because there are some zeros in L223.StubTechProd_elec_EUR but not in L1239.R_elec_supply
@@ -319,6 +354,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
                                       round(calOutputValue * fraction, 9),
                                       round(calOutputValue * fraction, energy.DIGITS_CALPRODUCTION))) %>%
       mutate(share.weight = if_else(calOutputValue > 0, 1, 0))
+
 
     # 4b. L2234.StubTechCalInput_elecS_EUR ----------------------------
     L2234.StubTechCalInput_NA <- L223.StubTechCalInput_elec_EUR %>%
