@@ -20,6 +20,8 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
                      FILE = "gcam-europe/A23.elecS_naming",
                      FILE = "common/GCAM_region_names",
                      FILE = "gcam-europe/mappings/grid_regions",
+                     FILE = "gcam-europe/NREL_capital_offshore_EUR",
+                     FILE = "gcam-europe/NREL_OMfixed_offshore_EUR",
                      "L1233.out_EJ_R_elecS_F_tech_cool_EUR",
                      "L2233.GlobalTechEff_elec_cool",
                      "L2233.GlobalTechShrwt_elec_cool",
@@ -273,6 +275,36 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       rename(intermittent.technology = technology) %>%
       bind_rows(L2235.GlobalIntTechCapital_elecS_cool_EUR)
 
+    # Update capital costs for offshore wind technologies with new NREL 2022 data. Paste data from file containing data from NREL_ATB_2022_capital extrapolated to 2100
+    # first pivot and convert 2020 dollars do 1975:
+    NREL_capital_offshore_EUR <- NREL_capital_offshore_EUR %>%
+      pivot_longer(
+        cols = -intermittent.technology,
+        names_to = "year",
+        values_to = "capital.overnight.new") %>%
+      mutate(year = as.integer(year)) %>%
+      mutate(capital.overnight.new = capital.overnight.new * gdp_deflator(1975, 2020))
+
+    # paste in the df
+    L2235.GlobalIntTechCapital_elecS_cool_EUR <- L2235.GlobalIntTechCapital_elecS_cool_EUR %>%
+      left_join(NREL_capital_offshore_EUR, by = c("intermittent.technology", "year")) %>%
+      mutate(capital.overnight = dplyr::coalesce(capital.overnight.new, capital.overnight)) %>%
+      select(-capital.overnight.new)
+
+    # Update OMfixed costs for offshore wind technologies with new NREL 2022 data. Similar procedure:
+    NREL_OMfixed_offshore_EUR <- NREL_OMfixed_offshore_EUR %>%
+      pivot_longer(
+        cols = -intermittent.technology,
+        names_to = "year",
+        values_to = "OM.fixed.new") %>%
+      mutate(year = as.integer(year)) %>%
+      mutate(OM.fixed.new = OM.fixed.new * gdp_deflator(1975, 2020))
+
+    # paste in the df
+    L2235.GlobalIntTechOMfixed_elecS_cool_EUR <- L2235.GlobalIntTechOMfixed_elecS_cool_EUR %>%
+      left_join(NREL_OMfixed_offshore_EUR, by = c("intermittent.technology", "year")) %>%
+      mutate(OM.fixed = dplyr::coalesce(OM.fixed.new,OM.fixed)) %>%
+      select(-OM.fixed.new)
 
     # efficiency
     L2235.GlobalIntTechEff_elecS_cool_EUR <- add_segments_to_cooling(L2233.GlobalIntTechEff_elec_cool) %>%
