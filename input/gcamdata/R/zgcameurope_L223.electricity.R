@@ -47,6 +47,7 @@ module_gcameurope_L223.electricity <- function(command, ...) {
                      "L223.StubTechCapFactor_elec",
                      "L223.StubTechCost_offshore_wind",
                      "L223.StubTech_elec",
+                     "L120.RegCapFactor_offshore_wind_EUR",
                      OUTPUTS_TO_COPY_FILTER)
 
   MODULE_OUTPUTS <- c("L223.StubTechCalInput_elec_EUR",
@@ -252,7 +253,19 @@ module_gcameurope_L223.electricity <- function(command, ...) {
     L223.StubTechCost_offshore_wind_EUR <- expand_offshore_wind(L223.StubTechCost_offshore_wind) %>% filter_regions_europe() %>% bind_rows(L223.StubTechCost_offshore_wind %>% filter(region == "Switzerland"))
     L223.StubTech_elec_EUR <- expand_offshore_wind(L223.StubTech_elec) %>% filter_regions_europe() %>% bind_rows(L223.StubTech_elec %>% filter(region == "Switzerland"))
 
-
+    # Update the capacity factors for wind offshore floating and fixed using the output from L120.
+    # First prepare the df:
+    L120.RegCapFactor_offshore_wind_EUR <- L120.RegCapFactor_offshore_wind_EUR %>%
+      left_join_error_no_match(GCAM_region_names, by= "GCAM_region_ID") %>%
+       mutate(resource = case_when(
+           resource == "fixed offshore wind resource" ~ "wind_offshore_fixed",
+           resource == "floating offshore wind resource" ~ "wind_offshore_floating",
+           TRUE ~ resource))
+    # Then join and replace values.
+    L223.StubTechCapFactor_elec_EUR <- L223.StubTechCapFactor_elec_EUR %>%
+      left_join(L120.RegCapFactor_offshore_wind_EUR, by = c("region", "stub.technology" = "resource")) %>%
+      mutate(capacity.factor = dplyr::coalesce(CFmax, capacity.factor)) %>%
+      select(-GCAM_region_ID, -CFmax)
 
     # Produce outputs ===================================================
     L223.StubTechCalInput_elec_EUR %>%
