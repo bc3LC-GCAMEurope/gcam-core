@@ -11,6 +11,7 @@
                 <constraint year="2045">146.6726645</constraint>
                 <constraint year="2050">62.75141985</constraint>
 <fixedTax fillout="1" year="2055">600</fixedTax>
+<fixedTax fillout="1" year="2060">650</fixedTax>
             </ghgpolicy>
             <linked-ghg-policy name="CO2_FUG">
                 <price-adjust fillout="1" year="2025">1</price-adjust>

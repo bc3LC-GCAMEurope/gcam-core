@@ -5,7 +5,7 @@
          <policy-portfolio-standard name="palmoil-constraint">
             <market>EU</market>
             <policyType>tax</policyType>
-            <constraint year="2020">35</constraint>
+           
             <constraint year="2025">30</constraint>
             <constraint year="2030">25</constraint>
             <constraint year="2035">25</constraint>
@@ -26,10 +26,8 @@
          <supplysector name="total oilpalm">
             <subsector name="imported oilpalm">
                <stub-technology name="imported oilpalm">
-                  <period year="2015">
-                     <input-tax name="palmoil-constraint" />
-                  </period>
-                  <period year="2020">
+
+                  <period year="2021">
                      <input-tax name="palmoil-constraint" />
                   </period>
                   <period year="2025">

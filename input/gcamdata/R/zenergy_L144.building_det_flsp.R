@@ -32,7 +32,7 @@ module_energy_L144.building_det_flsp <- function(command, ...) {
              FILE = "energy/Other_pcflsp_m2_ctry_Yh",
              FILE = "energy/IEA_PCResFloorspace",
              FILE = "energy/Odyssee_ResFloorspacePerHouse",
-             FILE = "socioeconomics/income_shares",
+             "L106.income_distributions",
              "L100.Pop_thous_ctry_Yh",
              "L102.gdp_mil90usd_Scen_R_Y",
              "L102.pcgdp_thous90USD_Scen_R_Y",
@@ -64,8 +64,8 @@ module_energy_L144.building_det_flsp <- function(command, ...) {
     L102.pcgdp_thous90USD_Scen_R_Y <- get_data(all_data, "L102.pcgdp_thous90USD_Scen_R_Y")
     L221.LN0_Land <- get_data(all_data, "L221.LN0_Land", strip_attributes = TRUE)
     L221.LN1_UnmgdAllocation <- get_data(all_data, "L221.LN1_UnmgdAllocation", strip_attributes = TRUE)
-    income_shares <- get_data(all_data, "socioeconomics/income_shares")
-    n_groups <- length(unique(income_shares$category))
+    income_shares <- get_data(all_data, "L106.income_distributions")
+    n_groups <- length(unique(income_shares$gcam.consumer))
 
     # ===================================================
 
@@ -78,42 +78,34 @@ module_energy_L144.building_det_flsp <- function(command, ...) {
       nls <- coef <- gdp_mil <- area_thouskm2 <- unadjust.satiation <- land.density.param <- tot.dens <-
       b.param <- income.param <- pc_gdp_thous <- flsp_pc_est <- flsp_est <- NULL
 
-    income_shares %>%
-      filter(sce == socioeconomics.BASE_INCSHARE_BASE) %>%
-      select(GCAM_region_ID, year, category, shares, gini, gdp_pcap_decile) ->
-      income_shares_hist
 
-    max_income_hist_year <- max(income_shares_hist$year)
-
-    fill_years <- HISTORICAL_YEARS
-
-    if(max_income_hist_year < MODEL_FINAL_BASE_YEAR) {
-      warning(paste0("Historical data in socioeconomics/income_shares only goes up to ",
-                     max_income_hist_year, " interpolating to ", MODEL_FINAL_BASE_YEAR,
-                     " using ", socioeconomics.BASE_INCSHARE_SCENARIO))
-      income_shares %>%
-        filter(sce == socioeconomics.BASE_INCSHARE_SCENARIO & model == socioeconomics.BASE_INCSHARE_MODEL & year == MODEL_FUTURE_YEARS[1]) %>%
-        select(GCAM_region_ID, year, category, shares, gini, gdp_pcap_decile) %>%
-        bind_rows(income_shares_hist) ->
-        income_shares_hist
-
-      fill_years <- c(HISTORICAL_YEARS, MODEL_FUTURE_YEARS[1])
-    }
-
-    income_shares_hist %>%
-      # doing a piece wise complete but just on years by region and category
-      tidyr::expand(tidyr::nesting(GCAM_region_ID, category), year = fill_years) %>%
-      # expecting shares, gini, and gdp_pcap_decile to generate NAs which we subsequently
-      # fill with approx_fun
-      left_join_error_no_match(income_shares_hist, by=c("GCAM_region_ID", "category", "year"),
-                               ignore_columns = c("shares", "gini", "gdp_pcap_decile")) %>%
-      group_by(GCAM_region_ID, category) %>%
-      mutate(shares = approx_fun(year, shares),
-             gini = approx_fun(year, gini),
-             gdp_pcap_decile = approx_fun(year, gdp_pcap_decile)) %>%
-      ungroup() %>%
-      filter(year %in% HISTORICAL_YEARS) ->
-      income_shares_hist
+    # if(max_income_hist_year < MODEL_FINAL_BASE_YEAR) {
+    #   warning(paste0("Historical data in L106.income_distributions only goes up to ",
+    #                  max_income_hist_year, " interpolating to ", MODEL_FINAL_BASE_YEAR,
+    #                  " using ", socioeconomics.BASE_INCSHARE_SCENARIO))
+    #   income_shares %>%
+    #     filter(sce == socioeconomics.BASE_INCSHARE_SCENARIO & model == socioeconomics.BASE_INCSHARE_MODEL & year == MODEL_FUTURE_YEARS[1]) %>%
+    #     select(GCAM_region_ID, year, category, shares, gini, gdp_pcap_decile) %>%
+    #     bind_rows(income_shares_hist) ->
+    #     income_shares_hist
+    #
+    #   fill_years <- c(HISTORICAL_YEARS, MODEL_FUTURE_YEARS[1])
+    # }
+#
+#     income_shares_hist %>%
+#       # doing a piece wise complete but just on years by region and category
+#       tidyr::expand(tidyr::nesting(GCAM_region_ID, category), year = fill_years) %>%
+#       # expecting shares, gini, and gdp_pcap_decile to generate NAs which we subsequently
+#       # fill with approx_fun
+#       left_join_error_no_match(income_shares_hist, by=c("GCAM_region_ID", "category", "year"),
+#                                ignore_columns = c("shares", "gini", "gdp_pcap_decile")) %>%
+#       group_by(GCAM_region_ID, category) %>%
+#       mutate(shares = approx_fun(year, shares),
+#              gini = approx_fun(year, gini),
+#              gdp_pcap_decile = approx_fun(year, gdp_pcap_decile)) %>%
+#       ungroup() %>%
+#       filter(year %in% HISTORICAL_YEARS) ->
+#       income_shares_hist
 
     # FLOORSPACE CALCULATION - RESIDENTIAL
 
@@ -465,9 +457,9 @@ module_energy_L144.building_det_flsp <- function(command, ...) {
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       left_join_error_no_match(L144.flsp_param, by = "region") %>%
       #add multiple consumers
-      repeat_add_columns(tibble(category= unique(income_shares_hist$category))) %>%
-      left_join_error_no_match(income_shares_hist, by = c("GCAM_region_ID", "year","category")) %>%
-      mutate(gdp_gr = gdp * shares,
+      repeat_add_columns(tibble(gcam.consumer = unique(income_shares$gcam.consumer))) %>%
+      left_join_error_no_match(income_shares, by = c("region", "year","gcam.consumer")) %>%
+      mutate(gdp_gr = gdp * subregional.income.share,
              pop_gr = pop/n_groups,
              pc_gdp_thous_gr = (gdp_gr/pop_gr)/1E3) %>%
       mutate(flsp_pc_est=(`unadjust.satiation` +(-`land.density.param`*log(tot_dens)))*exp(-`b.param`
@@ -630,7 +622,7 @@ module_energy_L144.building_det_flsp <- function(command, ...) {
       add_precursors("common/iso_GCAM_regID","common/GCAM_region_names", "energy/A44.pcflsp_default",
                      "energy/A44.HouseholdSize", "energy/CEDB_ResFloorspace_chn", "energy/Other_pcflsp_m2_ctry_Yh",
                      "energy/IEA_PCResFloorspace", "energy/Odyssee_ResFloorspacePerHouse",
-                     "L100.Pop_thous_ctry_Yh", "energy/RECS_ResFloorspace_usa","L102.pcgdp_thous90USD_Scen_R_Y","socioeconomics/income_shares") ->
+                     "L100.Pop_thous_ctry_Yh", "energy/RECS_ResFloorspace_usa","L102.pcgdp_thous90USD_Scen_R_Y") ->
       L144.flsp_bm2_R_res_Yh
 
     L144.flsp_bm2_R_comm_Yh %>%

@@ -154,7 +154,9 @@ module_gcameurope_L243.bio_trade_input <- function(command, ...) {
       left_join(L243.eur_shareweights_calculated, by = "region_export") %>%
       mutate(share.weight = if_else(is.na(share.weight.y), share.weight.x, share.weight.y),
              share.weight = if_else(region_export == SINGLE_MARKET_NAME, europe_to_global_shrwt, share.weight)) %>%
-      select(names(L243.SubsectorShrwtFllt_TradedBio))
+      select(names(L243.SubsectorShrwtFllt_TradedBio)) %>%
+      # SW 0 in biomass trade to eliminate the trade-loop
+      mutate(share.weight = if_else(region == "USA" & subsector == "European_Single_Market traded biomass", 0, share.weight))
 
     return_data(MODULE_OUTPUTS)
   } else {

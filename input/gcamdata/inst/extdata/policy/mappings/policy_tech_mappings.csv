@@ -856,3 +856,6 @@ ELEC_RES_NOM,peak generation,biomass (IGCC CCS)_peak,biomass (IGCC CCS) (seawate
 ELEC_RES_NOM,peak generation,biomass (IGCC CCS)_peak,biomass (IGCC CCS) (recirculating)
 ELEC_RES_NOM,peak generation,biomass (IGCC CCS)_peak,biomass (IGCC CCS) (dry cooling)
 COALDUMMY,delivered coal,delivered coal,delivered coal
+TRADEOILEEA,traded oil,European_Single_Market traded oil,European_Single_Market traded oil
+TRADECOALEEA,traded coal,European_Single_Market traded coal,European_Single_Market traded coal
+TRADELNGEEA,traded LNG,European_Single_Market traded LNG,European_Single_Market traded LNG

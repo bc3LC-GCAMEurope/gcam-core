@@ -8,7 +8,7 @@
 xml,market,ghgpolicy,link.type,mapping.name,year.fillout,GDPIntensity_BaseYear,adjust.year,2025,2030,2035,2040,2045,2050,2055,2060,2065,2070,2075,2080,2085,2090,2095,2100
 policy_ccapbuild_can.xml,Canada,CO2_building,,BUILD_SECTORS_NOCOOL,2030,,2025,19.9403927,19.9403927,,,,,,,,,,,,,,
 policy_ccapind_chn.xml,China,CO2_industry,,CO2_CHINA_INDUSTRY,,2021,2025,-28,-28,-28,-28,-28,-28,-28,-28,-28,-28,-28,-28,-28,-28,-28,-28
-policy_ccap_eu.xml,EU,CO2_ETS,,ETS,2030,,2025,361.4461505,225.1631978,,,,,,,,,,,,,,
+policy_ccap_eu.xml,EU,CO2_ETS,,ETS,2030,,2025,295.7070042,218.1861022,,,,,,,,,,,,,,
 policy_ccap_eu_ets2dummy.xml,EU,CO2_ETS2,,ETS2,2030,,2025,,0,,,,,,,,,,,,,,
 policy_fgas_eu.xml,EU,FGAS,FGAS,,2050,,2025,48.5,27.1,13.4,6.6,3.3,1.7,,,,,,,,,,
 policy_ccap_efta.xml,Switzerland,CO2_ETS,,ETS,2030,,2025,45,36.5,,,,,,,,,,,,,,

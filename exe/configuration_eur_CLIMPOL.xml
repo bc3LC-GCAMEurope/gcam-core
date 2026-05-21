@@ -79,8 +79,8 @@
 		<Value name = "land5">../input/gcamdata/xml/land_input_5_IRR_MGMT.xml</Value>
 		<Value name = "protected_land2">../input/gcamdata/xml/protected_land_input_2.xml</Value>
 		<Value name = "protected_land3">../input/gcamdata/xml/protected_land_input_3.xml</Value>
-		<!--Value name = "demand">../input/gcamdata/xml/ag_an_demand_input.xml</Value-->
-		<Value name = "demand">../input/gcamdata/xml/ag_an_demand_input_multiple_consumers.xml</Value>
+		<Value name = "demand">../input/gcamdata/xml/ag_an_demand_input.xml</Value>
+		<!--Value name = "demand">../input/gcamdata/xml/ag_an_demand_input_multiple_consumers.xml</Value-->
 		<Value name = "demand_paper">../input/gcamdata/xml/paper_delete_ag_demand.xml</Value>
 		<!--Value name = "bio_trade">../input/gcamdata/xml/bio_trade.xml</Value-->
 		<Value name = "bio_trade_EUR">../input/gcamdata/xml/bio_trade_EUR.xml</Value>
@@ -137,7 +137,7 @@
 		<Value name = "nonco2_proc">../input/gcamdata/xml/ind_urb_processing_sectors_MAC_EUR.xml</Value> 
 
 		<Value name = "nonco2_elecS">../input/gcamdata/xml/elecS_ghg_emissions_water_EUR.xml</Value> 
-		<Value name = "macro">../input/gcamdata/xml/socioeconomics_macro.xml</Value>
+		<!--Value name = "macro">../input/gcamdata/xml/socioeconomics_macro.xml</Value-->
 		
 		<Value name = "bio_feedstock_limit">../input/gcamdata/xml/liquids_limits.xml</Value>
 		<Value name = "bio_elec_w_feed_limit">../input/gcamdata/xml/water_elec_liquids_limits.xml</Value>
@@ -157,7 +157,7 @@
 
 	</ScenarioComponents>
 	<Strings>
-		<Value name="scenarioName">Ref_8p7_CLIMPOL_test</Value>
+		<Value name="scenarioName">ClimPol</Value>
 		<Value name="debug-region">USA</Value>
 		<Value name="AbatedGasForCostCurves">CO2</Value>
 	</Strings>
