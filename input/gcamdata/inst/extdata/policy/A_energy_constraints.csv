@@ -1,9 +1,9 @@
-# File: A_energy_constraints.csv,,,,,,,,,,,,,,,,,,,,,
-# Title: Policy floors/ceilings for tax/subsidy policies,,,,,,,,,,,,,,,,,,,,,
-# Comments: If using GDP intensity base year  in GDPIntensity_BaseYear column (must be historical year); then percent change in year columns,,,,,,,,,,,,,,,,,,,,,
-# Units: EJ (fe-constraint),,,,,,,,,,,,,,,,,,,,,
-# Column types: ccccicnnnnnnnnnnnnnnnn,,,,,,,,,,,,,,,,,,,,,
-# ----------,,,,,,,,,,,,,,,,,,,,,
+# File: A_energy_constraints.csv
+# Title: Policy floors/ceilings for tax/subsidy policies
+# Comments: If using GDP intensity base year  in GDPIntensity_BaseYear column (must be historical year); then percent change in year columns
+# Units: EJ (fe-constraint)
+# Column types: ccccicnnnnnnnnnnnnnnnn
+# ----------
 xml,market,policy.portfolio.standard,policyType,GDPIntensity_BaseYear,tech_mapping,2025,2030,2035,2040,2045,2050,2055,2060,2065,2070,2075,2080,2085,2090,2095,2100
 policy_tpes_aus,Australia_NZ,energy-constraint,tax,2021,PRIMARY_ENERGY,,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6,-28.6
 policy_greenH2_chn.xml,China,green_H2,subsidy,,GREEN_H2,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315,0.0180315

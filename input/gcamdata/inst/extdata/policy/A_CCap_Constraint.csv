@@ -1,10 +1,10 @@
-# File: A_CCap_Constraint.csv,,,,,,,,,,,,,,,,,,,,,,,
-# Title: Carbon caps for specific industries,,,,,,,,,,,,,,,,,,,,,,,
-# Units: MTC,,,,,,,,,,,,,,,,,,,,,,,
-# Comments: For linked regions (share same market/policy/constraint) only include the constraint for one region,,,,,,,,,,,,,,,,,,,,,,,
-#  If using GDP intensity base year  in GDPIntensity_BaseYear column (must be historical year); then percent change in year columns,,,,,,,,,,,,,,,,,,,,,,,
-# Column types: ccccciiinnnnnnnnnnnnnnnn,,,,,,,,,,,,,,,,,,,,,,,
-# ----------,,,,,,,,,,,,,,,,,,,,,,,
+# File: A_CCap_Constraint.csv
+# Title: Carbon caps for specific industries
+# Units: MTC
+# Comments: For linked regions (share same market/policy/constraint) only include the constraint for one region
+#  If using GDP intensity base year  in GDPIntensity_BaseYear column (must be historical year); then percent change in year columns
+# Column types: ccccciiinnnnnnnnnnnnnnnn
+# ----------
 xml,market,ghgpolicy,link.type,mapping.name,year.fillout,GDPIntensity_BaseYear,adjust.year,2025,2030,2035,2040,2045,2050,2055,2060,2065,2070,2075,2080,2085,2090,2095,2100
 policy_ccapbuild_can.xml,Canada,CO2_building,,BUILD_SECTORS_NOCOOL,2030,,2025,19.9403927,19.9403927,,,,,,,,,,,,,,
 policy_ccapind_chn.xml,China,CO2_industry,,CO2_CHINA_INDUSTRY,,2021,2025,-28,-28,-28,-28,-28,-28,-28,-28,-28,-28,-28,-28,-28,-28,-28,-28
