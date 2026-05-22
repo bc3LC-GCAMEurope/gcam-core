@@ -153,7 +153,7 @@ module_gcameurope_L232.water_demand_manufacturing <- function(command, ...) {
                   mutate(energy_coef_comp = energy_coef) %>%
                   mutate(energy_coef_ratio = energy_coef / energy_coef_comp)) %>%
       # filter year
-      filter(year == max(MODEL_BASE_YEARS)) ->
+      filter(year == MODEL_FINAL_BASE_YEAR) ->
       food_energy_coef_ratio
 
     # Scale the water use coefficients
@@ -244,7 +244,7 @@ module_gcameurope_L232.water_demand_manufacturing <- function(command, ...) {
       # Fill out the values in the final base year to all future years
       group_by(region, supplysector, subsector, technology, minicam.energy.input, market.name) %>%
       complete(year = MODEL_YEARS) %>%
-      mutate(coefficient = if_else(year %in% MODEL_FUTURE_YEARS, coefficient[year == max(MODEL_BASE_YEARS)], coefficient)) %>%
+      mutate(coefficient = if_else(year %in% MODEL_FUTURE_YEARS, coefficient[year == MODEL_FINAL_BASE_YEAR], coefficient)) %>%
       ungroup() %>%
 
       # add attributes for output
@@ -281,7 +281,7 @@ module_gcameurope_L232.water_demand_manufacturing <- function(command, ...) {
       # Fill out the values in the final base year to all future years
       group_by(region, supplysector, subsector, technology, minicam.energy.input, market.name) %>%
       complete(year = MODEL_YEARS) %>%
-      mutate(coefficient = if_else(year %in% MODEL_FUTURE_YEARS, coefficient[year == max(MODEL_BASE_YEARS)], coefficient)) %>%
+      mutate(coefficient = if_else(year %in% MODEL_FUTURE_YEARS, coefficient[year == MODEL_FINAL_BASE_YEAR], coefficient)) %>%
       ungroup() %>%
       mutate(coefficient = replace_na(coefficient, 0)) ->
       L2327.TechCoef_paper_EUR
@@ -315,7 +315,7 @@ module_gcameurope_L232.water_demand_manufacturing <- function(command, ...) {
       # Fill out the values in the final base year to all future years
       group_by(region, supplysector, subsector, technology, minicam.energy.input, market.name) %>%
       complete(year = MODEL_YEARS) %>%
-      mutate(coefficient = if_else(year %in% MODEL_FUTURE_YEARS, coefficient[year == max(MODEL_BASE_YEARS)], coefficient)) %>%
+      mutate(coefficient = if_else(year %in% MODEL_FUTURE_YEARS, coefficient[year == MODEL_FINAL_BASE_YEAR], coefficient)) %>%
       ungroup() ->
       L232.TechCoef_food_EUR
 

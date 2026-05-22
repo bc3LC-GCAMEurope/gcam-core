@@ -31,6 +31,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
                      "L2233.GlobalIntTechEff_elec_cool",
                      "L2233.GlobalIntTechCoef_elec_cool",
                      "L2234.GlobalIntTechBackup_elecS_EUR",
+                     "L2234.GlobalIntTechValueFactor_elecS_EUR",
                      "L2234.GlobalIntTechCapital_elecS_EUR",
                      "L2234.GlobalIntTechEff_elecS_EUR",
                      "L2234.GlobalIntTechLifetime_elecS_EUR",
@@ -73,6 +74,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
                       "L2235.GlobalTechLifetime_elecS_cool_EUR",
                       "L2235.AvgFossilEffKeyword_elecS_cool_EUR",
                       "L2235.GlobalIntTechBackup_elecS_cool_EUR",
+                      "L2235.GlobalIntTechValueFactor_elecS_cool_EUR",
                       "L2235.GlobalIntTechCapital_elecS_cool_EUR",
                       "L2235.GlobalIntTechEff_elecS_cool_EUR",
                       "L2235.GlobalIntTechLifetime_elecS_cool_EUR",
@@ -370,7 +372,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
     # share weights will be 0 from 2020-2100 to mirror GCAM-core.
     L2235.StubTechProd_elecS_cool_SW_EUR <- L2235.StubTechProd_elecS_cool_EUR %>%
       bind_rows(L2235.StubTechCalInput_elecS_cool_EUR) %>%
-      filter(year == max(MODEL_BASE_YEARS)) %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
       # join in subsector shareweights so we know which generation technologies
       # are allowed to deploy in the future
       left_join_error_no_match(L2235.SubsectorShrwt_elecS_cool_EUR %>%
@@ -397,7 +399,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
     L2235.StubTechInterp_elecS_EUR <- L2235.StubTechProd_elecS_cool_SW_EUR %>%
       filter(!grepl(gcamusa.DISALLOWED_COOLING_TECH, stub.technology),
              subs.share.weight > 0 & future.subs.shrwt > 0) %>%
-      mutate(from.year = max(MODEL_BASE_YEARS),
+      mutate(from.year = MODEL_FINAL_BASE_YEAR,
              to.year = max(MODEL_YEARS),
              interpolation.function = gcamusa.FIXED_SHAREWEIGHT)
 
@@ -420,7 +422,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
     L2235.StubTechInterpTo_elecS_fut0_EUR <- L2235.StubTechProd_elecS_cool_SW_EUR %>%
       filter(!grepl(gcamusa.DISALLOWED_COOLING_TECH, stub.technology),
              subs.share.weight == 0 & future.subs.shrwt == 0) %>%
-      mutate(from.year = max(MODEL_BASE_YEARS),
+      mutate(from.year = MODEL_FINAL_BASE_YEAR,
              to.year = max(MODEL_YEARS),
              interpolation.function = gcamusa.FIXED_SHAREWEIGHT)
 
@@ -481,7 +483,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
     L2235.StubTechShrwt_elecS_cool_EUR <- bind_rows(L2235.StubTechInterp_elecS_cool_EUR_pre,
                                                     L2235.StubTechInterpTo_elecS_mapped_EUR) %>%
       # get all technologies which are fixed at calibration values
-      filter(from.year > max(MODEL_BASE_YEARS) | interpolation.function != "fixed") %>%
+      filter(from.year > MODEL_FINAL_BASE_YEAR | interpolation.function != "fixed") %>%
       gather(drop, year, from.year, to.year) %>%
       select(region, supplysector, subsector0, subsector, stub.technology, year, share.weight = to.value)
 
@@ -609,6 +611,13 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       add_comments("Electricity Load Segments Intermittent Technology Backup Characteristics") %>%
       add_precursors("L2234.GlobalIntTechBackup_elecS_EUR") ->
       L2235.GlobalIntTechBackup_elecS_cool_EUR
+
+    L2235.GlobalIntTechValueFactor_elecS_cool_EUR %>%
+      add_title("New Electricity Load Segments Intermittent Technology Backup Characteristics") %>%
+      add_units("none") %>%
+      add_comments("Electricity Load Segments Intermittent Technology Backup Characteristics based on pcloe in GCAM-v7.3") %>%
+      add_precursors("L2234.GlobalIntTechValueFactor_elecS_EUR") ->
+      L2235.GlobalIntTechValueFactor_elecS_cool_EUR
 
     L2235.GlobalIntTechCapital_elecS_cool_EUR %>%
       add_title("Electricity Load Segments Intermittent Technology Capital Costs") %>%

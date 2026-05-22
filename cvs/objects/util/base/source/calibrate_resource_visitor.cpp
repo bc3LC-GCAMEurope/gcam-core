@@ -62,7 +62,7 @@ extern Scenario* scenario;
  * \param aRegionName Name of the region if starting the visiting below the
  *        region level.
  */
-CalibrateResourceVisitor::CalibrateResourceVisitor( const string& aRegionName )
+CalibrateResourceVisitor::CalibrateResourceVisitor( const gcamstr& aRegionName )
 :mCurrentRegionName( aRegionName )
 {
 }
@@ -71,12 +71,13 @@ void CalibrateResourceVisitor::startVisitResource( const AResource* aResource,
                                                    const int aPeriod )
 {
     mCurrentResourceName = aResource->getName();
+    mPrevSubResRemainPrice = 0.0;
 }
 
 void CalibrateResourceVisitor::endVisitResource( const AResource* aResource,
                                                  const int aPeriod )
 {
-    mCurrentResourceName.clear();
+    mCurrentResourceName = "";
 }
 
 void CalibrateResourceVisitor::startVisitSubResource( const SubResource* aSubResource, const int aPeriod ) {
@@ -192,6 +193,18 @@ void CalibrateResourceVisitor::startVisitReserveSubResource( const ReserveSubRes
         }
         double tempEffectivePrice = aSubResource->mGrade[ gr_ind ]->getCost( aPeriod ) -
             ( 1 - fractGrade ) * ( aSubResource->mGrade[ gr_ind ]->getCost( aPeriod ) - low_cost );
+        
+        // In the case when there has been no production and calibrated production is still
+        // zero reset the effective price.  In this case we are essentially calibrating a
+        // price wedge which ensures no produciton.  However, how far below the minimum price
+        // we set the wedge could be arbitrary.  Here we say that essentially we must fully
+        // deplete all other subresource before producing any from this subresource.
+        if(tempCumulProd == 0.0) {
+            tempEffectivePrice = aSubResource->mGrade[ 0 ]->getCost( aPeriod ) - mPrevSubResRemainPrice;
+        }
+        else {
+            mPrevSubResRemainPrice = aSubResource->mGrade.back()->getCost(aPeriod)- tempEffectivePrice;
+        }
         
         double mktPrice = scenario->getMarketplace()->getPrice( mCurrentResourceName,
                                                                 mCurrentRegionName,

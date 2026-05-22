@@ -87,11 +87,11 @@ const string& ThermalBuildingServiceInput::getXMLReportingName() const {
     return getXMLNameStatic();
 }
 
-void ThermalBuildingServiceInput::completeInit(const string& aRegionName,
-    const string& aSectorName,
-    const string& aSubsectorName,
-    const string& aTechName,
-    const IInfo* aTechInfo)
+void ThermalBuildingServiceInput::completeInit( const gcamstr& aRegionName,
+                                        const gcamstr& aSectorName,
+                                        const gcamstr& aSubsectorName,
+                                        const gcamstr& aTechName,
+                                        const IInfo* aTechInfo)
 {
     // Indicate that this sector depends on the service this input represents.
     // Note tech name is the name of the consumer which in GCAM is called directly
@@ -102,8 +102,8 @@ void ThermalBuildingServiceInput::completeInit(const string& aRegionName,
         aRegionName);
 }
 
-void ThermalBuildingServiceInput::initCalc(const string& aRegionName,
-    const string& aSectorName,
+void ThermalBuildingServiceInput::initCalc(const gcamstr& aRegionName,
+    const gcamstr& aSectorName,
     const bool aIsNewInvestmentPeriod,
     const bool aIsTrade,
     const IInfo* aTechInfo,
@@ -211,7 +211,7 @@ SatiationDemandFunction* ThermalBuildingServiceInput::getSatiationDemandFunction
 }
 
 //! Get the name of the input
-const string& ThermalBuildingServiceInput::getName() const {
+const gcamstr& ThermalBuildingServiceInput::getName() const {
     return mName;
 }
 
@@ -232,7 +232,7 @@ double ThermalBuildingServiceInput::getPhysicalDemand(const int aPeriod) const {
 }
 
 //! Set Physical Demand.
-void ThermalBuildingServiceInput::setPhysicalDemand(double aPhysicalDemand, const string& aRegionName, const int aPeriod)
+void ThermalBuildingServiceInput::setPhysicalDemand(double aPhysicalDemand, const gcamstr& aRegionName, const int aPeriod)
 {
     // We are storing the results in the same vector as the calibration data
     // generally the calculated value should match however it may not if the
@@ -309,11 +309,11 @@ void ThermalBuildingServiceInput::setCoefficient(const double aCoefficient, cons
  * \param aPeriod Period to find the price in.
  * \return The market or unadjusted price.
  */
-double ThermalBuildingServiceInput::getPrice(const string& aRegionName, const int aPeriod) const {
+double ThermalBuildingServiceInput::getPrice(const gcamstr& aRegionName, const int aPeriod) const {
     return scenario->getMarketplace()->getPrice(mName, aRegionName, aPeriod);
 }
 
-void ThermalBuildingServiceInput::setPrice(const string& aRegionName,
+void ThermalBuildingServiceInput::setPrice(const gcamstr& aRegionName,
     const double aPrice,
     const int aPeriod)
 {
@@ -324,7 +324,7 @@ void ThermalBuildingServiceInput::setPrice(const string& aRegionName,
 * \param aRegionName Name of the containing region.
 * \param aPeriod Model period.
 */
-double ThermalBuildingServiceInput::getPricePaid(const string& aRegionName, const int aPeriod) const {
+double ThermalBuildingServiceInput::getPricePaid(const gcamstr& aRegionName, const int aPeriod) const {
     return getPrice(aRegionName, aPeriod);
 }
 

@@ -79,7 +79,7 @@ bool S_CurveShutdownDecider::isSameType( const string& aType ) const {
     return aType == getXMLNameStatic();
 }
 
-const string& S_CurveShutdownDecider::getName() const {
+const gcamstr& S_CurveShutdownDecider::getName() const {
     return mName;
 }
 
@@ -112,8 +112,8 @@ void S_CurveShutdownDecider::toDebugXML( const int aPeriod,
 }
 
 double S_CurveShutdownDecider::calcShutdownCoef(const double aCalculatedProfitRate,
-                                                const string& aRegionName,
-                                                const string& aSectorName,
+                                                const gcamstr& aRegionName,
+                                                const gcamstr& aSectorName,
                                                 const int aInstallationYear,
                                                 const int aPeriod ) const 
 {
@@ -121,10 +121,13 @@ double S_CurveShutdownDecider::calcShutdownCoef(const double aCalculatedProfitRa
     double scaleFactor = 1.0;
     if (aPeriod > scenario->getModeltime()->getFinalCalibrationPeriod()) {
         const Modeltime* modeltime = scenario->getModeltime();
+        double numYears = (modeltime->getper_to_yr(aPeriod) - aInstallationYear);
+        double initialDis = 1.0 - 1.0 / (1.0 + exp(mSteepness * (0.0 - mHalfLife)));
+        double disAdj = numYears <= mHalfLife ? (1.0 - numYears / mHalfLife) * initialDis : 0.0;
         // shutdown the production with the function 1/(1+e^(steepness*(years active-halflife))).
         // this prevents a lot of retirement in the early years, and gives the vintage a long tail;
         // All remaining vintage is cut off at the read in lifetime
-        scaleFactor = 1 / (1 + exp(mSteepness * ((modeltime->getper_to_yr(aPeriod) - aInstallationYear) - mHalfLife)));
+        scaleFactor = 1.0 / (1.0 + exp(mSteepness * (numYears - mHalfLife))) + disAdj;
     }
     // Scale factor is between 0 and 1.
     assert(scaleFactor >= 0 && scaleFactor <= 1);

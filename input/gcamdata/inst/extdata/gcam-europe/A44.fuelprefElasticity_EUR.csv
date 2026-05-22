@@ -4,45 +4,45 @@
 # Column types: ccn
 # ----------
 supplysector,subsector,fuelprefElasticity
-resid heating modern EUR,biomass,-1
-resid heating coal EUR,coal,-0.7
+resid heating modern EUR,biomass,0
+resid heating coal EUR,coal,0
 resid heating modern EUR,electricity,0
 resid heating modern EUR,gas,0
 resid heating modern EUR,refined liquids,0
-resid heating modern EUR,district heat,-0.5
-resid heating modern EUR,water heat pump,-0.5
+resid heating modern EUR,district heat,0
+resid heating modern EUR,water heat pump,0
 resid cooling modern EUR,electricity,0
-resid cooling modern EUR,gas,-1
-resid cooking modern EUR,biomass,-1
-resid cooking coal EUR,coal,-0.7
+resid cooling modern EUR,gas,0
+resid cooking modern EUR,biomass,0
+resid cooking coal EUR,coal,0
 resid cooking modern EUR,electricity,0
 resid cooking modern EUR,gas,0
-resid cooking modern EUR,refined liquids,-0.5
+resid cooking modern EUR,refined liquids,0
 resid other appliance modern EUR,electricity,0
-resid hot water modern EUR,biomass,-1
-resid hot water coal EUR,coal,-0.7
+resid hot water modern EUR,biomass,0
+resid hot water coal EUR,coal,0
 resid hot water modern EUR,electricity,0
 resid hot water modern EUR,gas,0
-resid hot water modern EUR,refined liquids,-0.5
-resid hot water modern EUR,district heat,-0.5
-resid hot water modern EUR,water heat pump,-0.5
-resid others modern EUR,biomass,-1
-resid others coal EUR,coal,-1
+resid hot water modern EUR,refined liquids,0
+resid hot water modern EUR,district heat,0
+resid hot water modern EUR,water heat pump,0
+resid others modern EUR,biomass,0
+resid others coal EUR,coal,0
 resid others modern EUR,electricity,0
 resid others modern EUR,gas,0
-resid others modern EUR,refined liquids,-1
-comm heating EUR,biomass,-1
-comm heating EUR,coal,-0.7
+resid others modern EUR,refined liquids,0
+comm heating EUR,biomass,0
+comm heating EUR,coal,0
 comm heating EUR,electricity,0
 comm heating EUR,gas,0
 comm heating EUR,refined liquids,0
-comm heating EUR,district heat,-0.5
-comm heating EUR,water heat pump,-0.5
+comm heating EUR,district heat,0
+comm heating EUR,water heat pump,0
 comm cooling EUR,electricity,0
-comm cooling EUR,gas,-1
-comm others EUR,biomass,-1
-comm others EUR,coal,-1
+comm cooling EUR,gas,0
+comm others EUR,biomass,0
+comm others EUR,coal,0
 comm others EUR,electricity,0
 comm others EUR,gas,0
-comm others EUR,refined liquids,-1
-comm others EUR,district heat,-0.5
+comm others EUR,refined liquids,0
+comm others EUR,district heat,0

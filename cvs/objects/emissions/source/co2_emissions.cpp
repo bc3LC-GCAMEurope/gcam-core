@@ -48,6 +48,7 @@
 #include "marketplace/include/cached_market.h"
 #include "containers/include/scenario.h"
 #include "marketplace/include/marketplace.h"
+#include "functions/include/function_utils.h"
 
 using namespace std;
 
@@ -135,14 +136,14 @@ double CO2Emissions::calcInputCoef( const vector<IInput*>& aInputs, const int aP
     return coefFuel;
 }
 
-double CO2Emissions::getGHGValue( const std::string& aRegionName,
+double CO2Emissions::getGHGValue( const gcamstr& aRegionName,
                                   const std::vector<IInput*>& aInputs,
                                   const std::vector<IOutput*>& aOutputs,
                                   const ICaptureComponent* aSequestrationDevice,
                                   const int aPeriod ) const
 {
     // Constants
-    const double CVRT90 = 2.212; // 1975 $ to 1990 $
+    const double CVRT90 = FunctionUtils::DEFLATOR_1990_PER_DEFLATOR_1975(); // 1975 $ to 1990 $
     // Conversion from teragrams of carbon per EJ to metric tons of carbon per GJ
     const double CVRT_TG_MT = 1e-3;
 
@@ -211,7 +212,7 @@ double CO2Emissions::calcOutputEmissions( const vector<IOutput*>& aOutputs,
  * \param aRegionName Name of the region in which the emission is occurring.
  * \param aPeriod Period in which the emission is occurring.
  */
-double CO2Emissions::calcInputCO2Emissions( const vector<IInput*>& aInputs, const string& aRegionName, const int aPeriod ) const {
+double CO2Emissions::calcInputCO2Emissions( const vector<IInput*>& aInputs, const gcamstr& aRegionName, const int aPeriod ) const {
     double totalEmissions = 0;
 
     // Loop over the inputs calculating the amount of carbon in each.
@@ -226,7 +227,7 @@ double CO2Emissions::calcInputCO2Emissions( const vector<IInput*>& aInputs, cons
     return totalEmissions;
 }
 
-void CO2Emissions::calcEmission( const std::string& aRegionName,
+void CO2Emissions::calcEmission( const gcamstr& aRegionName,
                                  const std::vector<IInput*>& aInputs,
                                  const std::vector<IOutput*>& aOutputs,
                                  ICaptureComponent* aSequestrationDevice,

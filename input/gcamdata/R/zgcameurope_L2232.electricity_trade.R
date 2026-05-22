@@ -105,7 +105,7 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
     L2232.SubsectorShrwtInterp_elecS_grid_vertical_EUR <- L2232.SubsectorShrwtFllt_elecS_grid_vertical_EUR %>%
       distinct(region, supplysector, subsector) %>%
       mutate(apply.to = "share-weight",
-             from.year = max(MODEL_BASE_YEARS),
+             from.year = MODEL_FINAL_BASE_YEAR,
              to.year = max(MODEL_FUTURE_YEARS),
              interpolation.function = "fixed")
 
@@ -179,7 +179,7 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
     L2232.SubsectorShrwtFllt_EURelec %>%
       select(LEVEL2_DATA_NAMES[["Subsector"]]) %>%
       mutate(apply.to = "share-weight",
-             from.year = max(MODEL_BASE_YEARS),
+             from.year = MODEL_FINAL_BASE_YEAR,
              to.year = max(MODEL_YEARS),
              interpolation.function = "fixed") ->
       L2232.SubsectorInterp_EURelec
@@ -274,10 +274,12 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
         exports = case_when(
           sign(net.exports.CAL) == sign(net_exports) ~ exports * net.exports.CAL / net_exports,
           net.exports.CAL > 0 & net_exports < 0 ~ exports + net.exports.CAL - net_exports,
+          net_exports == 0 & net.exports.CAL > 0 ~ net.exports.CAL,
           TRUE ~ exports),
         imports = case_when(
           sign(net.exports.CAL) == sign(net_exports) ~ imports * net.exports.CAL / net_exports,
           net.exports.CAL < 0 & net_exports > 0 ~ imports + net_exports - net.exports.CAL,
+          net_exports == 0 & net.exports.CAL < 0 ~ abs(net.exports.CAL),
           TRUE ~  imports),
         net_exports_recalc = exports - imports,
         # Calculate consumption from domestic sources: total consumption minus gross imports
@@ -334,7 +336,7 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
     L2232.SubsectorShrwtFllt_elec_EUR_trade %>%
       select(LEVEL2_DATA_NAMES[["Subsector"]]) %>%
       mutate(apply.to = "share-weight",
-             from.year = max(MODEL_BASE_YEARS),
+             from.year = MODEL_FINAL_BASE_YEAR,
              to.year = max(MODEL_YEARS),
              interpolation.function = "fixed") ->
       L2232.SubsectorInterp_elec_EUR_trade
@@ -381,7 +383,7 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
                 by = c("region" = "grid_region", "year")) %>%
       group_by(region) %>%
       # Set future year own use coefficients the same as the base year coefficients
-      mutate(coefficient = replace(coefficient, year %in% MODEL_FUTURE_YEARS, coefficient[year == max(MODEL_BASE_YEARS)])) %>%
+      mutate(coefficient = replace(coefficient, year %in% MODEL_FUTURE_YEARS, coefficient[year == MODEL_FINAL_BASE_YEAR])) %>%
       ungroup %>%
       select(LEVEL2_DATA_NAMES[["TechCoef"]]) ->
       L2232.TechCoef_elecownuse_EUR_trade
@@ -415,7 +417,7 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
     # L2232.StubTechElecMarket_backup_EUR: electric sector name for states
     # Reset the electric sector market to the grid regions (for backup calculations)
     L223.GlobalIntTechBackup_elec %>%
-      distinct(supplysector = sector.name, subsector = subsector.name, stub.technology = technology) %>%
+      distinct(supplysector = sector.name, subsector = subsector.name, stub.technology = backup.intermittent.technology) %>%
       repeat_add_columns(select(grid_regions, region)) %>%
       repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
       left_join_error_no_match(select(grid_regions, electric.sector.market = grid_region, region),

@@ -65,7 +65,6 @@
 #include "util/base/include/ivisitor.h"
 #include "climate/include/iclimate_model.h"
 // Could hide with a factory method.
-#include "climate/include/magicc_model.h"
 #include "climate/include/hector_model.hpp"
 #include "climate/include/no_climate_model.h"
 #include "emissions/include/emissions_summer.h"
@@ -74,6 +73,7 @@
 #include "containers/include/market_dependency_finder.h"
 #include "technologies/include/global_technology_database.h"
 #include "containers/include/iactivity.h"
+#include "util/base/include/manage_state_variables.hpp"
 
 #if GCAM_PARALLEL_ENABLED
 #include "parallel/include/gcam_parallel.hpp"
@@ -122,7 +122,7 @@ void World::clear(){
 void World::completeInit() {
     //If none has been read in, instantiate the default climate model
     if ( !mClimateModel ) {
-        mClimateModel = new MagiccModel();
+        mClimateModel = new HectorModel();
     }
     
     // Initialize Climate Model
@@ -204,8 +204,9 @@ const std::string& World::getXMLNameStatic() {
 * \note In the future World object may have read-in names.
 * \return The name of the world.
 */
-const string& World::getName() const {
-    return getXMLNameStatic();
+const gcamstr& World::getName() const {
+    const static gcamstr NAME(getXMLNameStatic());
+    return NAME;
 }
 
 //! initialize anything that won't change during the calculation
@@ -292,8 +293,15 @@ void World::calc( const int aPeriod, GcamFlowGraph *aWorkGraph, const vector<IAc
     }
 
     // do the model calculation
-    aWorkGraph->mHead.try_put( tbb::flow::continue_msg() );
-    aWorkGraph->mTBBFlowGraph.wait_for_all();
+    tbb::task_arena& threadPool = scenario->getManageStateVariables()->mThreadPool;
+    tbb::task_group tg;
+    threadPool.execute([&](){
+        tg.run([&](){
+            aWorkGraph->mHead.try_put( tbb::flow::continue_msg() );
+            aWorkGraph->mTBBFlowGraph.wait_for_all();
+        });
+    });
+    threadPool.execute([&tg](){ tg.wait(); });
 
 #ifdef GNU_SOURCE
     feenableexcept(except);
@@ -421,8 +429,7 @@ void World::setEmissions( int period ) {
     accept( &allSummer, period );
     accept( &co2LandUseSummer, period );
         
-    // Only set emissions if they are valid. If these are not set
-    // MAGICC will use the default values.
+    // Only set emissions if they are valid.
     if( co2Summer.areEmissionsSet( period ) ){
         // Note: a climate model will either take the net or gross +/-
         // but not both, thus we make both available
@@ -477,7 +484,7 @@ void World::setEmissions( int period ) {
                                      coawbSummer.getEmissions( period ));
     }
     
-    // MAGICC wants N2O emissions in Tg N, but miniCAM calculates Tg N2O
+    // Hector wants N2O emissions in Tg N, but GCAM calculates Tg N2O
     if( n2oSummer.areEmissionsSet( period ) ){
         mClimateModel->setEmissions( "N2O", period,
                                      ( n2oSummer.getEmissions( period ) +
@@ -486,7 +493,7 @@ void World::setEmissions( int period ) {
                                      / N_TO_N2O );
     }
     
-    // MAGICC wants NOx emissions in Tg N, but miniCAM calculates Tg NOx
+    // Hector wants NOx emissions in Tg N, but GCAM calculates Tg NOx
     // FORTRAN code uses the conversion for NO2
     if( noxSummer.areEmissionsSet( period ) ){
         mClimateModel->setEmissions( "NOx", period,
@@ -497,7 +504,7 @@ void World::setEmissions( int period ) {
     }
     
     double so2total=0.0;
-    // MAGICC wants SO2 emissions in Tg S, but miniCAM calculates Tg SO2
+    // Hector wants SO2 emissions in Tg S, but GCAM calculates Tg SO2
     // Region 1 includes SO21 and 60% of SO24 (FSU)
     if( so21Summer.areEmissionsSet( period ) && so24Summer.areEmissionsSet( period )){
         double so21 = so21Summer.getEmissions( period ) +
@@ -509,7 +516,7 @@ void World::setEmissions( int period ) {
         so2total += so21;
     }
     
-    // MAGICC wants SO2 emissions in Tg S, but miniCAM calculates Tg SO2
+    // Hector wants SO2 emissions in Tg S, but GCAM calculates Tg SO2
     // Region 2 includes SO22 and 40% of SO24 (FSU)
     if( so22Summer.areEmissionsSet( period ) && so24Summer.areEmissionsSet( period )){
         double so22 = so22Summer.getEmissions( period ) +
@@ -521,7 +528,7 @@ void World::setEmissions( int period ) {
         so2total += so22;
     }
     
-    // MAGICC wants SO2 emissions in Tg S, but miniCAM calculates Tg SO2
+    // Hector wants SO2 emissions in Tg S, but GCAM calculates Tg SO2
     if( so23Summer.areEmissionsSet( period ) ){
         double so23 = so23Summer.getEmissions( period ) +
             so23awbSummer.getEmissions( period );
@@ -562,13 +569,7 @@ void World::setEmissions( int period ) {
     }
 
     if( hfc245faSummer.areEmissionsSet( period ) && hfc32Summer.areEmissionsSet( period ) && hfc365mfcSummer.areEmissionsSet( period ) && hfc152aSummer.areEmissionsSet( period ) ){
-        // MAGICC needs HFC245fa in kton of HFC245ca
-        mClimateModel->setEmissions( "HFC245ca", period,
-                                     hfc245faSummer.getEmissions( period ) / HFC_CA_TO_FA +
-                                     hfc32Summer.getEmissions( period ) * HFC32_TO_245 +
-                                     hfc365mfcSummer.getEmissions( period ) * HFC365_TO_245 +
-                                     hfc152aSummer.getEmissions( period ) * HFC152_TO_245);
-        // For models that need ktonnes of HFC245fa (no single model should implement both of these):
+        // For models that need ktonnes of HFC245fa
         mClimateModel->setEmissions("HFC245fa", period,
                                     hfc245faSummer.getEmissions(period)+
                                     hfc365mfcSummer.getEmissions( period ) * HFC365_TO_245 +
@@ -578,7 +579,6 @@ void World::setEmissions( int period ) {
                                      hfc32Summer.getEmissions( period ));
     }
     
-    // MAGICC needs this in tons of VOC. Input is in TgC
     if( vocSummer.areEmissionsSet( period ) ){
         mClimateModel->setEmissions( "NMVOCs", period,
                                      ( vocSummer.getEmissions( period ) +
@@ -586,7 +586,6 @@ void World::setEmissions( int period ) {
                                        vocawbSummer.getEmissions( period ) ));
     }
     
-    // MAGICC needs this in GgC. Model output is in TgC
     if( bcSummer.areEmissionsSet( period ) ){
         mClimateModel->setEmissions( "BC", period,
                                      ( bcSummer.getEmissions( period ) +
@@ -594,7 +593,6 @@ void World::setEmissions( int period ) {
                                      * TG_TO_PG );
     }
     
-    // MAGICC needs this in GgC. Model output is in TgC
     if( ocSummer.areEmissionsSet( period ) ){
         mClimateModel->setEmissions( "OC", period,
                                      ( ocSummer.getEmissions( period ) +
@@ -627,16 +625,6 @@ void World::setEmissions( int period ) {
                                     nh3agrSummer.getEmissions( period ) );
     }
 }
-    
-void World::runClimateModel() {
-    // The Climate model reads in data for the base period, so skip passing it in.
-    for( int period = 1; period < scenario->getModeltime()->getmaxper(); ++period ) {
-        setEmissions( period );
-    }
-    
-    // Run the model.
-    mClimateModel->runModel();
-}
 
 void World::runClimateModel( int aPeriod ) {
     if( aPeriod > 0 ) {
@@ -664,26 +652,6 @@ bool World::isAllCalibrated( const int period, double calAccuracy, const bool pr
     }
 	
     return isAllCalibrated;
-}
-
-/*! \brief This function returns a special mapping of strings to ints for use in
-*          the outputs. 
-* \details This map is created such that global maps to zero, region 0 maps to
-*          1, etc. It is similiar to the regionNamesToNumbers map but has the
-*          global element and each region number in the regionMap is 1 + the
-*          number in the regionNamesToNumbers map.
-* \warning This function should only be used by the database output functions. 
-* \return The map of region names to numbers.
-*/
-const map<string,int> World::getOutputRegionMap() const {
-    map<string,int> regionMap;
-
-    for ( unsigned int i = 0; i < mRegions.size(); i++ ) {
-        regionMap[mRegions[i]->getName()] = i+1; // start index from 1
-    }
-    // hardcode for now
-    regionMap["global"] = 0;
-    return regionMap;
 }
 
 /*! \brief Set a fixed tax for all regions.
@@ -784,7 +752,7 @@ const GlobalTechnologyDatabase* World::getGlobalTechnologyDatabase() const {
  * \param aRegionName The name of the region to get.
  * \return A const pointer to the requested region or null if not found.
  */
-Region const* World::getRegion( const string& aRegionName ) const {
+Region const* World::getRegion( const gcamstr& aRegionName ) const {
     for( auto region : mRegions ) {
         if( region->getName() == aRegionName ) {
             return region;

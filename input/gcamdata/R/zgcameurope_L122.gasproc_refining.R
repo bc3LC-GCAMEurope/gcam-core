@@ -68,9 +68,9 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
       semi_join(select(calibrated_techs, supplysector, subsector, technology), by = c("supplysector", "subsector", "technology")) %>%
       left_join(select(calibrated_techs, supplysector, subsector, technology, minicam.energy.input, sector, fuel), by = c("supplysector", "subsector", "technology", "minicam.energy.input")) %>%
       gather(hist_year, value, -supplysector, -subsector, -technology, -minicam.energy.input, -sector, -fuel) %>%
-      mutate(hist_year = as.numeric(hist_year)) %>%
       filter(hist_year == min(HISTORICAL_YEARS)) %>%
       repeat_add_columns(tibble(year = HISTORICAL_YEARS)) %>%
+      mutate(hist_year = as.numeric(hist_year)) %>%
       select(-hist_year) -> L122.globaltech_coef
 
 
@@ -94,7 +94,7 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
     # sugar cane ethanol, corn ethanol)
     BIOMASS_LIQUIDS <- c("refined biofuels_ethanol", "refined biofuels_FT")
     L122.out_EJ_R_biofuel_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
-      filter(sector == "TPES",
+      filter(sector == "TES",
              fuel %in% BIOMASS_LIQUIDS,
              year <= MODEL_FINAL_BASE_YEAR) %>%
       mutate(Biofuel = if_else(fuel == "refined biofuels_ethanol", "ethanol", "biodiesel")) %>%
@@ -176,7 +176,7 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
     # Create en_bal_TPES_OIL, en_bal_oil, ctl_OIL, and gtlctl_oil to adjust the outputs of CTL and GTL given the same fuel names of the oil refining outputs (as mentioned in the note above)
     # Get output for refined liquids for oil refining (TPES) sector
     en_bal_TPES_OIL <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
-      filter(sector == "TPES") %>%
+      filter(sector == "TES") %>%
       filter(fuel == "refined liquids") %>%
       select(GCAM_region_ID,sector, year, value_en_bal_TPES = value) %>%
       mutate(sector = "oil refining")
@@ -206,7 +206,7 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
 
     # Oil refining: input of oil is equal to TPES, and input of other fuels is from net refinery energy use
     L122.in_EJ_R_oilrefining_F_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
-      filter((sector == "TPES" & fuel == "refined liquids") |
+      filter((sector == "TES" & fuel == "refined liquids") |
                grepl("^net", sector) & grepl("oil refining", sector) & fuel != "refined liquids") %>%
       mutate(sector = "oil refining",
              fuel = if_else(fuel == "refined liquids", "oil", fuel)) %>%
@@ -339,8 +339,25 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
 
     # Gas processing output from biomass gasification is equal to regional TPES
     L122.out_EJ_R_gasproc_bio_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
-      filter(sector == "TPES" , fuel == "gasified biomass") %>%
+      filter(sector == "TES" , fuel == "gasified biomass") %>%
       mutate(sector = "gas processing", fuel = "biomass")
+
+    # JS 11/2025 In Iceland there gasified biomass values in 2021 is zero, with a positive value in previous years
+    # Need some gas for biofuel production, so taking copying the 2020 value to 2021:
+    ICE_ID <- GCAM_region_names %>%
+      filter(region == "Iceland") %>%
+      pull(GCAM_region_ID)
+
+    gasified_biomass_iceland_latest_nonzero <-
+      L122.out_EJ_R_gasproc_bio_Yh_EUR %>%
+      filter(GCAM_region_ID == ICE_ID,
+             value != 0) %>%
+      filter(year == max(year)) %>%
+      pull(value)
+
+    L122.out_EJ_R_gasproc_bio_Yh_EUR <- L122.out_EJ_R_gasproc_bio_Yh_EUR %>%
+      mutate(value = if_else(GCAM_region_ID == ICE_ID & year == MODEL_FINAL_BASE_YEAR,
+                             gasified_biomass_iceland_latest_nonzero, value))
 
     # Gas processing output from coal gasification is calculated from the input of coal
     L122.in_EJ_R_gasproc_coal_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
@@ -356,7 +373,7 @@ module_gcameurope_L122.gasproc_refining <- function(command, ...) {
 
     # Natural gas is equal to regional TPES minus upstream use of natural gas (e.g. GTL). Procedure and assumptiosn are explained below
     L122.out_EJ_R_gasproc_gas_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
-      filter(sector == "TPES", fuel == "gas") %>%
+      filter(sector == "TES", fuel == "gas") %>%
       mutate(sector = "gas processing")
 
     # NOTE2: This is complicated. Several of the "upstream" energy users--in GCAM 3.0, unconventional oil production and gas-to-liquids--are assumed

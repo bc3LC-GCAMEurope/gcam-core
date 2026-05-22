@@ -14,7 +14,8 @@
 #'\code{L244.ThermalServiceSatiation_EUR}, \code{L244.GenericServiceSatiation_EUR}, \code{L244.Intgains_scalar_EUR}, \code{L244.ShellConductance_bld_EUR},
 #' \code{L244.Supplysector_bld_EUR}, \code{L244.FinalEnergyKeyword_bld_EUR}, \code{L244.SubsectorShrwt_bld_EUR}, \code{L244.SubsectorShrwtFllt_bld_EUR}, \code{L244.SubsectorInterp_bld_EUR},
 #' \code{L244.SubsectorInterpTo_bld_EUR}, \code{L244.SubsectorLogit_bld_EUR}, \code{L244.FuelPrefElast_bld_EUR}, \code{L244.StubTech_bld_EUR}, \code{L244.StubTechEff_bld_EUR},
-#' \code{L244.StubTechCalInput_bld_EUR}, \code{L244.StubTechIntGainOutputRatio_EUR}, \code{L244.GlobalTechShrwt_bld_EUR}, \code{L244.PrimaryRenewKeyword_bld_EUR}, \code{L244.GlobalTechCost_bld_EUR}, \code{L244.GlobalTechSCurve_bld_EUR},
+#' \code{L244.StubTechCalInput_bld_EUR}, \code{L244.StubTechIntGainOutputRatio_EUR}, \code{L244.GlobalTechShrwt_bld_EUR}, \code{L244.PrimaryRenewKeyword_bld_EUR},
+#' \code{L244.GlobalTechCost_bld_EUR}, \code{L244.GlobalTechSCurve_bld_EUR}, \code{L244.GlobalTechProfitShutdown_bld_EUR}, \code{L244.GlobalTechLifetime_bld_EUR},
 #' \code{L244.DeleteGenericService_EUR}, \code{L244.DeleteThermalService_EUR} and \code{L244.GompFnParam_EUR}, \code{L244.Satiation_impedance_EUR},
 #' \code{L244.GenericServiceImpedance_EUR}, \code{L244.GenericServiceAdder_EUR}, \code{L244.ThermalServiceImpedance_EUR}, \code{L244.ThermalServiceAdder_EUR}
 #' \code{L244.GenericTradFuelParams_EUR}, \code{L244.ThermalTradFuelParams_EUR}, \code{L244.GenericServiceCoef_EUR},\code{L244.ThermalServiceCoef_EUR},
@@ -43,6 +44,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              FILE = "gcam-europe/A44.subsector_shrwt_EUR",
              FILE = "gcam-europe/A44.fuelprefElasticity_EUR",
              FILE = "gcam-europe/A44.globaltech_shrwt_EUR",
+             FILE = "gcam-europe/A44.globaltech_interp_EUR",
              FILE = "gcam-europe/A44.gcam_consumer_EUR",
              FILE = "gcam-europe/A44.demandFn_serv_EUR",
              FILE = "gcam-europe/A44.demandFn_flsp_EUR",
@@ -96,10 +98,13 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              "L244.StubTechCalInput_bld_EUR",
              "L244.StubTechIntGainOutputRatio_EUR",
              "L244.GlobalTechShrwt_bld_EUR",
+             "L244.GlobalTechInterp_bld_EUR",
              "L244.PrimaryRenewKeyword_bld_EUR",
              "L244.GlobalTechCost_bld_EUR",
              "L244.GlobalTechTrackCapital_bld_EUR",
              "L244.GlobalTechSCurve_bld_EUR",
+             "L244.GlobalTechProfitShutdown_bld_EUR",
+             "L244.GlobalTechLifetime_bld_EUR",
              "L244.DeleteGenericService_EUR",
              "L244.DeleteThermalService_EUR",
              "L244.HDDCDD_A2_CCSM3x_EUR",
@@ -144,6 +149,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
+
     GCAM_region_names <- filter_regions_europe(GCAM_region_names)
     A_regions <- filter_regions_europe(A_regions)
     A44.globaltech_shrwt_EUR <- gather_years(A44.globaltech_shrwt_EUR)
@@ -151,11 +157,22 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     L101.Pop_thous_R_Yh_EUR <- filter_regions_europe(L101.Pop_thous_R_Yh, region_ID_mapping = GCAM_region_names)
     L102.pcgdp_thous90USD_Scen_R_Y_EUR <- filter_regions_europe(L102.pcgdp_thous90USD_Scen_R_Y, region_ID_mapping = GCAM_region_names)
     L106.income_shares <- L106.income_distributions %>% filter_regions_europe()
-    n_groups<-nrow(unique(L106.income_shares %>%
-                            select(gcam.consumer)))
+    n_groups <- length(unique(L106.income_shares$gcam.consumer))
 
     # Add a deflator for harmonizing GDPpc with prices
     def9075<-gdp_deflator(1990, 1975)
+
+    # Check income shares are correct for all regions
+    check_income_shares <- L106.income_shares %>%
+      group_by(region, year) %>%
+      mutate(share_agg = sum(subregional.income.share)) %>%
+      ungroup()
+
+
+    if((sum(check_income_shares$share_agg) / nrow(check_income_shares))-1 > 0.01){
+      print("WARNING:income shares not correctly assigned")
+    }
+
 
     # ===================================================
     # Adjust gcam.consumer file to add the multiple consumers combining the raw file with multiple consumer information
@@ -272,7 +289,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     # Using the parameters estimated in module LA144.building_det_flsp, calculate the "estimated" residential floorspace
     # These estimations will be used for calibration and for the calculation of the regional bias adder (bias-adjust-parameter) in those regions with observed historical data
-    L244.Floorspace_resid_est<-L144.flsp_param_EUR %>%
+    L244.Floorspace_resid_est <- L144.flsp_param_EUR %>%
       repeat_add_columns(tibble(gcam.consumer=paste0("resid EUR_",unique(L106.income_shares$gcam.consumer)))) %>%
       left_join_error_no_match(GCAM_region_names, by="region") %>%
       repeat_add_columns(tibble(year=HISTORICAL_YEARS)) %>%
@@ -289,7 +306,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     # Calculate the regional bias adder as the difference between observed (L144.flsp_bm2_R_res_Yh_EUR) and estimated (L244.Floorspace_resid_est) data
     # Allocate the adder equally across multiple consumers
-    L244.Floorspace_resid_adder<-L244.Floorspace_resid_est %>%
+    L244.Floorspace_resid_adder <- L244.Floorspace_resid_est %>%
       group_by(region,year) %>%
       summarise(flsp_est = sum(flsp_est)) %>%
       ungroup() %>%
@@ -300,7 +317,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       repeat_add_columns(tibble(gcam.consumer=paste0("resid EUR_",unique(L106.income_shares$gcam.consumer))))
 
     # Combine observed data with the bias adder to obtain historical residential floorspace (BM2)
-    L244.Floorspace_resid<-L244.Floorspace_resid_est %>%
+    L244.Floorspace_resid <- L244.Floorspace_resid_est %>%
       select(region, gcam.consumer, year, flsp_est) %>%
       left_join_error_no_match(L244.Floorspace_resid_adder, by = c("region", "gcam.consumer","year")) %>%
       mutate(base.building.size = flsp_est + bias.adder,
@@ -393,7 +410,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     L144.Satiation_impedance_pre<-L244.Satiation_flsp_EUR %>%
       left_join_error_no_match(A_regions %>% select(GCAM_region_ID,region),by="region") %>%
-      mutate(year = max(MODEL_BASE_YEARS)) %>%
+      mutate(year = MODEL_FINAL_BASE_YEAR) %>%
       # Add base floorspace
       left_join_error_no_match(L244.Floorspace_EUR,by=c("region","gcam.consumer","nodeInput","building.node.input","year")) %>%
       rename(flsp_bm2 = base.building.size) %>%
@@ -429,7 +446,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     # At this point, with a single representative consumer in the commercial sector, the adder is going to be zero,
     # but this structure allows a future implementation of multiple consumers in the commercial sector
 
-    # First, check that at region level observed and estimated floorspace match in 2015: (satiation adder should be equal to zero)
+    # First, check that at region level observed and estimated floorspace match in 2021: (satiation adder should be equal to zero)
     L244.SatiationAdder_checkReg<- L244.Satiation_flsp_EUR %>%
       mutate(satiation.level = satiation.level * 1E6) %>%
       left_join_error_no_match(L244.Satiation_impedance_EUR,by = c("region", "gcam.consumer", "nodeInput", "building.node.input")) %>%
@@ -438,7 +455,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       summarise(satiation.level = mean(satiation.level),
                 `satiation-impedance`= mean(`satiation-impedance`)) %>%
       ungroup() %>%
-      mutate(year = 2015) %>%
+      mutate(year = MODEL_FINAL_BASE_YEAR) %>%
       left_join_error_no_match(A_regions %>% select(GCAM_region_ID,region),by = "region") %>%
       left_join_error_no_match(bind_rows(L144.flsp_bm2_R_res_Yh_EUR %>% mutate(nodeInput = "resid EUR"),
                                          L144.flsp_bm2_R_comm_Yh_EUR %>% mutate(nodeInput = "comm EUR")),
@@ -461,7 +478,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     L244.SatiationAdder_EUR<- L244.Satiation_flsp_EUR %>%
       mutate(satiation.level = satiation.level * 1E6) %>%
       left_join_error_no_match(L244.Satiation_impedance_EUR,by = c("region", "gcam.consumer", "nodeInput", "building.node.input")) %>%
-      mutate(year = max(MODEL_BASE_YEARS)) %>%
+      mutate(year = MODEL_FINAL_BASE_YEAR) %>%
       left_join_error_no_match(A_regions %>% select(GCAM_region_ID,region),by = "region") %>%
       left_join_error_no_match(L244.Floorspace_EUR,by=c("region","year","gcam.consumer", "nodeInput", "building.node.input")) %>%
       rename(observed_flsp_bm2 = base.building.size) %>%
@@ -503,15 +520,20 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     n.cons.groups<-as.numeric(length(unique(A44.gcam_consumer_resid$gcam.consumer)))
 
     add.cg<-function(df){
-      df.res<-df %>% filter(grepl("resid",supplysector))
-      df.comm<-df %>% filter(grepl("comm",supplysector))
 
-      df<- df.res %>%
-        repeat_add_columns(tibble::tibble(cons.groups)) %>%
-        separate(cons.groups,c("sector","cons.groups"),sep="_") %>%
-        unite(supplysector,c(supplysector,cons.groups), sep="_") %>%
-        select(-sector) %>%
-        bind_rows(df.comm)
+      df.res <- df %>% filter(grepl("resid", supplysector))
+      df.comm <- df %>% filter(grepl("comm", supplysector))
+
+      # prevent circularity: only add multiple consumers if the residential sector doesn't already have them
+      if (!all(grepl(paste(sub("resid", "", cons.groups), collapse = "|"), df.res$supplysector))) {
+        df <- df.res %>%
+          repeat_add_columns(tibble::tibble(cons.groups)) %>%
+          separate(cons.groups,c("sector","cons.groups"),sep="_") %>%
+          unite(supplysector,c(supplysector,cons.groups), sep="_") %>%
+          select(-sector) %>%
+          bind_rows(df.comm)
+      }
+
       return(df)
     }
 
@@ -519,6 +541,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     A44.fuelprefElasticity_EUR<-add.cg(A44.fuelprefElasticity_EUR)
 
     A44.globaltech_shrwt_EUR<-add.cg(A44.globaltech_shrwt_EUR)
+    A44.globaltech_interp_EUR<-add.cg(A44.globaltech_interp_EUR)
     A44.internal_gains_EUR<-add.cg(A44.internal_gains_EUR)
     A44.sector_EUR<-add.cg(A44.sector_EUR)
     A44.subsector_interp_EUR<-add.cg(A44.subsector_interp_EUR)
@@ -684,7 +707,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     L244.flsp_bm2_R <- bind_rows(L144.flsp_bm2_R_res_Yh_EUR, L144.flsp_bm2_R_comm_Yh_EUR) %>%
       # Again, used to be energy.SATIATION_YEAR, changed to pass timeshift test
-      filter(year == max(MODEL_BASE_YEARS)) %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
       select(-year)
 
     L244.ServiceSatiation_DEU <- L244.ServiceSatiation_DEU_pre %>%
@@ -713,7 +736,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
                                  mutate(gcam.consumer= if_else(grepl("resid",nodeInput),"resid EUR","comm EUR"))
                                , by = c(LEVEL2_DATA_NAMES[["BldNodes"]], "year")) %>%
       mutate(service.per.flsp = base.service / base.building.size) %>%
-      filter(year == max(MODEL_BASE_YEARS)) %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
       select(LEVEL2_DATA_NAMES[["BldNodes"]], building.service.input, service.per.flsp)
 
     L244.GenericServiceSatiation2 <- L244.GenericServiceSatiation_EUR %>%
@@ -768,7 +791,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     DEU.serv.perFlsp.coal<-max(L244.tmp_pre_deu$service.per.flsp)
 
     L244.tmp<-L244.tmp_pre %>%
-      filter(year == max(MODEL_BASE_YEARS)) %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
       select(-base.service, - base.building.size, -year) %>%
       mutate(service.per.flsp = if_else(region == gcam.DEU_REGION & thermal.building.service.input == "resid heating coal EUR",DEU.serv.perFlsp.coal,service.per.flsp))
 
@@ -978,6 +1001,14 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              subsector.name = subsector) %>%
       select(LEVEL2_DATA_NAMES[["GlobalTechYr"]], share.weight)
 
+    # L244.GlobalTechInterp_bld_EUR: Default shareweight interpolation for heatpump building technologies
+    L244.GlobalTechInterp_bld_EUR <- A44.globaltech_interp_EUR %>%
+      set_years() %>%
+      rename(sector.name = supplysector, subsector.name = subsector) %>%
+      # included to strip attributes from assumption file
+      mutate(sector.name = sector.name)
+
+
     # L244.GlobalTechCost_bld_EUR: Non-fuel costs of global building technologies
     L244.GlobalTechCost_bld_EUR <- add.cg(L144.NEcost_75USDGJ_EUR) %>%
       mutate(input.cost = round(NEcostPerService, energy.DIGITS_COST)) %>%
@@ -999,30 +1030,89 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       L244.GlobalTechTrackCapital_bld_EUR
 
 
+    # Retirement for building technologies
     # L244.GlobalTechSCurve_bld_EUR: Retirement rates for building technologies
     L244.globaltech_retirement_EUR <- A44.globaltech_retirement_EUR %>%
       left_join(A44.cost_efficiency_EUR %>%
                   select(supplysector, subsector, technology, lifetime_ok = lifetime),
-                by = 'supplysector') %>%
+                by = c('supplysector', 'subsector', 'technology')) %>%  # Join on all relevant columns
       mutate(lifetime = lifetime_ok) %>%
       mutate(half.life = lifetime / 2) %>%
       tidyr::expand_grid(unique(L106.income_shares %>%
-                                select(gcam.consumer))) %>%
+                                  select(gcam.consumer))) %>%
       mutate(supplysector = if_else(grepl('resid',supplysector),
                                     paste(supplysector, gcam.consumer, sep = '_'),
                                     supplysector))
 
     L244.GlobalTechSCurve_bld_EUR <- L244.GlobalTechCost_bld_EUR %>%
-      filter(year %in% c(max(MODEL_BASE_YEARS), MODEL_FUTURE_YEARS),
+      filter(year %in% MODEL_FINAL_BASE_YEAR,
              sector.name %in% L244.globaltech_retirement_EUR$supplysector) %>%
-      # Add lifetimes and steepness
-      left_join_strict(L244.globaltech_retirement_EUR, by = c("sector.name" = "supplysector",
-                                                                      "subsector.name" = "subsector",
-                                                                      "technology")) %>%
-      # Set steepness/halflife values to stock for base years, new for future years
-      mutate(steepness = if_else(year == max(MODEL_BASE_YEARS), steepness_stock, steepness_new)) %>%
-      select(LEVEL2_DATA_NAMES[["GlobalTechSCurve"]])
+      left_join(L244.globaltech_retirement_EUR,
+                by = c("sector.name" = "supplysector",
+                       "subsector.name" = "subsector",
+                       "technology")) %>%
+      filter(!is.na(lifetime)) %>%
+      mutate(year = MODEL_FINAL_BASE_YEAR) %>%
+      select(any_of(LEVEL2_DATA_NAMES[["GlobalTechSCurve"]]))
 
+    #===============================================================================
+    # 2. GlobalTechProfitShutdown - Profit shutdown parameters for building technologies
+    #    Applied to all model years (base and future)
+    #===============================================================================
+
+    # First, create a template with all technology-year combinations
+    # Get all technologies from A44.cost_efficiency_EUR
+    tech_base <- A44.cost_efficiency_EUR %>%
+      select(supplysector, subsector, technology) %>%
+      distinct()
+
+    # Get all model years (base + future)
+    all_years <- c(MODEL_FINAL_BASE_YEAR, MODEL_FUTURE_YEARS)
+
+    # Create the profit shutdown table using the inputs from A44.cost_efficiency_EUR
+    L244.GlobalTechProfitShutdown_bld_EUR <- A44.cost_efficiency_EUR %>%
+      # Select relevant columns (now including the new profit shutdown parameters)
+      select(supplysector, subsector, technology,
+             median.shutdown.point, profit.shutdown.steepness) %>%
+      # Expand to include all GCAM consumers (for residential technologies)
+      tidyr::expand_grid(unique(L106.income_shares %>% select(gcam.consumer))) %>%
+      # Modify supplysector for residential technologies (add consumer suffix)
+      mutate(supplysector = if_else(grepl('resid', supplysector),
+                                    paste(supplysector, gcam.consumer, sep = '_'),
+                                    supplysector)) %>%
+      # Expand to include all years
+      tidyr::expand_grid(year = all_years) %>%
+      # Rename columns to match what LEVEL2_DATA_NAMES[["GlobalTechProfitShutdown"]] expects
+      rename(sector.name = supplysector,
+             subsector.name = subsector) %>%
+      # Select columns in the order expected by LEVEL2_DATA_NAMES
+      select(LEVEL2_DATA_NAMES[["GlobalTechProfitShutdown"]])
+
+    #===============================================================================
+    # 3. GlobalTechLifetime - Lifetime values for building technologies
+    #    Applied to all model years (base and future)
+    #===============================================================================
+
+    # Get all model years (base + future)
+    all_years <- c(MODEL_FINAL_BASE_YEAR, MODEL_FUTURE_YEARS)
+
+    # Create the lifetime table
+    L244.GlobalTechLifetime_bld_EUR <- A44.cost_efficiency_EUR %>%
+      # Select relevant columns including lifetime
+      select(supplysector, subsector, technology, lifetime) %>%
+      # Expand to include all GCAM consumers (for residential technologies)
+      tidyr::expand_grid(unique(L106.income_shares %>% select(gcam.consumer))) %>%
+      # Modify supplysector for residential technologies (add consumer suffix)
+      mutate(supplysector = if_else(grepl('resid', supplysector),
+                                    paste(supplysector, gcam.consumer, sep = '_'),
+                                    supplysector)) %>%
+      # Expand to include all years
+      tidyr::expand_grid(year = all_years) %>%
+      # Rename columns to match what LEVEL2_DATA_NAMES[["GlobalTechLifetime"]] expects
+      rename(sector.name = supplysector,
+             subsector.name = subsector) %>%
+      # Select columns in the order expected by LEVEL2_DATA_NAMES
+      select(LEVEL2_DATA_NAMES[["GlobalTechLifetime"]])
 
     # L244.StubTechIntGainOutputRatio_EUR: Output ratios of internal gain energy from non-thermal building services
     L244.StubTechIntGainOutputRatio_pre <- L144.internal_gains_EUR %>%
@@ -2467,6 +2557,14 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_precursors("gcam-europe/A44.globaltech_shrwt_EUR") ->
       L244.GlobalTechShrwt_bld_EUR
 
+    L244.GlobalTechInterp_bld_EUR %>%
+      add_title("Technology shareweight interpolation for heatpump building technologies") %>%
+      add_units("Unitless") %>%
+      add_comments("fills out model years in A44.globaltech_interp_EUR") %>%
+      add_legacy_name("L244.GlobalTechInterp_bld_EUR") %>%
+      add_precursors("gcam-europe/A44.globaltech_interp_EUR") ->
+      L244.GlobalTechInterp_bld_EUR
+
     L244.PrimaryRenewKeyword_bld_EUR %>%
       add_title("Keywords of building renewable electric technologies") %>%
       add_units("NA") %>%
@@ -2525,11 +2623,27 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     L244.GlobalTechSCurve_bld_EUR %>%
       add_title("Retirement rates for building technologies") %>%
-      add_units("lifetime/half.life = years") %>%
-      add_comments("Lifetime, steepness, and half.life from A44.globaltech_retirement") %>%
+      add_units("annual rate") %>%
+      add_comments("Lifetime, half.life and steepness from A44.globaltech_retirement_EUR") %>%
       add_legacy_name("L244.GlobalTechSCurve_bld_EUR") %>%
-      add_precursors("gcam-europe/A44.cost_efficiency_EUR", "gcam-europe/A44.globaltech_retirement_EUR") ->
+      add_precursors("gcam-europe/A44.globaltech_retirement_EUR") ->
       L244.GlobalTechSCurve_bld_EUR
+
+      L244.GlobalTechProfitShutdown_bld_EUR %>%
+        add_title("Global tech profit shutdown decider and parameters") %>%
+        add_units("Unitless, used to determine shape of the function defining the relationship between shutdown rate and profitability") %>%
+        add_comments("Filters for any technologies that use a profit-based shutdown parameter") %>%
+        add_legacy_name("L244.GlobalTechProfitShutdown_bld_EUR") %>%
+        add_precursors("gcam-europe/A44.cost_efficiency_EUR") ->
+        L244.GlobalTechProfitShutdown_bld_EUR
+
+      L244.GlobalTechLifetime_bld_EUR %>%
+        add_title("Global tech lifetime for any technology with no retirement function") %>%
+        add_units("Lifetime in years") %>%
+        add_comments("Adds lifetime for all techs") %>%
+        add_legacy_name("L244.GlobalTechLifetime_bld_EUR") %>%
+        add_precursors("gcam-europe/A44.cost_efficiency_EUR") ->
+        L244.GlobalTechLifetime_bld_EUR
 
     if(exists("L244.DeleteGenericService_EUR")) {
       L244.DeleteGenericService_EUR %>%

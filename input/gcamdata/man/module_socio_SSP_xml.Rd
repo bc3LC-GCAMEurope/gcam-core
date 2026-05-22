@@ -14,11 +14,10 @@ module_socio_SSP_xml(command, ...)
 \value{
 Depends on \code{command}: either a vector of required inputs,
 a vector of output names, or (if \code{command} is "MAKE") all
-the generated outputs: \code{socioeconomics_gSSP1.xml}, \code{socioeconomics_gSSP2.xml}, \code{socioeconomics_gSSP3.xml},
-\code{socioeconomics_gSSP4.xml}, \code{socioeconomics_gSSP5.xml}, \code{socioeconomics_SSP1.xml},
+the generated outputs: \code{socioeconomics_SSP1.xml},
 \code{socioeconomics_SSP2.xml}, \code{socioeconomics_SSP3.xml},
 \code{socioeconomics_SSP4.xml}, and \code{socioeconomics_SSP5.xml}.
 }
 \description{
-Construct XML data structure for all the \code{socioeconomics_[g]SSP[1-5].xml} files.
+Construct XML data structure for all the \code{socioeconomics_SSP[1-5].xml} files.
 }

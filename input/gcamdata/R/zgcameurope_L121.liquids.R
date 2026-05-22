@@ -63,7 +63,7 @@ module_gcameurope_L121.liquids <- function(command, ...) {
 
     # Now subtract from refined liquids TPES and set remainder to crude oil
     L121.in_EJ_R_TPES_crude_Yh_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
-      filter(sector == "TPES", fuel == "refined liquids") %>%
+      filter(sector == "TES", fuel == "refined liquids") %>%
       left_join(L121.in_EJ_R_TPES_unoil_Yh_EUR, by = c("GCAM_region_ID", "sector", "year")) %>%
       replace_na(list(value.y = 0)) %>%
       mutate(fuel = "crude oil",
@@ -117,7 +117,7 @@ module_gcameurope_L121.liquids <- function(command, ...) {
       select(GCAM_region_ID, Biofuel, technology, GCAM_commodity, share)
 
     L121.share_R_TPES_biofuel_tech_EUR <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
-      filter(sector == "TPES",
+      filter(sector == "TES",
              grepl("refined biofuels", fuel),
              year == max(HISTORICAL_YEARS),
              value > 0) %>%

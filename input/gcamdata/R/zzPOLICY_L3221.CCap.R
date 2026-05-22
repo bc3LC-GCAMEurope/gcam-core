@@ -196,7 +196,7 @@ module_policy_L3221.CCap <- function(command, ...) {
 
       # First calculate GDP series - we have baseGDP, growth rate in perCapitaGDP and population
       L3221.GDP <- L201.GDP_Scen %>%
-        filter(scenario == paste0("g", socioeconomics.BASE_GDP_SCENARIO))
+        filter(scenario == paste0(socioeconomics.BASE_GDP_SCENARIO))
 
       # Next get the energy technologies that we want to constraint
       L3221.emissions_techs <- bind_rows(L3221.CCap_tech,

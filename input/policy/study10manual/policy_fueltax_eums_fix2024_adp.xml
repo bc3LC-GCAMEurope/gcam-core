@@ -4,7 +4,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.494888398</input-cost>
                             </minicam-non-energy-input>
@@ -95,7 +95,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.494888398</input-cost>
                             </minicam-non-energy-input>
@@ -186,7 +186,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>1.242189754</input-cost>
                             </minicam-non-energy-input>
@@ -277,7 +277,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>3.586081308</input-cost>
                             </minicam-non-energy-input>
@@ -370,7 +370,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.131175238</input-cost>
                             </minicam-non-energy-input>
@@ -461,7 +461,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.131175238</input-cost>
                             </minicam-non-energy-input>
@@ -552,7 +552,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>0.444703932</input-cost>
                             </minicam-non-energy-input>
@@ -643,7 +643,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>4.868142259</input-cost>
                             </minicam-non-energy-input>
@@ -736,7 +736,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0</input-cost>
                             </minicam-non-energy-input>
@@ -827,7 +827,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0</input-cost>
                             </minicam-non-energy-input>
@@ -918,7 +918,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>0</input-cost>
                             </minicam-non-energy-input>
@@ -1009,7 +1009,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>2.820029581</input-cost>
                             </minicam-non-energy-input>
@@ -1102,7 +1102,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.089437662</input-cost>
                             </minicam-non-energy-input>
@@ -1193,7 +1193,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.089437662</input-cost>
                             </minicam-non-energy-input>
@@ -1284,7 +1284,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>0.083640777</input-cost>
                             </minicam-non-energy-input>
@@ -1375,7 +1375,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>3.813751767</input-cost>
                             </minicam-non-energy-input>
@@ -1468,7 +1468,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.775126407</input-cost>
                             </minicam-non-energy-input>
@@ -1559,7 +1559,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.775126407</input-cost>
                             </minicam-non-energy-input>
@@ -1650,7 +1650,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>0.828126503</input-cost>
                             </minicam-non-energy-input>
@@ -1741,7 +1741,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>3.369383246</input-cost>
                             </minicam-non-energy-input>
@@ -1834,7 +1834,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.098381429</input-cost>
                             </minicam-non-energy-input>
@@ -1925,7 +1925,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.098381429</input-cost>
                             </minicam-non-energy-input>
@@ -2016,7 +2016,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>0.091093915</input-cost>
                             </minicam-non-energy-input>
@@ -2107,7 +2107,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>3.766684359</input-cost>
                             </minicam-non-energy-input>
@@ -2200,7 +2200,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>2.668223592</input-cost>
                             </minicam-non-energy-input>
@@ -2291,7 +2291,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>2.668223592</input-cost>
                             </minicam-non-energy-input>
@@ -2382,7 +2382,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>9.894455457</input-cost>
                             </minicam-non-energy-input>
@@ -2473,7 +2473,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>4.351079014</input-cost>
                             </minicam-non-energy-input>
@@ -2566,7 +2566,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.623082381</input-cost>
                             </minicam-non-energy-input>
@@ -2657,7 +2657,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.623082381</input-cost>
                             </minicam-non-energy-input>
@@ -2748,7 +2748,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>0.370172547</input-cost>
                             </minicam-non-energy-input>
@@ -2839,7 +2839,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>4.300214199</input-cost>
                             </minicam-non-energy-input>
@@ -2932,7 +2932,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>1.711240606</input-cost>
                             </minicam-non-energy-input>
@@ -3023,7 +3023,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>1.711240606</input-cost>
                             </minicam-non-energy-input>
@@ -3114,7 +3114,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>1.865769011</input-cost>
                             </minicam-non-energy-input>
@@ -3205,7 +3205,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>5.042272888</input-cost>
                             </minicam-non-energy-input>
@@ -3298,7 +3298,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.700595021</input-cost>
                             </minicam-non-energy-input>
@@ -3389,7 +3389,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.700595021</input-cost>
                             </minicam-non-energy-input>
@@ -3480,7 +3480,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>1.863284632</input-cost>
                             </minicam-non-energy-input>
@@ -3571,7 +3571,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>5.200814741</input-cost>
                             </minicam-non-energy-input>
@@ -3664,7 +3664,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.456132078</input-cost>
                             </minicam-non-energy-input>
@@ -3755,7 +3755,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.456132078</input-cost>
                             </minicam-non-energy-input>
@@ -3846,7 +3846,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>1.697659331</input-cost>
                             </minicam-non-energy-input>
@@ -3937,7 +3937,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>4.607999671</input-cost>
                             </minicam-non-energy-input>
@@ -4030,7 +4030,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.089437662</input-cost>
                             </minicam-non-energy-input>
@@ -4121,7 +4121,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.089437662</input-cost>
                             </minicam-non-energy-input>
@@ -4212,7 +4212,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>0.414063251</input-cost>
                             </minicam-non-energy-input>
@@ -4303,7 +4303,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>4.573879932</input-cost>
                             </minicam-non-energy-input>
@@ -4396,7 +4396,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.155025281</input-cost>
                             </minicam-non-energy-input>
@@ -4487,7 +4487,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.155025281</input-cost>
                             </minicam-non-energy-input>
@@ -4578,7 +4578,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>0.077015765</input-cost>
                             </minicam-non-energy-input>
@@ -4669,7 +4669,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>2.860514976</input-cost>
                             </minicam-non-energy-input>
@@ -4762,7 +4762,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.307069307</input-cost>
                             </minicam-non-energy-input>
@@ -4853,7 +4853,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.307069307</input-cost>
                             </minicam-non-energy-input>
@@ -4944,7 +4944,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>0.08281265</input-cost>
                             </minicam-non-energy-input>
@@ -5035,7 +5035,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>4.473975475</input-cost>
                             </minicam-non-energy-input>
@@ -5128,7 +5128,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.354769394</input-cost>
                             </minicam-non-energy-input>
@@ -5219,7 +5219,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.354769394</input-cost>
                             </minicam-non-energy-input>
@@ -5310,7 +5310,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>1.879847162</input-cost>
                             </minicam-non-energy-input>
@@ -5401,7 +5401,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>5.485743343</input-cost>
                             </minicam-non-energy-input>
@@ -5494,7 +5494,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.137137749</input-cost>
                             </minicam-non-energy-input>
@@ -5585,7 +5585,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.137137749</input-cost>
                             </minicam-non-energy-input>
@@ -5676,7 +5676,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>0.083640777</input-cost>
                             </minicam-non-energy-input>
@@ -5767,7 +5767,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>3.767016713</input-cost>
                             </minicam-non-energy-input>
@@ -5860,7 +5860,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.089437662</input-cost>
                             </minicam-non-energy-input>
@@ -5951,7 +5951,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.089437662</input-cost>
                             </minicam-non-energy-input>
@@ -6042,7 +6042,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>0.083640777</input-cost>
                             </minicam-non-energy-input>
@@ -6133,7 +6133,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>3.422033455</input-cost>
                             </minicam-non-energy-input>
@@ -6226,7 +6226,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.089437662</input-cost>
                             </minicam-non-energy-input>
@@ -6317,7 +6317,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.089437662</input-cost>
                             </minicam-non-energy-input>
@@ -6408,7 +6408,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>0.08281265</input-cost>
                             </minicam-non-energy-input>
@@ -6499,7 +6499,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>3.383522305</input-cost>
                             </minicam-non-energy-input>
@@ -6592,7 +6592,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.250425454</input-cost>
                             </minicam-non-energy-input>
@@ -6683,7 +6683,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.250425454</input-cost>
                             </minicam-non-energy-input>
@@ -6774,7 +6774,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>0.124218975</input-cost>
                             </minicam-non-energy-input>
@@ -6865,7 +6865,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>4.163162159</input-cost>
                             </minicam-non-energy-input>
@@ -6958,7 +6958,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>3.479125064</input-cost>
                             </minicam-non-energy-input>
@@ -7049,7 +7049,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>3.479125064</input-cost>
                             </minicam-non-energy-input>
@@ -7140,7 +7140,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>10.35158129</input-cost>
                             </minicam-non-energy-input>
@@ -7231,7 +7231,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>5.362150724</input-cost>
                             </minicam-non-energy-input>
@@ -7324,7 +7324,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.086456407</input-cost>
                             </minicam-non-energy-input>
@@ -7415,7 +7415,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.086456407</input-cost>
                             </minicam-non-energy-input>
@@ -7506,7 +7506,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>0.094406421</input-cost>
                             </minicam-non-energy-input>
@@ -7597,7 +7597,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>2.929778721</input-cost>
                             </minicam-non-energy-input>
@@ -7690,7 +7690,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.304088052</input-cost>
                             </minicam-non-energy-input>
@@ -7781,7 +7781,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.304088052</input-cost>
                             </minicam-non-energy-input>
@@ -7872,7 +7872,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>0.08281265</input-cost>
                             </minicam-non-energy-input>
@@ -7963,7 +7963,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>4.614869152</input-cost>
                             </minicam-non-energy-input>
@@ -8056,7 +8056,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.101362684</input-cost>
                             </minicam-non-energy-input>
@@ -8147,7 +8147,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.101362684</input-cost>
                             </minicam-non-energy-input>
@@ -8238,7 +8238,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>0.088609536</input-cost>
                             </minicam-non-energy-input>
@@ -8329,7 +8329,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>2.909072759</input-cost>
                             </minicam-non-energy-input>
@@ -8422,7 +8422,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.11030645</input-cost>
                             </minicam-non-energy-input>
@@ -8513,7 +8513,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.11030645</input-cost>
                             </minicam-non-energy-input>
@@ -8604,7 +8604,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>0.109312698</input-cost>
                             </minicam-non-energy-input>
@@ -8695,7 +8695,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>3.789873584</input-cost>
                             </minicam-non-energy-input>
@@ -8788,7 +8788,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.551532251</input-cost>
                             </minicam-non-energy-input>
@@ -8879,7 +8879,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.551532251</input-cost>
                             </minicam-non-energy-input>
@@ -8970,7 +8970,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>0.318828704</input-cost>
                             </minicam-non-energy-input>
@@ -9061,7 +9061,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>4.138945578</input-cost>
                             </minicam-non-energy-input>
@@ -9154,7 +9154,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.193781602</input-cost>
                             </minicam-non-energy-input>
@@ -9245,7 +9245,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>0.193781602</input-cost>
                             </minicam-non-energy-input>
@@ -9336,7 +9336,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>0.795001443</input-cost>
                             </minicam-non-energy-input>
@@ -9427,7 +9427,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>3.611897561</input-cost>
                             </minicam-non-energy-input>
@@ -9520,7 +9520,7 @@
             <supplysector name="delivered gas">
                 <subsector name="delivered gas">
                     <stub-technology name="delivered gas">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>2.456554458</input-cost>
                             </minicam-non-energy-input>
@@ -9611,7 +9611,7 @@
             <supplysector name="delivered gas transport">
                 <subsector name="delivered gas transport">
                     <stub-technology name="delivered gas transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="NG-tax">
                                 <input-cost>2.456554458</input-cost>
                             </minicam-non-energy-input>
@@ -9702,7 +9702,7 @@
             <supplysector name="elect_td_bld">
                 <subsector name="elect_td_bld">
                     <stub-technology name="elect_td_bld">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="elec-tax">
                                 <input-cost>2.705489285</input-cost>
                             </minicam-non-energy-input>
@@ -9793,7 +9793,7 @@
             <supplysector name="refined liquids transport">
                 <subsector name="refined liquids transport">
                     <stub-technology name="refined liquids transport">
-                        <period year="2020">
+                        <period year="2021">
                             <minicam-non-energy-input name="trnfuel-tax">
                                 <input-cost>4.323799056</input-cost>
                             </minicam-non-energy-input>

@@ -1,0 +1,21 @@
+# File: estat_nrg_d_hhq_filtered_en_corrSE.csv
+# Title: Corrected data (Sweden) for disaggregated final energy consumption in households - quantities
+# Units: TJ
+# Source: Data from JRC IDEES
+# Column types: cccccccnnc 
+# ----------
+STRUCTURE,STRUCTURE_ID,freq,nrg_bal,siec,unit,geo,TIME_PERIOD,OBS_VALUE,OBS_FLAG
+dataflow,ESTAT:NRG_D_HHQ(1.0),A,FC_OTH_HH_E_SH,RA600,TJ,SE,2015,46159.157,
+dataflow,ESTAT:NRG_D_HHQ(1.0),A,FC_OTH_HH_E_SH,RA600,TJ,SE,2016,53819.526,
+dataflow,ESTAT:NRG_D_HHQ(1.0),A,FC_OTH_HH_E_SH,RA600,TJ,SE,2017,53820,
+dataflow,ESTAT:NRG_D_HHQ(1.0),A,FC_OTH_HH_E_SH,RA600,TJ,SE,2018,56587,
+dataflow,ESTAT:NRG_D_HHQ(1.0),A,FC_OTH_HH_E_SH,RA600,TJ,SE,2019,56587,
+dataflow,ESTAT:NRG_D_HHQ(1.0),A,FC_OTH_HH_E_SH,RA600,TJ,SE,2020,61231,
+dataflow,ESTAT:NRG_D_HHQ(1.0),A,FC_OTH_HH_E_SH,RA600,TJ,SE,2021,61713,
+dataflow,ESTAT:NRG_D_HHQ(1.0),A,FC_OTH_HH_E,RA600,TJ,SE,2015,46159.157,
+dataflow,ESTAT:NRG_D_HHQ(1.0),A,FC_OTH_HH_E,RA600,TJ,SE,2016,53819.526,
+dataflow,ESTAT:NRG_D_HHQ(1.0),A,FC_OTH_HH_E,RA600,TJ,SE,2017,53820,
+dataflow,ESTAT:NRG_D_HHQ(1.0),A,FC_OTH_HH_E,RA600,TJ,SE,2018,56587,
+dataflow,ESTAT:NRG_D_HHQ(1.0),A,FC_OTH_HH_E,RA600,TJ,SE,2019,56587,
+dataflow,ESTAT:NRG_D_HHQ(1.0),A,FC_OTH_HH_E,RA600,TJ,SE,2020,61231,
+dataflow,ESTAT:NRG_D_HHQ(1.0),A,FC_OTH_HH_E,RA600,TJ,SE,2021,61713,

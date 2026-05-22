@@ -60,6 +60,32 @@ module_energy_L1323.iron_steel <- function(command, ...) {
     GCAM_region_names <- get_data(all_data, "common/GCAM_region_names")
     enduse_fuel_aggregation <- get_data(all_data, "energy/mappings/enduse_fuel_aggregation")
 
+    # some checking to ensure we have enough historical data to cover the calibration years and issue a warning
+    # and copy forward if no
+    All_steel_years <- unique(All_steel$year)
+    All_steel_max_year <- max(All_steel_years)
+    if (All_steel_max_year < MODEL_FINAL_BASE_YEAR) {
+      warning("energy/steel_prod_process: Copying to fill missing All Steel data. Update data to latest base year.")
+      All_steel_missing_years <- HISTORICAL_YEARS[HISTORICAL_YEARS > All_steel_max_year]
+      All_steel %>%
+        complete(nesting(country_name, unit_prod), year = c(All_steel_years, All_steel_missing_years)) %>%
+        group_by(country_name, unit_prod) %>%
+        # ideally we could just use copy_data_forward_long but we need to extend multiple variables
+        mutate(BLASTFUR = approx_fun(year, BLASTFUR, rule=2),
+               EAF = approx_fun(year, EAF, rule=2)) %>%
+        ungroup() ->
+        All_steel
+    }
+
+    DRI_years <- suppressWarnings(as.integer(names(DRI_stats)))
+    DRI_years <- DRI_years[!is.na(DRI_years)]
+    DRI_max_year <- max(DRI_years)
+    if (DRI_max_year < MODEL_FINAL_BASE_YEAR) {
+      warning("energy/WSA_direct_reduced_iron_2008_2019.csv: Copying to fill missing DRI data. Update data to latest base year.")
+      DRI_missing_years <- HISTORICAL_YEARS[HISTORICAL_YEARS > DRI_max_year]
+      DRI_stats <- copy_data_forward_wide(DRI_stats, DRI_max_year, DRI_missing_years)
+    }
+
     #Estimate DRI (direct reduced iron) consumption from country-wise WSA DRI production, imports, and exports data
     DRI_stats %>%
       gather(year,value,-metric,-country_name)%>%
@@ -80,7 +106,7 @@ module_energy_L1323.iron_steel <- function(command, ...) {
              `EAF with scrap`=if_else(`EAF with scrap`<0,0,`EAF with scrap`))%>%
       select(-EAF)%>%
       left_join(iso_GCAM_regID,by="country_name")%>%
-      select(-GCAM_region_ID,-country_name,-region_GCAM3)-> All_steel
+      select(-GCAM_region_ID,-country_name,-region_GCAM3)-> All_steel_Ctry
 
 
     # ===================================================
@@ -89,63 +115,63 @@ module_energy_L1323.iron_steel <- function(command, ...) {
     # Recalculate steel production by technology across years to be consistent
     # with the iron and steel trade balance (consumption = production - exports + imports)
     # Change steel production to long format and aggregate to region level
-    All_steel %>%
+    All_steel_Ctry %>%
       left_join(iso_GCAM_regID, by = "iso") %>%
       #aggregate the production to regional level
       group_by(GCAM_region_ID, year) %>%
       summarise(BLASTFUR=sum(BLASTFUR),`EAF with scrap`=sum(`EAF with scrap`),
-                `EAF with DRI`=sum(`EAF with DRI`))-> All_steel
+                `EAF with DRI`=sum(`EAF with DRI`))-> All_steel_R
 
-      #Obtain the index of GCAM_regions and sub sectors that are calibrated to zero steel production in the base-year
-      All_steel %>%
-        filter(year==MODEL_FINAL_BASE_YEAR & (`EAF with scrap`==0| BLASTFUR==0 | `EAF with DRI`==0)) %>%
-        left_join(GCAM_region_names,by=c("GCAM_region_ID"))-> L1323.index
+    #Obtain the index of GCAM_regions and sub sectors that are calibrated to zero steel production in the base-year
+    All_steel_R %>%
+      filter(year==MODEL_FINAL_BASE_YEAR & (`EAF with scrap`==0| BLASTFUR==0 | `EAF with DRI`==0)) %>%
+      left_join(GCAM_region_names,by=c("GCAM_region_ID"))-> L1323.index
 
-      #add a minimal steel production value (0.5% of the total) to technologies in the base-year where they are calibrated to zero
-      All_steel %>%
-        mutate(BLASTFUR = if_else(BLASTFUR==0 & year == MODEL_FINAL_BASE_YEAR,
-                                  (BLASTFUR+`EAF with scrap`+`EAF with DRI`)*0.005,BLASTFUR),
-               `EAF with scrap` = if_else(`EAF with scrap`== 0 & year == MODEL_FINAL_BASE_YEAR,
+    #add a minimal steel production value (0.5% of the total) to technologies in the base-year where they are calibrated to zero
+    All_steel_R %>%
+      mutate(BLASTFUR = if_else(BLASTFUR==0 & year == MODEL_FINAL_BASE_YEAR,
+                                (BLASTFUR+`EAF with scrap`+`EAF with DRI`)*0.005,BLASTFUR),
+             `EAF with scrap` = if_else(`EAF with scrap`== 0 & year == MODEL_FINAL_BASE_YEAR,
                                         (BLASTFUR+`EAF with scrap`+`EAF with DRI`)*0.005,`EAF with scrap`),
-               `EAF with DRI` = if_else(`EAF with DRI`==0 & year == MODEL_FINAL_BASE_YEAR,
-                                        (BLASTFUR+`EAF with scrap`+`EAF with DRI`)*0.005,`EAF with DRI`),
-               #calculate the percentage of BLASTFUR, EAF with scrap, and EAF with DRI across regions and years
-               BLASTFUR_pct = if_else(BLASTFUR == 0, 0, BLASTFUR/(BLASTFUR+`EAF with scrap`+`EAF with DRI`)),
-               EAF_scrap_pct = if_else(`EAF with scrap` == 0, 0, `EAF with scrap`/(BLASTFUR+`EAF with scrap`+`EAF with DRI`)),
-               EAF_DRI_pct = if_else(`EAF with DRI` == 0, 0, `EAF with DRI`/(BLASTFUR+`EAF with scrap`+`EAF with DRI`))) %>%
-        #join the WSA total steel production data from LB1092.Tradebalance_iron_steel_Mt_R_Y
-        left_join(GCAM_region_names,by="GCAM_region_ID") %>%
-        left_join(LB1092.Tradebalance_iron_steel_Mt_R_Y %>%
-                    filter(metric == "production") %>%
-                    rename(region=GCAM_region,production=value),by=c("region","year")) %>%
-        #recalculate the steel production by technologies and regions
-        #For example, steel produced from BLASTFUR is equal to WSA total production multiplied by percent BLASTFUR
-        mutate(BLASTFUR=BLASTFUR_pct*(1/CONV_KT_MT)*production,
-               `EAF with scrap`=EAF_scrap_pct*(1/CONV_KT_MT)*production,
-               `EAF with DRI`=EAF_DRI_pct*(1/CONV_KT_MT)*production) %>%
-        ungroup()%>%
-        select(GCAM_region_ID,year,BLASTFUR,`EAF with scrap`,`EAF with DRI`)%>%
-        #convert from wide to long
-        gather(subsector,value,-year,-GCAM_region_ID) %>%
-        #convert unit from kt to mt
-        mutate(value = value * CONV_KT_MT) %>%
-        select(GCAM_region_ID, year,subsector, value) %>%
-        filter(year %in% HISTORICAL_YEARS) -> L1323.out_Mt_R_iron_steel_Yh
+             `EAF with DRI` = if_else(`EAF with DRI`==0 & year == MODEL_FINAL_BASE_YEAR,
+                                      (BLASTFUR+`EAF with scrap`+`EAF with DRI`)*0.005,`EAF with DRI`),
+             #calculate the percentage of BLASTFUR, EAF with scrap, and EAF with DRI across regions and years
+             BLASTFUR_pct = if_else(BLASTFUR == 0, 0, BLASTFUR/(BLASTFUR+`EAF with scrap`+`EAF with DRI`)),
+             EAF_scrap_pct = if_else(`EAF with scrap` == 0, 0, `EAF with scrap`/(BLASTFUR+`EAF with scrap`+`EAF with DRI`)),
+             EAF_DRI_pct = if_else(`EAF with DRI` == 0, 0, `EAF with DRI`/(BLASTFUR+`EAF with scrap`+`EAF with DRI`))) %>%
+      #join the WSA total steel production data from LB1092.Tradebalance_iron_steel_Mt_R_Y
+      left_join(GCAM_region_names,by="GCAM_region_ID") %>%
+      left_join(LB1092.Tradebalance_iron_steel_Mt_R_Y %>%
+                  filter(metric == "production") %>%
+                  rename(region=GCAM_region,production=value),by=c("region","year")) %>%
+      #recalculate the steel production by technologies and regions
+      #For example, steel produced from BLASTFUR is equal to WSA total production multiplied by percent BLASTFUR
+      mutate(BLASTFUR=BLASTFUR_pct*(1/CONV_KT_MT)*production,
+             `EAF with scrap`=EAF_scrap_pct*(1/CONV_KT_MT)*production,
+             `EAF with DRI`=EAF_DRI_pct*(1/CONV_KT_MT)*production) %>%
+      ungroup()%>%
+      select(GCAM_region_ID,year,BLASTFUR,`EAF with scrap`,`EAF with DRI`)%>%
+      #convert from wide to long
+      gather(subsector,value,-year,-GCAM_region_ID) %>%
+      #convert unit from kt to mt
+      mutate(value = value * CONV_KT_MT) %>%
+      select(GCAM_region_ID, year,subsector, value) %>%
+      filter(year %in% HISTORICAL_YEARS) -> L1323.out_Mt_R_iron_steel_Yh
 
-   # L2323.SubsectorInterp_iron_steel: Subsector shareweight interpolation of iron and steel sector
-      A323.subsector_interp %>%
-        filter(is.na(to.value)) %>%
-        write_to_all_regions(LEVEL2_DATA_NAMES[["SubsectorInterp"]], GCAM_region_names) ->
-        L1323.SubsectorInterp_iron_steel
+    # L2323.SubsectorInterp_iron_steel: Subsector shareweight interpolation of iron and steel sector
+    A323.subsector_interp %>%
+      filter(is.na(to.value)) %>%
+      write_to_all_regions(LEVEL2_DATA_NAMES[["SubsectorInterp"]], GCAM_region_names) ->
+      L1323.SubsectorInterp_iron_steel
 
-   # linearly interpolate the share weights to 1 by 2100 for GCAM_regions and sub sectors that were calibrated to zero in the base-year
-   # It is important to linearly interpolate these sub sector share weights to 1 since we add a negligible steel production to these sub sectors in the base-year for future growth (line 78),
-   # which leads to incredibly low share-weights in the base-year and therefore no future expansion
-      L1323.SubsectorInterp_iron_steel$to.year[which(L1323.SubsectorInterp_iron_steel$region %in% unique((L1323.index %>%
-                                                                   filter(BLASTFUR == 0 |`EAF with scrap`== 0 |`EAF with DRI` == 0))$region))] <- 2100
+    # linearly interpolate the share weights to 1 by 2100 for GCAM_regions and sub sectors that were calibrated to zero in the base-year
+    # It is important to linearly interpolate these sub sector share weights to 1 since we add a negligible steel production to these sub sectors in the base-year for future growth (line 78),
+    # which leads to incredibly low share-weights in the base-year and therefore no future expansion
+    L1323.SubsectorInterp_iron_steel$to.year[which(L1323.SubsectorInterp_iron_steel$region %in% unique((L1323.index %>%
+                                                                                                          filter(BLASTFUR == 0 |`EAF with scrap`== 0 |`EAF with DRI` == 0))$region))] <- 2100
 
-      L1323.SubsectorInterp_iron_steel$interpolation.function[which(L1323.SubsectorInterp_iron_steel$region %in% unique((L1323.index %>%
-                                                                                                            filter(BLASTFUR == 0 |`EAF with scrap`== 0 |`EAF with DRI` == 0))$region))] <- "linear"
+    L1323.SubsectorInterp_iron_steel$interpolation.function[which(L1323.SubsectorInterp_iron_steel$region %in% unique((L1323.index %>%
+                                                                                                                         filter(BLASTFUR == 0 |`EAF with scrap`== 0 |`EAF with DRI` == 0))$region))] <- "linear"
     # Get steel energy use from IEA energy balances
     L1012.en_bal_EJ_R_Si_Fi_Yh %>%
       filter(grepl("steel", sector)) %>%
@@ -170,8 +196,8 @@ module_energy_L1323.iron_steel <- function(command, ...) {
       rename(output = value) %>%
       left_join(steel_intensity %>% select(-subsector,-ratio), by = c("subsector"="technology")) %>%
       mutate(value = value * CONV_GJ_EJ / CONV_T_MT,
-                    energy_use = output * value,
-                    unit = "EJ") ->
+             energy_use = output * value,
+             unit = "EJ") ->
       Intensity_literature
 
     # Scaler: IEA's estimates of fuel consumption divided by bottom-up estimate of energy consumption
@@ -209,7 +235,7 @@ module_energy_L1323.iron_steel <- function(command, ...) {
       select(-ratio)
 
 
-     # Use IO to calculate energy input
+    # Use IO to calculate energy input
     L1323.out_Mt_R_iron_steel_Yh %>%
       mutate(technology = subsector) %>%
       left_join(IO_iron_steel, by = c("subsector","technology","year","GCAM_region_ID")) %>%
@@ -217,11 +243,11 @@ module_energy_L1323.iron_steel <- function(command, ...) {
       select(GCAM_region_ID, supplysector = "sector", year, subsector, technology, fuel, "value") ->
       L1323.in_EJ_R_iron_steel_F_Y
 
-	  IO_iron_steel %>%
+    IO_iron_steel %>%
       select(GCAM_region_ID, year, supplysector = "sector", subsector, technology, fuel, coefficient) ->
       L1323.IO_GJkg_R_iron_steel_F_Yh
 
-	# Subtract iron and steel energy use from other industrial energy use
+    # Subtract iron and steel energy use from other industrial energy use
     L1322.in_EJ_R_indenergy_F_Yh %>%
       rename(raw = value) %>%
       left_join(L1323.in_EJ_R_iron_steel_F_Y %>%
@@ -326,4 +352,3 @@ module_energy_L1323.iron_steel <- function(command, ...) {
     stop("Unknown command")
   }
 }
-

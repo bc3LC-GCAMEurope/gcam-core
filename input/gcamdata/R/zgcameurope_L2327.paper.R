@@ -58,7 +58,10 @@ module_gcameurope_L2327.paper <- function(command, ...) {
                      "L203.Supplysector_demand",
                      "L203.PerCapitaBased",
                      "L123.eff_R_indchp_F_Yh_EUR",
-                     GLOBAL_TECH_COGEN)
+                     GLOBAL_TECH_COGEN,
+                     "L202.StubTechCoef_an_EUR",
+                     FILE = "emissions/A_PrimaryFuelCCoef")
+
   MODULE_OUTPUTS <- c("L2327.Supplysector_paper_EUR",
                       "L2327.FinalEnergyKeyword_paper_EUR",
                       "L2327.SubsectorLogit_paper_EUR",
@@ -68,6 +71,7 @@ module_gcameurope_L2327.paper <- function(command, ...) {
                       "L2327.StubTechProd_paper_EUR",
                       "L2327.StubTechCalInput_paper_heat_EUR",
                       "L2327.StubTechCoef_paper_EUR",
+                      "L2327.CarbonCapture_paper_EUR",
                       "L2327.PerCapitaBased_paper_EUR",
                       "L2327.BaseService_paper_EUR",
                       "L2327.PriceElasticity_paper_EUR",
@@ -231,7 +235,7 @@ module_gcameurope_L2327.paper <- function(command, ...) {
       mutate(output.ratio = elec_ratio * coefficient,
              output.ratio = round(output.ratio, energy.DIGITS_EFFICIENCY)) %>%
       # NOTE: holding the output ratio constant over time in future periods
-      left_join_error_no_match(select(filter(., year == max(MODEL_BASE_YEARS)), -coefficient, -elec_ratio),
+      left_join_error_no_match(select(filter(., year == MODEL_FINAL_BASE_YEAR), -coefficient, -elec_ratio),
                                by = c("supplysector", "subsector", "technology", "minicam.energy.input", "secondary.output")) %>%
       mutate(output.ratio = if_else(year.x %in% MODEL_BASE_YEARS, output.ratio.x, output.ratio.y)) %>%
       ungroup %>%
@@ -259,6 +263,27 @@ module_gcameurope_L2327.paper <- function(command, ...) {
       mutate(storage.market = energy.CO2.STORAGE.MARKET) ->
       L2327.GlobalTechCapture_paper
 
+
+    # Note the paper feedstock and energy have been bundled together into the wood pulp for
+    # energy commodity.  However the intention with the CCS is to capture the energy related
+    # carbon only.  As such we need to adjust the remove fraction by the ratio of, in terms of
+    # mass, energy to feedstock.
+    # To do this we start with the wood pulp for energy IO coefficient and back out the mass to
+    # energy conversion.  Note these ratios are all over the place and so we need to check for
+    # un-reasonable values.
+    WOODPULP_CCoef <- A_PrimaryFuelCCoef %>% filter(PrimaryFuelCO2Coef.name == "regional woodpulp for energy") %>% pull(PrimaryFuelCO2Coef)
+    L202.StubTechCoef_an_EUR %>%
+      filter(supplysector == "woodpulp_energy") %>%
+      inner_join(L2327.GlobalTechCapture_paper, by = "year") %>%
+      mutate(energy_feedstock_mass_ratio = (1/coefficient) * WOODPULP_CCoef * CONV_KG_T,
+             energy_feedstock_mass_ratio = pmin(energy_feedstock_mass_ratio, 1.0),
+             remove.fraction = remove.fraction * energy_feedstock_mass_ratio,
+             supplysector = sector.name,
+             subsector = subsector.name) %>%
+      select(LEVEL2_DATA_NAMES[['CarbonCapture']]) ->
+      L2327.CarbonCapture_paper_EUR
+
+
     # Retirement information
     A327.globaltech_retirement %>%
       set_years() %>%
@@ -278,7 +303,7 @@ module_gcameurope_L2327.paper <- function(command, ...) {
     # filters base years from original and then appends future years
     L2327.globaltech_retirement_base %>%
       mutate(year = as.integer(year)) %>%
-      filter(year == max(MODEL_BASE_YEARS)) %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
       bind_rows(L2327.globaltech_retirement_future) ->
       L2327.globaltech_retirement
 

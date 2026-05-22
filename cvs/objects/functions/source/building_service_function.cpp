@@ -52,30 +52,31 @@
 #include "functions/include/building_node_input.h"
 #include "functions/include/building_service_input.h"
 #include "functions/include/satiation_demand_function.h"
+#include "functions/include/function_utils.h"
 #include "sectors/include/sector_utils.h"
 
 using namespace std;
 
-double BuildingServiceFunction::calcCoefficient( InputSet& input, double consumption, const std::string& regionName,
-                            const std::string& sectorName, int period, double sigma, double IBT,
+double BuildingServiceFunction::calcCoefficient( InputSet& input, double consumption, const gcamstr& aRegionName,
+                            const gcamstr& sectorName, int period, double sigma, double IBT,
                             double capitalStock, const IInput* aParentInput ) const
 {
      return 1;
 }
 
-double BuildingServiceFunction::calcDemand( InputSet& input, double consumption, const std::string& regionName,
-                       const std::string& sectorName, const double population, int period,
+double BuildingServiceFunction::calcDemand( InputSet& input, double consumption, const gcamstr& aRegionName,
+                       const gcamstr& sectorName, const double population, int period,
                        double capitalStock, double alphaZero, double sigma, double IBT, const IInput* aParentInput ) const
 {
     const regex coalPattern("coal", regex::nosubs | regex::optimize | regex::egrep);
     const regex TradBioPattern("TradBio", regex::nosubs | regex::optimize | regex::egrep);
     
-    const double CVRT90 = 2.212; // 1975 $ to 1990 $
+    const double CVRT90 = FunctionUtils::DEFLATOR_1990_PER_DEFLATOR_1975(); // 1975 $ to 1990 $
     const BuildingNodeInput* buildingParentInput = static_cast<const BuildingNodeInput*>( aParentInput );
     // income is 1990 thousand $ and service price is 1975 $
-    double income = buildingParentInput->getSubregionalIncome(regionName, period) * 1000 / CVRT90;
+    double income = buildingParentInput->getSubregionalIncome(aRegionName, period) * 1000 / CVRT90;
     const double floorSpace = buildingParentInput->getPhysicalDemand( period );
-    const double internalGainsPerSqMeter = buildingParentInput->getInternalGains( regionName, period )
+    const double internalGainsPerSqMeter = buildingParentInput->getInternalGains( aRegionName, period )
         / floorSpace;
     double totalDemand = 0;
 
@@ -88,21 +89,20 @@ double BuildingServiceFunction::calcDemand( InputSet& input, double consumption,
             BuildingServiceInput* buildingServiceInput = static_cast<BuildingServiceInput*>( *inputIter );
 
             double thermalLoad = buildingServiceInput->calcThermalLoad( buildingParentInput, internalGainsPerSqMeter, period );
-
             double basePrice = buildingServiceInput->getServPriceBase();
 
             
-            if (regex_search(buildingServiceInput->getName(), coalPattern)) {
+            if (regex_search(buildingServiceInput->getName().get(), coalPattern)) {
 
-                double CoalserviceDensity = calcServiceDensCoal(buildingServiceInput,  income, basePrice, regionName, period);
+                double CoalserviceDensity = calcServiceDensCoal(buildingServiceInput,  income, basePrice, aRegionName, period);
 
                 demand = floorSpace * CoalserviceDensity;
 
                
             }
-            else if (regex_search(buildingServiceInput->getName(), TradBioPattern)) {
+            else if (regex_search(buildingServiceInput->getName().get(), TradBioPattern)) {
 
-                double TradBioserviceDensity = calcServiceDensTradBio(buildingServiceInput, income, basePrice, regionName, period);
+                double TradBioserviceDensity = calcServiceDensTradBio(buildingServiceInput, income, basePrice, aRegionName, period);
 
                 demand = floorSpace * TradBioserviceDensity;
 
@@ -110,7 +110,7 @@ double BuildingServiceFunction::calcDemand( InputSet& input, double consumption,
             }
             else {
                 
-                double serviceDensity = calcServiceDensity(buildingServiceInput, income, basePrice, regionName, period);
+                double serviceDensity = calcServiceDensity(buildingServiceInput, income, basePrice, aRegionName, period);
 
                 double biasadder = buildingServiceInput->getBiasAdder(period);
                 double adjustedServiceDensity = (buildingServiceInput->getCoef() * thermalLoad * serviceDensity) + biasadder;
@@ -120,6 +120,17 @@ double BuildingServiceFunction::calcDemand( InputSet& input, double consumption,
                 if (adjustedServiceDensity < 0) {
 
                     adjustedServiceDensity = buildingServiceInput->getServBaseDens();
+
+                // TODO - check if we want this chunk (Pralit adjustment tag GCAM-v8.3) instead of the 2 above lines
+                // if (adjustedServiceDensity < (buildingServiceInput->getCoef() *
+                //     thermalLoad *
+                //     calcServiceDensity(buildingServiceInput, income, basePrice, aRegionName, scenario->getModeltime()->getFinalCalibrationPeriod())) +
+                //     buildingServiceInput->getBiasAdder(scenario->getModeltime()->getFinalCalibrationPeriod())) {
+
+                //     adjustedServiceDensity = calcServiceDensity(buildingServiceInput, income, basePrice, aRegionName, scenario->getModeltime()->getFinalCalibrationPeriod()) *
+                //         thermalLoad * 
+                //         buildingServiceInput->getCoef() +
+                //         buildingServiceInput->getBiasAdder(scenario->getModeltime()->getFinalCalibrationPeriod());
 
                 }
 
@@ -144,14 +155,13 @@ double BuildingServiceFunction::calcDemand( InputSet& input, double consumption,
 
 
         totalDemand += demand;
-        (*inputIter)->setPhysicalDemand( demand, regionName, period );
+        (*inputIter)->setPhysicalDemand( demand, aRegionName, period );
     }
     return totalDemand;
 }
 
-
-double BuildingServiceFunction::calcLevelizedCost( const InputSet& aInputs, const std::string& aRegionName,
-                         const std::string& aSectorName, int aPeriod, double aAlphaZero, double aSigma,
+double BuildingServiceFunction::calcLevelizedCost( const InputSet& aInputs, const gcamstr& aRegionName,
+                         const gcamstr& aSectorName, int aPeriod, double aAlphaZero, double aSigma,
                          const IInput* aParentInput ) const
 {
     return 1;
@@ -170,7 +180,7 @@ double BuildingServiceFunction::calcLevelizedCost( const InputSet& aInputs, cons
 double BuildingServiceFunction::calcServiceDensity( BuildingServiceInput* aBuildingServiceInput,
                                                     const double aIncome,
                                                     const double aBasePrice,
-                                                    const string& aRegionName,
+                                                    const gcamstr& aRegionName,
                                                     const int aPeriod ) const
 {
     const double PriceAdjustParam = 0;
@@ -194,7 +204,7 @@ double BuildingServiceFunction::calcServiceDensity( BuildingServiceInput* aBuild
 double BuildingServiceFunction::calcServiceDensCoal(BuildingServiceInput* aBuildingServiceInput,
                                                         const double aIncome,
                                                         const double aBasePrice,
-                                                        const string& aRegionName,
+                                                        const gcamstr& aRegionName,
                                                         const int aPeriod) const
 {
 
@@ -239,7 +249,7 @@ double BuildingServiceFunction::calcServiceDensCoal(BuildingServiceInput* aBuild
 double BuildingServiceFunction::calcServiceDensTradBio(BuildingServiceInput* aBuildingServiceInput,
                                                           const double aIncome,
                                                           const double aBasePrice,
-                                                          const string& aRegionName,
+                                                          const gcamstr& aRegionName,
                                                           const int aPeriod) const
 {
 

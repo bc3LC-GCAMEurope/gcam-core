@@ -90,16 +90,14 @@ public:
     void completeInit();
     void toDebugXML( const int period, std::ostream& out, Tabs* tabs ) const;
 	static const std::string& getXMLNameStatic();
-    const std::string& getName() const;
+    const gcamstr& getName() const;
     void initCalc( const int period );
     void postCalc( const int aPeriod );
 
     void calc( const int period );
     void calc( const int period, const std::vector<IActivity*>& aRegionsToCalc );
     void setEmissions( int period );
-    void runClimateModel();
     void runClimateModel( int period );
-    const std::map<std::string,int> getOutputRegionMap() const;
     bool isAllCalibrated( const int period, double calAccuracy, const bool printWarnings ) const;
     void setTax( const GHGPolicy* aTax );
     const IClimateModel* getClimateModel() const;
@@ -110,7 +108,7 @@ public:
     
     const GlobalTechnologyDatabase* getGlobalTechnologyDatabase() const;
     
-    Region const* getRegion( const std::string& aRegionName ) const;
+    Region const* getRegion( const gcamstr& aRegionName ) const;
 
 	void accept( IVisitor* aVisitor, const int aPeriod ) const;
 

@@ -1,0 +1,28 @@
+# File: elecS_globaltech_capital_battery_ATB.csv
+# Title: ATB battery cost extended to 2021
+# Units: Unitless
+# Column types: cccinnnnnnnn
+# ----------
+supplysector,subsector,technology,period,lifetime,steepness,half.life,fcr,capacity.factor,capital.cost,fixed.om,variable.om
+peak generation,grid_storage,battery,1975,-1,-1,-1,0.13,0.16,615,15.37,0
+peak generation,grid_storage,battery,1990,-1,-1,-1,0.13,0.16,615,15.37,0
+peak generation,grid_storage,battery,2005,-1,-1,-1,0.13,0.16,615,15.37,0
+peak generation,grid_storage,battery,2010,-1,-1,-1,0.13,0.16,615,15.37,0
+peak generation,grid_storage,battery,2015,15,0.1,30,0.13,0.16,615,15.37,0
+peak generation,grid_storage,battery,2021,15,0.1,30,0.13,0.16,497,12.28,0
+peak generation,grid_storage,battery,2025,15,0.1,30,0.13,0.16,415,10.24,0
+peak generation,grid_storage,battery,2030,15,0.1,30,0.13,0.16,358,8.9,0
+peak generation,grid_storage,battery,2035,15,0.1,30,0.13,0.16,318,8.01,0
+peak generation,grid_storage,battery,2040,15,0.1,30,0.13,0.16,291,7.43,0
+peak generation,grid_storage,battery,2045,15,0.1,30,0.13,0.16,271,7.05,0
+peak generation,grid_storage,battery,2050,15,0.1,30,0.13,0.16,258,6.79,0
+peak generation,grid_storage,battery,2055,15,0.1,30,0.13,0.16,249,6.62,0
+peak generation,grid_storage,battery,2060,15,0.1,30,0.13,0.16,242,6.51,0
+peak generation,grid_storage,battery,2065,15,0.1,30,0.13,0.16,238,6.44,0
+peak generation,grid_storage,battery,2070,15,0.1,30,0.13,0.16,235,6.39,0
+peak generation,grid_storage,battery,2075,15,0.1,30,0.13,0.16,232,6.36,0
+peak generation,grid_storage,battery,2080,15,0.1,30,0.13,0.16,231,6.34,0
+peak generation,grid_storage,battery,2085,15,0.1,30,0.13,0.16,230,6.33,0
+peak generation,grid_storage,battery,2090,15,0.1,30,0.13,0.16,229,6.32,0
+peak generation,grid_storage,battery,2095,15,0.1,30,0.13,0.16,229,6.31,0
+peak generation,grid_storage,battery,2100,15,0.1,30,0.13,0.16,228,6.31,0

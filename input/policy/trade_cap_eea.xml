@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?><scenario>
+    <world>
+        <region name="USA">
+            <policy-portfolio-standard name="coal-trade-cap">
+                <market>USA</market>
+                <policyType>tax</policyType>
+                <constraint year="2025">0.9</constraint>
+                <constraint year="2030">0.9</constraint>
+                <constraint year="2035">0.9</constraint>
+                <constraint year="2040">0.9</constraint>
+                <constraint year="2045">0.9</constraint>
+                <constraint year="2050">0.9</constraint>
+            </policy-portfolio-standard>
+            <policy-portfolio-standard name="lng-trade-cap">
+                <market>USA</market>
+                <policyType>tax</policyType>
+                <constraint year="2025">1.6</constraint>
+                <constraint year="2030">1.6</constraint>
+                <constraint year="2035">1.6</constraint>
+                <constraint year="2040">1.6</constraint>
+                <constraint year="2045">1.6</constraint>
+                <constraint year="2050">1.6</constraint>
+            </policy-portfolio-standard>
+            <policy-portfolio-standard name="oil-trade-cap">
+                <market>USA</market>
+                <policyType>tax</policyType>
+                <constraint year="2025">1</constraint>
+                <constraint year="2030">1</constraint>
+                <constraint year="2035">1</constraint>
+                <constraint year="2040">1</constraint>
+                <constraint year="2045">1</constraint>
+                <constraint year="2050">1</constraint>
+            </policy-portfolio-standard>
+            <supplysector name="traded coal">
+                <subsector name="European_Single_Market traded coal">
+                    <stub-technology name="European_Single_Market traded coal">
+                        <period year="2021">
+                            <input-tax name="coal-trade-cap"/>
+                        </period>
+                        <period year="2025">
+                            <input-tax name="coal-trade-cap"/>
+                        </period>
+                        <period year="2030">
+                            <input-tax name="coal-trade-cap"/>
+                        </period>
+                        <period year="2035">
+                            <input-tax name="coal-trade-cap"/>
+                        </period>
+                        <period year="2040">
+                            <input-tax name="coal-trade-cap"/>
+                        </period>
+                        <period year="2045">
+                            <input-tax name="coal-trade-cap"/>
+                        </period>
+                        <period year="2050">
+                            <input-tax name="coal-trade-cap"/>
+                        </period>
+                        <period year="2055">
+                            <input-tax name="coal-trade-cap"/>
+                        </period>
+                        <period year="2060">
+                            <input-tax name="coal-trade-cap"/>
+                        </period>
+                        <period year="2065">
+                            <input-tax name="coal-trade-cap"/>
+                        </period>
+                        <period year="2070">
+                            <input-tax name="coal-trade-cap"/>
+                        </period>
+                        <period year="2075">
+                            <input-tax name="coal-trade-cap"/>
+                        </period>
+                        <period year="2080">
+                            <input-tax name="coal-trade-cap"/>
+                        </period>
+                        <period year="2085">
+                            <input-tax name="coal-trade-cap"/>
+                        </period>
+                        <period year="2090">
+                            <input-tax name="coal-trade-cap"/>
+                        </period>
+                        <period year="2095">
+                            <input-tax name="coal-trade-cap"/>
+                        </period>
+                        <period year="2100">
+                            <input-tax name="coal-trade-cap"/>
+                        </period>
+                    </stub-technology>
+                </subsector>
+                
+            </supplysector>
+            <supplysector name="traded LNG">
+                <subsector name="European_Single_Market traded LNG">
+                    <stub-technology name="European_Single_Market traded LNG">
+                        <period year="2021">
+                            <input-tax name="lng-trade-cap"/>
+                        </period>
+                        <period year="2025">
+                            <input-tax name="lng-trade-cap"/>
+                        </period>
+                        <period year="2030">
+                            <input-tax name="lng-trade-cap"/>
+                        </period>
+                        <period year="2035">
+                            <input-tax name="lng-trade-cap"/>
+                        </period>
+                        <period year="2040">
+                            <input-tax name="lng-trade-cap"/>
+                        </period>
+                        <period year="2045">
+                            <input-tax name="lng-trade-cap"/>
+                        </period>
+                        <period year="2050">
+                            <input-tax name="lng-trade-cap"/>
+                        </period>
+                        <period year="2055">
+                            <input-tax name="lng-trade-cap"/>
+                        </period>
+                        <period year="2060">
+                            <input-tax name="lng-trade-cap"/>
+                        </period>
+                        <period year="2065">
+                            <input-tax name="lng-trade-cap"/>
+                        </period>
+                        <period year="2070">
+                            <input-tax name="lng-trade-cap"/>
+                        </period>
+                        <period year="2075">
+                            <input-tax name="lng-trade-cap"/>
+                        </period>
+                        <period year="2080">
+                            <input-tax name="lng-trade-cap"/>
+                        </period>
+                        <period year="2085">
+                            <input-tax name="lng-trade-cap"/>
+                        </period>
+                        <period year="2090">
+                            <input-tax name="lng-trade-cap"/>
+                        </period>
+                        <period year="2095">
+                            <input-tax name="lng-trade-cap"/>
+                        </period>
+                        <period year="2100">
+                            <input-tax name="lng-trade-cap"/>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+            <supplysector name="traded oil">
+                <subsector name="European_Single_Market traded oil">
+                    <stub-technology name="European_Single_Market traded oil">
+                        <period year="2021">
+                            <input-tax name="oil-trade-cap"/>
+                        </period>
+                        <period year="2025">
+                            <input-tax name="oil-trade-cap"/>
+                        </period>
+                        <period year="2030">
+                            <input-tax name="oil-trade-cap"/>
+                        </period>
+                        <period year="2035">
+                            <input-tax name="oil-trade-cap"/>
+                        </period>
+                        <period year="2040">
+                            <input-tax name="oil-trade-cap"/>
+                        </period>
+                        <period year="2045">
+                            <input-tax name="oil-trade-cap"/>
+                        </period>
+                        <period year="2050">
+                            <input-tax name="oil-trade-cap"/>
+                        </period>
+                        <period year="2055">
+                            <input-tax name="oil-trade-cap"/>
+                        </period>
+                        <period year="2060">
+                            <input-tax name="oil-trade-cap"/>
+                        </period>
+                        <period year="2065">
+                            <input-tax name="oil-trade-cap"/>
+                        </period>
+                        <period year="2070">
+                            <input-tax name="oil-trade-cap"/>
+                        </period>
+                        <period year="2075">
+                            <input-tax name="oil-trade-cap"/>
+                        </period>
+                        <period year="2080">
+                            <input-tax name="oil-trade-cap"/>
+                        </period>
+                        <period year="2085">
+                            <input-tax name="oil-trade-cap"/>
+                        </period>
+                        <period year="2090">
+                            <input-tax name="oil-trade-cap"/>
+                        </period>
+                        <period year="2095">
+                            <input-tax name="oil-trade-cap"/>
+                        </period>
+                        <period year="2100">
+                            <input-tax name="oil-trade-cap"/>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+    </world>
+</scenario>

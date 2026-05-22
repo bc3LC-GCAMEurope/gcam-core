@@ -46,7 +46,9 @@ module_gcameurope_L210.resources <- function(command, ...) {
                                "L210.ResTechCost")
   MODULE_INPUTS <- c(FILE = "common/GCAM_region_names",
                     FILE = "energy/A_regions",
-                    FILE = "gcam-europe/A10.rsrc_info_EUR",
+                    FILE = "energy/A10.rsrc_info_fossils",
+                    FILE = "energy/A10.rsrc_info_renewables_others",
+                    FILE = "energy/A10.rsrc_info_uranium",
                     FILE = "gcam-europe/A10.subrsrc_info_EUR",
                     FILE = "energy/A10.TechChange",
                     FILE = "energy/A10.TechChange_SSPs",
@@ -108,20 +110,69 @@ module_gcameurope_L210.resources <- function(command, ...) {
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
-    A10.rsrc_info_EUR <- A10.rsrc_info_EUR %>% gather_years()
     # Remove trad bio in EUR datasets
     L210.RenewRsrc_EUR <- L210.RenewRsrc %>%
       filter(renewresource != 'traditional biomass') %>%
       filter_regions_europe()
+
     L210.RenewRsrcPrice_EUR <- L210.RenewRsrcPrice %>%
       filter(renewresource != 'traditional biomass') %>%
       filter_regions_europe()
+
     L210.ResTechShrwt <- L210.ResTechShrwt %>%
       filter(subresource != 'traditional biomass') %>%
       filter_regions_europe()
 
     # Create outputs that are simply copied from main scripts and filtered to Eurostat regions
     copy_filter_europe(all_data, OUTPUTS_TO_COPY_FILTER)
+
+    # Process resources prices data
+    # Source: bp-stats-review-2021-all-data.xlsx
+    # The specific regions, or region averages, used for global marker price described in the input file
+
+    # unit and currency conversion of resource prices into 1975$/GJ
+    A10.rsrc_info_fossils %>%
+      mutate(energy.conv = case_when(resource == "natural gas" ~ CONV_MMBTU_GJ,
+                                     resource == "crude oil" ~ CONV_BBL_GJ,
+                                     resource == "coal" ~ CONV_COALTONNE_GJ,
+                                     TRUE ~ NA_real_),
+             # convert each year as fossil prices are nominal USD
+             currency.conv = gdp_deflator(1975, year),
+             price = price * currency.conv / energy.conv,
+             `price-unit` = "1975$/GJ") %>%
+      # we are taking the mean price accross the "source" dimension in case we have
+      # multiple marker price markets for a given resource
+      group_by(resource, resource_type, market, `output-unit`, `price-unit`, year) %>%
+      summarize(value = mean(price)) %>%
+      # Note: taking advantage of the standard dplyr behavior to "pop" the last grouping: year
+      # which is what we want so that we can calculate moving average prices accross those yaers
+      mutate(moving_avg = Moving_average_lagged(value, periods = energy.FUEL_PRICES_MEAN_PERIOD)) %>%
+      ungroup() %>%
+      # filling earlier years with just the annual price
+      mutate(value = if_else(is.na(moving_avg), value, moving_avg)) %>%
+      select(-moving_avg) ->
+      A10.rsrc_info_fossils_processed_avg
+
+    # uranium unit conversion to 1975$
+    A10.rsrc_info_uranium %>%
+      gather_years() %>%
+      mutate(# the regex parses the currency unit to allow automatic currency deflation to $1975
+        value = value * gdp_deflator(1975, as.numeric(unique(unlist(regmatches(`price-unit`, gregexpr("[[:digit:]]+", `price-unit`)))))),
+        `price-unit` = gsub(unique(unlist(regmatches(`price-unit`, gregexpr("[[:digit:]]+", `price-unit`)))), "1975", `price-unit`)) -> A10.rsrc_info_uranium_processed
+
+
+    # merge individually prepared resource prices of fossils, renewables, and uranium into one A10.rsrc_info data object
+    A10.rsrc_info_merged <- bind_rows(A10.rsrc_info_fossils_processed_avg,
+                                      A10.rsrc_info_renewables_others %>% gather_years(),
+                                      A10.rsrc_info_uranium_processed
+    )
+
+    # Interpolate and extrapolate missing historical years
+    A10.rsrc_info_EUR <- A10.rsrc_info_merged %>%
+      complete(nesting(resource, resource_type, market, `output-unit`, `price-unit`), year = c(HISTORICAL_YEARS)) %>%
+      group_by(resource, resource_type, market, `output-unit`, `price-unit`) %>%
+      mutate(value = approx_fun(year, value, rule = 2)) %>%
+      ungroup()
 
     # 2A. Fossil: RESOURCE RESERVE ADDITIONS functions ----------------------------------
     # Check for calibrated resource prices for final historical model year.
@@ -312,7 +363,7 @@ module_gcameurope_L210.resources <- function(command, ...) {
     L210.RsrcCurves_fos_EUR <- L111.RsrcCurves_EJ_R_Ffos_EUR %>%
       # Add region name
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
-      mutate(available = round(available, energy.DIGITS_RESOURCE)) %>%
+      mutate(available = round(available, 6)) %>%
       select(region, resource = resource, subresource, grade, available, extractioncost)
 
     # 3. Shareweights ------------------
@@ -365,12 +416,15 @@ module_gcameurope_L210.resources <- function(command, ...) {
       left_join(no_hist_production, by = c("region", "resource", "year")) %>%
       mutate(lifetime = if_else(!is.na(lifetime.adj), lifetime.adj, lifetime)) %>%
       select(-lifetime.adj)
+
+
     # Produce outputs ===================================================
     L210.RenewRsrc_EUR %>%
       add_title("Market information for renewable resources") %>%
       add_units("NA") %>%
       add_comments("A10.rsrc_info_EUR written to all regions") %>%
-      add_precursors("energy/A_regions", "common/GCAM_region_names", "gcam-europe/A10.rsrc_info_EUR") ->
+      add_precursors("energy/A_regions", "common/GCAM_region_names", "energy/A10.rsrc_info_fossils",
+                     "energy/A10.rsrc_info_renewables_others", "energy/A10.rsrc_info_uranium") ->
       L210.RenewRsrc_EUR
 
     L210.RenewRsrcPrice_EUR %>%
@@ -409,6 +463,7 @@ module_gcameurope_L210.resources <- function(command, ...) {
       add_comments("is no competetion between technologies.") %>%
       add_precursors("common/GCAM_region_names", "gcam-europe/A10.subrsrc_info_EUR") ->
       L210.ResTechShrwt_EUR
+
 
     return_data(MODULE_OUTPUTS)
   } else {

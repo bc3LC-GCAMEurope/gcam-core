@@ -54,6 +54,7 @@
 #include "climate/include/iclimate_model.h"
 #include "climate/source/hector/inst/include/core.hpp"
 #include "climate/source/hector/inst/include/csv_outputstream_visitor.hpp"
+#include "util/base/include/auto_file.h"
 
 class IVisitor;
 
@@ -94,7 +95,6 @@ public:
     virtual bool setLUCEmissions( const std::string &aGasName,
                                   const int aYear, const double aEmissions );
     virtual double getEmissions( const std::string& aGasName, const int aYear ) const;
-    virtual runModelStatus runModel();
     virtual runModelStatus runModel( const int aPeriod );
     virtual double getConcentration( const std::string& aGasName, const int aYear ) const;
     virtual double getTemperature( const int aYear, const bool aAdjHistoricalPeriod = false ) const;
@@ -114,7 +114,7 @@ protected:
         IClimateModel,
 
         //! A map of the gases Magicc can report out.
-        DEFINE_VARIABLE( SIMPLE | NOT_PARSABLE, "output-gas-name-map", mOutputGasNameMap, std::map<std::string,int> ),
+        DEFINE_VARIABLE( SIMPLE | NOT_PARSABLE, "output-gas-name-map", mOutputGasNameMap, std::map<gcamstr,int> ),
         
         //! Last year to record year-by-year climate
         DEFINE_VARIABLE( SIMPLE, "hector-end-year", mHectorEndYear, int ),
@@ -126,7 +126,7 @@ protected:
         DEFINE_VARIABLE( SIMPLE | NOT_PARSABLE, "last-calc-year", mLastYear, int ),
 
         //! Hector initialization file
-        DEFINE_VARIABLE( SIMPLE, "hector-ini-file", mHectorIniFile, std::string )
+        DEFINE_VARIABLE( SIMPLE, "hector-ini-file", mHectorIniFile, gcamstr )
     )
 
 private:
@@ -183,7 +183,7 @@ private:
     std::unique_ptr<Hector::Core> mHcore;
 
     //! file handle for the outputstream visitor
-    std::unique_ptr<std::ofstream> mOfile;
+    AutoOutputFile mOfile;
 
     //! output stream visitor
     std::unique_ptr<Hector::CSVOutputStreamVisitor> mHosv;

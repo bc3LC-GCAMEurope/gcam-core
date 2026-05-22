@@ -25,6 +25,7 @@ module_energy_L1011.ff_GrossTrade <- function(command, ...) {
              FILE = "energy/mappings/comtrade_commodity_code",
              FILE = "energy/mappings/comtrade_trade_flow",
              FILE = "energy/comtrade_ff_trade",
+             FILE = "energy/comtrade_ff_trade_taiwan",
              FILE = "energy/GCAM_region_pipeline_bloc_import",
              FILE = "energy/GCAM_region_pipeline_bloc_export",
              FILE = "energy/comtrade_ff_trade_adjEUR"))
@@ -42,7 +43,7 @@ module_energy_L1011.ff_GrossTrade <- function(command, ...) {
       NetExp_EJ <- net_trade <- GrossExp_EJ <- GrossImp_EJ <- Year <- Reporter_Code <- Partner_Code <-
       Trade_Flow_Code <- Commodity_Code <- `Netweight_(kg)` <- Country_Code <- ISO3_digit_Alpha <- ISO3 <-
       Trade <- reporter_GCAM_region_ID <- partner_GCAM_region_ID <- PrimaryFuelCO2Coef.name <- PrimaryFuelCO2Coef <-
-      Ccontent <- export <- import <- NULL # silence package check.
+      Ccontent <- export <- import <- lag1 <- lag2 <- lead1 <- lead2 <- movave <- NULL # silence package check.
 
     all_data <- list(...)[[1]]
 
@@ -54,9 +55,11 @@ module_energy_L1011.ff_GrossTrade <- function(command, ...) {
     comtrade_ISO <- get_data(all_data, "energy/mappings/comtrade_countrycode_ISO")
     # April 29th 2019: Note that as Taiwan is not recognized by the UN there is no TWN ISO specified in the comtrade_ISO mappings
     # According to COMTRADE code 490 is (in practice) only Taiwan, but when/if better data is available for Taiwan we may want to update
+    # April 2025: Added iso country code 380 for Italy (which was 381 before)
     comtrade_commodity_GCAM <- get_data(all_data, "energy/mappings/comtrade_commodity_code")
     comtrade_trade_flow <- get_data(all_data, "energy/mappings/comtrade_trade_flow")
-    comtrade_ff_trade <- get_data(all_data, "energy/comtrade_ff_trade")
+    comtrade_ff_trade <- get_data(all_data, "energy/comtrade_ff_trade") #This is 2008-2022 data downloaded in April 2025
+    comtrade_ff_trade_tw <- get_data(all_data, "energy/comtrade_ff_trade_taiwan") #Keep old data for Taiwan because it does not show up in new data
     GCAM_region_pipeline_bloc_import <- get_data(all_data, "energy/GCAM_region_pipeline_bloc_import")
     GCAM_region_pipeline_bloc_export <- get_data(all_data, "energy/GCAM_region_pipeline_bloc_export")
     comtrade_ff_trade_adjEUR <- get_data(all_data, "energy/comtrade_ff_trade_adjEUR")
@@ -66,7 +69,13 @@ module_energy_L1011.ff_GrossTrade <- function(command, ...) {
     # Step 0: Add trade data from Eurostat. Improves the Comtrade estimations in EU.
     # We use an additional file transformed to "comtrade format" (comtrade_ff_trade_adjEUR).
     # This file can be periodically updated as new updated data becomes available
+
     comtrade_ff_trade <- comtrade_ff_trade %>%
+      anti_join(comtrade_ff_trade_adjEUR %>%
+                  mutate(Trade_Flow_Code = as.character(Trade_Flow_Code)),
+                by = c("Year", "Reporter_Code", "Reporter_iso", "Trade_Flow_Code",
+                       "Trade", "Partner_Code", "Partner_iso",
+                       "Commodity_Code", "Quantity_Unit_Code", "Qty_unit_abbr")) %>%
       bind_rows(comtrade_ff_trade_adjEUR)
 
     # 1: Filter and prepare the bi-lateral trade flow volume data by country and comtrade commodity
@@ -75,6 +84,7 @@ module_energy_L1011.ff_GrossTrade <- function(command, ...) {
     # Additional data and mappings will need to be gathered at comtrade's website
     # (https://comtrade.un.org/db/dqBasicQuery.aspx) if other commodities are added
 
+    #First deal will all regions
     comtrade_ff_trade %>%
       select(Year, Reporter_Code, Partner_Code, Trade_Flow_Code, Commodity_Code, value = `Netweight_(kg)`) %>%
       left_join_error_no_match(comtrade_trade_flow, by = c("Trade_Flow_Code" = "Trade_Flow_Code")) %>%
@@ -102,8 +112,53 @@ module_energy_L1011.ff_GrossTrade <- function(command, ...) {
       # Curacao, Saint Maarten, and French Southern Territory.
       filter(iso.reporter %in% iso_GCAM_regID$iso,
              iso.partner %in% iso_GCAM_regID$iso) ->
-      L1011.comtrade_ff_BiTrade_y_ctry_item
+      L1011.comtrade_ff_BiTrade_y_ctry_item_row
 
+    #Then deal with Taiwan which is not available in new data, so we use old data and extend it to 2022
+    comtrade_ff_trade_tw %>%
+      select(Year, Reporter_Code, Partner_Code, Trade_Flow_Code, Commodity_Code, value = `Netweight_(kg)`) %>%
+      mutate(Trade_Flow_Code = as.character(Trade_Flow_Code)) %>%
+      left_join_error_no_match(comtrade_trade_flow, by = c("Trade_Flow_Code" = "Trade_Flow_Code")) %>%
+      # Join the reporter and partner countries.
+      # Note also - this uses left_join_keep_first_only for countries like the USSR with multiple associated present-day
+      # iso codes. We wouldn't want to repeat the trade data by each post-dissolution country, and since none of these
+      # actually exist during the time frame for which gross trade is being assessed, there's no benefit to downscaling.
+      left_join_keep_first_only(comtrade_ISO %>%
+                                  select(Country_Code, ISO3 = ISO3_digit_Alpha),
+                                by = c("Reporter_Code" = "Country_Code")) %>%
+      rename(iso.reporter = ISO3) %>%
+      left_join_keep_first_only(comtrade_ISO %>%
+                                  select(Country_Code, ISO3 = ISO3_digit_Alpha),
+                                by = c("Partner_Code" = "Country_Code")) %>%
+      rename(iso.partner = ISO3,
+             year = Year,
+             Element = Trade) %>%
+      #Here filter for Taiwan only
+      filter(iso.reporter == "TWN" | iso.partner == "TWN") %>%
+      mutate(iso.reporter = tolower(iso.reporter),
+             iso.partner = tolower(iso.partner)) %>%
+      select(year, iso.reporter, iso.partner, Element, Commodity_Code, value) %>%
+      drop_na(value) %>%
+      filter(iso.reporter %in% iso_GCAM_regID$iso,
+             iso.partner %in% iso_GCAM_regID$iso)-> L1011.comtrade_ff_BiTrade_y_ctry_item_tw
+
+    #Now extend 2017 data for Taiwan onward (since we do not have newer data for this region)
+    new_years <- 2018:2022
+
+    L1011.comtrade_ff_BiTrade_y_ctry_item_tw %>%
+      filter(year == 2017) -> data_2017
+
+    extended_data <- lapply(new_years, function(y) {
+      data_2017 %>%
+        mutate(year = y)
+    }) %>%
+      bind_rows()
+
+    #Create complete table for taiwan
+    L1011.comtrade_ff_BiTrade_y_ctry_item_tw_extended <- bind_rows(extended_data, L1011.comtrade_ff_BiTrade_y_ctry_item_tw)
+
+    #Bind Taiwan and ROW tables
+    L1011.comtrade_ff_BiTrade_y_ctry_item <- bind_rows(L1011.comtrade_ff_BiTrade_y_ctry_item_row, L1011.comtrade_ff_BiTrade_y_ctry_item_tw_extended)
 
     # 2. Complete, clean, and re-balance the bilateral trade data
     # The bilateral trade data may not be symmetrical - some countries could be listed as partner countries but not reporter
@@ -118,18 +173,19 @@ module_energy_L1011.ff_GrossTrade <- function(command, ...) {
     # Start by producing a complete set of trade patterns for all years
     L1011.comtrade_ff_BiTrade_y_ctry_item %>%
       complete(nesting(iso.reporter, iso.partner, Element, Commodity_Code),
-               year = unique(L1011.comtrade_ff_BiTrade_y_ctry_item$year))  %>%
+               year = unique(L1011.comtrade_ff_BiTrade_y_ctry_item$year)) %>%
       group_by(iso.reporter, iso.partner, Element, Commodity_Code) %>%
       # Fill in missing values through interpolation between values and copying edge values forwards / backwards
       # TODO: the one place this extrapolation function is most questionable is for LNG,
       # which only picked up in the last several years.
+      fill(value, .direction = "up") %>%
       mutate(value = approx_fun(year, value, rule = 2)) %>%
       ungroup() %>%
       # Map COMTRADE commodity to GCAM fuel commodities
       # Note that we also track trade modes for natural gas (pipeline vs. LNG) here
       left_join_error_no_match(comtrade_commodity_GCAM %>%
                                  select(Commodity_Code, GCAM_Commodity, GCAM_Commodity_traded),
-                               by = c("Commodity_Code")) %>%
+                               by = c("Commodity_Code"))%>%
       left_join_error_no_match(A_PrimaryFuelCCoef %>%
                                  select(PrimaryFuelCO2Coef.name, PrimaryFuelCO2Coef),
                                by = c("GCAM_Commodity" = "PrimaryFuelCO2Coef.name")) %>%

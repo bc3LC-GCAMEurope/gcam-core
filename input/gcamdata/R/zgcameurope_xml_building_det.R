@@ -37,6 +37,7 @@ module_gcameurope_building_det_xml <- function(command, ...) {
                      "L244.StubTechCalInput_bld_EUR",
                      "L244.StubTechIntGainOutputRatio_EUR",
                      "L244.GlobalTechShrwt_bld_EUR",
+                     "L244.GlobalTechInterp_bld_EUR",
                      "L244.PrimaryRenewKeyword_bld_EUR",
                      "L244.GlobalTechCost_bld_EUR",
                      "L244.GlobalTechTrackCapital_bld_EUR",
@@ -44,6 +45,8 @@ module_gcameurope_building_det_xml <- function(command, ...) {
                      "L244.GlobalTechCost_bld",
                      "L244.GlobalTechTrackCapital_bld",
                      "L244.GlobalTechSCurve_bld_EUR",
+                     "L244.GlobalTechProfitShutdown_bld_EUR",
+                     "L244.GlobalTechLifetime_bld_EUR",
                      "L244.DeleteThermalService_EUR",
                      "L244.Satiation_impedance_EUR",
                      "L244.GenericServiceImpedance_EUR",
@@ -96,6 +99,8 @@ module_gcameurope_building_det_xml <- function(command, ...) {
       add_xml_data(L244.GenericTradFuelParams_EUR, "GenericTradFuelParams") %>%
       add_xml_data(L244.ThermalTradFuelParams_EUR, "ThermalTradFuelParams") %>%
       add_xml_data(L244.GlobalTechSCurve_bld_EUR, "GlobalTechSCurve")  %>%
+      add_xml_data(L244.GlobalTechProfitShutdown_bld_EUR, "GlobalTechProfitShutdown")  %>%
+      add_xml_data(L244.GlobalTechLifetime_bld_EUR, "GlobalTechLifetime") %>%
       add_xml_data(L244.GenericServicePrice_EUR, "GenericServicePrice") %>%
       add_xml_data(L244.ThermalServicePrice_EUR, "ThermalServicePrice") %>%
       add_xml_data(L244.GenericBaseDens_EUR, "GenericBaseDens") %>%
@@ -112,6 +117,7 @@ module_gcameurope_building_det_xml <- function(command, ...) {
       add_xml_data(L244.StubTechCalInput_bld_EUR, "StubTechCalInput") %>%
       add_xml_data(L244.StubTechIntGainOutputRatio_EUR, "StubTechIntGainOutputRatio") %>%
       add_xml_data(L244.GlobalTechShrwt_bld_EUR, "GlobalTechShrwt") %>%
+      add_xml_data(L244.GlobalTechInterp_bld_EUR, "GlobalTechInterp") %>%
       add_xml_data(L244.PrimaryRenewKeyword_bld_EUR, "PrimaryRenewKeyword") %>%
       add_node_equiv_xml("input") %>%
       add_xml_data(L244.GlobalTechTrackCapital_bld_EUR, "GlobalTechTrackCapital") %>%
@@ -134,7 +140,7 @@ module_gcameurope_building_det_xml <- function(command, ...) {
                      "L244.GenericBaseDens_EUR", "L244.ThermalBaseDens_EUR",
                      "L244.GenericServiceCoef_EUR","L244.ThermalServiceCoef_EUR",
                      "L244.GenericTradFuelParams_EUR", "L244.ThermalTradFuelParams_EUR",
-                     "L244.GlobalTechTrackCapital_bld_EUR") ->   building_det_EUR.xml
+                     "L244.GlobalTechTrackCapital_bld_EUR", "L244.GlobalTechInterp_bld_EUR") ->   building_det_EUR.xml
 
     # Some data inputs may not actually contain data. If so, do not add_xml_data.
     if(nrow(L244.DeleteThermalService_EUR) > 0) {

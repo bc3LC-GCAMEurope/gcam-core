@@ -71,7 +71,7 @@ const string& CalcBasePrice::getXMLName() const {
     return getXMLNameStatic();
 }
 
-const string& CalcBasePrice::getName() const {
+const gcamstr& CalcBasePrice::getName() const {
     return mName;
 }
 
@@ -81,8 +81,8 @@ bool CalcBasePrice::XMLParse( rapidxml::xml_node<char>* & aNode ) {
             string nodeName = XMLParseHelper::getNodeName(aNode);
             if( nodeName == "sector-map" ) {
                 map<string, string> attrs = XMLParseHelper::getAllAttrs(aNode);
-                string fromSector = attrs["from-name"];
-                string toSector = attrs["to-name"];
+                gcamstr fromSector(attrs["from-name"]);
+                gcamstr toSector(attrs["to-name"]);
                 mSectorNameMap[ fromSector ] = toSector;
             }
         }
@@ -137,12 +137,13 @@ void CalcBasePrice::popFilterStep<Region*>( Region* const & aData ) {
         // some error checking to see if a user parsed a sector to aggregate but GCAMFusion didn't
         // actually find any data for it
         auto mappedSectorValueIter = mMappedSectorOutputs.find( (*mappedSectorIter).second );
-        if( mappedSectorValueIter == mMappedSectorOutputs.end() ) {
+        // Silence warning
+        /* if (mappedSectorValueIter == mMappedSectorOutputs.end()) {
             ILogger& mainLog = ILogger::getLogger( "main_log" );
             mainLog.setLevel( ILogger::ERROR );
             mainLog << "Warning couldn't find values for: " << (*mappedSectorIter).second  << "in " << mCurrRegionName << endl;
-        }
-        else {
+        } */
+        if (mappedSectorValueIter != mMappedSectorOutputs.end()) {
             IInfo* marketInfo = scenario->getMarketplace()->getMarketInfo( (*mappedSectorIter).first, mCurrRegionName, mPeriod, false );
             if( marketInfo ) {
                 // store the base price which may be used for accounting purposes later

@@ -7,13 +7,9 @@ ModelTime, modeltime/+{time-step}start-year, modeltime/+start-year, modeltime/+f
 
 ModelTimeInterYears, modeltime/+{time-step}inter-year, modeltime/+inter-year, modeltime/+{dummy-tag}inter-year, scenario, scenario/modeltime
 
-MAGICC, MagiccModel/+last-historical-year, MagiccModel/+bc-unit-forcing, MagiccModel/+ghgInputFileName, scenario, scenario/world, world/MagiccModel
-
 hector, HectorModel/+hector-end-year, HectorModel/+emissions-switch-year, HectorModel/+hector-ini-file, scenario, scenario/world, world/HectorModel
 
 NoClimateModel, world/no-climate-model, scenario, scenario/world, 
-
-DeleteMAGICC, world/{delete=1}MagiccModel, scenario, scenario/world
 
 DeleteHector, world/{delete=1}HectorModel, scenario, scenario/world
 
@@ -50,11 +46,13 @@ GDP, world/+{name}region, nationalAccountContainer/+{year}nationalAccount, natio
 
 PPPConvert, world/+{name}region, nationalAccountContainer/+gdp-ppp-conversion, scenario, scenario/world, region/nationalAccountContainer
 
-NationalAccount, world/+{name}region, nationalAccountContainer/+{year}nationalAccount, nationalAccount/+capital-stock, nationalAccount/+depreciation-rate, nationalAccount/+savings-rate, nationalAccount/+energy-investment, nationalAccount/+labor-wages, nationalAccount/+capital-value, nationalAccount/+labor-force-share, nationalAccount/+capital-net-export, scenario, scenario/world, region/nationalAccountContainer
+NationalAccount, world/+{name}region, nationalAccountContainer/+{year}nationalAccount, nationalAccount/+capital-stock, nationalAccount/+depreciation-rate, nationalAccount/+savings-rate, nationalAccount/+energy-investment, nationalAccount/+labor-wages, nationalAccount/+capital-value, nationalAccount/+capital-net-export, scenario, scenario/world, region/nationalAccountContainer
 
 GDPMacroFunction, world/+{name}region, nationalAccountContainer/+{name}gdp-macro-function, gdp-macro-function/+rho, gdp-macro-function/+{name}factor-input-node, factor-input-node/+node-gamma, factor-input-node/+{name}factor-input-leaf, factor-input-leaf/+is-primary-factor, factor-input-leaf/+is-capital, factor-input-leaf/+is-labor, factor-input-leaf/+is-energy, scenario, scenario/world, region/nationalAccountContainer
 
 SavingsRateParams, world/+{name}region, nationalAccountContainer/+saving-rate-param-base, nationalAccountContainer/+saving-rate-param-GR-coef, nationalAccountContainer/+saving-rate-param-SR-coef, scenario, scenario/world, region/nationalAccountContainer
+
+LaborForceShare, world/+{name}region, nationalAccountContainer/+{year}nationalAccount, nationalAccount/+labor-force-share, scenario, scenario/world, region/nationalAccountContainer
 
 TotalFactorProductivity, world/+{name}region, nationalAccountContainer/+{year}nationalAccount, nationalAccount/+total-factor-productivity, scenario, scenario/world, region/nationalAccountContainer
 
@@ -403,7 +401,9 @@ GlobalIntTechLifetime, global-technology-database/+{sector-name}location-info, g
 
 GlobalIntTechProfitShutdown, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}intermittent-technology, intermittent-technology/+{year}period, profit-shutdown-decider/+median-shutdown-point, profit-shutdown-decider/+steepness, scenario, scenario/world, world/global-technology-database, period/{name=profit}profit-shutdown-decider
 
-GlobalIntTechBackup, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}intermittent-technology, intermittent-technology/+{year}period, period/+electric-sector-name, period/+trial-market-name, period/+backup-capital-cost, period/+backup-capacity-factor, capacity-limit-backup-calculator/+capacity-limit, period/+{name}minicam-energy-input, period/+{name}minicam-non-energy-input, minicam-energy-input/+flag, scenario, scenario/world, world/global-technology-database, period/capacity-limit-backup-calculator
+GlobalIntTechBackup, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}backup-intermittent-technology, backup-intermittent-technology/+{year}period, period/+electric-sector-name, period/+trial-market-name, period/+backup-capital-cost, period/+backup-capacity-factor, capacity-limit-backup-calculator/+capacity-limit, period/+{name}minicam-energy-input, period/+{name}minicam-non-energy-input, minicam-energy-input/+flag, scenario, scenario/world, world/global-technology-database, period/capacity-limit-backup-calculator
+
+GlobalIntTechValueFactor, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}intermittent-technology, intermittent-technology/+{year}period, period/+electric-sector-name, period/+trial-market-name, value-factor-calculator/+value-factor-intercept, value-factor-calculator/+value-factor-slope, scenario, scenario/world, world/global-technology-database, period/value-factor-calculator
 
 GlobalIntTechCost, global-technology-database/+{sector-name}location-info, global-technology-database/+{subsector-name}location-info, location-info/+{name}intermittent-technology, intermittent-technology/+{year}period, period/+{name}minicam-non-energy-input, minicam-non-energy-input/+input-cost, scenario, scenario/world, world/global-technology-database
 

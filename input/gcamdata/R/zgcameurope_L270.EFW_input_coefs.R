@@ -91,12 +91,12 @@ module_gcameurope_L270.EFW_input_coefs <- function(command, ...) {
     # This method uses the function used in GCAM (C++) for determining non-CO2 pollutant emissions factor reduction as a
     # function of per-capita GDP. The base-GDP scenario is set in the constants.
     L270.GDPreduction_scen_R_Y <- filter(L102.pcgdp_thous90USD_Scen_R_Y,
-                                         year %in% c(max(MODEL_BASE_YEARS), MODEL_FUTURE_YEARS)) %>%
+                                         year %in% c(MODEL_FINAL_BASE_YEAR, MODEL_FUTURE_YEARS)) %>%
       rename(pcGDP = value) %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       select(scenario, region, year, pcGDP) %>%
       group_by(scenario, region) %>%
-      mutate(baseGDP = pcGDP[year==max(MODEL_BASE_YEARS)]) %>%
+      mutate(baseGDP = pcGDP[year == MODEL_FINAL_BASE_YEAR]) %>%
       ungroup() %>%
       # Copied from C++ code for GDP control. negative values occur where GDP declines; not allowing this to reduce trtshr.
       mutate(reduction = 1 - (1 / (1 + (pcGDP - baseGDP) / efw.WWTRT_STEEPNESS)),

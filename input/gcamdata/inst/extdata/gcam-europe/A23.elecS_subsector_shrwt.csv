@@ -13,14 +13,15 @@ electricity,geothermal,end-year,1
 electricity,nuclear,initial-future-year,0
 electricity,nuclear,2025,0
 electricity,nuclear,2030,1
+electricity,nuclear,2035,1
 electricity,nuclear,end-year,1
-base load generation,wind,end-year,1
 electricity,wind,end-year,0
-base load generation,wind,2030,1
 electricity,solar,end-year,1
 electricity,solar,2030,1
 elect_td_bld,rooftop_pv,end-year,0.25
 elect_td_bld,rooftop_pv,2030,0.25
+base load generation,wind,end-year,1
+base load generation,wind,2030,1
 peak generation,grid_storage,end-year,1
 peak generation,geothermal,initial-future-year,0
 subpeak generation,geothermal,initial-future-year,0

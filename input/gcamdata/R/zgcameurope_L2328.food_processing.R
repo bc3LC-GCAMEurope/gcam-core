@@ -203,7 +203,7 @@ module_gcameurope_L2328.food_processing <- function(command, ...) {
     # filters base years from original and then appends future years
     L2328.globaltech_retirement_base %>%
       mutate(year = as.integer(year)) %>%
-      filter(year == max(MODEL_BASE_YEARS)) %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
       bind_rows(L2328.globaltech_retirement_future) ->
       L2328.globaltech_retirement
 
@@ -264,7 +264,7 @@ module_gcameurope_L2328.food_processing <- function(command, ...) {
       # Note: Fixed future coefficient for now
       group_by(region, supplysector, subsector, stub.technology, minicam.energy.input, market.name) %>%
       complete(year = MODEL_YEARS) %>%
-      mutate(coefficient = if_else(year %in% MODEL_FUTURE_YEARS, coefficient[year == max(MODEL_BASE_YEARS)], coefficient)) %>%
+      mutate(coefficient = if_else(year %in% MODEL_FUTURE_YEARS, coefficient[year == MODEL_FINAL_BASE_YEAR], coefficient)) %>%
       ungroup() ->
       L2328.StubTechCoef_food_EUR
 

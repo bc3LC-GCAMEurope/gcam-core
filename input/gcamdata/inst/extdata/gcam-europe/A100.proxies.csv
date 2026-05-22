@@ -1,0 +1,17 @@
+# File: A100.proxies.csv
+# Title: GCAM EU regions proxies mapping following historical countries development
+# Units: NA
+# Description: Maps iso codes from GCAM EU regions that require a proxy region when they don't meet the socioeocnomic theresholds
+# Column types: ii
+# ----------
+GCAM_region_ID,proxy_GCAM_region_ID
+57,59
+30,50
+44,43
+37,29
+39,49
+41,65
+45,29
+53,42
+63,28
+46,42

@@ -112,9 +112,10 @@
                 <output-unit>MTC</output-unit>
             </linked-ghg-policy>
         </region>
-        <region name="EU-12">
+
+        <region name="Ukraine">
             <linked-ghg-policy name="CO2_LUC">
-                <market>EU-12</market>
+                <market>Ukraine</market>
                 <linked-policy>CO2</linked-policy>
                 <price-adjust year="1975" fillout="1">1.0</price-adjust>
                 <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
@@ -122,46 +123,7 @@
                 <output-unit>MTC</output-unit>
             </linked-ghg-policy>
         </region>
-        <region name="EU-15">
-            <linked-ghg-policy name="CO2_LUC">
-                <market>EU-15</market>
-                <linked-policy>CO2</linked-policy>
-                <price-adjust year="1975" fillout="1">1.0</price-adjust>
-                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
-                <price-unit>1990$/tC</price-unit>
-                <output-unit>MTC</output-unit>
-            </linked-ghg-policy>
-        </region>
-        <region name="Europe_Eastern">
-            <linked-ghg-policy name="CO2_LUC">
-                <market>Europe_Eastern</market>
-                <linked-policy>CO2</linked-policy>
-                <price-adjust year="1975" fillout="1">1.0</price-adjust>
-                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
-                <price-unit>1990$/tC</price-unit>
-                <output-unit>MTC</output-unit>
-            </linked-ghg-policy>
-        </region>
-        <region name="Europe_Non_EU">
-            <linked-ghg-policy name="CO2_LUC">
-                <market>Europe_Non_EU</market>
-                <linked-policy>CO2</linked-policy>
-                <price-adjust year="1975" fillout="1">1.0</price-adjust>
-                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
-                <price-unit>1990$/tC</price-unit>
-                <output-unit>MTC</output-unit>
-            </linked-ghg-policy>
-        </region>
-        <region name="European Free Trade Association">
-            <linked-ghg-policy name="CO2_LUC">
-                <market>European Free Trade Association</market>
-                <linked-policy>CO2</linked-policy>
-                <price-adjust year="1975" fillout="1">1.0</price-adjust>
-                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
-                <price-unit>1990$/tC</price-unit>
-                <output-unit>MTC</output-unit>
-            </linked-ghg-policy>
-        </region>
+
         <region name="India">
             <linked-ghg-policy name="CO2_LUC">
                 <market>India</market>
@@ -322,5 +284,387 @@
                 <output-unit>MTC</output-unit>
             </linked-ghg-policy>
         </region>
+
+        <region name="Austria">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Austria</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Belgium">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Belgium</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Bulgaria">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Bulgaria</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Croatia">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Croatia</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Cyprus">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Cyprus</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Czech Republic">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Czech Republic</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Denmark">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Denmark</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Estonia">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Estonia</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Finland">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Finland</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="France">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>France</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Germany">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Germany</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Greece">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Greece</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Hungary">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Hungary</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Ireland">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Ireland</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Italy">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Italy</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Latvia">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Latvia</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Lithuania">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Lithuania</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Luxembourg">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Luxembourg</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Malta">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Malta</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Netherlands">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Netherlands</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Poland">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Poland</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Portugal">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Portugal</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Romania">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Romania</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Slovakia">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Slovakia</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Slovenia">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Slovenia</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Spain">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Spain</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Sweden">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Sweden</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Albania">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Albania</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Belarus">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Belarus</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Bosnia and Herzegovina">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Bosnia and Herzegovina</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Iceland">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Iceland</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Macedonia">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Macedonia</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+
+        <region name="Moldova">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Moldova</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Norway">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Norway</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
     </world>
+        <region name="Serbia and Montenegro">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Serbia and Montenegro</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Switzerland">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Switzerland</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="Turkey">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>Turkey</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
+        <region name="UK">
+            <linked-ghg-policy name="CO2_LUC">
+                <market>UK</market>
+                <linked-policy>CO2</linked-policy>
+                <price-adjust year="1975" fillout="1">1.0</price-adjust>
+                <demand-adjust year="1975" fillout="1">0.0</demand-adjust>
+                <price-unit>1990$/tC</price-unit>
+                <output-unit>MTC</output-unit>
+            </linked-ghg-policy>
+        </region>
 </scenario>

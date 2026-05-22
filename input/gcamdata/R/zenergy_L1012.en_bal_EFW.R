@@ -241,6 +241,7 @@ module_energy_L1012.en_bal_EFW <- function(command, ...) {
       mutate(value = if_else(is.na(energy_EJ_revised), value, energy_EJ_revised)) %>%
       select(-energy_EJ_revised)
 
+
     # ===================================================
 
     # Produce outputs

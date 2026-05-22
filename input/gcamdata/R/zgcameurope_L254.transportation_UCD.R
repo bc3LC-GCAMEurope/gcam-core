@@ -16,7 +16,7 @@
 #' \code{L254.StubTranTechCalInput_EUR}, \code{L254.StubTranTechLoadFactor_EUR},
 #' \code{L254.StubTranTechCost_EUR}, \code{L254.StubTranTechCoef_EUR}, \code{L254.StubTechCalInput_passthru_EUR},
 #' \code{L254.StubTechProd_nonmotor_EUR}, \code{L254.PerCapitaBased_trn_EUR}, \code{L254.PriceElasticity_trn_EUR},
-#' \code{L254.IncomeElasticity_trn_EUR}, \code{L254.BaseService_trn_EUR}. The corresponding file in the
+#' \code{L254.IncomeElasticity_trn_EUR}, \code{L254.BaseService_trn_EUR}, \code{L254.StubTranTechShrwt_EUR}. The corresponding file in the
 #' original data system was \code{L254.transportation_UCD.R} (energy level2).
 #' @details Due to the asymmetrical nature of the transportation sectors in the various regions, we can't simply write
 #' generic information to all regions. Instead, technology information is read from the global UCD transportation
@@ -25,7 +25,7 @@
 #' @importFrom dplyr anti_join arrange bind_rows filter if_else group_by left_join mutate one_of pull select semi_join summarise contains desc
 #' @importFrom tidyr complete nesting
 #' @author AJS September 2017
-module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
+module_gcameurope_L254.transportation_UCD <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/GCAM_region_names",
              FILE = "energy/mappings/UCD_techs",
@@ -45,7 +45,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
              FILE = "energy/A54.tranSubsector_shrwt_revised",
              FILE = "energy/A54.tranSubsector_logit_revised",
              FILE = "energy/A54.globaltranTech_retire_revised",
-             FILE = "energy/A54.globaltranTech_shrwt_revised",
+             FILE = "gcam-europe/A54.globaltranTech_shrwt_revised_EUR",
              FILE=  "energy/A54.globaltranTech_interp_revised",
              FILE = "energy/A54.globaltech_passthru",
              FILE = "energy/A54.globaltech_passthru_revised",
@@ -88,7 +88,8 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
              "L254.PerCapitaBased_trn_EUR",
              "L254.PriceElasticity_trn_EUR",
              "L254.IncomeElasticity_trn_EUR",
-             "L254.BaseService_trn_EUR"))
+             "L254.BaseService_trn_EUR",
+             "L254.StubTranTechShrwt_EUR"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -138,7 +139,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       A54.tranSubsector_VOTT<- bind_rows(A54.tranSubsector_VOTT,A54.tranSubsector_VOTT_SSP1)
 
       A54.globaltranTech_retire <- get_data(all_data, "energy/A54.globaltranTech_retire_revised",strip_attributes = TRUE)
-      A54.globaltranTech_shrwt <- get_data(all_data, "energy/A54.globaltranTech_shrwt_revised",strip_attributes = TRUE)
+      A54.globaltranTech_shrwt <- get_data(all_data, "gcam-europe/A54.globaltranTech_shrwt_revised_EUR",strip_attributes = TRUE)
       A54.globaltranTech_interp <- get_data(all_data, "energy/A54.globaltranTech_interp_revised",strip_attributes = TRUE)
       A54.globaltech_passthru <- get_data(all_data, "energy/A54.globaltech_passthru_revised",strip_attributes = TRUE)
     } else {
@@ -463,7 +464,8 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
     #kbn 2020-06-02 Updating with sce below (See description of changes using search string kbn 2020-06-02 Making changes to generate xmls for SSPs flexibly)
     L154.cost_usdvkm_R_trn_m_sz_tech_F_Y %>%
       filter(year %in% MODEL_YEARS) %>%
-      mutate(input.cost = round((value / gdp_deflator(2005, 1990)), energy.DIGITS_COST)) %>%
+      # costs come in as 2005$/veh-km we need 1975$/veh-km
+      mutate(input.cost = value / gdp_deflator(2005, 1975)) %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       left_join_keep_first_only(UCD_techs, by = c("UCD_sector", "mode", "size.class", "UCD_technology", "UCD_fuel")) %>%
       rename(stub.technology = tranTechnology) %>%
@@ -477,11 +479,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       left_join_keep_first_only(UCD_techs, by = c("UCD_sector", "mode", "size.class", "UCD_technology", "UCD_fuel")) %>%
       rename(subsector = tranSubsector,
              stub.technology = tranTechnology) %>%
-      # note: the units for transport output / costs will yield a dollar
-      # amount of million 1990$, the rest of the capital market will be in billion 1975$
-      # so we need to include the unit conversion here to make it consistent
-      mutate(capital.coef = capital.coef / 1000 / gdp_deflator(1990, 1975),
-             minicam.non.energy.input = "non-energy",
+      mutate(minicam.non.energy.input = "non-energy",
              # note consumer vehicles are technically not investment but rather "consumer durable"
              tracking.market = if_else(grepl('trn_pass_road_LDV', supplysector),
                                        socioeconomics.EN_DURABLE_MARKET_NAME, socioeconomics.EN_CAPITAL_MARKET_NAME),
@@ -498,7 +496,9 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
     #kbn 2019-10-14 Switching to left_join_keep_first, since we have fewer mode categories now.
     L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y %>%
       filter(year %in% MODEL_YEARS) %>%
-      mutate(coefficient = round((value * CONV_MJ_BTU), energy.DIGITS_COEFFICIENT)) %>%
+      # intensities are given in MJ / veh-km we want EJ / billion veh-km
+      # which implies a conversion of 10^9 / 10^12 == 1 / 10^3
+      mutate(coefficient = value * CONV_ONES_THOUS) %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       left_join_keep_first_only(UCD_techs, by = c("UCD_sector", "mode", "size.class", "UCD_technology", "UCD_fuel")) %>%
       rename(stub.technology = tranTechnology) %>%
@@ -522,7 +522,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
                                               "stub.technology", "minicam.energy.input", "year","sce")) %>%
       mutate(loadFactor=if_else(is.na(loadFactor),0,loadFactor),
              coefficient=if_else(is.na(coefficient),0,coefficient),
-             output = calibrated.value * loadFactor * CONV_EJ_GJ / (coefficient * CONV_BTU_KJ),
+             output = calibrated.value * loadFactor / (coefficient),
              output = if_else(is.na(output),0,output)) %>%
       select(all_of(c("region", "supplysector", "tranSubsector", "stub.technology", "year", "minicam.energy.input",
              "calibrated.value", "loadFactor", "coefficient", "output", "sce"))) ->
@@ -581,7 +581,9 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
     L154.out_mpkm_R_trn_nonmotor_Yh %>%
       mutate(sce= paste0("CORE")) %>%
       filter(year %in% MODEL_BASE_YEARS) %>%
-      mutate(calOutputValue = round(value, energy.DIGITS_MPKM)) %>%
+      # service is given as million pass-km
+      # we want service in billion pass-km so we need to divide by 10^3
+      mutate(calOutputValue = value * CONV_ONES_THOUS) %>%
       # right_join: expect to withdrawal all non EUR regions
       right_join(GCAM_region_ID_EUR, by = "GCAM_region_ID") %>%
       left_join_error_no_match(A54.globaltech_nonmotor, by = c("mode" = "tranSubsector")) %>%
@@ -627,6 +629,50 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
       L254.BaseService_trn # OUTPUT
 
 
+    # Update JS 05/2026 Add SW to European countries to overlap the values in the global tech database
+    L254.StubTranTechShrwt_EUR <- A54.globaltranTech_shrwt %>%
+      repeat_add_columns(tibble(region = unique(GCAM_region_names$region))) %>%
+      filter_regions_europe() %>%
+      filter(sce=="CORE") %>%
+      select(-sce) %>%
+      gather_years() %>%
+      # Expand table to include all model years
+      complete(year = c(year, MODEL_YEARS), nesting(region, supplysector, tranSubsector, tranTechnology)) %>%
+      # Extrapolate to fill out values for all years
+      # Rule 2 is used so years that may be outside of min-max range are assigned values from closest data, as opposed to NAs
+      group_by(supplysector, tranSubsector, tranTechnology) %>%
+      mutate(share.weight = approx_fun(year, value, rule = 2),
+             share.weight = round(share.weight, energy.DIGITS_SHRWT)) %>%
+      ungroup() %>%
+      filter(year %in% MODEL_YEARS) %>%
+      mutate(sce= paste0("CORE")) %>%
+      rename(stub.technology = tranTechnology) %>%
+      # # Repeat for SSP1 as me may want to have lower shareweights in that variant (TODO, no changes across scenarios at this moment)
+      # select(-sce) %>%
+      # repeat_add_columns(tibble(sce = c("CORE", "SSP1"))) %>%
+      select(all_of(c(LEVEL2_DATA_NAMES[["StubTranTechShrwt"]], "sce")))
+
+    # Adjust base-year shareweights
+    L254.StubTranTechShrwt_EUR_hist <- L254.StubTranTechShrwt_EUR %>%
+      filter(year %in% MODEL_BASE_YEARS) %>%
+      left_join(L254.StubTranTechOutput, by = c("region", "supplysector", "tranSubsector", "stub.technology", "year", "sce")) %>%
+      filter(complete.cases(.)) %>%
+      mutate(share.weight = if_else(calibrated.value == 0, 0, 1)) %>%
+      select(all_of(c(LEVEL2_DATA_NAMES[["StubTranTechShrwt"]], "sce")))
+
+    L254.StubTranTechShrwt_EUR_fut <- L254.StubTranTechShrwt_EUR %>%
+      filter(year > MODEL_FINAL_BASE_YEAR)
+
+    L254.StubTranTechShrwt_EUR_pre <- bind_rows(
+      L254.StubTranTechShrwt_EUR_hist,
+      L254.StubTranTechShrwt_EUR_fut
+    )
+
+    adj_sw <- L254.StubTranTechOutput %>%
+      select(region, supplysector, tranSubsector, stub.technology, sce)
+
+     L254.StubTranTechShrwt_EUR <- L254.StubTranTechShrwt_EUR_pre %>%
+       semi_join(adj_sw, by = c("region", "supplysector", "tranSubsector", "stub.technology", "sce"))
 
     # ===================================================
 
@@ -823,8 +869,8 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
 
     L254.StubTranTechCost %>%
       add_title("TranTechnology costs (all periods)") %>%
-      add_units("$1990USD / vkm") %>%
-      add_comments("Non-fuel cost was adjusted to 1990") %>%
+      add_units("$1975USD / vkm") %>%
+      add_comments("Non-fuel cost was adjusted to 1975") %>%
       add_comments("Transportation cost table was mapped from UCD technology to GCAM technology") %>%
       add_legacy_name("L254.StubTranTechCost") %>%
       add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "L154.cost_usdvkm_R_trn_m_sz_tech_F_Y") ->
@@ -858,7 +904,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
 
     L254.StubTechProd_nonmotor %>%
       add_title("Service output of non-motorized transportation technologies") %>%
-      add_units("Million pass-km") %>%
+      add_units("Billion pass-km") %>%
       add_comments("Supply sector and stub.technology information was added to non-motorized service output information") %>%
       add_legacy_name("L254.StubTechProd_nonmotor") %>%
       add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/A54.sector", "L154.out_mpkm_R_trn_nonmotor_Yh") ->
@@ -898,6 +944,16 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
                      "L154.loadfactor_R_trn_m_sz_tech_F_Y", "L154.in_EJ_R_trn_m_sz_tech_F_Yh") ->
       L254.BaseService_trn_EUR
 
+    L254.StubTranTechShrwt_EUR %>%
+      add_title("Region-specific shareweights for EUR regions") %>%
+      add_units("unitless") %>%
+      add_comments("SWs are defined to substitute the values in the global tech database") %>%
+      add_legacy_name("L254.StubTranTechShrwt_EUR") %>%
+      add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/A54.sector", "energy/mappings/UCD_techs", "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions",
+                     "L154.out_mpkm_R_trn_nonmotor_Yh", "L154.intensity_MJvkm_R_trn_m_sz_tech_F_Y",
+                     "L154.loadfactor_R_trn_m_sz_tech_F_Y", "L154.in_EJ_R_trn_m_sz_tech_F_Yh") ->
+      L254.StubTranTechShrwt_EUR
+
     return_data(L254.Supplysector_trn_EUR, L254.FinalEnergyKeyword_trn_EUR, L254.tranSubsectorLogit_EUR,
                 L254.tranSubsectorShrwt_EUR, L254.tranSubsectorShrwtFllt_EUR, L254.tranSubsectorInterp_EUR,
                 L254.tranSubsectorInterpTo_EUR, L254.tranSubsectorSpeed_EUR, L254.tranSubsectorSpeed_passthru_EUR,
@@ -906,7 +962,7 @@ module_gcameurpe_L254.transportation_UCD <- function(command, ...) {
                 L254.StubTech_nonmotor_EUR, L254.StubTranTechCalInput_EUR, L254.StubTranTechLoadFactor_EUR,
                 L254.StubTranTechCost_EUR, L254.StubTranTechCoef_EUR, L254.StubTechCalInput_passthru_EUR,
                 L254.StubTechProd_nonmotor_EUR, L254.PerCapitaBased_trn_EUR, L254.PriceElasticity_trn_EUR,
-                L254.IncomeElasticity_trn_EUR, L254.BaseService_trn_EUR, L254.StubTechTrackCapital_EUR)
+                L254.IncomeElasticity_trn_EUR, L254.BaseService_trn_EUR, L254.StubTechTrackCapital_EUR, L254.StubTranTechShrwt_EUR)
   } else {
     stop("Unknown command")
   }

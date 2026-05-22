@@ -19,7 +19,7 @@ module_gcameurope_L1327.paper <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "energy/A_regions",
              FILE = "gcam-europe/mappings/enduse_fuel_aggregation",
-             FILE = "aglu/FAO/FAO_Paper_Prod_t_FORESTAT",
+             "L100.FAO_For_Prod_m3",
              FILE = "aglu/AGLU_ctry",
              FILE = "common/iso_GCAM_regID",
              FILE = "energy/A327.globaltech_coef",
@@ -53,7 +53,7 @@ module_gcameurope_L1327.paper <- function(command, ...) {
     A_regions <- get_data(all_data, "energy/A_regions",strip_attributes = TRUE) %>% filter_regions_europe()
     enduse_fuel_aggregation <- get_data(all_data, "gcam-europe/mappings/enduse_fuel_aggregation", strip_attributes = TRUE)
     L1326.in_EJ_R_indenergy_F_Yh_EUR <- get_data(all_data, "L1326.in_EJ_R_indenergy_F_Yh_EUR", strip_attributes = TRUE)
-    FAO_Paper_Prod_t_FORESTAT <- get_data(all_data, "aglu/FAO/FAO_Paper_Prod_t_FORESTAT", strip_attributes = TRUE)
+    L100.FAO_For_Prod_m3 <- get_data(all_data, "L100.FAO_For_Prod_m3", strip_attributes = TRUE) %>% filter_regions_europe()
     AGLU_ctry <- get_data(all_data, "aglu/AGLU_ctry", strip_attributes = TRUE) %>% filter_regions_europe()
     iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID", strip_attributes = TRUE) %>% filter_regions_europe()
     GCAM_region_names <- get_data(all_data, "common/GCAM_region_names", strip_attributes = TRUE) %>% filter_regions_europe()
@@ -67,19 +67,12 @@ module_gcameurope_L1327.paper <- function(command, ...) {
     # 2. Perform computations
 
     # Paper  production - map to iso and aggregate to GCAM regions
-    FAO_Paper_Prod_t_FORESTAT %>%
-      gather(-c(countries, country.codes, item, item.codes, element, element.codes, unit), key = "year", value = "value") %>%
-      mutate(value = replace_na(value, 0),
-             year = as.integer(year),
-             value = value * CONV_TON_MEGATON,
-             unit = "Mt",
-             sector = "paper") %>%
-      left_join(AGLU_ctry %>% select(countries = FAO_country, iso), by = "countries") %>%
-      left_join(iso_GCAM_regID %>% select(iso, GCAM_region_ID), by = "iso") %>%
-      group_by(GCAM_region_ID, sector, year) %>%
-      summarise(value = sum(value)) %>%
-      ungroup() %>%
-      na.omit() ->
+    L100.FAO_For_Prod_m3 %>%
+      filter(item_code == 1876) %>% #item == "Paper and paperboard"
+      group_by(GCAM_region_ID, sector = "paper", year) %>%
+      summarise(value = sum(value) * CONV_TON_MEGATON) %>%
+      mutate(unit = "Mt") %>%
+      ungroup() ->
       L1327.out_Mt_R_paper_Yh_EUR
 
 
@@ -463,4 +456,3 @@ module_gcameurope_L1327.paper <- function(command, ...) {
     stop("Unknown command")
   }
 }
-

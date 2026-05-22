@@ -25,7 +25,8 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
                           "L223.GlobalTechLifetime_elec", "L223.GlobalIntTechLifetime_elec",
                           "L223.GlobalTechSCurve_elec", "L223.GlobalTechProfitShutdown_elec",
                           "L223.GlobalTechCapture_elec",
-                          "L223.GlobalIntTechBackup_elec")
+                          "L223.GlobalIntTechBackup_elec",
+                          "L223.GlobalIntTechValueFactor_elec")
   MODULE_INPUTS <- c(FILE = "gcam-europe/mappings/grid_regions",
                      FILE = "common/GCAM_region_names",
                      FILE = "energy/A23.sector",
@@ -39,7 +40,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
                      FILE = "gcam-europe/A23.elecS_stubtech_energy_inputs",
                      FILE = "gcam-europe/A23.elecS_naming",
                      FILE = "gcam-europe/elecS_time_fraction",
-                     "L113.elecS_globaltech_capital_battery_ATB",
+                     FILE = "gcam-europe/elecS_globaltech_capital_battery_ATB",
                      "L1239.R_elec_supply",
                      "L223.StubTechEff_elec_EUR",
                      "L223.StubTechCalInput_elec_EUR",
@@ -79,6 +80,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
                       "L2234.GlobalIntTechSCurve_elecS_EUR",
                       "L2234.GlobalTechCapture_elecS_EUR",
                       "L2234.GlobalIntTechBackup_elecS_EUR",
+                      "L2234.GlobalIntTechValueFactor_elecS_EUR",
                       "L2234.PassThroughSector_elecS_EUR",
                       "L2234.PassThroughTech_elecS_grid_EUR",
                       "L2234.StubTechEff_elecS_EUR",
@@ -116,6 +118,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       }
     }
 
+
     # 0. functions -------------------
     # Want to expand electricity supplysector to all segments, except for any present for same subsector/tech
     expand_globaldb <- function(df){
@@ -125,6 +128,9 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       } else if ("intermittent.technology" %in% names(df)){
         expand_to_segments(df, sector = "sector.name", group_by_cols = c("subsector.name", "intermittent.technology"), segments = L2234.load_segments) %>%
           tech_name_expansion(sector = "sector.name", tech = "intermittent.technology", mapping = A23.elecS_naming)
+      } else if ("backup.intermittent.technology" %in% names(df)){
+        expand_to_segments(df, sector = "sector.name", group_by_cols = c("subsector.name", "backup.intermittent.technology"), segments = L2234.load_segments) %>%
+          tech_name_expansion(sector = "sector.name", tech = "backup.intermittent.technology", mapping = A23.elecS_naming)
       } else {  warning("No technology column found") }
     }
 
@@ -249,7 +255,10 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
 
     L2234.StubTechProd_elecS_EUR <- L2234.StubTechProd_NA %>%
       tidyr::replace_na(list(fraction = 0)) %>%
-      mutate(calOutputValue = round(calOutputValue * fraction, energy.DIGITS_CALPRODUCTION)) %>%
+      # JS: Small adjustment for low production in Malta
+      mutate(calOutputValue = if_else(region == "Malta",
+                                      round(calOutputValue * fraction, 9),
+                                      round(calOutputValue * fraction, energy.DIGITS_CALPRODUCTION))) %>%
       mutate(share.weight = if_else(calOutputValue > 0, 1, 0))
 
     # 4b. L2234.StubTechCalInput_elecS_EUR ----------------------------
@@ -343,7 +352,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       distinct(supplysector,subsector, elecS_tech = technology)
 
 
-    L2234.elecS_globaltech_capital_battery_ATB <- L113.elecS_globaltech_capital_battery_ATB %>%
+    L2234.elecS_globaltech_capital_battery_ATB <- elecS_globaltech_capital_battery_ATB %>%
       left_join_error_no_match(grid_storage_elecS, by = c("supplysector", "subsector")) %>%
       select(-technology) %>%
       rename(technology = elecS_tech)
@@ -654,7 +663,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       add_units("unitless") %>%
       add_comments("Global capacity factors for electricity load segments generation technologies") %>%
       add_precursors("gcam-europe/elecS_time_fraction",
-                     "L113.elecS_globaltech_capital_battery_ATB",
+                     "gcam-europe/elecS_globaltech_capital_battery_ATB",
                      "L223.GlobalTechCapFac_elec") ->
       L2234.GlobalTechCapFac_elecS_EUR
 

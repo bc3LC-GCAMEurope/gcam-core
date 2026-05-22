@@ -14,7 +14,7 @@
 #' years, and split into various sub-categories. Missing values are set to zero because the GLU files don't include
 #' zero values (i.e. they only report nonzero land use combinations).
 #' @importFrom assertthat assert_that
-#' @importFrom dplyr arrange distinct filter group_by left_join mutate select summarise
+#' @importFrom dplyr arrange distinct filter group_by left_join mutate select summarise n
 #' @importFrom tidyr complete nesting spread
 #' @importFrom stats quantile
 #' @author BBL April 2017
@@ -54,8 +54,6 @@ module_aglu_L120.LC_GIS_R_LTgis_Yh_GLU <- function(command, ...) {
 
     all_data <- list(...)[[1]]
 
-    # Load required inputs ----
-    get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
 
     # Load required inputs ----
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
@@ -92,7 +90,7 @@ module_aglu_L120.LC_GIS_R_LTgis_Yh_GLU <- function(command, ...) {
     ##calculate protection_shares
 
     land.type %>%
-      mutate(prot_status = if_else( Status %in% aglu.NONPROTECT_LAND_STATUS, "Non-protected" ,"Protected")) %>%
+      mutate(prot_status = if_else(Status %in% aglu.NONPROTECT_LAND_STATUS, "Non-protected" ,"Protected")) %>%
       filter(LT_HYDE %in% c("Unmanaged","Pasture")) %>%
       left_join(SAGE_LT, by = "LT_SAGE") %>%  # includes NAs
       ## Drop all rows with missing values (inland bodies of water)
@@ -103,7 +101,7 @@ module_aglu_L120.LC_GIS_R_LTgis_Yh_GLU <- function(command, ...) {
       group_by(GCAM_region_ID, year, GLU, Land_Type) %>%
       mutate (Tot_land = sum(value)) %>%
       ungroup() %>%
-      filter(prot_status ==  "Protected" ) %>%
+      filter(prot_status ==  "Protected") %>%
       group_by(GCAM_region_ID, year, GLU, Land_Type) %>%
       mutate(value= sum(value)) %>%
       ungroup() %>%
@@ -190,9 +188,9 @@ module_aglu_L120.LC_GIS_R_LTgis_Yh_GLU <- function(command, ...) {
       group_by(GCAM_region_ID, Land_Type, GLU) %>%
       #Note that soil and vegetation carbon units are in Mgc/ha. These are therefore converted to kg/m2 using CONV_THA_KGM2.
       #We compute a weighted average using land area as a weight.
-      mutate( soil_c = (sum(land_area * soil_c)/sum(land_area))*CONV_THA_KGM2,
+      mutate(soil_c = (sum(land_area * soil_c)/sum(land_area))*CONV_THA_KGM2,
               veg_c = (sum(land_area * (vegc_ag+ vegc_bg))/sum(land_area))*CONV_THA_KGM2,
-              `mature age` = sum(`mature age` * land_area )/sum(land_area)) %>%
+              `mature age` = sum(`mature age` * land_area)/sum(land_area)) %>%
       ungroup() %>%
       mutate(soil_c = if_else(is.na(soil_c),0,soil_c),
              veg_c = if_else(is.na(veg_c),0,veg_c),
@@ -244,7 +242,7 @@ module_aglu_L120.LC_GIS_R_LTgis_Yh_GLU <- function(command, ...) {
       group_by(GCAM_region_ID, Land_Type, GLU) %>%
       #Note that soil and vegetation carbon units are in Mgc/ha. These are therefore converted to kg/m2 using CONV_THA_KGM2.
       #We compute a weighted average using land area as a weight.
-      mutate( soil_c = (sum(land_area * soil_c)/sum(land_area))*0.7,
+      mutate(soil_c = (sum(land_area * soil_c)/sum(land_area))*0.7,
               veg_c = aglu.DEFAULT_VEG_CARBON_CROPLAND,
               `mature age` = 1) %>%
       ungroup() %>%
@@ -333,6 +331,15 @@ module_aglu_L120.LC_GIS_R_LTgis_Yh_GLU <- function(command, ...) {
       mutate(year = as.integer(year)) ->
       L120.LC_bm2_R_LT_Yh_GLU
 
+
+    # Extrapolate to fill missing data
+    if (MODEL_FINAL_BASE_YEAR > max(L120.LC_bm2_R_LT_Yh_GLU$year) || any(is.na(L120.LC_bm2_R_LT_Yh_GLU$value))) {
+      warning("module_aglu_L120.LC_GIS_R_LTgis_Yh_GLU: MODEL_FINAL_BASE_YEAR is greater than the maximum year in the land cover data (L120.LC_bm2_R_LT_Yh_GLU). Extrapolating to MODEL_FINAL_BASE_YEAR.")
+      L120.LC_bm2_R_LT_Yh_GLU <- L120.LC_bm2_R_LT_Yh_GLU %>%
+        group_by(GCAM_region_ID, Land_Type, GLU) %>%
+        mutate(value = approx_fun(year, value, rule = 2)) %>%
+        ungroup()
+    }
 
     # Subset the land types that are not further modified
     L120.LC_bm2_R_UrbanLand_Yh_GLU <- filter(L120.LC_bm2_R_LT_Yh_GLU, Land_Type == "UrbanLand")

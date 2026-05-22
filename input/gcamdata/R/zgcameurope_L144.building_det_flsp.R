@@ -31,7 +31,7 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
              FILE = "gcam-europe/mappings/geo_to_iso_map",
              "L106.income_distributions",
              "L100.Pop_thous_ctry_Yh",
-             "L102.gdp_mil90usd_GCAM3_R_Y",
+             "L102.gdp_mil90usd_Scen_R_Y",
              "L102.pcgdp_thous90USD_Scen_R_Y",
              "L221.LN0_Land",
              "L221.LN1_UnmgdAllocation"))
@@ -51,11 +51,11 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
     A44.flsp_bm2_state_comm <- get_data(all_data, "energy/A44.flsp_bm2_state_comm")
     A44.pcflsp_default <- get_data(all_data, "energy/A44.pcflsp_default")
     A44.HouseholdSize <- get_data(all_data, "energy/A44.HouseholdSize")
-    EUR_avDwelling <- get_data(all_data, "gcam-europe/estat_ilc_hcmh02_filtered_en")
-    EUR_avHousehold <- get_data(all_data, "gcam-europe/estat_ilc_lvph01_filtered_en")
+    EUR_avDwelling <- get_data(all_data, "gcam-europe/estat_ilc_hcmh02_filtered_en")  %>%  filter(geo != "EU27_2020")
+    EUR_avHousehold <- get_data(all_data, "gcam-europe/estat_ilc_lvph01_filtered_en") %>%  filter(geo != "EU27_2020")
     geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map") %>% filter_regions_europe()
     L100.Pop_thous_ctry_Yh <- get_data(all_data, "L100.Pop_thous_ctry_Yh") %>% filter_regions_europe()
-    L102.gdp_mil90usd_GCAM3_R_Y <- get_data(all_data, "L102.gdp_mil90usd_GCAM3_R_Y") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
+    L102.gdp_mil90usd_Scen_R_Y <- get_data(all_data, "L102.gdp_mil90usd_Scen_R_Y") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
     L102.pcgdp_thous90USD_Scen_R_Y <- get_data(all_data, "L102.pcgdp_thous90USD_Scen_R_Y") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
     L221.LN0_Land<-get_data(all_data, "L221.LN0_Land", strip_attributes = TRUE) %>% filter_regions_europe()
     L221.LN1_UnmgdAllocation<-get_data(all_data, "L221.LN1_UnmgdAllocation", strip_attributes = TRUE) %>% filter_regions_europe()
@@ -169,7 +169,7 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
     # due to the bias.correction.adder incorporated to the floorspace demand.
 
     # First, define which is by default the final observed year and save the regions with observed data beyond that point (up to the final calibration year)
-    avg_fin_obs_year<-2005
+    avg_fin_obs_year <- MODEL_FINAL_BASE_YEAR
     iso_with_obs_data<-iso_GCAM_regID %>%
       filter(iso %in% list_iso_calc) %>%
       pull(GCAM_region_ID) %>%
@@ -285,7 +285,7 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
       repeat_add_columns(tibble(gcam.consumer= unique(L106.income_shares$gcam.consumer))) %>%
       left_join_error_no_match(L106.income_shares %>%
                                  left_join_error_no_match(GCAM_region_names, by = 'region'),
-                               by = c("GCAM_region_ID", "year","gcam.consumer")) %>%
+                               by = c("GCAM_region_ID", "region", "year","gcam.consumer")) %>%
       mutate(gdp_gr = gdp * subregional.income.share,
              pop_gr = pop/n_groups,
              pc_gdp_thous_gr = (gdp_gr/pop_gr)/1E3) %>%
@@ -361,7 +361,10 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
     # Note that this produces a final output table.
     L144.flsp_bm2_R_res_Yh_EUR %>%
       rename(value_flsp = value) %>%
-      left_join_error_no_match(L102.gdp_mil90usd_GCAM3_R_Y, by = c("GCAM_region_ID", "year")) %>% # Join GDP
+      left_join_error_no_match(L102.gdp_mil90usd_Scen_R_Y %>%
+                                 # any SSP scenario is fine as only historical years (same across SSPs) are used
+                                 filter(scenario == "SSP2") %>% select(-scenario),
+                               by = c("GCAM_region_ID", "year")) %>% # Join GDP
       filter(year %in% HISTORICAL_YEARS) %>%
       # Convert to billion $ and divide by floorspace (billion m2), so that final units will be $ / m2
       # Buildings is assumed to be 20% of GDP
@@ -399,7 +402,7 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
       add_comments("all countries were calculated by GCAM3 regional floorspace data") %>%
       add_legacy_name("L144.flsp_bm2_R_comm_Yh_EUR") %>%
       add_precursors("common/iso_GCAM_regID", "energy/A44.flsp_bm2_state_comm", "energy/A44.pcflsp_default",
-                     "L100.Pop_thous_ctry_Yh", "L102.gdp_mil90usd_GCAM3_R_Y") ->
+                     "L100.Pop_thous_ctry_Yh", "L102.gdp_mil90usd_Scen_R_Y") ->
       L144.flsp_bm2_R_comm_Yh_EUR
 
     L144.flspPrice_90USDm2_R_bld_Yh_EUR %>%
@@ -410,7 +413,7 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
       add_precursors("common/iso_GCAM_regID",  "energy/A44.pcflsp_default",
                      "energy/A44.HouseholdSize", "gcam-europe/estat_ilc_hcmh02_filtered_en", "gcam-europe/estat_ilc_lvph01_filtered_en",
                      "gcam-europe/mappings/geo_to_iso_map", "L100.Pop_thous_ctry_Yh",
-                     "L102.gdp_mil90usd_GCAM3_R_Y") ->
+                     "L102.gdp_mil90usd_Scen_R_Y") ->
       L144.flspPrice_90USDm2_R_bld_Yh_EUR
 
     L144.flsp_param_EUR %>%

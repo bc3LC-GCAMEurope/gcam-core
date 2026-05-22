@@ -16,6 +16,7 @@ module_socio_L106.income_distributions <- function(command, ...) {
     return(c("L106.income_distributions"))
   } else if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/GCAM_region_names",
+             FILE = "socioeconomics/income_shares",
              FILE = "socioeconomics/Rao_multimodel_income_deciles"))
   } else if(command == driver.MAKE) {
 
@@ -27,15 +28,23 @@ module_socio_L106.income_distributions <- function(command, ...) {
 
     # Load data
     region_map <- get_data(all_data, "common/GCAM_region_names")
-    income_dists_raw <- get_data(all_data, "socioeconomics/Rao_multimodel_income_deciles")
+    income_dist_row <- get_data(all_data, "socioeconomics/income_shares") %>%
+      select(-gdp_pcap_decile)
+    income_dist_eur <- get_data(all_data, "socioeconomics/Rao_multimodel_income_deciles") %>%
+      left_join_error_no_match(region_map, by = "GCAM_region_ID")
+
+    # Create a income distribution datasets that substitutes non-Europe coutires by latest data (socioeconomics/income_shares)
+    income_dist_pre <- income_dist_eur %>%
+      anti_join(income_dist_row, by = "region") %>%
+      bind_rows(income_dist_row) %>%
+      filter(region %in% unique(region_map$region))
 
     # Process
-    income_dists_raw %>%
+    income_dist_pre %>%
       filter(sce %in% c("Historical data", ssp),
              year %in% MODEL_YEARS,
              model %in% c(model_type, "Historical data")) %>%
       mutate(subregional.population.share = 0.1) %>% #TODO: Don't hard code this?
-      left_join(region_map, by = "GCAM_region_ID") %>%
       rename(subregional.income.share = shares,
              gcam.consumer = category) %>%
       select(region, gcam.consumer, subregional.population.share, subregional.income.share, year) ->
@@ -49,10 +58,19 @@ module_socio_L106.income_distributions <- function(command, ...) {
       stop("Income shares don't add up to 1")
     }
 
+    # Need to extend the shares to 2021:
+    L106.income_distributions <- L106.income_distributions %>%
+      complete(nesting(region, gcam.consumer), year = MODEL_BASE_YEARS) %>%
+      group_by(region, gcam.consumer) %>%
+      mutate(subregional.population.share = approx_fun(year, subregional.population.share, rule = 2),
+              subregional.income.share = approx_fun(year, subregional.income.share, rule = 2)) %>%
+      ungroup()
+
+
     # Produce outputs, add appropriate flags and comments
     tibble(L106.income_distributions) %>%
       add_units("None") %>%
-      add_precursors("common/GCAM_region_names", "socioeconomics/Rao_multimodel_income_deciles") %>%
+      add_precursors("common/GCAM_region_names", "socioeconomics/income_shares", "socioeconomics/Rao_multimodel_income_deciles") %>%
       add_comments("Income distributions filtered by SSP and model type") ->
       L106.income_distributions
 

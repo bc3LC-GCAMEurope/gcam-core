@@ -19,9 +19,6 @@
 module_gcameurope_L141.hfc_R_S_T_Y <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/GCAM_region_names",
-             FILE = "common/GCAM32_to_EU",
-             FILE = "gcam-europe/mappings/geo_to_climate_map",
-             FILE = "gcam-europe/mappings/geo_to_iso_map",
              FILE = "gcam-europe/gcam_fgas_tech_EUR",
              FILE = "emissions/other_f_gases",
              "L144.in_EJ_R_bld_serv_F_Yh_EUR",
@@ -65,9 +62,6 @@ module_gcameurope_L141.hfc_R_S_T_Y <- function(command, ...) {
 
     # Load required inputs
     GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>% filter_regions_europe()
-    GCAM32_to_EU <- get_data(all_data, "common/GCAM32_to_EU") %>% filter_regions_europe()
-    geo_to_climate_map <- get_data(all_data, "gcam-europe/mappings/geo_to_climate_map") %>% filter_regions_europe()
-    geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map") %>% filter_regions_europe()
     gcam_fgas_tech_EUR <- get_data(all_data, "gcam-europe/gcam_fgas_tech_EUR", strip_attributes = TRUE)
     other_f_gases <- get_data(all_data, "emissions/other_f_gases")
     L144.in_EJ_R_bld_serv_F_Yh_EUR <- get_data(all_data, "L144.in_EJ_R_bld_serv_F_Yh_EUR")
@@ -95,6 +89,8 @@ module_gcameurope_L141.hfc_R_S_T_Y <- function(command, ...) {
     EDGAR_HFC32 <- get_data(all_data, "emissions/EDGAR/EDGAR_HFC32")
     EDGAR_HFC365mfc <- get_data(all_data, "emissions/EDGAR/EDGAR_HFC365mfc")
     EDGAR_HFC43 <- get_data(all_data, "emissions/EDGAR/EDGAR_HFC43")
+
+    iso_adj <- iso_GCAM_regID %>% pull(iso)
 
     . <- year <- value <- GCAM_region_ID <- sector <- fuel <- service <-
       IPCC_description <- agg_sector <- ISO_A3 <- iso <- EDGAR_agg_sector <-
@@ -160,15 +156,6 @@ module_gcameurope_L141.hfc_R_S_T_Y <- function(command, ...) {
                                               L141.EDGAR_hfc_R_S_T_Yh_other) %>%
       mutate(year = as.numeric(year))
 
-    # iso-geo-climate_group mapping
-    iso_to_climate_group <- geo_to_iso_map %>%
-      filter_regions_europe() %>%
-      left_join_error_no_match(geo_to_climate_map, by = 'geo') %>%
-      left_join_error_no_match(GCAM32_to_EU %>%
-                                 filter(GCAMEU_region != GCAM32_region),
-                               by = 'iso') %>%
-      select(GCAM_region_ID, climate_group)
-
     # Map Emissions to GCAM technologies
     L141.hfc_R_S_T_Yh_EUR.long <- gcam_fgas_tech_EUR %>%
       repeat_add_columns(tibble(GCAM_region_ID = unique(GCAM_region_names$GCAM_region_ID))) %>%
@@ -176,31 +163,14 @@ module_gcameurope_L141.hfc_R_S_T_Y <- function(command, ...) {
       repeat_add_columns(tibble(Non.CO2 = unique(L141.EDGAR_hfc_R_S_T_Yh.long$Non.CO2))) %>%
       left_join(L141.EDGAR_hfc_R_S_T_Yh.long,
                 by = c("EDGAR_agg_sector", "GCAM_region_ID", "year", "Non.CO2")) %>% # there should be NAs as some sectors have no emissions
-      replace_na(list(emissions = 0)) %>% # replace NAs with zero
-      # extract climate region
-      mutate(
-        climate_group = case_when(
-          grepl("south", stub.technology, ignore.case = TRUE) & !grepl("middle", stub.technology, ignore.case = TRUE) ~ "south",
-          grepl("middle south", stub.technology, ignore.case = TRUE) ~ "middle south",
-          grepl("middle north", stub.technology, ignore.case = TRUE) ~ "middle north",
-          grepl("north", stub.technology, ignore.case = TRUE) & !grepl("middle", stub.technology, ignore.case = TRUE) ~ "north",
-          TRUE ~ NA_character_  # Default case: if no pattern matches, set NA
-        )
-      ) %>%
-      # filter region-climateregion pairs
-      left_join(iso_to_climate_group %>%
-                  mutate(tokeep = T),
-                by = c('GCAM_region_ID','climate_group'),
-                relationship = "many-to-many") %>%
-      filter(is.na(climate_group) | tokeep) %>%
-      select(-climate_group, -tokeep) %>%
-      distinct()
+      replace_na(list(emissions = 0)) # replace NAs with zero
+
 
     # Calculates shares of IEA cooling energy balances that go to residential and commercial
     # ======================================================================================
     # Select residential and cooling emisssions from L144.in_EJ_R_bld_serv_F_Yh_EUR
     L141.R_cooling_T_Yh.long <- L144.in_EJ_R_bld_serv_F_Yh_EUR %>%
-      filter(grepl("cooling|heating",service), fuel == "electricity")
+      filter(grepl("cooling",service), fuel == "electricity")
     # Group by GCAM region and ID and year in new data frame (use to calculate share of total later)
     L141.R_cooling_Yh <- L141.R_cooling_T_Yh.long %>%
       group_by(GCAM_region_ID,year) %>%
@@ -257,7 +227,7 @@ module_gcameurope_L141.hfc_R_S_T_Y <- function(command, ...) {
       L141.EPA_HFCs_main
 
     # Combine with all ODS Substitute emissions subcategory files, convert to long form
-    EPA_ODSS_Aerosols %>%
+    L141.EPA_HFCs_sector_full <- EPA_ODSS_Aerosols %>%
       bind_rows(EPA_ODSS_FireExt, EPA_ODSS_Foams, EPA_ODSS_RefAC, EPA_ODSS_Solvents) %>%
       gather_years(value_col = "EPA_emissions")  %>%
       # bind all HFCs together, join to GCAM regions and aggregate country emissions to GCAM regions
@@ -268,34 +238,14 @@ module_gcameurope_L141.hfc_R_S_T_Y <- function(command, ...) {
       summarise(EPA_emissions = sum(EPA_emissions)) %>%
       ungroup() %>%
       # Map EPA sectors to EDGAR_agg_sectors and GCAM supplysectors for matching
-      left_join(EPA_fgas_sector_map_EUR, by = "EPA_sector", relationship = "many-to-many") %>%
-      group_by(GCAM_region_ID, supplysector, subsector, stub.technology, EDGAR_agg_sector, year) %>%
-      summarise(EPA_emissions = sum(EPA_emissions)) %>%
-      ungroup() %>%
+      left_join_error_no_match(EPA_fgas_sector_map_EUR, by = "EPA_sector") %>%
+      select(GCAM_region_ID, supplysector, subsector, stub.technology, EDGAR_agg_sector, year, EPA_emissions) %>%
       complete(nesting(GCAM_region_ID, supplysector, subsector, stub.technology, EDGAR_agg_sector), year = c(year, HISTORICAL_YEARS)) %>%
       arrange(supplysector, year) %>%
       group_by(GCAM_region_ID, supplysector, subsector, stub.technology, EDGAR_agg_sector) %>%
       mutate(EPA_emissions = approx_fun(year, EPA_emissions, rule = 1)) %>%
-      ungroup() %>%
-      # extract climate region
-      mutate(
-        climate_group = case_when(
-          grepl("south", stub.technology, ignore.case = TRUE) & !grepl("middle", stub.technology, ignore.case = TRUE) ~ "south",
-          grepl("middle south", stub.technology, ignore.case = TRUE) ~ "middle south",
-          grepl("middle north", stub.technology, ignore.case = TRUE) ~ "middle north",
-          grepl("north", stub.technology, ignore.case = TRUE) & !grepl("middle", stub.technology, ignore.case = TRUE) ~ "north",
-          TRUE ~ NA_character_  # Default case: if no pattern matches, set NA
-        )
-      ) %>%
-      # filter region-climateregion pairs
-      left_join(iso_to_climate_group %>%
-                  mutate(tokeep = T),
-                by = c('GCAM_region_ID','climate_group'),
-                relationship = "many-to-many") %>%
-      filter(is.na(climate_group) | tokeep) %>%
-      select(-climate_group, -tokeep) %>%
-      distinct() ->
-      L141.EPA_HFCs_sector_full
+      ungroup()
+
 
     # Prepare EDGAR data for matching
     # ===============================
@@ -307,9 +257,9 @@ module_gcameurope_L141.hfc_R_S_T_Y <- function(command, ...) {
       select(-gwp) ->
       L141.hfc_R_S_T_Yh_GWP
 
-    # Aggregate comm/resid cooling/heating to a single sector to match to EPA totals
+    # Aggregate comm/resid cooling to a single sector to match to EPA totals
     L141.hfc_R_S_T_Yh_GWP %>%
-      mutate(supplysector = if_else(grepl('cooling|heating', supplysector), 'cooling', supplysector)) %>%
+      mutate(supplysector = if_else(grepl('cooling', supplysector), 'cooling', supplysector)) %>%
       group_by(supplysector, subsector, stub.technology, EPA_sector, EDGAR_agg_sector, MAC_type1, GCAM_region_ID, year) %>%
       summarise(emissions = sum(emissions)) %>%
       rename(tot_emissions = emissions) %>%
@@ -366,9 +316,9 @@ module_gcameurope_L141.hfc_R_S_T_Y <- function(command, ...) {
       ungroup() ->
       L141.hfc_R_S_T_Yh_totalHFC2
 
-    # Append cooling name so below match can identify resid and comm cooling/heating as cooling sectors
+    # Append cooling name so below match can identify resid and comm cooling as cooling sectors
     L141.hfc_R_S_T_Yh_gas %>%
-      mutate(supply = if_else(grepl('cooling|heating', supplysector), 'cooling', supplysector)) %>%
+      mutate(supply = if_else(grepl('cooling', supplysector), 'cooling', supplysector)) %>%
       # Calculates global share of emissions in each year and sector to individual HFC gases
       left_join(L141.hfc_R_S_T_Yh_totalHFC2, by = c("supply" = "supplysector", "subsector", "stub.technology",
                                                     "EPA_sector", "EDGAR_agg_sector","MAC_type1" , "year")) %>%
@@ -406,7 +356,7 @@ module_gcameurope_L141.hfc_R_S_T_Y <- function(command, ...) {
 
     # Compute final cooling HFC emissions factors
     L141.EPA_HFC_R_S_T_Yh_adj %>%
-      filter(grepl("cooling|heating",supplysector), year %in% HISTORICAL_YEARS) %>%
+      filter(grepl("cooling",supplysector), year %in% HISTORICAL_YEARS) %>%
       left_join_error_no_match(L141.R_cooling_T_Yh.long %>%
                                  # complete services-sector-region setting 0
                                  complete(GCAM_region_ID, year, service, fill = list(value = 0)) %>%

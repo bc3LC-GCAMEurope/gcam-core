@@ -38,6 +38,7 @@ module_gcameurope_L1261.elec_trade <- function(command, ...) {
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
 
+
     # 0. Mappings to eurostat trade balance ----------------------
     # need to map grid regions to eurostat data
     country_code_mapping <- distinct(eurostat_elec_exports, code = code_exporter, region = export_ctry) %>%
@@ -49,14 +50,16 @@ module_gcameurope_L1261.elec_trade <- function(command, ...) {
              region = gsub("North Macedonia", "Macedonia", region),
              region = gsub("^Serbia", "Serbia and Montenegro", region),
              region = gsub("^Montenegro", "Serbia and Montenegro", region),
-             region = gsub("United Kingdom", "UK", region))
+             region = gsub("United Kingdom", "UK", region)) %>%
+      mutate(region = if_else(code == "MD", "Moldova", region))
 
     grid_region_mapping <- grid_regions %>%
       left_join(country_code_mapping, by = "region") %>%
       # add Andorra and Liechtenstein
       bind_rows(tibble(grid_region = c("Iberian_Peninsula", "Central_Western_Europe"),
                        code = c("AD", "LI"),
-                       region = c("Andorra", "Liechtenstein")))
+                       region = c("Andorra", "Liechtenstein"))) %>%
+      mutate(code = if_else(region == "Switzerland", "CH", code))
 
     L126.in_EJ_R_elecownuse_F_Yh_EUR_grid <- L126.in_EJ_R_elecownuse_F_Yh_EUR %>%
       filter_regions_europe(regions_to_keep_name = grid_regions$region, region_ID_mapping = GCAM_region_names)
@@ -141,7 +144,8 @@ module_gcameurope_L1261.elec_trade <- function(command, ...) {
       filter(!(sign(sum(net_exports)) != sign(cal_net_exports) & sign(net_exports) != sign(cal_net_exports))) %>%
       mutate(ownuse_adj = net_exports * cal_net_exports / sum(net_exports)) %>%
       ungroup %>%
-      left_join_error_no_match(distinct(GCAM32_to_EU, country_name, GCAM_region_ID) , by = c("region" = "country_name")) %>%
+      left_join_error_no_match(distinct(GCAM32_to_EU %>%
+                                          mutate(country_name = if_else(GCAMEU_region == "Moldova", "Moldova", country_name)), country_name, GCAM_region_ID) , by = c("region" = "country_name")) %>%
       select(year, GCAM_region_ID, ownuse_adj)
 
     L1261.out_EJ_R_elecownuse_F_Yh_EUR <- L126.out_EJ_R_elecownuse_F_Yh_EUR_grid %>%
@@ -185,7 +189,9 @@ module_gcameurope_L1261.elec_trade <- function(command, ...) {
     L1261.elec_exports_R_EJ_EUR <- L1261.elec_trade_R_EJ_EUR_pre %>%
       group_by(grid_region = grid_region_exporter, year) %>%
       summarise(exports = sum(value)) %>%
-      ungroup
+      ungroup %>%
+      # explicitly write zeros for any missing years
+      complete(grid_region, year = unique(L1261.elec_trade_R_EJ_EUR_pre$year), fill = list(exports = 0))
 
     L1261.elec_imports_R_EJ_EUR <- L1261.elec_trade_R_EJ_EUR_pre %>%
       group_by(grid_region = grid_region_importer, year) %>%
@@ -203,7 +209,16 @@ module_gcameurope_L1261.elec_trade <- function(command, ...) {
       mutate(net_exports = if_else(year < min(L1261.elec_trade_R_EJ_EUR_pre$year), net_exports[year == min(L1261.elec_trade_R_EJ_EUR_pre$year)], net_exports),
              exports = if_else(year < min(L1261.elec_trade_R_EJ_EUR_pre$year), exports[year == min(L1261.elec_trade_R_EJ_EUR_pre$year)], exports),
              imports = if_else(year < min(L1261.elec_trade_R_EJ_EUR_pre$year), imports[year == min(L1261.elec_trade_R_EJ_EUR_pre$year)], imports)) %>%
-      ungroup
+      ungroup %>%
+      # Ireland does not export any electricity to other grid regions, so it needs to be added to the list
+      complete(
+        nesting(year),
+        grid_region = unique(grid_regions$grid_region),
+        fill = list(exports = 0, imports = 0, net_exports = 0)
+      )
+
+
+
 
     # OUTPUTS ===================================================
     L1261.out_EJ_R_elecownuse_F_Yh_EUR %>%

@@ -64,7 +64,7 @@ module_gcameurope_L111.rsrc_fos_Prod <- function(command, ...) {
     L111.TPES_EJ_F_Yh_REMAINDER <- L1012.en_bal_EJ_R_Si_Fi_Yh %>%
       anti_join(L1012.en_bal_EJ_R_Si_Fi_Yh_EUR, by = c("GCAM_region_ID")) %>%
       bind_rows(L1012.en_bal_EJ_R_Si_Fi_Yh_EUR) %>%
-      filter(sector == "TPES", fuel %in% energy.RSRC_FUELS, year %in% HISTORICAL_YEARS) %>%
+      filter(sector == "TES", fuel %in% energy.RSRC_FUELS, year %in% HISTORICAL_YEARS) %>%
       group_by(sector, fuel, year) %>%
       summarise(value = sum(value)) %>%
       ungroup %>%

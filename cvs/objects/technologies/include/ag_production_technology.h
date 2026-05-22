@@ -75,43 +75,40 @@ public:
     static const std::string& getXMLNameStatic();
     AgProductionTechnology* clone() const;    
     
-    virtual void completeInit( const std::string& aRegionName,
-                               const std::string& aSectorName,
-                               const std::string& aSubsectorName,
+    virtual void completeInit( const gcamstr& aRegionName,
+                               const gcamstr& aSectorName,
+                               const gcamstr& aSubsectorName,
                                const IInfo* aSubsectorIInfo,
                                ILandAllocator* aLandAllocator );
     
-    virtual void initCalc( const std::string& aRegionName,
-                           const std::string& aSectorName,
+    virtual void initCalc( const gcamstr& aRegionName,
+                           const gcamstr& aSectorName,
                            const IInfo* aSubsectorInfo,
                            const Demographic* aDemographics,
                            PreviousPeriodInfo& aPrevPeriodInfo,
                            const int aPeriod );
 
-    virtual double calcShare( const std::string& aRegionName,
+    virtual double calcShare( const gcamstr& aRegionName,
                               const IDiscreteChoice* aChoiceFn,
                               int aPeriod ) const; 
     
-    virtual void production( const std::string& aRegionName,
-                             const std::string& aSectorName, 
+    virtual void production( const gcamstr& aRegionName,
+                             const gcamstr& aSectorName, 
                              double aVariableDemand,
                              double aFixedOutputScaleFactor,
                              const int aPeriod );
 
-    virtual void calcCost( const std::string& aRegionName,
-                           const std::string& aSectorName,
+    virtual void calcCost( const gcamstr& aRegionName,
+                           const gcamstr& aSectorName,
                            const int aPeriod );
     
-    virtual double getFixedOutput( const std::string& aRegionName,
-                                   const std::string& aSectorName,
+    virtual double getFixedOutput( const gcamstr& aRegionName,
+                                   const gcamstr& aSectorName,
                                    const bool aHasRequiredInput,
                                    const std::string& aRequiredInput,
                                    const double aMarginalRevenue,
                                    const int aPeriod ) const;
 
-    virtual double getNonEnergyCost( const std::string& aRegionName,
-                                     const int aPeriod ) const;
-    
     virtual void doInterpolations( const Technology* aPrevTech, const Technology* aNextTech );
     
     virtual Value getParsedShareWeight() const;
@@ -153,15 +150,15 @@ protected:
     virtual void acceptDerived( IVisitor* aVisitor, const int aPeriod ) const;    
     virtual const std::string& getXMLName() const;
     
-    virtual double calcProfitRate( const std::string& aRegionName,
-                                   const std::string& aProductName,
+    virtual double calcProfitRate( const gcamstr& aRegionName,
+                                   const gcamstr& aProductName,
                                    const int aPeriod );
 
-    double calcSupply( const std::string& aRegionName,
-                       const std::string& aProductName,
+    double calcSupply( const gcamstr& aRegionName,
+                       const gcamstr& aProductName,
                        const int aPeriod ) const;
 
-    void setCalYields( const std::string& aRegionName);
+    void setCalYields( const gcamstr& aRegionName);
 };
 
 #endif // _AG_PRODUCTION_TECHNOLOGY_H_

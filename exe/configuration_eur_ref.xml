@@ -7,10 +7,9 @@
 		<Value name="GHGInputFileName">../input/magicc/inputs/input_gases.emk</Value>
 		<Value write-output="1" append-scenario-name="0" name="xmldb-location">../output/database_basexdb</Value>
 		<Value write-output="1" append-scenario-name="0" name="restart">./restart/restart</Value>
-		<Value write-output="0" append-scenario-name="1" name="xmlDebugFileName">debug.xml</Value>
-		<Value write-output="1" append-scenario-name="0" name="climatFileName">gas.emk</Value>
+		<Value write-output="1" append-scenario-name="1" name="xmlDebugFileName">debug.xml</Value>
+		<Value write-output="1" append-scenario-name="0" name="hector-output">../output/gcam-hector-outputstream.csv</Value>
 		<Value write-output="1" append-scenario-name="1" name="costCurvesOutputFileName">cost_curves.xml</Value>
-		<Value write-output="1" append-scenario-name="0" name="batchCSVOutputFile">batch-csv-out.csv</Value>
 		<Value write-output="0" append-scenario-name="0" name="supplyDemandOutputFileName">SDCurves.csv</Value>
 		<Value write-output="0" append-scenario-name="0" name="flow-graph">gcam-flow-graph.dot</Value>
 		<Value write-output="0" append-scenario-name="0" name="dependencyGraphName">DependencyGraph.dot</Value>
@@ -18,7 +17,9 @@
 	</Files>
 	<ScenarioComponents>
         <Value name = "climate">../input/gcamdata/xml/hector.xml</Value>
-		<Value name = "socioeconomics">../input/gcamdata/xml/socioeconomics_gSSP2.xml</Value>
+		<Value name = "socioeconomics">../input/gcamdata/xml/socioeconomics_CORE.xml</Value>
+		<Value name = "socioeconomics_income_elas">../input/gcamdata/xml/socioeconomics_incelas_ssp2.xml</Value>
+		<Value name = "socioeconomics_income_elas">../input/gcamdata/xml/socioeconomics_incelas_ssp2_EUR.xml</Value>
 		<Value name = "resources">../input/gcamdata/xml/resources.xml</Value>
 		<Value name = "resources">../input/gcamdata/xml/resources_EUR.xml</Value>
 		<Value name = "energy_supply">../input/gcamdata/xml/en_supply.xml</Value>
@@ -34,30 +35,23 @@
 		<Value name = "energy_distribution">../input/gcamdata/xml/en_distribution_EUR.xml</Value>
 		<Value name = "other_industry">../input/gcamdata/xml/other_industry.xml</Value>
 		<Value name = "other_industry">../input/gcamdata/xml/other_industry_EUR.xml</Value>
-		<Value name = "industry_income_elas">../input/gcamdata/xml/other_industry_incelas_gssp2.xml</Value>
  		<Value name = "iron_steel">../input/gcamdata/xml/iron_steel.xml</Value>
 		 <Value name = "iron_steel">../input/gcamdata/xml/iron_steel_EUR.xml</Value>
-		<Value name = "iron_steel_income_elas">../input/gcamdata/xml/iron_steel_incelas_gssp2.xml</Value>   
 		<Value name = "iron_steel trade">../input/gcamdata/xml/iron_steel_trade_EUR.xml</Value>
  		<Value name = "Off_road">../input/gcamdata/xml/Off_road.xml</Value>
 		 <Value name = "Off_road">../input/gcamdata/xml/Off_road_EUR.xml</Value>
-		<Value name = "Off_road_income_elas">../input/gcamdata/xml/Off_road_incelas_gssp2.xml</Value>  
  		<Value name = "chemical">../input/gcamdata/xml/chemical.xml</Value>
 		 <Value name = "chemical">../input/gcamdata/xml/chemical_EUR.xml</Value>
-		<Value name = "chemical_income_elas">../input/gcamdata/xml/chemical_incelas_gssp2.xml</Value>   
  		<Value name = "aluminum">../input/gcamdata/xml/aluminum.xml</Value>
 		 <Value name = "aluminum">../input/gcamdata/xml/aluminum_EUR.xml</Value>
-		<Value name = "aluminum_income_elas">../input/gcamdata/xml/aluminum_incelas_gssp2.xml</Value> 
  		<Value name = "paper">../input/gcamdata/xml/paper.xml</Value>
  		<Value name = "paper">../input/gcamdata/xml/paper_EUR.xml</Value>
-		<Value name = "paper_income_elas">../input/gcamdata/xml/paper_incelas_gssp2.xml</Value> 
 		<Value name = "food_processing">../input/gcamdata/xml/food_processing.xml</Value> 
 		<Value name = "food_processing">../input/gcamdata/xml/food_processing_EUR.xml</Value> 
 		<Value name = "cement">../input/gcamdata/xml/cement.xml</Value>
 		<Value name = "cement">../input/gcamdata/xml/cement_EUR.xml</Value>
-		<Value name = "cement_income_elas">../input/gcamdata/xml/cement_incelas_gssp2.xml</Value>
+		<Value name = "fertilizer_energy">../input/gcamdata/xml/en_Fert.xml</Value>
 		<Value name = "fertilizer_energy">../input/gcamdata/xml/en_Fert_EUR.xml</Value>
-		<!--Value name = "fertilizer_energy">../input/gcamdata/xml/en_Fert.xml</Value-->
 		<Value name = "hddcdd">../input/gcamdata/xml/HDDCDD_constdd_no_GCM.xml</Value>
 		<Value name = "hddcdd">../input/gcamdata/xml/HDDCDD_constdd_no_GCM_EUR.xml</Value>
 		<Value name = "building">../input/gcamdata/xml/building_det.xml</Value>
@@ -162,8 +156,6 @@
 	<Strings>
 		<Value name="scenarioName">Ref</Value>
 		<Value name="debug-region">USA</Value>
-		<Value name="MAGICC-input-dir">../input/magicc/inputs</Value>
-		<Value name="MAGICC-output-dir">../output</Value>
 		<Value name="AbatedGasForCostCurves">CO2</Value>
 	</Strings>
 	<Bools>
@@ -174,6 +166,7 @@
 		<Value name="find-path">0</Value>
 		<Value name="createCostCurve">0</Value>
 		<Value name="debugChecking">0</Value>
+		<Value name="verbose-parse-warnings">0</Value>
 		<Value name="simulActive">1</Value>
 		<Value name="PrintValuesOnGraphs">1</Value>
 		<Value name="ShowNullPaths">0</Value>
@@ -185,12 +178,11 @@
 		<Value name="numPointsForSD">21</Value>
 		<Value name="numPointsForCO2CostCurve">5</Value>
 		<Value name="carbon-output-start-year">1705</Value>
-		<Value name="climateOutputInterval">5</Value>
-		<Value name="parallel-grain-size">50</Value>
 		<Value name="stop-period">-1</Value>
 		<Value name="stop-year">-1</Value>
 		<Value name="restart-period">-1</Value>
 		<Value name="restart-year">-1</Value>
+		<Value name="xmldb-buffer-size">100</Value>
 		<Value name="max-parallelism">-1</Value>
 	</Ints>
 	<Doubles>

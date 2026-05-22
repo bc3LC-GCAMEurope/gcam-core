@@ -214,7 +214,7 @@ module_gcameurope_L2326.aluminum <- function(command, ...) {
     # filters base years from original and then appends future years
     L2326.globaltech_retirement_base %>%
       mutate(year = as.integer(year)) %>%
-      filter(year == max(MODEL_BASE_YEARS)) %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
       bind_rows(L2326.globaltech_retirement_future) ->
       L2326.globaltech_retirement
 

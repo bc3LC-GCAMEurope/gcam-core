@@ -22,6 +22,7 @@ module_aglu_L142.ag_Fert_IO_R_C_Y_GLU <- function(command, ...) {
 
   MODULE_INPUTS <-
     c(FILE = "common/iso_GCAM_regID",
+      FILE = "common/GCAM_region_names",
       FILE = "aglu/FAO/FAO_ag_items_PRODSTAT",
       "L100.FAO_ag_Prod_t",
       "L100.LDS_ag_prod_t",
@@ -115,7 +116,7 @@ module_aglu_L142.ag_Fert_IO_R_C_Y_GLU <- function(command, ...) {
     # they only have one GLU, so production does not need to be spread between GLUs
     L100.FAO_isl_mlt_adjust <- L100.FAO_ag_Prod_t %>%
       filter(iso %in% c("isl", "mlt"), value > 0, year == aglu.GTAP_HISTORICAL_YEAR) %>%
-      left_join(select(FAO_ag_items_PRODSTAT, item, item_code, GTAP_crop), by = c("item", "item_code")) %>%
+      left_join(select(FAO_ag_items_PRODSTAT, item, item_code, GTAP_crop), by = c("item_code")) %>%
       # Dropping some leeks and misc veg production in Malta
       na.omit() %>%
       select(iso, GTAP_crop, value_FAO = value)
@@ -212,6 +213,27 @@ module_aglu_L142.ag_Fert_IO_R_C_Y_GLU <- function(command, ...) {
       stop("Fertilizer input-output coefficients need to be specified in all historical years")
     }
 
+
+    # JS 05/2026: Adjust some regions with unrealistic (too high) I/O coefficients. Apply to all GLUs (TBD!)
+    adj_IO_df <- tibble(
+      region = c("Lithuania", "Bulgaria", "Czech Republic", "Ireland"),
+      GCAM_commodity = c("FiberCrop", "FiberCrop", "NutsSeeds", "SugarCrop"),
+      value_adj = c(0.4, 0.4, 0.35, 0.005)
+    ) %>%
+      repeat_add_columns(tibble(year = unique(L142.ag_Fert_IO_R_C_Y_GLU$year))) %>%
+      left_join_error_no_match(GCAM_region_names, by = "region") %>%
+      select(-region)
+
+    L142.ag_Fert_IO_R_C_Y_GLU <- L142.ag_Fert_IO_R_C_Y_GLU %>%
+      left_join(adj_IO_df, by = c("GCAM_region_ID", "GCAM_commodity", "year")) %>%
+      mutate(value = if_else(
+        !is.na(value_adj) & year >= 2005,
+        pmin(value, value_adj, na.rm = TRUE),
+        value
+      )) %>%
+      select(-value_adj)
+
+
     # Produce outputs
     L142.ag_Fert_Prod_MtN_ctry_Y %>%
       add_title("Fertilizer production by country / year") %>%
@@ -242,6 +264,7 @@ module_aglu_L142.ag_Fert_IO_R_C_Y_GLU <- function(command, ...) {
       add_comments("And then are scaled so that regional total fertilizer consumptions are balanced") %>%
       add_legacy_name("L142.ag_Fert_IO_R_C_Y_GLU") %>%
       add_precursors("common/iso_GCAM_regID",
+                     "common/GCAM_region_names",
                      "aglu/FAO/FAO_ag_items_PRODSTAT",
                      "L100.LDS_ag_prod_t",
                      "L101.ag_Prod_Mt_R_C_Y_GLU",

@@ -62,7 +62,6 @@
 #include "marketplace/include/marketplace.h"
 #include "marketplace/include/market.h"
 #include "climate/include/iclimate_model.h"
-#include "climate/include/magicc_model.h"
 #include "resources/include/subresource.h"
 #include "resources/include/reserve_subresource.h"
 #include "resources/include/renewable_subresource.h"
@@ -78,7 +77,6 @@
 #include "land_allocator/include/land_use_history.h"
 #include "ccarbon_model/include/icarbon_calc.h"
 #include "ccarbon_model/include/land_carbon_densities.h"
-#include "util/base/include/atom.h"
 #include "land_allocator/include/land_node.h"
 #include "technologies/include/ioutput.h"
 #include "technologies/include/base_technology.h"
@@ -192,7 +190,8 @@ mSubsectorDepth( 0 )
 
 #if( __HAVE_JAVA__ )
     // Set Java as the sink of data for mBuffer.
-    SendToJavaIOSink sendToJavaSink( mJNIContainer.get() );
+    int bufferSize = Configuration::getInstance()->getInt("xmldb-buffer-size", 1);
+    SendToJavaIOSink sendToJavaSink( mJNIContainer.get(), bufferSize );
     mBuffer.push( sendToJavaSink );
 #else
     mBuffer.push( null_sink() );
@@ -310,6 +309,8 @@ unique_ptr<XMLDBOutputter::JNIContainer> XMLDBOutputter::createContainer( const 
         jniContainer.reset( 0 );
         return jniContainer;
     }
+    
+    int bufferSize = conf->getInt("xmldb-buffer-size", 1);
 
     // Start the Java VM with the following settings
     JavaVMInitArgs vmArgs;
@@ -362,7 +363,7 @@ unique_ptr<XMLDBOutputter::JNIContainer> XMLDBOutputter::createContainer( const 
     // "(Ljava/lang/String;Ljava/lang/String)V".  The arguments are the database, and
     // a unique name to call the document that we will put into the database.
     jmethodID writeDBCtorMID = jniContainer->mJavaEnv->GetMethodID( jniContainer->mWriteDBClass,
-        "<init>", "(Ljava/lang/String;Ljava/lang/String;)V" );
+        "<init>", "(Ljava/lang/String;Ljava/lang/String;I)V" );
     if( !writeDBCtorMID ) {
         ILogger& mainLog = ILogger::getLogger( "main_log" );
         mainLog.setLevel( ILogger::SEVERE );
@@ -391,10 +392,11 @@ unique_ptr<XMLDBOutputter::JNIContainer> XMLDBOutputter::createContainer( const 
     // Convert the C++ string to a Java String so that they can be passed to the constructor.
     jstring jXMLDBContainerName = jniContainer->mJavaEnv->NewStringUTF( xmldbContainerName.c_str() );
     jstring jDocName = jniContainer->mJavaEnv->NewStringUTF( docName.c_str() );
+    jint jBufferSize = bufferSize;
 
     // Call the constructor to get an instance of writeDBClassName.
     jniContainer->mWriteDBInstance = jniContainer->mJavaEnv->NewGlobalRef(
-        jniContainer->mJavaEnv->NewObject( jniContainer->mWriteDBClass, writeDBCtorMID, jXMLDBContainerName, jDocName ) );
+        jniContainer->mJavaEnv->NewObject( jniContainer->mWriteDBClass, writeDBCtorMID, jXMLDBContainerName, jDocName, jBufferSize ) );
     if( !jniContainer->mWriteDBInstance ) {
         ILogger& mainLog = ILogger::getLogger( "main_log" );
         mainLog.setLevel( ILogger::SEVERE );
@@ -485,6 +487,15 @@ void XMLDBOutputter::startVisitScenario( const Scenario* aScenario, const int aP
     mTabs->writeTabs( mBuffer );
     mBuffer << "<model-version>ver_" << __ObjECTS_VER__ << "_r" << __REVISION_NUMBER__
         << "</model-version>" << endl;
+    
+    // put the model years in the output as well which may be useful metadata
+    XMLWriteOpeningTag("modeltime", mBuffer, mTabs.get());
+    const Modeltime* modeltime = aScenario->getModeltime();
+    for(int per = 0; per < modeltime->getmaxper(); ++per) {
+        int year = modeltime->getper_to_yr(per);
+        XMLWriteElement(year, "model-year", mBuffer, mTabs.get());
+    }
+    XMLWriteClosingTag("modeltime", mBuffer, mTabs.get());
 }
 
 void XMLDBOutputter::endVisitScenario( const Scenario* aScenario, const int aPeriod ){
@@ -525,7 +536,7 @@ void XMLDBOutputter::endVisitRegionMiniCAM( const RegionMiniCAM* aRegionMiniCAM,
     assert( !mCurrentRegion.empty() );
 
     // Clear the region name.
-    mCurrentRegion.clear();
+    mCurrentRegion = "";
 
     // Write the closing region tag.
     XMLWriteClosingTag( aRegionMiniCAM->getXMLName(), mBuffer, mTabs.get() );
@@ -562,8 +573,8 @@ void XMLDBOutputter::endVisitResource( const AResource* aResource,
     // Write the closing resource tag.
     XMLWriteClosingTag( aResource->getXMLName(), mBuffer, mTabs.get() );
     // Clear the current resource.
-    mCurrentPriceUnit.clear();
-    mCurrentOutputUnit.clear();
+    mCurrentPriceUnit = "";
+    mCurrentOutputUnit = "";
 }
 
 void XMLDBOutputter::startVisitSubResource( const SubResource* aSubResource,
@@ -681,10 +692,10 @@ void XMLDBOutputter::endVisitSector( const Sector* aSector, const int aPeriod ){
     XMLWriteClosingTag( aSector->getXMLName(), mBuffer, mTabs.get() );
 
     // Clear the current sector.
-    mCurrentSector.clear();
-    mCurrentPriceUnit.clear();
-    mCurrentOutputUnit.clear();
-    mCurrentInputUnit.clear();
+    mCurrentSector = "";
+    mCurrentPriceUnit = "";
+    mCurrentOutputUnit = "";
+    mCurrentInputUnit = "";
 }
 
 void XMLDBOutputter::startVisitSubsector( const Subsector* aSubsector,
@@ -909,14 +920,6 @@ void XMLDBOutputter::startVisitMiniCAMInput( const MiniCAMInput* aInput, const i
     // we use startVisitInput to write out the generic input information, however
     // startVisitInput will never be called by an accept so we do it here
     startVisitInput( aInput, aPeriod );
-        
-    // We want to write the keywords last due to limitations in 
-    // XPath we could be searching for them using following-sibling
-    // note that mBufferStack.top() is the child buffer for input
-    if( !aInput->mKeywordMap.empty() && mBufferStack.top()->rdbuf()->in_avail()/*->str().empty()*/ ) {
-        XMLWriteElementWithAttributes( "", "keyword", *mBufferStack.top(), mTabs.get(), 
-            aInput->mKeywordMap );
-    }
 }
 void XMLDBOutputter::endVisitMiniCAMInput( const MiniCAMInput* aInput, const int aPeriod ) {
     // call the endVisitInput explicitly becuase it is never called by an accept method.
@@ -1196,7 +1199,7 @@ void XMLDBOutputter::startVisitGHG( const AGHG* aGHG, const int aPeriod ){
         }
 
         // Write indirect emissions if this is CO2.
-        if( aGHG->getName() == "CO2" && !util::isEqual( mCurrIndirectEmissions[ i ], 0.0 ) ){
+        if( aGHG->getName() == gcamstr("CO2") && !util::isEqual( mCurrIndirectEmissions[ i ], 0.0 ) ){
             writeItemToBuffer( mCurrIndirectEmissions[ i ], "indirect-emissions", *childBuffer, 
                 mTabs.get(), i, aGHG->mEmissionsUnit );
         }
@@ -1236,9 +1239,9 @@ void XMLDBOutputter::endVisitMarketplace( const Marketplace* aMarketplace,
 {
     // Write the closing marketplace tag.
     XMLWriteClosingTag( Marketplace::getXMLNameStatic(), mBuffer, mTabs.get() );
-    mCurrentMarket.clear();
-    mCurrentPriceUnit.clear();
-    mCurrentOutputUnit.clear();
+    mCurrentMarket = "";
+    mCurrentPriceUnit = "";
+    mCurrentOutputUnit = "";
 
 }
 
@@ -1253,11 +1256,10 @@ void XMLDBOutputter::startVisitMarket( const Market* aMarket,
     XMLWriteElement( aMarket->getRegionName(), "MarketRegion", mBuffer, mTabs.get() );
 
     // if next market clear out units to be updated
-    if( mCurrentMarket != aMarket->getName() ){
-        mCurrentMarket.clear();
+    if( mCurrentMarket != aMarket->getName() ){;
         mCurrentMarket = aMarket->getName();
-        mCurrentPriceUnit.clear();
-        mCurrentOutputUnit.clear();
+        mCurrentPriceUnit = "";
+        mCurrentOutputUnit = "";
     }
     // Store unit information from base period
     if( aMarket->getYear() == scenario->getModeltime()->getStartYear() ) {
@@ -1273,10 +1275,10 @@ void XMLDBOutputter::startVisitMarket( const Market* aMarket,
     writeItem( "demand", mCurrentOutputUnit, aMarket->getRawDemand(), -1 );
     writeItem( "supply", mCurrentOutputUnit, aMarket->getRawSupply(), -1 );
 
-    for( vector<const objects::Atom*>::const_iterator i = aMarket->getContainedRegions().begin();
+    for( vector<gcamstr>::const_iterator i = aMarket->getContainedRegions().begin();
         i != aMarket->getContainedRegions().end(); i++ )
     {
-        XMLWriteElement( (*i)->getID(), "ContainedRegion", mBuffer, mTabs.get() );
+        XMLWriteElement( (*i).get(), "ContainedRegion", mBuffer, mTabs.get() );
     }
 }
 
@@ -1297,16 +1299,12 @@ void XMLDBOutputter::startVisitClimateModel( const IClimateModel* aClimateModel,
     assert( aPeriod == -1 );
     // Write the opening tag.
     XMLWriteOpeningTag( "climate-model", mBuffer, mTabs.get() );
-    int outputInterval
-        = Configuration::getInstance()->getInt( "climateOutputInterval",
-                                   scenario->getModeltime()->gettimestep( 0 ) );
-
-    // print at least to 2100 if interval is set appropriately
-    int endingYear = max( scenario->getModeltime()->getEndYear(), 2100 );
+    
+    const Modeltime* modeltime = scenario->getModeltime();
 
     // Write the concentrations for the request period.
-    for( int year = scenario->getModeltime()->getStartYear();
-         year <= endingYear; year += outputInterval )
+    for( int year = modeltime->getStartYear();
+         year <= modeltime->getEndYear(); year++ )
     {
          writeItemUsingYear( "CO2-concentration", "PPM",
                              aClimateModel->getConcentration( "CO2", year ),
@@ -1344,8 +1342,8 @@ void XMLDBOutputter::startVisitClimateModel( const IClimateModel* aClimateModel,
     }
 
     // Write total radiative forcing
-    for( int year = scenario->getModeltime()->getStartYear();
-         year <= endingYear; year += outputInterval )
+    for( int year = modeltime->getStartYear();
+         year <= modeltime->getEndYear(); year++ )
     {
         // Kyoto Forcing
         writeItemUsingYear( "forcing-Kyoto", "W/m^2",
@@ -1357,10 +1355,12 @@ void XMLDBOutputter::startVisitClimateModel( const IClimateModel* aClimateModel,
         + aClimateModel->getForcing( "HFC143A", util::round( year ) )
         + aClimateModel->getForcing( "HFC227ea", util::round( year ) )
         + aClimateModel->getForcing( "HFC245fa", util::round( year ) )
+        + aClimateModel->getForcing( "HFC23", util::round( year ) )
+        + aClimateModel->getForcing( "HFC4310", util::round( year ) )
+        + aClimateModel->getForcing( "HFC32", util::round( year ) )
         + aClimateModel->getForcing( "SF6", util::round( year ) )
         + aClimateModel->getForcing( "CF4", util::round( year ) )
-        + aClimateModel->getForcing( "C2F6", util::round( year ) )
-        + aClimateModel->getForcing( "OtherHC", util::round( year ) ),
+        + aClimateModel->getForcing( "C2F6", util::round( year ) ),
                              year );
 
         // HFCs Forcing
@@ -1371,21 +1371,38 @@ void XMLDBOutputter::startVisitClimateModel( const IClimateModel* aClimateModel,
         + aClimateModel->getForcing( "HFC227ea", util::round( year ) )
         + aClimateModel->getForcing( "HFC245fa", util::round( year ) )
         + aClimateModel->getForcing( "HFC23", util::round( year ) )
+        + aClimateModel->getForcing( "HFC4310", util::round( year ) )
         + aClimateModel->getForcing( "HFC32", util::round( year ) ),
                              year );
 
-                // Long-lived Forcing
+        // Total halocarbon Forcing
         writeItemUsingYear( "forcing-halocarbons", "W/m^2",
-        aClimateModel->getForcing( "HFC125", util::round( year ) )
+                           aClimateModel->getForcing( "C2F6", util::round( year ) )
+        + aClimateModel->getForcing( "CCl4", util::round( year ) )
+        + aClimateModel->getForcing( "CF4", util::round( year ) )
+        + aClimateModel->getForcing( "CFC11", util::round( year ) )
+        + aClimateModel->getForcing( "CFC113", util::round( year ) )
+        + aClimateModel->getForcing( "CFC114", util::round( year ) )
+        + aClimateModel->getForcing( "CFC115", util::round( year ) )
+        + aClimateModel->getForcing( "CFC12", util::round( year ) )
+        + aClimateModel->getForcing( "CH3Br", util::round( year ) )
+        + aClimateModel->getForcing( "CH3CCl3", util::round( year ) )
+        + aClimateModel->getForcing( "CH3Cl", util::round( year ) )
+        + aClimateModel->getForcing( "halon1211", util::round( year ) )
+        + aClimateModel->getForcing( "halon1301", util::round( year ) )
+        + aClimateModel->getForcing( "halon2402", util::round( year ) )
+        + aClimateModel->getForcing( "HCF141b", util::round( year ) )
+        + aClimateModel->getForcing( "HCF142b", util::round( year ) )
+        + aClimateModel->getForcing( "HCF22", util::round( year ) )
+        + aClimateModel->getForcing( "HFC125", util::round( year ) )
         + aClimateModel->getForcing( "HFC134A", util::round( year ) )
         + aClimateModel->getForcing( "HFC143A", util::round( year ) )
         + aClimateModel->getForcing( "HFC227ea", util::round( year ) )
+        + aClimateModel->getForcing( "HFC23", util::round( year ) )
         + aClimateModel->getForcing( "HFC245fa", util::round( year ) )
-        + aClimateModel->getForcing( "SF6", util::round( year ) )
-        + aClimateModel->getForcing( "CF4", util::round( year ) )
-        + aClimateModel->getForcing( "C2F6", util::round( year ) )
-        + aClimateModel->getForcing( "OtherHC", util::round( year ) )
-        + aClimateModel->getForcing( "Montreal", util::round( year ) ),
+        + aClimateModel->getForcing( "HFC32", util::round( year ) )
+        + aClimateModel->getForcing( "HFC4310", util::round( year ) )
+        + aClimateModel->getForcing( "SF6", util::round( year ) ),
                              year );
         
         // PFCs Forcing
@@ -1500,7 +1517,28 @@ void XMLDBOutputter::startVisitClimateModel( const IClimateModel* aClimateModel,
         
         // Montreal gas Forcing
         writeItemUsingYear( "forcing-Montreal", "W/m^2",
-                           aClimateModel->getForcing( "Montreal", util::round( year ) ),
+                           aClimateModel->getForcing( "HFC125", util::round( year ) )
+        + aClimateModel->getForcing( "HFC134A", util::round( year ) )
+        + aClimateModel->getForcing( "HFC143A", util::round( year ) )
+        + aClimateModel->getForcing( "HFC227ea", util::round( year ) )
+        + aClimateModel->getForcing( "HFC245fa", util::round( year ) )
+        + aClimateModel->getForcing( "HFC23", util::round( year ) )
+        + aClimateModel->getForcing( "HFC4310", util::round( year ) )
+        + aClimateModel->getForcing( "HFC32", util::round( year ) )
+        + aClimateModel->getForcing( "CFC11", util::round( year ) )
+        + aClimateModel->getForcing( "CFC113", util::round( year ) )
+        + aClimateModel->getForcing( "CFC114", util::round( year ) )
+        + aClimateModel->getForcing( "CFC115", util::round( year ) )
+        + aClimateModel->getForcing( "CFC12", util::round( year ) )
+        + aClimateModel->getForcing( "HCF141b", util::round( year ) )
+        + aClimateModel->getForcing( "HCF142b", util::round( year ) )
+        + aClimateModel->getForcing( "HCF22", util::round( year ) )
+        + aClimateModel->getForcing( "CCl4", util::round( year ) )
+        + aClimateModel->getForcing( "CH3CCl3", util::round( year ) )
+        + aClimateModel->getForcing( "CH3Br", util::round( year ) )
+        + aClimateModel->getForcing( "halon1211", util::round( year ) )
+        + aClimateModel->getForcing( "halon1301", util::round( year ) )
+        + aClimateModel->getForcing( "halon2402", util::round( year ) ),
                            year );
         
         // Total Forcing
@@ -1511,8 +1549,8 @@ void XMLDBOutputter::startVisitClimateModel( const IClimateModel* aClimateModel,
      }
 
     // Write net terrestrial uptake
-    for( int year = scenario->getModeltime()->getStartYear();
-         year <= endingYear; year += outputInterval )
+    for( int year = modeltime->getStartYear();
+         year <= modeltime->getEndYear(); year++ )
     {
         writeItemUsingYear( "net-terrestrial-uptake", "GtC",
                              aClimateModel->getNetTerrestrialUptake( year ),
@@ -1520,8 +1558,8 @@ void XMLDBOutputter::startVisitClimateModel( const IClimateModel* aClimateModel,
     }
 
     // Write net ocean uptake
-    for( int year = scenario->getModeltime()->getStartYear();
-         year <= endingYear; year += outputInterval )
+    for( int year = modeltime->getStartYear();
+         year <= modeltime->getEndYear(); year++ )
     {
         writeItemUsingYear( "net-ocean-uptake", "GtC",
                              aClimateModel->getNetOceanUptake( year ),
@@ -1529,8 +1567,8 @@ void XMLDBOutputter::startVisitClimateModel( const IClimateModel* aClimateModel,
     }
 
     // Global-mean air temperature
-    for( int year = scenario->getModeltime()->getStartYear();
-         year <= endingYear; year += outputInterval )
+    for( int year = modeltime->getStartYear();
+         year <= modeltime->getEndYear(); year++ )
     {
         writeItemUsingYear( "global-mean-air-temperature-native", "degreesC",
                              aClimateModel->getTemperature( year, false ),
@@ -1538,8 +1576,8 @@ void XMLDBOutputter::startVisitClimateModel( const IClimateModel* aClimateModel,
     }
     
     // Global-mean surface temperature
-    for( int year = scenario->getModeltime()->getStartYear();
-         year <= endingYear; year += outputInterval )
+    for( int year = modeltime->getStartYear();
+         year <= modeltime->getEndYear(); year++ )
     {
         writeItemUsingYear( "global-mean-surface-temperature-native", "degreesC",
                              aClimateModel->getGmst( year, false ),
@@ -1547,8 +1585,8 @@ void XMLDBOutputter::startVisitClimateModel( const IClimateModel* aClimateModel,
     }
     
     // Global-mean air temperature relative to 1850-1900 mean
-    for( int year = scenario->getModeltime()->getStartYear();
-         year <= endingYear; year += outputInterval )
+    for( int year = modeltime->getStartYear();
+         year <= modeltime->getEndYear(); year++ )
     {
         writeItemUsingYear( "global-mean-air-temperature", "degreesC",
                              aClimateModel->getTemperature( year, true ),
@@ -1556,8 +1594,8 @@ void XMLDBOutputter::startVisitClimateModel( const IClimateModel* aClimateModel,
     }
     
     // Global-mean surface temperature relative to 1850-1900 mean
-    for( int year = scenario->getModeltime()->getStartYear();
-         year <= endingYear; year += outputInterval )
+    for( int year = modeltime->getStartYear();
+         year <= modeltime->getEndYear(); year++ )
     {
         writeItemUsingYear( "global-mean-surface-temperature", "degreesC",
                              aClimateModel->getGmst( year, true ),
@@ -1697,11 +1735,10 @@ void XMLDBOutputter::startVisitCarbonCalc( const ICarbonCalc* aCarbonCalc, const
     // Printing yearly values would be too much data.
     const Modeltime* modeltime = scenario->getModeltime();
     const int startingYear = max( Configuration::getInstance()->getInt( "carbon-output-start-year", 1990 ), CarbonModelUtils::getStartYear() );
-    int outputInterval = Configuration::getInstance()->getInt( "climateOutputInterval",modeltime->gettimestep( 0 ) );
     
     for( int aYear = startingYear; 
              aYear <= modeltime->getper_to_yr( modeltime->getmaxper() - 1 ) || aYear == modeltime->getper_to_yr( modeltime->getmaxper() - 1 ); 
-             aYear += outputInterval ){
+             aYear++ ){
         writeItemUsingYear( "land-use-change-emission", "MtC/yr", aCarbonCalc->getNetLandUseChangeEmission( aYear ), aYear );
         writeItemUsingYear( "above-land-use-change-emission", "MtC/yr", aCarbonCalc->getNetLandUseChangeEmissionAbove( aYear ), aYear );
         writeItemUsingYear( "below-land-use-change-emission", "MtC/yr", aCarbonCalc->getNetLandUseChangeEmissionBelow( aYear ), aYear );
@@ -1719,7 +1756,7 @@ void XMLDBOutputter::startVisitCarbonCalc( const ICarbonCalc* aCarbonCalc, const
     }
     for( int aYear = modeltime->getStartYear();
              aYear <= modeltime->getper_to_yr( modeltime->getmaxper() - 1 ) || aYear == modeltime->getper_to_yr( modeltime->getmaxper() - 1 );
-             aYear += outputInterval ){
+             aYear++ ){
         writeItemUsingYear( "above-ground-carbon-stock", "MtC", aCarbonCalc->getAboveGroundCarbonStock( aYear ), aYear );
 
     }
@@ -2082,8 +2119,8 @@ void XMLDBOutputter::startVisitFoodDemandInput( const FoodDemandInput* aFoodDema
     mCurrentPriceUnit = "2005$/Mcal/day";
     mCurrentInputUnit = "Pcal/yr";
     startVisitInput( aFoodDemandInput, aPeriod );
-    mCurrentPriceUnit.clear();
-    mCurrentInputUnit.clear();
+    mCurrentPriceUnit = "";
+    mCurrentInputUnit = "";
 
     const Modeltime* modeltime = scenario->getModeltime();
     for( int per = 0; per < modeltime->getmaxper(); ++per ) {
@@ -2250,15 +2287,16 @@ map<string, string> XMLDBOutputter::decomposeLandName( string aLandName ) {
  *          error checking and set the error flag as appropriate.
  * \param aJNIContainer A weak pointer to the container which holds the Java VM
  *                      references.  May be null if it did not initialize properly.
+ * \param aBufferSize The configured buffer size which should be used consistently in C++ and Java.
  */
-XMLDBOutputter::SendToJavaIOSink::SendToJavaIOSink( const JNIContainer* aJNIContainer )
+XMLDBOutputter::SendToJavaIOSink::SendToJavaIOSink( const JNIContainer* aJNIContainer, const int aBufferSize )
 :mJNIContainer( aJNIContainer ),
 // Get the receiveDataFromGCAM method from the write DB class with arguments of a byte
 // array "[B", an integer "I", and a return type of bool "Z" 
 mReceiveDataMID( aJNIContainer ? aJNIContainer->mJavaEnv->GetMethodID( aJNIContainer->mWriteDBClass, "receiveDataFromGCAM", "([BI)Z") : 0 ),
 // The same buffer size as the one used in Java, if we try to tune this we should
 // adjust it both here and in Java.
-BUFFER_SIZE( 1024 * 1024 ),
+BUFFER_SIZE( aBufferSize * 1024 * 1024 ),
 mJNIBuffer( aJNIContainer ? aJNIContainer->mJavaEnv->NewByteArray( BUFFER_SIZE  ) : 0 ),
 // If any of the required JNI data structures were not properly set then set the error flag.
 mErrorFlag( !mJNIContainer || !mReceiveDataMID || !mJNIBuffer )

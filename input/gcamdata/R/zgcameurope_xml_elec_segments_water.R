@@ -52,6 +52,7 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
                      "L2235.GlobalTechLifetime_elecS_cool_EUR",
                      "L2235.AvgFossilEffKeyword_elecS_cool_EUR",
                      "L2235.GlobalIntTechBackup_elecS_cool_EUR",
+                     "L2235.GlobalIntTechValueFactor_elecS_cool_EUR",
                      "L2235.GlobalIntTechCapital_elecS_cool_EUR",
                      "L2235.GlobalIntTechEff_elecS_cool_EUR",
                      "L2235.GlobalIntTechLifetime_elecS_cool_EUR",
@@ -169,8 +170,27 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
       add_xml_data(L2235.GlobalTechSCurve_elecS_cool_EUR, "GlobalTechSCurve") %>%
       add_xml_data(L2235.GlobalIntTechSCurve_elecS_cool_EUR, "GlobalIntTechSCurve") %>%
       add_xml_data(L2235.GlobalTechCapture_elecS_cool_EUR, "GlobalTechCapture") %>%
-      add_xml_data(L2235.GlobalTechLifetime_elecS_cool_EUR, "GlobalTechLifetime") %>%
-      add_xml_data(L2235.GlobalIntTechBackup_elecS_cool_EUR, "GlobalIntTechBackup") %>%
+      add_xml_data(L2235.GlobalTechLifetime_elecS_cool_EUR, "GlobalTechLifetime") ->
+      elec_segments_water_EUR.xml
+
+
+    if(energy.ELEC_USE_BACKUP) {
+      elec_segments_water_EUR.xml %>%
+        add_xml_data(L2235.GlobalIntTechBackup_elecS_cool_EUR, "GlobalIntTechBackup") %>%
+        add_xml_data_generate_levels(L2235.StubTechMarket_backup_elecS_cool_EUR,
+                                     "StubTechMarket","subsector","nesting-subsector",1,FALSE) %>%
+        add_precursors("L2235.GlobalIntTechBackup_elecS_cool_EUR",
+                       "L2235.StubTechMarket_backup_elecS_cool_EUR") ->
+        elec_segments_water_EUR.xml
+    } else {
+      elec_segments_water_EUR.xml %>%
+        add_xml_data(L2235.GlobalIntTechValueFactor_elecS_cool_EUR, "GlobalIntTechValueFactor") %>%
+        add_precursors("L2235.GlobalIntTechValueFactor_elecS_cool_EUR") ->
+        elec_segments_water_EUR.xml
+    }
+
+
+    elec_segments_water_EUR.xml %>%
       add_xml_data(L2235.GlobalTechShrwt_elecS_cool_EUR, "GlobalTechShrwt")  %>%
       # add_xml_data(L2235.GlobalIntTechShrwt_elecS_cool_EUR, "GlobalIntTechShrwt")
     # %>%
