@@ -38,7 +38,7 @@ module_policy_CTax.xml <- function(command, ...) {
 
       L3222.CTax_GHG_Link_CO2_2020_tmp <- filter_for_xml(L3222.CTax_GHG_Link) %>%
         filter(linked.ghg.policy == "CO2") %>%
-        mutate(price.adjust = 1, demand.adjust = 1, year = 2020) %>%
+        mutate(price.adjust = 1, demand.adjust = 1, year = min(MODEL_FUTURE_YEARS)) %>%
         select(region, linked.ghg.policy, year, price.adjust, demand.adjust)
 
       L3222.CTax_GHG_Link_History_tmp <- filter_for_xml(L3222.CTax_GHG_Link) %>%
