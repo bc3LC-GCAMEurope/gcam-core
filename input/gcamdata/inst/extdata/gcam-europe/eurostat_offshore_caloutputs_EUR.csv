@@ -1,0 +1,48 @@
+# File: eurostat_offshore_caloutputs_EUR.csv,,,,,,
+# Title: Calibrated output of fixed offshore wind historical years,,,,,,
+# Units: none,,,,,,
+# Comments: percentual calibrated output of fixed offshore wind with respect to total wind ,,,,,,
+# Source: Eurostat + national data. ,,,,,,
+# Column types: cnnnnnn,,,,,,
+# -------,,,,,,
+country_name,1975,1990,2005,2010,2015,2021
+Belgium,0,0,0,0,0,57.41105721
+Bulgaria,0,0,0,0,0,0
+Czech Republic,0,0,0,0,0,0
+Denmark,0,0,0,0,8.993078089,47.29339193
+Germany,0,0,0,0,4.072422604,21.31752052
+Estonia,0,0,0,0,0,0
+Ireland,0,0,0,0,0.377160422,0.253528651
+Greece,0,0,0,0,0,0
+Spain,0,0,0,0,0,0
+France,0,0,0,0,0,0.014346769
+Croatia,0,0,0,0,0,0
+Italy,0,0,0,0,0,0
+Cyprus,0,0,0,0,0,0
+Latvia,0,0,0,0,0,0
+Lithuania,0,0,0,0,0,0
+Luxembourg,0,0,0,0,0,0
+Hungary,0,0,0,0,0,0
+Malta,0,0,0,0,0,0
+Netherlands,0,0,0,0,4.728565756,43.8782623
+Austria,0,0,0,0,0,0
+Poland,0,0,0,0,0,0
+Portugal,0,0,0,0,0,0.397090896
+Romania,0,0,0,0,0,0
+Slovenia,0,0,0,0,0,0
+Slovakia,0,0,0,0,0,0
+Finland,0,0,0,0,0,3.032891354
+Sweden,0,0,0,0,1.298860434,2.358941418
+Iceland,0,0,0,0,0,0
+Norway,0,0,0,0,0,0
+UK,0,0,0,0,43.26038873,54.82872281
+Bosnia and Herzegovina,0,0,0,0,0,0
+Serbia and Montenegro,0,0,0,0,0,0
+Moldova,0,0,0,0,0,0
+Macedonia,0,0,0,0,0,0
+Georgia,0,0,0,0,0,0
+Albania,0,0,0,0,0,0
+Serbia,0,0,0,0,0,0
+Turkey,0,0,0,0,0,0
+Ukraine,0,0,0,0,0,0
+Switzerland,0,0,0,0,0,0

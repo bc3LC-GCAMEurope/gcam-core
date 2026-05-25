@@ -21,9 +21,7 @@
 #' @importFrom tidyr complete nesting replace_na
 #' @author RH Feb 2024
 module_gcameurope_L223.electricity <- function(command, ...) {
-  OUTPUTS_TO_COPY_FILTER <- c( "L223.StubTechCapFactor_elec",
-                               "L223.StubTechCost_offshore_wind",
-                               "L223.StubTechFixOut_hydro",
+  OUTPUTS_TO_COPY_FILTER <- c( "L223.StubTechFixOut_hydro",
                                "L223.Supplysector_elec",
                                "L223.ElecReserve",
                                "L223.SectorUseTrialMarket_elec",
@@ -34,8 +32,7 @@ module_gcameurope_L223.electricity <- function(command, ...) {
                                "L223.SubsectorShrwt_nuc",
                                "L223.SubsectorShrwt_renew",
                                "L223.SubsectorInterp_elec",
-                               "L223.SubsectorInterpTo_elec",
-                               "L223.StubTech_elec")
+                               "L223.SubsectorInterpTo_elec")
 
   MODULE_INPUTS <- c(FILE = "common/GCAM_region_names",
                      FILE = "gcam-europe/mappings/grid_regions",
@@ -47,12 +44,19 @@ module_gcameurope_L223.electricity <- function(command, ...) {
                      "L1231.in_EJ_R_elec_F_tech_Yh",
                      "L1231.out_EJ_R_elec_F_tech_Yh",
                      "L1231.eff_R_elec_F_tech_Yh",
+                     "L223.StubTechCapFactor_elec",
+                     "L223.StubTechCost_offshore_wind",
+                     "L223.StubTech_elec",
+                     "L120.RegCapFactor_offshore_wind_EUR",
                      OUTPUTS_TO_COPY_FILTER)
 
   MODULE_OUTPUTS <- c("L223.StubTechCalInput_elec_EUR",
                       "L223.StubTechFixOut_elec_EUR",
                       "L223.StubTechProd_elec_EUR",
                       "L223.StubTechEff_elec_EUR",
+                      "L223.StubTechCapFactor_elec_EUR",
+                      "L223.StubTechCost_offshore_wind_EUR",
+                      "L223.StubTech_elec_EUR",
                       paste0(OUTPUTS_TO_COPY_FILTER, "_EUR"))
 
   if(command == driver.DECLARE_INPUTS) {
@@ -207,6 +211,62 @@ module_gcameurope_L223.electricity <- function(command, ...) {
       L223.StubTechEff_elec_EUR
     L223.StubTechEff_elec_EUR <- L223.StubTechEff_elec_EUR[LEVEL2_DATA_NAMES[["StubTechEff"]]]
 
+
+    # ----------------------------
+    # DEVELOPMENT OF THE OFFSHORE TECHNOLOGIES
+
+    # Function to distinguish between floating and fixed offshore technologies
+    expand_offshore_wind <- function(df) {
+      # Check if the dataframe has either of the relevant columns
+      if ("stub.technology" %in% colnames(df)) {
+        tech_col <- "stub.technology"
+      } else if ("intermittent.technology" %in% colnames(df)) {
+        tech_col <- "intermittent.technology"
+      } else {
+        # If neither column exists, return the dataframe unchanged
+        return(df)
+      }
+
+      # Check if wind_offshore exists in the technology column
+      if ("wind_offshore" %in% df[[tech_col]]) {
+        # Create rows for floating and fixed offshore wind
+        floating_rows <- df[df[[tech_col]] == "wind_offshore", ]
+        fixed_rows <- df[df[[tech_col]] == "wind_offshore", ]
+
+        # Replace technology names
+        floating_rows[[tech_col]] <- "wind_offshore_floating"
+        fixed_rows[[tech_col]] <- "wind_offshore_fixed"
+
+        # Bind the original data (without wind_offshore) with the new rows
+        df <- rbind(df[df[[tech_col]] != "wind_offshore", ],
+                    floating_rows,
+                    fixed_rows)
+      }
+
+      return(df)
+    }
+
+    # Apply the function to all dataframes in the list (include adjustment for Switzerland)
+
+
+    L223.StubTechCapFactor_elec_EUR <- expand_offshore_wind(L223.StubTechCapFactor_elec) %>% filter_regions_europe() %>% bind_rows(L223.StubTechCapFactor_elec %>% filter(region == "Switzerland"))
+    L223.StubTechCost_offshore_wind_EUR <- expand_offshore_wind(L223.StubTechCost_offshore_wind) %>% filter_regions_europe() %>% bind_rows(L223.StubTechCost_offshore_wind %>% filter(region == "Switzerland"))
+    L223.StubTech_elec_EUR <- expand_offshore_wind(L223.StubTech_elec) %>% filter_regions_europe() %>% bind_rows(L223.StubTech_elec %>% filter(region == "Switzerland"))
+
+    # Update the capacity factors for wind offshore floating and fixed using the output from L120.
+    # First prepare the df:
+    L120.RegCapFactor_offshore_wind_EUR <- L120.RegCapFactor_offshore_wind_EUR %>%
+      left_join_error_no_match(GCAM_region_names, by= "GCAM_region_ID") %>%
+       mutate(resource = case_when(
+           resource == "fixed offshore wind resource" ~ "wind_offshore_fixed",
+           resource == "floating offshore wind resource" ~ "wind_offshore_floating",
+           TRUE ~ resource))
+    # Then join and replace values.
+    L223.StubTechCapFactor_elec_EUR <- L223.StubTechCapFactor_elec_EUR %>%
+      left_join(L120.RegCapFactor_offshore_wind_EUR, by = c("region", "stub.technology" = "resource")) %>%
+      mutate(capacity.factor = dplyr::coalesce(CFmax, capacity.factor)) %>%
+      select(-GCAM_region_ID, -CFmax)
+
     # Produce outputs ===================================================
     L223.StubTechCalInput_elec_EUR %>%
       add_title("calibrated input values and shareweights for electricity sector by subsector and stub technology for base years") %>%
@@ -239,6 +299,37 @@ module_gcameurope_L223.electricity <- function(command, ...) {
       add_legacy_name("L223.StubTechEff_elec_EUR") %>%
       add_precursors("energy/calibrated_techs", "common/GCAM_region_names", "L1231.eff_R_elec_F_tech_Yh_EUR", "energy/A23.globaltech_eff") ->
       L223.StubTechEff_elec_EUR
+
+    L223.StubTechCapFactor_elec_EUR %>%
+      add_title("capacity factors in electricity sector") %>%
+      add_units("unitless") %>%
+      add_comments("") %>%
+      add_precursors("energy/calibrated_techs", "common/GCAM_region_names", "L1231.eff_R_elec_F_tech_Yh_EUR", "energy/A23.globaltech_eff",
+                     "L223.StubTechCapFactor_elec",
+                     "L223.StubTechCost_offshore_wind",
+                     "L223.StubTech_elec") ->
+      L223.StubTechCapFactor_elec_EUR
+
+    L223.StubTechCost_offshore_wind_EUR %>%
+      add_title("tech cost in electricity sector") %>%
+      add_units("unitless") %>%
+      add_comments("") %>%
+      add_precursors("energy/calibrated_techs", "common/GCAM_region_names", "L1231.eff_R_elec_F_tech_Yh_EUR", "energy/A23.globaltech_eff",
+                     "L223.StubTechCapFactor_elec",
+                     "L223.StubTechCost_offshore_wind",
+                     "L223.StubTech_elec") ->
+      L223.StubTechCost_offshore_wind_EUR
+
+
+    L223.StubTech_elec_EUR %>%
+      add_title("tech cost in electricity sector") %>%
+      add_units("unitless") %>%
+      add_comments("") %>%
+      add_precursors("energy/calibrated_techs", "common/GCAM_region_names", "L1231.eff_R_elec_F_tech_Yh_EUR", "energy/A23.globaltech_eff",
+                     "L223.StubTechCapFactor_elec",
+                     "L223.StubTechCost_offshore_wind",
+                     "L223.StubTech_elec") ->
+      L223.StubTech_elec_EUR
 
     return_data(MODULE_OUTPUTS)
   } else {

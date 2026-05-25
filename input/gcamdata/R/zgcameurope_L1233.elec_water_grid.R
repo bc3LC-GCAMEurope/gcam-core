@@ -18,7 +18,7 @@
 module_gcameurope_L1233.elec_water_grid <- function(command, ...) {
   MODULE_INPUTS <- c(FILE = "gcam-europe/mappings/grid_regions",
                      FILE = "common/GCAM_region_names",
-                     FILE = "water/elec_tech_water_map",
+                     FILE = "gcam-europe/elec_tech_water_map_EUR",
                      FILE = "gcam-europe/A23.elecS_naming",
                      "L1233.out_EJ_R_elec_F_tech_Yh_cool_EUR",
                      "L1233.out_EJ_R_elec_F_tech_Yh_cool",
@@ -46,7 +46,7 @@ module_gcameurope_L1233.elec_water_grid <- function(command, ...) {
       tidyr::replace_na(list(fraction = 0))
 
     # fix solar names here too
-    elec_tech_water_map <- elec_tech_water_map %>%
+    elec_tech_water_map <- elec_tech_water_map_EUR %>%
       mutate(from.subsector = if_else(from.subsector == "solar", fuel, from.subsector))
 
     # combine EUR data with non-EUR regions

@@ -1,4 +1,4 @@
-# File: A23.globaltech_shrwt.csv
+# File: A23.globaltech_shrwt_EUR.csv
 # Title: Electricity technology shareweights
 # Units: Unitless share-weights
 # Source: None (GCAM assumptions)
@@ -30,4 +30,5 @@ electricity,solar,CSP,0,0,0,0,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5
 electricity,solar,CSP_storage,0,0,0,0,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5
 electricity,geothermal,geothermal,1,1,1,1,1,1,1,1,1,1,1,1
 elect_td_bld,rooftop_pv,rooftop_pv,0,0,0,0,1,1,1,1,1,1,1,1
-electricity,wind,wind_offshore,0,0,0,0,1,1,1,1,1,1,1,1
+electricity,wind,wind_offshore_floating,0,0,0,0,1,1,1,1,1,1,1,1
+electricity,wind,wind_offshore_fixed,0,0,0,0,1,1,1,1,1,1,1,1
