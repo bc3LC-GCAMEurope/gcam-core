@@ -41,6 +41,7 @@ module_gcameurope_transportation_UCD_CORE_xml <- function(command, ...) {
              "L254.PriceElasticity_trn_EUR",
              "L254.IncomeElasticity_trn_EUR",
              "L254.BaseService_trn_EUR",
+             "L254.StubTranTechInterp_EUR",
              "L254.StubTranTechShrwt_EUR"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     xml_files<- c("transportation_UCD_CORE_EUR.xml","transportation_UCD_SSP1_EUR.xml","transportation_UCD_SSP3_EUR.xml","transportation_UCD_SSP5_EUR.xml")
@@ -85,6 +86,7 @@ module_gcameurope_transportation_UCD_CORE_xml <- function(command, ...) {
     L254.IncomeElasticity_trn <- get_data(all_data, "L254.IncomeElasticity_trn_EUR")
     L254.BaseService_trn <- get_data(all_data, "L254.BaseService_trn_EUR")
     L254.StubTranTechShrwt <- get_data(all_data, "L254.StubTranTechShrwt_EUR")
+    L254.StubTranTechInterp <- get_data(all_data, "L254.StubTranTechInterp_EUR")
 
 
     # ===================================================
@@ -156,6 +158,7 @@ module_gcameurope_transportation_UCD_CORE_xml <- function(command, ...) {
 
       L254.BaseService_trn_SSP <- L254.BaseService_trn %>% filter(sce =="CORE")
       L254.StubTranTechShrwt_SSP <- L254.StubTranTechShrwt %>% filter(sce =="CORE")
+      L254.StubTranTechInterp_SSP <- L254.StubTranTechInterp %>% filter(sce =="CORE")
 
 
       #Create xmls
@@ -189,6 +192,7 @@ module_gcameurope_transportation_UCD_CORE_xml <- function(command, ...) {
         add_xml_data(L254.IncomeElasticity_trn_SSP, "IncomeElasticity") %>%
         add_xml_data(L254.BaseService_trn_SSP, "BaseService") %>%
         add_xml_data(L254.StubTranTechShrwt_SSP, "StubTranTechShrwt") %>%
+        add_xml_data(L254.StubTranTechInterp_SSP, "StubTranTechInterp") %>%
         add_precursors("L254.Supplysector_trn_EUR",
                        "L254.FinalEnergyKeyword_trn_EUR",
                        "L254.tranSubsectorLogit_EUR",
@@ -214,6 +218,7 @@ module_gcameurope_transportation_UCD_CORE_xml <- function(command, ...) {
                        "L254.PriceElasticity_trn_EUR",
                        "L254.IncomeElasticity_trn_EUR",
                        "L254.BaseService_trn_EUR",
+                       "L254.StubTranTechInterp_EUR",
                        "L254.StubTranTechShrwt_EUR")  %>%
         assign(xml_name, ., envir = curr_env)
 

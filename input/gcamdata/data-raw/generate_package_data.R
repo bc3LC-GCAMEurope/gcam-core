@@ -291,6 +291,7 @@ generate_level2_data_names <- function() {
   level2_data_names[["StubTranTechProd"]] <- c("region", "supplysector", "tranSubsector", "stub.technology", "year", "calOutputValue")
   level2_data_names[["StubTranTechShrwt"]] <- c("region", "supplysector", "tranSubsector", "stub.technology", "year", "share.weight")
   level2_data_names[["StubTranTechFixedOutput"]] <- c("region", "supplysector", "tranSubsector", "stub.technology", "year", "fixedOutput")
+  level2_data_names[["StubTranTechInterp"]] <- c(level2_data_names[["StubTranTech"]], "apply.to", "from.year", "to.year", "interpolation.function")
   level2_data_names[["DeleteStubTech"]] <- level2_data_names[["StubTech"]]
   level2_data_names[["StubTechSCurve"]] <- c("region", "supplysector", "subsector", "stub.technology", "year", "lifetime", "steepness", "half.life")
   level2_data_names[["StubTechLifetime"]] <- c("region", "supplysector", "subsector", "stub.technology", "year", "lifetime")

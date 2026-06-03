@@ -16,7 +16,8 @@
 #' \code{L254.StubTranTechCalInput_EUR}, \code{L254.StubTranTechLoadFactor_EUR},
 #' \code{L254.StubTranTechCost_EUR}, \code{L254.StubTranTechCoef_EUR}, \code{L254.StubTechCalInput_passthru_EUR},
 #' \code{L254.StubTechProd_nonmotor_EUR}, \code{L254.PerCapitaBased_trn_EUR}, \code{L254.PriceElasticity_trn_EUR},
-#' \code{L254.IncomeElasticity_trn_EUR}, \code{L254.BaseService_trn_EUR}, \code{L254.StubTranTechShrwt_EUR}. The corresponding file in the
+#' \code{L254.IncomeElasticity_trn_EUR}, \code{L254.BaseService_trn_EUR}, \code{L254.StubTranTechShrwt_EUR}\code{L254.StubTranTechInterp_EUR}.
+#'  The corresponding file in the
 #' original data system was \code{L254.transportation_UCD.R} (energy level2).
 #' @details Due to the asymmetrical nature of the transportation sectors in the various regions, we can't simply write
 #' generic information to all regions. Instead, technology information is read from the global UCD transportation
@@ -44,9 +45,9 @@ module_gcameurope_L254.transportation_UCD <- function(command, ...) {
              FILE = "energy/A54.tranSubsector_interp_revised",
              FILE = "energy/A54.tranSubsector_shrwt_revised",
              FILE = "energy/A54.tranSubsector_logit_revised",
-             FILE = "energy/A54.globaltranTech_retire_revised",
+             FILE = "gcam-europe/A54.globaltranTech_retire_revised_EUR",
              FILE = "gcam-europe/A54.globaltranTech_shrwt_revised_EUR",
-             FILE=  "energy/A54.globaltranTech_interp_revised",
+             FILE=  "gcam-europe/A54.globaltranTech_interp_revised_EUR",
              FILE = "energy/A54.globaltech_passthru",
              FILE = "energy/A54.globaltech_passthru_revised",
              FILE = "energy/A54.globaltech_nonmotor",
@@ -89,7 +90,8 @@ module_gcameurope_L254.transportation_UCD <- function(command, ...) {
              "L254.PriceElasticity_trn_EUR",
              "L254.IncomeElasticity_trn_EUR",
              "L254.BaseService_trn_EUR",
-             "L254.StubTranTechShrwt_EUR"))
+             "L254.StubTranTechShrwt_EUR",
+             "L254.StubTranTechInterp_EUR"))
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
@@ -138,9 +140,9 @@ module_gcameurope_L254.transportation_UCD <- function(command, ...) {
       A54.tranSubsector_VOTT_SSP1 <- get_data(all_data, "energy/A54.tranSubsector_VOTT_ssp1_revised",strip_attributes = TRUE) %>% mutate(sce=paste0("SSP1"))
       A54.tranSubsector_VOTT<- bind_rows(A54.tranSubsector_VOTT,A54.tranSubsector_VOTT_SSP1)
 
-      A54.globaltranTech_retire <- get_data(all_data, "energy/A54.globaltranTech_retire_revised",strip_attributes = TRUE)
+      A54.globaltranTech_retire <- get_data(all_data, "gcam-europe/A54.globaltranTech_retire_revised_EUR",strip_attributes = TRUE)
       A54.globaltranTech_shrwt <- get_data(all_data, "gcam-europe/A54.globaltranTech_shrwt_revised_EUR",strip_attributes = TRUE)
-      A54.globaltranTech_interp <- get_data(all_data, "energy/A54.globaltranTech_interp_revised",strip_attributes = TRUE)
+      A54.globaltranTech_interp <- get_data(all_data, "gcam-europe/A54.globaltranTech_interp_revised_EUR",strip_attributes = TRUE)
       A54.globaltech_passthru <- get_data(all_data, "energy/A54.globaltech_passthru_revised",strip_attributes = TRUE)
     } else {
       A54.tranSubsector_logit <- get_data(all_data, "energy/A54.tranSubsector_logit",strip_attributes = TRUE)
@@ -674,6 +676,26 @@ module_gcameurope_L254.transportation_UCD <- function(command, ...) {
      L254.StubTranTechShrwt_EUR <- L254.StubTranTechShrwt_EUR_pre %>%
        semi_join(adj_sw, by = c("region", "supplysector", "tranSubsector", "stub.technology", "sce"))
 
+     # Update JS 06/2026 Add Interpolation rule to European countries to overlap the values in the global tech database
+     L254.StubTranTechInterp_EUR <- A54.globaltranTech_interp %>%
+       repeat_add_columns(tibble(region = unique(GCAM_region_names$region))) %>%
+       filter_regions_europe() %>%
+       filter(sce=="CORE") %>%
+       rename(stub.technology = tranTechnology) %>%
+       semi_join(adj_sw, by = c("region", "supplysector", "tranSubsector", "stub.technology", "sce")) %>%
+       set_years() %>%
+       select(all_of(c(LEVEL2_DATA_NAMES[["StubTranTechInterp"]], "sce")))
+
+     # # TODO: Add retirement to European countries to overlap the values in the global tech database
+     # L254.StubTranTechSCurve_EUR <- A54.globaltranTech_retire %>%
+     #   repeat_add_columns(tibble(region = unique(GCAM_region_names$region))) %>%
+     #   filter_regions_europe() %>%
+     #   rename(stub.technology = tranTechnology) %>%
+     #   mutate(sce = "CORE") %>%
+     #   # semi_join(adj_sw, by = c("region", "supplysector", "tranSubsector", "stub.technology", "sce")) %>%
+     #   #select("region", "supplysector", "tranSubsector", "stub.technology", "year", "lifetime", "steepness", "half.life")
+     #   select(all_of(c(LEVEL2_DATA_NAMES[["StubTranTechSCurve"]], "sce")))
+
     # ===================================================
 
     L254.Supplysector_trn %>%
@@ -910,6 +932,24 @@ module_gcameurope_L254.transportation_UCD <- function(command, ...) {
       add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/A54.sector", "L154.out_mpkm_R_trn_nonmotor_Yh") ->
       L254.StubTechProd_nonmotor_EUR
 
+    L254.StubTranTechInterp_EUR %>%
+      add_title("TranTechnology Interpolation rules (all periods)") %>%
+      add_units("unitless") %>%
+      add_comments("Adjustments for EUR countries") %>%
+      add_legacy_name("L254.StubTranTechInterp_EUR") %>%
+      add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/mappings/UCD_techs",
+                     "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "gcam-europe/A54.globaltranTech_interp_revised_EUR") ->
+      L254.StubTranTechInterp_EUR
+
+    # L254.StubTranTechSCurve_EUR %>%
+    #   add_title("TranTechnology retirement rules (all periods)") %>%
+    #   add_units("unitless") %>%
+    #   add_comments("Adjustments for EUR countries") %>%
+    #   add_legacy_name("L254.StubTranTechSCurve_EUR") %>%
+    #   add_precursors("common/GCAM_region_names", "L101.GCAM_EUR_regions", "energy/mappings/UCD_techs",
+    #                  "energy/mappings/UCD_techs_revised", "energy/mappings/UCD_size_class_revisions", "gcam-europe/A54.globaltranTech_retire_revised_EUR") ->
+    #   L254.StubTranTechSCurve_EUR
+
     L254.PerCapitaBased_trn %>%
       add_title("Per-capita based flag for transportation final demand") %>%
       add_units("NA") %>%
@@ -962,7 +1002,8 @@ module_gcameurope_L254.transportation_UCD <- function(command, ...) {
                 L254.StubTech_nonmotor_EUR, L254.StubTranTechCalInput_EUR, L254.StubTranTechLoadFactor_EUR,
                 L254.StubTranTechCost_EUR, L254.StubTranTechCoef_EUR, L254.StubTechCalInput_passthru_EUR,
                 L254.StubTechProd_nonmotor_EUR, L254.PerCapitaBased_trn_EUR, L254.PriceElasticity_trn_EUR,
-                L254.IncomeElasticity_trn_EUR, L254.BaseService_trn_EUR, L254.StubTechTrackCapital_EUR, L254.StubTranTechShrwt_EUR)
+                L254.IncomeElasticity_trn_EUR, L254.BaseService_trn_EUR, L254.StubTechTrackCapital_EUR,
+                L254.StubTranTechShrwt_EUR, L254.StubTranTechInterp_EUR)
   } else {
     stop("Unknown command")
   }
