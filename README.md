@@ -64,7 +64,7 @@ To ensure the `gcamdata` system and the policies extension run correctly, please
 * **tidyr Version**: Use `tidyr 1.1.3` to run the policy chunks. If you are not using `renv`, you may want to install this version of `tidyr` 
 with `devtools::install_version("tidyr", version = "1.1.3")`.
 * **nloptr Version**: Use `nloptr 1.2.2.2` to run the Europe electricity segments chunks. If you are not using `renv`, you may want to install this version of `nloptr` 
-with `devtools::install_version("nloptr", version = "1.1.3")`.
+with `devtools::install_version("nloptr", version = "1.2.2.2")`.
 
 
 ## Useful links
