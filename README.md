@@ -6,7 +6,7 @@ GCAM-Europe’s geographical disaggregation is highly detailed for the European 
 
 <p align="center">
   <img 
-    src="https://raw.githubusercontent.com/bc3LC-GCAMEurope/gcam-core/GCAM-Europe_K/Readme_fig1.png"
+    src="https://raw.githubusercontent.com/bc3LC-GCAMEurope/gcam-core/GCAM-Europe/Readme_fig1.png"
     title="Regional disaggregation in GCAM-Europe."
     alt="Regional disaggregation in GCAM-Europe."
     width="80%" 
@@ -28,7 +28,7 @@ Relevant for the industrial sector, GCAM-Europe considers an European Single Mar
 
 <p align="center">
   <img 
-    src="https://raw.githubusercontent.com/bc3LC-GCAMEurope/gcam-core/GCAM-Europe_K/Readme_fig2.png"
+    src="https://raw.githubusercontent.com/bc3LC-GCAMEurope/gcam-core/GCAM-Europe/Readme_fig2.png"
     title="Electricity grid regions in GCAM-Europe."
     alt="Electricity grid regions in GCAM-Europe."
     width="80%" 
