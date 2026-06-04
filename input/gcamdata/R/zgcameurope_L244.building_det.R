@@ -32,6 +32,7 @@
 module_gcameurope_L244.building_det <- function(command, ...) {
   MODULE_INPUTS <- c(
              FILE = "common/GCAM_region_names",
+             FILE = "common/GCAM32_to_EU",
              FILE = "gcam-europe/calibrated_techs_bld_det_EUR",
              FILE = "gcam-europe/A44.globaltech_keyword_EUR",
              FILE = "gcam-europe/A44.globaltech_retirement_EUR",
@@ -51,6 +52,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              FILE = "gcam-europe/A44.internal_gains_EUR",
              FILE = "energy/A44.satiation_flsp",
              FILE = "gcam-europe/A44.demand_satiation_mult_EUR",
+             FILE = "gcam-europe/mappings/hh_items_techs_map",
              "L144.flsp_bm2_R_res_Yh_EUR",
              "L144.flsp_bm2_R_comm_Yh_EUR",
              "L144.base_service_EJ_serv_EUR",
@@ -65,6 +67,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              "L101.Pop_thous_R_Yh",
              "L102.pcgdp_thous90USD_Scen_R_Y",
              "L106.income_distributions",
+             "L107.en_consumption_shares_EUR",
              "L144.flsp_param_EUR",
              "L144.hab_land_flsp_fin_EUR",
              "L144.prices_bld_EUR",
@@ -158,6 +161,11 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     L102.pcgdp_thous90USD_Scen_R_Y_EUR <- filter_regions_europe(L102.pcgdp_thous90USD_Scen_R_Y, region_ID_mapping = GCAM_region_names)
     L106.income_shares <- L106.income_distributions %>% filter_regions_europe()
     n_groups <- length(unique(L106.income_shares$gcam.consumer))
+    EU_12_15 <- c('Croatia', # add Croatia manually, as it is present in the HH DIAMOND db
+                  GCAM32_to_EU %>%
+                    filter(GCAM32_region %in% c('EU-12','EU-15'),
+                           !GCAMEU_region %in% gcameurope.EUROSTAT_ADJCOUNTRIES) %>%
+                    pull(GCAMEU_region) %>% unique())
 
     # Add a deflator for harmonizing GDPpc with prices
     def9075<-gdp_deflator(1990, 1975)
@@ -167,12 +175,27 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       group_by(region, year) %>%
       mutate(share_agg = sum(subregional.income.share)) %>%
       ungroup()
-
-
     if((sum(check_income_shares$share_agg) / nrow(check_income_shares))-1 > 0.01){
       print("WARNING:income shares not correctly assigned")
     }
 
+    # Check technology shares shares are correct for all regions
+    check_income_shares <- L107.en_consumption_shares_EUR %>%
+      group_by(region, consumption.category) %>%
+      mutate(share_agg = sum(share)) %>%
+      ungroup()
+    if((sum(check_income_shares$share_agg) / nrow(check_income_shares))-1 > 0.01){
+      print("WARNING:income shares not correctly assigned")
+    }
+
+    # Manual fix: set Germany as Austria's proxy (HH DIAMOND db misses Austria)
+    L107.en_consumption_shares_EUR <- bind_rows(
+      L107.en_consumption_shares_EUR,
+      L107.en_consumption_shares_EUR %>%
+        filter(region == 'Germany') %>%
+        mutate(region = 'Austria',
+               GCAM_region_ID = 28)
+    )
 
     # ===================================================
     # Adjust gcam.consumer file to add the multiple consumers combining the raw file with multiple consumer information
