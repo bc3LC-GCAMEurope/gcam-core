@@ -1,4 +1,4 @@
-# File: A107.hh_DIAMOND.csv
+# File: A07.hh_DIAMOND.csv
 # Title: The EU_hh_DIAMOND database was created by merging information from SILC (recipient) and HBS (donor) using the statistical matching strategy of Tomás et al. (2025). The database is created for household income deciles, covering multiple microeconomic variables rGRCated to income and consumption dimensions for the reference year 2015, and expresses the information in current euros (average per household). Note that some countries are not yet included due to data issue (AT).
 # Source: BC3 microdata
 # Units: 2015 EURO
