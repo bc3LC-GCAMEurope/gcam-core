@@ -1,0 +1,14 @@
+# File: hh_items_techs_map.csv
+# Title: Mapping from EU HH database items to Eurostat technologies
+# Units: NA
+# Source: BC3
+# Column types: cc
+# ----------
+fuel,consumption.category
+biomass,solid fuels
+coal,solid fuels
+gas,gas
+refined liquids,liquid fuels
+heat,district heat
+electricity,electricity
+elec_solar CSP,other

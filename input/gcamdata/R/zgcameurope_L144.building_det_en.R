@@ -8,7 +8,9 @@
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
-#' the generated outputs: \code{L144.end_use_eff_EUR}, \code{L144.shell_eff_R_Y_EUR}, \code{L144.in_EJ_R_bld_serv_F_Yh_EUR}, \code{L144.in_EJ_R_bld_serv_tech_F_Yh_EUR}, \code{L144.NEcost_75USDGJ_EUR}, \code{L144.internal_gains_EUR}, \code{L144.base_service_EJ_serv_EUR}, \code{L144.prices_bld_EUR}. The corresponding file in the
+#' the generated outputs: \code{L144.end_use_eff_EUR}, \code{L144.shell_eff_R_Y_EUR}, \code{L144.in_EJ_R_bld_serv_F_Yh_EUR}, \code{L144.in_EJ_R_bld_serv_tech_F_Yh_EUR},
+#' \code{L144.NEcost_75USDGJ_EUR}, \code{L144.internal_gains_EUR}, \code{L144.base_service_EJ_serv_EUR}, \code{L144.prices_bld_EUR}, \code{L144.base_service_EJ_serv_hh_EUR},
+#' \code{L144.base_service_EJ_serv_fuel_hh_EUR}. The corresponding file in the
 #' original data system was \code{LA144.building_det_en.R} (energy level1).
 #' @details Calculates building energy consumption, non-energy costs, energy output by service, internal gains, and end-use technology and shell efficiency
 #' @importFrom assertthat assert_that
@@ -41,10 +43,12 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
              FILE = "gcam-europe/mappings/siec_to_fuel_map",
              FILE = "gcam-europe/nrg_bal_c",
              FILE = "gcam-europe/nrg_bal_c_corrSE",
+             FILE = "gcam-europe/mappings/hh_items_techs_map",
              "L101.in_EJ_R_bld_Fi_Yh_EUR",
              "L142.in_EJ_R_bld_F_Yh_EUR",
              "L143.HDDCDD_scen_RG3_Y",
              "L143.HDDCDD_scen_ctry_Y",
+             "L107.en_consumption_shares_EUR",
              FILE = "gcam-europe/A44.CalPrice_bld_EUR"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L144.end_use_eff_EUR",
@@ -55,6 +59,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
              "L144.internal_gains_EUR",
              "L144.base_service_EJ_serv_EUR",
              "L144.base_service_EJ_serv_fuel_EUR",
+             "L144.base_service_EJ_serv_hh_EUR",
+             "L144.base_service_EJ_serv_fuel_hh_EUR",
              "L144.prices_bld_EUR"))
   } else if(command == driver.MAKE) {
 
@@ -89,6 +95,16 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     L142.in_EJ_R_bld_F_Yh_EUR <- get_data(all_data, "L142.in_EJ_R_bld_F_Yh_EUR")
     L143.HDDCDD_scen_RG3_Y <- get_data(all_data, "L143.HDDCDD_scen_RG3_Y") %>% filter_regions_europe()
     L143.HDDCDD_scen_ctry_Y <- get_data(all_data, "L143.HDDCDD_scen_ctry_Y") %>% filter_regions_europe()
+    L107.en_consumption_shares_EUR <- get_data(all_data, "L107.en_consumption_shares_EUR")
+    hh_items_techs_map <- get_data(all_data, "gcam-europe/mappings/hh_items_techs_map")
+
+    # Individual countries present in the HH DIAMOND db
+    EU_12_15 <- c(GCAM32_to_EU %>%
+                    filter(GCAM32_region %in% c('EU-12','EU-15') |
+                             country_name == 'Croatia', # add Croatia manually, as it is present in the HH DIAMOND db
+                           !GCAMEU_region %in% gcameurope.EUROSTAT_ADJCOUNTRIES) %>%
+                    select(GCAMEU_region, GCAM_region_ID) %>% distinct())
+
 
     # ===================================================
 
@@ -1443,6 +1459,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
 
     # Calculate base service, which is the product of energy consumption and efficiency
     # Note that this produces a final output table
+    # We compute it by hh group (_hh_) and aggregated (default)
     L144.base_service_EJ_serv_EUR <- L144.in_EJ_R_bld_serv_tech_F_Yh_EUR %>%
       # Join efficiency data
       left_join(L144.end_use_eff_EUR_2f, by = c("GCAM_region_ID", "sector", "fuel", "service",
@@ -1455,6 +1472,51 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       ungroup() %>%
       # explicitly set zeros for any services without values
       complete(nesting(GCAM_region_ID, year), nesting(sector, service)) %>%
+      tidyr::replace_na(list(value = 0))
+
+
+
+    # considering HH groups
+    L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR_comm <- L144.in_EJ_R_bld_serv_tech_F_Yh_EUR %>%
+      filter(grepl("comm", sector)) %>%
+      mutate(gcam.consumer = 'comm EUR')
+
+    L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR_resid <- rbind(
+      # EU-12 & EU-15 countries (with data in HH DIAMOND db)
+      L144.in_EJ_R_bld_serv_tech_F_Yh_EUR %>%
+        filter(grepl("resid", sector) & GCAM_region_ID %in% unique(EU_12_15$GCAM_region_ID)) %>%
+        left_join_error_no_match(hh_items_techs_map, by = 'fuel') %>%
+        left_join(L107.en_consumption_shares_EUR %>%
+                    select(-region), by = c('consumption.category','GCAM_region_ID')) %>%
+        mutate(gcam.consumer = paste('resid EUR', decile, sep = '_'),
+               value = value * share) %>%
+        select(colnames(L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR_comm)),
+      # The rest of the European regions
+      L144.in_EJ_R_bld_serv_tech_F_Yh_EUR %>%
+        filter(grepl("resid", sector) & !GCAM_region_ID %in% unique(EU_12_15$GCAM_region_ID)) %>%
+        mutate(gcam.consumer = 'resid EUR')
+    )
+
+    L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR <- rbind(
+      L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR_comm,
+      L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR_resid
+    )
+
+
+    L144.base_service_EJ_serv_hh_EUR <- L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR %>%
+      # Join efficiency data
+      left_join(L144.end_use_eff_EUR_2f, by = c("GCAM_region_ID", "sector", "fuel", "service",
+                                                "subsector", "technology", "year")) %>%
+      # Energy output is the product of energy consumption and efficiency
+      mutate(value = value * value_eff) %>%
+      # Aggregate across fuel types (by region, sector, service)
+      group_by(GCAM_region_ID, sector, service, year, gcam.consumer) %>%
+      summarise(value = sum(value)) %>%
+      ungroup() %>%
+      # explicitly set zeros for any services without values
+      group_by(gcam.consumer) %>%
+      complete(nesting(GCAM_region_ID, year), nesting(sector, service)) %>%
+      ungroup() %>%
       tidyr::replace_na(list(value = 0))
 
     # Finally, write out the service output by fuel, to estimate parameters used in the demand for traditional services (in L244.building_det)
@@ -1470,6 +1532,20 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       # fix 0s in base service by setting 1e-6 to avoid future pb
       mutate(value = ifelse(value == 0, 1e-6, value)) ->
       L144.base_service_EJ_serv_fuel_EUR
+
+
+    L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR %>%
+      left_join_error_no_match(L144.end_use_eff_EUR_2f, by = c("GCAM_region_ID", "sector", "fuel", "service",
+                                                               "subsector", "technology", "year")) %>%
+      # Energy output is the product of energy consumption and efficiency
+      mutate(value = value * value_eff) %>%
+      # Aggregate across technologies (by region, sector, service, fuel)
+      group_by(GCAM_region_ID, sector, fuel, service, subsector, technology, year, gcam.consumer) %>%
+      summarise(value = sum(value)) %>%
+      ungroup() %>%
+      # fix 0s in base service by setting 1e-6 to avoid future pb
+      mutate(value = ifelse(value == 0, 1e-6, value)) ->
+      L144.base_service_EJ_serv_fuel_hh_EUR
 
 
     # 3 Internal gains ##############################################################################################
@@ -1588,6 +1664,15 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
                      "energy/A_regions", "gcam-europe/A44.cost_efficiency_EUR", "gcam-europe/A44.internal_gains_EUR", "common/GCAM_region_names") ->
       L144.internal_gains_EUR
 
+    L144.base_service_EJ_serv_hh_EUR %>%
+      add_title("Building energy output by each service by GCAM region ID / sector / service / fuel / gcam.consumer / historical year") %>%
+      add_units("EJ/yr") %>%
+      add_comments("Product of energy consumption and efficiency aggregated by region, sector, service, gcam.consumer") %>%
+      add_legacy_name("L144.base_service_EJ_serv_EUR") %>%
+      add_precursors("gcam-europe/A44.USA_TechChange_EUR", "gcam-europe/calibrated_techs_bld_det_EUR", "common/iso_GCAM_regID", "energy/A44.tech_eff_mult_RG3",
+                     "energy/A_regions", "gcam-europe/A44.cost_efficiency_EUR", "common/GCAM_region_names") ->
+      L144.base_service_EJ_serv_hh_EUR
+
     L144.base_service_EJ_serv_EUR %>%
       add_title("Building energy output by each service by GCAM region ID / sector / service / fuel / historical year") %>%
       add_units("EJ/yr") %>%
@@ -1606,6 +1691,15 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
                      "energy/A_regions", "gcam-europe/A44.cost_efficiency_EUR", "gcam-europe/A44.cost_efficiency_EUR", "common/GCAM_region_names") ->
       L144.base_service_EJ_serv_fuel_EUR
 
+    L144.base_service_EJ_serv_fuel_hh_EUR %>%
+      add_title("Building energy output by each service by GCAM region ID / sector / service / fuel / gcam.consumer / historical year") %>%
+      add_units("EJ/yr") %>%
+      add_comments("Product of energy consumption and efficiency aggregated by region, sector, service, gcam.consumer") %>%
+      add_legacy_name("L144.base_service_EJ_serv_fuel") %>%
+      add_precursors("energy/A44.USA_TechChange_EUR", "gcam-europe/calibrated_techs_bld_det_EUR", "common/iso_GCAM_regID", "energy/A44.tech_eff_mult_RG3",
+                     "energy/A_regions", "gcam-europe/A44.cost_efficiency_EUR", "gcam-europe/A44.cost_efficiency_EUR", "common/GCAM_region_names") ->
+      L144.base_service_EJ_serv_fuel_hh_EUR
+
     L144.prices_bld_EUR %>%
       add_title("Residential average service prices by GCAM region ID / historical year") %>%
       add_units("$1975/unit") %>%
@@ -1617,7 +1711,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
 
     return_data(L144.end_use_eff_EUR, L144.shell_eff_R_Y_EUR, L144.in_EJ_R_bld_serv_F_Yh_EUR,
                 L144.in_EJ_R_bld_serv_tech_F_Yh_EUR, L144.NEcost_75USDGJ_EUR, L144.internal_gains_EUR,
-                L144.base_service_EJ_serv_EUR, L144.base_service_EJ_serv_fuel_EUR, L144.prices_bld_EUR)
+                L144.base_service_EJ_serv_EUR, L144.base_service_EJ_serv_fuel_EUR,
+                L144.base_service_EJ_serv_hh_EUR, L144.base_service_EJ_serv_fuel_hh_EUR, L144.prices_bld_EUR)
   } else {
     stop("Unknown command")
   }

@@ -33,22 +33,20 @@ module_gcameurope_L107.en_consumption_shares <- function(command, ...) {
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
 
+    # NOTE: we assume same population accros hh groups
     A107.hh_DIAMOND <- A107.hh_DIAMOND %>%
-      # compute per capita income & total population by decile
-      mutate(income = (HY010 * Households) / (Population * Households),
-             total_pop = Households * Population) %>%
       # # rename deciles column
       mutate(Decile = as.character(Decile),
              Decile = paste0('d',as.character(Decile))) %>%
       # select relevant coicop items
-      select(ISO3, Decile, Households, Population, HY010, total_pop, income,
+      select(ISO3, Decile,
              EUR_HE0451, EUR_HE0452, EUR_HE0453, EUR_HE0454, EUR_HE0455) %>%
       pivot_longer(cols = c('EUR_HE0451', 'EUR_HE0452', 'EUR_HE0453', 'EUR_HE0454', 'EUR_HE0455'), names_to = 'COICOP', values_to = 'value') %>%
       left_join(A107.hh_DIAMOND_varList, by = 'COICOP') %>%
       # compute shares by country & technology among Deciles
       group_by(ISO3, Item) %>%
-      mutate(total_tech_expenditure = sum(value * total_pop),
-             share = value * total_pop / total_tech_expenditure) %>%
+      mutate(total_tech_expenditure = sum(value),
+             share = value / total_tech_expenditure) %>%
       ungroup() %>%
       # fix NAs (due to total_tech_expenditure)
       mutate(share = if_else(is.na(share), 0, share)) %>%
