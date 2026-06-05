@@ -8,7 +8,7 @@
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
-#' the generated outputs: \code{L101.en_bal_EJ_R_Si_Fi_Yh_EUR}, \code{L101.in_EJ_R_trn_Fi_Yh_EUR}, \code{L101.in_EJ_R_bld_Fi_Yh_EUR}, \code{L101.GCAM_EUR_regions}..
+#' the generated outputs: \code{L101.en_bal_EJ_R_Si_Fi_Yh_EUR}, \code{L101.in_EJ_R_trn_Fi_Yh_EUR}, \code{L101.in_EJ_R_bld_Fi_Yh_EUR}, \code{L101.in_EJ_R_bld_Fi_Yh_hh_EUR}, \code{L101.GCAM_EUR_regions}..
 #' @details Assign Eurostat product and flow data to nomenclature used in GCAM (fuel and sector, respectively), summarizing
 #' by (generally) iso and/or region, sector, fuel, and year.
 #' @importFrom assertthat assert_that
@@ -16,35 +16,49 @@
 #' @importFrom tidyr replace_na
 #' @author RLH December 2023
 module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
+  MODULE_INPUTS <- c(FILE = "common/GCAM32_to_EU",
+                     FILE = "gcam-europe/nrg_bal_c",
+                     FILE = "gcam-europe/nrg_bal_c_corrSE",
+                     FILE = "gcam-europe/mappings/geo_to_iso_map",
+                     FILE = "gcam-europe/mappings/nrgbal_to_sector_map",
+                     FILE = "gcam-europe/mappings/siec_to_fuel_map",
+                     FILE = "gcam-europe/mappings/Eurostat_sector_fuel_modifications",
+                     FILE = "gcam-europe/mappings/enduse_fuel_aggregation",
+                     FILE = "gcam-europe/mappings/hh_items_techs_map",
+                     "L1011.en_bal_EJ_R_Si_Fi_Yh",
+                     "L107.en_consumption_shares_EUR")
+  MODULE_OUTPUTS <-c("L101.GCAM_EUR_regions",
+                     "L101.en_bal_EJ_R_Si_Fi_Yh_EUR",
+                     "L101.in_EJ_R_trn_Fi_Yh_EUR",
+                     "L101.in_EJ_R_bld_Fi_Yh_EUR",
+                     "L101.in_EJ_R_bld_Fi_Yh_hh_EUR",
+                     "L101.CHP_IO_EUR")
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "common/GCAM32_to_EU",
-             FILE = "gcam-europe/nrg_bal_c",
-             FILE = "gcam-europe/nrg_bal_c_corrSE",
-             FILE = "gcam-europe/mappings/geo_to_iso_map",
-             FILE = "gcam-europe/mappings/nrgbal_to_sector_map",
-             FILE = "gcam-europe/mappings/siec_to_fuel_map",
-             FILE = "gcam-europe/mappings/Eurostat_sector_fuel_modifications",
-             FILE = "gcam-europe/mappings/enduse_fuel_aggregation",
-             "L1011.en_bal_EJ_R_Si_Fi_Yh"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L101.GCAM_EUR_regions",
-             "L101.en_bal_EJ_R_Si_Fi_Yh_EUR",
-             "L101.in_EJ_R_trn_Fi_Yh_EUR",
-             "L101.in_EJ_R_bld_Fi_Yh_EUR",
-             "L101.CHP_IO_EUR"))
+    return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
 
     # Load required inputs ----------------
-    GCAM32_to_EU <- get_data(all_data, "common/GCAM32_to_EU")
-    nrg_bal_c <- get_data(all_data, "gcam-europe/nrg_bal_c")
-    nrg_bal_c_corrSE <- get_data(all_data, "gcam-europe/nrg_bal_c_corrSE")
-    geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map")
-    nrgbal_to_sector_map <- get_data(all_data, "gcam-europe/mappings/nrgbal_to_sector_map")
-    siec_to_fuel_map <- get_data(all_data, "gcam-europe/mappings/siec_to_fuel_map")
-    Eurostat_sector_fuel_modifications <- get_data(all_data, "gcam-europe/mappings/Eurostat_sector_fuel_modifications")
-    enduse_fuel_aggregation <- get_data(all_data, "gcam-europe/mappings/enduse_fuel_aggregation")
+    get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
+
+    # Manual fix: set Germany as Austria's proxy (HH DIAMOND db misses Austria)
+    L107.en_consumption_shares_EUR <- bind_rows(
+      L107.en_consumption_shares_EUR,
+      L107.en_consumption_shares_EUR %>%
+        filter(region == 'Germany') %>%
+        mutate(region = 'Austria',
+               GCAM_region_ID = 28)
+    )
+
+    # Individual countries present in the HH DIAMOND db
+    EU_12_15 <- c(GCAM32_to_EU %>%
+                    filter(GCAM32_region %in% c('EU-12','EU-15') |
+                             country_name == 'Croatia', # add Croatia manually, as it is present in the HH DIAMOND db
+                           !GCAMEU_region %in% gcameurope.EUROSTAT_ADJCOUNTRIES) %>%
+                    select(GCAMEU_region, GCAM_region_ID) %>% distinct())
 
     # JS 2026: Adjust balances with improved data for Sweden (SE)
     nrg_bal_c <- nrg_bal_c %>%
@@ -338,6 +352,33 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       summarise(value = sum(value, na.rm = T)) %>%
       ungroup # FINAL OUTPUT TABLE - temporally complete EUR data
 
+    # b.2: buildings by hh group
+    L101.in_EJ_R_bld_Fi_Yh_hh_EUR_comm <- L101.in_EJ_R_bld_Fi_Yh_EUR %>%
+      filter(grepl("comm", sector)) %>%
+      mutate(gcam.consumer = 'comm EUR')
+
+    L101.in_EJ_R_bld_Fi_Yh_hh_EUR_resid <- rbind(
+      # EU-12 & EU-15 countries (with data in HH DIAMOND db)
+      L101.in_EJ_R_bld_Fi_Yh_EUR %>%
+        filter(grepl("resid", sector) & GCAM_region_ID %in% unique(EU_12_15$GCAM_region_ID)) %>%
+        left_join_error_no_match(hh_items_techs_map, by = 'fuel') %>%
+        left_join(L107.en_consumption_shares_EUR %>%
+                    select(-region), by = c('consumption.category','GCAM_region_ID')) %>%
+        mutate(gcam.consumer = paste('resid EUR', decile, sep = '_'),
+               value = value * share) %>%
+        select(colnames(L101.in_EJ_R_bld_Fi_Yh_hh_EUR_comm)),
+      # The rest of the European regions
+      L101.in_EJ_R_bld_Fi_Yh_EUR %>%
+        filter(grepl("resid", sector) & !GCAM_region_ID %in% unique(EU_12_15$GCAM_region_ID)) %>%
+        mutate(gcam.consumer = 'resid EUR')
+      )
+
+
+    L101.in_EJ_R_bld_Fi_Yh_hh_EUR <- rbind(
+      L101.in_EJ_R_bld_Fi_Yh_hh_EUR_comm,
+      L101.in_EJ_R_bld_Fi_Yh_hh_EUR_resid
+      ) # FINAL OUTPUT TABLE - temporally complete EUR data
+
     # 3. Produce Outputs ------------
     L101.GCAM_EUR_regions %>%
       add_title("ISO to GCAM region mapping for EUR regions with Eurostat data", overwrite = T) %>%
@@ -369,6 +410,15 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       same_precursors_as(L101.in_EJ_R_trn_Fi_Yh_EUR) ->
       L101.in_EJ_R_bld_Fi_Yh_EUR
 
+    L101.in_EJ_R_bld_Fi_Yh_hh_EUR %>%
+      add_title("Eurostat (1990 - 2021) & IEA (1971 - 1989) building energy consumption by country / IEA sector / fuel / historical year") %>%
+      add_units("EJ") %>%
+      add_comments("Consumption of energy by the building sector by fuel, gcam.consumer and historical year. Aggregated by fuel, gcam.consumer, and country") %>%
+      add_precursors("common/GCAM32_to_EU", "gcam-europe/nrg_bal_c", "gcam-europe/mappings/geo_to_iso_map",
+                         "gcam-europe/mappings/nrgbal_to_sector_map", "gcam-europe/mappings/siec_to_fuel_map",
+                         "gcam-europe/mappings/enduse_fuel_aggregation", "L107.en_consumption_shares_EUR") ->
+      L101.in_EJ_R_bld_Fi_Yh_hh_EUR
+
     L101.CHP_IO_EUR %>%
       add_title("Eurostat IO ratios for elec production from CHP") %>%
       add_units("EJ / EJ") %>%
@@ -380,6 +430,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
                 L101.en_bal_EJ_R_Si_Fi_Yh_EUR,
                 L101.in_EJ_R_trn_Fi_Yh_EUR,
                 L101.in_EJ_R_bld_Fi_Yh_EUR,
+                L101.in_EJ_R_bld_Fi_Yh_hh_EUR,
                 L101.CHP_IO_EUR)
   } else {
     stop("Unknown command")
