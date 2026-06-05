@@ -105,6 +105,14 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
                            !GCAMEU_region %in% gcameurope.EUROSTAT_ADJCOUNTRIES) %>%
                     select(GCAMEU_region, GCAM_region_ID) %>% distinct())
 
+    # Manual fix: set Germany as Austria's proxy (HH DIAMOND db misses Austria)
+    L107.en_consumption_shares_EUR <- bind_rows(
+      L107.en_consumption_shares_EUR,
+      L107.en_consumption_shares_EUR %>%
+        filter(region == 'Germany') %>%
+        mutate(region = 'Austria',
+               GCAM_region_ID = 28)
+    )
 
     # ===================================================
 

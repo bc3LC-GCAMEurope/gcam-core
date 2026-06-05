@@ -57,6 +57,8 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              "L144.flsp_bm2_R_comm_Yh_EUR",
              "L144.base_service_EJ_serv_EUR",
              "L144.base_service_EJ_serv_fuel_EUR",
+             "L144.base_service_EJ_serv_hh_EUR",
+             "L144.base_service_EJ_serv_fuel_hh_EUR",
              "L144.in_EJ_R_bld_serv_F_Yh_EUR",
              "L144.in_EJ_R_bld_serv_tech_F_Yh_EUR",
              "L144.end_use_eff_EUR",
@@ -67,7 +69,6 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              "L101.Pop_thous_R_Yh",
              "L102.pcgdp_thous90USD_Scen_R_Y",
              "L106.income_distributions",
-             "L107.en_consumption_shares_EUR",
              "L144.flsp_param_EUR",
              "L144.hab_land_flsp_fin_EUR",
              "L144.prices_bld_EUR",
@@ -178,24 +179,6 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     if((sum(check_income_shares$share_agg) / nrow(check_income_shares))-1 > 0.01){
       print("WARNING:income shares not correctly assigned")
     }
-
-    # Check technology shares shares are correct for all regions
-    check_income_shares <- L107.en_consumption_shares_EUR %>%
-      group_by(region, consumption.category) %>%
-      mutate(share_agg = sum(share)) %>%
-      ungroup()
-    if((sum(check_income_shares$share_agg) / nrow(check_income_shares))-1 > 0.01){
-      print("WARNING:income shares not correctly assigned")
-    }
-
-    # Manual fix: set Germany as Austria's proxy (HH DIAMOND db misses Austria)
-    L107.en_consumption_shares_EUR <- bind_rows(
-      L107.en_consumption_shares_EUR,
-      L107.en_consumption_shares_EUR %>%
-        filter(region == 'Germany') %>%
-        mutate(region = 'Austria',
-               GCAM_region_ID = 28)
-    )
 
     # ===================================================
     # Adjust gcam.consumer file to add the multiple consumers combining the raw file with multiple consumer information
@@ -659,7 +642,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     L244.ThermalBaseService_hh_EUR_pre <- L244.base_service_hh %>%
       filter(building.service.input %in% thermal_services) %>%
       rename(thermal.building.service.input = building.service.input) %>%
-      complete(nesting(region,year,gcam.consumer,nodeInput), thermal.building.service.input = c(thermal.building.service.input, generic_services)) %>%
+      complete(nesting(region,year,gcam.consumer,nodeInput), thermal.building.service.input = c(thermal.building.service.input, thermal_services)) %>%
       filter(!(
         (grepl('comm', nodeInput) & grepl('resid', thermal.building.service.input)) |
           (grepl('resid', nodeInput) & grepl('comm', thermal.building.service.input))
