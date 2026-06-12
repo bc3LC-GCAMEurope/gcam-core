@@ -150,10 +150,10 @@
 		<Value name = "solver">../input/solution/cal_broyden_config.xml</Value>
 
 
-        <Value name = "prune_ag">../input/policy/co2ndctax_nonEU_2100.xml</Value>
-        <Value name = "prune_ag">../input/policy/ff55_co2_2100.xml</Value>
+        <Value name = "co2_policy">../input/policy/co2ndctax_nonEU_2100.xml</Value>
+        <Value name = "ff55_policy">../input/policy/ff55_co2_2100.xml</Value>
 
-        <Value name = "prune_ag">../input/policy/bio_constraint_140.xml</Value>
+        <Value name = "bio_policy">../input/policy/bio_constraint_140.xml</Value>
 
 	</ScenarioComponents>
 	<Strings>
