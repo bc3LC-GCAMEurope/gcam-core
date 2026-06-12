@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="UTF-8"?><scenario>
+    <world>
+        <region name="Austria">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="Belgium">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="Bulgaria">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="Croatia">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="Cyprus">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="Czech Republic">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="Denmark">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="Estonia">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="Finland">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="France">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="Germany">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="Greece">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="Hungary">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="Ireland">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="Italy">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="Latvia">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="Lithuania">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="Luxembourg">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="Malta">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="Netherlands">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="Poland">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="Portugal">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="Romania">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="Slovakia">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="Slovenia">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="Spain">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+        <region name="Sweden">
+            <energy-final-demand name="other industry">
+                <final-energy-consumer>
+                    <aeei year="2025">0.000420074</aeei>
+                    <aeei year="2030">0.000420074</aeei>
+                    <aeei year="2035">0.000420074</aeei>
+                    <aeei year="2040">0.000420074</aeei>
+                    <aeei year="2045">0.000420074</aeei>
+                    <aeei year="2050">0.000420074</aeei>
+                    <aeei year="2055">0.000420074</aeei>
+                    <aeei year="2060">0.000420074</aeei>
+                    <aeei year="2065">0.000420074</aeei>
+                    <aeei year="2070">0.000420074</aeei>
+                    <aeei year="2075">0.000420074</aeei>
+                    <aeei year="2080">0.000420074</aeei>
+                    <aeei year="2085">0.000420074</aeei>
+                    <aeei year="2090">0.000420074</aeei>
+                    <aeei year="2095">0.000420074</aeei>
+                    <aeei year="2100">0.000420074</aeei>
+                </final-energy-consumer>
+            </energy-final-demand>
+        </region>
+    </world>
+</scenario>

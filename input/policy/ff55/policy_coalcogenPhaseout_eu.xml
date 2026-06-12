@@ -1,0 +1,787 @@
+<?xml version="1.0" encoding="UTF-8"?><scenario>
+    <world>
+        <region name="Germany">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Austria">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Belgium">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Bulgaria">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Croatia">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Cyprus">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Czech Republic">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Denmark">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Estonia">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Finland">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="France">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Greece">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Hungary">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Ireland">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Latvia">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Italy">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Lithuania">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Luxembourg">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Malta">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Netherlands">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Poland">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Portugal">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Romania">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Slovakia">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Slovenia">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Spain">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Sweden">
+            <supplysector name="other industrial energy use">
+                <subsector name="coal">
+                    <stub-technology name="coal cogen_grid">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>0</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>0</share-weight>
+                        </period>
+                    </stub-technology>
+                </subsector>
+            </supplysector>
+        </region>
+    </world>
+</scenario>

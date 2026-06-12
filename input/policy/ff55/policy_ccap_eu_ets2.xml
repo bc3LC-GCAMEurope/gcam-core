@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?><scenario>
+    <world>
+        <region name="Austria">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Belgium">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Bulgaria">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Croatia">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Cyprus">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Czech Republic">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Denmark">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Estonia">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Finland">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="France">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Germany">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Greece">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Hungary">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Ireland">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Italy">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Latvia">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Lithuania">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Luxembourg">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Malta">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Netherlands">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Poland">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Portugal">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Romania">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Slovakia">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Slovenia">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Spain">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+        <region name="Sweden">
+            <ghgpolicy name="CO2_ETS2">
+                <market>EU</market>
+                <fixedTax year="2030">100</fixedTax>
+            </ghgpolicy>
+        </region>
+    </world>
+</scenario>
