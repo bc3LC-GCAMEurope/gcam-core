@@ -149,6 +149,12 @@
 
 		<Value name = "solver">../input/solution/cal_broyden_config_diamond.xml</Value>
 
+		<!-- EV ADOPTION: Optional file to load survey-based EV adoption rates from UniBasel -->
+		<!--Value name="EV_adoption">../input/policy/EV_calib_basel.xml</Value-->
+
+
+		<!-- DIAMOND POLICY FILES -->
+
    		<Value name = "diamond_policy">../input/policy/bio_constraint_140adp-.xml</Value>
 
 		

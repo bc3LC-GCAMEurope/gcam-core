@@ -149,10 +149,13 @@
 
 		<Value name = "solver">../input/solution/cal_broyden_config.xml</Value>
 
+		<!-- EV ADOPTION: Optional file to load survey-based EV adoption rates from UniBasel -->
+		<!--Value name="EV_adoption">../input/policy/EV_calib_basel.xml</Value-->
 
+
+		<!-- POLICY FILES -->
         <Value name = "co2_policy">../input/policy/co2ndctax_nonEU_2100.xml</Value>
         <Value name = "ff55_policy">../input/policy/ff55_co2_2100.xml</Value>
-
         <Value name = "bio_policy">../input/policy/bio_constraint_140.xml</Value>
 
 	</ScenarioComponents>

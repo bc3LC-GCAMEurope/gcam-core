@@ -1,0 +1,1262 @@
+<?xml version="1.0" encoding="UTF-8"?><scenario>
+    <world>
+        <region name="Austria">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.62815995</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>1.255869013</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>1.255273228</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>1.255273228</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>1.255273228</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>1.255273228</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+                <tranSubsector name="Large Car and Truck">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.62815995</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>1.255869013</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>1.255273228</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>1.255273228</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>1.255273228</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>1.255273228</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="Belgium">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>2.287541114</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>3.514076219</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>3.566496391</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>3.566496391</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>3.566496391</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>3.566496391</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+                <tranSubsector name="Large Car and Truck">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>2.287541114</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>3.514076219</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>3.566496391</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>3.566496391</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>3.566496391</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>3.566496391</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="Bulgaria">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.559761892</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>4.876831437</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>4.837229668</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>4.837229668</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>4.837229668</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>4.837229668</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="Croatia">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.207087086</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>2.839578929</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>2.787153122</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>2.787153122</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>2.787153122</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>2.787153122</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="Cyprus">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.487616704</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>2.311337841</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>2.324163406</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>2.324163406</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>2.324163406</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>2.324163406</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+                <tranSubsector name="Large Car and Truck">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.559761892</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>4.876831437</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>4.837229668</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>4.837229668</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>4.837229668</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>4.837229668</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="Czech Republic">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.358515914</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>1.90769991</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>1.890771024</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>1.890771024</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>1.890771024</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>1.890771024</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="Denmark">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>9.520804483</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>6.812258175</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>6.844003014</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>6.844003014</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>6.844003014</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>6.844003014</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+                <tranSubsector name="Large Car and Truck">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.207087086</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>2.839578929</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>2.787153122</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>2.787153122</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>2.787153122</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>2.787153122</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="Estonia">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.6</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>1.2</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>1.190161934</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>1.190161934</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>1.190161934</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>1.190161934</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+                <tranSubsector name="Large Car and Truck">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.487616704</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>2.311337841</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>2.324163406</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>2.324163406</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>2.324163406</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>2.324163406</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="Finland">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>2.909025811</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>4.060558567</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>4.092571475</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>4.092571475</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>4.092571475</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>4.092571475</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+                <tranSubsector name="Large Car and Truck">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.358515914</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>1.90769991</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>1.890771024</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>1.890771024</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>1.890771024</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>1.890771024</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="France">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>1.479549495</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>2.696528881</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>2.717860794</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>2.717860794</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>2.717860794</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>2.717860794</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+                <tranSubsector name="Large Car and Truck">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>9.520804483</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>6.812258175</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>6.844003014</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>6.844003014</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>6.844003014</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>6.844003014</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="Germany">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.886443527</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>2.206555344</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>2.22822931</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>2.22822931</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>2.22822931</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>2.22822931</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+                <tranSubsector name="Large Car and Truck">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.6</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>1.2</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>1.190161934</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>1.190161934</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>1.190161934</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>1.190161934</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="Greece">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.804422598</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>5.630932311</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>5.651429608</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>5.651429608</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>5.651429608</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>5.651429608</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+                <tranSubsector name="Large Car and Truck">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>2.909025811</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>4.060558567</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>4.092571475</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>4.092571475</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>4.092571475</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>4.092571475</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="Hungary">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.824496035</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>4.136174702</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>4.137681426</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>4.137681426</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>4.137681426</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>4.137681426</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="Ireland">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>3.314238518</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>5.678968485</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>5.716917192</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>5.716917192</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>5.716917192</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>5.716917192</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+                <tranSubsector name="Large Car and Truck">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>1.479549495</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>2.696528881</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>2.717860794</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>2.717860794</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>2.717860794</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>2.717860794</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="Italy">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.504826751</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>3.423931598</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>3.444494271</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>3.444494271</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>3.444494271</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>3.444494271</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+                <tranSubsector name="Large Car and Truck">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.886443527</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>2.206555344</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>2.22822931</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>2.22822931</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>2.22822931</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>2.22822931</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="Latvia">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.513711666</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>3.486611341</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>3.467571325</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>3.467571325</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>3.467571325</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>3.467571325</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+                <tranSubsector name="Large Car and Truck">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.804422598</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>5.630932311</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>5.651429608</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>5.651429608</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>5.651429608</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>5.651429608</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="Lithuania">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.374248709</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>2.033351089</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>2.004346973</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>2.004346973</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>2.004346973</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>2.004346973</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+                <tranSubsector name="Large Car and Truck">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.824496035</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>4.136174702</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>4.137681426</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>4.137681426</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>4.137681426</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>4.137681426</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="Luxembourg">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>1.67602089</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>3.152688498</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>3.197821552</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>3.197821552</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>3.197821552</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>3.197821552</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+                <tranSubsector name="Large Car and Truck">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>3.314238518</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>5.678968485</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>5.716917192</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>5.716917192</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>5.716917192</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>5.716917192</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="Malta">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.5</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>1.515563318</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>1.515654239</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>1.515654239</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>1.515654239</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>1.515654239</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+                <tranSubsector name="Large Car and Truck">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.504826751</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>3.423931598</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>3.444494271</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>3.444494271</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>3.444494271</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>3.444494271</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="Netherlands">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>2.36958503</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>3.225921363</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>3.269410145</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>3.269410145</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>3.269410145</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>3.269410145</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+                <tranSubsector name="Large Car and Truck">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.513711666</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>3.486611341</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>3.467571325</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>3.467571325</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>3.467571325</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>3.467571325</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="Poland">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.595925111</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>2.709505206</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>2.685544672</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>2.685544672</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>2.685544672</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>2.685544672</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="Portugal">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>1.610321255</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>3.776813251</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>3.795535128</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>3.795535128</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>3.795535128</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>3.795535128</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+                <tranSubsector name="Large Car and Truck">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.374248709</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>2.033351089</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>2.004346973</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>2.004346973</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>2.004346973</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>2.004346973</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="Romania">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>2.75</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>5.610157654</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>5.552658891</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>5.552658891</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>5.552658891</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>5.552658891</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="Slovakia">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.484768086</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>4.63659691</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>4.659898428</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>4.659898428</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>4.659898428</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>4.659898428</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="Slovenia">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>1.360688245</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>3.011665406</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>3.02012382</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>3.02012382</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>3.02012382</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>3.02012382</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="Spain">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.391919044</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>2.469959591</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>2.485496053</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>2.485496053</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>2.485496053</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>2.485496053</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+                <tranSubsector name="Large Car and Truck">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>1.67602089</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>3.152688498</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>3.197821552</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>3.197821552</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>3.197821552</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>3.197821552</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+        <region name="Sweden">
+            <supplysector name="trn_pass_road_LDV_4W">
+                <tranSubsector name="Car">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>2.008187879</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>3.390261362</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>3.417957446</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>3.417957446</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>3.417957446</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>3.417957446</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+                <tranSubsector name="Large Car and Truck">
+                    <stub-technology name="BEV">
+                        <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
+                            <interpolation-function name="fixed"/>
+                        </interpolation-rule>
+                        <period year="2025">
+                            <share-weight>0.5</share-weight>
+                        </period>
+                        <period year="2030">
+                            <share-weight>1.515563318</share-weight>
+                        </period>
+                        <period year="2035">
+                            <share-weight>1.515654239</share-weight>
+                        </period>
+                        <period year="2040">
+                            <share-weight>1.515654239</share-weight>
+                        </period>
+                        <period year="2045">
+                            <share-weight>1.515654239</share-weight>
+                        </period>
+                        <period year="2050">
+                            <share-weight>1.515654239</share-weight>
+                        </period>
+                    </stub-technology>
+                </tranSubsector>
+            </supplysector>
+        </region>
+    </world>
+</scenario>

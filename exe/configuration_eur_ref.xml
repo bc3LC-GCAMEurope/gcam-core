@@ -149,7 +149,8 @@
 
 		<Value name = "solver">../input/solution/cal_broyden_config.xml</Value>
 
-
+		<!-- EV ADOPTION: Optional file to load survey-based EV adoption rates from UniBasel -->
+		<!--Value name="EV_adoption">../input/policy/EV_calib_basel.xml</Value-->
 
 
 	</ScenarioComponents>
