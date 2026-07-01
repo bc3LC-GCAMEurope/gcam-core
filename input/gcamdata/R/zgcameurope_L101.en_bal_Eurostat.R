@@ -116,30 +116,30 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
 
     # See what year a country becomes available
     # At end, will substitute out for IEA data
-   year_filters <- L101.Eurostat_en_bal_ctry_hist %>%
-     group_by(iso) %>%
-     summarise(across(matches(YEAR_PATTERN), ~all(is.na(.x)))) %>%
-     pivot_longer(
-       cols = `2021`:`1990`,
-       names_to = "year",
-       values_to = "value"
-     ) %>%
-     filter(value == TRUE, year <= MODEL_FINAL_BASE_YEAR) %>%
-     left_join_error_no_match(GCAM32_to_EU %>% select(iso, GCAM_region_ID), by = "iso") %>%
-     distinct(year, GCAM_region_ID)
+    year_filters <- L101.Eurostat_en_bal_ctry_hist %>%
+      group_by(iso) %>%
+      summarise(across(matches(YEAR_PATTERN), ~all(is.na(.x)))) %>%
+      pivot_longer(
+        cols = `2021`:`1990`,
+        names_to = "year",
+        values_to = "value"
+      ) %>%
+      filter(value == TRUE, year <= MODEL_FINAL_BASE_YEAR) %>%
+      left_join_error_no_match(GCAM32_to_EU %>% select(iso, GCAM_region_ID), by = "iso") %>%
+      distinct(year, GCAM_region_ID)
 
 
     # Drop some sector-fuel combinations that are not relevant
     # Electricity-generation-only fuels (e.g., wind, solar, hydro, geothermal) consumed by sectors other than electricity generation
     # REVISIT FOR GCAM-EUROPE - THIS REMOVES BUILDING SOLAR THERMAL and GEOTHERMAL HEATING (TURKEY & ICELAND)
     # Primary biomass and district heat consumed by the transportation sector
-   L101.Eurostat_en_bal_ctry_hist_clean <- L101.Eurostat_en_bal_ctry_hist %>%
-     filter(!(
-       grepl("elec_", fuel) & !grepl("electricity generation",sector) &
-         !(fuel == "elec_solar CSP" & grepl("bld", sector))
-     ),
-     !(fuel == "biomass" & grepl("trn_", sector)),
-     !(fuel == "heat" & grepl("trn_", sector)))
+    L101.Eurostat_en_bal_ctry_hist_clean <- L101.Eurostat_en_bal_ctry_hist %>%
+      filter(!(
+        grepl("elec_", fuel) & !grepl("electricity generation",sector) &
+          !(fuel == "elec_solar CSP" & grepl("bld", sector))
+      ),
+      !(fuel == "biomass" & grepl("trn_", sector)),
+      !(fuel == "heat" & grepl("trn_", sector)))
 
 
     # Aggregate by relevant categories (in EJ)
@@ -265,7 +265,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
                   filter(GCAM_region_ID %in% L101.GCAM_EUR_regions$GCAM_region_ID,
                          year < min(L101.en_bal_EJ_iso_Si_Fi_Yh_Eurostat$year)),
                 L101.en_bal_EJ_R_Si_Fi_Yh_EUR_replace_na_years
-                )
+      )
 
     # For the final balance, we take out UK as it includes Eurostat data, but not for the entire timeframe
     # The adjustment can be rolled back if data becomes available
@@ -276,7 +276,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
                   complete(nesting(GCAM_region_ID, sector, fuel),
                            year = unique(L101.en_bal_EJ_R_Si_Fi_Yh_EUR_tmp$year),
                            fill = list(value = 0)) %>%
-                      filter(year <= MODEL_FINAL_BASE_YEAR))
+                  filter(year <= MODEL_FINAL_BASE_YEAR))
 
     # 1c. Get ratio for feedstocks based on IEA -------------------
     # Eurostat has only industrial feedstocks, but IEA splits defines industrial, chemical, and construction
