@@ -110,8 +110,17 @@ module_gcameurope_L2392.gas_trade <- function(command, ...) {
     # Replace IEA data with Eurostat data where available
     L239.Production_reg_dom <- L239.Production_reg_dom %>%
       anti_join(L239.Production_reg_dom_EUR, by = "region") %>%
-      bind_rows(L239.Production_reg_dom_EUR)
-
+      bind_rows(L239.Production_reg_dom_EUR) %>%
+      # Add CalOuput (equal to zero) in missing regions
+      complete(
+        nesting(supplysector, subsector, technology, year, share.weight.year),
+        region = unique(GCAM_region_names$region),
+        fill = list(
+          calOutputValue    = 0,
+          subs.share.weight = 0,
+          tech.share.weight = 0
+        )
+      )
 
     # Keywords of global technologies for NG (which has nesting subsectors)
     # process domestic natural gas and LNG which are mapped to all regions
