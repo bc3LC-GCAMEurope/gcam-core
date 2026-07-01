@@ -367,7 +367,7 @@ namespace objects {
     * \return The constant SMALL_NUM.
     */
    static inline double getSmallNumber() {
-      const double SMALL_NUM = 1e-6;
+      const double SMALL_NUM = 1e-8;
       return SMALL_NUM;
    }
 
@@ -379,7 +379,7 @@ namespace objects {
     * \return The constant VERY_SMALL_NUM.
     */
    static inline double getVerySmallNumber() {
-      const double VERY_SMALL_NUM = 1e-8;
+      const double VERY_SMALL_NUM = 1e-11;
       return VERY_SMALL_NUM;
    }
 
@@ -404,7 +404,7 @@ namespace objects {
     * \return The constant LARGE_NUM.
     */
    static inline double getLargeNumber() {
-      const double LARGE_NUM = 1e+6;
+      const double LARGE_NUM = 1e+8;
       return LARGE_NUM;
    }
 
