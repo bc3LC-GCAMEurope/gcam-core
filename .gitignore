@@ -92,3 +92,8 @@ output/modelinterface/modelinterface
 
 input/price_co2_EU.xml
 input/policy/price_co2_EU.xml
+
+/output
+/HH_WILLIAM
+/checkers
+/input/gcamdata/inst/extdata/gcam-europe/hh_DIAMOND

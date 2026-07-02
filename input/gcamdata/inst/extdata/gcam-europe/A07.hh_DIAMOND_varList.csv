@@ -1,0 +1,116 @@
+# File: A07.hh_DIAMOND_varList.csv
+# Title: COICOP - variable name mapping for EU_hh_DIAMOND database
+# Source: BC3 microdata
+# Units: Unitless
+# Column types: cc
+# ----------
+COICOP,Item
+HY010,Total household gross income
+HY020,Total disposable household income
+PY010G_hh,Employee cash or near cash income
+PY020G_hh,Non-cash employee income
+PY021G_hh,Company car
+PY050G_hh,Cash profits or losses from self-employment
+PY080G_hh,Pension from individual private plans
+PY090G_hh,Unemployment benefits
+PY100G_hh,Old-age benefits
+PY110G_hh,Survivor benefits
+PY120G_hh,Sickness benefits
+PY130G_hh,Disability benefits
+PY140G_hh,Education-related allowances
+HY030G,Imputed rent
+HY040G,Income from rental of a property or land
+HY050G,Family/children-related allowances
+HY060G,Social exclusion not elsewhere classified
+HY070G,Housing allowances
+HY080G,Regular interhousehold cash transfer received
+HY090G,"Interest, dividends, profit from capital investments in unincorporated business"
+HY100G,Interest repayments on mortgage
+HY110G,Income received by people aged under 16 
+HY120G,Regular taxes on wealth
+HY130G,Regular interhousehold cash transfer paid
+HY140G,Tax on income and social contributions
+HY170G,Value of goods produced for own consumption
+EUR_HE00,Total consumption expenditure
+EUR_HE011,Food
+EUR_HE012,Non-alcoholic beverages
+EUR_HE021,Alcoholic beverages
+EUR_HE022,Tobacco
+EUR_HE023,Narcotics
+EUR_HE031,Clothing
+EUR_HE032,Footwear
+EUR_HE041,Actual rentals for housing
+EUR_HE042,Imputed rentals for housing
+EUR_HE043,Maintenance and repair of the dwelling
+EUR_HE044,Water supply and miscellaneous services relating to the dwelling
+EUR_HE0451,Electricity
+EUR_HE04510,Electricity
+EUR_HE0452,Gas
+EUR_HE04521,Natural gas and town gas
+EUR_HE04522,Liquefied hydrocarbons-butane-propane-etc.
+EUR_HE0453,Liquid fuels
+EUR_HE04530,Liquid fuels
+EUR_HE0454,Solid fuels
+EUR_HE04541,Coal
+EUR_HE04549,Other solid fuels
+EUR_HE0455,District heat
+EUR_HE04550,Heat energy
+EUR_HE051,"Furniture and furnishings, carpets and other floor coverings"
+EUR_HE052,Household textiles
+EUR_HE053,Household appliances
+EUR_HE054,Glassware tableware and household utensils
+EUR_HE055,Tools and equipment for house and garden
+EUR_HE056,Goods and services for routine household maintenance
+EUR_HE061,"Medical products, appliances and equipment"
+EUR_HE062,Out-patient services
+EUR_HE063,Hospital services
+EUR_HE071,Purchase of vehicles
+EUR_HE0721,Spare parts and accessories for personal transport equipment
+EUR_HE0722,Fuels and lubricants for personal transport equipment
+EUR_HE07221,Diesel
+EUR_HE07222,Petrol
+EUR_HE07223,Other fuels for personal transport equipment
+EUR_HE07224,Lubricants
+EUR_HE0723,Maintenance and repair of personal transport equipment
+EUR_HE0724,Other services in respect of personal transport equipment
+EUR_HE0731,Passenger transport by railway
+EUR_HE07311,Passenger transport by train
+EUR_HE07312,Passenger transport by underground and tram
+EUR_HE0732,Passenger transport by road
+EUR_HE07321,Passenger transport by bus and coach
+EUR_HE07322,Passenger transport by taxi and hired car with driver
+EUR_HE0733,Passenger transport by air
+EUR_HE07331,Domestic flights
+EUR_HE07332,International flights
+EUR_HE0734,Passenger transport by sea and inland waterway
+EUR_HE07341,Passenger transport by sea
+EUR_HE07342,Passenger transport by inland waterway
+EUR_HE0735,Combined passenger transport
+EUR_HE07350,Combined passenger transport
+EUR_HE0736,Other purchased transport services
+EUR_HE07361,"Funicular, cable-car and chair-lift transport"
+EUR_HE07362,Removal and storage services
+EUR_HE07369,Other purchased transport services NEC
+EUR_HE081,Postal services
+EUR_HE082,Telephone and telefax equipment
+EUR_HE083,Telephone and telefax services
+EUR_HE091,"Audio-visual, photographic and information processing equipment"
+EUR_HE092,Other major durables for recreation and culture
+EUR_HE093,"Other recreational items and equipment, gardens and pets"
+EUR_HE094,Recreational and cultural services
+EUR_HE095,"Newspapers, books and stationery"
+EUR_HE096,Package holidays
+EUR_HE101,Pre-primary and primary education
+EUR_HE102,Secondary education
+EUR_HE103,Post-secondary nontertiary education
+EUR_HE104,Tertiary education
+EUR_HE105,Education not definable by level
+EUR_HE111,Catering services
+EUR_HE112,Accommodation services
+EUR_HE121,Personal care
+EUR_HE122,Prostitution
+EUR_HE123,Personal effects NEC
+EUR_HE124,Social protection
+EUR_HE125,Insurance
+EUR_HE126,Financial services NEC
+EUR_HE127,Other services NEC
