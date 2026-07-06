@@ -3,7 +3,7 @@
         <region name="Austria">
             <ghgpolicy name="CO2_ETS2">
                 <market>EU</market>
-                <constraint fillout="1" year="2030">0</constraint>
+                <constraint year="2030">0</constraint>
             </ghgpolicy>
             <supplysector name="resid cooking modern EUR_d1">
                 <subsector name="electricity">
