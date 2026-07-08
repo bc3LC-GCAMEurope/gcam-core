@@ -14,7 +14,7 @@
 #' original data system was \code{LA144.building_det_en.R} (energy level1).
 #' @details Calculates building energy consumption, non-energy costs, energy output by service, internal gains, and end-use technology and shell efficiency
 #' @importFrom assertthat assert_that
-#' @importFrom dplyr bind_rows filter group_by left_join lag mutate pull select summarise rowwise
+#' @importFrom dplyr bind_rows filter group_by left_join lag mutate pull select summarise rowwise coalesce
 #' @importFrom tidyr complete replace_na
 #' @author BC3 2024
 module_gcameurope_L144.building_det_en <- function(command, ...) {
@@ -29,6 +29,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
              FILE = "gcam-europe/mappings/heatpump_to_tech_map",
              FILE = "gcam-europe/mappings/heatpump_service_to_tech_map",
              FILE = "gcam-europe/calibrated_techs_bld_det_EUR",
+             FILE = "gcam-europe/A44.shares_hp_EUR",
              FILE = "gcam-europe/A44.cost_efficiency_EUR",
              FILE = "gcam-europe/A44.internal_gains_EUR",
              FILE = "gcam-europe/A44.share_serv_fuel_EUR",
@@ -76,6 +77,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     heatpump_to_tech_map <- get_data(all_data, "gcam-europe/mappings/heatpump_to_tech_map")
     heatpump_service_to_tech_map <- get_data(all_data, "gcam-europe/mappings/heatpump_service_to_tech_map")
     calibrated_techs_bld_det_EUR <- get_data(all_data, "gcam-europe/calibrated_techs_bld_det_EUR")
+    A44.shares_hp_EUR <- get_data(all_data, "gcam-europe/A44.shares_hp_EUR", strip_attributes = TRUE)
     A44.cost_efficiency_EUR <- get_data(all_data, "gcam-europe/A44.cost_efficiency_EUR", strip_attributes = TRUE)
     A44.internal_gains_EUR <- get_data(all_data, "gcam-europe/A44.internal_gains_EUR")
     A44.share_serv_fuel_EUR <- get_data(all_data, "gcam-europe/A44.share_serv_fuel_EUR")
@@ -113,6 +115,18 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
         mutate(region = 'Austria',
                GCAM_region_ID = 28)
     )
+
+    # Reshape hp shares' data
+    A44.shares_hp_EUR <- A44.shares_hp_EUR %>%
+      pivot_longer(cols = c(-decile, -technology),
+                   names_to = 'country', values_to = 'D10share') %>%
+      mutate(decile = paste0('d',decile)) %>%
+      left_join(GCAM32_to_EU %>%
+                  select(country = GCAMEU_region, GCAM_region_ID),
+                by = 'country') %>%
+      select(-country) %>%
+      distinct()
+
 
     # ===================================================
 
@@ -1495,9 +1509,34 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
         filter(grepl("resid", sector) & GCAM_region_ID %in% unique(EU_12_15$GCAM_region_ID)) %>%
         left_join_error_no_match(hh_items_techs_map, by = 'fuel') %>%
         left_join(L107.en_consumption_shares_EUR %>%
-                    select(-region), by = c('consumption.category','GCAM_region_ID')) %>%
+                    select(-region) %>%
+                    rename(fuelshare = share),
+                  by = c('consumption.category','GCAM_region_ID')) %>%
+        left_join(A44.shares_hp_EUR, by = c('GCAM_region_ID','decile','technology')) %>%
+        mutate(final_share = fuelshare * coalesce(D10share, 1)) %>%
+        # ct fuel consumption by HH
+        mutate(share_to_add = fuelshare - final_share) %>%
+        mutate(value_to_add = value * share_to_add) %>%
+        group_by(year, GCAM_region_ID, fuel, decile) %>%
+        mutate(value_to_add_byHH = sum(value_to_add),                                                                 # quantity to be added by the decile
+               n_items           = sum(value_to_add == 0 & value != 0, na.rm = TRUE),                                 # count nº items that will modify their share
+               value_to_add_byHH = if_else(value_to_add == 0 & value != 0, value_to_add_byHH / n_items, 0),           # quantity to add by item
+               final_share       = if_else(value != 0, final_share + value_to_add_byHH / value, final_share)) %>%     # update final share
+        ungroup() %>%
+        select(-value_to_add_byHH, -n_items, -value_to_add, -share_to_add) %>%
+        # ct service & fuel consumption by country
+        group_by(year, GCAM_region_ID, fuel, service) %>%
+        mutate(gap_value           = sum(value*fuelshare) - sum(value*final_share),                                    # quantity to be added by the country
+               n_items             = n() - sum(D10share == 0 | value == 0, na.rm = T),                                 # count nº items that will modify their share
+               value_to_add_byCTRY = if_else((is.na(D10share) | D10share != 0) & n_items != 0 & value != 0,
+                                             gap_value / n_items, 0),                                                  # quantity to add by item
+               final_share         = if_else(value != 0 & (is.na(D10share) | D10share != 0),
+                                            final_share + value_to_add_byCTRY / value, final_share)) %>%              # update final share
+        ungroup() %>%
+        select(-D10share, -gap_value, -n_items, -value_to_add_byCTRY) %>%
+        # apply share and clean data
         mutate(gcam.consumer = paste('resid EUR', decile, sep = '_'),
-               value = value * share) %>%
+               value = value * final_share) %>%
         select(colnames(L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR_comm)),
       # The rest of the European regions
       L144.in_EJ_R_bld_serv_tech_F_Yh_EUR %>%
@@ -1554,6 +1593,42 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       # fix 0s in base service by setting 1e-6 to avoid future pb
       mutate(value = ifelse(value == 0, 1e-6, value)) ->
       L144.base_service_EJ_serv_fuel_hh_EUR
+
+
+    # Check hh files match the totals ###############################################################################
+
+    # a) fuel consumption by HH
+    data_check <- L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR %>%
+      group_by(gcam.consumer, fuel, GCAM_region_ID, year) %>%
+      summarise(value_hh = sum(value)) %>%
+      ungroup() %>%
+      left_join_error_no_match(
+        L144.in_EJ_R_bld_serv_tech_F_Yh_EUR %>%
+          group_by(fuel, GCAM_region_ID, year) %>%
+          summarise(value = sum(value)) %>%
+          ungroup(),
+        by = c('fuel', 'GCAM_region_ID', 'year')
+      ) %>%
+      mutate(diff = value_hh - value)
+
+    stopifnot(max(data_check$diff) == 0)
+
+
+    # b) fuel and service consumption by CTRY
+    data_check <- L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR_resid  %>%
+      group_by(service, fuel, GCAM_region_ID, year) %>%
+      summarise(value_ctry = sum(value)) %>%
+      ungroup() %>%
+      left_join_error_no_match(
+        L144.in_EJ_R_bld_serv_tech_F_Yh_EUR_resid %>%
+          group_by(service, fuel, GCAM_region_ID, year) %>%
+          summarise(value = sum(value)) %>%
+          ungroup(),
+        by = c('service', 'fuel', 'GCAM_region_ID', 'year')
+      ) %>%
+      mutate(diff = value_ctry - value)
+
+    stopifnot(max(data_check$diff) == 0)
 
 
     # 3 Internal gains ##############################################################################################
@@ -1678,7 +1753,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       add_comments("Product of energy consumption and efficiency aggregated by region, sector, service, gcam.consumer") %>%
       add_legacy_name("L144.base_service_EJ_serv_EUR") %>%
       add_precursors("gcam-europe/A44.USA_TechChange_EUR", "gcam-europe/calibrated_techs_bld_det_EUR", "common/iso_GCAM_regID", "energy/A44.tech_eff_mult_RG3",
-                     "energy/A_regions", "gcam-europe/A44.cost_efficiency_EUR", "common/GCAM_region_names") ->
+                     "energy/A_regions", "gcam-europe/A44.cost_efficiency_EUR", "common/GCAM_region_names", "L107.en_consumption_shares_EUR", "gcam-europe/A44.shares_hp_EUR") ->
       L144.base_service_EJ_serv_hh_EUR
 
     L144.base_service_EJ_serv_EUR %>%
@@ -1705,7 +1780,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       add_comments("Product of energy consumption and efficiency aggregated by region, sector, service, gcam.consumer") %>%
       add_legacy_name("L144.base_service_EJ_serv_fuel") %>%
       add_precursors("energy/A44.USA_TechChange_EUR", "gcam-europe/calibrated_techs_bld_det_EUR", "common/iso_GCAM_regID", "energy/A44.tech_eff_mult_RG3",
-                     "energy/A_regions", "gcam-europe/A44.cost_efficiency_EUR", "gcam-europe/A44.cost_efficiency_EUR", "common/GCAM_region_names") ->
+                     "energy/A_regions", "gcam-europe/A44.cost_efficiency_EUR", "gcam-europe/A44.cost_efficiency_EUR", "common/GCAM_region_names",
+                     "L107.en_consumption_shares_EUR", "gcam-europe/A44.shares_hp_EUR") ->
       L144.base_service_EJ_serv_fuel_hh_EUR
 
     L144.prices_bld_EUR %>%
