@@ -1516,7 +1516,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
         # heat pump shares are only to be applied to resid heating
         mutate(D10share = if_else(service != 'resid heating modern EUR', NA, D10share)) %>%
         # estimate raw final_share
-        mutate(final_share = fuel_share * coalesce(D10share, 1)) %>%
+        mutate(final_share = fuel_share * dplyr::coalesce(D10share, 1)) %>%
         # ct fuel consumption by HH
         mutate(share_to_add = fuel_share - final_share) %>%
         mutate(value_to_add = value * share_to_add) %>%
