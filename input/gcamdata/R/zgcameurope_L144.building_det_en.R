@@ -1513,6 +1513,9 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
                     rename(fuel_share = share),
                   by = c('consumption.category','GCAM_region_ID')) %>%
         left_join(A44.shares_hp_EUR, by = c('GCAM_region_ID','decile','technology')) %>%
+        # heat pump shares are only to be applied to resid heating
+        mutate(D10share = if_else(service != 'resid heating modern EUR', NA, D10share)) %>%
+        # estimate raw final_share
         mutate(final_share = fuel_share * coalesce(D10share, 1)) %>%
         # ct fuel consumption by HH
         mutate(share_to_add = fuel_share - final_share) %>%
@@ -1536,7 +1539,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
         select(-D10share, -gap_value, -n_items, -value_to_add_byCTRY) %>%
         # apply share and clean data
         mutate(gcam.consumer = paste('resid EUR', decile, sep = '_'),
-               value = if_else(fuel != 'elec_solar CSP', value * final_share, value * fuel_share)) %>%
+               # value = if_else(fuel != 'elec_solar CSP', value * final_share, value * fuel_share)) %>%
+               value = value * final_share) %>%
         select(colnames(L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR_comm)),
       # The rest of the European regions
       L144.in_EJ_R_bld_serv_tech_F_Yh_EUR %>%
