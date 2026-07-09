@@ -3,7 +3,7 @@
 # Units: Rate in relation to D10 (1 indicates that has the same share as D10)
 # Source: Prescott - DIAMOND July 2026
 # Comments: UEC = unit energy consumption. Before efficiency correction e.g. 60 units useful energy for heating devices
-# Column types: ncnnnnnnnnnnnnnnnnnnnnnnnnnnnnn
+# Column types: ncnnnnnnnnnnnnnnnnnnnnnnnnnnn
 # ----------
 decile,technology,Austria,Belgium,Bulgaria,Croatia,Cyprus,Czech Republic,Denmark,Estonia,Finland,France,Germany,Greece,Hungary,Ireland,Italy,Latvia,Lithuania,Luxembourg,Malta,Netherlands,Poland,Portugal,Romania,Slovakia,Slovenia,Spain,Sweden
 1,air-water pump south,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
