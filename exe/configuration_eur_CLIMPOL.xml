@@ -152,8 +152,9 @@
 		<!-- EV ADOPTION: Optional file to load survey-based EV adoption rates from UniBasel -->
 		<!--Value name="EV_adoption">../input/policy/EV_calib_basel.xml</Value-->
 
-		<!-- EEA TRADE: Optional file to avoid trade circularity issue -->
-		<!--Value name="EEA_trade_tax">../input/policy/eea_trade_tax.xml</Value-->
+		<!-- EEA TRADE: Optional fileS to avoid trade circularity issue -->
+		<Value name="EEA_trade_tax">../input/policy/eea_trade_tax.xml</Value>
+		<!--Value name="EEA_trade_SW0oil">../input/policy/EEAoil_0sw.xml</Value-->
 
 		<!-- POLICY FILES -->
         <Value name = "co2_policy">../input/policy/co2ndctax_nonEU_2100.xml</Value>

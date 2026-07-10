@@ -169,7 +169,7 @@
         <Value name = "diamond_policy">../input/policy/ff55/policy_fueltax_eums_fix2024_adp.xml</Value>
 
 
-        <Value name = "diamond_policy">../input/policy/policy_diamond_simple_ctax_altGWP_adp.xml</Value>
+        <Value name = "diamond_policy">../input/policy/policy_diamond_simple_ctax_altGWP.xml</Value>
         <Value name = "diamond_policy">../input/policy/policy_diamond_simple_altGWP_dummy.xml</Value>
 		<Value name = "policy-target-file">../input/policy/DIAMOND_GHG_LUClink_8p7.xml</Value>
 
