@@ -6,6 +6,7 @@
                     <interpolation-rule apply-to="share-weight" delete="1" from-year="2050" to-year="2100">
                         <interpolation-function name="fixed"/>
                     </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
                     <share-weight year="2025">0</share-weight>
                     <share-weight year="2030">0</share-weight>
                     <share-weight year="2035">0</share-weight>

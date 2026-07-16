@@ -57,21 +57,20 @@ module_socio_L101.Population <- function(command, ...) {
       # hard code 2020 here since socioeconomics.SSP_DB_BASEYEAR is now 2025
       # and base year is 2021
       complete(nesting(scenario, iso),
-               year = c(2020:max(FUTURE_YEARS))) %>%
-      filter(year %in% c(2020:max(FUTURE_YEARS))) %>%
+               year = c(2015 :max(FUTURE_YEARS))) %>%
       group_by(scenario, iso) %>%
       # Data is in five year intervals, so interpolate so get data for the base-year before calculating ratios
       mutate(pop = approx_fun(year, pop, rule = 2),
-             ratio_iso_ssp = pop / pop[year == socioeconomics.FINAL_HIST_YEAR]) %>%  # Calculate population ratios to final historical year (2010), no units
+             ratio_iso_ssp = pop / pop[year == 2021]) %>%  # Calculate population ratios to final historical year (2010), no units
       select(-pop) %>%
-      filter(year >= socioeconomics.FINAL_HIST_YEAR) %>%
+      filter(year >= 2015) %>%
       # Third, project country population values using SSP ratios and final historical year populations.
       # Not all countries in the UN data are in SSP data. Create complete tibble with all UN countries & SSP years.
       ungroup() ->
       L100.Pop_thous_SSP_ctry_Yfut_growth_ratio
 
     ##  extract the final historical population from UN ----
-    pop_final_hist <- filter(L100.Pop_thous_ctry_Yh, year == socioeconomics.FINAL_HIST_YEAR) %>%
+    pop_final_hist <- filter(L100.Pop_thous_ctry_Yh, year == 2021) %>%
       rename(pop_final_hist = value) %>%
       select(-year)
 
@@ -120,6 +119,7 @@ module_socio_L101.Population <- function(command, ...) {
       repeat_add_columns(tibble(scenario = unique(L101.Pop_thous_SSP_R_Yfut$scenario))) %>%
       bind_rows(L101.Pop_thous_SSP_R_Yfut)
 
+    L101.Pop_thous_R_Yh <- L101.Pop_thous_R_Yh %>% filter(year <= MODEL_FINAL_BASE_YEAR)
 
     # Produce outputs ----
     L100.Pop_thous_SSP_ctry_Yfut %>%

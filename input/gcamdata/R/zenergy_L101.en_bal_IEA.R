@@ -293,6 +293,10 @@ module_energy_L101.en_bal_IEA <- function(command, ...) {
                               L101.in_EJ_ctry_trn_Fi_Yh,
                               L101.in_EJ_ctry_bld_Fi_Yh)
     }
+    L101.en_bal_EJ_R_Si_Fi_Yh_full <-  L101.en_bal_EJ_R_Si_Fi_Yh_full  %>%  filter(year <= MODEL_FINAL_BASE_YEAR)
+    L101.en_bal_EJ_ctry_Si_Fi_Yh_full  <-  L101.en_bal_EJ_ctry_Si_Fi_Yh_full  %>% filter(year <= MODEL_FINAL_BASE_YEAR)
+    L101.in_EJ_ctry_trn_Fi_Yh  <-  L101.in_EJ_ctry_trn_Fi_Yh  %>% filter(year <= MODEL_FINAL_BASE_YEAR)
+    L101.in_EJ_ctry_bld_Fi_Yh  <-  L101.in_EJ_ctry_bld_Fi_Yh  %>% filter(year <= MODEL_FINAL_BASE_YEAR)
 
     return_data(L101.en_bal_EJ_R_Si_Fi_Yh_full, L101.en_bal_EJ_ctry_Si_Fi_Yh_full,
                 L101.in_EJ_ctry_trn_Fi_Yh, L101.in_EJ_ctry_bld_Fi_Yh)

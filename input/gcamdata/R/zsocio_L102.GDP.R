@@ -53,7 +53,7 @@ module_socio_L102.GDP <- function(command, ...) {
     # Load required inputs ----
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
 
-
+    L100.Pop_thous_ctry_Yh <- L100.Pop_thous_ctry_Yh %>% filter(year <= MODEL_FINAL_BASE_YEAR)
 
     # 1. Stitch GDP projections to historical values  ----
     ## Step 1: Get historical GDP data & mapping ready ----
@@ -79,16 +79,20 @@ module_socio_L102.GDP <- function(command, ...) {
     ## Step 2: Prepare future GDP projections ----
     # Note that the base year or PPP/MER doesn't matter here
     # We will apply growth rates to historical values
+    ###################################
     L100.GDP_bilusd_SSP_ctry_Yfut_raw %>%
-      left_join_error_no_match(iso_region32_lookup, by = 'iso') %>%
+      left_join_error_no_match(iso_region32_lookup, by = "iso") %>%
       group_by(scenario, GCAM_region_ID, year) %>%
-      summarize(gdp = sum(gdp, na.rm = T)) %>%
-      # The steps below write out the data to all future years, starting from the final socio historical year
-      complete(nesting(scenario, GCAM_region_ID), year = c(socioeconomics.FINAL_HIST_YEAR, FUTURE_YEARS)) %>%
+      summarize(gdp = sum(gdp, na.rm = TRUE), .groups = "drop") %>%
+      complete(
+        nesting(scenario, GCAM_region_ID),
+        year = c(socioeconomics.FINAL_HIST_YEAR, FUTURE_YEARS)
+      ) %>%
       group_by(scenario, GCAM_region_ID) %>%
       mutate(gdp = approx_fun(year, gdp)) %>%
       ungroup() ->
       gdp_bilusd_rgn_Yfut
+    ###################################
     ## Units are billions of 2017$ but relative ratio will be used when connecting to historical data
 
 
@@ -173,6 +177,7 @@ module_socio_L102.GDP <- function(command, ...) {
     ## calculate per-capita GDP.  This is another final output
     pcgdp.thous90usd.scen.rgn.yr <-
       gdp.mil90usd.scen.rgn.yr %>%
+      filter(year != 2020) %>%
       left_join_error_no_match(pop.thous.scen.rgn.yr,
                                by = c('scenario', 'GCAM_region_ID', 'year')) %>%
       mutate(pcgdp = gdp / population) %>%

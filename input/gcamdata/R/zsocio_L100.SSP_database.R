@@ -75,7 +75,7 @@ module_socio_L100.SSP_database <- function(command, ...) {
         by = c("model", "region", "variable", "unit", "iso", "year")
       ) %>%
       # new ssp data starts 2025 (socioeconomics.SSP_DB_BASEYEAR)
-      mutate(value = if_else(year < socioeconomics.SSP_DB_BASEYEAR, hist, value)) %>%
+      mutate(value = if_else(is.na(value), hist, value)) %>%
       select(-hist) ->
       SSP_pop_1
 
@@ -199,7 +199,7 @@ module_socio_L100.SSP_database <- function(command, ...) {
         by = c("model", "region", "variable", "unit", "iso", "year")
       ) %>%
       # new ssp data starts 2025 (socioeconomics.SSP_DB_BASEYEAR)
-      mutate(value = if_else(year < socioeconomics.SSP_DB_BASEYEAR, hist, value)) %>%
+      mutate(value = if_else(is.na(value), hist, value)) %>%
       select(iso, scenario, year, gdp = value) ->
       L100.GDP_bilusd_SSP_ctry_Yfut_raw
 

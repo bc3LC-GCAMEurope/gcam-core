@@ -72,9 +72,9 @@ module_energy_L121.liquids <- function(command, ...) {
     # pre-built output datasets and exit.
     if(is.null(L100.IEA_en_bal_ctry_hist)) {
       # Proprietary IEA energy data are not available, so used prebuilt outputs
-      L121.in_EJ_R_unoil_F_Yh <- extract_prebuilt_data("L121.in_EJ_R_unoil_F_Yh")
-      L121.in_EJ_R_TPES_crude_Yh <- extract_prebuilt_data("L121.in_EJ_R_TPES_crude_Yh")
-      L121.in_EJ_R_TPES_unoil_Yh <- extract_prebuilt_data("L121.in_EJ_R_TPES_unoil_Yh")
+      L121.in_EJ_R_unoil_F_Yh <- extract_prebuilt_data("L121.in_EJ_R_unoil_F_Yh")  %>%  filter(year <= MODEL_FINAL_BASE_YEAR)
+      L121.in_EJ_R_TPES_crude_Yh <- extract_prebuilt_data("L121.in_EJ_R_TPES_crude_Yh")  %>%  filter(year <= MODEL_FINAL_BASE_YEAR)
+      L121.in_EJ_R_TPES_unoil_Yh <- extract_prebuilt_data("L121.in_EJ_R_TPES_unoil_Yh")  %>%  filter(year <= MODEL_FINAL_BASE_YEAR)
       L121.share_R_TPES_biofuel_tech <- extract_prebuilt_data("L121.share_R_TPES_biofuel_tech")
       L121.BiomassOilRatios_kgGJ_R_C <- extract_prebuilt_data("L121.BiomassOilRatios_kgGJ_R_C")
     } else {
@@ -268,7 +268,9 @@ module_energy_L121.liquids <- function(command, ...) {
       L121.BiomassOilRatios_kgGJ_R_C <- L121.BiomassOilRatios_kgGJ_R_C %>%
         mutate(IOcoef = if_else(GCAM_commodity == "Soybean" & GCAM_region_ID %in% eur_iso, IOcoef * (1 - soy_adj_eur), IOcoef))
 
-
+      L121.in_EJ_R_unoil_F_Yh <- L121.in_EJ_R_unoil_F_Yh %>%  filter(year <= MODEL_FINAL_BASE_YEAR)
+      L121.in_EJ_R_TPES_crude_Yh <- L121.in_EJ_R_TPES_crude_Yh %>%  filter(year <= MODEL_FINAL_BASE_YEAR)
+      L121.in_EJ_R_TPES_unoil_Yh <- L121.in_EJ_R_TPES_unoil_Yh %>%  filter(year <= MODEL_FINAL_BASE_YEAR)
 
       # ===================================================
       # Produce outputs
@@ -316,9 +318,9 @@ module_energy_L121.liquids <- function(command, ...) {
         L121.BiomassOilRatios_kgGJ_R_C
 
       # At this point the objects should be identical to the prebuilt objects
-      verify_identical_prebuilt(L121.in_EJ_R_unoil_F_Yh,
-                                L121.in_EJ_R_TPES_crude_Yh,
-                                L121.in_EJ_R_TPES_unoil_Yh,
+      verify_identical_prebuilt(L121.in_EJ_R_unoil_F_Yh  %>%  filter(year <= MODEL_FINAL_BASE_YEAR),
+                                L121.in_EJ_R_TPES_crude_Yh  %>%  filter(year <= MODEL_FINAL_BASE_YEAR),
+                                L121.in_EJ_R_TPES_unoil_Yh  %>%  filter(year <= MODEL_FINAL_BASE_YEAR),
                                 L121.share_R_TPES_biofuel_tech,
                                 L121.BiomassOilRatios_kgGJ_R_C)
     }

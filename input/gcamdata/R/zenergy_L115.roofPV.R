@@ -33,7 +33,7 @@ module_energy_L115.roofPV <- function(command, ...) {
     # Load required inputs
     iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID")
     A15.roofPV_curves <- get_data(all_data, "energy/A15.roofPV_curves")
-    L100.Pop_thous_ctry_Yh <- get_data(all_data, "L100.Pop_thous_ctry_Yh")
+    L100.Pop_thous_ctry_Yh <- get_data(all_data, "L100.Pop_thous_ctry_Yh")  %>% filter(year <= MODEL_FINAL_BASE_YEAR)
 
     # ===================================================
     # Categorizing countries and regions to GCAM Region ID; selecting population in 2010

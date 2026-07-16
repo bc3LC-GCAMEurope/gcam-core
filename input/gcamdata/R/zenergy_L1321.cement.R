@@ -257,22 +257,23 @@ module_energy_L1321.cement <- function(command, ...) {
     # Merge cement electricity data (new and old data have different countries - need to merge and extrapolate)
 
     # Calculate average increase from 1971 to 2018 weighted by cement production - to back fill countries with no data
-    elec_change_average_1971_to_2018 <-  IEA_cement_elec_kwht %>%
+    elec_change_average_1971_to_2015 <-  IEA_cement_elec_kwht %>%
       full_join(IEA_cement_elec_kwht_update, by = c('Country')) %>%
-      unique %>% # join the new and old data
-      #select just those with 2010 and 2018 values so can calculate average
-      filter(!is.na(`1971`), !is.na(`2018`)) %>%
-      #join in 2018 cement production to weight the average
+      unique %>%
+      rename(`2015` = `2018`) %>%
+      #select just those with 2010 and 2015 values so can calculate average
+      filter(!is.na(`1971`), !is.na(`2015`)) %>%
+      #join in 2015 cement production to weight the average
       left_join_error_no_match( L1321.out_Mt_C_cement_Yh_corrected %>%
-                                  filter(year == 2018) %>%
+                                  filter(year == 2015) %>%
                                   left_join(cement_regions %>% unique, by = c('iso')) %>%
                                   mutate(Country = IEA_intensity_region) %>%
                                   select(Country, value) %>%
                                   filter(!is.na(value)), by = c('Country')) %>%
-      mutate(increase = `1971`/`2018`) %>%
+      mutate(increase = `1971`/`2015`) %>%
       filter(Country != 'China') %>% #China seems to be dragging the efficiency increase waaaaay up so remove
       filter(Country != 'India') %>%
-      # calculate the weighted average change from 2010 to 2018
+      # calculate the weighted average change from 2010 to 2015
       mutate(total_value = sum(value)) %>%
       mutate(weighted_increase = increase*value/total_value) %>%
       pull(weighted_increase) %>% sum()
@@ -280,11 +281,12 @@ module_energy_L1321.cement <- function(command, ...) {
     # Merge all elec data and fill in extrapolation from above
     IEA_cement_elec_kwht_merged <-  IEA_cement_elec_kwht %>%
       full_join(IEA_cement_elec_kwht_update, by = c('Country')) %>%
-      filter(! is.na(`2018`)) %>%
+      rename(`2015` = `2018`) %>%
+      filter(! is.na(`2015`)) %>%
       unique %>%
       # extrapolate back to 1971
-      mutate(`1971`= ifelse(is.na(`1971`),`2018`*elec_change_average_1971_to_2018,`1971`)) %>%
-      mutate(`2021`=`2018`)
+      mutate(`1971`= ifelse(is.na(`1971`),`2015`*elec_change_average_1971_to_2015,`1971`)) %>%
+      mutate(`2021`=`2015`)
 
     # Interpolate available data on electricity intensity to all historical years
     IEA_cement_elec_kwht_merged %>%

@@ -66,6 +66,7 @@ module_emissions_L152.MACC <- function(command, ...) {
       group_by(GCAM_region_ID, Sector, Process, year) %>%
       summarise(value = sum(value)) %>%
       ungroup() %>%
+      mutate(year = if_else(year == 2020, 2021L, year)) %>%
       filter(year %in% emissions.EPA_MACC_YEAR) ->
       EPA_ag_update
 
@@ -92,7 +93,8 @@ module_emissions_L152.MACC <- function(command, ...) {
       select(GCAM_region_ID, Sector, Process, year, cost_2010USD_tCO2e, reduction_MtCO2e) %>%
       mutate(cost_2010USD_tCO2e = as.numeric(cost_2010USD_tCO2e),
              cost_1990USD_tCe = round(cost_2010USD_tCO2e * emissions.CONV_C_CO2 * gdp_deflator(1990, base_year = 2010), 0)) %>%
-      select(-cost_2010USD_tCO2e) ->
+      select(-cost_2010USD_tCO2e) %>%
+      mutate(year = if_else(year == 2020, 2021L, year)) ->
       L152.EPA_MACC_MtCO2e_ungrouped
 
     # For in abatement and basebline data:

@@ -23,20 +23,21 @@ FLAG_XML             <- "FLAG_XML"              # xml data
 # Time constants ======================================================================
 
 # Historical years for level 1 data processing. All chunks that produce historical data
-# for model calibration are required to produce annual data covering this entire span.
-HISTORICAL_YEARS        <- 1971:2021
+# for mod el calibration are required to produce annual data covering this entire span.
+HISTORICAL_YEARS        <- 1971:2015
 
 # Future years for level 1 data processing, for the few chunks that
 # produce future data (e.g., population projections)
 FUTURE_YEARS            <- (max(HISTORICAL_YEARS)+1):2100
-
+FUTURE_YEARS[FUTURE_YEARS == 2020] <- 2021
+FUTURE_YEARS <- unique(FUTURE_YEARS)
 # Calibrated periods in the model. Only level 2 chunks should reference these
 MODEL_BASE_YEARS        <- unique(c(1975, 1990, 2005, 2010, 2015, max(HISTORICAL_YEARS)))
 MODEL_FINAL_BASE_YEAR   <- max(MODEL_BASE_YEARS)
 
 # Future (not calibrated) model periods. Only level 2 chunks should reference these
-MODEL_FUTURE_YEARS      <- seq(2025, 2100, 5)
-
+MODEL_FUTURE_YEARS      <- seq(2020, 2100, 5)
+MODEL_FUTURE_YEARS[MODEL_FUTURE_YEARS == 2020] <- 2021
 # Make sure years are consistent
 if (min(MODEL_FUTURE_YEARS) <= max(HISTORICAL_YEARS)) {
   stop("ERROR: Model future years overlap historial years in constants.R")
@@ -212,11 +213,11 @@ SO2_SHIP_LIMIT_POLICY_MULTIPLIER <- 0.001 * 2
 
 # Time
 aglu.MODEL_MEAN_PERIOD_LENGTH <- 3       # AgLU data use a moving average over this period length in LA.100
-aglu.MODEL_PRICE_YEARS      <- 2020:2022 # consistent with aglu.MODEL_SUA_MEAN_PERIODS
-aglu.MODEL_MACRONUTRIENT_YEARS <- 2020:2022   # consistent with aglu.MODEL_SUA_MEAN_PERIODS; FAO only has data for after 2010
-aglu.MODEL_COST_YEARS       <- 2008:2016
+aglu.MODEL_PRICE_YEARS      <- 2014:2016 # consistent with aglu.MODEL_SUA_MEAN_PERIODS
+aglu.MODEL_MACRONUTRIENT_YEARS <- 2014:2016   # consistent with aglu.MODEL_SUA_MEAN_PERIODS; FAO only has data for after 2010
+aglu.MODEL_COST_YEARS       <- 2008:2014
 aglu.DEFLATOR_BASE_YEAR     <- MODEL_FINAL_BASE_YEAR      # year used as the basis for computing regional price deflators
-aglu.FALLOW_YEARS           <- 2020:2022 # Years used for calculating the % of fallow land
+aglu.FALLOW_YEARS           <- 2014:2016 # Years used for calculating the % of fallow land
 aglu.AGLU_HISTORICAL_YEARS  <- 1973:MODEL_FINAL_BASE_YEAR
 aglu.BASE_YEAR_IFA          <- 2006       # Base year of International Fertilizer Industry Association (IFA) fertilizer application data
 aglu.BIO_START_YEAR         <- 2025       # Also set in aglu/A_bio_ghost_share
@@ -701,15 +702,15 @@ energy.FOOD_PROCESSING.ENERGY_INFILL_MIN_EJ_PCAL_COEF <- 0.000413 # minimum valu
 # Socioeconomics constants ======================================================================
 
 socioeconomics.GCAMFAOSTAT_GDP_Dollar_Year <- 2015 # dollar year in FAO GDP (we have an assertion in gcamfaostat)
-Socioeconomic.PWT.LastYear <- 2019 # the latest year in PWT
-socioeconomics.Global_Macro_Database_LastYear <- 2023 # the latest year in GMD
+Socioeconomic.PWT.LastYear <- 2015 # the latest year in PWT
+socioeconomics.Global_Macro_Database_LastYear <- 2015 # the latest year in GMD
 socioeconomics.GCAM_GDP_Dollar_Year <- 1990 # GDP dollar year in GCAM
-socioeconomics.SSP_DB_BASEYEAR <- 2025 # base year of SSP data base v3.2 Beta
-socioeconomics.SSP_DB_Labor_StartYear <- 2020 # start year of population by age (to derive work-age pop) in SSP data base v3.2 Beta
+socioeconomics.SSP_DB_BASEYEAR <- 2015 # base year of SSP data base v3.2 Beta
+socioeconomics.SSP_DB_Labor_StartYear <- 2015 # start year of population by age (to derive work-age pop) in SSP data base v3.2 Beta
 socioeconomics.GDP_ADJ_MOVING_AVERAGE_ISO <- NULL
 socioeconomics.GDP_ADG_MOVING_AVERAGE_DURATION <- 15 # used for smoothing GDP for South_America_North
 socioeconomics.GDP_ADJ_NO_NEG_GROWTH_ISO <- c("twn")
-socioeconomics.GDP_ADJ_NO_NEG_GROWTH_YEAR <- 2025 # used for adjusting GDP projection to avoid negative GDP growth after this year (for Taiwan and South_America_North)
+socioeconomics.GDP_ADJ_NO_NEG_GROWTH_YEAR <- 2015 # used for adjusting GDP projection to avoid negative GDP growth after this year (for Taiwan and South_America_North)
 
 socioeconomics.CORE_GCAM_SCENARIO <- "SSP2"
 socioeconomics.SSP_EUR <- TRUE  # used for using Population & GDP European SSP2 data projections
@@ -935,12 +936,14 @@ emissions.UNCONVENTIONAL.OIL.FUG.CH4.EMFACT <- 0.0882
 emissions.UNCONVENTIONAL.OIL.FUG.N2O.EMFACT <- 0.000000939
 
 # Time
-emissions.CEDS_YEARS              <- 1970:2022           # Year coverage for CEDS inventory.
+emissions.CEDS_YEARS              <- 1970:2015           # Year coverage for CEDS inventory.
 emissions.CTRL_BASE_YEAR          <- 1975                # Year to read in pollution controls
 emissions.DEFOREST_COEF_YEARS     <- c(2000, 2005)
 emissions.EDGAR_YEARS             <- 1971:2008
 emissions.EPA_HISTORICAL_YEARS    <- 1971:2002
 emissions.EPA_MACC_YEAR           <- seq(2015, 2050, 5)        # based on 2019 EPA nonCO2 report
+emissions.EPA_MACC_YEAR[emissions.EPA_MACC_YEAR == 2020] <- 2021
+emissions.EPA_MACC_YEAR <- unique(emissions.EPA_MACC_YEAR)
 emissions.EPA_MACC_FUTURE_YEAR    <- seq(2055, 2100, 5)        # EPA report only covers till 2050
 emissions.EPA_TC_TIMESTEP         <- 5   # currently calculate EPA MAC-based technological change based on every 5 years
 emissions.EPA_BAU_HIST_YEAR       <- c(1990, 1995, 2000, 2005, 2010, 2015) # based on 2019 EPA nonCO2 report

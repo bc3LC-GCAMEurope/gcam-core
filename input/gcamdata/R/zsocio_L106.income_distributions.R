@@ -37,7 +37,8 @@ module_socio_L106.income_distributions <- function(command, ...) {
     income_dist_pre <- income_dist_eur %>%
       anti_join(income_dist_row, by = "region") %>%
       bind_rows(income_dist_row) %>%
-      filter(region %in% unique(region_map$region))
+      filter(region %in% unique(region_map$region)) %>%
+      mutate(year = if_else(year == 2020, 2021L, year))
 
     # Process
     income_dist_pre %>%

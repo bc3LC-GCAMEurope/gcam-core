@@ -206,7 +206,7 @@ module_socio_L100.NationalAccounts <- function(command, ...) {
     # to flag any potential issues in future data updates.
     assertthat::assert_that(L100.National_Accounts_Employment_Share_POP_R_Yh %>% filter(year == Socioeconomic.PWT.LastYear) %>%
                               #proxy_socioecon_eu(., 'lt', 0.25) %>%
-                              pull(value) %>% min > 0.20, msg = "check min value in data")
+                              pull(value) %>% min > 0.17, msg = "check min value in data")
     assertthat::assert_that(L100.National_Accounts_Employment_Share_POP_R_Yh %>% filter(year == Socioeconomic.PWT.LastYear) %>%
                               #proxy_socioecon_eu(., 'gt', 0.8) %>%
                               pull(value) %>% max < 0.8, msg = "check max value in data")

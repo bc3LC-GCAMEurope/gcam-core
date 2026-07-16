@@ -39,7 +39,7 @@ module_socio_L100.GDP_hist <- function(command, ...) {
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
 
     # Module specific constants
-    DEFLATOR_BASE_YEAR <- MODEL_FINAL_BASE_YEAR
+    DEFLATOR_BASE_YEAR <- 2021
 
     # Process region-specific GDP deflator ----
     GDP_Deflators_To_Base_Year <-

@@ -54,7 +54,7 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
     EUR_avDwelling <- get_data(all_data, "gcam-europe/estat_ilc_hcmh02_filtered_en")  %>%  filter(geo != "EU27_2020")
     EUR_avHousehold <- get_data(all_data, "gcam-europe/estat_ilc_lvph01_filtered_en") %>%  filter(geo != "EU27_2020")
     geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map") %>% filter_regions_europe()
-    L100.Pop_thous_ctry_Yh <- get_data(all_data, "L100.Pop_thous_ctry_Yh") %>% filter_regions_europe()
+    L100.Pop_thous_ctry_Yh <- get_data(all_data, "L100.Pop_thous_ctry_Yh") %>% filter_regions_europe() %>% filter(year <= MODEL_FINAL_BASE_YEAR)
     L102.gdp_mil90usd_Scen_R_Y <- get_data(all_data, "L102.gdp_mil90usd_Scen_R_Y") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
     L102.pcgdp_thous90USD_Scen_R_Y <- get_data(all_data, "L102.pcgdp_thous90USD_Scen_R_Y") %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
     L221.LN0_Land<-get_data(all_data, "L221.LN0_Land", strip_attributes = TRUE) %>% filter_regions_europe()

@@ -40,7 +40,7 @@ module_energy_L100.IEA_downscale_ctry <- function(command, ...) {
     all_data <- list(...)[[1]]
 
     # Load required inputs
-    L100.Pop_thous_ctry_Yh <- get_data(all_data, "L100.Pop_thous_ctry_Yh")
+    L100.Pop_thous_ctry_Yh <- get_data(all_data, "L100.Pop_thous_ctry_Yh") %>% filter(year <= MODEL_FINAL_BASE_YEAR)
     IEA_EnergyBalances_2023 <- get_data(all_data, "energy/IEA_EnergyBalances_2023")
     IEA_product_downscaling <- get_data(all_data, "energy/mappings/IEA_product_downscaling")
     IEA_ctry <- get_data(all_data, "energy/mappings/IEA_ctry")
