@@ -610,7 +610,8 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       left_join_error_no_match(calibrated_techs_bld_det_EUR %>%
                                  select(-gcam.consumer), by = c("sector", "service", "subsector", "technology")) %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
-      group_by(region, gcam.consumer, nodeInput, building.node.input, building.service.input = supplysector, year) %>%
+      group_by(region, gcam.consumer, nodeInput, building.node.input,
+               building.service.input = supplysector, year) %>%
       summarise(base.service = sum(base.service)) %>%
       ungroup() %>%
       select(LEVEL2_DATA_NAMES[["BldNodes"]], building.service.input, year, base.service)
@@ -2141,24 +2142,32 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     L244.StubTechIntGainOutputRatio_EUR<-add.cg(L244.StubTechIntGainOutputRatio_pre)
 
     # Finally need to calibrate the different technologies at consumer-group level
-    shares_resid<-bind_rows(L244.GenericShares_EUR %>% rename(share = gen_share,
-                                                              agg.share = agg_gen_share,
-                                                              adj_sector = building.service.input),
-                            L244.ThermalShares_EUR %>% rename(adj_sector = thermal.building.service.input,
-                                                              share = thermal_share,
-                                                              agg.share = agg_thermal_share)) %>%
-      filter(grepl("resid",gcam.consumer)) %>%
-      separate(gcam.consumer,c("tmp","group"),sep = "_",remove = F) %>%
-      select(region,year,group,adj_sector,share)
+    shares_resid<-L144.base_service_EJ_serv_fuel_hh_EUR %>%
+      # filter only resid
+      filter(sector == 'bld_resid') %>%
+      # add region names
+      left_join(GCAM32_to_EU %>%
+                  select(region = GCAMEU_region, GCAM_region_ID) %>%
+                  distinct(), by = 'GCAM_region_ID') %>%
+      # rename service to sector
+      rename(stub.technology = technology) %>%
+      separate(gcam.consumer,c("adj_sector","group"),sep = "_",remove = T) %>%
+      mutate(supplysector = paste(service, group, sep = '_')) %>%
+      # clean
+      select(region,year,group,supplysector,service,stub.technology,value) %>%
+      # compute shares
+      group_by(region, year, service, stub.technology) %>%
+      mutate(share = value / sum(value)) %>%
+      ungroup() %>%
+      select(-service,-value)
 
     L244.StubTechCalInput_bld_comm<- L244.StubTechCalInput_bld_pre %>%
       filter(grepl("comm",supplysector))
 
     L244.StubTechCalInput_bld_resid2<-add.cg(L244.StubTechCalInput_bld_pre) %>%
       filter(grepl("resid",supplysector)) %>%
-      separate(supplysector,c("adj_sector","group"),sep = "_",remove = F) %>%
       # use left_join due to lack of heating in Indonesia
-      left_join(shares_resid, by=c("region","year","group","adj_sector")) %>%
+      left_join(shares_resid, by=c("region","year","supplysector","stub.technology")) %>%
       mutate(share = if_else(is.na(share),0,share)) %>%
       mutate(calibrated.value = calibrated.value * share) %>%
       select(LEVEL2_DATA_NAMES[["StubTechCalInput"]])
