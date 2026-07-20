@@ -25,7 +25,9 @@
 #' The corresponding file in the original data system was \code{L244.building_det.R} (energy level2).
 #' @details Creates level2 data for the building sector.
 #' @importFrom assertthat assert_that
-#' @importFrom dplyr bind_rows distinct filter if_else group_by left_join mutate select semi_join summarise
+#' @importFrom dplyr bind_rows distinct filter if_else group_by left_join mutate select semi_join summarise group_split
+#' @importFrom purrr map_df
+#' @importFrom stringr str_extract
 #' @importFrom tidyr complete gather nesting unite
 #' @author RLH September 2017
 
@@ -61,6 +63,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     "L144.base_service_EJ_serv_fuel_hh_EUR",
     "L144.in_EJ_R_bld_serv_F_Yh_EUR",
     "L144.in_EJ_R_bld_serv_tech_F_Yh_EUR",
+    "L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR",
     "L144.end_use_eff_EUR",
     "L144.shell_eff_R_Y_EUR",
     "L144.NEcost_75USDGJ_EUR",
@@ -2142,35 +2145,46 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     L244.StubTechIntGainOutputRatio_EUR<-add.cg(L244.StubTechIntGainOutputRatio_pre)
 
     # Finally need to calibrate the different technologies at consumer-group level
-    shares_resid<-L144.base_service_EJ_serv_fuel_hh_EUR %>%
-      # filter only resid
-      filter(sector == 'bld_resid') %>%
-      # add region names
-      left_join(GCAM32_to_EU %>%
-                  select(region = GCAMEU_region, GCAM_region_ID) %>%
-                  distinct(), by = 'GCAM_region_ID') %>%
-      # rename service to sector
-      rename(stub.technology = technology) %>%
-      separate(gcam.consumer,c("adj_sector","group"),sep = "_",remove = T) %>%
-      mutate(supplysector = paste(service, group, sep = '_')) %>%
-      # clean
-      select(region,year,group,supplysector,service,stub.technology,value) %>%
-      # compute shares
-      group_by(region, year, service, stub.technology) %>%
-      mutate(share = value / sum(value)) %>%
+    L244.StubTechCalInput_bld_pre_hh <- L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR %>%
+      filter(year %in% MODEL_BASE_YEARS) %>%
+      rename(calibrated.value = value) %>%
+      mutate(calibrated.value = round(calibrated.value, energy.DIGITS_CALOUTPUT)) %>%
+      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
+      left_join_error_no_match(calibrated_techs_bld_det_EUR %>%
+                                 select(-gcam.consumer),
+                               by = c("sector", "service", "fuel", "subsector", "technology")) %>% # to have minicam.energy.input, gcam.consumer... and other columns
+      mutate(share.weight.year = year,
+             stub.technology = technology) %>%
+      group_by(region, supplysector, subsector, year) %>%
+      mutate(subs.share.weight = sum(calibrated.value)) %>%
       ungroup() %>%
-      select(-service,-value)
+      # If aggregated calibrated value > 0, set subsector shareweight to 1, else set to 0
+      mutate(subs.share.weight = if_else(subs.share.weight > 0, 1, 0),
+             # If calibrated value for specific technology > 0 , set tech shareweight to 1, else set to 0
+             tech.share.weight = if_else(calibrated.value > 0, 1, 0)) %>%
+      select(LEVEL2_DATA_NAMES[["StubTechCalInput"]], 'gcam.consumer')
 
-    L244.StubTechCalInput_bld_comm<- L244.StubTechCalInput_bld_pre %>%
+
+    L244.StubTechCalInput_bld_comm<- L244.StubTechCalInput_bld_pre_hh %>%
       filter(grepl("comm",supplysector))
 
-    L244.StubTechCalInput_bld_resid2<-add.cg(L244.StubTechCalInput_bld_pre) %>%
+    L244.StubTechCalInput_bld_resid2<-L244.StubTechCalInput_bld_pre_hh %>%
       filter(grepl("resid",supplysector)) %>%
-      # use left_join due to lack of heating in Indonesia
-      left_join(shares_resid, by=c("region","year","supplysector","stub.technology")) %>%
-      mutate(share = if_else(is.na(share),0,share)) %>%
-      mutate(calibrated.value = calibrated.value * share) %>%
-      select(LEVEL2_DATA_NAMES[["StubTechCalInput"]])
+      mutate(supplysector = paste0(supplysector, str_extract(gcam.consumer, "(?<=EUR).*"))) %>%
+      mutate(has_decile = str_detect(supplysector, "_d([1-9]|10)$")) %>%
+      # split the data into two regions with gcam deciles and regions without.
+      # repeat the rows for each decile in the second group
+      group_split(has_decile) %>%
+      map_df(~ {
+        if (unique(.x$has_decile) == FALSE) {
+          .x %>%
+            add.cg()
+        } else {
+          .x
+        }
+      }) %>%
+      # clean up the helper column
+      select(-has_decile)
 
     # complete with 0s the missing StubTechs using L244.StubTechEff_bld_EUR
     L244.StubTechCalInput_bld_resid <- L244.StubTechEff_bld_EUR %>%
