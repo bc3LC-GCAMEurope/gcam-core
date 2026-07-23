@@ -41,9 +41,7 @@
 <user-configurable-solver year="1975" fillout="1">
         <solution-tolerance>0.005</solution-tolerance>
         <solution-floor>0.0001</solution-floor>
-        <!-- Raised from 0.028: Romania gas processing/natural gas missed calibration by 3.8% in
-             period 2 (2005). This block covers periods 0-3 (1975-2010). -->
-        <calibration-tolerance>0.04</calibration-tolerance>
+        <calibration-tolerance>0.028</calibration-tolerance>
         <max-model-calcs>3000</max-model-calcs>
 
         <preconditioner-solver-component>
@@ -78,9 +76,7 @@
 <user-configurable-solver year="2015" fillout="1">
         <solution-tolerance>0.005</solution-tolerance>
         <solution-floor>0.0001</solution-floor>
-        <!-- Raised from 0.02: Netherlands resid heating (EUR_d9/d10) and Romania natural gas
-             missed calibration by 2.4-2.5% in periods 4-5 (2015, 2021), covered by this block. -->
-        <calibration-tolerance>0.026</calibration-tolerance>
+        <calibration-tolerance>0.02</calibration-tolerance>
         <max-model-calcs>3000</max-model-calcs>
 
         <preconditioner-solver-component>
@@ -247,34 +243,14 @@
 		<solution-tolerance fillout="1" region="Canada" period="1" market-type="natural gas">0.03</solution-tolerance>
 		<solution-tolerance fillout="1" region="Indonesia" period="1" market-type="natural gas">0.03</solution-tolerance>
 		<solution-tolerance fillout="1" region="Croatia" period="1" market-type="natural gas">0.03</solution-tolerance>
-		<solution-tolerance fillout="1" region="Romania" period="1" market-type="natural gas">0.03</solution-tolerance>
 
 		<solution-tolerance fillout="1" region="Croatia" period="2" market-type="natural gas">0.03</solution-tolerance>
 		<solution-tolerance fillout="1" region="Poland" period="2" market-type="natural gas">0.03</solution-tolerance>
-		<!-- Widened from 0.03: observed RED was 3.6% in 2005, still exceeding the old tolerance -->
-		<solution-tolerance fillout="1" region="Romania" period="2" market-type="natural gas">0.04</solution-tolerance>
+		<solution-tolerance fillout="1" region="Romania" period="2" market-type="natural gas">0.03</solution-tolerance>
 		<solution-tolerance fillout="1" region="Ukraine" period="2" market-type="natural gas">0.03</solution-tolerance>
 
 		<solution-tolerance fillout="1" region="Croatia" period="3" market-type="natural gas">0.03</solution-tolerance>
 		<solution-tolerance fillout="1" region="Ukraine" period="3" market-type="natural gas">0.03</solution-tolerance>
-
-		<!-- Added: Romania crude oil sat just below tolerance (ED ~0.5-1.8%) and never solved
-		     in periods 1-4 (1990-2015); DDGS and feedcakes was similarly near-converged in
-		     periods 3-5 (2010-2021). -->
-		<solution-tolerance fillout="1" region="Romania" period="1" market-type="crude oil">0.03</solution-tolerance>
-		<!-- Widened from 0.03: observed RED was 7.8% in 2005, still exceeding the old tolerance -->
-		<solution-tolerance fillout="1" region="Romania" period="2" market-type="crude oil">0.08</solution-tolerance>
-		<!-- Widened from 0.03: observed RED 3.18% in 2010 -->
-		<solution-tolerance fillout="1" region="Romania" period="3" market-type="crude oil">0.035</solution-tolerance>
-		<!-- Widened from 0.03: observed RED 3.12% in 2015 -->
-		<solution-tolerance fillout="1" region="Romania" period="4" market-type="crude oil">0.035</solution-tolerance>
-		<!-- Added: crude oil was also unsolved in 2021 (RED 2.7%), no override previously set -->
-		<solution-tolerance fillout="1" region="Romania" period="5" market-type="crude oil">0.03</solution-tolerance>
-		<!-- Widened from 0.03: observed RED 3.08% in 2010 -->
-		<solution-tolerance fillout="1" region="Romania" period="3" market-type="DDGS and feedcakes">0.035</solution-tolerance>
-		<!-- Widened from 0.03: observed RED 3.03% in 2015 -->
-		<solution-tolerance fillout="1" region="Romania" period="4" market-type="DDGS and feedcakes">0.035</solution-tolerance>
-		<solution-tolerance fillout="1" region="Romania" period="5" market-type="DDGS and feedcakes">0.03</solution-tolerance>
 
 		<solution-floor fillout="1" region="USA" market-type="gas trade statistical differences">0.01</solution-floor>
 		<solution-floor fillout="1" region="Sweden" market-type="district heat">0.01</solution-floor>
