@@ -2174,8 +2174,8 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       mutate(has_decile = str_detect(supplysector, "_d([1-9]|10)$")) %>%
       # split the data into two regions with gcam deciles and regions without.
       # repeat the rows for each decile in the second group
-      group_split(has_decile) %>%
-      map_df(~ {
+      dplyr::group_split(has_decile) %>%
+      purrr::map_df(~ {
         if (unique(.x$has_decile) == FALSE) {
           .x %>%
             add.cg()
