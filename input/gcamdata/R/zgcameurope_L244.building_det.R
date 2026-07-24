@@ -2188,12 +2188,17 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     # complete with 0s the missing StubTechs using L244.StubTechEff_bld_EUR
     L244.StubTechCalInput_bld_resid <- L244.StubTechEff_bld_EUR %>%
-      filter(year %in% MODEL_BASE_YEARS) %>%
+      filter(year %in% MODEL_BASE_YEARS,
+             grepl('resid', supplysector)) %>%
       left_join(L244.StubTechCalInput_bld_resid2, by = c('region','supplysector','subsector','stub.technology','year','minicam.energy.input')) %>%
       mutate(calibrated.value = if_else(is.na(calibrated.value), 0, calibrated.value)) %>%
       mutate(share.weight.year = if_else(is.na(share.weight.year), year, share.weight.year)) %>%
-      mutate(subs.share.weight = if_else(is.na(subs.share.weight), 0, subs.share.weight)) %>%
-      mutate(tech.share.weight = if_else(is.na(tech.share.weight), 0, tech.share.weight))
+      mutate(tech.share.weight = if_else(is.na(tech.share.weight), 0, tech.share.weight)) %>%
+      mutate(gcam.consumer = paste0('resid EUR', str_extract(supplysector, "(?<=EUR).*"))) %>%
+      group_by(region, year, supplysector, subsector) %>%
+      mutate(subs.share.weight = if_else(sum(calibrated.value, na.rm = T) > 0, 1, 0)) %>%
+      ungroup()
+
 
     L244.StubTechCalInput_bld_EUR<-bind_rows(L244.StubTechCalInput_bld_resid,L244.StubTechCalInput_bld_comm)
 
