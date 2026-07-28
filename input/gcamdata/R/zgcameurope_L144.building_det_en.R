@@ -1530,7 +1530,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
         select(-value_to_add_byHH, -n_items, -value_to_add, -share_to_add) %>%
         # ct service & fuel consumption by country
         group_by(year, GCAM_region_ID, fuel, service) %>%
-        mutate(gap_value           = sum(value*fuel_share) - sum(value*final_share),                                    # quantity to be added by the country
+        mutate(gap_value           = sum(value*fuel_share) - sum(value*final_share),                                   # quantity to be added by the country
                n_items             = n() - sum(D10share == 0 | value == 0, na.rm = T),                                 # count nº items that will modify their share
                value_to_add_byCTRY = if_else((is.na(D10share) | D10share != 0) & n_items != 0 & value != 0,
                                              gap_value / n_items, 0),                                                  # quantity to add by item
