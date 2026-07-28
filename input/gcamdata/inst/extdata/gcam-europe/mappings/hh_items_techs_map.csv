@@ -11,4 +11,4 @@ gas,gas
 refined liquids,liquid fuels
 heat,district heat
 electricity,electricity
-elec_solar CSP,other
+elec_solar CSP,electricity

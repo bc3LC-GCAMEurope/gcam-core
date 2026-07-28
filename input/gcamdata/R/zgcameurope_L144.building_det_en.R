@@ -1540,7 +1540,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
         select(-D10share, -gap_value, -n_items, -value_to_add_byCTRY) %>%
         # apply share and clean data
         mutate(gcam.consumer = paste('resid EUR', decile, sep = '_'),
-               value = if_else(!GCAM_region_ID %in% c(47,50), value * final_share, value)) %>% # skip NLD & ROU adjustment
+               value = if_else(!GCAM_region_ID %in% c(47,50) | fuel != 'elec_solar CSP', value * final_share, value * fuel_share)) %>% # skip NLD & ROU adjustment
         select(colnames(L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR_comm)),
       # The rest of the European regions
       L144.in_EJ_R_bld_serv_tech_F_Yh_EUR %>%
