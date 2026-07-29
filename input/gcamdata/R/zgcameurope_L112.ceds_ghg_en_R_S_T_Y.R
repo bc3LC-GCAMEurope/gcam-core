@@ -808,7 +808,8 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
                        distinct(GCAM_region_ID, year, CEDS_agg_sector, CEDS_agg_fuel),
                      by = c("GCAM_region_ID", "CEDS_agg_sector", "CEDS_agg_fuel", "year")),
         by = c("GCAM_region_ID", "year", "CEDS_agg_sector", "CEDS_agg_fuel")
-      ) ->
+      ) %>%
+      distinct() ->
       L112.CEDSGCAM_emissions
 
     L112.CEDSGCAM_emissions %>%
