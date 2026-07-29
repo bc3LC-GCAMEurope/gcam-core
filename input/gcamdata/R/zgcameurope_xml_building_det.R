@@ -159,11 +159,11 @@ module_gcameurope_building_det_xml <- function(command, ...) {
         add_xml_data(L244.SubsectorShrwt_bld_EUR, "SubsectorShrwt") ->
         building_det_EUR.xml
     }
-    if(!is.null(L244.SubsectorShrwtFllt_bld_EUR)) {
-      building_det_EUR.xml %>%
-        add_xml_data(L244.SubsectorShrwtFllt_bld_EUR, "SubsectorShrwtFllt") ->
-        building_det_EUR.xml
-    }
+    # if(!is.null(L244.SubsectorShrwtFllt_bld_EUR)) {
+    #   building_det_EUR.xml %>%
+    #     add_xml_data(L244.SubsectorShrwtFllt_bld_EUR, "SubsectorShrwtFllt") ->
+    #     building_det_EUR.xml
+    # }
     if(!is.null(L244.SubsectorInterp_bld_EUR)) {
       building_det_EUR.xml %>%
         add_xml_data(L244.SubsectorInterp_bld_EUR, "SubsectorInterp") ->
