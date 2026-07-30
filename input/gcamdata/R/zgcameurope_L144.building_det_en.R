@@ -1528,25 +1528,26 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
         mutate(share_to_add = fuel_share - final_share) %>%
         mutate(value_to_add = value * share_to_add) %>%
         group_by(year, GCAM_region_ID, fuel, decile) %>%
-        mutate(value_to_add_byHH = sum(value_to_add),                                                                 # quantity to be added by the decile
-               n_items           = sum(value_to_add == 0 & value != 0, na.rm = TRUE),                                 # count nº items that will modify their share
-               value_to_add_byHH = if_else(value_to_add == 0 & value != 0, value_to_add_byHH / n_items, 0),           # quantity to add by item
-               final_share       = if_else(value != 0, final_share + value_to_add_byHH / value, final_share)) %>%     # update final share
+        mutate(value_to_add_byHH = sum(value_to_add),                                                                  # quantity to be added by the decile
+               total_value       = sum(value, na.rm = TRUE)) %>%                                                       # count total value by group to allocate value_to_add proportionally
         ungroup() %>%
-        select(-value_to_add_byHH, -n_items, -value_to_add, -share_to_add) %>%
+        mutate(value_to_add_byHH = if_else(value_to_add == 0 & value != 0, value_to_add_byHH * value / total_value, 0),# quantity to add by item
+               final_share       = if_else(value != 0, final_share + value_to_add_byHH / value, final_share)) %>%      # update final share
+        select(-value_to_add_byHH, -total_value, -value_to_add, -share_to_add) %>%
         # ct service & fuel consumption by country
         group_by(year, GCAM_region_ID, fuel, service) %>%
         mutate(gap_value           = sum(value*fuel_share) - sum(value*final_share),                                   # quantity to be added by the country
-               n_items             = n() - sum(D10share == 0 | value == 0, na.rm = T),                                 # count nº items that will modify their share
-               value_to_add_byCTRY = if_else((is.na(D10share) | D10share != 0) & n_items != 0 & value != 0,
-                                             gap_value / n_items, 0),                                                  # quantity to add by item
+               total_value         = sum(value, na.rm = TRUE)) %>%                                                     # count nº items that will modify their share
+        ungroup() %>%
+        mutate(value_to_add_byCTRY = if_else((is.na(D10share) | D10share != 0) & value != 0,
+                                             gap_value * value / total_value, 0),                                      # quantity to add by item
                final_share         = if_else(value != 0 & (is.na(D10share) | D10share != 0),
                                             final_share + value_to_add_byCTRY / value, final_share)) %>%               # update final share
-        ungroup() %>%
-        select(-D10share, -gap_value, -n_items, -value_to_add_byCTRY) %>%
+        select(-D10share, -gap_value, -total_value, -value_to_add_byCTRY) %>%
         # apply share and clean data
         mutate(gcam.consumer = paste('resid EUR', decile, sep = '_'),
-               value = if_else(!GCAM_region_ID %in% c(47,50) | fuel != 'elec_solar CSP', value * final_share, value * fuel_share)) %>% # skip NLD & ROU adjustment
+               value = if_else(!GCAM_region_ID %in% c(47,50) | fuel != 'elec_solar CSP',
+                               value * final_share, value * fuel_share)) %>% # skip adjustment for solar fuel
         select(colnames(L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR_comm)),
       # The rest of the European regions
       L144.in_EJ_R_bld_serv_tech_F_Yh_EUR %>%
