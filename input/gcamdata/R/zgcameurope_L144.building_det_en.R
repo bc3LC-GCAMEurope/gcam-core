@@ -43,7 +43,6 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
              FILE = "gcam-europe/mappings/siec_to_fuel_map",
              FILE = "gcam-europe/nrg_bal_c",
              FILE = "gcam-europe/nrg_bal_c_corrSE",
-             FILE = "gcam-europe/mappings/hh_items_techs_map",
              "L101.in_EJ_R_bld_Fi_Yh_EUR",
              "L142.in_EJ_R_bld_F_Yh_EUR",
              "L143.HDDCDD_scen_RG3_Y",
@@ -96,7 +95,6 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     L143.HDDCDD_scen_RG3_Y <- get_data(all_data, "L143.HDDCDD_scen_RG3_Y") %>% filter_regions_europe()
     L143.HDDCDD_scen_ctry_Y <- get_data(all_data, "L143.HDDCDD_scen_ctry_Y") %>% filter_regions_europe()
     L107.en_consumption_shares_EUR <- get_data(all_data, "L107.en_consumption_shares_EUR")
-    hh_items_techs_map <- get_data(all_data, "gcam-europe/mappings/hh_items_techs_map")
 
     # Individual countries present in the HH DIAMOND db
     EU_12_15 <- c(GCAM32_to_EU %>%
@@ -104,15 +102,6 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
                              country_name == 'Croatia', # add Croatia manually, as it is present in the HH DIAMOND db
                            !GCAMEU_region %in% gcameurope.EUROSTAT_ADJCOUNTRIES) %>%
                     select(GCAMEU_region, GCAM_region_ID) %>% distinct())
-
-    # Manual fix: set Germany as Austria's proxy (HH DIAMOND db misses Austria)
-    L107.en_consumption_shares_EUR <- bind_rows(
-      L107.en_consumption_shares_EUR,
-      L107.en_consumption_shares_EUR %>%
-        filter(region == 'Germany') %>%
-        mutate(region = 'Austria',
-               GCAM_region_ID = 28)
-    )
 
     # ===================================================
 
@@ -1493,9 +1482,9 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       # EU-12 & EU-15 countries (with data in HH DIAMOND db)
       L144.in_EJ_R_bld_serv_tech_F_Yh_EUR %>%
         filter(grepl("resid", sector) & GCAM_region_ID %in% unique(EU_12_15$GCAM_region_ID)) %>%
-        left_join_error_no_match(hh_items_techs_map, by = 'fuel') %>%
         left_join(L107.en_consumption_shares_EUR %>%
-                    select(-region), by = c('consumption.category','GCAM_region_ID')) %>%
+                    select(-region), by = c("GCAM_region_ID", "fuel", "service", "subsector", "technology"),
+                  relationship = "many-to-many") %>%
         mutate(gcam.consumer = paste('resid EUR', decile, sep = '_'),
                value = value * share) %>%
         select(colnames(L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR_comm)),

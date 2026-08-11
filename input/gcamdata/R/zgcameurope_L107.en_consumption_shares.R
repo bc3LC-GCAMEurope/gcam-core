@@ -19,7 +19,9 @@ module_gcameurope_L107.en_consumption_shares <- function(command, ...) {
   MODULE_INPUTS <- c(
     FILE = "common/GCAM32_to_EU",
     FILE  = "gcam-europe/A07.hh_DIAMOND",
-    FILE  = "gcam-europe/A07.hh_DIAMOND_varList")
+    FILE  = "gcam-europe/A07.hh_DIAMOND_varList",
+    FILE  = "gcam-europe/A44.en_consumption_shares_hp_EUR",
+    FILE = "gcam-europe/mappings/hh_items_techs_map")
   MODULE_OUTPUTS <- c("L107.en_consumption_shares_EUR")
 
   if(command == driver.DECLARE_INPUTS) {
@@ -32,6 +34,8 @@ module_gcameurope_L107.en_consumption_shares <- function(command, ...) {
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
+
+    n_cons <- as.numeric(length(unique(A07.hh_DIAMOND$Decile)))
 
     # NOTE: we assume same population accros hh groups
     A07.hh_DIAMOND <- A07.hh_DIAMOND %>%
@@ -58,12 +62,38 @@ module_gcameurope_L107.en_consumption_shares <- function(command, ...) {
       # select relevant columns
       select(region, decile = Decile, consumption.category = Item, share, GCAM_region_ID)
 
-    # add "other" category with uniform shares
-    L107.en_consumption_shares_EUR <- A07.hh_DIAMOND %>%
-      select(region, decile, GCAM_region_ID) %>%
-      distinct() %>%
-      mutate(consumption.category = 'other', share = 0.1) %>%
-      bind_rows(A07.hh_DIAMOND)
+    # Load pre-computed shares for heatpump technologies
+    A07.hh_DIAMOND_hp <- A44.en_consumption_shares_hp_EUR %>%
+      mutate(GCAM_region_ID = as.integer(GCAM_region_ID))
+
+
+    L107.en_consumption_shares_EUR <- bind_rows(
+      A07.hh_DIAMOND,
+      A07.hh_DIAMOND_hp
+    )
+
+    # Manual fix: set Germany as Austria's proxy (HH DIAMOND db misses Austria)
+    L107.en_consumption_shares_EUR <- bind_rows(
+      L107.en_consumption_shares_EUR,
+      L107.en_consumption_shares_EUR %>%
+        filter(region == 'Germany') %>%
+        mutate(region = 'Austria',
+               GCAM_region_ID = 28)
+    )
+
+    # Expand shares to all technologies
+    L107.en_consumption_shares_EUR <- L107.en_consumption_shares_EUR %>%
+      left_join(hh_items_techs_map, by  = "consumption.category",
+                relationship = "many-to-many") %>%
+      select(-consumption.category)
+
+
+    # # If all shares equal to zero it is because the tech is not in the DIAMOND data
+    # # Build an artifact (equal split) to ensure all cmbinatios are present and avoid joining issues
+    L107.en_consumption_shares_EUR <- L107.en_consumption_shares_EUR %>%
+      group_by(GCAM_region_ID, fuel, service, subsector, technology) %>%
+      mutate(share = if (sum(share) == 0) 1/n_cons else share) %>%
+      ungroup()
 
 
     #===================================================
@@ -74,7 +104,7 @@ module_gcameurope_L107.en_consumption_shares <- function(command, ...) {
       add_comments("Only EU-12 & EU-15 countries") %>%
       add_legacy_name("L107.en_consumption_shares_EUR") %>%
       add_precursors("common/GCAM32_to_EU","gcam-europe/A07.hh_DIAMOND",
-                     "gcam-europe/A07.hh_DIAMOND_varList") ->
+                     "gcam-europe/A07.hh_DIAMOND_varList", "gcam-europe/A44.en_consumption_shares_hp_EUR") ->
       L107.en_consumption_shares_EUR
 
     return_data(MODULE_OUTPUTS)
