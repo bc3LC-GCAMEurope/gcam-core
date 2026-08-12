@@ -102,12 +102,6 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     L143.HDDCDD_scen_ctry_Y <- get_data(all_data, "L143.HDDCDD_scen_ctry_Y") %>% filter_regions_europe()
     L107.en_consumption_shares_EUR <- get_data(all_data, "L107.en_consumption_shares_EUR")
 
-    # Individual countries present in the HH DIAMOND db
-    EU_12_15 <- c(GCAM32_to_EU %>%
-                    filter(GCAM32_region %in% c('EU-12','EU-15') |
-                             country_name == 'Croatia', # add Croatia manually, as it is present in the HH DIAMOND db
-                           !GCAMEU_region %in% gcameurope.EUROSTAT_ADJCOUNTRIES) %>%
-                    select(GCAMEU_region, GCAM_region_ID) %>% distinct())
 
     # ===================================================
 
@@ -1484,21 +1478,15 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       filter(grepl("comm", sector)) %>%
       mutate(gcam.consumer = 'comm EUR')
 
-    L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR_resid <- rbind(
-      # EU-12 & EU-15 countries (with data in HH DIAMOND db)
-      L144.in_EJ_R_bld_serv_tech_F_Yh_EUR %>%
-        filter(grepl("resid", sector) & GCAM_region_ID %in% unique(EU_12_15$GCAM_region_ID)) %>%
+    L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR_resid <- L144.in_EJ_R_bld_serv_tech_F_Yh_EUR %>%
+        filter(grepl("resid", sector)) %>%
         left_join(L107.en_consumption_shares_EUR %>%
                     select(-region), by = c("GCAM_region_ID", "fuel", "service", "subsector", "technology"),
                   relationship = "many-to-many") %>%
         mutate(gcam.consumer = paste('resid EUR', decile, sep = '_'),
                value = value * share) %>%
-        select(colnames(L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR_comm)),
-      # The rest of the European regions
-      L144.in_EJ_R_bld_serv_tech_F_Yh_EUR %>%
-        filter(grepl("resid", sector) & !GCAM_region_ID %in% unique(EU_12_15$GCAM_region_ID)) %>%
-        mutate(gcam.consumer = 'resid EUR')
-    )
+        select(colnames(L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR_comm))
+
 
     L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR <- rbind(
       L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR_comm,
