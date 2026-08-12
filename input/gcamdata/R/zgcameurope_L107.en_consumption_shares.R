@@ -72,14 +72,32 @@ module_gcameurope_L107.en_consumption_shares <- function(command, ...) {
       A07.hh_DIAMOND_hp
     )
 
-    # Manual fix: set Germany as Austria's proxy (HH DIAMOND db misses Austria)
-    L107.en_consumption_shares_EUR <- bind_rows(
-      L107.en_consumption_shares_EUR,
-      L107.en_consumption_shares_EUR %>%
-        filter(region == 'Germany') %>%
-        mutate(region = 'Austria',
-               GCAM_region_ID = 28)
+    # Manual fix: set Germany as Austria's proxy (HH DIAMOND db misses Austria) + no data info
+
+    proxy_map <- tibble::tribble(
+      ~proxy_region, ~region,    ~GCAM_region_ID,
+      "Germany",     "Austria",   28,
+      "Croatia",     "Albania",   55,
+      "Croatia",     "Bosnia and Herzegovina",   57,
+      "Finland",     "Iceland",   58,
+      "Croatia",     "Macedonia",   59,
+      "Bulgaria",     "Moldova",   60,
+      "Sweden",     "Norway",   61,
+      "Croatia",     "Serbia and Montenegro",   62,
+      "Greece",     "Turkey",   64,
+      "Ireland",     "UK",   65,
+      "Bulgaria",     "Ukraine",   66,
     )
+
+    proxy_rows <- purrr::pmap_dfr(proxy_map, function(proxy_region, region, GCAM_region_ID) {
+      L107.en_consumption_shares_EUR %>%
+        filter(region == proxy_region) %>%
+        mutate(region = .env$region, GCAM_region_ID = .env$GCAM_region_ID)
+    })
+
+
+    L107.en_consumption_shares_EUR <- bind_rows(L107.en_consumption_shares_EUR, proxy_rows)
+
 
     # Expand shares to all technologies
     L107.en_consumption_shares_EUR <- L107.en_consumption_shares_EUR %>%
