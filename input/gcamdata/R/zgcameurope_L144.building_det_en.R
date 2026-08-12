@@ -92,6 +92,12 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     nrg_bal_c_corrSE <- get_data(all_data, "gcam-europe/nrg_bal_c_corrSE")
     L101.in_EJ_R_bld_Fi_Yh_EUR <- get_data(all_data, "L101.in_EJ_R_bld_Fi_Yh_EUR")
     L142.in_EJ_R_bld_F_Yh_EUR <- get_data(all_data, "L142.in_EJ_R_bld_F_Yh_EUR")
+    L142.in_EJ_R_bld_F_Yh_EUR_adj <- L142.in_EJ_R_bld_F_Yh_EUR %>%
+      complete(fuel = unique(A44.share_serv_fuel_EUR$fuel), nesting(GCAM_region_ID, sector, year), fill=list(value=0)) %>%
+      filter(grepl('comm',sector),
+             !grepl('traditional',fuel)) %>%
+      rbind(L142.in_EJ_R_bld_F_Yh_EUR %>%
+              filter(grepl('resid',sector)))
     L143.HDDCDD_scen_RG3_Y <- get_data(all_data, "L143.HDDCDD_scen_RG3_Y") %>% filter_regions_europe()
     L143.HDDCDD_scen_ctry_Y <- get_data(all_data, "L143.HDDCDD_scen_ctry_Y") %>% filter_regions_europe()
     L107.en_consumption_shares_EUR <- get_data(all_data, "L107.en_consumption_shares_EUR")
@@ -743,7 +749,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       replace_na(list(ServiceShare = 0)) %>%
       # Multiply these shares by the (final, adjusted) energy consumption by region / sector / fuel
       # Rows expanded due to years
-      left_join(L142.in_EJ_R_bld_F_Yh_EUR, by = c("GCAM_region_ID", "sector", "fuel"),
+      left_join(L142.in_EJ_R_bld_F_Yh_EUR_adj, by = c("GCAM_region_ID", "sector", "fuel"),
                 relationship = "many-to-many") %>%
       filter(year %in% HISTORICAL_YEARS) %>%
       mutate(value = ServiceShare * value,
@@ -1302,7 +1308,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       summarise(value = sum(value)) %>%
       ungroup()
 
-    check <- L142.in_EJ_R_bld_F_Yh_EUR %>%
+    check <- L142.in_EJ_R_bld_F_Yh_EUR_adj %>%
       filter(abs(value) > 1e-7) %>%
       left_join(L144.in_EJ_check,
                 by = c("GCAM_region_ID", "sector", "fuel", "year")) %>%
@@ -1395,7 +1401,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       summarise(value = sum(value)) %>%
       ungroup()
 
-    check <- L142.in_EJ_R_bld_F_Yh_EUR %>%
+    check <- L142.in_EJ_R_bld_F_Yh_EUR_adj %>%
       filter(abs(value) > 1e-7) %>%
       left_join(L144.in_EJ_check,
                 by = c("GCAM_region_ID", "sector", "fuel", "year")) %>%
@@ -1525,10 +1531,11 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       # Aggregate across technologies (by region, sector, service, fuel)
       group_by(GCAM_region_ID, sector, fuel, service, subsector, technology, year) %>%
       summarise(value = sum(value)) %>%
-      ungroup() %>%
-      # fix 0s in base service by setting 1e-6 to avoid future pb
-      mutate(value = ifelse(value == 0, 1e-6, value)) ->
+      ungroup() ->
       L144.base_service_EJ_serv_fuel_EUR
+    # %>%
+    #   # fix 0s in base service by setting 1e-6 to avoid future pb
+    #   mutate(value = ifelse(value == 0, 1e-6, value))
 
 
     L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR %>%
@@ -1539,10 +1546,11 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       # Aggregate across technologies (by region, sector, service, fuel)
       group_by(GCAM_region_ID, sector, fuel, service, subsector, technology, year, gcam.consumer) %>%
       summarise(value = sum(value)) %>%
-      ungroup() %>%
-      # fix 0s in base service by setting 1e-6 to avoid future pb
-      mutate(value = ifelse(value == 0, 1e-6, value)) ->
+      ungroup() ->
       L144.base_service_EJ_serv_fuel_hh_EUR
+    # %>%
+    #   # fix 0s in base service by setting 1e-6 to avoid future pb
+    #   mutate(value = ifelse(value == 0, 1e-6, value))
 
 
     # 3 Internal gains ##############################################################################################

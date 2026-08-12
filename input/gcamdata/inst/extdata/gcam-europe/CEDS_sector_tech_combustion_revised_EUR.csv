@@ -34,6 +34,8 @@ comm others EUR,coal,coal,bld_comm,coal
 comm cooling EUR,gas,gas,bld_comm,gas
 comm heating EUR,gas,gas,bld_comm,gas
 comm others EUR,gas,gas,bld_comm,gas
+comm heating EUR,gas,hydrogen,bld_comm,hydrogen
+comm others EUR,gas,hydrogen,bld_comm,hydrogen
 comm heating EUR,refined liquids,refined liquids,bld_comm,refined liquids
 comm heating EUR,water heat pump,air-water pump south,bld_comm,air-water pump south
 comm heating EUR,water heat pump,air-water pump middle south,bld_comm,air-water pump middle south
