@@ -61,6 +61,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     "L144.base_service_EJ_serv_fuel_hh_EUR",
     "L144.in_EJ_R_bld_serv_F_Yh_EUR",
     "L144.in_EJ_R_bld_serv_tech_F_Yh_EUR",
+    "L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR",
     "L144.end_use_eff_EUR",
     "L144.shell_eff_R_Y_EUR",
     "L144.NEcost_75USDGJ_EUR",
@@ -162,11 +163,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     L102.pcgdp_thous90USD_Scen_R_Y_EUR <- filter_regions_europe(L102.pcgdp_thous90USD_Scen_R_Y, region_ID_mapping = GCAM_region_names)
     L106.income_shares <- L106.income_distributions %>% filter_regions_europe()
     n_groups <- length(unique(L106.income_shares$gcam.consumer))
-    EU_12_15 <- c(GCAM32_to_EU %>%
-                    filter(GCAM32_region %in% c('EU-12','EU-15') |
-                             country_name == 'Croatia', # add Croatia manually, as it is present in the HH DIAMOND db
-                           !GCAMEU_region %in% gcameurope.EUROSTAT_ADJCOUNTRIES) %>%
-                    select(GCAMEU_region, GCAM_region_ID) %>% distinct())
+
 
     # Add a deflator for harmonizing GDPpc with prices
     def9075<-gdp_deflator(1990, 1975)
@@ -1245,8 +1242,6 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       left_join(L244.DeleteThermalService_pre %>% select(region,service=thermal.building.service.input,base.service), by = c("region", "service")) %>%
       #replace_na(list(base.service = 0)) %>%
       filter(complete.cases(.)) %>%
-      # adjust Eastern Africa to not delete modern services
-      mutate(base.service = if_else(grepl("Africa",region) & service == "resid heating modern EUR",1e-9,base.service)) %>%
       filter(base.service == 0) %>%
       select(-base.service) %>%
       rename(supplysector = service) %>%
@@ -1556,9 +1551,9 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     #------------------------------------------------------
     # The region-level service is allocated to different consumers using "shares"
-    # First, shares are estimated using the corresponding demand functions (either for modern or traditional fuels)
     # Shares are used to allocate observed regional eergy/service data across subregional consumers
     # L244.GenericBaseService_EUR and L244.ThermalBaseService_EUR are adjusted to have service data at consumer level within each region
+    # We still need to compute the L244.GenericShares_pre to estimate the adder
 
     # L244.GenericBaseService_EUR adjusted -- non EU12 & EU15 regions
     L244.GenericBaseService_pre<-L244.GenericBaseService_EUR %>%
@@ -1610,60 +1605,6 @@ module_gcameurope_L244.building_det <- function(command, ...) {
                             serv)) %>%
       mutate(serv = if_else(afford == 0, 0, serv))
 
-    # Calculate subtotals (for shares)
-    L244.GenericShares_pre_subt<-L244.GenericShares_pre %>%
-      group_by(region,year,building.service.input) %>%
-      summarise(serv = sum(serv)) %>%
-      ungroup() %>%
-      rename(serv_aggReg = serv)
-
-    # Merge the subtotals to the estimated values to calculate %shares for each consumer group, in each region and period
-    L244.GenericShares_EUR_noEU1215<- L244.GenericShares_pre %>%
-      left_join_error_no_match(L244.GenericShares_pre_subt
-                               , by=c("region","building.service.input","year")) %>%
-      mutate(gen_share = serv / serv_aggReg) %>%
-      select(region,gcam.consumer,nodeInput,building.node.input,building.service.input,year,gen_share) %>%
-      replace_na(list(gen_share = 0)) %>%
-      # Check
-      group_by(region,nodeInput,building.node.input,building.service.input,year) %>%
-      mutate(agg_gen_share = sum(gen_share)) %>%
-      ungroup()
-
-
-    # L244.GenericBaseService_EUR adjusted -- EU12 & EU15 regions
-    L244.GenericShares_EUR_EU1215<-L244.GenericBaseService_hh_EUR %>%
-      group_by(region, year, nodeInput, building.node.input, building.service.input) %>%
-      mutate(agg_value = sum(base.service)) %>%
-      ungroup() %>%
-      mutate(gen_share = base.service/agg_value) %>%
-      replace_na(list(gen_share = 0)) %>%
-      # Check
-      group_by(region,nodeInput,building.node.input,building.service.input,year) %>%
-      mutate(agg_gen_share = sum(gen_share)) %>%
-      ungroup() %>%
-      select(-base.service, -agg_value)
-
-    # L244.GenericBaseService_EUR adjusted -- all regions
-    L244.GenericShares_EUR <-rbind(
-      L244.GenericShares_EUR_EU1215 %>%
-        filter(region %in% EU_12_15$GCAMEU_region),
-      L244.GenericShares_EUR_noEU1215 %>%
-        filter(!region %in% EU_12_15$GCAMEU_region)
-    )
-
-    L244.GenericBaseService_EUR<-L244.GenericBaseService_pre %>%
-      select(region,gcam.consumer,nodeInput,building.node.input,building.service.input,year, base.service) %>%
-      filter(grepl("resid",nodeInput)) %>%
-      repeat_add_columns(tibble(group=unique(L106.income_shares$gcam.consumer))) %>%
-      unite(gcam.consumer,c("gcam.consumer","group"),sep = "_") %>%
-      bind_rows(L244.GenericBaseService_pre %>%
-                  select(region,gcam.consumer,nodeInput,building.node.input,building.service.input,year,base.service) %>%
-                  filter(grepl("comm",nodeInput))) %>%
-      left_join_error_no_match(L244.GenericShares_EUR %>% select(-agg_gen_share)
-                               , by = c("region", "gcam.consumer", "nodeInput", "building.node.input", "building.service.input","year")) %>%
-      mutate(base.service = base.service * gen_share) %>%
-      select(-gen_share) %>%
-      mutate(base.service = round(base.service, energy.DIGITS_SERVICE))
 
 
     # L244.ThermalBaseService_EUR adjusted -- non EU12 & EU15 regions
@@ -1721,60 +1662,26 @@ module_gcameurope_L244.building_det <- function(command, ...) {
                             serv)) %>%
       mutate(serv = if_else(afford == 0, 0, serv))
 
-    # Calculate subtotals (for shares)
-    L244.ThermalShares_pre_subt<-L244.ThermalShares_pre %>%
-      group_by(region,year,thermal.building.service.input) %>%
-      summarise(serv = sum(serv)) %>%
-      ungroup() %>%
-      rename(serv_aggReg = serv)
 
-    # Merge the subtotals to the estimated values to calculate %shares for each consumer group, in each region and period
-    L244.ThermalShares_EUR_noEU1215<- L244.ThermalShares_pre %>%
-      left_join(L244.ThermalShares_pre_subt
-                , by=c("region","thermal.building.service.input","year")) %>%
-      mutate(thermal_share = serv / serv_aggReg) %>%
-      select(region,gcam.consumer,nodeInput,building.node.input,thermal.building.service.input,year,thermal_share) %>%
-      replace_na(list(thermal_share = 0)) %>%
-      # Check
-      group_by(region,nodeInput,building.node.input,thermal.building.service.input,year) %>%
-      mutate(agg_thermal_share = sum(thermal_share)) %>%
-      ungroup()
+    # HERE WE CALCULATE THE THERMAL AND GEENERIC SERVICES BASED ON L144 INFO:
 
-    # L244.ThermalBaseService_EUR adjusted -- EU12 & EU15 regions
-    L244.ThermalShares_EUR_EU1215<-L244.ThermalBaseService_hh_EUR %>%
-      group_by(region, year, nodeInput, building.node.input, thermal.building.service.input) %>%
-      mutate(agg_value = sum(base.service)) %>%
-      ungroup() %>%
-      mutate(thermal_share = base.service/agg_value) %>%
-      replace_na(list(thermal_share = 0)) %>%
-      # Check
-      group_by(region,nodeInput,building.node.input,thermal.building.service.input,year) %>%
-      mutate(agg_thermal_share = sum(thermal_share)) %>%
-      ungroup() %>%
-      select(-base.service, -agg_value)
-
-    # L244.ThermalBaseService_EUR adjusted -- all regions
-    L244.ThermalShares_EUR <-rbind(
-      L244.ThermalShares_EUR_EU1215 %>%
-        filter(region %in% EU_12_15$GCAMEU_region),
-      L244.ThermalShares_EUR_noEU1215 %>%
-        filter(!region %in% EU_12_15$GCAMEU_region)
-    )
-
-    L244.ThermalBaseService_EUR<-L244.ThermalBaseService_pre %>%
-      select(region,gcam.consumer,nodeInput,building.node.input,thermal.building.service.input,year, base.service) %>%
-      filter(grepl("resid",nodeInput)) %>%
-      repeat_add_columns(tibble(group=unique(L106.income_shares$gcam.consumer))) %>%
-      unite(gcam.consumer,c("gcam.consumer","group"),sep = "_") %>%
-      bind_rows(L244.ThermalBaseService_pre %>%
-                  select(region,gcam.consumer,nodeInput,building.node.input,thermal.building.service.input,year ,base.service) %>%
-                  filter(grepl("comm",nodeInput))) %>%
-      left_join_error_no_match(L244.ThermalShares_EUR %>%
-                                 select(-agg_thermal_share)
-                               , by = c("region", "gcam.consumer", "nodeInput", "building.node.input", "thermal.building.service.input","year")) %>%
-      mutate(base.service = base.service * thermal_share) %>%
-      select(-thermal_share) %>%
+    L244.Service_EUR <- L144.base_service_EJ_serv_hh_EUR %>%
+      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
+      filter(year %in% MODEL_BASE_YEARS) %>%
+      select(region, gcam.consumer, building.service.input = service, year, base.service = value) %>%
+      mutate(nodeInput = str_extract(gcam.consumer, "^[^_]+"),
+             building.node.input = if_else(grepl("resid", building.service.input), "resid_building", "comm_building")) %>%
       mutate(base.service = round(base.service, energy.DIGITS_SERVICE))
+
+
+    L244.GenericBaseService_EUR <- L244.Service_EUR %>%
+      filter(building.service.input %in% generic_services)
+
+    L244.ThermalBaseService_EUR <- L244.Service_EUR %>%
+      filter(building.service.input %in% thermal_services) %>%
+      rename(thermal.building.service.input = building.service.input)
+
+
 
     #------------------------------------------------------
     # Write a dataframe with all parameters for traditional fuels:
@@ -1782,9 +1689,15 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       filter(grepl("resid", nodeInput),
              !grepl("modern", building.service.input)) %>%
       select(-base.service) %>%
-      mutate(b1 = b1_coal_oth,
-             b2 = b2_coal_oth,
-             b3 = b3_coal_oth) %>%
+      mutate(b1 = if_else(grepl("cooking", building.service.input), b1_coal_cooking, NA_real_),
+             b1 = if_else(grepl("hot water", building.service.input), b1_coal_hotwater, b1),
+             b1 = if_else(grepl("others", building.service.input), b1_coal_oth, b1),
+             b2 = if_else(grepl("cooking", building.service.input), b2_coal_cooking, NA_real_),
+             b2 = if_else(grepl("hot water", building.service.input), b2_coal_hotwater, b2),
+             b2 = if_else(grepl("others", building.service.input), b2_coal_oth, b2),
+             b3 = if_else(grepl("cooking", building.service.input), b3_coal_cooking, NA_real_),
+             b3 = if_else(grepl("hot water", building.service.input), b3_coal_hotwater, b3),
+             b3 = if_else(grepl("others", building.service.input), b3_coal_oth, b3)) %>%
       separate(gcam.consumer, c("gcam.consumer", "group"), sep = '_') %>%
       mutate(gcam.consumer = paste0(gcam.consumer, "_", group),
              building.service.input = paste0(building.service.input, "_", group)) %>%
@@ -2141,40 +2054,34 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     L244.StubTechIntGainOutputRatio_EUR<-add.cg(L244.StubTechIntGainOutputRatio_pre)
 
     # Finally need to calibrate the different technologies at consumer-group level
-    shares_resid<-bind_rows(L244.GenericShares_EUR %>% rename(share = gen_share,
-                                                              agg.share = agg_gen_share,
-                                                              adj_sector = building.service.input),
-                            L244.ThermalShares_EUR %>% rename(adj_sector = thermal.building.service.input,
-                                                              share = thermal_share,
-                                                              agg.share = agg_thermal_share)) %>%
-      filter(grepl("resid",gcam.consumer)) %>%
-      separate(gcam.consumer,c("tmp","group"),sep = "_",remove = F) %>%
-      select(region,year,group,adj_sector,share)
+    L244.StubTechCalInput_bld_pre_hh <- L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR %>%
+      filter(year %in% MODEL_BASE_YEARS) %>%
+      rename(calibrated.value = value) %>%
+      mutate(calibrated.value = round(calibrated.value, energy.DIGITS_CALOUTPUT)) %>%
+      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
+      left_join_error_no_match(calibrated_techs_bld_det_EUR %>%
+                                 select(-gcam.consumer),
+                               by = c("sector", "service", "fuel", "subsector", "technology")) %>% # to have minicam.energy.input, gcam.consumer... and other columns
+      mutate(share.weight.year = year,
+             stub.technology = technology) %>%
+      group_by(region, supplysector, subsector, year) %>%
+      mutate(subs.share.weight = sum(calibrated.value)) %>%
+      ungroup() %>%
+      # If aggregated calibrated value > 0, set subsector shareweight to 1, else set to 0
+      mutate(subs.share.weight = if_else(subs.share.weight > 0, 1, 0),
+             # If calibrated value for specific technology > 0 , set tech shareweight to 1, else set to 0
+             tech.share.weight = if_else(calibrated.value > 0, 1, 0)) %>%
+      select(LEVEL2_DATA_NAMES[["StubTechCalInput"]], 'gcam.consumer')
 
-    L244.StubTechCalInput_bld_comm<- L244.StubTechCalInput_bld_pre %>%
+
+    L244.StubTechCalInput_bld_comm<- L244.StubTechCalInput_bld_pre_hh %>%
       filter(grepl("comm",supplysector))
 
-    L244.StubTechCalInput_bld_resid2<-add.cg(L244.StubTechCalInput_bld_pre) %>%
+    L244.StubTechCalInput_bld_resid <- L244.StubTechCalInput_bld_pre_hh %>%
       filter(grepl("resid",supplysector)) %>%
-      separate(supplysector,c("adj_sector","group"),sep = "_",remove = F) %>%
-      # use left_join due to lack of heating in Indonesia
-      left_join(shares_resid, by=c("region","year","group","adj_sector")) %>%
-      mutate(share = if_else(is.na(share),0,share)) %>%
-      mutate(calibrated.value = calibrated.value * share) %>%
-      select(LEVEL2_DATA_NAMES[["StubTechCalInput"]])
-
-    # complete with 0s the missing StubTechs using L244.StubTechEff_bld_EUR
-    L244.StubTechCalInput_bld_resid <- L244.StubTechEff_bld_EUR %>%
-      filter(year %in% MODEL_BASE_YEARS,
-             grepl('resid', supplysector)) %>%
-      left_join(L244.StubTechCalInput_bld_resid2, by = c('region','supplysector','subsector','stub.technology','year','minicam.energy.input')) %>%
-      mutate(calibrated.value = if_else(is.na(calibrated.value), 0, calibrated.value)) %>%
-      mutate(share.weight.year = if_else(is.na(share.weight.year), year, share.weight.year)) %>%
-      mutate(tech.share.weight = if_else(is.na(tech.share.weight), 0, tech.share.weight)) %>%
-      mutate(gcam.consumer = paste0('resid EUR', str_extract(supplysector, "(?<=EUR).*"))) %>%
-      group_by(region, year, supplysector, subsector) %>%
-      mutate(subs.share.weight = if_else(sum(calibrated.value, na.rm = T) > 0, 1, 0)) %>%
-      ungroup()
+      separate(gcam.consumer,c("adj","group"), sep = "_",remove = F) %>%
+      mutate(supplysector = paste0(supplysector,"_",group)) %>%
+      select(LEVEL2_DATA_NAMES[["StubTechCalInput"]], 'gcam.consumer')
 
 
     L244.StubTechCalInput_bld_EUR<-bind_rows(L244.StubTechCalInput_bld_resid,L244.StubTechCalInput_bld_comm)
@@ -2322,6 +2229,33 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       mutate(base.density = base.service / base.building.size) %>%
       replace_na(list(base.density = 0)) %>%
       select(LEVEL2_DATA_NAMES[["ThermalBaseDens"]])
+
+    #------------------------------------------------------
+    # Finally, I need to create some GenericShares and Thermal shares by sector for the emissions
+
+    L244.GenericShares_EUR <- L244.GenericBaseService_hh_EUR %>%
+      group_by(region, year, nodeInput, building.node.input, building.service.input) %>%
+      mutate(agg_value = sum(base.service)) %>%
+      ungroup() %>%
+      mutate(gen_share = base.service/agg_value) %>%
+      replace_na(list(gen_share = 0)) %>%
+      # Check
+      group_by(region,nodeInput,building.node.input,building.service.input,year) %>%
+      mutate(agg_gen_share = sum(gen_share)) %>%
+      ungroup() %>%
+      select(-base.service, -agg_value)
+
+    L244.ThermalShares_EUR <-  L244.ThermalBaseService_hh_EUR %>%
+      group_by(region, year, nodeInput, building.node.input, thermal.building.service.input) %>%
+      mutate(agg_value = sum(base.service)) %>%
+      ungroup() %>%
+      mutate(thermal_share = base.service/agg_value) %>%
+      replace_na(list(thermal_share = 0)) %>%
+      # Check
+      group_by(region,nodeInput,building.node.input,thermal.building.service.input,year) %>%
+      mutate(agg_thermal_share = sum(thermal_share)) %>%
+      ungroup() %>%
+      select(-base.service, -agg_value)
 
 
     #===================================================

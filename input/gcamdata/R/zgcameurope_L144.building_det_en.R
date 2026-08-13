@@ -54,6 +54,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
              "L144.shell_eff_R_Y_EUR",
              "L144.in_EJ_R_bld_serv_F_Yh_EUR",
              "L144.in_EJ_R_bld_serv_tech_F_Yh_EUR",
+             "L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR",
              "L144.NEcost_75USDGJ_EUR",
              "L144.internal_gains_EUR",
              "L144.base_service_EJ_serv_EUR",
@@ -1638,6 +1639,18 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
                      "gcam-europe/calibrated_techs_bld_det_EUR", "gcam-europe/A44.cost_efficiency_EUR") ->
       L144.in_EJ_R_bld_serv_tech_F_Yh_EUR
 
+    L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR %>%
+      add_title("Building energy consumption by GCAM region ID / sector / fuel / service / technology / household / historical year") %>%
+      add_units("EJ/yr") %>%
+      add_comments("Energy consumption by service is calculated by allocating energy consumption across services using calculated service shares") %>%
+      add_legacy_name("L144.in_EJ_R_bld_serv_F_Yh_EUR") %>%
+      add_precursors("energy/A_regions", "L142.in_EJ_R_bld_F_Yh_EUR", "gcam-europe/A44.share_serv_fuel_EUR", "L101.in_EJ_R_bld_Fi_Yh_EUR",
+                     "L143.HDDCDD_scen_RG3_Y", "L143.HDDCDD_scen_ctry_Y", "common/GCAM32_to_EU", "gcam-europe/estat_nrg_ind_ahbtc_filtered_en",
+                     "gcam-europe/mappings/geo_to_climate_map", "gcam-europe/mappings/geo_to_iso_map", "gcam-europe/mappings/heatpump_to_tech_map",
+                     "gcam-europe/calibrated_techs_bld_det_EUR", "gcam-europe/A44.cost_efficiency_EUR",
+                     "gcam-europe/nrg_bal_c", "gcam-europe/nrg_bal_c_corrSE") ->
+      L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR
+
     L144.NEcost_75USDGJ_EUR %>%
       add_title("Building Non energy cost by supplysector / subsector / technology") %>%
       add_units("1975$/GJ-service") %>%
@@ -1705,7 +1718,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     return_data(L144.end_use_eff_EUR, L144.shell_eff_R_Y_EUR, L144.in_EJ_R_bld_serv_F_Yh_EUR,
                 L144.in_EJ_R_bld_serv_tech_F_Yh_EUR, L144.NEcost_75USDGJ_EUR, L144.internal_gains_EUR,
                 L144.base_service_EJ_serv_EUR, L144.base_service_EJ_serv_fuel_EUR,
-                L144.base_service_EJ_serv_hh_EUR, L144.base_service_EJ_serv_fuel_hh_EUR, L144.prices_bld_EUR)
+                L144.base_service_EJ_serv_hh_EUR, L144.base_service_EJ_serv_fuel_hh_EUR, L144.prices_bld_EUR,
+                L144.in_EJ_R_bld_serv_tech_F_Yh_hh_EUR)
   } else {
     stop("Unknown command")
   }
