@@ -2077,11 +2077,36 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     L244.StubTechCalInput_bld_comm<- L244.StubTechCalInput_bld_pre_hh %>%
       filter(grepl("comm",supplysector))
 
-    L244.StubTechCalInput_bld_resid <- L244.StubTechCalInput_bld_pre_hh %>%
+    L244.StubTechCalInput_bld_resid2<-L244.StubTechCalInput_bld_pre_hh %>%
       filter(grepl("resid",supplysector)) %>%
-      separate(gcam.consumer,c("adj","group"), sep = "_",remove = F) %>%
-      mutate(supplysector = paste0(supplysector,"_",group)) %>%
-      select(LEVEL2_DATA_NAMES[["StubTechCalInput"]], 'gcam.consumer')
+      mutate(supplysector = paste0(supplysector, str_extract(gcam.consumer, "(?<=EUR).*"))) %>%
+      mutate(has_decile = str_detect(supplysector, "_d([1-9]|10)$")) %>%
+      # split the data into two regions with gcam deciles and regions without.
+      # repeat the rows for each decile in the second group
+      dplyr::group_split(has_decile) %>%
+      purrr::map_df(~ {
+        if (unique(.x$has_decile) == FALSE) {
+          .x %>%
+            add.cg()
+        } else {
+          .x
+        }
+      }) %>%
+      # clean up the helper column
+      select(-has_decile)
+
+    # complete with 0s the missing StubTechs using L244.StubTechEff_bld_EUR
+    L244.StubTechCalInput_bld_resid <- L244.StubTechEff_bld_EUR %>%
+      filter(year %in% MODEL_BASE_YEARS,
+             grepl('resid', supplysector)) %>%
+      left_join(L244.StubTechCalInput_bld_resid2, by = c('region','supplysector','subsector','stub.technology','year','minicam.energy.input')) %>%
+      mutate(calibrated.value = if_else(is.na(calibrated.value), 0, calibrated.value)) %>%
+      mutate(share.weight.year = if_else(is.na(share.weight.year), year, share.weight.year)) %>%
+      mutate(tech.share.weight = if_else(is.na(tech.share.weight), 0, tech.share.weight)) %>%
+      mutate(gcam.consumer = paste0('resid EUR', str_extract(supplysector, "(?<=EUR).*"))) %>%
+      group_by(region, year, supplysector, subsector) %>%
+      mutate(subs.share.weight = if_else(sum(calibrated.value, na.rm = T) > 0, 1, 0)) %>%
+      ungroup()
 
 
     L244.StubTechCalInput_bld_EUR<-bind_rows(L244.StubTechCalInput_bld_resid,L244.StubTechCalInput_bld_comm)
