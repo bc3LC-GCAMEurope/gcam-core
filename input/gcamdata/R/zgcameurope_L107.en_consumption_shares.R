@@ -63,8 +63,17 @@ module_gcameurope_L107.en_consumption_shares <- function(command, ...) {
       select(region, decile = Decile, consumption.category = Item, share, GCAM_region_ID)
 
     # Load pre-computed shares for heatpump technologies
+
+    # First select the model to estimate the shares: c("liquidity", "blend", "smoothed", "engel", "quadratic")
+    hp_model <- "smoothed"
+
     A07.hh_DIAMOND_hp <- A44.en_consumption_shares_hp_EUR %>%
-      mutate(GCAM_region_ID = as.integer(GCAM_region_ID))
+      mutate(GCAM_region_ID = as.integer(GCAM_region_ID)) %>%
+      select(-engel_eps) %>%
+      pivot_longer(cols = -c(region, decile, GCAM_region_ID, consumption.category),
+                   names_to = "model", values_to = "share") %>%
+      filter(model == hp_model) %>%
+      select(-model)
 
 
     L107.en_consumption_shares_EUR <- bind_rows(
