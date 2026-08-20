@@ -2291,7 +2291,8 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_comments("A44.gcam_consumer_EUR written to all regions") %>%
       add_comments("subregional.population.share and subregional.income.share set to 1") %>%
       add_legacy_name("L244.SubregionalShares_EUR") %>%
-      add_precursors("common/GCAM_region_names", "gcam-europe/A44.gcam_consumer_EUR") ->
+      add_precursors("common/GCAM_region_names", "gcam-europe/A44.gcam_consumer_EUR",
+                     "L106.income_distributions", "L101.Pop_thous_R_Yh", "L102.pcgdp_thous90USD_Scen_R_Y") ->
       L244.SubregionalShares_EUR
 
     L244.PriceExp_IntGains_EUR %>%
@@ -2364,8 +2365,9 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_legacy_name("L244.GompFnParam_EUR") %>%
       add_precursors("common/GCAM_region_names",
                      "L144.flsp_param_EUR",
-                     "L102.pcgdp_thous90USD_Scen_R_Y_EUR", "L101.Pop_thous_R_Yh_EUR",
-                     "L144.flsp_bm2_R_res_Yh_EUR","L144.hab_land_flsp_fin_EUR") ->
+                     "L102.pcgdp_thous90USD_Scen_R_Y", "L101.Pop_thous_R_Yh",
+                     "L144.flsp_bm2_R_res_Yh_EUR", "L144.hab_land_flsp_fin_EUR",
+                     "L106.income_distributions") ->
       L244.GompFnParam_EUR
 
     L244.ThermalBaseService_EUR %>%
@@ -2373,8 +2375,10 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_units("EJ/yr") %>%
       add_comments("L144.base_service_EJ_serv_EUR rounded and renamed") %>%
       add_legacy_name("L244.ThermalBaseService_EUR") %>%
-      add_precursors("gcam-europe/A44.internal_gains_EUR", "gcam-europe/A44.sector_EUR", "L144.base_service_EJ_serv_EUR",
-                     "gcam-europe/calibrated_techs_bld_det_EUR", "common/GCAM_region_names") ->
+      add_precursors("gcam-europe/A44.internal_gains_EUR", "gcam-europe/A44.sector_EUR",
+                     "L144.base_service_EJ_serv_EUR", "L144.base_service_EJ_serv_hh_EUR",
+                     "gcam-europe/calibrated_techs_bld_det_EUR", "common/GCAM_region_names",
+                     "L106.income_distributions") ->
       L244.ThermalBaseService_EUR
 
     L244.GenericBaseService_EUR %>%
@@ -2382,7 +2386,10 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_units("EJ/yr") %>%
       add_comments("L144.base_service_EJ_serv_EUR rounded and renamed") %>%
       add_legacy_name("L244.GenericBaseService_EUR") %>%
-      same_precursors_as(L244.ThermalBaseService_EUR) ->
+      add_precursors("gcam-europe/A44.internal_gains_EUR", "gcam-europe/A44.sector_EUR",
+                     "L144.base_service_EJ_serv_EUR", "L144.base_service_EJ_serv_hh_EUR",
+                     "gcam-europe/calibrated_techs_bld_det_EUR", "common/GCAM_region_names",
+                     "L106.income_distributions") ->
       L244.GenericBaseService_EUR
 
     L244.ThermalServiceSatiation_EUR %>%
@@ -2482,7 +2489,9 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_units("Unitless") %>%
       add_comments("Shell conductance from L144.shell_eff_R_Y_EUR") %>%
       add_legacy_name("L244.ShellConductance_bld_EUR") %>%
-      add_precursors("L144.shell_eff_R_Y_EUR", "common/GCAM_region_names", "gcam-europe/A44.gcam_consumer_EUR") ->
+      add_precursors("L144.shell_eff_R_Y_EUR", "common/GCAM_region_names",
+                     "gcam-europe/A44.gcam_consumer_EUR", "L106.income_distributions",
+                     "L102.pcgdp_thous90USD_Scen_R_Y", "L101.Pop_thous_R_Yh") ->
       L244.ShellConductance_bld_EUR
 
     L244.Supplysector_bld_EUR %>%
@@ -2659,7 +2668,9 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_units("Unitless") %>%
       add_comments("Calculated using pc_thous") %>%
       add_legacy_name("L244.GenericTradFuelParams_EUR") %>%
-      add_precursors("common/GCAM_region_names","L144.base_service_EJ_serv_fuel_EUR") ->
+      add_precursors("common/GCAM_region_names", "L144.base_service_EJ_serv_fuel_EUR",
+                     "L102.pcgdp_thous90USD_Scen_R_Y", "L144.prices_bld_EUR",
+                     "L144.flsp_bm2_R_res_Yh_EUR", "L106.income_distributions") ->
       L244.GenericTradFuelParams_EUR
 
     L244.ThermalTradFuelParams_EUR %>%
@@ -2667,7 +2678,9 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_units("Unitless") %>%
       add_comments("Calculated using pc_thous") %>%
       add_legacy_name("L244.ThermalTradFuelParams_EUR") %>%
-      add_precursors("common/GCAM_region_names","L144.base_service_EJ_serv_fuel_EUR") ->
+      add_precursors("common/GCAM_region_names", "L144.base_service_EJ_serv_fuel_EUR",
+                     "L102.pcgdp_thous90USD_Scen_R_Y", "L144.prices_bld_EUR",
+                     "L144.flsp_bm2_R_res_Yh_EUR", "L106.income_distributions") ->
       L244.ThermalTradFuelParams_EUR
 
     L244.ThermalShares_EUR %>%
@@ -2675,7 +2688,9 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_units("%") %>%
       add_comments("Calculated using pc_thous") %>%
       add_legacy_name("L244.ThermalShares_EUR") %>%
-      add_precursors("common/GCAM_region_names","L144.in_EJ_R_bld_serv_tech_F_Yh_EUR") ->
+      add_precursors("common/GCAM_region_names", "L144.in_EJ_R_bld_serv_tech_F_Yh_EUR",
+                     "L144.base_service_EJ_serv_hh_EUR", "gcam-europe/calibrated_techs_bld_det_EUR",
+                     "L106.income_distributions") ->
       L244.ThermalShares_EUR
 
     L244.GenericShares_EUR %>%
@@ -2683,7 +2698,9 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_units("%") %>%
       add_comments("Calculated using pc_thous") %>%
       add_legacy_name("L244.GenericShares_EUR") %>%
-      add_precursors("common/GCAM_region_names","L144.in_EJ_R_bld_serv_tech_F_Yh_EUR") ->
+      add_precursors("common/GCAM_region_names", "L144.in_EJ_R_bld_serv_tech_F_Yh_EUR",
+                     "L144.base_service_EJ_serv_hh_EUR", "gcam-europe/calibrated_techs_bld_det_EUR",
+                     "L106.income_distributions") ->
       L244.GenericShares_EUR
 
     L244.GlobalTechTrackCapital_bld_EUR %>%
@@ -2698,7 +2715,9 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_units("annual rate") %>%
       add_comments("Lifetime, half.life and steepness from A44.globaltech_retirement_EUR") %>%
       add_legacy_name("L244.GlobalTechSCurve_bld_EUR") %>%
-      add_precursors("gcam-europe/A44.globaltech_retirement_EUR") ->
+      add_precursors("gcam-europe/A44.globaltech_retirement_EUR",
+                     "gcam-europe/A44.cost_efficiency_EUR",
+                     "L106.income_distributions") ->
       L244.GlobalTechSCurve_bld_EUR
 
     L244.GlobalTechProfitShutdown_bld_EUR %>%
@@ -2706,7 +2725,8 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_units("Unitless, used to determine shape of the function defining the relationship between shutdown rate and profitability") %>%
       add_comments("Filters for any technologies that use a profit-based shutdown parameter") %>%
       add_legacy_name("L244.GlobalTechProfitShutdown_bld_EUR") %>%
-      add_precursors("gcam-europe/A44.cost_efficiency_EUR") ->
+      add_precursors("gcam-europe/A44.cost_efficiency_EUR",
+                     "L106.income_distributions") ->
       L244.GlobalTechProfitShutdown_bld_EUR
 
     L244.GlobalTechLifetime_bld_EUR %>%
@@ -2714,7 +2734,8 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_units("Lifetime in years") %>%
       add_comments("Adds lifetime for all techs") %>%
       add_legacy_name("L244.GlobalTechLifetime_bld_EUR") %>%
-      add_precursors("gcam-europe/A44.cost_efficiency_EUR") ->
+      add_precursors("gcam-europe/A44.cost_efficiency_EUR",
+                     "L106.income_distributions") ->
       L244.GlobalTechLifetime_bld_EUR
 
     if(exists("L244.DeleteGenericService_EUR")) {
@@ -2746,7 +2767,8 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_units("$1975/GJ") %>%
       add_comments("Prices for generic services") %>%
       add_legacy_name("L244.GenericServicePrice_EUR") %>%
-      add_precursors("common/GCAM_region_names","L144.prices_bld_EUR") ->
+      add_precursors("common/GCAM_region_names", "L144.prices_bld_EUR",
+                     "gcam-europe/A44.gcam_consumer_EUR") ->
       L244.GenericServicePrice_EUR
 
     L244.ThermalServicePrice_EUR %>%
@@ -2754,7 +2776,8 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_units("$1975/GJ") %>%
       add_comments("Prices for thermal services") %>%
       add_legacy_name("L244.ThermalServicePrice_EUR") %>%
-      add_precursors("common/GCAM_region_names","L144.prices_bld_EUR") ->
+      add_precursors("common/GCAM_region_names", "L144.prices_bld_EUR",
+                     "gcam-europe/A44.gcam_consumer_EUR") ->
       L244.ThermalServicePrice_EUR
 
     L244.GenericBaseDens_EUR %>%
@@ -2762,7 +2785,10 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_units("$1975/GJ") %>%
       add_comments("Service density for generic services") %>%
       add_legacy_name("L244.GenericBaseDens_EUR") %>%
-      add_precursors("common/GCAM_region_names","L144.in_EJ_R_bld_serv_tech_F_Yh_EUR","L144.flsp_bm2_R_res_Yh_EUR") ->
+      add_precursors("common/GCAM_region_names", "L144.base_service_EJ_serv_hh_EUR",
+                     "gcam-europe/calibrated_techs_bld_det_EUR",
+                     "L144.flsp_bm2_R_res_Yh_EUR", "L144.flsp_bm2_R_comm_Yh_EUR",
+                     "L106.income_distributions") ->
       L244.GenericBaseDens_EUR
 
     L244.ThermalBaseDens_EUR %>%
@@ -2770,9 +2796,11 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_units("$1975/GJ") %>%
       add_comments("Service density for thermal services") %>%
       add_legacy_name("L244.ThermalBaseDens_EUR") %>%
-      add_precursors("common/GCAM_region_names","L144.in_EJ_R_bld_serv_tech_F_Yh_EUR","L144.flsp_bm2_R_res_Yh_EUR") ->
+      add_precursors("common/GCAM_region_names", "L144.base_service_EJ_serv_hh_EUR",
+                     "gcam-europe/calibrated_techs_bld_det_EUR",
+                     "L144.flsp_bm2_R_res_Yh_EUR", "L144.flsp_bm2_R_comm_Yh_EUR",
+                     "L106.income_distributions") ->
       L244.ThermalBaseDens_EUR
-
 
     return_data(MODULE_OUTPUTS)
 
