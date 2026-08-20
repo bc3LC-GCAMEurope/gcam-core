@@ -1,0 +1,46 @@
+# File: hh_items_techs_map.csv
+# Title: Mapping from EU HH database items to Eurostat technologies
+# Units: NA
+# Source: BC3
+# Column types: cccccc
+# ----------
+fuel,service,supplysector,subsector,technology,consumption.category
+biomass,resid cooking modern EUR,resid cooking modern EUR,biomass,biomass,solid fuels
+biomass,resid heating modern EUR,resid heating modern EUR,biomass,biomass,solid fuels
+biomass,resid hot water modern EUR,resid hot water modern EUR,biomass,biomass,solid fuels
+biomass,resid others modern EUR,resid others modern EUR,biomass,biomass,solid fuels
+coal,resid cooking coal EUR,resid cooking coal EUR,coal,coal,solid fuels
+coal,resid heating coal EUR,resid heating coal EUR,coal,coal,solid fuels
+coal,resid hot water coal EUR,resid hot water coal EUR,coal,coal,solid fuels
+coal,resid others coal EUR,resid others coal EUR,coal,coal,solid fuels
+elec_solar CSP,resid heating modern EUR,resid heating modern EUR,water heat pump,solar thermal,solar
+elec_solar CSP,resid hot water modern EUR,resid hot water modern EUR,water heat pump,solar thermal,solar
+electricity,resid cooking modern EUR,resid cooking modern EUR,electricity,electricity,electricity
+electricity,resid cooling modern EUR,resid cooling modern EUR,electricity,electricity,electricity
+electricity,resid heating modern EUR,resid heating modern EUR,electricity,resistance,electricity
+electricity,resid heating modern EUR,resid heating modern EUR,electricity,air-air pump south,electricity
+electricity,resid heating modern EUR,resid heating modern EUR,electricity,air-air pump middle south,electricity
+electricity,resid heating modern EUR,resid heating modern EUR,electricity,air-air pump middle north,electricity
+electricity,resid heating modern EUR,resid heating modern EUR,electricity,air-air pump north,electricity
+electricity,resid heating modern EUR,resid heating modern EUR,water heat pump,air-water pump south,air
+electricity,resid heating modern EUR,resid heating modern EUR,water heat pump,air-water pump middle south,air
+electricity,resid heating modern EUR,resid heating modern EUR,water heat pump,air-water pump middle north,air
+electricity,resid heating modern EUR,resid heating modern EUR,water heat pump,air-water pump north,air
+electricity,resid heating modern EUR,resid heating modern EUR,water heat pump,geo-water pump,geo
+electricity,resid hot water modern EUR,resid hot water modern EUR,electricity,resistance,electricity
+electricity,resid hot water modern EUR,resid hot water modern EUR,water heat pump,heat pump,electricity
+electricity,resid other appliance modern EUR,resid other appliance modern EUR,electricity,electricity,electricity
+electricity,resid others modern EUR,resid others modern EUR,electricity,electricity,electricity
+gas,resid cooking modern EUR,resid cooking modern EUR,gas,gas,gas
+gas,resid cooling modern EUR,resid cooling modern EUR,gas,gas,gas
+gas,resid heating modern EUR,resid heating modern EUR,gas,gas,gas
+gas,resid hot water modern EUR,resid hot water modern EUR,gas,gas,gas
+gas,resid others modern EUR,resid others modern EUR,gas,gas,gas
+heat,resid heating modern EUR,resid heating modern EUR,district heat,district heat,district heat
+heat,resid hot water modern EUR,resid hot water modern EUR,district heat,district heat,district heat
+hydrogen,resid heating modern EUR,resid heating modern EUR,gas,hydrogen,gas
+hydrogen,resid others modern EUR,resid others modern EUR,gas,hydrogen,gas
+refined liquids,resid cooking modern EUR,resid cooking modern EUR,refined liquids,refined liquids,liquid fuels
+refined liquids,resid heating modern EUR,resid heating modern EUR,refined liquids,refined liquids,liquid fuels
+refined liquids,resid hot water modern EUR,resid hot water modern EUR,refined liquids,refined liquids,liquid fuels
+refined liquids,resid others modern EUR,resid others modern EUR,refined liquids,refined liquids,liquid fuels
