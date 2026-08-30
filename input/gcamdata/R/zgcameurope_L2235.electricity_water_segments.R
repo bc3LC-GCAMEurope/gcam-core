@@ -16,10 +16,12 @@
 #' @importFrom tidyr complete nesting replace_na
 #' @author NTG May 2020
 module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
-  MODULE_INPUTS <- c(FILE = "water/elec_tech_water_map",
+  MODULE_INPUTS <- c(FILE = "gcam-europe/elec_tech_water_map_EUR",
                      FILE = "gcam-europe/A23.elecS_naming",
                      FILE = "common/GCAM_region_names",
                      FILE = "gcam-europe/mappings/grid_regions",
+                     FILE = "gcam-europe/NREL_capital_offshore_EUR",
+                     FILE = "gcam-europe/NREL_OMfixed_offshore_EUR",
                      "L1233.out_EJ_R_elecS_F_tech_cool_EUR",
                      "L2233.GlobalTechEff_elec_cool",
                      "L2233.GlobalTechShrwt_elec_cool",
@@ -63,6 +65,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
                      "L2234.StubTechCost_offshore_wind_elecS_EUR")
   MODULE_OUTPUTS <- c("L2235.GlobalTechEff_elecS_cool_EUR",
                       "L2235.GlobalTechShrwt_elecS_cool_EUR",
+                      "L2235.GlobalTechShrwt_elecS_cool_EUR_nosgmnt",
                       "L2235.GlobalTechProfitShutdown_elecS_cool_EUR",
                       "L2235.GlobalTechOMvar_elecS_cool_EUR",
                       "L2235.GlobalTechOMfixed_elecS_cool_EUR",
@@ -74,16 +77,26 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
                       "L2235.GlobalTechLifetime_elecS_cool_EUR",
                       "L2235.AvgFossilEffKeyword_elecS_cool_EUR",
                       "L2235.GlobalIntTechBackup_elecS_cool_EUR",
+                      "L2235.GlobalIntTechBackup_elecS_cool_EUR_nosgmnt",
                       "L2235.GlobalIntTechValueFactor_elecS_cool_EUR",
+                      "L2235.GlobalIntTechValueFactor_elecS_cool_EUR_nosgmnt",
                       "L2235.GlobalIntTechCapital_elecS_cool_EUR",
+                      "L2235.GlobalIntTechCapital_elecS_cool_EUR_nosgmnt",
                       "L2235.GlobalIntTechEff_elecS_cool_EUR",
+                      "L2235.GlobalIntTechEff_elecS_cool_EUR_nosgmnt",
                       "L2235.GlobalIntTechLifetime_elecS_cool_EUR",
+                      "L2235.GlobalIntTechLifetime_elecS_cool_EUR_nosgmnt",
                       "L2235.GlobalIntTechOMfixed_elecS_cool_EUR",
+                      "L2235.GlobalIntTechOMfixed_elecS_cool_EUR_nosgmnt",
                       "L2235.GlobalIntTechOMvar_elecS_cool_EUR",
+                      "L2235.GlobalIntTechOMvar_elecS_cool_EUR_nosgmnt",
                       "L2235.GlobalIntTechCoef_elecS_cool_EUR",
+                      "L2235.GlobalIntTechCoef_elecS_cool_EUR_nosgmnt",
                       "L2235.GlobalIntTechSCurve_elecS_cool_EUR",
+                      "L2235.GlobalIntTechSCurve_elecS_cool_EUR_nosgmnt",
                       "L2235.PrimaryRenewKeyword_elecS_cool_EUR",
                       "L2235.PrimaryRenewKeywordInt_elecS_cool_EUR",
+                      "L2235.PrimaryRenewKeywordInt_elecS_cool_EUR_nosgmnt",
                       "L2235.StubTech_elecS_cool_EUR",
                       "L2235.StubTechEff_elecS_cool_EUR",
                       # "L2235.StubTechCoef_elecS_cool_EUR",
@@ -114,6 +127,44 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
     # 0a. Load required inputs ---------------
     get_data_list(all_data, MODULE_INPUTS)
 
+    # Function to distinguish between floating and fixed offshore technologies
+    expand_offshore_wind <- function(df) {
+      # Check if the dataframe has either of the relevant columns
+      if ("technology" %in% colnames(df)) {
+        tech_col <- "technology"
+      } else if ("backup.intermittent.technology" %in% colnames(df)) {
+        tech_col <- "backup.intermittent.technology"
+      } else if ("intermittent.technology" %in% colnames(df)) {
+        tech_col <- "intermittent.technology"
+      } else {
+        # If neither column exists, return the dataframe unchanged
+        return(df)
+      }
+
+      # Check if wind_offshore exists in the technology column
+      if ("wind_offshore" %in% df[[tech_col]]) {
+        # Create rows for floating and fixed offshore wind
+        floating_rows <- df[df[[tech_col]] == "wind_offshore", ]
+        fixed_rows <- df[df[[tech_col]] == "wind_offshore", ]
+
+        # Replace technology names
+        floating_rows[[tech_col]] <- "wind_offshore_floating"
+        fixed_rows[[tech_col]] <- "wind_offshore_fixed"
+
+        # Bind the original data (without wind_offshore) with the new rows
+        df <- rbind(df[df[[tech_col]] != "wind_offshore", ],
+                    floating_rows,
+                    fixed_rows)
+      }
+
+      return(df)
+    }
+
+    # Apply the function to dataframe
+    L2233.GlobalIntTechEff_elec_cool <- expand_offshore_wind(L2233.GlobalIntTechEff_elec_cool) %>%
+      mutate(minicam.energy.input = if_else(grepl("floating", technology), paste0("floating ", minicam.energy.input), minicam.energy.input),
+             minicam.energy.input = if_else(grepl("fixed", technology), paste0("fixed ", minicam.energy.input), minicam.energy.input))
+
     # Define countries that have access to offshore wind as allowing for seawater cooling
     seawater_countries <- unique(L2234.StubTechCost_offshore_wind_elecS_EUR$region)
 
@@ -125,7 +176,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       mutate(technology = "battery") %>%
       bind_rows(battery_mapping)
 
-    elec_cool_expansion <- distinct(elec_tech_water_map, subsector.name = from.subsector,
+    elec_cool_expansion <- distinct(elec_tech_water_map_EUR, subsector.name = from.subsector,
                                     technology = to.subsector, to.technology, from.technology) %>%
       repeat_add_columns(distinct(A23.elecS_naming, name_adder)) %>%
       # storage, wind , and solar tech names need to be taken from from.technology, other techs from.technology col
@@ -195,7 +246,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
              value = add_global_cooling_techs(get(input_nm)) %>%
                add_title(paste0(attributes(get(input_nm))$title, " - european grid regions"), overwrite = T) %>%
                add_units(attributes(get(input_nm))$unit) %>%
-               add_precursors(c(input_nm, "gcam-europe/A23.elecS_naming", "water/elec_tech_water_map")),
+               add_precursors(c(input_nm, "gcam-europe/A23.elecS_naming", "gcam-europe/elec_tech_water_map_EUR")),
              envir = globalenv() )})
 
     # 1b. Adds in data from L2233 cooling data if needed -----------------
@@ -224,6 +275,37 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       rename(intermittent.technology = technology) %>%
       bind_rows(L2235.GlobalIntTechCapital_elecS_cool_EUR)
 
+    # Update capital costs for offshore wind technologies with new NREL 2022 data. Paste data from file containing data from NREL_ATB_2022_capital extrapolated to 2100
+    # first pivot and convert 2020 dollars do 1975:
+    NREL_capital_offshore_EUR <- NREL_capital_offshore_EUR %>%
+      pivot_longer(
+        cols = -intermittent.technology,
+        names_to = "year",
+        values_to = "capital.overnight.new") %>%
+      mutate(year = as.integer(year)) %>%
+      mutate(capital.overnight.new = capital.overnight.new * gdp_deflator(1975, 2020))
+
+    # paste in the df
+    L2235.GlobalIntTechCapital_elecS_cool_EUR <- L2235.GlobalIntTechCapital_elecS_cool_EUR %>%
+      left_join(NREL_capital_offshore_EUR, by = c("intermittent.technology", "year")) %>%
+      mutate(capital.overnight = dplyr::coalesce(capital.overnight.new, capital.overnight)) %>%
+      select(-capital.overnight.new)
+
+    # Update OMfixed costs for offshore wind technologies with new NREL 2022 data. Similar procedure:
+    NREL_OMfixed_offshore_EUR <- NREL_OMfixed_offshore_EUR %>%
+      pivot_longer(
+        cols = -intermittent.technology,
+        names_to = "year",
+        values_to = "OM.fixed.new") %>%
+      mutate(year = as.integer(year)) %>%
+      mutate(OM.fixed.new = OM.fixed.new * gdp_deflator(1975, 2020))
+
+    # paste in the df
+    L2235.GlobalIntTechOMfixed_elecS_cool_EUR <- L2235.GlobalIntTechOMfixed_elecS_cool_EUR %>%
+      left_join(NREL_OMfixed_offshore_EUR, by = c("intermittent.technology", "year")) %>%
+      mutate(OM.fixed = dplyr::coalesce(OM.fixed.new,OM.fixed)) %>%
+      select(-OM.fixed.new)
+
     # efficiency
     L2235.GlobalIntTechEff_elecS_cool_EUR <- add_segments_to_cooling(L2233.GlobalIntTechEff_elec_cool) %>%
       rename(intermittent.technology = technology) %>%
@@ -239,7 +321,13 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       distinct(supplysector = sector.name, subsector0 = subsector.name0,
                subsector = subsector.name, stub.technology = technology) %>%
       repeat_add_columns(grid_regions %>% distinct(region)) %>%
-      filter(!(grepl("seawater|wind_offshore", stub.technology) & !region %in% seawater_countries))
+      filter(!(grepl("seawater|wind_offshore", stub.technology) & !region %in% seawater_countries)) %>%
+      # Adjust Switzerland
+      mutate(subsector = if_else(region == "Switzerland", gsub("_floating", "", subsector), subsector),
+             subsector = if_else(region == "Switzerland", gsub("_fixed", "", subsector), subsector),
+             stub.technology = if_else(region == "Switzerland", gsub("_floating", "", stub.technology), stub.technology),
+             stub.technology = if_else(region == "Switzerland", gsub("_fixed", "", stub.technology), stub.technology)) %>%
+      distinct()
 
     # Efficiencies do not change with the addition of cooling techs
     L2235.StubTechEff_elecS_cool_EUR <- add_global_cooling_techs(L2234.StubTechEff_elecS_EUR) %>%
@@ -247,17 +335,26 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       bind_rows(add_global_cooling_techs(L2234.StubTechEff_battery_elecS_EUR))
 
     # Get shares of each cooling tech within subsector
-    L1233.out_EJ_R_elecS_F_tech_cool_EUR_share <- L1233.out_EJ_R_elecS_F_tech_cool_EUR %>%
+    # We need to duplicate rows for fixed offshore wind, different for Switzerland
+    L1233.out_EJ_R_elecS_F_tech_cool_EUR_share <- bind_rows(L1233.out_EJ_R_elecS_F_tech_cool_EUR,
+      L1233.out_EJ_R_elecS_F_tech_cool_EUR %>%
+        filter(year %in% MODEL_BASE_YEARS) %>%
+        filter(technology == "wind") %>%
+        mutate(technology = if_else(GCAM_region_ID == 63, "wind_offshore", "wind_offshore_fixed"),
+               subsector = if_else(GCAM_region_ID == 63, gsub("^wind_", "wind_offshore_", subsector), gsub("^wind_", "wind_offshore_fixed_", subsector))))
+
+    L1233.out_EJ_R_elecS_F_tech_cool_EUR_share <- L1233.out_EJ_R_elecS_F_tech_cool_EUR_share %>%
       filter(year %in% MODEL_BASE_YEARS) %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       rename(subsector0 = fuel) %>%
       mutate(subsector0 = if_else(grepl("solar", subsector0), "solar", subsector0)) %>%
       group_by(region, year, supplysector, subsector0, subsector) %>%
       mutate(share = value / sum(value)) %>%
-      ungroup
+      ungroup()
 
     # Apply shares to renewable production
     L2235.StubTechProd_elecS_cool_EUR <- add_global_cooling_techs(L2234.StubTechProd_elecS_EUR) %>%
+      mutate(stub.technology = if_else(region == "Switzerland" & is.na(stub.technology), "wind_offshore", stub.technology)) %>%
       left_join(L1233.out_EJ_R_elecS_F_tech_cool_EUR_share,
                 by = c("region", "supplysector", "subsector", "year", "subsector0", "stub.technology" = "technology")) %>%
       filter(!(!region %in% seawater_countries & grepl("seawater", stub.technology) & is.na(share)))
@@ -289,16 +386,26 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
     # 2b. StubTech simply add cooling tech -------------------
     L2235.StubTechFixOut_elecS_cool_EUR <- add_global_cooling_techs(L2234.StubTechFixOut_elecS_EUR)
     L2235.StubTechFixOut_hydro_elecS_cool_EUR <-  add_global_cooling_techs(L2234.StubTechFixOut_hydro_elecS_EUR)
-    L2235.StubTechCost_offshore_wind_elecS_cool_EUR <-  add_global_cooling_techs(L2234.StubTechCost_offshore_wind_elecS_EUR)
-    L2235.StubTechCapFactor_elecS_cool_EUR <-  add_global_cooling_techs(L2234.StubTechCapFactor_elecS_EUR)
-    L2235.StubTechElecMarket_backup_elecS_cool_EUR <-  add_global_cooling_techs(L2234.StubTechElecMarket_backup_elecS_EUR)
+    L2235.StubTechCost_offshore_wind_elecS_cool_EUR <-  add_global_cooling_techs(L2234.StubTechCost_offshore_wind_elecS_EUR) %>%
+      # Adjust Switzerland
+      mutate(stub.technology = if_else(is.na(stub.technology), "wind_offshore", stub.technology))
+    L2235.StubTechCapFactor_elecS_cool_EUR <-  add_global_cooling_techs(L2234.StubTechCapFactor_elecS_EUR) %>%
+      # Adjust Switzerland
+      mutate(stub.technology = if_else(is.na(stub.technology), "wind_offshore", stub.technology))
+    L2235.StubTechElecMarket_backup_elecS_cool_EUR <-  add_global_cooling_techs(L2234.StubTechElecMarket_backup_elecS_EUR) %>%
+      # Adjust Switzerland
+      mutate(stub.technology = if_else(is.na(stub.technology), "wind_offshore", stub.technology))
 
     # 2c. Logits -----------------------------------
     L2235.SubsectorLogit_elecS_EUR <- L2234.SubsectorLogit_elecS_EUR %>% rename(subsector0 = subsector)
 
     L2235.SubsectorLogit_elecS_cool_EUR <- L2235.StubTech_elecS_cool_EUR %>%
       distinct(region, supplysector, subsector0, subsector) %>%
-      left_join_error_no_match(L2235.SubsectorLogit_elecS_EUR, by = c("region", "supplysector", "subsector0"))
+      left_join_error_no_match(L2235.SubsectorLogit_elecS_EUR, by = c("region", "supplysector", "subsector0")) %>%
+      # Adjust Switzerland
+      mutate(subsector = if_else(region == "Switzerland", gsub("_floating", "", subsector), subsector)) %>%
+      mutate(subsector = if_else(region == "Switzerland", gsub("_fixed", "", subsector), subsector)) %>%
+      distinct()
     #
     # 2d. Coefs -------------
     # L2235.StubTechCoef_elecS_cool_EUR <- L2235.StubTechEff_elecS_cool_EUR %>%
@@ -361,7 +468,12 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
 
 
     L2235.SubsectorShrwt_elecS_cool_EUR <- bind_rows(L2235.SubsectorShrwt_elecS_cool_EUR_hist,
-                                                     L2235.SubsectorShrwt_elecS_cool_EUR_fut)
+                                                     L2235.SubsectorShrwt_elecS_cool_EUR_fut) %>%
+      # Adjust Switzerland
+      mutate(subsector = if_else(region == "Switzerland", gsub("_floating", "", subsector), subsector)) %>%
+      mutate(subsector = if_else(region == "Switzerland", gsub("_fixed", "", subsector), subsector)) %>%
+      distinct()
+
 
     # 2f. Technology Shareweights ----------------------
 
@@ -493,7 +605,257 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       mutate(apply.to = gcamusa.INTERP_APPLY_TO) %>%
       select(LEVEL2_DATA_NAMES[["StubTechInterp"]], subsector0)
 
-    #
+    # Create a function to add back the wind_offshore tech
+
+    duplicate_offshore <- function(df) {
+
+      if ("backup.intermittent.technology" %in% names(df)) {
+
+        new_rows <- df %>%
+          filter(backup.intermittent.technology == "wind_offshore_floating") %>%
+          mutate(
+            backup.intermittent.technology = gsub("_floating", "", backup.intermittent.technology),
+            subsector.name = gsub("_floating", "", subsector.name)
+          ) %>%
+          {
+            if ("minicam.energy.input" %in% names(.)) {
+              mutate(., minicam.energy.input = "offshore wind resource")
+            } else .
+          }
+
+        bind_rows(df, new_rows)
+
+      } else if ("intermittent.technology" %in% names(df)) {
+
+        new_rows <- df %>%
+          filter(intermittent.technology == "wind_offshore_floating") %>%
+          mutate(
+            intermittent.technology = gsub("_floating", "", intermittent.technology),
+            subsector.name = gsub("_floating", "", subsector.name)
+          ) %>%
+          {
+            if ("minicam.energy.input" %in% names(.)) {
+              mutate(., minicam.energy.input = "offshore wind resource")
+            } else .
+          }
+
+        bind_rows(df, new_rows)
+
+      } else if ("technology" %in% names(df)) {
+
+        new_rows <- df %>%
+          filter(technology == "wind_offshore_floating") %>%
+          mutate(
+            technology = gsub("_floating", "", technology),
+            subsector.name = gsub("_floating", "", subsector.name)
+          ) %>%
+          {
+            if ("minicam.energy.input" %in% names(.)) {
+              mutate(., minicam.energy.input = "offshore wind resource")
+            } else .
+          }
+
+        bind_rows(df, new_rows)
+
+      } else {
+        df
+      }
+    }
+
+    # Adjustments to create wind offshore technologies for no segment regions (Turkey and Iceland)
+
+    L2235.GlobalTechShrwt_elecS_cool_EUR_nosgmnt <- L2235.GlobalTechShrwt_elecS_cool_EUR %>%
+      filter(grepl("offshore", subsector.name)) %>%
+      duplicate_offshore() %>%
+      mutate(
+        sector.name = if_else(
+          technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "electricity",
+          sector.name
+        ),
+        subsector.name = if_else(
+          technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "wind",
+          subsector.name
+        )
+      ) %>%
+      select(LEVEL2_DATA_NAMES[["GlobalTechShrwt"]])
+
+
+    L2235.GlobalIntTechBackup_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechBackup_elecS_cool_EUR %>%
+      filter(grepl("offshore", subsector.name)) %>%
+      duplicate_offshore() %>%
+      mutate(
+        sector.name = if_else(
+          backup.intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "electricity",
+          sector.name
+        ),
+        subsector.name = if_else(
+          backup.intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "wind",
+          subsector.name
+        )
+      ) %>%
+      select(LEVEL2_DATA_NAMES[["GlobalIntTechBackup"]])
+
+
+    L2235.GlobalIntTechValueFactor_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechValueFactor_elecS_cool_EUR %>%
+      filter(grepl("offshore", subsector.name)) %>%
+      duplicate_offshore() %>%
+      mutate(
+        sector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "electricity",
+          sector.name
+        ),
+        subsector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "wind",
+          subsector.name
+        )
+      ) %>%
+      select(LEVEL2_DATA_NAMES[["GlobalIntTechValueFactor"]])
+
+    L2235.GlobalIntTechCapital_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechCapital_elecS_cool_EUR %>%
+      filter(grepl("offshore", subsector.name)) %>%
+      duplicate_offshore() %>%
+      mutate(
+        sector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "electricity",
+          sector.name
+        ),
+        subsector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "wind",
+          subsector.name
+        )
+      ) %>%
+      select(LEVEL2_DATA_NAMES[["GlobalIntTechCapital"]])
+
+    L2235.GlobalIntTechEff_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechEff_elecS_cool_EUR %>%
+      filter(grepl("offshore", subsector.name)) %>%
+      duplicate_offshore() %>%
+      mutate(
+        sector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "electricity",
+          sector.name
+        ),
+        subsector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "wind",
+          subsector.name
+        )
+      ) %>%
+      select(LEVEL2_DATA_NAMES[["GlobalIntTechEff"]])
+
+    L2235.GlobalIntTechLifetime_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechLifetime_elecS_cool_EUR %>%
+      filter(grepl("offshore", subsector.name)) %>%
+      duplicate_offshore() %>%
+      mutate(
+        sector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "electricity",
+          sector.name
+        ),
+        subsector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "wind",
+          subsector.name
+        )
+      ) %>%
+      select(LEVEL2_DATA_NAMES[["GlobalIntTechLifetime"]])
+
+    L2235.GlobalIntTechOMfixed_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechOMfixed_elecS_cool_EUR %>%
+      filter(grepl("offshore", subsector.name)) %>%
+      duplicate_offshore() %>%
+      mutate(
+        sector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "electricity",
+          sector.name
+        ),
+        subsector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "wind",
+          subsector.name
+        )
+      ) %>%
+      select(LEVEL2_DATA_NAMES[["GlobalIntTechOMfixed"]])
+
+    L2235.GlobalIntTechOMvar_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechOMvar_elecS_cool_EUR %>%
+      filter(grepl("offshore", subsector.name)) %>%
+      duplicate_offshore() %>%
+      mutate(
+        sector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "electricity",
+          sector.name
+        ),
+        subsector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "wind",
+          subsector.name
+        )
+      ) %>%
+      select(LEVEL2_DATA_NAMES[["GlobalIntTechOMvar"]])
+
+    L2235.GlobalIntTechCoef_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechCoef_elecS_cool_EUR %>%
+      filter(grepl("offshore", subsector.name)) %>%
+      duplicate_offshore() %>%
+      mutate(
+        sector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "electricity",
+          sector.name
+        ),
+        subsector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "wind",
+          subsector.name
+        )
+      ) %>%
+      rename(technology = intermittent.technology) %>%
+      select(LEVEL2_DATA_NAMES[["GlobalIntTechCoef"]])
+
+    L2235.GlobalIntTechSCurve_elecS_cool_EUR_nosgmnt <- L2235.GlobalIntTechSCurve_elecS_cool_EUR %>%
+      filter(grepl("offshore", subsector.name)) %>%
+      duplicate_offshore() %>%
+      mutate(
+        sector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "electricity",
+          sector.name
+        ),
+        subsector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "wind",
+          subsector.name
+        )
+      ) %>%
+      select(LEVEL2_DATA_NAMES[["GlobalIntTechSCurve"]])
+
+    L2235.PrimaryRenewKeywordInt_elecS_cool_EUR_nosgmnt <- L2235.PrimaryRenewKeywordInt_elecS_cool_EUR %>%
+      filter(grepl("offshore", subsector.name)) %>%
+      duplicate_offshore() %>%
+      mutate(
+        sector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "electricity",
+          sector.name
+        ),
+        subsector.name = if_else(
+          intermittent.technology %in% c("wind_offshore_fixed", "wind_offshore_floating"),
+          "wind",
+          subsector.name
+        )
+      ) %>%
+      rename(technology = intermittent.technology) %>%
+      select(LEVEL2_DATA_NAMES[["PrimaryRenewKeywordInt"]])
+
+
     # Produce outputs ===================================================
     L2234.Supplysector_elecS_EUR %>%
       add_title("Supply Sector Information for Electricity Load Segments", overwrite = T) %>%
@@ -520,7 +882,17 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
                      "L2241.GlobalTechShrwt_coal_vintage_EUR",
                      "L2241.GlobalTechShrwt_elec_coalret_EUR",
                      "L2233.GlobalTechShrwt_elec_cool") ->
-      L2235.GlobalTechShrwt_elec_cool_EUR
+      L2235.GlobalTechShrwt_elecS_cool_EUR
+
+    L2235.GlobalTechShrwt_elecS_cool_EUR_nosgmnt %>%
+      add_title("Electricity Technology Shareweights") %>%
+      add_units("none") %>%
+      add_comments("Electricity Technology Shareweights") %>%
+      add_precursors("L2234.GlobalTechShrwt_elecS_EUR",
+                     "L2241.GlobalTechShrwt_coal_vintage_EUR",
+                     "L2241.GlobalTechShrwt_elec_coalret_EUR",
+                     "L2233.GlobalTechShrwt_elec_cool") ->
+      L2235.GlobalTechShrwt_elecS_cool_EUR_nosgmnt
 
     L2235.GlobalTechProfitShutdown_elecS_cool_EUR %>%
       add_title("Electricity Load Segments Technology Profit Shutdown Decider") %>%
@@ -612,12 +984,27 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       add_precursors("L2234.GlobalIntTechBackup_elecS_EUR") ->
       L2235.GlobalIntTechBackup_elecS_cool_EUR
 
+    L2235.GlobalIntTechBackup_elecS_cool_EUR_nosgmnt %>%
+      add_title("Electricity Intermittent Technology Backup Characteristics") %>%
+      add_units("none") %>%
+      add_comments("Electricity Intermittent Technology Backup Characteristics") %>%
+      add_precursors("L2234.GlobalIntTechBackup_elecS_EUR") ->
+      L2235.GlobalIntTechBackup_elecS_cool_EUR_nosgmnt
+
     L2235.GlobalIntTechValueFactor_elecS_cool_EUR %>%
       add_title("New Electricity Load Segments Intermittent Technology Backup Characteristics") %>%
       add_units("none") %>%
       add_comments("Electricity Load Segments Intermittent Technology Backup Characteristics based on pcloe in GCAM-v7.3") %>%
       add_precursors("L2234.GlobalIntTechValueFactor_elecS_EUR") ->
       L2235.GlobalIntTechValueFactor_elecS_cool_EUR
+
+    L2235.GlobalIntTechValueFactor_elecS_cool_EUR_nosgmnt %>%
+      add_title("New Electricity Intermittent Technology Backup Characteristics") %>%
+      add_units("none") %>%
+      add_comments("Electricity Intermittent Technology Backup Characteristics based on pcloe in GCAM-v7.3") %>%
+      add_precursors("L2234.GlobalIntTechValueFactor_elecS_EUR") ->
+      L2235.GlobalIntTechValueFactor_elecS_cool_EUR_nosgmnt
+
 
     L2235.GlobalIntTechCapital_elecS_cool_EUR %>%
       add_title("Electricity Load Segments Intermittent Technology Capital Costs") %>%
@@ -627,6 +1014,14 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
                      "L2233.GlobalIntTechCapital_elec_cool") ->
       L2235.GlobalIntTechCapital_elecS_cool_EUR
 
+    L2235.GlobalIntTechCapital_elecS_cool_EUR_nosgmnt %>%
+      add_title("Electricity Intermittent Technology Capital Costs") %>%
+      add_units("none") %>%
+      add_comments("Electricity Load Segments Intermittent Technology Capital Costs") %>%
+      add_precursors("L2234.GlobalIntTechCapital_elecS_EUR",
+                     "L2233.GlobalIntTechCapital_elec_cool") ->
+      L2235.GlobalIntTechCapital_elecS_cool_EUR_nosgmnt
+
     L2235.GlobalIntTechEff_elecS_cool_EUR %>%
       add_title("Electricity Load Segments Intermittent Technology Efficiencies") %>%
       add_units("none") %>%
@@ -635,12 +1030,27 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
                      "L2233.GlobalIntTechEff_elec_cool") ->
       L2235.GlobalIntTechEff_elecS_cool_EUR
 
+    L2235.GlobalIntTechEff_elecS_cool_EUR_nosgmnt %>%
+      add_title("Electricity Intermittent Technology Efficiencies") %>%
+      add_units("none") %>%
+      add_comments("Electricity Load Segments Intermittent Technology Efficiencies") %>%
+      add_precursors("L2234.GlobalIntTechEff_elecS_EUR",
+                     "L2233.GlobalIntTechEff_elec_cool") ->
+      L2235.GlobalIntTechEff_elecS_cool_EUR_nosgmnt
+
     L2235.GlobalIntTechLifetime_elecS_cool_EUR %>%
       add_title("Electricity Load Segments Intermittent Technology Lifetimes") %>%
       add_units("none") %>%
       add_comments("Electricity Load Segments Intermittent Technology Lifetimes") %>%
       add_precursors("L2234.GlobalIntTechLifetime_elecS_EUR") ->
       L2235.GlobalIntTechLifetime_elecS_cool_EUR
+
+    L2235.GlobalIntTechLifetime_elecS_cool_EUR_nosgmnt %>%
+      add_title("Electricity Intermittent Technology Lifetimes") %>%
+      add_units("none") %>%
+      add_comments("Electricity Load Segments Intermittent Technology Lifetimes") %>%
+      add_precursors("L2234.GlobalIntTechLifetime_elecS_EUR") ->
+      L2235.GlobalIntTechLifetime_elecS_cool_EUR_nosgmnt
 
     L2235.GlobalIntTechOMfixed_elecS_cool_EUR %>%
       add_title("Electricity Load Segments Intermittent Technology Fixed OM Costs") %>%
@@ -649,6 +1059,13 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       add_precursors("L2234.GlobalIntTechOMfixed_elecS_EUR") ->
       L2235.GlobalIntTechOMfixed_elecS_cool_EUR
 
+    L2235.GlobalIntTechOMfixed_elecS_cool_EUR_nosgmnt %>%
+      add_title("Electricity Intermittent Technology Fixed OM Costs") %>%
+      add_units("none") %>%
+      add_comments("Electricity Load Segments Intermittent Technology Fixed OM Costs") %>%
+      add_precursors("L2234.GlobalIntTechOMfixed_elecS_EUR") ->
+      L2235.GlobalIntTechOMfixed_elecS_cool_EUR_nosgmnt
+
     L2235.GlobalIntTechOMvar_elecS_cool_EUR %>%
       add_title("Electricity Load Segments Intermittent Technology Variable OM Costs") %>%
       add_units("none") %>%
@@ -656,12 +1073,26 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       add_precursors("L2234.GlobalIntTechOMvar_elecS_EUR") ->
       L2235.GlobalIntTechOMvar_elecS_cool_EUR
 
+    L2235.GlobalIntTechOMvar_elecS_cool_EUR_nosgmnt %>%
+      add_title("Electricity Intermittent Technology Variable OM Costs") %>%
+      add_units("none") %>%
+      add_comments("Electricity Load Segments Intermittent Technology Variable OM Costs") %>%
+      add_precursors("L2234.GlobalIntTechOMvar_elecS_EUR") ->
+      L2235.GlobalIntTechOMvar_elecS_cool_EUR_nosgmnt
+
     L2235.GlobalIntTechCoef_elecS_cool_EUR %>%
       add_title("Water demand coefs for int techs") %>%
       add_units("none") %>%
       add_comments("Water demand coefs for int techs") %>%
       add_precursors("L2233.GlobalIntTechCoef_elec_cool") ->
       L2235.GlobalIntTechCoef_elecS_cool_EUR
+
+    L2235.GlobalIntTechCoef_elecS_cool_EUR_nosgmnt %>%
+      add_title("Water demand coefs for int techs") %>%
+      add_units("none") %>%
+      add_comments("Water demand coefs for int techs") %>%
+      add_precursors("L2233.GlobalIntTechCoef_elec_cool") ->
+      L2235.GlobalIntTechCoef_elecS_cool_EUR_nosgmnt
 
     L2235.PrimaryRenewKeyword_elecS_cool_EUR %>%
       add_title("Primary Renewable Keywords for Electricity Load Segments Technologies") %>%
@@ -676,6 +1107,13 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       add_comments("Primary Renewable Keywords for Electricity Load Segments Intermittent Technologies") %>%
       add_precursors("L2234.PrimaryRenewKeywordInt_elecS_EUR") ->
       L2235.PrimaryRenewKeywordInt_elecS_cool_EUR
+
+    L2235.PrimaryRenewKeywordInt_elecS_cool_EUR_nosgmnt %>%
+      add_title("Primary Renewable Keywords for Electricity Intermittent Technologies") %>%
+      add_units("none") %>%
+      add_comments("Primary Renewable Keywords for Electricity Intermittent Technologies") %>%
+      add_precursors("L2234.PrimaryRenewKeywordInt_elecS_EUR") ->
+      L2235.PrimaryRenewKeywordInt_elecS_cool_EUR_nosgmnt
 
     L2235.StubTechEff_elecS_cool_EUR %>%
       add_title("Electricity Load Segments Base Year Efficiencies") %>%
