@@ -33,7 +33,7 @@ module_socio_L106.income_distributions <- function(command, ...) {
     income_dist_eur <- get_data(all_data, "socioeconomics/Rao_multimodel_income_deciles") %>%
       left_join_error_no_match(region_map, by = "GCAM_region_ID")
 
-    # Create a income distribution datasets that substitutes non-Europe coutires by latest data (socioeconomics/income_shares)
+    # Create a income distribution datasets that substitutes non-Europe countries by latest data (socioeconomics/income_shares)
     income_dist_pre <- income_dist_eur %>%
       anti_join(income_dist_row, by = "region") %>%
       bind_rows(income_dist_row) %>%
