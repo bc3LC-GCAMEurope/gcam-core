@@ -27,8 +27,8 @@ module_energy_L2231.wind_update <- function(command, ...) {
              FILE = "energy/NREL_onshore_energy",
              FILE = "energy/onshore_wind_grid_cost",
              FILE = "energy/NREL_wind_energy_distance_range",
-             "L113.globaltech_capital_ATB",
-             "L113.globaltech_OMfixed_ATB",
+             "L1233.globaltech_capital_ATB",
+             "L1233.globaltech_OMfixed_ATB",
              "L223.StubTechCapFactor_elec"))
   } else if(command == driver.DECLARE_OUTPUTS) {
     return(c("L2231.SmthRenewRsrcCurves_onshore_wind",
@@ -56,8 +56,8 @@ module_energy_L2231.wind_update <- function(command, ...) {
     GCAM_region_names <- get_data(all_data, "common/GCAM_region_names")
     fuel_energy_input <- get_data(all_data, "energy/mappings/fuel_energy_input")
     A20.wind_class_CFs <- get_data(all_data, "energy/A20.wind_class_CFs")
-    L113.globaltech_OMfixed_ATB <- get_data(all_data, "L113.globaltech_OMfixed_ATB")
-    L113.globaltech_capital_ATB <- get_data(all_data, "L113.globaltech_capital_ATB")
+    L1233.globaltech_OMfixed_ATB <- get_data(all_data, "L1233.globaltech_OMfixed_ATB", strip_attributes = TRUE)
+    L1233.globaltech_capital_ATB <- get_data(all_data, "L1233.globaltech_capital_ATB", strip_attributes = TRUE)
     NREL_wind_ctry <- get_data(all_data, "energy/mappings/NREL_wind_ctry")
     NREL_onshore_energy <- get_data(all_data, "energy/NREL_onshore_energy")
     onshore_wind_grid_cost <- get_data(all_data, "energy/onshore_wind_grid_cost")
@@ -73,37 +73,30 @@ module_energy_L2231.wind_update <- function(command, ...) {
     L2231.onshore_wind_potential_EJ <- NREL_onshore_energy %>%
       select(-total) %>%
       left_join_error_no_match(NREL_wind_ctry, by = "IAM_country") %>%
-      # Adjust Yugolsavia (to SRB)
-      mutate(IAM_country = if_else(IAM_country == "Yugoslavia, Federal Republic of", "Serbia", IAM_country),
-             iso = if_else(iso == "yug", "srb", iso)) %>%
       left_join_error_no_match(iso_GCAM_regID %>% select(iso, GCAM_region_ID), by = "iso") %>%
       left_join_error_no_match(GCAM_region_names, by = c("GCAM_region_ID")) %>%
       select(-c(IAM_country, iso, GCAM_region_ID)) %>%
-      tidyr::gather(wind_class, resource.potential.EJ, -region, -distance) %>%
+      gather(wind_class, resource.potential.EJ, -region, -distance) %>%
       mutate(resource.potential.EJ = resource.potential.EJ * 1000 * CONV_TWH_EJ ) %>%
       group_by(region, wind_class) %>%
       summarise(resource.potential.EJ = sum(resource.potential.EJ)) %>%
       ungroup() %>%
       filter(resource.potential.EJ != 0) #-> L2231.onshore_wind_potential_EJ
 
-    L113.globaltech_capital_ATB %>%
-      gather_years() %>%
+    L1233.globaltech_capital_ATB %>%
       filter(technology == "wind",
              year == MODEL_FINAL_BASE_YEAR) %>%
-      distinct(value)-> L2231.onshore_wind_capital
-    L2231.onshore_wind_capital <- as.numeric(L2231.onshore_wind_capital)
+      pull(capital.overnight)-> L2231.onshore_wind_capital
 
-    L113.globaltech_capital_ATB %>%
-      filter(technology == "wind") %>%
-      select(fixed.charge.rate) -> L2231.onshore_wind_fcr
-    L2231.onshore_wind_fcr <- as.numeric(L2231.onshore_wind_fcr)
-
-    L113.globaltech_OMfixed_ATB %>%
-      gather_years() %>%
+    L1233.globaltech_capital_ATB %>%
       filter(technology == "wind",
              year == MODEL_FINAL_BASE_YEAR) %>%
-      distinct(value)-> L2231.onshore_wind_OMfixed
-    L2231.onshore_wind_OMfixed <- as.numeric(L2231.onshore_wind_OMfixed)
+      pull(fixed.charge.rate) -> L2231.onshore_wind_fcr
+
+    L1233.globaltech_OMfixed_ATB %>%
+      filter(technology == "wind",
+             year == MODEL_FINAL_BASE_YEAR) %>%
+      pull(OM.fixed)-> L2231.onshore_wind_OMfixed
 
     L2231.onshore_wind_potential_EJ %>%
       left_join_error_no_match(A20.wind_class_CFs, by = c("wind_class")) %>%
@@ -124,29 +117,28 @@ module_energy_L2231.wind_update <- function(command, ...) {
     # Pvar represents costs that are expected to increase from base.price as deployment increases.
     # This models the increase in costs as more optimal locations are used first.
 
-    L2231.onshore_wind_curve <- L2231.onshore_wind_matrix %>%
+    L2231.onshore_wind_matrix %>%
       group_by(region) %>%
       arrange(region, price) %>%
       mutate(base.price = min(price),
              Pvar = price - base.price,
              maxSubResource = round(max(supply), energy.DIGITS_MAX_SUB_RESOURCE)) %>%
-      ungroup()
+      ungroup() -> L2231.onshore_wind_curve
 
     # Approximate mid-price using first supply points that are less than (p1, Q1) and greater than (p2,Q2) 50% of maxSubResource.
     # Using these points, the mid-price can be estimated as:
     # mid.price = ((P2-P1)*maxSubResource + 2*Q2*P1 - 2*Q1*P2)/(2*(Q2-Q1))
     # This assumes that the curve is largely linear between the two points above.
 
-
     # Calculating P1 and Q1
-    L2231.mid.price_1 <- L2231.onshore_wind_curve %>%
+    L2231.onshore_wind_curve %>%
       mutate(percent.supply = supply / maxSubResource) %>%
       group_by(region) %>%
       filter(percent.supply <= energy.WIND_CURVE_MIDPOINT) %>%
       # filter for highest price point below 50% of total resource
       filter(Pvar == max(Pvar)) %>%
       ungroup() %>%
-      select(region, P1 = Pvar, Q1 = supply, maxSubResource)
+      select(region, P1 = Pvar, Q1 = supply, maxSubResource) -> L2231.mid.price_1
 
     # Calculating P2 and Q2
     L2231.onshore_wind_curve %>%
@@ -181,9 +173,7 @@ module_energy_L2231.wind_update <- function(command, ...) {
       dplyr::bind_rows(L2231.mid.price_singleprice) -> L2231.mid.price
 
     L2231.onshore_wind_curve %>%
-      # use left_join for error with Austria
-      left_join(L2231.mid.price, by = c("region")) %>%
-      filter(complete.cases(.))-> L2231.onshore_wind_curve
+      left_join_error_no_match(L2231.mid.price, by = c("region")) -> L2231.onshore_wind_curve
 
     # Defining variables to be used later.
     region_list <- unique(L2231.onshore_wind_curve$region)
@@ -221,10 +211,9 @@ module_energy_L2231.wind_update <- function(command, ...) {
     # Thus, we calculate model input parameter techChange (which is the reduction per year) as 1-a'^(1/5)
 
     # First, calculate capital cost over time for "wind_offshore" technology
-    L113.globaltech_capital_ATB %>%
+    L1233.globaltech_capital_ATB %>%
       filter(technology == "wind") %>%
-      fill_exp_decay_extrapolate(c(MODEL_BASE_YEARS, MODEL_FUTURE_YEARS)) %>%
-      rename(capital.overnight = value, intermittent.technology = technology) -> L2231.onshore_wind_cap_cost
+      rename(intermittent.technology = technology) -> L2231.onshore_wind_cap_cost
 
     # Second, calculate technological change
     L2231.onshore_wind_cap_cost %>%
@@ -244,25 +233,14 @@ module_energy_L2231.wind_update <- function(command, ...) {
              year > MODEL_FINAL_BASE_YEAR) -> L2231.TechChange_onshore_wind
 
     # Calculate capacity factor for all GCAM regions
-    L2231.StubTechCapFactor_onshore_wind <- L223.StubTechCapFactor_elec %>%
+    L223.StubTechCapFactor_elec %>%
       filter(subsector == "wind",
              !grepl("_offshore", stub.technology)) %>%
-      # use left_join for Austria
-      left_join(L2231.onshore_wind_curve %>%
+      left_join_error_no_match(L2231.onshore_wind_curve %>%
                                  distinct(region, CFmax),
                                by = c("region")) %>%
-      # Adjust Austria
-      mutate(CFmax = if_else(region == "Austria", capacity.factor, CFmax),
-             capacity.factor = round(CFmax, energy.DIGITS_CAPACITY_FACTOR)) %>%
-      select(region, supplysector, subsector, stub.technology, year, capacity.factor)
-
-    # giving Malta same capacity factor of Cyrpus
-    L2231.StubTechCapFactor_onshore_wind <- L2231.StubTechCapFactor_onshore_wind %>%
-      filter(region == "Cyprus") %>%
-      mutate(region = "Malta") %>%
-      bind_rows(L2231.StubTechCapFactor_onshore_wind %>%
-                  filter(region != "Malta"))
-
+      mutate(capacity.factor= round(CFmax, energy.DIGITS_CAPACITY_FACTOR)) %>%
+      select(region, supplysector, subsector, stub.technology, year, capacity.factor) -> L2231.StubTechCapFactor_onshore_wind
 
     # Grid connection costs are read in as fixed non-energy cost adders (in $/GJ). This is calculated using three things:
     # 1. the average onshore wind $/kW-km data
@@ -279,12 +257,9 @@ module_energy_L2231.wind_update <- function(command, ...) {
     # based on resources which are less likely to be developed.
 
     # First, get share of potential by each distance bin for each GCAM region
-    L2231.onshore_wind_potential_share <- NREL_onshore_energy %>%
+    NREL_onshore_energy %>%
       select(IAM_country, distance, total) %>%
       left_join_error_no_match(NREL_wind_ctry, by = "IAM_country") %>%
-      # Adjust Yugolsavia (to SRB)
-      mutate(IAM_country = if_else(IAM_country == "Yugoslavia, Federal Republic of", "Serbia", IAM_country),
-             iso = if_else(iso == "yug", "srb", iso)) %>%
       left_join_error_no_match(iso_GCAM_regID %>% select(iso, GCAM_region_ID), by = "iso") %>%
       left_join_error_no_match(GCAM_region_names, by = c("GCAM_region_ID")) %>%
       select(-c(IAM_country, iso, GCAM_region_ID)) %>%
@@ -293,7 +268,7 @@ module_energy_L2231.wind_update <- function(command, ...) {
       ungroup() %>%
       group_by(region) %>%
       mutate(share = total / sum(total)) %>%
-      ungroup()
+      ungroup() -> L2231.onshore_wind_potential_share
 
     # Then, generate bins for each cost point using representative distances
     NREL_wind_energy_distance_range %>%
@@ -314,21 +289,12 @@ module_energy_L2231.wind_update <- function(command, ...) {
 
     # Now to convert 2010 $/kW cost to 1975 $/GJ cost
     L2231.onshore_wind_cost_per_kW %>%
-      left_join(L2231.StubTechCapFactor_onshore_wind %>%
+      left_join_error_no_match(L2231.StubTechCapFactor_onshore_wind %>%
                                  select(region, capacity.factor) %>%
                                  unique(),
                                by = c("region")) %>%
       mutate(fcr = L2231.onshore_wind_fcr,
              grid.cost = fcr * cost / (CONV_YEAR_HOURS * capacity.factor * CONV_KWH_GJ) * gdp_deflator(1975, 2010)) -> L2231.grid.cost
-
-    # Adjust Malta (same grid costs as Greece)
-    L2231.grid.cost_mlt <- L2231.grid.cost %>%
-      filter(region == "Greece") %>%
-      mutate(region = "Malta")
-
-    L2231.grid.cost <- L2231.grid.cost %>%
-      filter(complete.cases(.)) %>%
-      bind_rows(L2231.grid.cost_mlt)
 
     # Set grid connection cost for all regions
     GCAM_region_names %>%
@@ -377,7 +343,7 @@ module_energy_L2231.wind_update <- function(command, ...) {
       add_legacy_name("L2231.SmthRenewRsrcCurves_onshore_wind") %>%
       add_precursors( "common/iso_GCAM_regID", "common/GCAM_region_names",
                       "energy/mappings/fuel_energy_input",  "energy/A20.wind_class_CFs",
-                      "L113.globaltech_capital_ATB", "L113.globaltech_OMfixed_ATB",
+                      "L1233.globaltech_capital_ATB", "L1233.globaltech_OMfixed_ATB",
                       "energy/NREL_onshore_energy", "energy/mappings/NREL_wind_ctry",
                       "L223.StubTechCapFactor_elec") ->
       L2231.SmthRenewRsrcCurves_onshore_wind

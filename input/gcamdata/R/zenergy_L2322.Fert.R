@@ -1,577 +1,552 @@
 # Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
 
-#' module_energy_L2322.Fert
+#' module_energy_L1322.Fert
 #'
-#' Provide supply sector information/keywords, subsector shareweights, global technology lifetime,
-#' energy inputs and coefficients, global fertilizer manufacturing technologies, etc. for the fertilizer sector.
+#' Compute ammonia fertilizer production and energy inputs by technology.
 #'
 #' @param command API command to execute
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
-#' the generated outputs:  \code{L2322.Supplysector_Fert}, \code{L2322.FinalEnergyKeyword_Fert}, \code{L2322.SubsectorLogit_Fert},
-#' \code{L2322.SubsectorShrwtFllt_Fert}, \code{L2322.SubsectorInterp_Fert}, \code{L2322.StubTech_Fert}, \code{L2322.GlobalTechShrwt_Fert},
-#' \code{L2322.GlobalTechCoef_Fert}, \code{L2322.GlobalTechCost_Fert}, \code{L2322.GlobalTechCapture_Fert}, \code{L2322.GlobalTechSCurve_Fert},
-#' \code{L2322.GlobalTechProfitShutdown_Fert}, \code{L2322.StubTechProd_FertProd}, \code{L2322.StubTechCoef_Fert}. The corresponding file in the
-#' original data system was \code{L2322.Fert.R} (energy level2).
-#' @details This chunk provides supply sector information/keywords, subsector shareweights, global technology lifetime,
-#' energy inputs and coefficients, global fertilizer manufacturing technologies, etc. for the fertilizer sector.
+#' the generated outputs: \code{L1322.Fert_Prod_MtNH3_R_F_Y}, \code{L1322.IO_R_Fert_F_Yh}, \code{L1322.in_EJ_R_indenergy_F_Yh}, \code{L1322.in_EJ_R_indfeed_F_Yh}, \code{L1322.Fert_NEcost_75USDkgNH3_F}. The corresponding file in the
+#' original data system was \code{LB1322.Fert.R} (energy level1).
+#' @details Fertilizer production and energy information was calculated using country-level fuel share and energy intensity data
+#' to allocate generic fertilizer production data across technologies. Re-allocation of energy use between energy and feedstock
+#' quantities for the industrial sector was done to avoid negative values at the country level, before aggregating
+#' to the regional level. Also, a final cost table was calculated using USA market fertilizer price data and H2A characteristics
+#' of hydrogen production technologies.
 #' @importFrom assertthat assert_that
-#' @importFrom dplyr arrange bind_rows filter if_else group_by left_join mutate select
-#' @importFrom tidyr complete nesting
-#' @author LF September 2017
-module_energy_L2322.Fert <- function(command, ...) {
+#' @importFrom dplyr filter group_by left_join mutate pull select summarise
+#' @importFrom tidyr complete fill gather replace_na spread
+#' @author AJS July 2017
+module_energy_L1322.Fert <- function(command, ...) {
+
+  MODULE_INPUTS <-
+    c(FILE = "common/iso_GCAM_regID",
+      FILE = "energy/mappings/IEA_ctry",
+      FILE = "energy/IEA_Fert_fuel_data",
+      FILE = "energy/H2A_Prod_Tech",
+      FILE = "energy/A21.globaltech_cost",
+      FILE = "energy/A22.globaltech_cost",
+      FILE = "energy/Rt_Nfert_bilateral_trade",
+      FILE = "energy/mappings/Rt_Nfert_commodities",
+      "L1321.in_EJ_R_indenergy_F_Yh",
+      "L132.in_EJ_R_indfeed_F_Yh",
+      "L142.ag_Fert_Prod_MtN_ctry_Y",
+      "L142.ag_Fert_NetExp_MtN_R_Y",
+      "L210.rsrc_info")
+
+  MODULE_OUTPUTS <-
+    c("L1322.Fert_Prod_MtNH3_R_F_Y",
+      "L1322.IO_R_Fert_F_Yh",
+      "L1322.in_EJ_R_indenergy_F_Yh",
+      "L1322.in_EJ_R_indfeed_F_Yh",
+      "L1322.Fert_NEcost_75USDkgNH3_F",
+      "L1322.Fert_GrossTrade_Mt_R_Y")
+
   if(command == driver.DECLARE_INPUTS) {
-    return(c(FILE = "common/GCAM_region_names",
-             FILE = "energy/calibrated_techs",
-             FILE = "energy/A322.sector",
-             FILE = "energy/A322.subsector_interp",
-             FILE = "energy/A322.subsector_logit",
-             FILE = "energy/A322.subsector_shrwt",
-             FILE = "energy/A322.globaltech_coef",
-             FILE = "energy/A322.globaltech_shrwt",
-             FILE = "energy/A322.globaltech_co2capture",
-             FILE = "energy/A322.globaltech_retirement",
-             "L1322.Fert_Prod_MtNH3_R_F_Y",
-             "L1322.IO_R_Fert_F_Yh",
-             "L1322.Fert_NEcost_75USDkgNH3_F",
-             "L142.ag_Fert_NetExp_MtN_R_Y"))
+    return(MODULE_INPUTS)
   } else if(command == driver.DECLARE_OUTPUTS) {
-    return(c("L2322.Supplysector_Fert",
-             "L2322.SectorUseTrialMarket_tra",
-             "L2322.FinalEnergyKeyword_Fert",
-             "L2322.SubsectorLogit_Fert",
-             "L2322.SubsectorShrwtFllt_Fert",
-             "L2322.SubsectorInterp_Fert",
-             "L2322.StubTech_Fert",
-             "L2322.GlobalTechShrwt_Fert",
-             "L2322.TechShrwt_TradedFert",
-             "L2322.GlobalTechCoef_Fert",
-             "L2322.TechCoef_TradedFert",
-             "L2322.StubTechMarket_FertImports",
-             "L2322.GlobalTechCost_Fert",
-             "L2322.GlobalTechCapture_Fert",
-             "L2322.GlobalTechSCurve_Fert",
-             "L2322.GlobalTechProfitShutdown_Fert",
-             "L2322.StubTechProd_FertProd",
-             "L2322.StubTechCoef_Fert",
-             "L2322.Production_FertExport",
-             "L2322.StubTechProd_FertImport",
-             "L2322.StubTechProd_FertDomCons",
-             "L2322.StubTechProd_NtoAg"))
+    return(MODULE_OUTPUTS)
   } else if(command == driver.MAKE) {
 
     all_data <- list(...)[[1]]
 
-    # Load required inputs
-    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names")
-    calibrated_techs <- get_data(all_data, "energy/calibrated_techs")
-    A322.sector <- get_data(all_data, "energy/A322.sector", strip_attributes = TRUE)
-    A322.subsector_interp <- get_data(all_data, "energy/A322.subsector_interp", strip_attributes = TRUE)
-    A322.subsector_logit <- get_data(all_data, "energy/A322.subsector_logit", strip_attributes = TRUE)
-    A322.subsector_shrwt <- get_data(all_data, "energy/A322.subsector_shrwt", strip_attributes = TRUE)
-    A322.globaltech_coef <- get_data(all_data, "energy/A322.globaltech_coef")
-    A322.globaltech_shrwt <- get_data(all_data, "energy/A322.globaltech_shrwt", strip_attributes = TRUE)
-    A322.globaltech_co2capture <- get_data(all_data, "energy/A322.globaltech_co2capture")
-    A322.globaltech_retirement <- get_data(all_data, "energy/A322.globaltech_retirement", strip_attributes = TRUE)
-    L1322.Fert_Prod_MtNH3_R_F_Y <- get_data(all_data, "L1322.Fert_Prod_MtNH3_R_F_Y", strip_attributes = TRUE)
-    L1322.IO_R_Fert_F_Yh <- get_data(all_data, "L1322.IO_R_Fert_F_Yh", strip_attributes = TRUE)
-    L1322.Fert_NEcost_75USDkgNH3_F <- get_data(all_data, "L1322.Fert_NEcost_75USDkgNH3_F")
-    L142.ag_Fert_NetExp_MtN_R_Y <- get_data(all_data, "L142.ag_Fert_NetExp_MtN_R_Y", strip_attributes = TRUE)
+    # Silence package notes
+    year <- value <- iso <- GCAM_region_ID <- sector <- fuel <- variable <- IEA_Fert_reg <- intensity_GJkgNH3 <-
+      value_share <- Fert_Prod_MtNH3 <- in_Fert <- value.x <- value.y <- in_indenergy <- in_indfeed <- check <-
+      mult <- value_share_adj <- coal <- gas <- Fert_Prod_MtNH3 <- in_Fert_adj <- feedstock_GJkgNH3 <- energy_GJkgNH3 <-
+      indenergy_to_Fert <- indfeed_to_Fert <- in_indenergy_netFert <- value_indenergy <- resource <- . <- `2005` <-
+      supplysector <- subsector <- technology <- minicam.non.energy.input <- improvement.max <- improvement.rate <-
+      improvement.shadow.technology <- NEcost <- Technology <- NEcost_75USDkgNH3 <- `Central Natural Gas Sequestration` <-
+      `Central Natural Gas` <- `Central Coal` <- `Central Coal Sequestration` <- Fert_Prod_MtNH3_adj <-
+      in_indfeed_netFert <- Central_Natural_Gas_Sequestration <- Central_Natural_Gas <- Central_Coal <- Central_Coal_Sequestration <- NULL
 
-    # ===================================================
-    # 0. Give binding for variable names used in pipeline
+    # Load required inputs ----
+    get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
 
-    year.fillout <- to.value <- technology <- year <-
-      share.weight <- supplysector <- subsector <- coefficient <- minicam.energy.input <-
-      NEcost_75USDkgNH3 <- input.cost <- remove.fraction <- half.life <- median.shutdown.point <-
-      value <- calOutputValue <- sector <- fuel <- subs.share.weight <- region <- fixedOutput <- . <- NULL
 
-    # ===================================================
-    # 1. Perform computations
-    # Create tables to delete technologies and subsectors in regions where heat is not modeled as a fuel
-    # 1a. Supplysector information
-    # L2322.Supplysector_Fert: Supply sector information for fertilizer sector
-    A322.sector %>%
-      write_to_all_regions(c(LEVEL2_DATA_NAMES[["Supplysector"]], LOGIT_TYPE_COLNAME),
-                           GCAM_region_names,
-                           has_traded = TRUE) ->
-      L2322.Supplysector_Fert
+    # Compute fertilizer production and energy inputs by technology ----
+    # Disaggregating fertilizer production by country / year to production technologies (gas, coal, oil)
 
-    # L2322.SectorUseTrialMarket_tra: Create solved markets for the traded sectors
-    L2322.SectorUseTrialMarket_tra <- filter(A322.sector, traded == 1) %>%
-      mutate(region = gcam.USA_REGION,
-             use.trial.market = 1) %>%
-      select(LEVEL2_DATA_NAMES[["SectorUseTrialMarket"]])
+    # First, extract fuel share data to create a dedicated table for fuel shares
+    IEA_Fert_fuel_data %>%
+      tidyr::gather(variable, value, -IEA_Fert_reg) %>% # Convert to long form
+      filter(grepl("share", variable)) %>% # Filter for only the share data
+      mutate(fuel = sub("share_", "", variable), # Create a dedicated fuel column
+             fuel = sub("oil", "refined liquids", fuel)) %>% # Rename oil to refined liquids
+      select(IEA_Fert_reg, fuel, value_share = value) ->
+      L1322.IEA_fert_fuel_shares
 
-    # L2322.FinalEnergyKeyword_Fert: Supply sector keywords for fertilizer sector
-    A322.sector %>%
-      write_to_all_regions(LEVEL2_DATA_NAMES[["FinalEnergyKeyword"]],
-                           GCAM_region_names,
-                           has_traded = TRUE) %>%
-      na.omit ->
-      L2322.FinalEnergyKeyword_Fert
+    # Now, extract intensities (energy per unit mass) to create a dedicated table for fuel intensities
+    IEA_Fert_fuel_data %>%
+      tidyr::gather(variable, value, -IEA_Fert_reg) %>%
+      filter(grepl("GJtNH3", variable)) %>% # Filter for only GJtNH3 (i.e., energy per unit mass)
+      mutate(fuel = sub("_GJtNH3", "", variable),
+             fuel = sub("oil", "refined liquids", fuel), # Rename oil to refined liquids
+             intensity_GJkgNH3 = value / CONV_T_KG) %>%  # Convert units to kg instead of ton of ammonia
+      select(IEA_Fert_reg, fuel, intensity_GJkgNH3) ->
+      L1322.IEA_fert_fuel_intensities
 
-    # 2b. Subsector information
-    # L2322.SubsectorLogit_Fert: Subsector logit exponents of fertilizer sector
-    A322.subsector_logit %>%
-      write_to_all_regions(c(LEVEL2_DATA_NAMES[["SubsectorLogit"]], LOGIT_TYPE_COLNAME),
-                           GCAM_region_names,
-                           has_traded = TRUE) ->
-      L2322.SubsectorLogit_Fert
+    # Repeat fertilizer production table by number of fuels and match in the IEA region, fuel share, and intensity for each country
+    # Note that IEA_ctry occasionally has muliple country names for a single iso. Dropping IEA_ctry (country name) column to avoid confusion.
+    IEA_iso_region <- unique(select(IEA_ctry, iso, IEA_Fert_reg))
 
-    # L2322.SubsectorShrwtFllt_Fert: Subsector shareweights of fertilizer sector
-    A322.subsector_shrwt %>%
-      filter(!is.na(year.fillout)) %>%
-      write_to_all_regions(LEVEL2_DATA_NAMES[["SubsectorShrwtFllt"]],
-                           GCAM_region_names,
-                           has_traded = TRUE) ->
-      L2322.SubsectorShrwtFllt_Fert
+    L142.ag_Fert_Prod_MtN_ctry_Y %>%
+      # In the energy system, Mt N is converted to Mt NH3
+      mutate(value_MtNH3 = value / CONV_NH3_N) %>%
+      select(-value) %>%
+      repeat_add_columns(tibble::tibble(fuel = c("coal", "gas", "refined liquids"))) %>% # Exanding table to include fuels for each iso
+      # change to inner_join here as L142.ag_Fert_Prod_MtN_ctry_Y may have unimportant FAO regions that not included in IEA_iso_region
+      inner_join(IEA_iso_region, by = "iso") %>% # Assign data to fert region using iso
+      # Now we can attach the share data, matching to fert region
+      left_join_error_no_match(L1322.IEA_fert_fuel_shares, by = c("fuel", "IEA_Fert_reg")) %>%
+      # Switch individual countries' fuel shares according to literature or to make energy balances work at the regional level.
+      # North Korea: coal in all years (http://www9.ocn.ne.jp/~aslan/dprkeng0409.pdf)
+      mutate(value_share = replace(value_share, (iso == "prk") & (fuel == "coal"), 1),
+             value_share = replace(value_share, (iso == "prk") & (fuel != "coal"), 0),
+             # Multiply total production of NH3 by fuel-specific shares to calculate ammonia production by fuel type
+             Fert_Prod_MtNH3 = value_MtNH3 * value_share) %>%
+      # Calculating energy inputs to fertilizer production by country and fuel type
+      # Match in the energy intensity by fuel type and IEA fertilizer region
+      left_join_error_no_match(L1322.IEA_fert_fuel_intensities, by = c("IEA_Fert_reg", "fuel")) %>%
+      mutate(in_Fert = Fert_Prod_MtNH3 * intensity_GJkgNH3) %>%
+      select(iso, year, fuel, value_MtNH3, value_share, in_Fert, intensity_GJkgNH3) ->
+      L1322.Fert_Prod_MtNH3_ctry_F_Y
 
-    # L2322.SubsectorInterp_Fert: Subsector shareweight interpolation of fertilizer sector
-    A322.subsector_interp %>%
-      filter(is.na(to.value)) %>%
-      write_to_all_regions(LEVEL2_DATA_NAMES[["SubsectorInterp"]],
-                           GCAM_region_names,
-                           has_traded = TRUE) ->
-      L2322.SubsectorInterp_Fert
+    # Checking total energy inputs to fertilizer against industrial energy use for each region
+    # First, create a couple lists to use to expand table in a later step
+    list_GCAM_region_ID <- unique(iso_GCAM_regID$GCAM_region_ID)
+    list_fuels <- unique(L1322.Fert_Prod_MtNH3_ctry_F_Y$fuel)
 
-    # 2c. Technology information
-    # L2322.StubTech_Fert: Identification of stub technologies of fertilizer sector
-    # Note: assuming that technology list in the shareweight table includes the full set (any others would default to a 0 shareweight)
-    # Traded technologies are not represented as stub technologies and are dropped here
-    A322.globaltech_shrwt %>%
-      filter(traded == 0) %>%
-      write_to_all_regions(LEVEL2_DATA_NAMES[["Tech"]],
-                           GCAM_region_names,
-                           has_traded = FALSE) %>%
-      rename(stub.technology = technology) ->
-      L2322.StubTech_Fert
-
-    # L2322.GlobalTechShrwt_Fert: Shareweights of global fertilizer sector technologies
-    # Exclude traded commodities from the global technology database
-    A322.globaltech_shrwt %>%
-      filter(traded == 0) %>%
-      select(-traded) %>%
-      gather_years(value_col = "share.weight") %>%
-      complete(nesting(supplysector, subsector, technology), year = c(year, MODEL_BASE_YEARS, MODEL_FUTURE_YEARS)) %>%
-      arrange(supplysector, subsector, technology, year) %>%
-      group_by(supplysector, subsector, technology) %>%
-      mutate(share.weight = approx_fun(year, share.weight, rule = 1)) %>%
-      ungroup %>%
-      filter(year %in% c(MODEL_BASE_YEARS, MODEL_FUTURE_YEARS)) %>%
-      rename(sector.name = supplysector, subsector.name = subsector) %>%
-      select(LEVEL2_DATA_NAMES[["GlobalTechShrwt"]]) ->
-      L2322.GlobalTechShrwt_Fert
-
-    # Traded technologies are assigned to all regions within a given region
-    A322.globaltech_shrwt %>%
-      filter(traded == 1) %>%
-      gather_years(value_col = "share.weight") %>%
-      complete(nesting(supplysector, subsector, technology, traded), year = c(year, MODEL_BASE_YEARS, MODEL_FUTURE_YEARS)) %>%
-      arrange(supplysector, subsector, technology, year) %>%
-      group_by(supplysector, subsector, technology) %>%
-      mutate(share.weight = approx_fun(year, share.weight, rule = 1)) %>%
-      ungroup %>%
-      filter(year %in% c(MODEL_BASE_YEARS, MODEL_FUTURE_YEARS)) %>%
-      write_to_all_regions(LEVEL2_DATA_NAMES[["TechShrwt"]],
-                           GCAM_region_names = GCAM_region_names,
-                           has_traded = TRUE) ->
-      L2322.TechShrwt_TradedFert
-
-    # L2322.GlobalTechCoef_Fert: Energy inputs and coefficients of global fertilizer energy use and feedstocks technologies
-    # Traded (export) technologies are not assigned to the global technology database
-    A322.globaltech_coef %>%
-      filter(traded == 0) %>%
-      gather_years(value_col = "coefficient") %>%
-      complete(nesting(supplysector, subsector, technology, minicam.energy.input), year = c(year, MODEL_BASE_YEARS, MODEL_FUTURE_YEARS)) %>%
-      arrange(supplysector, subsector, technology, minicam.energy.input, year) %>%
-      group_by(supplysector, subsector, technology, minicam.energy.input) %>%
-      mutate(coefficient = approx_fun(year, coefficient, rule = 1),
-             coefficient = round(coefficient, energy.DIGITS_COEFFICIENT)) %>%
-      ungroup %>%
-      filter(year %in% c(MODEL_BASE_YEARS, MODEL_FUTURE_YEARS)) %>%
-      rename(sector.name = supplysector, subsector.name = subsector) %>%
-      select(LEVEL2_DATA_NAMES[["GlobalTechCoef"]]) ->
-      L2322.GlobalTechCoef_Fert
-
-    # Traded (export) technologies are treated as standard technologies
-    A322.globaltech_coef %>%
-      filter(traded == 1) %>%
-      gather_years(value_col = "coefficient") %>%
-      complete(nesting(supplysector, subsector, technology, minicam.energy.input, traded), year = c(year, MODEL_BASE_YEARS, MODEL_FUTURE_YEARS)) %>%
-      arrange(supplysector, subsector, technology, minicam.energy.input, year) %>%
-      group_by(supplysector, subsector, technology, minicam.energy.input) %>%
-      mutate(coefficient = approx_fun(year, coefficient, rule = 1),
-             coefficient = round(coefficient, energy.DIGITS_COEFFICIENT)) %>%
-      ungroup %>%
-      filter(year %in% c(MODEL_BASE_YEARS, MODEL_FUTURE_YEARS)) %>%
-      write_to_all_regions(LEVEL2_DATA_NAMES[["TechCoef"]],
-                           GCAM_region_names = GCAM_region_names,
-                           has_traded = TRUE,
-                           set_market = TRUE) ->
-      L2322.TechCoef_TradedFert
-
-    # Market-names of import technologies are assigned to the USA
-    L2322.GlobalTechCoef_Fert %>%
-      filter(grepl("import", subsector.name)) %>%
-      rename(supplysector = sector.name,
-             subsector = subsector.name,
-             stub.technology = technology) %>%
-      write_to_all_regions(LEVEL2_DATA_NAMES[["StubTechMarket"]],
-                           GCAM_region_names,
-                           has_traded = FALSE) %>%
-      mutate(market.name = gcam.USA_REGION) ->
-      L2322.StubTechMarket_FertImports
-
-    # Costs of global technologies
-    # L2322.GlobalTechCost_Fert: Non-energy costs of global fertilizer manufacturing technologies
-    L2322.GlobalTechCoef_Fert %>%
-      select(LEVEL2_DATA_NAMES[["GlobalTechYr"]]) %>%
-      mutate(minicam.non.energy.input = "non-energy") %>%
-      left_join(L1322.Fert_NEcost_75USDkgNH3_F, by = c('technology' = 'fuel')) %>% # expecting NAs in the joined tibble
-      rename(input.cost = NEcost_75USDkgNH3) %>%
-      mutate(input.cost = round(input.cost, energy.DIGITS_COST)) %>%
-      na.omit -> # Export technologies have no cost assigned. Just drop the object
-      L2322.GlobalTechCost_Fert
-
-    # Carbon capture rates from technologies with CCS
-    # L2322.GlobalTechCapture_Fert: CO2 capture fractions from global fertilizer production technologies with CCS
-    ## No need to consider historical periods or intermittent technologies here
-    A322.globaltech_co2capture %>%
-      gather_years(value_col = "remove.fraction") %>%
-      complete(nesting(supplysector, subsector, technology), year = c(year, MODEL_FUTURE_YEARS)) %>%
-      arrange(supplysector, subsector, technology, year) %>%
-      group_by(supplysector, subsector, technology) %>%
-      mutate(remove.fraction = approx_fun(year, remove.fraction, rule = 1),
-             remove.fraction = round(remove.fraction, energy.DIGITS_REMOVE.FRACTION)) %>%
-      ungroup %>%
-      filter(year %in% MODEL_FUTURE_YEARS) %>%
-      rename(sector.name = supplysector, subsector.name = subsector) %>%
-      mutate(storage.market = "carbon-storage") ->
-      L2322.GlobalTechCapture_Fert
-
-    # Retirement information
-    A322.globaltech_retirement %>%
-      set_years %>%
-      mutate(year = as.integer(year)) %>%
-      rename(sector.name = supplysector, subsector.name = subsector) ->
-      A322.globaltech_retirement_with_years
-
-    # Copy the data in the last base year period through to the end year
-    A322.globaltech_retirement_with_years %>%
-      filter(year == MODEL_FINAL_BASE_YEAR) ->
-      A322.globaltech_retirement_max_baseyear
-
-    A322.globaltech_retirement_with_years %>%
-      filter(year == min(MODEL_FUTURE_YEARS)) %>%
-      select(-year) %>%
-      repeat_add_columns(tibble(year = MODEL_FUTURE_YEARS)) %>%
-      bind_rows(A322.globaltech_retirement_max_baseyear) ->
-      L2322.globaltech_retirement
-
-    # Retirement may consist of any of three types of retirement function (phased, s-curve, or none)
-    # All of these options have different headers, and all are allowed
-
-    # L2322.GlobalTechSCurve_Fert: Global tech lifetime and s-curve retirement function
-    L2322.globaltech_retirement %>%
-      filter(!is.na(half.life)) %>%
-      select(LEVEL2_DATA_NAMES[["GlobalTechYr"]], "lifetime", "steepness", "half.life") ->
-      L2322.GlobalTechSCurve_Fert
-
-    # L2322.GlobalTechProfitShutdown_Fert: Global tech profit shutdown decider.
-    L2322.globaltech_retirement %>%
-      filter(!is.na(median.shutdown.point)) %>%
-      select(LEVEL2_DATA_NAMES[["GlobalTechYr"]], "median.shutdown.point", "profit.shutdown.steepness") ->
-      L2322.GlobalTechProfitShutdown_Fert
-
-    # Calibration and region-specific data
-    # L2322.StubTechProd_FertProd: calibrated output of fertilizer production technologies
-    L1322.Fert_Prod_MtNH3_R_F_Y %>%
-      filter(year %in% MODEL_BASE_YEARS) %>%
-      rename(calOutputValue = value) %>%
-      mutate(calOutputValue = round(calOutputValue, energy.DIGITS_CALOUTPUT)) %>%
-      left_join_error_no_match(GCAM_region_names, by = 'GCAM_region_ID') %>%
-      left_join_error_no_match(select(calibrated_techs, sector, fuel, supplysector, subsector, technology), by = c("sector", "fuel") ) %>%
-      rename(stub.technology = technology) %>%
-      mutate(share.weight.year = year,
-             subs.share.weight = if_else(calOutputValue > 0, 1, 0),
-             tech.share.weight = subs.share.weight) %>%
-      select(LEVEL2_DATA_NAMES[["StubTechProd"]]) ->
-      L2322.StubTechProd_FertProd
-
-    # L2322.StubTechCoef_Fert: calibrated base-year coefficients of fertilizer production technologies
-    L1322.IO_R_Fert_F_Yh %>%
-      filter(year %in% MODEL_BASE_YEARS) %>%
-      rename(coefficient = value) %>%
-      mutate(coefficient = round(coefficient, energy.DIGITS_COEFFICIENT)) %>%
-      filter(coefficient != 0) %>% # Where 0, drop from this table (to revert to assumed defaults)
-      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
-      left_join_error_no_match(select(calibrated_techs, sector, fuel, supplysector, subsector, technology, minicam.energy.input), by = c("sector", "fuel")) %>%
-      mutate(stub.technology = technology, market.name = region) %>%
-      select(LEVEL2_DATA_NAMES[["StubTechCoef"]]) ->
-      L2322.StubTechCoef_Fert
-
-    # Ammonia Exports = NetExports where positive
-    L142.ag_Fert_NetExp_MtN_R_Y %>%
-      select(GCAM_region_ID, year, calOutputValue = value) %>%
-      filter(year %in% MODEL_BASE_YEARS) %>%
-      mutate(calOutputValue = if_else(calOutputValue < 0, 0,
-                                      round(calOutputValue / CONV_NH3_N, energy.DIGITS_CALOUTPUT))) %>%   # Convert N export to NH3
-      left_join_error_no_match(GCAM_region_names,
-                               by = "GCAM_region_ID") %>%
-      rename(market.name = region) %>%
-      left_join_error_no_match(L2322.TechCoef_TradedFert,
-                               by = c("market.name", "year")) %>%
-      mutate(share.weight.year = year,
-             subs.share.weight = if_else(calOutputValue > 0, 1, 0),
-             tech.share.weight = if_else(calOutputValue > 0, 1, 0)) %>%
-      select(LEVEL2_DATA_NAMES[["Production"]]) ->
-      L2322.Production_FertExport
-
-    # Ammonia Imports = NetExports where negative
-    L142.ag_Fert_NetExp_MtN_R_Y %>%
-      select(GCAM_region_ID, year, calOutputValue = value) %>%
-      filter(year %in% MODEL_BASE_YEARS) %>%
-      mutate(calOutputValue = if_else(calOutputValue > 0, 0,
-                                      round(calOutputValue * -1 / CONV_NH3_N, energy.DIGITS_CALOUTPUT))) %>%   # Convert N import to NH3
-      left_join_error_no_match(GCAM_region_names,
-                               by = "GCAM_region_ID") %>%
-      left_join_error_no_match(filter(L2322.StubTech_Fert, grepl("imported", subsector)),
-                                      by = "region") %>%
-      mutate(share.weight.year = year,
-             subs.share.weight = if_else(calOutputValue > 0, 1, 0),
-             tech.share.weight = if_else(calOutputValue > 0, 1, 0)) %>%
-      select(LEVEL2_DATA_NAMES[["StubTechProd"]]) ->
-      L2322.StubTechProd_FertImport
-
-    # Ammonia Consumption of Domestic Production = Production - Exports
-    L2322.Production_FertExport %>%
-      mutate(region = substr(subsector, 1, regexpr("traded", subsector, fixed = T) - 2)) %>%
-      select(region, year, Exports = calOutputValue) ->
-      L2322.AmmoniaExports
-
-    L2322.StubTechProd_FertProd %>%
-      group_by(region, year) %>%
-      summarise(Production = sum(calOutputValue)) %>%
+    # Aggregate by GCAM region
+    L1322.Fert_Prod_MtNH3_ctry_F_Y %>%
+      left_join_error_no_match(iso_GCAM_regID, by = "iso") %>% # Assign data to GCAM region using iso
+      group_by(GCAM_region_ID, fuel, year) %>% # Aggregate by GCAM region, fuel, and year
+      summarise(in_Fert = sum(in_Fert)) %>%
       ungroup() %>%
-      left_join_error_no_match(L2322.AmmoniaExports, by = c("region", "year")) %>%
-      mutate(calOutputValue = Production - Exports) %>%
-      left_join_error_no_match(filter(L2322.StubTech_Fert, grepl("domestic", subsector)),
-                               by = "region") %>%
-      mutate(share.weight.year = year,
-             subs.share.weight = if_else(calOutputValue > 0, 1, 0),
-             tech.share.weight = if_else(calOutputValue > 0, 1, 0)) %>%
-      select(LEVEL2_DATA_NAMES[["StubTechProd"]]) ->
-      L2322.StubTechProd_FertDomCons
+      # Expand this table to all regions, fuels, and years in case there are regions that aren't countries in the aglu databases
+      complete(GCAM_region_ID = list_GCAM_region_ID,
+               fuel = list_fuels,
+               year = HISTORICAL_YEARS,
+               fill = list(in_Fert = 0)) %>%
+      # Attach data from ind energy and ind feedstocks
+      left_join_error_no_match(L1321.in_EJ_R_indenergy_F_Yh, by = c("GCAM_region_ID", "year", "fuel")) %>%
+      left_join_error_no_match(L132.in_EJ_R_indfeed_F_Yh, by = c("GCAM_region_ID", "fuel", "year")) %>%
+      select(GCAM_region_ID, fuel, year, in_Fert, in_indenergy = value.x, in_indfeed = value.y) %>%
+      # Finally, check whether the remaining available industrial energy use is not negative
+      # (i.e., ind. energy + ind. feedstocks - fert)
+      mutate(check = in_indenergy + in_indfeed - in_Fert) ->
+      L1322.Fert_ALL_MtNH3_R_F_Y
 
-    # Calibrated flow of ammonia to agricultural "N fertilizer"
-    # The input of ammonia to N fertilizer is equal to the sum of consumption of domestic production plus imports,
-    # times the NH3-to-N stoichiometric mass ratio
-    L2322.StubTechProd_FertDomCons %>%
-      select(region, year, DomConsumption = calOutputValue) %>%
-      left_join_error_no_match(select(L2322.StubTechProd_FertImport,
-                                      region, year, Imports = calOutputValue),
-                               by = c("region", "year")) %>%
-      mutate(calOutputValue = round((DomConsumption + Imports) * CONV_NH3_N,
-                                    energy.DIGITS_CALOUTPUT)) %>%
-      left_join_error_no_match(filter(L2322.StubTech_Fert, supplysector == aglu.FERT_NAME),
-                               by = "region") %>%
-      mutate(share.weight.year = year,
-             subs.share.weight = if_else(calOutputValue > 0, 1, 0),
-             tech.share.weight = if_else(calOutputValue > 0, 1, 0)) %>%
-      select(LEVEL2_DATA_NAMES[["StubTechProd"]]) ->
-      L2322.StubTechProd_NtoAg
+    # Modifying fertilizer production shares so that industrial energy/feedstock use does not go negative for any fuels
+    # Modify the fuel shares in the country-level fertilizer production tables, and re-compute fertilizer production quantities
+    L1322.Fert_ALL_MtNH3_R_F_Y %>%
+      filter(check < 0) %>%
+      mutate(mult = (1 - (-1 * check / in_Fert))) %>%
+      select(GCAM_region_ID, fuel, year, mult)->
+      L1322.Fert_modify
 
-    # ===================================================
-    # Produce outputs
+    # For matched region/fuel/year, multiply the original shares by the multipliers from above
+    L1322.Fert_Prod_MtNH3_ctry_F_Y %>%
+      left_join_error_no_match(iso_GCAM_regID, by = "iso") %>%
+      # left_join_error_no_match cannot be used because there are some rows in the base table left unmatched. NAs will be introduced.
+      left_join(L1322.Fert_modify, by = c("GCAM_region_ID", "fuel", "year")) %>%
+      replace_na(list(mult = 1)) %>%
+      mutate(value_share_adj = value_share * mult) %>%
+      select(iso, GCAM_region_ID, year, fuel, value_MtNH3, value_share_adj, intensity_GJkgNH3) %>%
+      unique()->
+      L1322.Fert_Prod_MtNH3_ctry_F_Y_share_adj
 
-    L2322.Supplysector_Fert %>%
-      add_title("Supply sector information for fertilizer sector") %>%
-      add_units("NA") %>%
-      add_comments("For fertilizer sector, the supply sector information (output.unit, input.unit, price.unit, logit.year.fillout, logit.exponent) from A322.sector is expended into all GCAM regions") %>%
-      add_legacy_name("L2322.Supplysector_Fert") %>%
-      add_precursors("common/GCAM_region_names", "energy/A322.sector") ->
-      L2322.Supplysector_Fert
+    # For regions whose fuel shares changed, re-assign the production and energy inputs to the oil-based technology
+    # Note that the sum of coal and gas shares never exceed 1. So the minimum share for refined liquids would be 0.
+    L1322.Fert_Prod_MtNH3_ctry_F_Y_share_adj %>%
+      select(iso, year, fuel, value_share_adj) %>%
+      spread(fuel, value_share_adj) %>% # This is to set up the calculation in the next step
+      mutate(`refined liquids` = 1 - coal - gas) %>%
+      tidyr::gather(fuel, value_share_adj, -iso, -year) ->
+      Ctry_fuel_share_adj
 
-    L2322.SectorUseTrialMarket_tra %>%
-      add_title("Supplysector flag indicating to make trial markets for traded ammonia") %>%
-      add_units("NA") %>%
-      add_comments("This helps model solution") %>%
-      add_precursors("energy/A322.sector") ->
-      L2322.SectorUseTrialMarket_tra
+    # Disaggregating input energy to fertilizer production into energy use (combustion) and feedstocks
+    # The "feedstock" requirement is equal to the energy content of the hydrogen in NH3
+    # see https://www.iea.org/publications/freepublications/publication/chemical_petrochemical_sector.pdf
+    H_energy_GJtH2 <- 120 # Energy content of hydrogen is 120 MJ/kg, which is 120 GJ/t
+    # See https://hypertextbook.com/facts/2005/MichelleFung.shtml
+    NH3_H_frac <- 3 / 17 # Mass ratio of hydrogen in ammonia is about 3/17
+    NH3_energy_GJtNH3 <- H_energy_GJtH2 * NH3_H_frac # Calculating energy in ammonia
+    NH3_energy_GJkgNH3 <- NH3_energy_GJtNH3  / CONV_T_KG # Calcuating energy per kg of NH3
 
-    L2322.FinalEnergyKeyword_Fert %>%
-      add_title("Supply sector keywords for fertilizer sector") %>%
-      add_units("NA") %>%
-      add_comments("For fertilizer sector, the supply sector final energy keywords from A322.sector are expended into all GCAM regions") %>%
-      add_legacy_name("L2322.FinalEnergyKeyword_Fert") %>%
-      add_precursors("common/GCAM_region_names", "energy/A322.sector") ->
-      L2322.FinalEnergyKeyword_Fert
+    # Re-compute fertilizer production and energy requirements using these new shares
+    L1322.Fert_Prod_MtNH3_ctry_F_Y_share_adj %>%
+      select(-value_share_adj) %>% # Drop old share. Will be replaced with new values in next step.
+      left_join_error_no_match(Ctry_fuel_share_adj, by = c("iso", "year", "fuel")) %>%
+      mutate(Fert_Prod_MtNH3_adj = value_MtNH3 * value_share_adj, # Adjust Fert_Prod with adjusted shares
+             in_Fert_adj = Fert_Prod_MtNH3_adj * intensity_GJkgNH3) %>% # Adjust in_Fert with adjusted production
+      # Recheck total energy inputs to fertilizer against industrial energy use for each region
+      # Aggregate to GCAM region
+      group_by(GCAM_region_ID, fuel, year) %>%
+      summarise(Fert_Prod_MtNH3_adj = sum(Fert_Prod_MtNH3_adj),
+                in_Fert_adj = sum(in_Fert_adj)) %>%
+      ungroup() %>%
+      # Expand table to write out to all region x fuel x year combinations
+      complete(GCAM_region_ID = list_GCAM_region_ID,
+               fuel = list_fuels,
+               year = HISTORICAL_YEARS,
+               fill = list(in_Fert_adj = 0, Fert_Prod_MtNH3_adj = 0)) %>%
+      # Re-checking total energy inputs to fertilizer against industrial energy use for each region
+      left_join_error_no_match(L1322.Fert_ALL_MtNH3_R_F_Y, by = c("GCAM_region_ID", "fuel", "year")) %>%
+      mutate(check = in_indenergy + in_indfeed - in_Fert_adj, # Recheck, adjusting for in_Fert_adj
+             check = replace(check, abs(check) < 1e-6, 0),
+             # Recalculate intensity
+             intensity_GJkgNH3 = in_Fert_adj / Fert_Prod_MtNH3_adj) %>%
+      replace_na(list(intensity_GJkgNH3 = 0)) %>%
+      # Adding column for feedstock energy density, which was calcuated earlier using hydrogen density
+      mutate(feedstock_GJkgNH3 = NH3_energy_GJkgNH3, # Adding single column with energy density of feedstock
+             energy_GJkgNH3 = intensity_GJkgNH3 - feedstock_GJkgNH3, # Substract energy density of feedstock
+             # Calculate first-order estimate of energy and feedstock quantities in the industrial sector
+             indfeed_to_Fert = Fert_Prod_MtNH3_adj * feedstock_GJkgNH3,
+             indenergy_to_Fert = Fert_Prod_MtNH3_adj * energy_GJkgNH3,
+             # Calculate remaining industrial energy and feedstock consumption re-allocating to avoid negative values
+             in_indenergy_netFert = in_indenergy - indenergy_to_Fert,
+             in_indfeed_netFert = in_indfeed - indfeed_to_Fert,
+             # This next step pertains to the available energy and feedstock quantities for the industrial sector,
+             # in regions where either went negative as a result of including the fertilizer industry (using the
+             # IEA's shares of production by fuel type, modified so that no regions went negative, and following
+             # the IEA's conventions on disaggregation of feedstocks and energy-use). We are assuming that for the
+             # purposes of re-allocation of energy from the (general) industrial sector to the fertilizer sector,
+             # all energy is available, whether initially classified as feedstocks or energy-use. This may zero out
+             # both energy and feedstocks or both in the general industrial sector, causing all industrial demands
+             # of natural gas to be for the ammonia industry.
+             # Note that the quantities are added because one is negative.
+             in_indenergy_netFert = replace(in_indenergy_netFert, in_indfeed_netFert < 0,
+                                            round((in_indenergy_netFert + in_indfeed_netFert)[in_indfeed_netFert < 0], 10)),
+             in_indfeed_netFert = replace(in_indfeed_netFert, in_indfeed_netFert < 0, 0),
+             in_indfeed_netFert = replace(in_indfeed_netFert, in_indenergy_netFert < 0,
+                                          round((in_indfeed_netFert + in_indenergy_netFert)[in_indenergy_netFert < 0], 10)),
+             in_indenergy_netFert = replace(in_indenergy_netFert, in_indenergy_netFert < 0, 0),
+             # Add column for sector, which will be "ammonia"
+             sector = "ammonia") %>%
+      select(GCAM_region_ID, fuel, sector, year, Fert_Prod_MtNH3_adj, intensity_GJkgNH3,
+             in_indenergy_netFert, in_indfeed_netFert) ->
+      L1322.Fert_ALL_MtNH3_R_F_Y_adj
 
-    L2322.SubsectorLogit_Fert %>%
-      add_title("Subsector logit exponents of fertilizer sector") %>%
-      add_units("NA") %>%
-      add_comments("For fertilizer sector, the subsector logit exponents from A322.subsector_logit are expanded into all GCAM regions") %>%
-      add_legacy_name("L2322.SubsectorLogit_Fert") %>%
-      add_precursors("energy/A322.subsector_logit", "common/GCAM_region_names") ->
-      L2322.SubsectorLogit_Fert
+    # Building tables of fertilizer production by technology, IO coefs, and energy/feedstock inputs to rest of industry ----
+    # Four of the final five tables will be built here.
 
-    L2322.SubsectorShrwtFllt_Fert %>%
-      add_title("Subsector shareweights of fertilizer") %>%
-      add_units("Unitless") %>%
-      add_comments("For fertilizer sector, the subsector shareweights from A322.subsector_shrwt are expanded into all GCAM regions") %>%
-      add_legacy_name("L2322.SubsectorShrwtFllt_Fert") %>%
-      add_precursors("energy/A322.subsector_shrwt", "common/GCAM_region_names") ->
-      L2322.SubsectorShrwtFllt_Fert
+    # Creating final output table "Fertilizer production by GCAM region / fuel / year"
+    L1322.Fert_ALL_MtNH3_R_F_Y_adj %>%
+      select(GCAM_region_ID, sector, fuel, year, value = Fert_Prod_MtNH3_adj) ->
+      L1322.Fert_Prod_MtNH3_R_F_Y # Note that this is a final output table
 
-    L2322.SubsectorInterp_Fert %>%
-      add_title("Subsector shareweight interpolation of fertilizer sector") %>%
-      add_units("NA") %>%
-      add_comments("For fertilizer sector, the subsector shareweight interpolation function infromation from A322.subsector_interp is expanded into all GCAM regions") %>%
-      add_legacy_name("L2322.SubsectorInterp_Fert") %>%
-      add_precursors("energy/A322.subsector_interp", "common/GCAM_region_names") ->
-      L2322.SubsectorInterp_Fert
+    # Creating final output table "Fertilizer input-output coefs by GCAM region / fuel (base year techs only) / year"
+    L1322.Fert_ALL_MtNH3_R_F_Y_adj %>%
+      select(GCAM_region_ID, sector, fuel, year, value = intensity_GJkgNH3) ->
+      L1322.IO_R_Fert_F_Yh # Note that this is a final output table
 
-    L2322.StubTech_Fert %>%
-      add_title("Stub-technology (coal, coal CCS, and etc.) for fertilizer sector") %>%
-      add_units("NA") %>%
-      add_comments("For fertilizer sector, the stub technologies from A322.globaltech_shrwt are expanded into all GCAM regions") %>%
-      add_legacy_name("L2322.StubTech_Fert") %>%
-      add_precursors("energy/A322.globaltech_shrwt", "common/GCAM_region_names") ->
-      L2322.StubTech_Fert
+    # Creating final output table "Adjusted industrial feedstock use by GCAM region / fuel / year"
+    # We already calcuated the values. We only need to add a column for the sector and strip out unnecessary columns.
+    L1322.Fert_ALL_MtNH3_R_F_Y_adj %>%
+      mutate(sector = "industry_feedstocks") %>%
+      select(GCAM_region_ID, sector, fuel, year, value = in_indfeed_netFert) ->
+      L1322.in_EJ_R_indfeed_F_Yh # Note that this is a final output table
 
-    L2322.GlobalTechShrwt_Fert %>%
-      add_title("Shareweights of global fertilizer sector technologies") %>%
-      add_units("Unitless") %>%
-      add_comments("For fertilizer sector, the share weights from A322.globaltech_shrwt are interpolated into all base years and future years") %>%
-      add_legacy_name("L2322.GlobalTechShrwt_Fert") %>%
-      add_precursors("energy/A322.globaltech_shrwt") ->
-      L2322.GlobalTechShrwt_Fert
+    # Extract the values we calculated for industrial energy use. These values will be used for its respective final table.
+    L1322.Fert_ALL_MtNH3_R_F_Y_adj %>%
+      select(GCAM_region_ID, fuel, year, value = in_indenergy_netFert) ->
+      L1322.in_EJ_R_indenergy_Ffert_Yh
 
-    L2322.TechShrwt_TradedFert %>%
-      add_title("Shareweights of traded fertilizer sector technologies") %>%
-      add_units("Unitless") %>%
-      add_comments("For fertilizer sector, the share weights from A322.globaltech_shrwt are interpolated into all base years and future years") %>%
-      add_precursors("common/GCAM_region_names") %>%
-      same_precursors_as(L2322.GlobalTechShrwt_Fert) ->
-      L2322.TechShrwt_TradedFert
+    # Creating final output table "Adjusted industrial energy use by GCAM region / fuel / year"
+    # We are starting with the input industrial energy table and replacing a portion of the values we calcuated in this chunk.
+    L1321.in_EJ_R_indenergy_F_Yh %>%
+      rename(value_indenergy = value) %>%
+      # left_join_error_no_match cannot be used because the joining tibble has less rows, so NAs will be introduced.
+      # This will be helpful as a filter in the following step.
+      left_join(L1322.in_EJ_R_indenergy_Ffert_Yh, by = c("GCAM_region_ID", "fuel", "year")) %>% # Join values we calculated
+      # Replace any NAs with original industrial energy value
+      mutate(value = replace(value, is.na(value), value_indenergy[is.na(value)])) %>%
+      select(GCAM_region_ID, sector, fuel, year, value) ->
+      L1322.in_EJ_R_indenergy_F_Yh # Note that this is a final output table.
 
-    L2322.GlobalTechCoef_Fert %>%
-      add_title("Energy inputs and coefficients of global fertilizer energy use and feedstocks technologies") %>%
-      add_units("GJ/kg NH3 for ammonia supplysector; Unitless for regional ammonia; kgNH3/kgN for N fertilizer") %>%
-      add_comments("For fertilizer sector, the energy use coefficients from A322.globaltech_coef are interpolated into all model years") %>%
-      add_legacy_name("energy/A322.globaltech_coef") %>%
-      add_precursors("energy/A322.globaltech_coef") ->
-      L2322.GlobalTechCoef_Fert
 
-    L2322.TechCoef_TradedFert %>%
-      add_title("Energy inputs, coefficients, and market names of traded fertilizer technologies") %>%
-      add_units("unitless IO") %>%
-      add_comments("Traded technologies are not assigned to the global technology database") %>%
-      add_precursors("common/GCAM_region_names") %>%
-      same_precursors_as(L2322.GlobalTechCoef_Fert) ->
-      L2322.TechCoef_TradedFert
+    # Calculate fertilizer non-energy costs by technology ----
+    # These technologies include gas, gas with CCS, coal, coal with CCS, and oil
+    # First, calculate gas cost per kg NH3
+    # Calculating non-energy costs for gas technology as USA market fertilizer price minus GCAM fuel costs
+    # Calculate the gas price as the sum of resource costs plus intermediate sectoral mark-ups
 
-    L2322.StubTechMarket_FertImports %>%
-      add_title("Market-name of ammonia import technologies in each region") %>%
-      add_units("unitless IO") %>%
-      add_comments("Import markets are cleared within the USA region") %>%
-      add_precursors("common/GCAM_region_names") %>%
-      same_precursors_as(L2322.GlobalTechCoef_Fert) ->
-      L2322.StubTechMarket_FertImports
 
-    L2322.GlobalTechCost_Fert %>%
-      add_title("Non-energy costs of global fertilizer manufacturing technologies") %>%
-      add_units("1975 USD/kgNH3") %>%
-      add_comments("For fertilizer sector, the non-energy costs of global fertilizer manufacturing technologies are calculated using values from L1322.Fert_NEcost_75USDkgNH3_F") %>%
-      add_legacy_name("L2322.GlobalTechCost_Fert") %>%
-      add_precursors("L1322.Fert_NEcost_75USDkgNH3_F") ->
-      L2322.GlobalTechCost_Fert
+    # The processing steps below ensure that the base year for fertilizer prices is included
+    L210.rsrc_info %>%
+      filter(resource == "natural gas") %>%
+      gather_years() %>%
+      select(resource, year, value) %>%
+      complete(resource, year = sort(unique(c(year, aglu.FERT_PRICE_YEAR)))) %>%
+      mutate(value = approx_fun(year, value)) %>%
+      filter(year == aglu.FERT_PRICE_YEAR) %>%
+      mutate(value = replace_na(value, 0)) %>%
+      pull(value) ->
+      A10.rsrc_cost_aglu.FERT_PRICE_YEAR # Save cost as single unique number. Units are 1975 USD per GJ.
 
-    L2322.GlobalTechCapture_Fert %>%
-      add_title("CO2 capture fractions from global fertilizer production technologies with CCS") %>%
-      add_units("Unitless") %>%
-      add_comments("For fertilizer sector, the remove fractions from A322.globaltech_co2capture are interpolated into all model years") %>%
-      add_legacy_name("L2322.GlobalTechCapture_Fert") %>%
-      add_precursors("energy/A322.globaltech_co2capture") ->
-      L2322.GlobalTechCapture_Fert
 
-    L2322.GlobalTechSCurve_Fert %>%
-      add_title("Global tech lifetime and s-curve retirement function") %>%
-      add_units("year for lifetime and halflife; Unitless for steepness") %>%
-      add_comments("The values are extracted from L2322.globaltech_retirement for entries that half life value is not NA") %>%
-      add_legacy_name("L2322.GlobalTechSCurve_Fert") %>%
-      add_precursors("energy/A322.globaltech_retirement") ->
-      L2322.GlobalTechSCurve_Fert
+    # A21.globaltech_cost and A22.globaltech_cost report costs on primary energy handling (A21) and transformation technologies (A22)
+    # Units for both are 1975$/GJ
+    # As mentioned above, because aglu.FERT_PRICE_YEAR is the year used as the fertilizer base price (from L210.rsrc_info), we will interpolate for
+    # this year for both global tech cost tables so that we may add up all costs consistently.
 
-    L2322.GlobalTechProfitShutdown_Fert %>%
-      add_title("Global tech profit shutdown decider") %>%
-      add_units("Unitless") %>%
-      add_comments("The values are extracted from L2322.globaltech_retirement for entries that median shutdown point is not NA") %>%
-      add_legacy_name("L2322.GlobalTechProfitShutdown_Fert") %>%
-      add_precursors("energy/A322.globaltech_retirement") ->
-      L2322.GlobalTechProfitShutdown_Fert
+    # Interpolate to get cost of primary energy transformation for natural gas in aglu.FERT_PRICE_YEAR
+    A22.globaltech_cost %>%
+      filter(technology == "natural gas") %>%
+      gather_years() %>%
+      select(technology, year, value) %>%
+      complete(technology, year = sort(unique(c(year, aglu.FERT_PRICE_YEAR)))) %>%
+      mutate(value = approx_fun(year, value)) %>%
+      filter(year == aglu.FERT_PRICE_YEAR) %>%
+      mutate(value = if_else(is.na(value),0,as.double(value))) %>%
+      pull(value) -> # Save cost as single number. Units are 1975 USD per GJ.
+      A22.globaltech_cost_aglu.FERT_PRICE_YEAR
 
-    L2322.StubTechProd_FertProd %>%
-      add_title("calibrated output of fertilizer technologies") %>%
-      add_units("Mt N") %>%
-      add_comments("Values are calculated using L1322.Fert_Prod_MtNH3_R_F_Y then added GCAM region information") %>%
-      add_legacy_name("L2322.StubTechProd_Fert") %>%
-      add_precursors("L1322.Fert_Prod_MtNH3_R_F_Y", "common/GCAM_region_names", "energy/calibrated_techs") ->
-      L2322.StubTechProd_FertProd
+    # Sum up costs. Units are 1975 USD per GJ.
+    L1322.P_gas_75USDGJ <- A10.rsrc_cost_aglu.FERT_PRICE_YEAR + energy.GAS_PIPELINE_COST_ADDER_75USDGJ
 
-    L2322.StubTechCoef_Fert %>%
-      add_title("calibrated base-year coefficients of fertilizer production technologies") %>%
-      add_units("Unitless") %>%
-      add_comments("Coefficients are calculated using L1322.IO_R_Fert_F_Yh") %>%
-      add_legacy_name("L2322.StubTechCoef_Fert") %>%
-      add_precursors("L1322.IO_R_Fert_F_Yh", "common/GCAM_region_names", "energy/calibrated_techs") ->
-      L2322.StubTechCoef_Fert
+    # Obtain fertilizer input-output cofficient for natural gas in aglu.FERT_PRICE_YEAR
+    L1322.IO_R_Fert_F_Yh %>%
+      filter(year == aglu.FERT_PRICE_YEAR,
+             GCAM_region_ID == gcam.USA_CODE,
+             fuel == "gas") %>%
+      pull(value) -> # Save coefficient as single number
+      L1322.IO_GJkgNH3_Fert_gas
 
-    L2322.Production_FertExport %>%
-      add_title("calibrated base-year exports of ammonia") %>%
+    # Multiply cost by input-output cofficient. Units are 1975 USD per GJ.
+    L1322.Fert_Fuelcost_75USDGJ_gas <- L1322.P_gas_75USDGJ * L1322.IO_GJkgNH3_Fert_gas
+
+    # Convert NH3 cost in 2010$/tNH3 to 1975$/kgNH3
+    # Note that aglu.FERT_PRICE is only used here for calculating nonenergy cost
+    # aglu.FERT_PRICE is not a real value since the price should be regional
+
+    Fert_Cost_75USDkgNH3 <- aglu.FERT_PRICE * gdp_deflator(1975, aglu.FERT_PRICE_YEAR) * CONV_KG_T
+
+    # Calculate non-fuel cost of natural gas steam reforming (includes delivery charges)
+    L1322.Fert_NEcost_75USDkgNH3_gas <- as.double(Fert_Cost_75USDkgNH3 - L1322.Fert_Fuelcost_75USDGJ_gas)
+
+
+    # Use H2A technology characteristics to derive characteristics of other technologies
+
+    # NOTE: Because our NGSR NEcosts were calculated as a residual from mkt prices, and include delivery costs,
+    # not using a ratio of costs, but rather an arithmetic adder. H2A costs are in $/kgH; convert to NH3-equivalent
+
+    # First, calculate costs in 1975 USD per kg NH3
+    H2A_Prod_Tech %>%
+      mutate(NEcost_75USDkgNH3 = NEcost * gdp_deflator(1975, 2016) * NH3_H_frac) ->
+      H2A_Prod_Tech_1975
+
+    # Derive costs as the cost of NGSR plus the specified cost adder
+    H2A_Prod_Tech_1975 %>%
+      select(Technology, NEcost_75USDkgNH3) %>%
+      mutate(Technology= if_else(Technology=="Central Natural Gas Sequestration","Central_Natural_Gas_Sequestration",Technology),
+             Technology= if_else(Technology=="Central Natural Gas","Central_Natural_Gas",Technology),
+             Technology= if_else(Technology=="Central Coal","Central_Coal",Technology),
+             Technology= if_else(Technology=="Central Coal Sequestration","Central_Coal_Sequestration",Technology)) %>%
+      spread(Technology, NEcost_75USDkgNH3) %>%
+      mutate(gasCCS = as.double(Central_Natural_Gas_Sequestration - Central_Natural_Gas + L1322.Fert_NEcost_75USDkgNH3_gas),
+             coal = as.double(Central_Coal - Central_Natural_Gas+ L1322.Fert_NEcost_75USDkgNH3_gas),
+             coalCCS = as.double(Central_Coal_Sequestration - Central_Natural_Gas+ L1322.Fert_NEcost_75USDkgNH3_gas))-> H2A_Prod_Tech_1975
+
+    H2A_Prod_Tech_1975 ->L1322.Fert_NEcost_75USDkgNH3_technologies
+
+
+    # Here the individual costs will be saved. These values will be used to build the final table.
+    L1322.Fert_NEcost_75USDkgNH3_gasCCS <- L1322.Fert_NEcost_75USDkgNH3_technologies[["gasCCS"]]
+
+    L1322.Fert_NEcost_75USDkgNH3_coal <- L1322.Fert_NEcost_75USDkgNH3_technologies[["coal"]]
+
+    L1322.Fert_NEcost_75USDkgNH3_coalCCS <- L1322.Fert_NEcost_75USDkgNH3_technologies[["coalCCS"]]
+
+    #For H2, subtract out natural gas SMR non-energy cost to avoid double counting
+    L1322.Fert_NEcost_75USDkgNH3_H2 <- L1322.Fert_NEcost_75USDkgNH3_gas-L1322.Fert_NEcost_75USDkgNH3_technologies[["Central_Natural_Gas"]]
+
+    # Oil
+    # For oil, the lack of differentiation in oil-derived products means that the fuel costs are too high
+    # Fertilizer is made from relatively low-cost by-products of oil refining
+    # Also, the technology is being phased out where it is currently used (primarily India)
+    # To minimize price distortions from this phase-out, and to ensure no negative profit rates in the ag sector,
+    # set the NE cost to generally balance the total net costs with natural gas steam reforming
+
+    L1322.Fert_NEcost_75USDkgNH3_oil <- -0.05
+
+    # Build final output table with NE costs by technology.  Non-energy costs for direct hydrogen production were set equal to those of vented gas.
+    L1322.Fert_NEcost_75USDkgNH3_F <- tibble(fuel = c("gas", "gas CCS", "coal", "coal CCS", "refined liquids","hydrogen"),
+                                             NEcost_75USDkgNH3 = c(L1322.Fert_NEcost_75USDkgNH3_gas,
+                                                                   L1322.Fert_NEcost_75USDkgNH3_gasCCS,
+                                                                   L1322.Fert_NEcost_75USDkgNH3_coal,
+                                                                   L1322.Fert_NEcost_75USDkgNH3_coalCCS,
+                                                                   L1322.Fert_NEcost_75USDkgNH3_oil,
+                                                                   L1322.Fert_NEcost_75USDkgNH3_H2))
+
+    # Process data on net and gross trade of nitrogen in fertilizers.
+    ISO_map <- iso_GCAM_regID %>%
+      mutate(ISO = toupper(iso)) %>%
+      select(ISO, GCAM_region_ID)
+
+    # Multiply each commodity in the bilateral trade matrix by its nitrogen mass fraction
+    # Drop out any trade where the exporter and importer are in the same GCAM region
+    # Aggregate by GCAM regions (imports and exports)
+    Rt_Nfert_bilateral_trade %>%
+      select(Exporter_ISO = 'Exporter ISO3', Importer_ISO = 'Importer ISO3','Resource','Year',Weight = 'Weight (1000kg)') %>%
+      drop_na() %>%
+      group_by(Exporter_ISO, Importer_ISO, Resource) %>%
+      summarise(Weight = mean(Weight)) %>%
+      ungroup() %>%
+      left_join_error_no_match(Rt_Nfert_commodities, by = "Resource") %>%
+      mutate(Trade_Mt = Weight * Nfrac * CONV_T_MT) %>%
+      inner_join(ISO_map, by = c(Exporter_ISO = "ISO")) %>%
+      rename(Exporter_regID = GCAM_region_ID) %>%
+      inner_join(ISO_map, by = c(Importer_ISO = "ISO")) %>%
+      rename(Importer_regID = GCAM_region_ID) %>%
+      filter(Exporter_regID != Importer_regID) %>%
+      group_by(Exporter_regID, Importer_regID) %>%
+      summarise(Trade_Mt = sum(Trade_Mt)) %>%
+      ungroup() ->
+      L1322.Fert_GrossTrade_Mt_R_unscaled
+
+    # For trade structure, aggregate imports and exports by region separately, and join to a single data table
+    L1322.Fert_GrossExports_Mt_R <- L1322.Fert_GrossTrade_Mt_R_unscaled %>%
+      select(GCAM_region_ID = Exporter_regID, Exports_Mt = Trade_Mt) %>%
+      group_by(GCAM_region_ID) %>%
+      summarise(Exports_Mt = sum(Exports_Mt)) %>%
+      ungroup()
+
+    L1322.Fert_GrossImports_Mt_R <- L1322.Fert_GrossTrade_Mt_R_unscaled %>%
+      select(GCAM_region_ID = Importer_regID, Imports_Mt = Trade_Mt) %>%
+      group_by(GCAM_region_ID) %>%
+      summarise(Imports_Mt = sum(Imports_Mt)) %>%
+      ungroup()
+
+    # First scale the gross exports so that the sum of global exports equals the scale of global imports
+    # Then scale the gross exports and imports to match the FAO-based net exports, in L142.ag_Fert_NetExp_MtN_R_Y
+    # Rules applied:
+    #  1) where RT-based net exports "NetExports_Mt" are less than FAO-based net exports "value", and
+    #    1a) gross exports "Exports_Mt" exceed scaled net exports, reduce imports to balance
+    #    1b) gross exports "Exports_Mt" are less than scaled net exports, increase exports to balance
+    #  2) where RT-based net exports "NetExports_Mt" exceed FAO-scaled net exports "value", and
+    #    2a) the region is a net exporter (value > 0), reduce the exports
+    #    2b) the region is a net importer (value < 0), reduce the imports
+    #  3) where production exceeds exports, reduce both exports and imports so that domestic own production is not negative
+    L1322.Fert_GrossTrade_Mt_R_fby <- full_join(L1322.Fert_GrossExports_Mt_R, L1322.Fert_GrossImports_Mt_R,
+                                                by = "GCAM_region_ID") %>%
+      mutate(Exports_Mt = Exports_Mt * sum(Imports_Mt) / sum(Exports_Mt),
+             NetExports_Mt = Exports_Mt - Imports_Mt) %>%
+      full_join(filter(L142.ag_Fert_NetExp_MtN_R_Y, year==max(MODEL_BASE_YEARS)),
+                by = "GCAM_region_ID") %>%
+      replace_na(list(Exports_Mt = 0, Imports_Mt = 0, NetExports_Mt = 0)) %>%
+      mutate(Imports_Mt_scaled = if_else(NetExports_Mt < value & Exports_Mt > value, Exports_Mt - value, Imports_Mt),
+             Exports_Mt_scaled = if_else(NetExports_Mt < value & Exports_Mt < value, value + Imports_Mt_scaled, Exports_Mt),
+             Exports_Mt_scaled = if_else(NetExports_Mt > value & value > 0, Exports_Mt + value - NetExports_Mt, Exports_Mt_scaled),
+             Imports_Mt_scaled = if_else(NetExports_Mt > value & value < 0, Imports_Mt - value + NetExports_Mt, Imports_Mt_scaled),
+             NetExports_Mt_scaled = Exports_Mt_scaled - Imports_Mt_scaled,
+             year = max(MODEL_BASE_YEARS)) %>%
+      select(GCAM_region_ID, GCAM_commodity, year, Exports_Mt_scaled, Imports_Mt_scaled, value) %>%
+      rename(Exports_Mt = Exports_Mt_scaled, Imports_Mt = Imports_Mt_scaled, NetExports_Mt = value)
+
+    # final adjustment to gross trade, to ensure that exports do not exceed production
+    L1322.Fert_Prod_MtN_R_fby <- L1322.Fert_Prod_MtNH3_R_F_Y %>%
+      filter(year == max(MODEL_BASE_YEARS)) %>%
+      group_by(GCAM_region_ID) %>%
+      summarise(Prod_MtN = sum(value) * CONV_NH3_N) %>%
+      ungroup()
+
+    # If we reduce trade by the reported export quantity, then all exports go to zero. If we reduce trade by the discrepancy
+    # between production and exports, then all domestic use of own production will be zero. This approach takes the midpoint.
+    L1322.Fert_GrossTrade_Mt_R_fby <- L1322.Fert_GrossTrade_Mt_R_fby %>%
+      left_join_error_no_match(L1322.Fert_Prod_MtN_R_fby, by = "GCAM_region_ID") %>%
+      mutate(TradeReduction_Mt = if_else(Exports_Mt > Prod_MtN, (2 * Exports_Mt - Prod_MtN) / 2, 0),
+             Exports_Mt = Exports_Mt - TradeReduction_Mt,
+             Imports_Mt = Imports_Mt - TradeReduction_Mt) %>%
+      select(-Prod_MtN, -TradeReduction_Mt)
+
+    L1322.Fert_GrossTrade_Mt_R_Y <- L142.ag_Fert_NetExp_MtN_R_Y %>%
+      filter(year < max(MODEL_BASE_YEARS)) %>%
+      mutate(Exports_Mt = if_else(value > 0, value, 0),
+             Imports_Mt = if_else(value <= 0, value * -1, 0),
+             NetExports_Mt = value) %>%
+      select(-value) %>%
+      bind_rows(L1322.Fert_GrossTrade_Mt_R_fby)
+
+    # Done ----
+
+    L1322.Fert_Prod_MtNH3_R_F_Y %>%
+      add_title("Fertilizer production by GCAM region / fuel / year") %>%
       add_units("Mt NH3") %>%
-      add_comments("Calibrated exports of ammonia") %>%
-      same_precursors_as(L2322.TechCoef_TradedFert) %>%
-      add_precursors("L142.ag_Fert_NetExp_MtN_R_Y") ->
-      L2322.Production_FertExport
+      add_comments("Generic fertilizer production data was broken down using country-level fuel share and energy intensity data.") %>%
+      add_comments("Shares of fertilizer production were modified so that industrial energy/feedstock for any fuels were not negative for any country, before aggregating to the regional level.") %>%
+      add_legacy_name("L1322.Fert_Prod_MtN_R_F_Y") %>%
+      add_precursors("common/iso_GCAM_regID",
+                     "energy/mappings/IEA_ctry",
+                     "energy/IEA_Fert_fuel_data",
+                     "L142.ag_Fert_Prod_MtN_ctry_Y") ->
+      L1322.Fert_Prod_MtNH3_R_F_Y
 
-    L2322.StubTechProd_FertImport %>%
-      add_title("calibrated base-year imports of ammonia") %>%
-      add_units("Mt NH3") %>%
-      add_comments("Calibrated imports of ammonia") %>%
-      add_precursors("L142.ag_Fert_NetExp_MtN_R_Y",
-                     "common/GCAM_region_names",
-                     "energy/A322.globaltech_shrwt") ->
-      L2322.StubTechProd_FertImport
+    L1322.IO_R_Fert_F_Yh %>%
+      add_title("Fertilizer input-output coefs by GCAM region / fuel (base year techs only) / year") %>%
+      add_units("GJ per kg NH3") %>%
+      add_comments("Generic fertilizer production data was broken down using country-level fuel share and energy intensity data.") %>%
+      add_comments("Re-allocation of energy use between energy and feedstock quantities for the industrial sector was done to avoid negative values at the country level, before aggregating to the regional level.") %>%
+      add_legacy_name("L1322.IO_R_Fert_F_Yh") %>%
+      add_precursors("common/iso_GCAM_regID",
+                     "energy/mappings/IEA_ctry",
+                     "energy/IEA_Fert_fuel_data",
+                     "L142.ag_Fert_Prod_MtN_ctry_Y",
+                     "L1321.in_EJ_R_indenergy_F_Yh",
+                     "L132.in_EJ_R_indfeed_F_Yh") ->
+      L1322.IO_R_Fert_F_Yh
 
-    L2322.StubTechProd_FertDomCons %>%
-      add_title("calibrated base-year consumption of domestically produced ammonia") %>%
-      add_units("Mt NH3") %>%
-      add_comments("Calculated as production minus exports") %>%
-      add_precursors("L142.ag_Fert_NetExp_MtN_R_Y",
-                     "common/GCAM_region_names",
-                     "energy/A322.globaltech_shrwt") ->
-      L2322.StubTechProd_FertDomCons
+    L1322.in_EJ_R_indenergy_F_Yh %>%
+      add_title("Adjusted industrial energy use by GCAM region / fuel / year") %>%
+      add_units("EJ") %>%
+      add_comments("Industrial energy use was calculated using country-level fuel share and energy intensity data to break down generic fertilizer production data.") %>%
+      add_comments("Re-allocation of energy use between energy and feedstock quantities for the industrial sector was done to avoid negative values at the country level, before aggregating to the regional level.") %>%
+      add_legacy_name("L1322.in_EJ_R_indenergy_F_Yh") %>%
+      add_precursors("common/iso_GCAM_regID",
+                     "energy/mappings/IEA_ctry",
+                     "energy/IEA_Fert_fuel_data",
+                     "L142.ag_Fert_Prod_MtN_ctry_Y",
+                     "L1321.in_EJ_R_indenergy_F_Yh",
+                     "L132.in_EJ_R_indfeed_F_Yh") ->
+      L1322.in_EJ_R_indenergy_F_Yh
 
-    L2322.StubTechProd_NtoAg %>%
-      add_title("calibrated base-year flow of synthetic nitrogen to the agricultural sector") %>%
-      add_units("Mt NH3") %>%
-      add_comments("Calculated as ammonia consumption of domestic production plus imports, times the N/NH3 mass ratio") %>%
-      same_precursors_as(L2322.StubTechProd_FertDomCons) ->
-      L2322.StubTechProd_NtoAg
+    L1322.in_EJ_R_indfeed_F_Yh %>%
+      add_title("Adjusted industrial feedstock use by GCAM region / fuel / year") %>%
+      add_units("EJ") %>%
+      add_comments("Industrial feedstock use was calculated using country-level fuel share and energy intensity data to break down generic fertilizer production data.") %>%
+      add_comments("Re-allocation of energy use between energy and feedstock quantities for the industrial sector was done to avoid negative values at the country level, before aggregating to the regional level.") %>%
+      add_legacy_name("L1322.in_EJ_R_indfeed_F_Yh") %>%
+      add_precursors("common/iso_GCAM_regID",
+                     "energy/mappings/IEA_ctry",
+                     "energy/IEA_Fert_fuel_data",
+                     "L142.ag_Fert_Prod_MtN_ctry_Y",
+                     "L1321.in_EJ_R_indenergy_F_Yh",
+                     "L132.in_EJ_R_indfeed_F_Yh") ->
+      L1322.in_EJ_R_indfeed_F_Yh
+
+    L1322.Fert_NEcost_75USDkgNH3_F %>%
+      add_title("Fertilizer non-energy costs by technology") %>%
+      add_units("1975USD/kgNH3") %>%
+      add_comments("Gas was calculated using USA market fertilizer price minus GCAM fuel costs.") %>%
+      add_comments("Gas with CCS, coal, and coal with CCS were calculated using H2A characteristics of hydrogen production technologies") %>%
+      add_comments("Oil was set to generally balance the total net costs with natural gas steam reforming.") %>%
+      add_legacy_name("L1322.Fert_NEcost_75USDkgNH3_F") %>%
+      add_precursors("energy/H2A_Prod_Tech","L210.rsrc_info",
+                     "energy/A21.globaltech_cost", "energy/A22.globaltech_cost") ->
+      L1322.Fert_NEcost_75USDkgNH3_F
+
+    L1322.Fert_GrossTrade_Mt_R_Y %>%
+      add_title("N Fertilizer gross trade by GCAM region and year") %>%
+      add_units("Mt N / yr") %>%
+      add_comments("ResourceTrade values scaled to match FAO-based mass balances in L142.ag_Fert_NetExp_MtN_R_Y") %>%
+      add_precursors("energy/Rt_Nfert_bilateral_trade", "energy/mappings/Rt_Nfert_commodities", "L142.ag_Fert_NetExp_MtN_R_Y") ->
+      L1322.Fert_GrossTrade_Mt_R_Y
 
 
-    return_data(L2322.Supplysector_Fert, L2322.SectorUseTrialMarket_tra,
-                L2322.FinalEnergyKeyword_Fert, L2322.SubsectorLogit_Fert,
-                L2322.SubsectorShrwtFllt_Fert, L2322.SubsectorInterp_Fert,
-                L2322.StubTech_Fert, L2322.GlobalTechShrwt_Fert, L2322.TechShrwt_TradedFert,
-                L2322.GlobalTechCoef_Fert, L2322.TechCoef_TradedFert, L2322.StubTechMarket_FertImports,
-                L2322.GlobalTechCost_Fert, L2322.GlobalTechCapture_Fert, L2322.GlobalTechSCurve_Fert,
-                L2322.GlobalTechProfitShutdown_Fert, L2322.StubTechProd_FertProd, L2322.StubTechCoef_Fert,
-                L2322.Production_FertExport, L2322.StubTechProd_FertImport, L2322.StubTechProd_FertDomCons,
-                L2322.StubTechProd_NtoAg)
+    return_data(MODULE_OUTPUTS)
   } else {
     stop("Unknown command")
   }
