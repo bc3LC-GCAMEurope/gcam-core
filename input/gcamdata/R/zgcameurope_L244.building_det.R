@@ -1301,7 +1301,6 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     # The demand for traditional fuels (coal) decreases as income raises -> Need to use a different functional form
     # From historical data we fit a function that includes:
     # - Negative income effect
-    # - Positive quadratic income effect (represents an horizontal asymptot): Note that for coal this effect is not significant with the used data (b3 = 0)
     # - For price, the data does not show a clear trend, so negative price elasticities are taken from literature (could be easily changed by the user):
     #  -0.5 for coal. Given the fitted logarithmic model, they can be directly set as elasticieties n the regression.
 
@@ -1344,7 +1343,6 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     b1_coal_heat <- as.numeric(fit_coal_heat$coefficients[1])
     b2_coal_heat <- as.numeric(fit_coal_heat$coefficients[2])
-    b3_coal_heat <- 0 # Non-significant
 
     # Non-thermal services (cooking)
     fit_coal_cooking <- lm(log_en_EJ_flsp ~ log_pcgdp_thous  + GCAM_region_ID,
@@ -1352,7 +1350,6 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     b1_coal_cooking <- as.numeric(fit_coal_cooking$coefficients[1])
     b2_coal_cooking <- as.numeric(fit_coal_cooking$coefficients[2])
-    b3_coal_cooking <- 0 # Non-significant
 
     # Non-thermal services (hot water)
     fit_coal_hotwater <- lm(log_en_EJ_flsp ~ log_pcgdp_thous  + GCAM_region_ID,
@@ -1360,7 +1357,6 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     b1_coal_hotwater <- as.numeric(fit_coal_hotwater$coefficients[1])
     b2_coal_hotwater <- as.numeric(fit_coal_hotwater$coefficients[2])
-    b3_coal_hotwater <- 0 # Non-significant
 
     # Non-thermal services (other)
     fit_coal_oth <- lm(log_en_EJ_flsp ~ log_pcgdp_thous  + GCAM_region_ID,
@@ -1368,7 +1364,6 @@ module_gcameurope_L244.building_det <- function(command, ...) {
 
     b1_coal_oth <- as.numeric(fit_coal_oth$coefficients[1])
     b2_coal_oth <- as.numeric(fit_coal_oth$coefficients[2])
-    b3_coal_oth <- 0 # Non-significant
 
     #------------------------------------------------------
     # In order to make the function flexible to the implementation of multiple consumers, the satiation impedance (mu) and the calibration coefficent (k)
@@ -1592,16 +1587,16 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       mutate(serv=(satiation.level * (1-exp((-log(2)/`satiation-impedance`)*afford))) * base.building.size) %>%
       # Adjust coal
       mutate(serv = if_else(grepl("heating coal",building.service.input),
-                            exp(b1_coal_heat + b2_coal_heat * log(pcGDP_thous90USD_gr) + b3_coal_heat * (log(pcGDP_thous90USD_gr)^2) + prelast_coal * log(price)) * base.building.size,
+                            exp(b1_coal_heat + b2_coal_heat * log(pcGDP_thous90USD_gr)  + prelast_coal * log(price)) * base.building.size,
                             serv)) %>%
       mutate(serv = if_else(grepl("cooking coal",building.service.input),
-                            exp(b1_coal_cooking + b2_coal_cooking * log(pcGDP_thous90USD_gr) + b3_coal_cooking * (log(pcGDP_thous90USD_gr)^2) + prelast_coal * log(price)) * base.building.size,
+                            exp(b1_coal_cooking + b2_coal_cooking * log(pcGDP_thous90USD_gr)  + prelast_coal * log(price)) * base.building.size,
                             serv)) %>%
       mutate(serv = if_else(grepl("hot water coal",building.service.input),
-                            exp(b1_coal_hotwater + b2_coal_hotwater * log(pcGDP_thous90USD_gr) + b3_coal_hotwater * (log(pcGDP_thous90USD_gr)^2) + prelast_coal * log(price)) * base.building.size,
+                            exp(b1_coal_hotwater + b2_coal_hotwater * log(pcGDP_thous90USD_gr)  + prelast_coal * log(price)) * base.building.size,
                             serv)) %>%
       mutate(serv = if_else(grepl("others coal",building.service.input),
-                            exp(b1_coal_oth + b2_coal_oth * log(pcGDP_thous90USD_gr) + b3_coal_oth * (log(pcGDP_thous90USD_gr)^2) + prelast_coal * log(price)) * base.building.size,
+                            exp(b1_coal_oth + b2_coal_oth * log(pcGDP_thous90USD_gr)  + prelast_coal * log(price)) * base.building.size,
                             serv)) %>%
       mutate(serv = if_else(afford == 0, 0, serv))
 
@@ -1649,16 +1644,16 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       mutate(serv=(satiation.level * (1-exp((-log(2)/`satiation-impedance`)*afford))) * base.building.size) %>%
       # Adjust coal
       mutate(serv = if_else(grepl("heating coal",thermal.building.service.input),
-                            exp(b1_coal_heat + b2_coal_heat * log(pcGDP_thous90USD_gr) + b3_coal_heat * (log(pcGDP_thous90USD_gr)^2) + prelast_coal * log(price)) * base.building.size,
+                            exp(b1_coal_heat + b2_coal_heat * log(pcGDP_thous90USD_gr) + prelast_coal * log(price)) * base.building.size,
                             serv)) %>%
       mutate(serv = if_else(grepl("cooking coal",thermal.building.service.input),
-                            exp(b1_coal_cooking + b2_coal_cooking * log(pcGDP_thous90USD_gr) + b3_coal_cooking * (log(pcGDP_thous90USD_gr)^2) + prelast_coal * log(price)) * base.building.size,
+                            exp(b1_coal_cooking + b2_coal_cooking * log(pcGDP_thous90USD_gr)  + prelast_coal * log(price)) * base.building.size,
                             serv)) %>%
       mutate(serv = if_else(grepl("hot water coal",thermal.building.service.input),
-                            exp(b1_coal_hotwater + b2_coal_hotwater * log(pcGDP_thous90USD_gr) + b3_coal_hotwater * (log(pcGDP_thous90USD_gr)^2) + prelast_coal * log(price)) * base.building.size,
+                            exp(b1_coal_hotwater + b2_coal_hotwater * log(pcGDP_thous90USD_gr)  + prelast_coal * log(price)) * base.building.size,
                             serv)) %>%
       mutate(serv = if_else(grepl("others coal",thermal.building.service.input),
-                            exp(b1_coal_oth + b2_coal_oth * log(pcGDP_thous90USD_gr) + b3_coal_oth * (log(pcGDP_thous90USD_gr)^2) + prelast_coal * log(price)) * base.building.size,
+                            exp(b1_coal_oth + b2_coal_oth * log(pcGDP_thous90USD_gr) + prelast_coal * log(price)) * base.building.size,
                             serv)) %>%
       mutate(serv = if_else(afford == 0, 0, serv))
 
@@ -1694,10 +1689,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              b1 = if_else(grepl("others", building.service.input), b1_coal_oth, b1),
              b2 = if_else(grepl("cooking", building.service.input), b2_coal_cooking, NA_real_),
              b2 = if_else(grepl("hot water", building.service.input), b2_coal_hotwater, b2),
-             b2 = if_else(grepl("others", building.service.input), b2_coal_oth, b2),
-             b3 = if_else(grepl("cooking", building.service.input), b3_coal_cooking, NA_real_),
-             b3 = if_else(grepl("hot water", building.service.input), b3_coal_hotwater, b3),
-             b3 = if_else(grepl("others", building.service.input), b3_coal_oth, b3)) %>%
+             b2 = if_else(grepl("others", building.service.input), b2_coal_oth, b2)) %>%
       separate(gcam.consumer, c("gcam.consumer", "group"), sep = '_') %>%
       mutate(gcam.consumer = paste0(gcam.consumer, "_", group),
              building.service.input = paste0(building.service.input, "_", group)) %>%
@@ -1711,8 +1703,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              !grepl("modern", thermal.building.service.input)) %>%
       select(-base.service) %>%
       mutate(b1 = b1_coal_heat,
-             b2 = b2_coal_heat,
-             b3 = b3_coal_heat) %>%
+             b2 = b2_coal_heat) %>%
       separate(gcam.consumer, c("gcam.consumer", "group"), sep = '_') %>%
       mutate(gcam.consumer = paste0(gcam.consumer, "_", group),
              thermal.building.service.input = paste0(thermal.building.service.input, "_", group)) %>%
