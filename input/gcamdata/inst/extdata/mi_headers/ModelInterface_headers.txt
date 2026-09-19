@@ -602,9 +602,9 @@ GenericBaseDens, world/+{name}region, region/+{name}gcam-consumer, gcam-consumer
 
 ThermalBaseDens, world/+{name}region, region/+{name}gcam-consumer, gcam-consumer/+{name}nodeInput, nodeInput/+{name}building-node-input, building-node-input/+{name}thermal-building-service-input, thermal-building-service-input/+base-density, scenario, scenario/world
 
-GenericTradFuelParams, world/+{name}region, region/+{name}gcam-consumer, gcam-consumer/+{name}nodeInput, nodeInput/+{name}building-node-input, building-node-input/+{name}building-service-input, building-service-input/+prelast, building-service-input/+b1, building-service-input/+b2, building-service-input/+b3, scenario, scenario/world
+GenericTradFuelParams, world/+{name}region, region/+{name}gcam-consumer, gcam-consumer/+{name}nodeInput, nodeInput/+{name}building-node-input, building-node-input/+{name}building-service-input, building-service-input/+prelast, building-service-input/+b1, building-service-input/+b2, scenario, scenario/world
 
-ThermalTradFuelParams, world/+{name}region, region/+{name}gcam-consumer, gcam-consumer/+{name}nodeInput, nodeInput/+{name}building-node-input, building-node-input/+{name}thermal-building-service-input, thermal-building-service-input/+prelast, thermal-building-service-input/+b1, thermal-building-service-input/+b2, thermal-building-service-input/+b3, scenario, scenario/world
+ThermalTradFuelParams, world/+{name}region, region/+{name}gcam-consumer, gcam-consumer/+{name}nodeInput, nodeInput/+{name}building-node-input, building-node-input/+{name}thermal-building-service-input, thermal-building-service-input/+prelast, thermal-building-service-input/+b1, thermal-building-service-input/+b2, scenario, scenario/world
 
 GenericServiceTechChange, world/+{name}region, region/+{name}gcam-consumer, gcam-consumer/+{name}nodeInput, nodeInput/+{name}building-node-input, building-node-input/+{name}building-service-input, building-service-input/+{year;fillout=1}tech-change, building-service-input/+tech-change, scenario, scenario/world
 
