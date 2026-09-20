@@ -140,8 +140,8 @@ module_gcameurope_L2391.gas_trade_flows <- function(command, ...) {
       filter(year %in% MODEL_BASE_YEARS) %>%
       complete(nesting(GCAM_Commodity, GCAM_Commodity_traded, year), region = unique(GCAM_region_names$region)) %>%
       replace_na(list(share = 0)) -> L2391.NG_import_shares # %>%
-      # # add in European_Single_Market
-      # bind_rows(L1011.SingleMarket_shares %>% rename(share = import_share)  %>% select(-export_share))-> L2391.NG_import_shares
+    # # add in European_Single_Market
+    # bind_rows(L1011.SingleMarket_shares %>% rename(share = import_share)  %>% select(-export_share))-> L2391.NG_import_shares
 
     # Partition calibrated imports by region between pipeline & LNG
     # Join calibrated gross NG trade and shares, calculate calibrated value by trade vehicle
@@ -376,12 +376,28 @@ module_gcameurope_L2391.gas_trade_flows <- function(command, ...) {
     # Divide export difference for each region between LNG & pipelines according to historical shares,
     # and then adjust the corresponding calOutputValues accordingly.  Thiss will keep any region's
     # exports from going negative and keep LNG / pipeline shares relatively constant.
+    # First, recalculate historical shares from adjusted data (as in upstream module_energy_L2391).
+    L2391.gas_flow_balances %>%
+      select(region, year, calExport_pipe, calExport_LNG) %>%
+      tidyr::gather(GCAM_Commodity_traded, value, -c(region, year)) %>%
+      mutate(GCAM_Commodity = "natural gas",
+             GCAM_Commodity_traded = gsub("calExport_", "", GCAM_Commodity_traded),
+             GCAM_Commodity_traded = if_else(GCAM_Commodity_traded == "pipe", "gas pipeline", GCAM_Commodity_traded)) %>%
+      group_by(region, year, GCAM_Commodity, GCAM_Commodity_traded) %>%
+      summarise(value = sum(value)) %>%
+      ungroup() %>%
+      group_by(region, year) %>%
+      mutate(share = value / sum(value)) %>%
+      ungroup() %>%
+      mutate(share = if_else(is.nan(share), 0, share)) %>%
+      select(-value) -> L2391.NG_export_shares_adj
+
     L2391.NG_import_calOutput_statdiff_EUR %>%
       left_join_error_no_match(GCAM_region_pipeline_bloc_export, by = c("region" = "origin.region")) %>%
-      # L2391.NG_export_shares contains shares for LNG and pipeline
+      # L2391.NG_export_shares_adj contains shares for LNG and pipeline
       # join will duplicate rows by each carrier
       # LJENM will error, left_join() is used
-      left_join(L2391.NG_export_shares, by = c("region", "year")) %>%
+      left_join(L2391.NG_export_shares_adj, by = c("region", "year")) %>%
       mutate(value = value * share) %>%
       select(-share) -> L2391.NG_import_calOutput_adj
 
