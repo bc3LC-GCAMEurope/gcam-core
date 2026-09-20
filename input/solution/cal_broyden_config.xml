@@ -137,13 +137,7 @@
 			<solution-info-filter>unsolved && solvable && market-matches="negative_emiss_budget"</solution-info-filter>
         </bisect-all-solver-component>
 
-        <bisect-all-solver-component>
-            <bracket-interval>0.05</bracket-interval>
-            <max-bracket-iterations>20</max-bracket-iterations>
-            <max-iterations>10</max-iterations>
-            <use-secant-brackets>0</use-secant-brackets>
-            <solution-info-filter>unsolved && solvable && price-greater-than="0"</solution-info-filter>
-        </bisect-all-solver-component>
+        <!-- STABILITY TEST: broad bisect-all (unsolved && solvable && price-greater-than 0) removed for 2025 -->
         <bisect-all-solver-component>
             <bracket-interval>0.05</bracket-interval>
             <max-bracket-iterations>20</max-bracket-iterations>
@@ -152,12 +146,51 @@
 			<solution-info-filter>unsolved && solvable && market-matches="_water withdrawals"</solution-info-filter>
         </bisect-all-solver-component>
         
+        <!-- STABILITY TEST D: statistical-differences markets are zero-demand in future periods (share weight 0),
+             so solvable-nr Broyden drops them; they need bisection (X -> 0) or the period is never "all solved". -->
+        <bisect-all-solver-component>
+            <bracket-interval>0.1</bracket-interval>
+            <max-bracket-iterations>20</max-bracket-iterations>
+            <max-iterations>30</max-iterations>
+            <use-secant-brackets>1</use-secant-brackets>
+            <solution-info-filter>unsolved && solvable && market-matches="statistical differences"</solution-info-filter>
+        </bisect-all-solver-component>
+
         <broyden-solver-component>
-            <max-iterations>10</max-iterations>
+            <max-iterations>30</max-iterations>
             <ftol>5.0e-4</ftol>
             <linear-price/>
             <solution-info-filter>solvable-nr</solution-info-filter>
         </broyden-solver-component>
+
+        <!-- STABILITY TEST F (diagnostic): oil markets end up with zero/negative prices after linear Broyden;
+             price-greater-than excludes them. Bisect handles negative X (increaseX/decreaseX are sign-aware). -->
+        <bisect-all-solver-component>
+            <bracket-interval>0.05</bracket-interval>
+            <max-bracket-iterations>20</max-bracket-iterations>
+            <max-iterations>20</max-iterations>
+            <use-secant-brackets>0</use-secant-brackets>
+            <solution-info-filter>unsolved && solvable && market-matches="crude oil"</solution-info-filter>
+        </bisect-all-solver-component>
+
+        <bisect-all-solver-component>
+            <bracket-interval>0.05</bracket-interval>
+            <max-bracket-iterations>20</max-bracket-iterations>
+            <max-iterations>20</max-iterations>
+            <use-secant-brackets>0</use-secant-brackets>
+            <solution-info-filter>unsolved && solvable && market-matches="traded oil"</solution-info-filter>
+        </bisect-all-solver-component>
+
+            <!-- STABILITY TEST D: residual cleanup AFTER Broyden. Only the few still-unsolved markets are bracketed,
+             so this does not inflate FX for the whole model like the old broad bisect did. Catches tiny-price
+             markets (e.g. Mexico refining) that Broyden solvable-nr excludes. -->
+        <bisect-all-solver-component>
+            <bracket-interval>0.05</bracket-interval>
+            <max-bracket-iterations>20</max-bracket-iterations>
+            <max-iterations>10</max-iterations>
+            <use-secant-brackets>0</use-secant-brackets>
+            <solution-info-filter>unsolved && solvable && price-greater-than="0"</solution-info-filter>
+        </bisect-all-solver-component>
 
     </user-configurable-solver>
 
