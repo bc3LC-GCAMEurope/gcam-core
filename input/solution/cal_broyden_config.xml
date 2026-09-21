@@ -152,71 +152,20 @@
 			<solution-info-filter>unsolved && solvable && market-matches="_water withdrawals"</solution-info-filter>
         </bisect-all-solver-component>
         
-        <broyden-solver-component>
-            <max-iterations>10</max-iterations>
-            <ftol>5.0e-4</ftol>
-            <linear-price/>
-            <solution-info-filter>solvable-nr</solution-info-filter>
-        </broyden-solver-component>
+<broyden-solver-component>
+    <max-iterations>10</max-iterations>
+    <ftol>5.0e-4</ftol>
+    <max-price-step>5</max-price-step>
+    <linear-price/>
+    <solution-info-filter>solvable-nr</solution-info-filter>
+</broyden-solver-component>
 
     </user-configurable-solver>
 
     <!-- Dedicated 2030 block: period 7 failed to converge within the inherited 15000 iter
          budget (85 solvable markets remained). Increasing max-model-calcs to 25000 and
          Broyden max-iterations to 30 should be sufficient; all later periods solve easily. -->
-    <user-configurable-solver year="2030">
-        <solution-tolerance>0.003</solution-tolerance>
-        <solution-floor>0.0005</solution-floor>
-        <calibration-tolerance>0.005</calibration-tolerance>
-        <max-model-calcs>25000</max-model-calcs>
-
-        <preconditioner-solver-component>
-            <solution-info-filter>solvable</solution-info-filter>
-            <ftol>1.0e-2</ftol>
-            <max-iterations>2</max-iterations>
-        </preconditioner-solver-component>
-
-        <bisect-all-solver-component>
-            <bracket-interval>0.1</bracket-interval>
-            <max-bracket-iterations>40</max-bracket-iterations>
-            <max-iterations>30</max-iterations>
-            <use-secant-brackets>1</use-secant-brackets>
-            <solution-info-filter>unsolved && solvable && market-matches="energy net export"</solution-info-filter>
-        </bisect-all-solver-component>
-
-        <bisect-all-solver-component>
-            <bracket-interval>0.05</bracket-interval>
-            <max-bracket-iterations>20</max-bracket-iterations>
-            <max-iterations>10</max-iterations>
-            <use-secant-brackets>1</use-secant-brackets>
-            <solution-info-filter>unsolved && solvable && market-matches="negative_emiss_budget"</solution-info-filter>
-        </bisect-all-solver-component>
-
-        <bisect-all-solver-component>
-            <bracket-interval>0.05</bracket-interval>
-            <max-bracket-iterations>20</max-bracket-iterations>
-            <max-iterations>10</max-iterations>
-            <use-secant-brackets>0</use-secant-brackets>
-            <solution-info-filter>unsolved && solvable && price-greater-than="0"</solution-info-filter>
-        </bisect-all-solver-component>
-        <bisect-all-solver-component>
-            <bracket-interval>0.05</bracket-interval>
-            <max-bracket-iterations>20</max-bracket-iterations>
-            <max-iterations>10</max-iterations>
-            <use-secant-brackets>1</use-secant-brackets>
-            <solution-info-filter>unsolved && solvable && market-matches="_water withdrawals"</solution-info-filter>
-        </bisect-all-solver-component>
-
-        <!-- More Broyden iterations to clear the ~85 near-converged solvable markets -->
-        <broyden-solver-component>
-            <max-iterations>30</max-iterations>
-            <ftol>5.0e-4</ftol>
-            <linear-price/>
-            <solution-info-filter>solvable-nr</solution-info-filter>
-        </broyden-solver-component>
-
-    </user-configurable-solver>
-
+    
     <!-- The SolutionInfoParamParser object allows us to specify the following solution algorithm
          parameters with varying granularity.
          The parameters which can be parsed:
@@ -236,34 +185,27 @@
              4) Default values from the Solver/SolverComponent
     -->
     <solution-info-param-parser>
-		<solution-tolerance fillout="1" region="Iceland" market-type="Pasture">0.03</solution-tolerance>
-		<solution-tolerance fillout="1" region="Cyprus" market-type="Pasture">0.03</solution-tolerance>
-		<solution-tolerance fillout="1" region="Cyprus" market-type="FodderGrass">0.03</solution-tolerance>
+        <!-- Calibration-year residuals found with the no-exception diagnostic run (periods 1-3).
+             fillout="0": each exception applies ONLY to the period listed (period index: 1=1990, 2=2005, 3=2010).
+             Natural gas: regional consumption is 0.5-0.9% below domestic supply + imports (Canada, Indonesia 1990;
+             Croatia 1990/2005/2010; Poland, Romania, Ukraine 2005).
+             Pasture: tolerance stacking from small animal-product markets (Iceland 1990/2010, Cyprus 2010). -->
+        <solution-tolerance fillout="0" region="Canada" period="1" market-type="natural gas">0.01</solution-tolerance>
+        <solution-tolerance fillout="0" region="Indonesia" period="1" market-type="natural gas">0.01</solution-tolerance>
+        <solution-tolerance fillout="0" region="Croatia" period="1" market-type="natural gas">0.01</solution-tolerance>
+        <solution-tolerance fillout="0" region="Croatia" period="2" market-type="natural gas">0.01</solution-tolerance>
+        <solution-tolerance fillout="0" region="Poland" period="2" market-type="natural gas">0.01</solution-tolerance>
+        <solution-tolerance fillout="0" region="Romania" period="2" market-type="natural gas">0.01</solution-tolerance>
+        <solution-tolerance fillout="0" region="Ukraine" period="2" market-type="natural gas">0.01</solution-tolerance>
+        <solution-tolerance fillout="0" region="Ukraine" period="3" market-type="natural gas">0.01</solution-tolerance>
+        <solution-tolerance fillout="0" region="Croatia" period="3" market-type="natural gas">0.01</solution-tolerance>
 
-		<solution-tolerance fillout="1" region="Canada" period="1" market-type="natural gas">0.03</solution-tolerance>
-		<solution-tolerance fillout="1" region="Indonesia" period="1" market-type="natural gas">0.03</solution-tolerance>
-		<solution-tolerance fillout="1" region="Croatia" period="1" market-type="natural gas">0.03</solution-tolerance>
+        <solution-tolerance fillout="0" region="Iceland" period="1" market-type="Pasture">0.03</solution-tolerance>
+        <solution-tolerance fillout="0" region="Iceland" period="3" market-type="Pasture">0.03</solution-tolerance>
+        <solution-tolerance fillout="0" region="Cyprus" period="3" market-type="Pasture">0.01</solution-tolerance>
+        <solution-tolerance fillout="0" region="Cyprus" period="3" market-type="FodderGrass">0.01</solution-tolerance>
 
-		<solution-tolerance fillout="1" region="Croatia" period="2" market-type="natural gas">0.03</solution-tolerance>
-		<solution-tolerance fillout="1" region="Poland" period="2" market-type="natural gas">0.03</solution-tolerance>
-		<solution-tolerance fillout="1" region="Romania" period="2" market-type="natural gas">0.03</solution-tolerance>
-		<solution-tolerance fillout="1" region="Ukraine" period="2" market-type="natural gas">0.03</solution-tolerance>
-
-		<solution-tolerance fillout="1" region="Croatia" period="3" market-type="natural gas">0.03</solution-tolerance>
-		<solution-tolerance fillout="1" region="Ukraine" period="3" market-type="natural gas">0.03</solution-tolerance>
-
-		<solution-floor fillout="1" region="USA" market-type="gas trade statistical differences">0.01</solution-floor>
-		<solution-floor fillout="1" region="Sweden" market-type="district heat">0.01</solution-floor>
-		<solution-floor fillout="1" region="Belgium" market-type="district heat">0.01</solution-floor>
-		<solution-floor fillout="1" region="Greece" market-type="district heat">0.01</solution-floor>
-		<solution-floor fillout="1" region="Germany" market-type="district heat">0.01</solution-floor>
-		<solution-tolerance fillout="1" region="Albania" period="3" market-type="crude oil">0.05</solution-tolerance>
-
-
-        <!-- applies to all regions since region attribute is not included -->
+        <!-- Trial-Value: solo el max-price-change del core (gcam-core master) -->
         <max-price-change fillout="1" market-type="Trial-Value" period="1">10</max-price-change>
-		<solution-tolerance fillout="1" period="6" market-type="Trial-Value">0.05</solution-tolerance>
-
-
       </solution-info-param-parser>
 </scenario>
