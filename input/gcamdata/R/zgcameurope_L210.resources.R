@@ -418,6 +418,27 @@ module_gcameurope_L210.resources <- function(command, ...) {
       select(-lifetime.adj)
 
 
+    # 5. Remove offshore wind from regions with no offshore resource ------------------
+    # zenergy_L120.offshore_wind fills regions without NREL offshore potential with maxSubResource = 0
+    # (and a dummy mid.price/exponent). Those dummy resources create solvable-looking markets
+    # (resource + trial-supply) with a degenerate supply curve, which hurts solver stability.
+    # Drop the offshore resource, its price, technology and tech change for those regions.
+    no_offshore_regions <- L210.SmthRenewRsrcCurves_offshore_wind_EUR %>%
+      filter(maxSubResource == 0) %>%
+      pull(region) %>%
+      unique()
+
+    L210.RenewRsrc_EUR <- L210.RenewRsrc_EUR %>%
+      filter(!(renewresource == "offshore wind resource" & region %in% no_offshore_regions))
+    L210.RenewRsrcPrice_EUR <- L210.RenewRsrcPrice_EUR %>%
+      filter(!(renewresource == "offshore wind resource" & region %in% no_offshore_regions))
+    L210.ResTechShrwt_EUR <- L210.ResTechShrwt_EUR %>%
+      filter(!(resource == "offshore wind resource" & region %in% no_offshore_regions))
+    L210.SmthRenewRsrcCurves_offshore_wind_EUR <- L210.SmthRenewRsrcCurves_offshore_wind_EUR %>%
+      filter(!region %in% no_offshore_regions)
+    L210.SmthRenewRsrcTechChange_offshore_wind_EUR <- L210.SmthRenewRsrcTechChange_offshore_wind_EUR %>%
+      filter(!region %in% no_offshore_regions)
+
     # Produce outputs ===================================================
     L210.RenewRsrc_EUR %>%
       add_title("Market information for renewable resources") %>%
