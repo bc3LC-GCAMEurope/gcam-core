@@ -125,7 +125,7 @@
         <bracket-interval>0.1</bracket-interval>  <!-- Wider bracket for energy markets -->
         <max-bracket-iterations>40</max-bracket-iterations>
         <max-iterations>30</max-iterations>
-        <use-secant-brackets>1</use-secant-brackets>
+        <use-secant-brackets>0</use-secant-brackets>
         <solution-info-filter>unsolved && solvable && market-matches="energy net export"</solution-info-filter>
     </bisect-all-solver-component>
 
@@ -207,5 +207,6 @@
 
         <!-- Trial-Value: solo el max-price-change del core (gcam-core master) -->
         <max-price-change fillout="1" market-type="Trial-Value" period="1">10</max-price-change>
+
       </solution-info-param-parser>
 </scenario>
