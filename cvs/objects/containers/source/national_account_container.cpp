@@ -217,8 +217,42 @@ void NationalAccountContainer::initCalc( const Demographic* aDemographics, const
         mGdpMacroFunction->initCalc( mRegionName, mNationalAccounts[aPeriod], aPeriod );
         const bool isFixedGDP = Configuration::getInstance()->getBool("FixedGDP-Path");
         const Modeltime* modeltime = scenario->getModeltime();
-        double currTFP = isFixedGDP || aPeriod <= modeltime->getFinalCalibrationPeriod() ? 1.0 : mNationalAccounts[aPeriod]->getAccountValue(NationalAccount::TOTAL_FACTOR_PRODUCTIVITY);
+        const int basePeriod = modeltime->getFinalCalibrationPeriod();
+        double currTFP = isFixedGDP || aPeriod <= basePeriod ? 1.0 : mNationalAccounts[aPeriod]->getAccountValue(NationalAccount::TOTAL_FACTOR_PRODUCTIVITY);
         mGdpMacroFunction->setTotalFactorProductivity(currTFP);
+
+        // The "energy net export", "capital", and "consumer durable" Trial-Value markets
+        // (all created/driven through this GDP macro linkage, see setGDPTrialMarket's
+        // dependency registrations above) only become economically active in the first
+        // period after the final calibration period. Before that, each market's price
+        // simply carries whatever historical/calibrated value was read in and is not
+        // solved for. Left alone, the solver's starting guess for EVERY period comes from
+        // a generic quadratic extrapolation across the previous few periods' prices. That
+        // is fine once a market has settled into a smooth trend, but these three markets
+        // can move by large factors period to period right as they turn on (confirmed via
+        // diagnostics: e.g. one region's "consumer durable" price dropped ~200x between
+        // the base period and the first active period), which makes the quadratic fit
+        // extrapolate wildly and destabilize convergence -- not just in the first active
+        // period, but in the period(s) after it too, since the extrapolation basis is
+        // itself still noisy. So rather than seeding only the first active period from the
+        // last calibrated price, we seed every period after the base period from the
+        // immediately preceding period's own (already solved) price: a simple flat
+        // carry-forward that replaces the quadratic extrapolation entirely for these three
+        // markets, for as long as the model runs. This is a strictly safer starting guess
+        // than extrapolating from a volatile recent history, without needing any
+        // period/region-specific solver tuning to compensate. Applies whether or not the
+        // GDP market itself is running in fixed-path mode: these three Trial-Value markets
+        // are still created and solved independently of the GDP market's own solve mode.
+        if( aPeriod > basePeriod ) {
+            Marketplace* marketplace = scenario->getMarketplace();
+            const gcamstr marketsToSeed[] = { mEnergyNetExportMrkName, gcamstr("capital"), gcamstr("consumer durable") };
+            for( const gcamstr& marketName : marketsToSeed ) {
+                double lastSolvedPrice = marketplace->getPrice( marketName, mRegionName, aPeriod - 1, false );
+                if( util::isValidNumber( lastSolvedPrice ) && lastSolvedPrice != Marketplace::NO_MARKET_PRICE ) {
+                    marketplace->setPrice( marketName, mRegionName, lastSolvedPrice, aPeriod, false );
+                }
+            }
+        }
     }
     
     // Set trial GDP bounds which gives a hint to the solver as to valid range of
