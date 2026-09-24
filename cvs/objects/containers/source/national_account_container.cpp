@@ -438,6 +438,14 @@ void NationalAccountContainer::postCalc( const int aPeriod ) {
         mGdpMacroFunction->postCalc( mRegionName, mNationalAccounts[aPeriod], aPeriod );
         mNationalAccounts[aPeriod]->postCalc();
     }
+
+    else {
+
+        // Ensure that GDPpcPPP is set even if not running the MACRO module
+        double gdpPerCapPPP = getMarketGDPperCapita(aPeriod) * mPPPConversion;
+        mNationalAccounts[aPeriod]->setAccount(NationalAccount::GDP_PER_CAPITA_PPP, gdpPerCapPPP);
+
+    }
 }
 
 
