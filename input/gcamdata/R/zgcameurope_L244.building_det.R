@@ -1258,7 +1258,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
              thermal.building.service.input = if_else(grepl("resid",gcam.consumer) ,paste0(thermal.building.service.input,"_",group),thermal.building.service.input)) %>%
       select(LEVEL2_DATA_NAMES[["DeleteThermalService"]])
 
-    if (is.na(unique(L244.DeleteThermalService_EUR$region))) {
+    if (all(is.na(unique(L244.DeleteThermalService_EUR$region)))) {
       L244.DeleteThermalService_EUR <- L244.DeleteThermalService_EUR[0,]
     }
 
