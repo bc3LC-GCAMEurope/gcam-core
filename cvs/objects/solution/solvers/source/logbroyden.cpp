@@ -119,6 +119,9 @@ bool LogBroyden::XMLParse( rapidxml::xml_node<char>* & aNode ) {
     else if(nodeName == "linear-price") {
       mLogPricep = false;
     }
+    else if(nodeName == "max-price-step") {
+      mMaxPriceStep = XMLParseHelper::getValue<double>( aNode );
+    }
     else if(nodeName == "log-price") {
       mLogPricep = true;    // not strictly necessary, as this is the default.
     }
@@ -526,6 +529,30 @@ int LogBroyden::bsolve(VecFVec &F, UBVECTOR &x, UBVECTOR &fx,
           dxmag = sqrt(dx.dot(dx));
           solverLog << " new dxmag: " << dxmag << std::endl;
       }*/
+
+    // Optional safeguard: limit the relative price change of any market in one step.
+    // Disabled unless <max-price-step> > 1 is set.  The whole vector is scaled so the
+    // direction of the step is preserved.
+    if(mMaxPriceStep > 1.0) {
+      double scale = 1.0;
+      int iclamp = -1;
+      for(int j=0; j<dx.size(); ++j) {
+        double adx = fabs(dx[j]);
+        double allowed = mLogPricep ? log(mMaxPriceStep)
+                                    : (mMaxPriceStep - 1.0) * std::max(fabs(x[j]), 0.1);
+        if(adx > allowed && allowed/adx < scale) {
+          scale = allowed/adx;
+          iclamp = j;
+        }
+      }
+      if(scale < 1.0) {
+        solverLog << "max-price-step: scaling Newton step by " << scale
+                  << " (limiting index " << iclamp << ", dx= " << dx[iclamp]
+                  << ", x= " << x[iclamp] << ")\n";
+        singleLog << "max-price-step: Newton step scaled by " << scale << "\n";
+        dx *= scale;
+      }
+    }
 
     // log the proposal step
     solverLog << "Proposal step magnitude dxmag= " << sqrt(dx.dot(dx)) << "\n\n";

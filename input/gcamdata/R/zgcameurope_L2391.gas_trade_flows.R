@@ -376,12 +376,28 @@ module_gcameurope_L2391.gas_trade_flows <- function(command, ...) {
     # Divide export difference for each region between LNG & pipelines according to historical shares,
     # and then adjust the corresponding calOutputValues accordingly.  Thiss will keep any region's
     # exports from going negative and keep LNG / pipeline shares relatively constant.
+    # First, recalculate historical shares from adjusted data (as in upstream module_energy_L2391).
+    L2391.gas_flow_balances %>%
+      select(region, year, calExport_pipe, calExport_LNG) %>%
+      tidyr::gather(GCAM_Commodity_traded, value, -c(region, year)) %>%
+      mutate(GCAM_Commodity = "natural gas",
+             GCAM_Commodity_traded = gsub("calExport_", "", GCAM_Commodity_traded),
+             GCAM_Commodity_traded = if_else(GCAM_Commodity_traded == "pipe", "gas pipeline", GCAM_Commodity_traded)) %>%
+      group_by(region, year, GCAM_Commodity, GCAM_Commodity_traded) %>%
+      summarise(value = sum(value)) %>%
+      ungroup() %>%
+      group_by(region, year) %>%
+      mutate(share = value / sum(value)) %>%
+      ungroup() %>%
+      mutate(share = if_else(is.nan(share), 0, share)) %>%
+      select(-value) -> L2391.NG_export_shares_adj
+
     L2391.NG_import_calOutput_statdiff_EUR %>%
       left_join_error_no_match(GCAM_region_pipeline_bloc_export, by = c("region" = "origin.region")) %>%
-      # L2391.NG_export_shares contains shares for LNG and pipeline
+      # L2391.NG_export_shares_adj contains shares for LNG and pipeline
       # join will duplicate rows by each carrier
       # LJENM will error, left_join() is used
-      left_join(L2391.NG_export_shares, by = c("region", "year")) %>%
+      left_join(L2391.NG_export_shares_adj, by = c("region", "year")) %>%
       mutate(value = value * share) %>%
       select(-share) -> L2391.NG_import_calOutput_adj
 
@@ -460,6 +476,121 @@ module_gcameurope_L2391.gas_trade_flows <- function(command, ...) {
     #   summarise(value = sum(calOutputValue)) %>%
     #   ungroup() -> L2391.NG_export_calOutput_statdiff_EUR_global
 
+
+    # STEP 6: Absorb the statistical differences into the regular trade flows --------------------
+    # The statistical differences sector (steps above) makes the base years balance, but it is an accounting
+    # artifact: from the first future year its share-weight is 0, so 2-3 EJ of trade (and the associated
+    # trial-value market carried from the final calibration year) disappear abruptly and destabilize the solver.
+    # Here we instead re-balance the regular flows so that the statistical differences are not needed.
+    # We look for a set of export flows X(region, network) and import flows Y(region, network) such that:
+    #  - regional total exports (X row sums) equal the calibrated regional exports (regular exports + stat. diff. exports)
+    #  - regional total imports (Y row sums) equal the calibrated regional imports (unchanged)
+    #  - for every network (each pipeline network and global LNG), exports and imports balance
+    # X and Y keep their structural zeros (a region only exports to its own pipeline network and to LNG, and only
+    # imports from the networks where it has an import link), and are as close as possible to the original flows
+    # (iterative proportional fitting on both matrices with a common column-total).
+    # The statistical differences tables are kept (structure is needed downstream) but set to zero.
+    absorb_statdiff_tol <- 1e-6
+    absorb_pools <- c(sort(unique(GCAM_region_pipeline_bloc_export$pipeline.market)), "LNG")
+
+    absorb_X_long <- bind_rows(
+      L2391.NG_export_calOutput_pipeline_EUR %>% transmute(region, year, pool = pipeline.market, value = calOutputValue),
+      L2391.NG_export_calOutput_LNG_EUR %>% transmute(region, year, pool = "LNG", value = calOutputValue))
+    absorb_Y_long <- bind_rows(
+      L2391.NG_import_calOutput_pipeline_EUR %>% transmute(region, year, pool = pipeline.market, value = calOutputValue),
+      L2391.NG_import_calOutput_LNG_EUR %>% transmute(region, year, pool = "LNG", value = calOutputValue))
+    absorb_SD_long <- L2391.NG_export_calOutput_statdiff_EUR %>%
+      transmute(region = market.name, year, value = calOutputValue)
+    absorb_regs <- sort(unique(c(absorb_X_long$region, absorb_Y_long$region, absorb_SD_long$region)))
+
+    absorb_mat <- function(d, yr = NULL) {
+      m <- matrix(0, length(absorb_regs), length(absorb_pools), dimnames = list(absorb_regs, absorb_pools))
+      if(!is.null(yr)) d <- d[d$year == yr, ]
+      for(i in seq_len(nrow(d))) {
+        r <- match(d$region[i], absorb_regs); cc <- match(d$pool[i], absorb_pools)
+        m[r, cc] <- m[r, cc] + d$value[i]
+      }
+      m
+    }
+    # structural support: cells that are used in at least one base year
+    absorb_suppX <- sapply(absorb_pools, function(p) sapply(absorb_regs, function(r)
+      any(absorb_X_long$value[absorb_X_long$region == r & absorb_X_long$pool == p] > 0)))
+    absorb_suppY <- sapply(absorb_pools, function(p) sapply(absorb_regs, function(r)
+      any(absorb_Y_long$value[absorb_Y_long$region == r & absorb_Y_long$pool == p] > 0)))
+    dimnames(absorb_suppX) <- dimnames(absorb_suppY) <- list(absorb_regs, absorb_pools)
+
+    absorb_one_year <- function(yr) {
+      x <- absorb_mat(absorb_X_long, yr)
+      y <- absorb_mat(absorb_Y_long, yr)
+      sd_exp <- absorb_mat(absorb_SD_long %>% mutate(pool = "LNG"), yr)[, "LNG"]
+      E <- rowSums(x) + sd_exp          # calibrated regional exports
+      Imp <- rowSums(y)                 # calibrated regional imports
+      suppX <- absorb_suppX | x > 0
+      # exporters with no export link at all: allow their own pipeline network and LNG
+      for(r in which(E > 1e-9 & rowSums(suppX) == 0)) {
+        own <- GCAM_region_pipeline_bloc_export$pipeline.market[GCAM_region_pipeline_bloc_export$origin.region == absorb_regs[r]]
+        suppX[r, c(own, "LNG")] <- TRUE
+      }
+      suppY <- absorb_suppY | y > 0
+      Mx <- ifelse(suppX, pmax(x, 1e-4), 0)
+      My <- ifelse(suppY, pmax(y, 1e-4), 0)
+      if(abs(sum(E) - sum(Imp)) > absorb_statdiff_tol) return(NULL)  # global balance is required
+      for(it in seq_len(5000)) {
+        rs <- rowSums(Mx); Mx <- Mx * ifelse(rs > 0, E / ifelse(rs > 0, rs, 1), 0)
+        rs <- rowSums(My); My <- My * ifelse(rs > 0, Imp / ifelse(rs > 0, rs, 1), 0)
+        Tt <- (colSums(Mx) + colSums(My)) / 2
+        cs <- colSums(Mx); Mx <- sweep(Mx, 2, ifelse(cs > 0, Tt / ifelse(cs > 0, cs, 1), 0), "*")
+        cs <- colSums(My); My <- sweep(My, 2, ifelse(cs > 0, Tt / ifelse(cs > 0, cs, 1), 0), "*")
+        if(it %% 50 == 0 &&
+           max(abs(rowSums(Mx) - E), abs(rowSums(My) - Imp), abs(colSums(Mx) - colSums(My))) < 1e-10) break
+      }
+      err <- max(abs(rowSums(Mx) - E), abs(rowSums(My) - Imp), abs(colSums(Mx) - colSums(My)))
+      if(err > absorb_statdiff_tol) return(NULL)
+      list(X = Mx, Y = My)
+    }
+
+    absorb_res <- list()
+    for(yr in MODEL_BASE_YEARS) {
+      r <- absorb_one_year(yr)
+      if(is.null(r)) {
+        warning(paste("Statistical differences could not be absorbed in year", yr, "; original statistical differences kept"))
+      } else {
+        absorb_res[[as.character(yr)]] <- r
+      }
+    }
+
+    absorb_X_new <- absorb_X_long %>% mutate(value_new = value)
+    absorb_Y_new <- absorb_Y_long %>% mutate(value_new = value)
+    for(yr in names(absorb_res)) {
+      idx <- which(absorb_X_new$year == as.numeric(yr))
+      absorb_X_new$value_new[idx] <- absorb_res[[yr]]$X[cbind(match(absorb_X_new$region[idx], absorb_regs), match(absorb_X_new$pool[idx], absorb_pools))]
+      idx <- which(absorb_Y_new$year == as.numeric(yr))
+      absorb_Y_new$value_new[idx] <- absorb_res[[yr]]$Y[cbind(match(absorb_Y_new$region[idx], absorb_regs), match(absorb_Y_new$pool[idx], absorb_pools))]
+    }
+    absorbed_years <- as.numeric(names(absorb_res))
+
+    L2391.NG_export_calOutput_pipeline_EUR <- L2391.NG_export_calOutput_pipeline_EUR %>%
+      mutate(pool = pipeline.market) %>%
+      left_join(absorb_X_new %>% filter(pool != "LNG") %>% select(region, year, pool, value_new), by = c("region", "year", "pool")) %>%
+      mutate(calOutputValue = if_else(year %in% absorbed_years & !is.na(value_new), value_new, calOutputValue)) %>%
+      select(-pool, -value_new)
+    L2391.NG_export_calOutput_LNG_EUR <- L2391.NG_export_calOutput_LNG_EUR %>%
+      left_join(absorb_X_new %>% filter(pool == "LNG") %>% select(region, year, value_new), by = c("region", "year")) %>%
+      mutate(calOutputValue = if_else(year %in% absorbed_years & !is.na(value_new), value_new, calOutputValue)) %>%
+      select(-value_new)
+    L2391.NG_import_calOutput_pipeline_EUR <- L2391.NG_import_calOutput_pipeline_EUR %>%
+      mutate(pool = pipeline.market) %>%
+      left_join(absorb_Y_new %>% filter(pool != "LNG") %>% select(region, year, pool, value_new), by = c("region", "year", "pool")) %>%
+      mutate(calOutputValue = if_else(year %in% absorbed_years & !is.na(value_new), value_new, calOutputValue)) %>%
+      select(-pool, -value_new)
+    L2391.NG_import_calOutput_LNG_EUR <- L2391.NG_import_calOutput_LNG_EUR %>%
+      left_join(absorb_Y_new %>% filter(pool == "LNG") %>% select(region, year, value_new), by = c("region", "year")) %>%
+      mutate(calOutputValue = if_else(year %in% absorbed_years & !is.na(value_new), value_new, calOutputValue)) %>%
+      select(-value_new)
+    L2391.NG_export_calOutput_statdiff_EUR <- L2391.NG_export_calOutput_statdiff_EUR %>%
+      mutate(calOutputValue = if_else(year %in% absorbed_years, 0, calOutputValue))
+    L2391.NG_import_calOutput_statdiff_EUR <- L2391.NG_import_calOutput_statdiff_EUR %>%
+      mutate(calOutputValue = if_else(year %in% absorbed_years, 0, calOutputValue))
 
     #
     # Produce outputs ----------------------------------------

@@ -571,9 +571,21 @@ bool Market::shouldSolveNR() const {
 * \author Josh Lurz
 */
 bool Market::meetsSpecialSolutionCriteria() const {
-    // This is a normal market which should not be solved in the base period
-    // unless the solve flag is set.
-    return ( !mSolveMarket && mYear == scenario->getModeltime()->getStartYear() );
+    // A market that is not currently flagged to solve is not something any
+    // solver component is (or can be, since every component's filter gates on
+    // solvable/solvable-nr) working on. Previously this was only recognized as
+    // "solved" in the model's start year, which meant a market that got
+    // deactivated (e.g. its raw supply and demand both collapsed to ~0, see
+    // Market::shouldSolve) in ANY later period could permanently block overall
+    // convergence: isAllSolved() would keep reporting false forever, with no
+    // component able to ever touch it to fix that. MarketRES already treats
+    // "not solving" as solved in every period (see MarketRES::
+    // meetsSpecialSolutionCriteria); this generalizes that same, safer logic
+    // to every market type, matching what the "unsolved" solution-info-filter
+    // operand already assumes should be true (SolutionInfoSet::getUnsolvedSet
+    // additionally requires shouldSolve() precisely because a market that
+    // doesn't want to solve should never count as a blocker).
+    return !mSolveMarket;
 }
 
 /*!
