@@ -34,7 +34,8 @@ module_socio_L106.income_distributions <- function(command, ...) {
     income_dist_eur_original <- get_data(all_data, "socioeconomics/Rao_multimodel_income_deciles") %>%
       left_join_error_no_match(region_map, by = "GCAM_region_ID")
     income_dist_eur_DIAMOND <- get_data(all_data, "socioeconomics/Rao_multimodel_income_deciles_DIAMOND") %>%
-      left_join_error_no_match(region_map, by = "GCAM_region_ID")
+      left_join_error_no_match(region_map, by = "GCAM_region_ID") %>%
+      filter(year > 2015)
 
     # Consider default Rao data for non-available DIAMOND preprocessed data
     # NOTE: Moldova, Serbia and Montenegro, and Romania are left unchanged (GCAMEUR regions)
