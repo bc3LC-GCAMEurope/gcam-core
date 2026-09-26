@@ -140,6 +140,7 @@
 		<Value name = "macro">../input/gcamdata/xml/socioeconomics_macro.xml</Value>
 		
 		<Value name = "bio_feedstock_limit">../input/gcamdata/xml/liquids_limits.xml</Value>
+        <Value name = "bio_elec_limit_eur">../input/gcamdata/xml/liquids_limits_europe.xml</Value>
 		<Value name = "bio_elec_w_feed_limit">../input/gcamdata/xml/water_elec_liquids_limits.xml</Value>
 		<Value name = "bio_externality">../input/gcamdata/xml/bio_externality.xml</Value>
         <Value name = "gas_trade">../input/gcamdata/xml/gas_trade_EUR.xml</Value>
