@@ -62,13 +62,6 @@ module_socio_L201.Pop_GDP_scenarios <- function(command, ...) {
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
 
-    gcam_macro_TFP_open %>%
-      left_join(distinct(GCAM32_to_EU, GCAM32_region,  GCAMEU_region),
-                by = c("region" = "GCAM32_region")) %>%
-      select(-region) %>%
-      select(scenario, region = GCAMEU_region, year, productivity) ->
-      gcam_macro_TFP_open
-
 
     # (1) L201.Pop_Scen: pop for all scenarios ----
     L201.Pop_Scen <-

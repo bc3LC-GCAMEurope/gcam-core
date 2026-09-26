@@ -6,7 +6,7 @@
 * CONTRACTOR MAKES ANY WARRANTY, EXPRESS OR IMPLIED, OR ASSUMES ANY
 * LIABILITY FOR THE USE OF THIS SOFTWARE. This notice including this
 * sentence must appear on any copies of this computer software.
-* 
+*
 * EXPORT CONTROL
 * User agrees that the Software will not be shipped, transferred or
 * exported into any country or used in any manner prohibited by the
@@ -21,17 +21,17 @@
 * (including without limitation Iran, Syria, Sudan, Cuba, and North Korea)
 *     and that User is not otherwise prohibited
 * under the Export Laws from receiving the Software.
-* 
+*
 * Copyright 2011 Battelle Memorial Institute.  All Rights Reserved.
-* Distributed as open-source under the terms of the Educational Community 
+* Distributed as open-source under the terms of the Educational Community
 * License version 2.0 (ECL 2.0). http://www.opensource.org/licenses/ecl2.php
-* 
+*
 * For further details, see: http://www.globalchange.umd.edu/models/gcam/
 *
 */
 
 
-/*! 
+/*!
  * \file sector_utils.cpp
  * \ingroup Objects
  * \brief The SectorUtils class source file.
@@ -44,6 +44,8 @@
 #include <algorithm>
 #include <numeric>
 #include <cfloat>
+#include <set>
+#include <mutex>
 
 #include "sectors/include/sector_utils.h"
 #include "containers/include/scenario.h"
@@ -69,6 +71,15 @@ typedef std::map<gcamstr, gcamstr>::const_iterator NameIterator;
  * \brief Find the national accounts for the given region.
  * \param aRegionName The region name to find.
  * \return A pointer to the national account for the requested region or null if not found.
+ * \note Some regions (e.g. GCAM-Europe's trade-hub and electricity-grid
+ *       "pseudo-regions") are intentionally defined without a
+ *       NationalAccountContainer since they are not real economies and
+ *       have no GDP/macro representation. Returning null for those is an
+ *       expected, handled condition rather than a model error, so the
+ *       corresponding log message is only emitted once per region (instead
+ *       of once per call, which under multi-threaded solving could produce
+ *       thousands of interleaved/corrupted log lines) and at a lower log
+ *       level.
  */
 NationalAccountContainer const* getNationalAccountContainer( const gcamstr& aRegionName ) {
     Region const* region = scenario->getWorld()->getRegion( aRegionName );
@@ -78,16 +89,35 @@ NationalAccountContainer const* getNationalAccountContainer( const gcamstr& aReg
             return ret;
         }
         else {
-            ILogger& mainLog = ILogger::getLogger( "main_log" );
-            mainLog.setLevel( ILogger::ERROR );
-            mainLog << "NationalAccountContainer not initialized in " << aRegionName << endl;
+            // Log this at most once per region name, and protect the
+            // static tracking set with a mutex since sector calculations
+            // may run this in parallel across solver threads.
+            static std::set<gcamstr> sRegionsWithoutAccountsWarned;
+            static std::mutex sNoAccountsLogMutex;
+            std::lock_guard<std::mutex> lock( sNoAccountsLogMutex );
+            if( sRegionsWithoutAccountsWarned.insert( aRegionName ).second ) {
+                ILogger& mainLog = ILogger::getLogger( "main_log" );
+                mainLog.setLevel( ILogger::NOTICE );
+                mainLog << "NationalAccountContainer not initialized in " << aRegionName
+                        << " -- treating as a region with no national accounts (e.g. a "
+                        << "trade or electricity-grid hub region); GDP-dependent "
+                        << "calculations for it will use neutral default values." << endl;
+            }
             return 0;
         }
     }
     else {
-        ILogger& mainLog = ILogger::getLogger( "main_log" );
-        mainLog.setLevel( ILogger::ERROR );
-        mainLog << "Could not find region " << aRegionName << endl;
+        // Not finding a region at all is a more serious condition (likely
+        // a real configuration error), so this stays at ERROR level, but is
+        // still only logged once per region name to avoid log spam/corruption.
+        static std::set<gcamstr> sRegionsNotFoundWarned;
+        static std::mutex sNotFoundLogMutex;
+        std::lock_guard<std::mutex> lock( sNotFoundLogMutex );
+        if( sRegionsNotFoundWarned.insert( aRegionName ).second ) {
+            ILogger& mainLog = ILogger::getLogger( "main_log" );
+            mainLog.setLevel( ILogger::ERROR );
+            mainLog << "Could not find region " << aRegionName << endl;
+        }
         return 0;
     }
 }
@@ -103,25 +133,29 @@ void SectorUtils::addGDPDependency(const gcamstr &aRegionName, const gcamstr &aS
 double SectorUtils::getGDP( const gcamstr& aRegionName, const int aPeriod ) {
     NationalAccountContainer const* gdp = getNationalAccountContainer( aRegionName );
     // error messages would have already been printed if not found
-    return gdp ? gdp->getMarketGDP( aPeriod ) : 0.0;
+    // Use a neutral fallback of 1.0 (rather than 0.0) so that regions with
+    // no national accounts (e.g. GCAM-Europe trade/grid hub regions) do not
+    // propagate log(0) = -inf or 0/0 = NaN into GDP-ratio-based calculations
+    // elsewhere in the model.
+    return gdp ? gdp->getMarketGDP( aPeriod ) : 1.0;
 }
 
 double SectorUtils::getGDPPerCap( const gcamstr& aRegionName, const int aPeriod ) {
     NationalAccountContainer const* gdp = getNationalAccountContainer( aRegionName );
     // error messages would have already been printed if not found
-    return gdp ? gdp->getMarketGDPperCapita( aPeriod ) : 0.0;
+    return gdp ? gdp->getMarketGDPperCapita( aPeriod ) : 1.0;
 }
 
 double SectorUtils::getGDPPerCapScaled( const gcamstr& aRegionName, const int aPeriod ) {
     NationalAccountContainer const* gdp = getNationalAccountContainer( aRegionName );
     // error messages would have already been printed if not found
-    return gdp ? gdp->getMarketGDPperCapitaNorm( aPeriod ) : 0.0;
+    return gdp ? gdp->getMarketGDPperCapitaNorm( aPeriod ) : 1.0;
 }
 
 double SectorUtils::getGDPPPP( const gcamstr& aRegionName, const int aPeriod ) {
     NationalAccountContainer const* gdp = getNationalAccountContainer( aRegionName );
     // error messages would have already been printed if not found
-    return gdp ? gdp->getGDPPPP( aPeriod ) : 0.0;
+    return gdp ? gdp->getGDPPPP( aPeriod ) : 1.0;
 }
 
 /*!
@@ -209,7 +243,7 @@ void SectorUtils::addToTrialDemand( const gcamstr& aRegionName,
 
     // Locate the trial market name.
     NameIterator trialName = sTrialMarketNames.find( aSectorName );
-    
+
     // Check if the market existed.
     assert( trialName != sTrialMarketNames.end() );
 
@@ -240,7 +274,7 @@ double SectorUtils::getTrialSupply( const gcamstr& aRegionName,
 
     // Locate the trial market name.
     NameIterator trialName = sTrialMarketNames.find( aSectorName );
-    
+
     // Check if the market existed.
     if( trialName == sTrialMarketNames.end() ){
         return -1;
@@ -250,7 +284,7 @@ double SectorUtils::getTrialSupply( const gcamstr& aRegionName,
     // the price.
     double trialPrice = scenario->getMarketplace()->getPrice( trialName->second,
                                                               aRegionName, aPeriod );
-    
+
     // The market should have existed if the trial market name search succeeded.
     assert( trialPrice != Marketplace::NO_MARKET_PRICE );
     return trialPrice;
@@ -301,7 +335,7 @@ pair<double, double> SectorUtils::normalizeLogShares( vector<double>& alogShares
     // find the log of the largest unnormalized share
     double lfac = *max_element(alogShares.begin(), alogShares.end());
     double sum = 0.0;
-    
+
     // check for all zero prices
     if( lfac == -numeric_limits<double>::infinity() ) {
         // In this case, set all shares to zero and return.
@@ -325,10 +359,10 @@ pair<double, double> SectorUtils::normalizeLogShares( vector<double>& alogShares
     sum = 0.0;                               // double check the normalization
     for( size_t i = 0; i < alogShares.size(); ++i ) {
         alogShares[ i ] = exp( alogShares[ i ] - norm );   // divide by norm constant and unlog
-        sum += alogShares[ i ];                      // accumulate sum of normalized shares 
+        sum += alogShares[ i ];                      // accumulate sum of normalized shares
                                                      //   (should be 1.0 when we're done.)
     }
-    
+
     // In actuality, this rescaling scheme should eliminate the problem of
     // failed normalizations, but we'll allow for the possibility anyhow.
     assert( sum < numeric_limits<double>::min() || util::isEqual( sum, 1.0 ) );
@@ -341,7 +375,7 @@ double SectorUtils::normalizeShares( vector<double>& aShares ){
     const double sum = accumulate( aShares.begin(), aShares.end(), 0.0 );
 
     typedef vector<double>::iterator VecIterator;
-    
+
     // Check for an unnormalizable vector. Unnormalized shares may be very
     // small.
     if( sum > DBL_MIN ){
@@ -352,7 +386,7 @@ double SectorUtils::normalizeShares( vector<double>& aShares ){
         // Check that the normalization was performed correctly.
         assert( util::isEqual( accumulate( aShares.begin(),
                                            aShares.end(), 0.0 ), 1.0 ) );
-        
+
         // If the shares could be normalized assume they were correct.
         return 1;
     }
@@ -363,7 +397,7 @@ double SectorUtils::normalizeShares( vector<double>& aShares ){
 
 /*!
  * \brief Get the base period to use for calculation of price ratios used in demand calculations
- * \details Price ratio calculations need to be normalized to the last calibation period. 
+ * \details Price ratio calculations need to be normalized to the last calibation period.
  * \param aPeriod Model period.
  * \warning This approach will result in price effects of zero for all demands in a calibration year
  *          even if that particular sector has no calibration values.
@@ -382,7 +416,7 @@ int SectorUtils::getDemandNormPeriod( const int aPeriod ){
     else {
         normPeriod = modeltime->getFinalCalibrationPeriod();
     }
-    
+
     return normPeriod;
 }
 
@@ -409,7 +443,7 @@ double SectorUtils::convertEnergyToCapacity( const double aCapacityFactor,
 
     // Conversion: 1 gigaWattHour of electricity = 3.6E-6 ExaJoules
     const double EJ_PER_GWH = 3.6E-6;
-    
+
     // Number of hours in a year.
     const unsigned int HOURS_PER_YEAR = 8760;
 
@@ -440,10 +474,10 @@ double SectorUtils::calcPriceRatio( const gcamstr& aRegionName,
     // The price ratio is always 1 in the base period.
     double priceRatio = 1;
     double internalBasePeriod = aBasePeriod;
-    
+
     // Prices before 1990 are not valid.
     if ( aBasePeriod == 0 ) {
-        internalBasePeriod = 1; 
+        internalBasePeriod = 1;
     }
     if( aCurrentPeriod > internalBasePeriod ) {
         const Marketplace* marketplace = scenario->getMarketplace();
@@ -451,7 +485,7 @@ double SectorUtils::calcPriceRatio( const gcamstr& aRegionName,
         double currentPrice = marketplace->getPrice( aSectorName, aRegionName, aCurrentPeriod );
 
         priceRatio = currentPrice / basePrice;
-        
+
     }
 
     return priceRatio;
@@ -523,7 +557,7 @@ void SectorUtils::setFinalEnergyFlag( const gcamstr& aRegionName,
     sectorInfo->setBoolean( gcamstr("is-final-energy"), true );
 }
 
-/*! 
+/*!
  * \brief Return whether the given sector is a supplier of final energy.
  * \param aRegionName Region name.
  * \param aSectorName Sector name.
@@ -558,7 +592,7 @@ double SectorUtils::convertCapacityToEnergy( const double aCapacityFactor,
     const double EJ_PER_GWH = 3.6E-6;
     // Number of hours in a year.
     const unsigned int HOURS_PER_YEAR = 8760;
-    
+
 	//converts capacity in GW to energy in EJ
     return aCapacity * ( aCapacityFactor * EJ_PER_GWH * HOURS_PER_YEAR );
 }
@@ -618,7 +652,7 @@ void SectorUtils::setSupplyBehaviorBounds( const gcamstr& aGoodName, const gcams
 */
 void SectorUtils::fillMissingPeriodVectorInterpolated( objects::PeriodVector<Value>& aPeriodVector ){
     const Modeltime* modeltime = scenario->getModeltime();
-    
+
     // the periodVector for the final calibration period should be initialized
     assert( aPeriodVector[ modeltime->getFinalCalibrationPeriod() ].isInited() );
 
@@ -657,14 +691,14 @@ void SectorUtils::fillMissingPeriodVectorInterpolated( objects::PeriodVector<Val
             // difference is if the isInited() flag on the interpolated value is set
             // or not.
             if( prevValue.isInited() || nextValue.isInited() ) {
-                aPeriodVector[ per ].set( prevYear != nextYear ? util::linearInterpolateY( 
+                aPeriodVector[ per ].set( prevYear != nextYear ? util::linearInterpolateY(
                     currYear, prevYear, nextYear, prevValue, nextValue ) : prevValue.get() );
             }
         }
     }
 }
 
-/*! \brief Fills missing period elements in a Value vector with values 
+/*! \brief Fills missing period elements in a Value vector with values
 *         available from next initialized or read-in values.
 * \detail This method is intended for enabling variable time-step capability
 *         and filling in values that have not been read-in or initialized
@@ -674,7 +708,7 @@ void SectorUtils::fillMissingPeriodVectorInterpolated( objects::PeriodVector<Val
 */
 void SectorUtils::fillMissingPeriodVectorNextAvailable( objects::PeriodVector<Value>& aPeriodVector ){
     const Modeltime* modeltime = scenario->getModeltime();
-    
+
     // the periodVector for the final calibration period should be initialized
     assert( aPeriodVector[ modeltime->getFinalCalibrationPeriod() ].isInited() );
 
