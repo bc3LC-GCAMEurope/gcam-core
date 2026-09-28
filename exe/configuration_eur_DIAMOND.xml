@@ -148,7 +148,7 @@
         <Value name = "prune_ag">../input/gcamdata/xml/prune_empty_ag.xml</Value>
         <Value name = "prune_ag">../input/gcamdata/xml/prune_empty_ag_EUR.xml</Value>
 
-		<Value name = "solver">../input/solution/cal_broyden_config_diamond.xml</Value>
+		<Value name = "solver">../input/solution/cal_broyden_config.xml</Value>
 
 		<!-- EV ADOPTION: Optional file to load survey-based EV adoption rates from UniBasel -->
 		<!--Value name="EV_adoption">../input/policy/EV_calib_basel.xml</Value-->
