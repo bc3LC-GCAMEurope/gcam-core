@@ -59,7 +59,7 @@ module_energy_L144.building_det_flsp <- function(command, ...) {
     Other_pcflsp_m2_ctry_Yh <- get_data(all_data, "energy/Other_pcflsp_m2_ctry_Yh")
     IEA_PCResFloorspace <- get_data(all_data, "energy/IEA_PCResFloorspace")
     Odyssee_ResFloorspacePerHouse <- get_data(all_data, "energy/Odyssee_ResFloorspacePerHouse")
-    L100.Pop_thous_ctry_Yh <- get_data(all_data, "L100.Pop_thous_ctry_Yh") %>% filter(year <= MODEL_FINAL_BASE_YEAR)
+    L100.Pop_thous_ctry_Yh <- get_data(all_data, "L100.Pop_thous_ctry_Yh")
     L102.gdp_mil90usd_Scen_R_Y <- get_data(all_data, "L102.gdp_mil90usd_Scen_R_Y")
     L102.pcgdp_thous90USD_Scen_R_Y <- get_data(all_data, "L102.pcgdp_thous90USD_Scen_R_Y")
     L221.LN0_Land <- get_data(all_data, "L221.LN0_Land", strip_attributes = TRUE)

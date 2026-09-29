@@ -1,0 +1,4201 @@
+supplysector,subsector,logit.exponent,logit.type,iteration
+resid heating modern EUR,biomass,-1,,1
+resid heating coal EUR,coal,-4,,1
+resid heating modern EUR,electricity,-15,,1
+resid heating modern EUR,gas,-15,,1
+resid heating modern EUR,refined liquids,-8,,1
+resid heating modern EUR,district heat,-4,,1
+resid heating modern EUR,water heat pump,-19,,1
+resid cooling modern EUR,electricity,-15,,1
+resid cooling modern EUR,gas,-19,,1
+resid cooking modern EUR,biomass,-5,,1
+resid cooking coal EUR,coal,-10,,1
+resid cooking modern EUR,electricity,-17,,1
+resid cooking modern EUR,gas,-18,,1
+resid cooking modern EUR,refined liquids,-17,,1
+resid other appliance modern EUR,electricity,-11,,1
+resid hot water modern EUR,biomass,-15,,1
+resid hot water coal EUR,coal,-15,,1
+resid hot water modern EUR,electricity,-12,,1
+resid hot water modern EUR,gas,-10,,1
+resid hot water modern EUR,refined liquids,-2,,1
+resid hot water modern EUR,district heat,-7,,1
+resid hot water modern EUR,water heat pump,-13,,1
+resid others modern EUR,biomass,-4,,1
+resid others coal EUR,coal,-8,,1
+resid others modern EUR,electricity,-5,,1
+resid others modern EUR,gas,-19,,1
+resid others modern EUR,refined liquids,-15,,1
+comm heating EUR,biomass,-10,,1
+comm heating EUR,coal,-15,,1
+comm heating EUR,electricity,-2,,1
+comm heating EUR,gas,-6,,1
+comm heating EUR,refined liquids,-7,,1
+comm heating EUR,district heat,-2,,1
+comm heating EUR,water heat pump,-2,,1
+comm cooling EUR,electricity,-14,,1
+comm cooling EUR,gas,-12,,1
+comm others EUR,biomass,-5,,1
+comm others EUR,coal,-13,,1
+comm others EUR,electricity,-18,,1
+comm others EUR,gas,-5,,1
+comm others EUR,refined liquids,-19,,1
+comm others EUR,district heat,-16,,1
+resid heating modern EUR,biomass,-11,,2
+resid heating coal EUR,coal,-4,,2
+resid heating modern EUR,electricity,-18,,2
+resid heating modern EUR,gas,-5,,2
+resid heating modern EUR,refined liquids,-12,,2
+resid heating modern EUR,district heat,-1,,2
+resid heating modern EUR,water heat pump,-9,,2
+resid cooling modern EUR,electricity,-16,,2
+resid cooling modern EUR,gas,-4,,2
+resid cooking modern EUR,biomass,-18,,2
+resid cooking coal EUR,coal,-6,,2
+resid cooking modern EUR,electricity,-16,,2
+resid cooking modern EUR,gas,-15,,2
+resid cooking modern EUR,refined liquids,-3,,2
+resid other appliance modern EUR,electricity,-2,,2
+resid hot water modern EUR,biomass,-3,,2
+resid hot water coal EUR,coal,-10,,2
+resid hot water modern EUR,electricity,-5,,2
+resid hot water modern EUR,gas,-15,,2
+resid hot water modern EUR,refined liquids,-14,,2
+resid hot water modern EUR,district heat,-13,,2
+resid hot water modern EUR,water heat pump,-17,,2
+resid others modern EUR,biomass,-10,,2
+resid others coal EUR,coal,-6,,2
+resid others modern EUR,electricity,-4,,2
+resid others modern EUR,gas,-10,,2
+resid others modern EUR,refined liquids,-14,,2
+comm heating EUR,biomass,-11,,2
+comm heating EUR,coal,-10,,2
+comm heating EUR,electricity,-18,,2
+comm heating EUR,gas,-3,,2
+comm heating EUR,refined liquids,-10,,2
+comm heating EUR,district heat,-20,,2
+comm heating EUR,water heat pump,-13,,2
+comm cooling EUR,electricity,-13,,2
+comm cooling EUR,gas,-11,,2
+comm others EUR,biomass,-16,,2
+comm others EUR,coal,-1,,2
+comm others EUR,electricity,-9,,2
+comm others EUR,gas,-11,,2
+comm others EUR,refined liquids,-1,,2
+comm others EUR,district heat,-20,,2
+resid heating modern EUR,biomass,-8,,3
+resid heating coal EUR,coal,-13,,3
+resid heating modern EUR,electricity,-3,,3
+resid heating modern EUR,gas,-19,,3
+resid heating modern EUR,refined liquids,-15,,3
+resid heating modern EUR,district heat,-7,,3
+resid heating modern EUR,water heat pump,-15,,3
+resid cooling modern EUR,electricity,-16,,3
+resid cooling modern EUR,gas,-10,,3
+resid cooking modern EUR,biomass,-7,,3
+resid cooking coal EUR,coal,-12,,3
+resid cooking modern EUR,electricity,-1,,3
+resid cooking modern EUR,gas,-1,,3
+resid cooking modern EUR,refined liquids,-20,,3
+resid other appliance modern EUR,electricity,-20,,3
+resid hot water modern EUR,biomass,-6,,3
+resid hot water coal EUR,coal,-15,,3
+resid hot water modern EUR,electricity,-11,,3
+resid hot water modern EUR,gas,-19,,3
+resid hot water modern EUR,refined liquids,-10,,3
+resid hot water modern EUR,district heat,-3,,3
+resid hot water modern EUR,water heat pump,-9,,3
+resid others modern EUR,biomass,-10,,3
+resid others coal EUR,coal,-2,,3
+resid others modern EUR,electricity,-16,,3
+resid others modern EUR,gas,-19,,3
+resid others modern EUR,refined liquids,-15,,3
+comm heating EUR,biomass,-19,,3
+comm heating EUR,coal,-16,,3
+comm heating EUR,electricity,-8,,3
+comm heating EUR,gas,-1,,3
+comm heating EUR,refined liquids,-16,,3
+comm heating EUR,district heat,-12,,3
+comm heating EUR,water heat pump,-15,,3
+comm cooling EUR,electricity,-6,,3
+comm cooling EUR,gas,-1,,3
+comm others EUR,biomass,-12,,3
+comm others EUR,coal,-19,,3
+comm others EUR,electricity,-10,,3
+comm others EUR,gas,-9,,3
+comm others EUR,refined liquids,-16,,3
+comm others EUR,district heat,-2,,3
+resid heating modern EUR,biomass,-2,,4
+resid heating coal EUR,coal,-8,,4
+resid heating modern EUR,electricity,-7,,4
+resid heating modern EUR,gas,-12,,4
+resid heating modern EUR,refined liquids,-8,,4
+resid heating modern EUR,district heat,-6,,4
+resid heating modern EUR,water heat pump,-2,,4
+resid cooling modern EUR,electricity,-11,,4
+resid cooling modern EUR,gas,-8,,4
+resid cooking modern EUR,biomass,-20,,4
+resid cooking coal EUR,coal,-15,,4
+resid cooking modern EUR,electricity,-18,,4
+resid cooking modern EUR,gas,-6,,4
+resid cooking modern EUR,refined liquids,-2,,4
+resid other appliance modern EUR,electricity,-20,,4
+resid hot water modern EUR,biomass,-4,,4
+resid hot water coal EUR,coal,-3,,4
+resid hot water modern EUR,electricity,-6,,4
+resid hot water modern EUR,gas,-6,,4
+resid hot water modern EUR,refined liquids,-17,,4
+resid hot water modern EUR,district heat,-7,,4
+resid hot water modern EUR,water heat pump,-7,,4
+resid others modern EUR,biomass,-4,,4
+resid others coal EUR,coal,-11,,4
+resid others modern EUR,electricity,-5,,4
+resid others modern EUR,gas,-11,,4
+resid others modern EUR,refined liquids,-4,,4
+comm heating EUR,biomass,-7,,4
+comm heating EUR,coal,-15,,4
+comm heating EUR,electricity,-6,,4
+comm heating EUR,gas,-14,,4
+comm heating EUR,refined liquids,-16,,4
+comm heating EUR,district heat,-15,,4
+comm heating EUR,water heat pump,-8,,4
+comm cooling EUR,electricity,-10,,4
+comm cooling EUR,gas,-1,,4
+comm others EUR,biomass,-13,,4
+comm others EUR,coal,-5,,4
+comm others EUR,electricity,-2,,4
+comm others EUR,gas,-3,,4
+comm others EUR,refined liquids,-5,,4
+comm others EUR,district heat,-9,,4
+resid heating modern EUR,biomass,-6,,5
+resid heating coal EUR,coal,-10,,5
+resid heating modern EUR,electricity,-17,,5
+resid heating modern EUR,gas,-4,,5
+resid heating modern EUR,refined liquids,-7,,5
+resid heating modern EUR,district heat,-7,,5
+resid heating modern EUR,water heat pump,-3,,5
+resid cooling modern EUR,electricity,-13,,5
+resid cooling modern EUR,gas,-8,,5
+resid cooking modern EUR,biomass,-1,,5
+resid cooking coal EUR,coal,-10,,5
+resid cooking modern EUR,electricity,-18,,5
+resid cooking modern EUR,gas,-10,,5
+resid cooking modern EUR,refined liquids,-11,,5
+resid other appliance modern EUR,electricity,-11,,5
+resid hot water modern EUR,biomass,-3,,5
+resid hot water coal EUR,coal,-18,,5
+resid hot water modern EUR,electricity,-17,,5
+resid hot water modern EUR,gas,-6,,5
+resid hot water modern EUR,refined liquids,-19,,5
+resid hot water modern EUR,district heat,-6,,5
+resid hot water modern EUR,water heat pump,-3,,5
+resid others modern EUR,biomass,-6,,5
+resid others coal EUR,coal,-15,,5
+resid others modern EUR,electricity,-13,,5
+resid others modern EUR,gas,-12,,5
+resid others modern EUR,refined liquids,-2,,5
+comm heating EUR,biomass,-13,,5
+comm heating EUR,coal,-9,,5
+comm heating EUR,electricity,-18,,5
+comm heating EUR,gas,-6,,5
+comm heating EUR,refined liquids,-4,,5
+comm heating EUR,district heat,-18,,5
+comm heating EUR,water heat pump,-1,,5
+comm cooling EUR,electricity,-10,,5
+comm cooling EUR,gas,-1,,5
+comm others EUR,biomass,-14,,5
+comm others EUR,coal,-17,,5
+comm others EUR,electricity,-8,,5
+comm others EUR,gas,-5,,5
+comm others EUR,refined liquids,-4,,5
+comm others EUR,district heat,-10,,5
+resid heating modern EUR,biomass,-20,,6
+resid heating coal EUR,coal,-15,,6
+resid heating modern EUR,electricity,-8,,6
+resid heating modern EUR,gas,-11,,6
+resid heating modern EUR,refined liquids,-7,,6
+resid heating modern EUR,district heat,-1,,6
+resid heating modern EUR,water heat pump,-15,,6
+resid cooling modern EUR,electricity,-19,,6
+resid cooling modern EUR,gas,-1,,6
+resid cooking modern EUR,biomass,-11,,6
+resid cooking coal EUR,coal,-6,,6
+resid cooking modern EUR,electricity,-20,,6
+resid cooking modern EUR,gas,-20,,6
+resid cooking modern EUR,refined liquids,-4,,6
+resid other appliance modern EUR,electricity,-1,,6
+resid hot water modern EUR,biomass,-2,,6
+resid hot water coal EUR,coal,-5,,6
+resid hot water modern EUR,electricity,-4,,6
+resid hot water modern EUR,gas,-15,,6
+resid hot water modern EUR,refined liquids,-8,,6
+resid hot water modern EUR,district heat,-10,,6
+resid hot water modern EUR,water heat pump,-4,,6
+resid others modern EUR,biomass,-6,,6
+resid others coal EUR,coal,-15,,6
+resid others modern EUR,electricity,-12,,6
+resid others modern EUR,gas,-20,,6
+resid others modern EUR,refined liquids,-18,,6
+comm heating EUR,biomass,-15,,6
+comm heating EUR,coal,-1,,6
+comm heating EUR,electricity,-3,,6
+comm heating EUR,gas,-4,,6
+comm heating EUR,refined liquids,-3,,6
+comm heating EUR,district heat,-19,,6
+comm heating EUR,water heat pump,-20,,6
+comm cooling EUR,electricity,-10,,6
+comm cooling EUR,gas,-14,,6
+comm others EUR,biomass,-16,,6
+comm others EUR,coal,-1,,6
+comm others EUR,electricity,-1,,6
+comm others EUR,gas,-10,,6
+comm others EUR,refined liquids,-7,,6
+comm others EUR,district heat,-14,,6
+resid heating modern EUR,biomass,-5,,7
+resid heating coal EUR,coal,-11,,7
+resid heating modern EUR,electricity,-19,,7
+resid heating modern EUR,gas,-20,,7
+resid heating modern EUR,refined liquids,-7,,7
+resid heating modern EUR,district heat,-9,,7
+resid heating modern EUR,water heat pump,-2,,7
+resid cooling modern EUR,electricity,-6,,7
+resid cooling modern EUR,gas,-19,,7
+resid cooking modern EUR,biomass,-14,,7
+resid cooking coal EUR,coal,-7,,7
+resid cooking modern EUR,electricity,-6,,7
+resid cooking modern EUR,gas,-20,,7
+resid cooking modern EUR,refined liquids,-13,,7
+resid other appliance modern EUR,electricity,-2,,7
+resid hot water modern EUR,biomass,-6,,7
+resid hot water coal EUR,coal,-2,,7
+resid hot water modern EUR,electricity,-14,,7
+resid hot water modern EUR,gas,-18,,7
+resid hot water modern EUR,refined liquids,-20,,7
+resid hot water modern EUR,district heat,-12,,7
+resid hot water modern EUR,water heat pump,-14,,7
+resid others modern EUR,biomass,-14,,7
+resid others coal EUR,coal,-10,,7
+resid others modern EUR,electricity,-15,,7
+resid others modern EUR,gas,-18,,7
+resid others modern EUR,refined liquids,-18,,7
+comm heating EUR,biomass,-14,,7
+comm heating EUR,coal,-10,,7
+comm heating EUR,electricity,-9,,7
+comm heating EUR,gas,-9,,7
+comm heating EUR,refined liquids,-1,,7
+comm heating EUR,district heat,-12,,7
+comm heating EUR,water heat pump,-19,,7
+comm cooling EUR,electricity,-7,,7
+comm cooling EUR,gas,-13,,7
+comm others EUR,biomass,-16,,7
+comm others EUR,coal,-17,,7
+comm others EUR,electricity,-8,,7
+comm others EUR,gas,-14,,7
+comm others EUR,refined liquids,-8,,7
+comm others EUR,district heat,-9,,7
+resid heating modern EUR,biomass,-3,,8
+resid heating coal EUR,coal,-17,,8
+resid heating modern EUR,electricity,-11,,8
+resid heating modern EUR,gas,-7,,8
+resid heating modern EUR,refined liquids,-15,,8
+resid heating modern EUR,district heat,-5,,8
+resid heating modern EUR,water heat pump,-9,,8
+resid cooling modern EUR,electricity,-17,,8
+resid cooling modern EUR,gas,-15,,8
+resid cooking modern EUR,biomass,-18,,8
+resid cooking coal EUR,coal,-20,,8
+resid cooking modern EUR,electricity,-20,,8
+resid cooking modern EUR,gas,-5,,8
+resid cooking modern EUR,refined liquids,-10,,8
+resid other appliance modern EUR,electricity,-10,,8
+resid hot water modern EUR,biomass,-18,,8
+resid hot water coal EUR,coal,-4,,8
+resid hot water modern EUR,electricity,-15,,8
+resid hot water modern EUR,gas,-3,,8
+resid hot water modern EUR,refined liquids,-4,,8
+resid hot water modern EUR,district heat,-20,,8
+resid hot water modern EUR,water heat pump,-1,,8
+resid others modern EUR,biomass,-5,,8
+resid others coal EUR,coal,-11,,8
+resid others modern EUR,electricity,-16,,8
+resid others modern EUR,gas,-10,,8
+resid others modern EUR,refined liquids,-14,,8
+comm heating EUR,biomass,-5,,8
+comm heating EUR,coal,-20,,8
+comm heating EUR,electricity,-19,,8
+comm heating EUR,gas,-13,,8
+comm heating EUR,refined liquids,-9,,8
+comm heating EUR,district heat,-9,,8
+comm heating EUR,water heat pump,-4,,8
+comm cooling EUR,electricity,-14,,8
+comm cooling EUR,gas,-13,,8
+comm others EUR,biomass,-2,,8
+comm others EUR,coal,-10,,8
+comm others EUR,electricity,-20,,8
+comm others EUR,gas,-13,,8
+comm others EUR,refined liquids,-7,,8
+comm others EUR,district heat,-3,,8
+resid heating modern EUR,biomass,-2,,9
+resid heating coal EUR,coal,-18,,9
+resid heating modern EUR,electricity,-4,,9
+resid heating modern EUR,gas,-7,,9
+resid heating modern EUR,refined liquids,-11,,9
+resid heating modern EUR,district heat,-6,,9
+resid heating modern EUR,water heat pump,-2,,9
+resid cooling modern EUR,electricity,-10,,9
+resid cooling modern EUR,gas,-12,,9
+resid cooking modern EUR,biomass,-11,,9
+resid cooking coal EUR,coal,-18,,9
+resid cooking modern EUR,electricity,-20,,9
+resid cooking modern EUR,gas,-20,,9
+resid cooking modern EUR,refined liquids,-5,,9
+resid other appliance modern EUR,electricity,-5,,9
+resid hot water modern EUR,biomass,-7,,9
+resid hot water coal EUR,coal,-14,,9
+resid hot water modern EUR,electricity,-9,,9
+resid hot water modern EUR,gas,-2,,9
+resid hot water modern EUR,refined liquids,-15,,9
+resid hot water modern EUR,district heat,-2,,9
+resid hot water modern EUR,water heat pump,-13,,9
+resid others modern EUR,biomass,-2,,9
+resid others coal EUR,coal,-7,,9
+resid others modern EUR,electricity,-2,,9
+resid others modern EUR,gas,-16,,9
+resid others modern EUR,refined liquids,-11,,9
+comm heating EUR,biomass,-2,,9
+comm heating EUR,coal,-16,,9
+comm heating EUR,electricity,-11,,9
+comm heating EUR,gas,-15,,9
+comm heating EUR,refined liquids,-10,,9
+comm heating EUR,district heat,-15,,9
+comm heating EUR,water heat pump,-9,,9
+comm cooling EUR,electricity,-20,,9
+comm cooling EUR,gas,-5,,9
+comm others EUR,biomass,-18,,9
+comm others EUR,coal,-20,,9
+comm others EUR,electricity,-16,,9
+comm others EUR,gas,-12,,9
+comm others EUR,refined liquids,-12,,9
+comm others EUR,district heat,-19,,9
+resid heating modern EUR,biomass,-18,,10
+resid heating coal EUR,coal,-10,,10
+resid heating modern EUR,electricity,-10,,10
+resid heating modern EUR,gas,-20,,10
+resid heating modern EUR,refined liquids,-15,,10
+resid heating modern EUR,district heat,-5,,10
+resid heating modern EUR,water heat pump,-10,,10
+resid cooling modern EUR,electricity,-2,,10
+resid cooling modern EUR,gas,-19,,10
+resid cooking modern EUR,biomass,-3,,10
+resid cooking coal EUR,coal,-1,,10
+resid cooking modern EUR,electricity,-19,,10
+resid cooking modern EUR,gas,-14,,10
+resid cooking modern EUR,refined liquids,-20,,10
+resid other appliance modern EUR,electricity,-12,,10
+resid hot water modern EUR,biomass,-1,,10
+resid hot water coal EUR,coal,-18,,10
+resid hot water modern EUR,electricity,-16,,10
+resid hot water modern EUR,gas,-1,,10
+resid hot water modern EUR,refined liquids,-16,,10
+resid hot water modern EUR,district heat,-16,,10
+resid hot water modern EUR,water heat pump,-3,,10
+resid others modern EUR,biomass,-20,,10
+resid others coal EUR,coal,-4,,10
+resid others modern EUR,electricity,-16,,10
+resid others modern EUR,gas,-4,,10
+resid others modern EUR,refined liquids,-12,,10
+comm heating EUR,biomass,-13,,10
+comm heating EUR,coal,-18,,10
+comm heating EUR,electricity,-5,,10
+comm heating EUR,gas,-17,,10
+comm heating EUR,refined liquids,-12,,10
+comm heating EUR,district heat,-1,,10
+comm heating EUR,water heat pump,-20,,10
+comm cooling EUR,electricity,-20,,10
+comm cooling EUR,gas,-3,,10
+comm others EUR,biomass,-5,,10
+comm others EUR,coal,-10,,10
+comm others EUR,electricity,-3,,10
+comm others EUR,gas,-2,,10
+comm others EUR,refined liquids,-4,,10
+comm others EUR,district heat,-13,,10
+resid heating modern EUR,biomass,-3,,11
+resid heating coal EUR,coal,-2,,11
+resid heating modern EUR,electricity,-20,,11
+resid heating modern EUR,gas,-8,,11
+resid heating modern EUR,refined liquids,-12,,11
+resid heating modern EUR,district heat,-8,,11
+resid heating modern EUR,water heat pump,-18,,11
+resid cooling modern EUR,electricity,-9,,11
+resid cooling modern EUR,gas,-4,,11
+resid cooking modern EUR,biomass,-9,,11
+resid cooking coal EUR,coal,-16,,11
+resid cooking modern EUR,electricity,-2,,11
+resid cooking modern EUR,gas,-15,,11
+resid cooking modern EUR,refined liquids,-14,,11
+resid other appliance modern EUR,electricity,-3,,11
+resid hot water modern EUR,biomass,-11,,11
+resid hot water coal EUR,coal,-6,,11
+resid hot water modern EUR,electricity,-12,,11
+resid hot water modern EUR,gas,-13,,11
+resid hot water modern EUR,refined liquids,-5,,11
+resid hot water modern EUR,district heat,-13,,11
+resid hot water modern EUR,water heat pump,-5,,11
+resid others modern EUR,biomass,-4,,11
+resid others coal EUR,coal,-10,,11
+resid others modern EUR,electricity,-14,,11
+resid others modern EUR,gas,-17,,11
+resid others modern EUR,refined liquids,-4,,11
+comm heating EUR,biomass,-2,,11
+comm heating EUR,coal,-3,,11
+comm heating EUR,electricity,-2,,11
+comm heating EUR,gas,-10,,11
+comm heating EUR,refined liquids,-3,,11
+comm heating EUR,district heat,-5,,11
+comm heating EUR,water heat pump,-15,,11
+comm cooling EUR,electricity,-19,,11
+comm cooling EUR,gas,-10,,11
+comm others EUR,biomass,-2,,11
+comm others EUR,coal,-10,,11
+comm others EUR,electricity,-14,,11
+comm others EUR,gas,-13,,11
+comm others EUR,refined liquids,-19,,11
+comm others EUR,district heat,-18,,11
+resid heating modern EUR,biomass,-18,,12
+resid heating coal EUR,coal,-17,,12
+resid heating modern EUR,electricity,-20,,12
+resid heating modern EUR,gas,-8,,12
+resid heating modern EUR,refined liquids,-11,,12
+resid heating modern EUR,district heat,-6,,12
+resid heating modern EUR,water heat pump,-13,,12
+resid cooling modern EUR,electricity,-17,,12
+resid cooling modern EUR,gas,-13,,12
+resid cooking modern EUR,biomass,-1,,12
+resid cooking coal EUR,coal,-20,,12
+resid cooking modern EUR,electricity,-11,,12
+resid cooking modern EUR,gas,-16,,12
+resid cooking modern EUR,refined liquids,-5,,12
+resid other appliance modern EUR,electricity,-12,,12
+resid hot water modern EUR,biomass,-17,,12
+resid hot water coal EUR,coal,-8,,12
+resid hot water modern EUR,electricity,-17,,12
+resid hot water modern EUR,gas,-5,,12
+resid hot water modern EUR,refined liquids,-16,,12
+resid hot water modern EUR,district heat,-14,,12
+resid hot water modern EUR,water heat pump,-14,,12
+resid others modern EUR,biomass,-5,,12
+resid others coal EUR,coal,-17,,12
+resid others modern EUR,electricity,-19,,12
+resid others modern EUR,gas,-20,,12
+resid others modern EUR,refined liquids,-4,,12
+comm heating EUR,biomass,-16,,12
+comm heating EUR,coal,-16,,12
+comm heating EUR,electricity,-19,,12
+comm heating EUR,gas,-10,,12
+comm heating EUR,refined liquids,-19,,12
+comm heating EUR,district heat,-13,,12
+comm heating EUR,water heat pump,-6,,12
+comm cooling EUR,electricity,-11,,12
+comm cooling EUR,gas,-2,,12
+comm others EUR,biomass,-1,,12
+comm others EUR,coal,-7,,12
+comm others EUR,electricity,-6,,12
+comm others EUR,gas,-5,,12
+comm others EUR,refined liquids,-12,,12
+comm others EUR,district heat,-11,,12
+resid heating modern EUR,biomass,-5,,13
+resid heating coal EUR,coal,-2,,13
+resid heating modern EUR,electricity,-8,,13
+resid heating modern EUR,gas,-15,,13
+resid heating modern EUR,refined liquids,-6,,13
+resid heating modern EUR,district heat,-19,,13
+resid heating modern EUR,water heat pump,-4,,13
+resid cooling modern EUR,electricity,-5,,13
+resid cooling modern EUR,gas,-14,,13
+resid cooking modern EUR,biomass,-10,,13
+resid cooking coal EUR,coal,-13,,13
+resid cooking modern EUR,electricity,-9,,13
+resid cooking modern EUR,gas,-4,,13
+resid cooking modern EUR,refined liquids,-13,,13
+resid other appliance modern EUR,electricity,-16,,13
+resid hot water modern EUR,biomass,-20,,13
+resid hot water coal EUR,coal,-7,,13
+resid hot water modern EUR,electricity,-13,,13
+resid hot water modern EUR,gas,-9,,13
+resid hot water modern EUR,refined liquids,-3,,13
+resid hot water modern EUR,district heat,-9,,13
+resid hot water modern EUR,water heat pump,-16,,13
+resid others modern EUR,biomass,-3,,13
+resid others coal EUR,coal,-9,,13
+resid others modern EUR,electricity,-19,,13
+resid others modern EUR,gas,-11,,13
+resid others modern EUR,refined liquids,-19,,13
+comm heating EUR,biomass,-14,,13
+comm heating EUR,coal,-20,,13
+comm heating EUR,electricity,-7,,13
+comm heating EUR,gas,-13,,13
+comm heating EUR,refined liquids,-19,,13
+comm heating EUR,district heat,-1,,13
+comm heating EUR,water heat pump,-13,,13
+comm cooling EUR,electricity,-13,,13
+comm cooling EUR,gas,-20,,13
+comm others EUR,biomass,-18,,13
+comm others EUR,coal,-9,,13
+comm others EUR,electricity,-4,,13
+comm others EUR,gas,-7,,13
+comm others EUR,refined liquids,-2,,13
+comm others EUR,district heat,-5,,13
+resid heating modern EUR,biomass,-20,,14
+resid heating coal EUR,coal,-15,,14
+resid heating modern EUR,electricity,-1,,14
+resid heating modern EUR,gas,-13,,14
+resid heating modern EUR,refined liquids,-16,,14
+resid heating modern EUR,district heat,-12,,14
+resid heating modern EUR,water heat pump,-5,,14
+resid cooling modern EUR,electricity,-7,,14
+resid cooling modern EUR,gas,-12,,14
+resid cooking modern EUR,biomass,-17,,14
+resid cooking coal EUR,coal,-12,,14
+resid cooking modern EUR,electricity,-18,,14
+resid cooking modern EUR,gas,-17,,14
+resid cooking modern EUR,refined liquids,-4,,14
+resid other appliance modern EUR,electricity,-10,,14
+resid hot water modern EUR,biomass,-2,,14
+resid hot water coal EUR,coal,-1,,14
+resid hot water modern EUR,electricity,-11,,14
+resid hot water modern EUR,gas,-12,,14
+resid hot water modern EUR,refined liquids,-18,,14
+resid hot water modern EUR,district heat,-16,,14
+resid hot water modern EUR,water heat pump,-17,,14
+resid others modern EUR,biomass,-16,,14
+resid others coal EUR,coal,-5,,14
+resid others modern EUR,electricity,-9,,14
+resid others modern EUR,gas,-16,,14
+resid others modern EUR,refined liquids,-18,,14
+comm heating EUR,biomass,-2,,14
+comm heating EUR,coal,-17,,14
+comm heating EUR,electricity,-11,,14
+comm heating EUR,gas,-19,,14
+comm heating EUR,refined liquids,-1,,14
+comm heating EUR,district heat,-18,,14
+comm heating EUR,water heat pump,-9,,14
+comm cooling EUR,electricity,-16,,14
+comm cooling EUR,gas,-13,,14
+comm others EUR,biomass,-2,,14
+comm others EUR,coal,-18,,14
+comm others EUR,electricity,-12,,14
+comm others EUR,gas,-20,,14
+comm others EUR,refined liquids,-17,,14
+comm others EUR,district heat,-4,,14
+resid heating modern EUR,biomass,-18,,15
+resid heating coal EUR,coal,-8,,15
+resid heating modern EUR,electricity,-3,,15
+resid heating modern EUR,gas,-16,,15
+resid heating modern EUR,refined liquids,-18,,15
+resid heating modern EUR,district heat,-2,,15
+resid heating modern EUR,water heat pump,-5,,15
+resid cooling modern EUR,electricity,-15,,15
+resid cooling modern EUR,gas,-8,,15
+resid cooking modern EUR,biomass,-12,,15
+resid cooking coal EUR,coal,-19,,15
+resid cooking modern EUR,electricity,-2,,15
+resid cooking modern EUR,gas,-11,,15
+resid cooking modern EUR,refined liquids,-14,,15
+resid other appliance modern EUR,electricity,-5,,15
+resid hot water modern EUR,biomass,-7,,15
+resid hot water coal EUR,coal,-16,,15
+resid hot water modern EUR,electricity,-5,,15
+resid hot water modern EUR,gas,-1,,15
+resid hot water modern EUR,refined liquids,-13,,15
+resid hot water modern EUR,district heat,-18,,15
+resid hot water modern EUR,water heat pump,-5,,15
+resid others modern EUR,biomass,-7,,15
+resid others coal EUR,coal,-13,,15
+resid others modern EUR,electricity,-13,,15
+resid others modern EUR,gas,-2,,15
+resid others modern EUR,refined liquids,-9,,15
+comm heating EUR,biomass,-15,,15
+comm heating EUR,coal,-17,,15
+comm heating EUR,electricity,-11,,15
+comm heating EUR,gas,-9,,15
+comm heating EUR,refined liquids,-15,,15
+comm heating EUR,district heat,-4,,15
+comm heating EUR,water heat pump,-11,,15
+comm cooling EUR,electricity,-15,,15
+comm cooling EUR,gas,-20,,15
+comm others EUR,biomass,-12,,15
+comm others EUR,coal,-17,,15
+comm others EUR,electricity,-8,,15
+comm others EUR,gas,-17,,15
+comm others EUR,refined liquids,-8,,15
+comm others EUR,district heat,-19,,15
+resid heating modern EUR,biomass,-17,,16
+resid heating coal EUR,coal,-2,,16
+resid heating modern EUR,electricity,-20,,16
+resid heating modern EUR,gas,-16,,16
+resid heating modern EUR,refined liquids,-8,,16
+resid heating modern EUR,district heat,-4,,16
+resid heating modern EUR,water heat pump,-17,,16
+resid cooling modern EUR,electricity,-12,,16
+resid cooling modern EUR,gas,-1,,16
+resid cooking modern EUR,biomass,-15,,16
+resid cooking coal EUR,coal,-19,,16
+resid cooking modern EUR,electricity,-14,,16
+resid cooking modern EUR,gas,-9,,16
+resid cooking modern EUR,refined liquids,-13,,16
+resid other appliance modern EUR,electricity,-14,,16
+resid hot water modern EUR,biomass,-14,,16
+resid hot water coal EUR,coal,-15,,16
+resid hot water modern EUR,electricity,-13,,16
+resid hot water modern EUR,gas,-5,,16
+resid hot water modern EUR,refined liquids,-8,,16
+resid hot water modern EUR,district heat,-3,,16
+resid hot water modern EUR,water heat pump,-5,,16
+resid others modern EUR,biomass,-10,,16
+resid others coal EUR,coal,-20,,16
+resid others modern EUR,electricity,-18,,16
+resid others modern EUR,gas,-3,,16
+resid others modern EUR,refined liquids,-15,,16
+comm heating EUR,biomass,-1,,16
+comm heating EUR,coal,-7,,16
+comm heating EUR,electricity,-6,,16
+comm heating EUR,gas,-1,,16
+comm heating EUR,refined liquids,-2,,16
+comm heating EUR,district heat,-4,,16
+comm heating EUR,water heat pump,-7,,16
+comm cooling EUR,electricity,-2,,16
+comm cooling EUR,gas,-14,,16
+comm others EUR,biomass,-1,,16
+comm others EUR,coal,-19,,16
+comm others EUR,electricity,-7,,16
+comm others EUR,gas,-1,,16
+comm others EUR,refined liquids,-1,,16
+comm others EUR,district heat,-17,,16
+resid heating modern EUR,biomass,-4,,17
+resid heating coal EUR,coal,-11,,17
+resid heating modern EUR,electricity,-12,,17
+resid heating modern EUR,gas,-13,,17
+resid heating modern EUR,refined liquids,-14,,17
+resid heating modern EUR,district heat,-20,,17
+resid heating modern EUR,water heat pump,-7,,17
+resid cooling modern EUR,electricity,-5,,17
+resid cooling modern EUR,gas,-11,,17
+resid cooking modern EUR,biomass,-4,,17
+resid cooking coal EUR,coal,-12,,17
+resid cooking modern EUR,electricity,-2,,17
+resid cooking modern EUR,gas,-10,,17
+resid cooking modern EUR,refined liquids,-11,,17
+resid other appliance modern EUR,electricity,-8,,17
+resid hot water modern EUR,biomass,-10,,17
+resid hot water coal EUR,coal,-15,,17
+resid hot water modern EUR,electricity,-2,,17
+resid hot water modern EUR,gas,-7,,17
+resid hot water modern EUR,refined liquids,-10,,17
+resid hot water modern EUR,district heat,-8,,17
+resid hot water modern EUR,water heat pump,-4,,17
+resid others modern EUR,biomass,-20,,17
+resid others coal EUR,coal,-5,,17
+resid others modern EUR,electricity,-20,,17
+resid others modern EUR,gas,-2,,17
+resid others modern EUR,refined liquids,-3,,17
+comm heating EUR,biomass,-18,,17
+comm heating EUR,coal,-6,,17
+comm heating EUR,electricity,-8,,17
+comm heating EUR,gas,-10,,17
+comm heating EUR,refined liquids,-12,,17
+comm heating EUR,district heat,-19,,17
+comm heating EUR,water heat pump,-20,,17
+comm cooling EUR,electricity,-6,,17
+comm cooling EUR,gas,-13,,17
+comm others EUR,biomass,-7,,17
+comm others EUR,coal,-17,,17
+comm others EUR,electricity,-17,,17
+comm others EUR,gas,-18,,17
+comm others EUR,refined liquids,-1,,17
+comm others EUR,district heat,-16,,17
+resid heating modern EUR,biomass,-18,,18
+resid heating coal EUR,coal,-3,,18
+resid heating modern EUR,electricity,-13,,18
+resid heating modern EUR,gas,-11,,18
+resid heating modern EUR,refined liquids,-10,,18
+resid heating modern EUR,district heat,-16,,18
+resid heating modern EUR,water heat pump,-8,,18
+resid cooling modern EUR,electricity,-14,,18
+resid cooling modern EUR,gas,-6,,18
+resid cooking modern EUR,biomass,-17,,18
+resid cooking coal EUR,coal,-19,,18
+resid cooking modern EUR,electricity,-20,,18
+resid cooking modern EUR,gas,-15,,18
+resid cooking modern EUR,refined liquids,-3,,18
+resid other appliance modern EUR,electricity,-18,,18
+resid hot water modern EUR,biomass,-16,,18
+resid hot water coal EUR,coal,-14,,18
+resid hot water modern EUR,electricity,-15,,18
+resid hot water modern EUR,gas,-2,,18
+resid hot water modern EUR,refined liquids,-12,,18
+resid hot water modern EUR,district heat,-16,,18
+resid hot water modern EUR,water heat pump,-14,,18
+resid others modern EUR,biomass,-14,,18
+resid others coal EUR,coal,-9,,18
+resid others modern EUR,electricity,-1,,18
+resid others modern EUR,gas,-3,,18
+resid others modern EUR,refined liquids,-14,,18
+comm heating EUR,biomass,-11,,18
+comm heating EUR,coal,-12,,18
+comm heating EUR,electricity,-5,,18
+comm heating EUR,gas,-13,,18
+comm heating EUR,refined liquids,-16,,18
+comm heating EUR,district heat,-1,,18
+comm heating EUR,water heat pump,-18,,18
+comm cooling EUR,electricity,-19,,18
+comm cooling EUR,gas,-15,,18
+comm others EUR,biomass,-11,,18
+comm others EUR,coal,-4,,18
+comm others EUR,electricity,-9,,18
+comm others EUR,gas,-11,,18
+comm others EUR,refined liquids,-17,,18
+comm others EUR,district heat,-2,,18
+resid heating modern EUR,biomass,-3,,19
+resid heating coal EUR,coal,-1,,19
+resid heating modern EUR,electricity,-15,,19
+resid heating modern EUR,gas,-16,,19
+resid heating modern EUR,refined liquids,-4,,19
+resid heating modern EUR,district heat,-7,,19
+resid heating modern EUR,water heat pump,-6,,19
+resid cooling modern EUR,electricity,-7,,19
+resid cooling modern EUR,gas,-1,,19
+resid cooking modern EUR,biomass,-18,,19
+resid cooking coal EUR,coal,-16,,19
+resid cooking modern EUR,electricity,-4,,19
+resid cooking modern EUR,gas,-6,,19
+resid cooking modern EUR,refined liquids,-11,,19
+resid other appliance modern EUR,electricity,-14,,19
+resid hot water modern EUR,biomass,-17,,19
+resid hot water coal EUR,coal,-6,,19
+resid hot water modern EUR,electricity,-5,,19
+resid hot water modern EUR,gas,-8,,19
+resid hot water modern EUR,refined liquids,-11,,19
+resid hot water modern EUR,district heat,-3,,19
+resid hot water modern EUR,water heat pump,-10,,19
+resid others modern EUR,biomass,-13,,19
+resid others coal EUR,coal,-18,,19
+resid others modern EUR,electricity,-6,,19
+resid others modern EUR,gas,-6,,19
+resid others modern EUR,refined liquids,-19,,19
+comm heating EUR,biomass,-3,,19
+comm heating EUR,coal,-18,,19
+comm heating EUR,electricity,-19,,19
+comm heating EUR,gas,-12,,19
+comm heating EUR,refined liquids,-6,,19
+comm heating EUR,district heat,-12,,19
+comm heating EUR,water heat pump,-7,,19
+comm cooling EUR,electricity,-9,,19
+comm cooling EUR,gas,-6,,19
+comm others EUR,biomass,-3,,19
+comm others EUR,coal,-1,,19
+comm others EUR,electricity,-4,,19
+comm others EUR,gas,-9,,19
+comm others EUR,refined liquids,-9,,19
+comm others EUR,district heat,-7,,19
+resid heating modern EUR,biomass,-3,,20
+resid heating coal EUR,coal,-18,,20
+resid heating modern EUR,electricity,-14,,20
+resid heating modern EUR,gas,-9,,20
+resid heating modern EUR,refined liquids,-20,,20
+resid heating modern EUR,district heat,-19,,20
+resid heating modern EUR,water heat pump,-10,,20
+resid cooling modern EUR,electricity,-17,,20
+resid cooling modern EUR,gas,-14,,20
+resid cooking modern EUR,biomass,-6,,20
+resid cooking coal EUR,coal,-4,,20
+resid cooking modern EUR,electricity,-4,,20
+resid cooking modern EUR,gas,-20,,20
+resid cooking modern EUR,refined liquids,-16,,20
+resid other appliance modern EUR,electricity,-6,,20
+resid hot water modern EUR,biomass,-5,,20
+resid hot water coal EUR,coal,-8,,20
+resid hot water modern EUR,electricity,-15,,20
+resid hot water modern EUR,gas,-2,,20
+resid hot water modern EUR,refined liquids,-19,,20
+resid hot water modern EUR,district heat,-3,,20
+resid hot water modern EUR,water heat pump,-6,,20
+resid others modern EUR,biomass,-19,,20
+resid others coal EUR,coal,-2,,20
+resid others modern EUR,electricity,-16,,20
+resid others modern EUR,gas,-8,,20
+resid others modern EUR,refined liquids,-8,,20
+comm heating EUR,biomass,-7,,20
+comm heating EUR,coal,-7,,20
+comm heating EUR,electricity,-1,,20
+comm heating EUR,gas,-3,,20
+comm heating EUR,refined liquids,-13,,20
+comm heating EUR,district heat,-4,,20
+comm heating EUR,water heat pump,-3,,20
+comm cooling EUR,electricity,-4,,20
+comm cooling EUR,gas,-8,,20
+comm others EUR,biomass,-14,,20
+comm others EUR,coal,-18,,20
+comm others EUR,electricity,-4,,20
+comm others EUR,gas,-16,,20
+comm others EUR,refined liquids,-16,,20
+comm others EUR,district heat,-13,,20
+resid heating modern EUR,biomass,-10,,21
+resid heating coal EUR,coal,-8,,21
+resid heating modern EUR,electricity,-7,,21
+resid heating modern EUR,gas,-7,,21
+resid heating modern EUR,refined liquids,-20,,21
+resid heating modern EUR,district heat,-9,,21
+resid heating modern EUR,water heat pump,-3,,21
+resid cooling modern EUR,electricity,-19,,21
+resid cooling modern EUR,gas,-13,,21
+resid cooking modern EUR,biomass,-5,,21
+resid cooking coal EUR,coal,-1,,21
+resid cooking modern EUR,electricity,-19,,21
+resid cooking modern EUR,gas,-7,,21
+resid cooking modern EUR,refined liquids,-9,,21
+resid other appliance modern EUR,electricity,-3,,21
+resid hot water modern EUR,biomass,-10,,21
+resid hot water coal EUR,coal,-14,,21
+resid hot water modern EUR,electricity,-20,,21
+resid hot water modern EUR,gas,-8,,21
+resid hot water modern EUR,refined liquids,-9,,21
+resid hot water modern EUR,district heat,-12,,21
+resid hot water modern EUR,water heat pump,-6,,21
+resid others modern EUR,biomass,-17,,21
+resid others coal EUR,coal,-11,,21
+resid others modern EUR,electricity,-3,,21
+resid others modern EUR,gas,-9,,21
+resid others modern EUR,refined liquids,-1,,21
+comm heating EUR,biomass,-13,,21
+comm heating EUR,coal,-1,,21
+comm heating EUR,electricity,-9,,21
+comm heating EUR,gas,-16,,21
+comm heating EUR,refined liquids,-5,,21
+comm heating EUR,district heat,-18,,21
+comm heating EUR,water heat pump,-11,,21
+comm cooling EUR,electricity,-17,,21
+comm cooling EUR,gas,-8,,21
+comm others EUR,biomass,-13,,21
+comm others EUR,coal,-1,,21
+comm others EUR,electricity,-13,,21
+comm others EUR,gas,-4,,21
+comm others EUR,refined liquids,-17,,21
+comm others EUR,district heat,-18,,21
+resid heating modern EUR,biomass,-11,,22
+resid heating coal EUR,coal,-6,,22
+resid heating modern EUR,electricity,-10,,22
+resid heating modern EUR,gas,-6,,22
+resid heating modern EUR,refined liquids,-13,,22
+resid heating modern EUR,district heat,-13,,22
+resid heating modern EUR,water heat pump,-12,,22
+resid cooling modern EUR,electricity,-3,,22
+resid cooling modern EUR,gas,-10,,22
+resid cooking modern EUR,biomass,-2,,22
+resid cooking coal EUR,coal,-19,,22
+resid cooking modern EUR,electricity,-11,,22
+resid cooking modern EUR,gas,-2,,22
+resid cooking modern EUR,refined liquids,-7,,22
+resid other appliance modern EUR,electricity,-3,,22
+resid hot water modern EUR,biomass,-17,,22
+resid hot water coal EUR,coal,-15,,22
+resid hot water modern EUR,electricity,-7,,22
+resid hot water modern EUR,gas,-8,,22
+resid hot water modern EUR,refined liquids,-17,,22
+resid hot water modern EUR,district heat,-13,,22
+resid hot water modern EUR,water heat pump,-19,,22
+resid others modern EUR,biomass,-4,,22
+resid others coal EUR,coal,-4,,22
+resid others modern EUR,electricity,-1,,22
+resid others modern EUR,gas,-9,,22
+resid others modern EUR,refined liquids,-10,,22
+comm heating EUR,biomass,-7,,22
+comm heating EUR,coal,-13,,22
+comm heating EUR,electricity,-6,,22
+comm heating EUR,gas,-3,,22
+comm heating EUR,refined liquids,-12,,22
+comm heating EUR,district heat,-19,,22
+comm heating EUR,water heat pump,-15,,22
+comm cooling EUR,electricity,-4,,22
+comm cooling EUR,gas,-11,,22
+comm others EUR,biomass,-9,,22
+comm others EUR,coal,-20,,22
+comm others EUR,electricity,-13,,22
+comm others EUR,gas,-19,,22
+comm others EUR,refined liquids,-16,,22
+comm others EUR,district heat,-2,,22
+resid heating modern EUR,biomass,-3,,23
+resid heating coal EUR,coal,-9,,23
+resid heating modern EUR,electricity,-2,,23
+resid heating modern EUR,gas,-7,,23
+resid heating modern EUR,refined liquids,-14,,23
+resid heating modern EUR,district heat,-14,,23
+resid heating modern EUR,water heat pump,-10,,23
+resid cooling modern EUR,electricity,-16,,23
+resid cooling modern EUR,gas,-14,,23
+resid cooking modern EUR,biomass,-15,,23
+resid cooking coal EUR,coal,-7,,23
+resid cooking modern EUR,electricity,-11,,23
+resid cooking modern EUR,gas,-2,,23
+resid cooking modern EUR,refined liquids,-9,,23
+resid other appliance modern EUR,electricity,-20,,23
+resid hot water modern EUR,biomass,-9,,23
+resid hot water coal EUR,coal,-18,,23
+resid hot water modern EUR,electricity,-8,,23
+resid hot water modern EUR,gas,-5,,23
+resid hot water modern EUR,refined liquids,-11,,23
+resid hot water modern EUR,district heat,-10,,23
+resid hot water modern EUR,water heat pump,-15,,23
+resid others modern EUR,biomass,-5,,23
+resid others coal EUR,coal,-15,,23
+resid others modern EUR,electricity,-15,,23
+resid others modern EUR,gas,-16,,23
+resid others modern EUR,refined liquids,-9,,23
+comm heating EUR,biomass,-10,,23
+comm heating EUR,coal,-15,,23
+comm heating EUR,electricity,-3,,23
+comm heating EUR,gas,-14,,23
+comm heating EUR,refined liquids,-16,,23
+comm heating EUR,district heat,-15,,23
+comm heating EUR,water heat pump,-5,,23
+comm cooling EUR,electricity,-3,,23
+comm cooling EUR,gas,-6,,23
+comm others EUR,biomass,-4,,23
+comm others EUR,coal,-4,,23
+comm others EUR,electricity,-16,,23
+comm others EUR,gas,-10,,23
+comm others EUR,refined liquids,-16,,23
+comm others EUR,district heat,-20,,23
+resid heating modern EUR,biomass,-9,,24
+resid heating coal EUR,coal,-16,,24
+resid heating modern EUR,electricity,-7,,24
+resid heating modern EUR,gas,-5,,24
+resid heating modern EUR,refined liquids,-1,,24
+resid heating modern EUR,district heat,-19,,24
+resid heating modern EUR,water heat pump,-18,,24
+resid cooling modern EUR,electricity,-18,,24
+resid cooling modern EUR,gas,-6,,24
+resid cooking modern EUR,biomass,-5,,24
+resid cooking coal EUR,coal,-17,,24
+resid cooking modern EUR,electricity,-1,,24
+resid cooking modern EUR,gas,-19,,24
+resid cooking modern EUR,refined liquids,-9,,24
+resid other appliance modern EUR,electricity,-1,,24
+resid hot water modern EUR,biomass,-8,,24
+resid hot water coal EUR,coal,-20,,24
+resid hot water modern EUR,electricity,-10,,24
+resid hot water modern EUR,gas,-14,,24
+resid hot water modern EUR,refined liquids,-20,,24
+resid hot water modern EUR,district heat,-2,,24
+resid hot water modern EUR,water heat pump,-5,,24
+resid others modern EUR,biomass,-12,,24
+resid others coal EUR,coal,-18,,24
+resid others modern EUR,electricity,-4,,24
+resid others modern EUR,gas,-8,,24
+resid others modern EUR,refined liquids,-14,,24
+comm heating EUR,biomass,-3,,24
+comm heating EUR,coal,-15,,24
+comm heating EUR,electricity,-18,,24
+comm heating EUR,gas,-5,,24
+comm heating EUR,refined liquids,-17,,24
+comm heating EUR,district heat,-20,,24
+comm heating EUR,water heat pump,-2,,24
+comm cooling EUR,electricity,-1,,24
+comm cooling EUR,gas,-3,,24
+comm others EUR,biomass,-14,,24
+comm others EUR,coal,-16,,24
+comm others EUR,electricity,-17,,24
+comm others EUR,gas,-17,,24
+comm others EUR,refined liquids,-4,,24
+comm others EUR,district heat,-19,,24
+resid heating modern EUR,biomass,-18,,25
+resid heating coal EUR,coal,-19,,25
+resid heating modern EUR,electricity,-1,,25
+resid heating modern EUR,gas,-16,,25
+resid heating modern EUR,refined liquids,-9,,25
+resid heating modern EUR,district heat,-6,,25
+resid heating modern EUR,water heat pump,-16,,25
+resid cooling modern EUR,electricity,-8,,25
+resid cooling modern EUR,gas,-10,,25
+resid cooking modern EUR,biomass,-18,,25
+resid cooking coal EUR,coal,-5,,25
+resid cooking modern EUR,electricity,-5,,25
+resid cooking modern EUR,gas,-17,,25
+resid cooking modern EUR,refined liquids,-15,,25
+resid other appliance modern EUR,electricity,-6,,25
+resid hot water modern EUR,biomass,-15,,25
+resid hot water coal EUR,coal,-12,,25
+resid hot water modern EUR,electricity,-2,,25
+resid hot water modern EUR,gas,-13,,25
+resid hot water modern EUR,refined liquids,-3,,25
+resid hot water modern EUR,district heat,-10,,25
+resid hot water modern EUR,water heat pump,-6,,25
+resid others modern EUR,biomass,-7,,25
+resid others coal EUR,coal,-4,,25
+resid others modern EUR,electricity,-9,,25
+resid others modern EUR,gas,-12,,25
+resid others modern EUR,refined liquids,-5,,25
+comm heating EUR,biomass,-14,,25
+comm heating EUR,coal,-6,,25
+comm heating EUR,electricity,-7,,25
+comm heating EUR,gas,-18,,25
+comm heating EUR,refined liquids,-6,,25
+comm heating EUR,district heat,-13,,25
+comm heating EUR,water heat pump,-19,,25
+comm cooling EUR,electricity,-17,,25
+comm cooling EUR,gas,-8,,25
+comm others EUR,biomass,-10,,25
+comm others EUR,coal,-11,,25
+comm others EUR,electricity,-3,,25
+comm others EUR,gas,-9,,25
+comm others EUR,refined liquids,-6,,25
+comm others EUR,district heat,-12,,25
+resid heating modern EUR,biomass,-19,,26
+resid heating coal EUR,coal,-7,,26
+resid heating modern EUR,electricity,-18,,26
+resid heating modern EUR,gas,-12,,26
+resid heating modern EUR,refined liquids,-4,,26
+resid heating modern EUR,district heat,-2,,26
+resid heating modern EUR,water heat pump,-4,,26
+resid cooling modern EUR,electricity,-17,,26
+resid cooling modern EUR,gas,-15,,26
+resid cooking modern EUR,biomass,-5,,26
+resid cooking coal EUR,coal,-12,,26
+resid cooking modern EUR,electricity,-9,,26
+resid cooking modern EUR,gas,-20,,26
+resid cooking modern EUR,refined liquids,-14,,26
+resid other appliance modern EUR,electricity,-15,,26
+resid hot water modern EUR,biomass,-1,,26
+resid hot water coal EUR,coal,-19,,26
+resid hot water modern EUR,electricity,-4,,26
+resid hot water modern EUR,gas,-8,,26
+resid hot water modern EUR,refined liquids,-15,,26
+resid hot water modern EUR,district heat,-2,,26
+resid hot water modern EUR,water heat pump,-19,,26
+resid others modern EUR,biomass,-3,,26
+resid others coal EUR,coal,-4,,26
+resid others modern EUR,electricity,-15,,26
+resid others modern EUR,gas,-4,,26
+resid others modern EUR,refined liquids,-10,,26
+comm heating EUR,biomass,-2,,26
+comm heating EUR,coal,-5,,26
+comm heating EUR,electricity,-9,,26
+comm heating EUR,gas,-12,,26
+comm heating EUR,refined liquids,-7,,26
+comm heating EUR,district heat,-12,,26
+comm heating EUR,water heat pump,-1,,26
+comm cooling EUR,electricity,-9,,26
+comm cooling EUR,gas,-7,,26
+comm others EUR,biomass,-16,,26
+comm others EUR,coal,-10,,26
+comm others EUR,electricity,-5,,26
+comm others EUR,gas,-12,,26
+comm others EUR,refined liquids,-11,,26
+comm others EUR,district heat,-13,,26
+resid heating modern EUR,biomass,-11,,27
+resid heating coal EUR,coal,-2,,27
+resid heating modern EUR,electricity,-3,,27
+resid heating modern EUR,gas,-3,,27
+resid heating modern EUR,refined liquids,-5,,27
+resid heating modern EUR,district heat,-11,,27
+resid heating modern EUR,water heat pump,-5,,27
+resid cooling modern EUR,electricity,-14,,27
+resid cooling modern EUR,gas,-16,,27
+resid cooking modern EUR,biomass,-8,,27
+resid cooking coal EUR,coal,-4,,27
+resid cooking modern EUR,electricity,-3,,27
+resid cooking modern EUR,gas,-2,,27
+resid cooking modern EUR,refined liquids,-6,,27
+resid other appliance modern EUR,electricity,-17,,27
+resid hot water modern EUR,biomass,-10,,27
+resid hot water coal EUR,coal,-13,,27
+resid hot water modern EUR,electricity,-2,,27
+resid hot water modern EUR,gas,-10,,27
+resid hot water modern EUR,refined liquids,-13,,27
+resid hot water modern EUR,district heat,-5,,27
+resid hot water modern EUR,water heat pump,-16,,27
+resid others modern EUR,biomass,-8,,27
+resid others coal EUR,coal,-15,,27
+resid others modern EUR,electricity,-14,,27
+resid others modern EUR,gas,-8,,27
+resid others modern EUR,refined liquids,-11,,27
+comm heating EUR,biomass,-9,,27
+comm heating EUR,coal,-4,,27
+comm heating EUR,electricity,-15,,27
+comm heating EUR,gas,-4,,27
+comm heating EUR,refined liquids,-10,,27
+comm heating EUR,district heat,-14,,27
+comm heating EUR,water heat pump,-18,,27
+comm cooling EUR,electricity,-4,,27
+comm cooling EUR,gas,-19,,27
+comm others EUR,biomass,-12,,27
+comm others EUR,coal,-17,,27
+comm others EUR,electricity,-4,,27
+comm others EUR,gas,-12,,27
+comm others EUR,refined liquids,-9,,27
+comm others EUR,district heat,-20,,27
+resid heating modern EUR,biomass,-3,,28
+resid heating coal EUR,coal,-6,,28
+resid heating modern EUR,electricity,-13,,28
+resid heating modern EUR,gas,-7,,28
+resid heating modern EUR,refined liquids,-16,,28
+resid heating modern EUR,district heat,-4,,28
+resid heating modern EUR,water heat pump,-7,,28
+resid cooling modern EUR,electricity,-9,,28
+resid cooling modern EUR,gas,-8,,28
+resid cooking modern EUR,biomass,-10,,28
+resid cooking coal EUR,coal,-12,,28
+resid cooking modern EUR,electricity,-16,,28
+resid cooking modern EUR,gas,-17,,28
+resid cooking modern EUR,refined liquids,-6,,28
+resid other appliance modern EUR,electricity,-7,,28
+resid hot water modern EUR,biomass,-3,,28
+resid hot water coal EUR,coal,-8,,28
+resid hot water modern EUR,electricity,-9,,28
+resid hot water modern EUR,gas,-17,,28
+resid hot water modern EUR,refined liquids,-8,,28
+resid hot water modern EUR,district heat,-16,,28
+resid hot water modern EUR,water heat pump,-18,,28
+resid others modern EUR,biomass,-5,,28
+resid others coal EUR,coal,-13,,28
+resid others modern EUR,electricity,-18,,28
+resid others modern EUR,gas,-5,,28
+resid others modern EUR,refined liquids,-4,,28
+comm heating EUR,biomass,-8,,28
+comm heating EUR,coal,-17,,28
+comm heating EUR,electricity,-12,,28
+comm heating EUR,gas,-5,,28
+comm heating EUR,refined liquids,-7,,28
+comm heating EUR,district heat,-4,,28
+comm heating EUR,water heat pump,-10,,28
+comm cooling EUR,electricity,-6,,28
+comm cooling EUR,gas,-13,,28
+comm others EUR,biomass,-18,,28
+comm others EUR,coal,-11,,28
+comm others EUR,electricity,-10,,28
+comm others EUR,gas,-11,,28
+comm others EUR,refined liquids,-17,,28
+comm others EUR,district heat,-3,,28
+resid heating modern EUR,biomass,-10,,29
+resid heating coal EUR,coal,-7,,29
+resid heating modern EUR,electricity,-15,,29
+resid heating modern EUR,gas,-9,,29
+resid heating modern EUR,refined liquids,-19,,29
+resid heating modern EUR,district heat,-12,,29
+resid heating modern EUR,water heat pump,-3,,29
+resid cooling modern EUR,electricity,-20,,29
+resid cooling modern EUR,gas,-13,,29
+resid cooking modern EUR,biomass,-17,,29
+resid cooking coal EUR,coal,-16,,29
+resid cooking modern EUR,electricity,-11,,29
+resid cooking modern EUR,gas,-6,,29
+resid cooking modern EUR,refined liquids,-10,,29
+resid other appliance modern EUR,electricity,-4,,29
+resid hot water modern EUR,biomass,-14,,29
+resid hot water coal EUR,coal,-2,,29
+resid hot water modern EUR,electricity,-2,,29
+resid hot water modern EUR,gas,-8,,29
+resid hot water modern EUR,refined liquids,-20,,29
+resid hot water modern EUR,district heat,-14,,29
+resid hot water modern EUR,water heat pump,-9,,29
+resid others modern EUR,biomass,-5,,29
+resid others coal EUR,coal,-12,,29
+resid others modern EUR,electricity,-12,,29
+resid others modern EUR,gas,-9,,29
+resid others modern EUR,refined liquids,-13,,29
+comm heating EUR,biomass,-13,,29
+comm heating EUR,coal,-15,,29
+comm heating EUR,electricity,-4,,29
+comm heating EUR,gas,-8,,29
+comm heating EUR,refined liquids,-5,,29
+comm heating EUR,district heat,-20,,29
+comm heating EUR,water heat pump,-10,,29
+comm cooling EUR,electricity,-8,,29
+comm cooling EUR,gas,-3,,29
+comm others EUR,biomass,-8,,29
+comm others EUR,coal,-14,,29
+comm others EUR,electricity,-13,,29
+comm others EUR,gas,-3,,29
+comm others EUR,refined liquids,-15,,29
+comm others EUR,district heat,-12,,29
+resid heating modern EUR,biomass,-19,,30
+resid heating coal EUR,coal,-16,,30
+resid heating modern EUR,electricity,-10,,30
+resid heating modern EUR,gas,-2,,30
+resid heating modern EUR,refined liquids,-4,,30
+resid heating modern EUR,district heat,-5,,30
+resid heating modern EUR,water heat pump,-20,,30
+resid cooling modern EUR,electricity,-9,,30
+resid cooling modern EUR,gas,-10,,30
+resid cooking modern EUR,biomass,-14,,30
+resid cooking coal EUR,coal,-2,,30
+resid cooking modern EUR,electricity,-19,,30
+resid cooking modern EUR,gas,-13,,30
+resid cooking modern EUR,refined liquids,-9,,30
+resid other appliance modern EUR,electricity,-8,,30
+resid hot water modern EUR,biomass,-9,,30
+resid hot water coal EUR,coal,-12,,30
+resid hot water modern EUR,electricity,-10,,30
+resid hot water modern EUR,gas,-18,,30
+resid hot water modern EUR,refined liquids,-7,,30
+resid hot water modern EUR,district heat,-9,,30
+resid hot water modern EUR,water heat pump,-12,,30
+resid others modern EUR,biomass,-8,,30
+resid others coal EUR,coal,-1,,30
+resid others modern EUR,electricity,-6,,30
+resid others modern EUR,gas,-6,,30
+resid others modern EUR,refined liquids,-3,,30
+comm heating EUR,biomass,-7,,30
+comm heating EUR,coal,-6,,30
+comm heating EUR,electricity,-6,,30
+comm heating EUR,gas,-13,,30
+comm heating EUR,refined liquids,-5,,30
+comm heating EUR,district heat,-13,,30
+comm heating EUR,water heat pump,-6,,30
+comm cooling EUR,electricity,-4,,30
+comm cooling EUR,gas,-15,,30
+comm others EUR,biomass,-18,,30
+comm others EUR,coal,-8,,30
+comm others EUR,electricity,-2,,30
+comm others EUR,gas,-3,,30
+comm others EUR,refined liquids,-7,,30
+comm others EUR,district heat,-14,,30
+resid heating modern EUR,biomass,-2,,31
+resid heating coal EUR,coal,-9,,31
+resid heating modern EUR,electricity,-4,,31
+resid heating modern EUR,gas,-16,,31
+resid heating modern EUR,refined liquids,-4,,31
+resid heating modern EUR,district heat,-10,,31
+resid heating modern EUR,water heat pump,-12,,31
+resid cooling modern EUR,electricity,-11,,31
+resid cooling modern EUR,gas,-4,,31
+resid cooking modern EUR,biomass,-8,,31
+resid cooking coal EUR,coal,-10,,31
+resid cooking modern EUR,electricity,-17,,31
+resid cooking modern EUR,gas,-17,,31
+resid cooking modern EUR,refined liquids,-7,,31
+resid other appliance modern EUR,electricity,-13,,31
+resid hot water modern EUR,biomass,-18,,31
+resid hot water coal EUR,coal,-16,,31
+resid hot water modern EUR,electricity,-18,,31
+resid hot water modern EUR,gas,-18,,31
+resid hot water modern EUR,refined liquids,-14,,31
+resid hot water modern EUR,district heat,-4,,31
+resid hot water modern EUR,water heat pump,-3,,31
+resid others modern EUR,biomass,-12,,31
+resid others coal EUR,coal,-7,,31
+resid others modern EUR,electricity,-15,,31
+resid others modern EUR,gas,-15,,31
+resid others modern EUR,refined liquids,-1,,31
+comm heating EUR,biomass,-5,,31
+comm heating EUR,coal,-17,,31
+comm heating EUR,electricity,-6,,31
+comm heating EUR,gas,-6,,31
+comm heating EUR,refined liquids,-1,,31
+comm heating EUR,district heat,-16,,31
+comm heating EUR,water heat pump,-11,,31
+comm cooling EUR,electricity,-12,,31
+comm cooling EUR,gas,-16,,31
+comm others EUR,biomass,-20,,31
+comm others EUR,coal,-11,,31
+comm others EUR,electricity,-13,,31
+comm others EUR,gas,-13,,31
+comm others EUR,refined liquids,-10,,31
+comm others EUR,district heat,-16,,31
+resid heating modern EUR,biomass,-20,,32
+resid heating coal EUR,coal,-8,,32
+resid heating modern EUR,electricity,-13,,32
+resid heating modern EUR,gas,-15,,32
+resid heating modern EUR,refined liquids,-4,,32
+resid heating modern EUR,district heat,-4,,32
+resid heating modern EUR,water heat pump,-18,,32
+resid cooling modern EUR,electricity,-1,,32
+resid cooling modern EUR,gas,-3,,32
+resid cooking modern EUR,biomass,-14,,32
+resid cooking coal EUR,coal,-2,,32
+resid cooking modern EUR,electricity,-4,,32
+resid cooking modern EUR,gas,-13,,32
+resid cooking modern EUR,refined liquids,-11,,32
+resid other appliance modern EUR,electricity,-18,,32
+resid hot water modern EUR,biomass,-16,,32
+resid hot water coal EUR,coal,-9,,32
+resid hot water modern EUR,electricity,-14,,32
+resid hot water modern EUR,gas,-1,,32
+resid hot water modern EUR,refined liquids,-7,,32
+resid hot water modern EUR,district heat,-2,,32
+resid hot water modern EUR,water heat pump,-17,,32
+resid others modern EUR,biomass,-4,,32
+resid others coal EUR,coal,-5,,32
+resid others modern EUR,electricity,-19,,32
+resid others modern EUR,gas,-6,,32
+resid others modern EUR,refined liquids,-6,,32
+comm heating EUR,biomass,-11,,32
+comm heating EUR,coal,-15,,32
+comm heating EUR,electricity,-15,,32
+comm heating EUR,gas,-10,,32
+comm heating EUR,refined liquids,-8,,32
+comm heating EUR,district heat,-2,,32
+comm heating EUR,water heat pump,-18,,32
+comm cooling EUR,electricity,-3,,32
+comm cooling EUR,gas,-10,,32
+comm others EUR,biomass,-2,,32
+comm others EUR,coal,-13,,32
+comm others EUR,electricity,-19,,32
+comm others EUR,gas,-13,,32
+comm others EUR,refined liquids,-13,,32
+comm others EUR,district heat,-3,,32
+resid heating modern EUR,biomass,-15,,33
+resid heating coal EUR,coal,-20,,33
+resid heating modern EUR,electricity,-1,,33
+resid heating modern EUR,gas,-17,,33
+resid heating modern EUR,refined liquids,-15,,33
+resid heating modern EUR,district heat,-6,,33
+resid heating modern EUR,water heat pump,-3,,33
+resid cooling modern EUR,electricity,-9,,33
+resid cooling modern EUR,gas,-2,,33
+resid cooking modern EUR,biomass,-18,,33
+resid cooking coal EUR,coal,-1,,33
+resid cooking modern EUR,electricity,-15,,33
+resid cooking modern EUR,gas,-10,,33
+resid cooking modern EUR,refined liquids,-19,,33
+resid other appliance modern EUR,electricity,-19,,33
+resid hot water modern EUR,biomass,-17,,33
+resid hot water coal EUR,coal,-19,,33
+resid hot water modern EUR,electricity,-15,,33
+resid hot water modern EUR,gas,-2,,33
+resid hot water modern EUR,refined liquids,-7,,33
+resid hot water modern EUR,district heat,-8,,33
+resid hot water modern EUR,water heat pump,-19,,33
+resid others modern EUR,biomass,-16,,33
+resid others coal EUR,coal,-19,,33
+resid others modern EUR,electricity,-16,,33
+resid others modern EUR,gas,-17,,33
+resid others modern EUR,refined liquids,-18,,33
+comm heating EUR,biomass,-4,,33
+comm heating EUR,coal,-1,,33
+comm heating EUR,electricity,-13,,33
+comm heating EUR,gas,-18,,33
+comm heating EUR,refined liquids,-11,,33
+comm heating EUR,district heat,-3,,33
+comm heating EUR,water heat pump,-20,,33
+comm cooling EUR,electricity,-2,,33
+comm cooling EUR,gas,-2,,33
+comm others EUR,biomass,-12,,33
+comm others EUR,coal,-8,,33
+comm others EUR,electricity,-14,,33
+comm others EUR,gas,-5,,33
+comm others EUR,refined liquids,-15,,33
+comm others EUR,district heat,-16,,33
+resid heating modern EUR,biomass,-3,,34
+resid heating coal EUR,coal,-14,,34
+resid heating modern EUR,electricity,-17,,34
+resid heating modern EUR,gas,-19,,34
+resid heating modern EUR,refined liquids,-12,,34
+resid heating modern EUR,district heat,-15,,34
+resid heating modern EUR,water heat pump,-20,,34
+resid cooling modern EUR,electricity,-1,,34
+resid cooling modern EUR,gas,-16,,34
+resid cooking modern EUR,biomass,-20,,34
+resid cooking coal EUR,coal,-11,,34
+resid cooking modern EUR,electricity,-15,,34
+resid cooking modern EUR,gas,-11,,34
+resid cooking modern EUR,refined liquids,-12,,34
+resid other appliance modern EUR,electricity,-14,,34
+resid hot water modern EUR,biomass,-11,,34
+resid hot water coal EUR,coal,-8,,34
+resid hot water modern EUR,electricity,-2,,34
+resid hot water modern EUR,gas,-14,,34
+resid hot water modern EUR,refined liquids,-9,,34
+resid hot water modern EUR,district heat,-20,,34
+resid hot water modern EUR,water heat pump,-16,,34
+resid others modern EUR,biomass,-5,,34
+resid others coal EUR,coal,-10,,34
+resid others modern EUR,electricity,-7,,34
+resid others modern EUR,gas,-10,,34
+resid others modern EUR,refined liquids,-5,,34
+comm heating EUR,biomass,-19,,34
+comm heating EUR,coal,-15,,34
+comm heating EUR,electricity,-7,,34
+comm heating EUR,gas,-11,,34
+comm heating EUR,refined liquids,-6,,34
+comm heating EUR,district heat,-6,,34
+comm heating EUR,water heat pump,-1,,34
+comm cooling EUR,electricity,-18,,34
+comm cooling EUR,gas,-9,,34
+comm others EUR,biomass,-9,,34
+comm others EUR,coal,-7,,34
+comm others EUR,electricity,-5,,34
+comm others EUR,gas,-9,,34
+comm others EUR,refined liquids,-2,,34
+comm others EUR,district heat,-18,,34
+resid heating modern EUR,biomass,-14,,35
+resid heating coal EUR,coal,-6,,35
+resid heating modern EUR,electricity,-7,,35
+resid heating modern EUR,gas,-4,,35
+resid heating modern EUR,refined liquids,-11,,35
+resid heating modern EUR,district heat,-12,,35
+resid heating modern EUR,water heat pump,-6,,35
+resid cooling modern EUR,electricity,-16,,35
+resid cooling modern EUR,gas,-19,,35
+resid cooking modern EUR,biomass,-9,,35
+resid cooking coal EUR,coal,-8,,35
+resid cooking modern EUR,electricity,-15,,35
+resid cooking modern EUR,gas,-6,,35
+resid cooking modern EUR,refined liquids,-9,,35
+resid other appliance modern EUR,electricity,-12,,35
+resid hot water modern EUR,biomass,-14,,35
+resid hot water coal EUR,coal,-1,,35
+resid hot water modern EUR,electricity,-19,,35
+resid hot water modern EUR,gas,-13,,35
+resid hot water modern EUR,refined liquids,-8,,35
+resid hot water modern EUR,district heat,-2,,35
+resid hot water modern EUR,water heat pump,-9,,35
+resid others modern EUR,biomass,-18,,35
+resid others coal EUR,coal,-1,,35
+resid others modern EUR,electricity,-14,,35
+resid others modern EUR,gas,-18,,35
+resid others modern EUR,refined liquids,-8,,35
+comm heating EUR,biomass,-15,,35
+comm heating EUR,coal,-19,,35
+comm heating EUR,electricity,-19,,35
+comm heating EUR,gas,-14,,35
+comm heating EUR,refined liquids,-13,,35
+comm heating EUR,district heat,-15,,35
+comm heating EUR,water heat pump,-7,,35
+comm cooling EUR,electricity,-6,,35
+comm cooling EUR,gas,-10,,35
+comm others EUR,biomass,-2,,35
+comm others EUR,coal,-5,,35
+comm others EUR,electricity,-12,,35
+comm others EUR,gas,-3,,35
+comm others EUR,refined liquids,-9,,35
+comm others EUR,district heat,-18,,35
+resid heating modern EUR,biomass,-5,,36
+resid heating coal EUR,coal,-2,,36
+resid heating modern EUR,electricity,-14,,36
+resid heating modern EUR,gas,-18,,36
+resid heating modern EUR,refined liquids,-2,,36
+resid heating modern EUR,district heat,-12,,36
+resid heating modern EUR,water heat pump,-15,,36
+resid cooling modern EUR,electricity,-4,,36
+resid cooling modern EUR,gas,-12,,36
+resid cooking modern EUR,biomass,-14,,36
+resid cooking coal EUR,coal,-12,,36
+resid cooking modern EUR,electricity,-6,,36
+resid cooking modern EUR,gas,-1,,36
+resid cooking modern EUR,refined liquids,-11,,36
+resid other appliance modern EUR,electricity,-10,,36
+resid hot water modern EUR,biomass,-17,,36
+resid hot water coal EUR,coal,-14,,36
+resid hot water modern EUR,electricity,-19,,36
+resid hot water modern EUR,gas,-20,,36
+resid hot water modern EUR,refined liquids,-9,,36
+resid hot water modern EUR,district heat,-3,,36
+resid hot water modern EUR,water heat pump,-2,,36
+resid others modern EUR,biomass,-15,,36
+resid others coal EUR,coal,-5,,36
+resid others modern EUR,electricity,-17,,36
+resid others modern EUR,gas,-16,,36
+resid others modern EUR,refined liquids,-1,,36
+comm heating EUR,biomass,-19,,36
+comm heating EUR,coal,-9,,36
+comm heating EUR,electricity,-11,,36
+comm heating EUR,gas,-10,,36
+comm heating EUR,refined liquids,-3,,36
+comm heating EUR,district heat,-5,,36
+comm heating EUR,water heat pump,-13,,36
+comm cooling EUR,electricity,-18,,36
+comm cooling EUR,gas,-13,,36
+comm others EUR,biomass,-5,,36
+comm others EUR,coal,-8,,36
+comm others EUR,electricity,-6,,36
+comm others EUR,gas,-19,,36
+comm others EUR,refined liquids,-13,,36
+comm others EUR,district heat,-20,,36
+resid heating modern EUR,biomass,-19,,37
+resid heating coal EUR,coal,-1,,37
+resid heating modern EUR,electricity,-3,,37
+resid heating modern EUR,gas,-8,,37
+resid heating modern EUR,refined liquids,-12,,37
+resid heating modern EUR,district heat,-5,,37
+resid heating modern EUR,water heat pump,-13,,37
+resid cooling modern EUR,electricity,-8,,37
+resid cooling modern EUR,gas,-5,,37
+resid cooking modern EUR,biomass,-17,,37
+resid cooking coal EUR,coal,-7,,37
+resid cooking modern EUR,electricity,-6,,37
+resid cooking modern EUR,gas,-5,,37
+resid cooking modern EUR,refined liquids,-20,,37
+resid other appliance modern EUR,electricity,-20,,37
+resid hot water modern EUR,biomass,-4,,37
+resid hot water coal EUR,coal,-3,,37
+resid hot water modern EUR,electricity,-3,,37
+resid hot water modern EUR,gas,-7,,37
+resid hot water modern EUR,refined liquids,-14,,37
+resid hot water modern EUR,district heat,-2,,37
+resid hot water modern EUR,water heat pump,-9,,37
+resid others modern EUR,biomass,-16,,37
+resid others coal EUR,coal,-12,,37
+resid others modern EUR,electricity,-12,,37
+resid others modern EUR,gas,-1,,37
+resid others modern EUR,refined liquids,-9,,37
+comm heating EUR,biomass,-13,,37
+comm heating EUR,coal,-18,,37
+comm heating EUR,electricity,-17,,37
+comm heating EUR,gas,-11,,37
+comm heating EUR,refined liquids,-14,,37
+comm heating EUR,district heat,-9,,37
+comm heating EUR,water heat pump,-16,,37
+comm cooling EUR,electricity,-5,,37
+comm cooling EUR,gas,-1,,37
+comm others EUR,biomass,-12,,37
+comm others EUR,coal,-15,,37
+comm others EUR,electricity,-10,,37
+comm others EUR,gas,-12,,37
+comm others EUR,refined liquids,-16,,37
+comm others EUR,district heat,-12,,37
+resid heating modern EUR,biomass,-18,,38
+resid heating coal EUR,coal,-18,,38
+resid heating modern EUR,electricity,-2,,38
+resid heating modern EUR,gas,-7,,38
+resid heating modern EUR,refined liquids,-2,,38
+resid heating modern EUR,district heat,-1,,38
+resid heating modern EUR,water heat pump,-9,,38
+resid cooling modern EUR,electricity,-5,,38
+resid cooling modern EUR,gas,-2,,38
+resid cooking modern EUR,biomass,-11,,38
+resid cooking coal EUR,coal,-12,,38
+resid cooking modern EUR,electricity,-4,,38
+resid cooking modern EUR,gas,-19,,38
+resid cooking modern EUR,refined liquids,-19,,38
+resid other appliance modern EUR,electricity,-16,,38
+resid hot water modern EUR,biomass,-16,,38
+resid hot water coal EUR,coal,-7,,38
+resid hot water modern EUR,electricity,-14,,38
+resid hot water modern EUR,gas,-7,,38
+resid hot water modern EUR,refined liquids,-12,,38
+resid hot water modern EUR,district heat,-15,,38
+resid hot water modern EUR,water heat pump,-20,,38
+resid others modern EUR,biomass,-20,,38
+resid others coal EUR,coal,-14,,38
+resid others modern EUR,electricity,-2,,38
+resid others modern EUR,gas,-10,,38
+resid others modern EUR,refined liquids,-17,,38
+comm heating EUR,biomass,-9,,38
+comm heating EUR,coal,-5,,38
+comm heating EUR,electricity,-20,,38
+comm heating EUR,gas,-8,,38
+comm heating EUR,refined liquids,-3,,38
+comm heating EUR,district heat,-3,,38
+comm heating EUR,water heat pump,-15,,38
+comm cooling EUR,electricity,-3,,38
+comm cooling EUR,gas,-12,,38
+comm others EUR,biomass,-20,,38
+comm others EUR,coal,-9,,38
+comm others EUR,electricity,-5,,38
+comm others EUR,gas,-3,,38
+comm others EUR,refined liquids,-9,,38
+comm others EUR,district heat,-8,,38
+resid heating modern EUR,biomass,-14,,39
+resid heating coal EUR,coal,-17,,39
+resid heating modern EUR,electricity,-9,,39
+resid heating modern EUR,gas,-2,,39
+resid heating modern EUR,refined liquids,-10,,39
+resid heating modern EUR,district heat,-1,,39
+resid heating modern EUR,water heat pump,-6,,39
+resid cooling modern EUR,electricity,-2,,39
+resid cooling modern EUR,gas,-16,,39
+resid cooking modern EUR,biomass,-12,,39
+resid cooking coal EUR,coal,-11,,39
+resid cooking modern EUR,electricity,-4,,39
+resid cooking modern EUR,gas,-9,,39
+resid cooking modern EUR,refined liquids,-10,,39
+resid other appliance modern EUR,electricity,-9,,39
+resid hot water modern EUR,biomass,-1,,39
+resid hot water coal EUR,coal,-11,,39
+resid hot water modern EUR,electricity,-11,,39
+resid hot water modern EUR,gas,-3,,39
+resid hot water modern EUR,refined liquids,-20,,39
+resid hot water modern EUR,district heat,-5,,39
+resid hot water modern EUR,water heat pump,-6,,39
+resid others modern EUR,biomass,-9,,39
+resid others coal EUR,coal,-11,,39
+resid others modern EUR,electricity,-7,,39
+resid others modern EUR,gas,-9,,39
+resid others modern EUR,refined liquids,-7,,39
+comm heating EUR,biomass,-13,,39
+comm heating EUR,coal,-19,,39
+comm heating EUR,electricity,-10,,39
+comm heating EUR,gas,-5,,39
+comm heating EUR,refined liquids,-15,,39
+comm heating EUR,district heat,-4,,39
+comm heating EUR,water heat pump,-16,,39
+comm cooling EUR,electricity,-2,,39
+comm cooling EUR,gas,-5,,39
+comm others EUR,biomass,-12,,39
+comm others EUR,coal,-14,,39
+comm others EUR,electricity,-6,,39
+comm others EUR,gas,-19,,39
+comm others EUR,refined liquids,-14,,39
+comm others EUR,district heat,-10,,39
+resid heating modern EUR,biomass,-8,,40
+resid heating coal EUR,coal,-12,,40
+resid heating modern EUR,electricity,-2,,40
+resid heating modern EUR,gas,-19,,40
+resid heating modern EUR,refined liquids,-19,,40
+resid heating modern EUR,district heat,-11,,40
+resid heating modern EUR,water heat pump,-6,,40
+resid cooling modern EUR,electricity,-16,,40
+resid cooling modern EUR,gas,-1,,40
+resid cooking modern EUR,biomass,-18,,40
+resid cooking coal EUR,coal,-17,,40
+resid cooking modern EUR,electricity,-8,,40
+resid cooking modern EUR,gas,-8,,40
+resid cooking modern EUR,refined liquids,-16,,40
+resid other appliance modern EUR,electricity,-11,,40
+resid hot water modern EUR,biomass,-15,,40
+resid hot water coal EUR,coal,-18,,40
+resid hot water modern EUR,electricity,-7,,40
+resid hot water modern EUR,gas,-13,,40
+resid hot water modern EUR,refined liquids,-7,,40
+resid hot water modern EUR,district heat,-16,,40
+resid hot water modern EUR,water heat pump,-3,,40
+resid others modern EUR,biomass,-15,,40
+resid others coal EUR,coal,-7,,40
+resid others modern EUR,electricity,-12,,40
+resid others modern EUR,gas,-17,,40
+resid others modern EUR,refined liquids,-9,,40
+comm heating EUR,biomass,-12,,40
+comm heating EUR,coal,-12,,40
+comm heating EUR,electricity,-16,,40
+comm heating EUR,gas,-11,,40
+comm heating EUR,refined liquids,-14,,40
+comm heating EUR,district heat,-7,,40
+comm heating EUR,water heat pump,-20,,40
+comm cooling EUR,electricity,-19,,40
+comm cooling EUR,gas,-9,,40
+comm others EUR,biomass,-17,,40
+comm others EUR,coal,-1,,40
+comm others EUR,electricity,-17,,40
+comm others EUR,gas,-3,,40
+comm others EUR,refined liquids,-19,,40
+comm others EUR,district heat,-8,,40
+resid heating modern EUR,biomass,-2,,41
+resid heating coal EUR,coal,-12,,41
+resid heating modern EUR,electricity,-14,,41
+resid heating modern EUR,gas,-10,,41
+resid heating modern EUR,refined liquids,-18,,41
+resid heating modern EUR,district heat,-19,,41
+resid heating modern EUR,water heat pump,-13,,41
+resid cooling modern EUR,electricity,-3,,41
+resid cooling modern EUR,gas,-12,,41
+resid cooking modern EUR,biomass,-9,,41
+resid cooking coal EUR,coal,-6,,41
+resid cooking modern EUR,electricity,-14,,41
+resid cooking modern EUR,gas,-1,,41
+resid cooking modern EUR,refined liquids,-11,,41
+resid other appliance modern EUR,electricity,-16,,41
+resid hot water modern EUR,biomass,-8,,41
+resid hot water coal EUR,coal,-19,,41
+resid hot water modern EUR,electricity,-8,,41
+resid hot water modern EUR,gas,-10,,41
+resid hot water modern EUR,refined liquids,-13,,41
+resid hot water modern EUR,district heat,-4,,41
+resid hot water modern EUR,water heat pump,-8,,41
+resid others modern EUR,biomass,-2,,41
+resid others coal EUR,coal,-1,,41
+resid others modern EUR,electricity,-2,,41
+resid others modern EUR,gas,-19,,41
+resid others modern EUR,refined liquids,-8,,41
+comm heating EUR,biomass,-7,,41
+comm heating EUR,coal,-7,,41
+comm heating EUR,electricity,-13,,41
+comm heating EUR,gas,-4,,41
+comm heating EUR,refined liquids,-11,,41
+comm heating EUR,district heat,-19,,41
+comm heating EUR,water heat pump,-9,,41
+comm cooling EUR,electricity,-4,,41
+comm cooling EUR,gas,-19,,41
+comm others EUR,biomass,-11,,41
+comm others EUR,coal,-11,,41
+comm others EUR,electricity,-14,,41
+comm others EUR,gas,-6,,41
+comm others EUR,refined liquids,-12,,41
+comm others EUR,district heat,-12,,41
+resid heating modern EUR,biomass,-19,,42
+resid heating coal EUR,coal,-9,,42
+resid heating modern EUR,electricity,-8,,42
+resid heating modern EUR,gas,-2,,42
+resid heating modern EUR,refined liquids,-4,,42
+resid heating modern EUR,district heat,-19,,42
+resid heating modern EUR,water heat pump,-16,,42
+resid cooling modern EUR,electricity,-6,,42
+resid cooling modern EUR,gas,-13,,42
+resid cooking modern EUR,biomass,-7,,42
+resid cooking coal EUR,coal,-5,,42
+resid cooking modern EUR,electricity,-7,,42
+resid cooking modern EUR,gas,-10,,42
+resid cooking modern EUR,refined liquids,-14,,42
+resid other appliance modern EUR,electricity,-1,,42
+resid hot water modern EUR,biomass,-7,,42
+resid hot water coal EUR,coal,-18,,42
+resid hot water modern EUR,electricity,-11,,42
+resid hot water modern EUR,gas,-2,,42
+resid hot water modern EUR,refined liquids,-20,,42
+resid hot water modern EUR,district heat,-9,,42
+resid hot water modern EUR,water heat pump,-1,,42
+resid others modern EUR,biomass,-4,,42
+resid others coal EUR,coal,-12,,42
+resid others modern EUR,electricity,-9,,42
+resid others modern EUR,gas,-5,,42
+resid others modern EUR,refined liquids,-6,,42
+comm heating EUR,biomass,-10,,42
+comm heating EUR,coal,-3,,42
+comm heating EUR,electricity,-16,,42
+comm heating EUR,gas,-18,,42
+comm heating EUR,refined liquids,-7,,42
+comm heating EUR,district heat,-20,,42
+comm heating EUR,water heat pump,-8,,42
+comm cooling EUR,electricity,-7,,42
+comm cooling EUR,gas,-2,,42
+comm others EUR,biomass,-5,,42
+comm others EUR,coal,-6,,42
+comm others EUR,electricity,-16,,42
+comm others EUR,gas,-8,,42
+comm others EUR,refined liquids,-15,,42
+comm others EUR,district heat,-12,,42
+resid heating modern EUR,biomass,-13,,43
+resid heating coal EUR,coal,-14,,43
+resid heating modern EUR,electricity,-4,,43
+resid heating modern EUR,gas,-19,,43
+resid heating modern EUR,refined liquids,-13,,43
+resid heating modern EUR,district heat,-17,,43
+resid heating modern EUR,water heat pump,-18,,43
+resid cooling modern EUR,electricity,-7,,43
+resid cooling modern EUR,gas,-9,,43
+resid cooking modern EUR,biomass,-4,,43
+resid cooking coal EUR,coal,-20,,43
+resid cooking modern EUR,electricity,-5,,43
+resid cooking modern EUR,gas,-17,,43
+resid cooking modern EUR,refined liquids,-3,,43
+resid other appliance modern EUR,electricity,-20,,43
+resid hot water modern EUR,biomass,-13,,43
+resid hot water coal EUR,coal,-9,,43
+resid hot water modern EUR,electricity,-16,,43
+resid hot water modern EUR,gas,-16,,43
+resid hot water modern EUR,refined liquids,-16,,43
+resid hot water modern EUR,district heat,-3,,43
+resid hot water modern EUR,water heat pump,-10,,43
+resid others modern EUR,biomass,-7,,43
+resid others coal EUR,coal,-14,,43
+resid others modern EUR,electricity,-20,,43
+resid others modern EUR,gas,-8,,43
+resid others modern EUR,refined liquids,-1,,43
+comm heating EUR,biomass,-17,,43
+comm heating EUR,coal,-3,,43
+comm heating EUR,electricity,-8,,43
+comm heating EUR,gas,-19,,43
+comm heating EUR,refined liquids,-7,,43
+comm heating EUR,district heat,-13,,43
+comm heating EUR,water heat pump,-9,,43
+comm cooling EUR,electricity,-3,,43
+comm cooling EUR,gas,-10,,43
+comm others EUR,biomass,-7,,43
+comm others EUR,coal,-13,,43
+comm others EUR,electricity,-13,,43
+comm others EUR,gas,-6,,43
+comm others EUR,refined liquids,-3,,43
+comm others EUR,district heat,-15,,43
+resid heating modern EUR,biomass,-17,,44
+resid heating coal EUR,coal,-18,,44
+resid heating modern EUR,electricity,-16,,44
+resid heating modern EUR,gas,-2,,44
+resid heating modern EUR,refined liquids,-13,,44
+resid heating modern EUR,district heat,-3,,44
+resid heating modern EUR,water heat pump,-12,,44
+resid cooling modern EUR,electricity,-2,,44
+resid cooling modern EUR,gas,-12,,44
+resid cooking modern EUR,biomass,-12,,44
+resid cooking coal EUR,coal,-11,,44
+resid cooking modern EUR,electricity,-14,,44
+resid cooking modern EUR,gas,-12,,44
+resid cooking modern EUR,refined liquids,-20,,44
+resid other appliance modern EUR,electricity,-8,,44
+resid hot water modern EUR,biomass,-20,,44
+resid hot water coal EUR,coal,-20,,44
+resid hot water modern EUR,electricity,-8,,44
+resid hot water modern EUR,gas,-2,,44
+resid hot water modern EUR,refined liquids,-17,,44
+resid hot water modern EUR,district heat,-19,,44
+resid hot water modern EUR,water heat pump,-10,,44
+resid others modern EUR,biomass,-11,,44
+resid others coal EUR,coal,-13,,44
+resid others modern EUR,electricity,-19,,44
+resid others modern EUR,gas,-20,,44
+resid others modern EUR,refined liquids,-9,,44
+comm heating EUR,biomass,-20,,44
+comm heating EUR,coal,-18,,44
+comm heating EUR,electricity,-19,,44
+comm heating EUR,gas,-5,,44
+comm heating EUR,refined liquids,-9,,44
+comm heating EUR,district heat,-4,,44
+comm heating EUR,water heat pump,-1,,44
+comm cooling EUR,electricity,-7,,44
+comm cooling EUR,gas,-11,,44
+comm others EUR,biomass,-6,,44
+comm others EUR,coal,-1,,44
+comm others EUR,electricity,-4,,44
+comm others EUR,gas,-1,,44
+comm others EUR,refined liquids,-11,,44
+comm others EUR,district heat,-17,,44
+resid heating modern EUR,biomass,-8,,45
+resid heating coal EUR,coal,-8,,45
+resid heating modern EUR,electricity,-9,,45
+resid heating modern EUR,gas,-18,,45
+resid heating modern EUR,refined liquids,-11,,45
+resid heating modern EUR,district heat,-14,,45
+resid heating modern EUR,water heat pump,-11,,45
+resid cooling modern EUR,electricity,-20,,45
+resid cooling modern EUR,gas,-19,,45
+resid cooking modern EUR,biomass,-12,,45
+resid cooking coal EUR,coal,-12,,45
+resid cooking modern EUR,electricity,-8,,45
+resid cooking modern EUR,gas,-5,,45
+resid cooking modern EUR,refined liquids,-9,,45
+resid other appliance modern EUR,electricity,-5,,45
+resid hot water modern EUR,biomass,-8,,45
+resid hot water coal EUR,coal,-2,,45
+resid hot water modern EUR,electricity,-9,,45
+resid hot water modern EUR,gas,-2,,45
+resid hot water modern EUR,refined liquids,-4,,45
+resid hot water modern EUR,district heat,-11,,45
+resid hot water modern EUR,water heat pump,-3,,45
+resid others modern EUR,biomass,-8,,45
+resid others coal EUR,coal,-12,,45
+resid others modern EUR,electricity,-19,,45
+resid others modern EUR,gas,-1,,45
+resid others modern EUR,refined liquids,-17,,45
+comm heating EUR,biomass,-19,,45
+comm heating EUR,coal,-18,,45
+comm heating EUR,electricity,-2,,45
+comm heating EUR,gas,-9,,45
+comm heating EUR,refined liquids,-1,,45
+comm heating EUR,district heat,-7,,45
+comm heating EUR,water heat pump,-19,,45
+comm cooling EUR,electricity,-20,,45
+comm cooling EUR,gas,-6,,45
+comm others EUR,biomass,-19,,45
+comm others EUR,coal,-9,,45
+comm others EUR,electricity,-20,,45
+comm others EUR,gas,-18,,45
+comm others EUR,refined liquids,-15,,45
+comm others EUR,district heat,-4,,45
+resid heating modern EUR,biomass,-15,,46
+resid heating coal EUR,coal,-20,,46
+resid heating modern EUR,electricity,-11,,46
+resid heating modern EUR,gas,-7,,46
+resid heating modern EUR,refined liquids,-8,,46
+resid heating modern EUR,district heat,-2,,46
+resid heating modern EUR,water heat pump,-8,,46
+resid cooling modern EUR,electricity,-17,,46
+resid cooling modern EUR,gas,-5,,46
+resid cooking modern EUR,biomass,-19,,46
+resid cooking coal EUR,coal,-8,,46
+resid cooking modern EUR,electricity,-11,,46
+resid cooking modern EUR,gas,-17,,46
+resid cooking modern EUR,refined liquids,-3,,46
+resid other appliance modern EUR,electricity,-16,,46
+resid hot water modern EUR,biomass,-11,,46
+resid hot water coal EUR,coal,-3,,46
+resid hot water modern EUR,electricity,-12,,46
+resid hot water modern EUR,gas,-2,,46
+resid hot water modern EUR,refined liquids,-17,,46
+resid hot water modern EUR,district heat,-14,,46
+resid hot water modern EUR,water heat pump,-4,,46
+resid others modern EUR,biomass,-20,,46
+resid others coal EUR,coal,-17,,46
+resid others modern EUR,electricity,-18,,46
+resid others modern EUR,gas,-17,,46
+resid others modern EUR,refined liquids,-5,,46
+comm heating EUR,biomass,-19,,46
+comm heating EUR,coal,-18,,46
+comm heating EUR,electricity,-12,,46
+comm heating EUR,gas,-11,,46
+comm heating EUR,refined liquids,-10,,46
+comm heating EUR,district heat,-1,,46
+comm heating EUR,water heat pump,-3,,46
+comm cooling EUR,electricity,-15,,46
+comm cooling EUR,gas,-18,,46
+comm others EUR,biomass,-17,,46
+comm others EUR,coal,-19,,46
+comm others EUR,electricity,-17,,46
+comm others EUR,gas,-2,,46
+comm others EUR,refined liquids,-14,,46
+comm others EUR,district heat,-16,,46
+resid heating modern EUR,biomass,-11,,47
+resid heating coal EUR,coal,-16,,47
+resid heating modern EUR,electricity,-15,,47
+resid heating modern EUR,gas,-18,,47
+resid heating modern EUR,refined liquids,-19,,47
+resid heating modern EUR,district heat,-9,,47
+resid heating modern EUR,water heat pump,-15,,47
+resid cooling modern EUR,electricity,-7,,47
+resid cooling modern EUR,gas,-6,,47
+resid cooking modern EUR,biomass,-5,,47
+resid cooking coal EUR,coal,-1,,47
+resid cooking modern EUR,electricity,-13,,47
+resid cooking modern EUR,gas,-20,,47
+resid cooking modern EUR,refined liquids,-12,,47
+resid other appliance modern EUR,electricity,-18,,47
+resid hot water modern EUR,biomass,-19,,47
+resid hot water coal EUR,coal,-14,,47
+resid hot water modern EUR,electricity,-12,,47
+resid hot water modern EUR,gas,-11,,47
+resid hot water modern EUR,refined liquids,-20,,47
+resid hot water modern EUR,district heat,-3,,47
+resid hot water modern EUR,water heat pump,-16,,47
+resid others modern EUR,biomass,-19,,47
+resid others coal EUR,coal,-9,,47
+resid others modern EUR,electricity,-9,,47
+resid others modern EUR,gas,-16,,47
+resid others modern EUR,refined liquids,-10,,47
+comm heating EUR,biomass,-10,,47
+comm heating EUR,coal,-8,,47
+comm heating EUR,electricity,-8,,47
+comm heating EUR,gas,-6,,47
+comm heating EUR,refined liquids,-3,,47
+comm heating EUR,district heat,-12,,47
+comm heating EUR,water heat pump,-12,,47
+comm cooling EUR,electricity,-16,,47
+comm cooling EUR,gas,-6,,47
+comm others EUR,biomass,-18,,47
+comm others EUR,coal,-18,,47
+comm others EUR,electricity,-19,,47
+comm others EUR,gas,-1,,47
+comm others EUR,refined liquids,-14,,47
+comm others EUR,district heat,-13,,47
+resid heating modern EUR,biomass,-18,,48
+resid heating coal EUR,coal,-6,,48
+resid heating modern EUR,electricity,-12,,48
+resid heating modern EUR,gas,-5,,48
+resid heating modern EUR,refined liquids,-11,,48
+resid heating modern EUR,district heat,-7,,48
+resid heating modern EUR,water heat pump,-13,,48
+resid cooling modern EUR,electricity,-1,,48
+resid cooling modern EUR,gas,-3,,48
+resid cooking modern EUR,biomass,-10,,48
+resid cooking coal EUR,coal,-7,,48
+resid cooking modern EUR,electricity,-14,,48
+resid cooking modern EUR,gas,-8,,48
+resid cooking modern EUR,refined liquids,-14,,48
+resid other appliance modern EUR,electricity,-10,,48
+resid hot water modern EUR,biomass,-18,,48
+resid hot water coal EUR,coal,-5,,48
+resid hot water modern EUR,electricity,-6,,48
+resid hot water modern EUR,gas,-8,,48
+resid hot water modern EUR,refined liquids,-12,,48
+resid hot water modern EUR,district heat,-1,,48
+resid hot water modern EUR,water heat pump,-12,,48
+resid others modern EUR,biomass,-14,,48
+resid others coal EUR,coal,-7,,48
+resid others modern EUR,electricity,-17,,48
+resid others modern EUR,gas,-16,,48
+resid others modern EUR,refined liquids,-10,,48
+comm heating EUR,biomass,-2,,48
+comm heating EUR,coal,-13,,48
+comm heating EUR,electricity,-11,,48
+comm heating EUR,gas,-7,,48
+comm heating EUR,refined liquids,-11,,48
+comm heating EUR,district heat,-15,,48
+comm heating EUR,water heat pump,-12,,48
+comm cooling EUR,electricity,-13,,48
+comm cooling EUR,gas,-1,,48
+comm others EUR,biomass,-7,,48
+comm others EUR,coal,-20,,48
+comm others EUR,electricity,-14,,48
+comm others EUR,gas,-6,,48
+comm others EUR,refined liquids,-18,,48
+comm others EUR,district heat,-2,,48
+resid heating modern EUR,biomass,-18,,49
+resid heating coal EUR,coal,-16,,49
+resid heating modern EUR,electricity,-11,,49
+resid heating modern EUR,gas,-6,,49
+resid heating modern EUR,refined liquids,-12,,49
+resid heating modern EUR,district heat,-5,,49
+resid heating modern EUR,water heat pump,-9,,49
+resid cooling modern EUR,electricity,-15,,49
+resid cooling modern EUR,gas,-19,,49
+resid cooking modern EUR,biomass,-12,,49
+resid cooking coal EUR,coal,-3,,49
+resid cooking modern EUR,electricity,-11,,49
+resid cooking modern EUR,gas,-17,,49
+resid cooking modern EUR,refined liquids,-20,,49
+resid other appliance modern EUR,electricity,-1,,49
+resid hot water modern EUR,biomass,-17,,49
+resid hot water coal EUR,coal,-5,,49
+resid hot water modern EUR,electricity,-16,,49
+resid hot water modern EUR,gas,-20,,49
+resid hot water modern EUR,refined liquids,-19,,49
+resid hot water modern EUR,district heat,-10,,49
+resid hot water modern EUR,water heat pump,-10,,49
+resid others modern EUR,biomass,-6,,49
+resid others coal EUR,coal,-1,,49
+resid others modern EUR,electricity,-7,,49
+resid others modern EUR,gas,-7,,49
+resid others modern EUR,refined liquids,-19,,49
+comm heating EUR,biomass,-3,,49
+comm heating EUR,coal,-7,,49
+comm heating EUR,electricity,-7,,49
+comm heating EUR,gas,-17,,49
+comm heating EUR,refined liquids,-2,,49
+comm heating EUR,district heat,-5,,49
+comm heating EUR,water heat pump,-19,,49
+comm cooling EUR,electricity,-15,,49
+comm cooling EUR,gas,-10,,49
+comm others EUR,biomass,-13,,49
+comm others EUR,coal,-12,,49
+comm others EUR,electricity,-10,,49
+comm others EUR,gas,-7,,49
+comm others EUR,refined liquids,-3,,49
+comm others EUR,district heat,-3,,49
+resid heating modern EUR,biomass,-18,,50
+resid heating coal EUR,coal,-3,,50
+resid heating modern EUR,electricity,-2,,50
+resid heating modern EUR,gas,-20,,50
+resid heating modern EUR,refined liquids,-9,,50
+resid heating modern EUR,district heat,-15,,50
+resid heating modern EUR,water heat pump,-18,,50
+resid cooling modern EUR,electricity,-14,,50
+resid cooling modern EUR,gas,-3,,50
+resid cooking modern EUR,biomass,-8,,50
+resid cooking coal EUR,coal,-4,,50
+resid cooking modern EUR,electricity,-2,,50
+resid cooking modern EUR,gas,-13,,50
+resid cooking modern EUR,refined liquids,-16,,50
+resid other appliance modern EUR,electricity,-14,,50
+resid hot water modern EUR,biomass,-9,,50
+resid hot water coal EUR,coal,-15,,50
+resid hot water modern EUR,electricity,-12,,50
+resid hot water modern EUR,gas,-13,,50
+resid hot water modern EUR,refined liquids,-6,,50
+resid hot water modern EUR,district heat,-15,,50
+resid hot water modern EUR,water heat pump,-20,,50
+resid others modern EUR,biomass,-7,,50
+resid others coal EUR,coal,-6,,50
+resid others modern EUR,electricity,-10,,50
+resid others modern EUR,gas,-11,,50
+resid others modern EUR,refined liquids,-1,,50
+comm heating EUR,biomass,-17,,50
+comm heating EUR,coal,-1,,50
+comm heating EUR,electricity,-14,,50
+comm heating EUR,gas,-4,,50
+comm heating EUR,refined liquids,-10,,50
+comm heating EUR,district heat,-17,,50
+comm heating EUR,water heat pump,-11,,50
+comm cooling EUR,electricity,-4,,50
+comm cooling EUR,gas,-8,,50
+comm others EUR,biomass,-1,,50
+comm others EUR,coal,-20,,50
+comm others EUR,electricity,-11,,50
+comm others EUR,gas,-9,,50
+comm others EUR,refined liquids,-8,,50
+comm others EUR,district heat,-8,,50
+resid heating modern EUR,biomass,-19,,51
+resid heating coal EUR,coal,-6,,51
+resid heating modern EUR,electricity,-17,,51
+resid heating modern EUR,gas,-15,,51
+resid heating modern EUR,refined liquids,-7,,51
+resid heating modern EUR,district heat,-13,,51
+resid heating modern EUR,water heat pump,-3,,51
+resid cooling modern EUR,electricity,-7,,51
+resid cooling modern EUR,gas,-10,,51
+resid cooking modern EUR,biomass,-20,,51
+resid cooking coal EUR,coal,-8,,51
+resid cooking modern EUR,electricity,-1,,51
+resid cooking modern EUR,gas,-17,,51
+resid cooking modern EUR,refined liquids,-1,,51
+resid other appliance modern EUR,electricity,-20,,51
+resid hot water modern EUR,biomass,-15,,51
+resid hot water coal EUR,coal,-12,,51
+resid hot water modern EUR,electricity,-16,,51
+resid hot water modern EUR,gas,-17,,51
+resid hot water modern EUR,refined liquids,-11,,51
+resid hot water modern EUR,district heat,-15,,51
+resid hot water modern EUR,water heat pump,-5,,51
+resid others modern EUR,biomass,-19,,51
+resid others coal EUR,coal,-16,,51
+resid others modern EUR,electricity,-13,,51
+resid others modern EUR,gas,-14,,51
+resid others modern EUR,refined liquids,-12,,51
+comm heating EUR,biomass,-20,,51
+comm heating EUR,coal,-18,,51
+comm heating EUR,electricity,-6,,51
+comm heating EUR,gas,-1,,51
+comm heating EUR,refined liquids,-6,,51
+comm heating EUR,district heat,-13,,51
+comm heating EUR,water heat pump,-8,,51
+comm cooling EUR,electricity,-15,,51
+comm cooling EUR,gas,-10,,51
+comm others EUR,biomass,-6,,51
+comm others EUR,coal,-18,,51
+comm others EUR,electricity,-14,,51
+comm others EUR,gas,-13,,51
+comm others EUR,refined liquids,-3,,51
+comm others EUR,district heat,-5,,51
+resid heating modern EUR,biomass,-3,,52
+resid heating coal EUR,coal,-17,,52
+resid heating modern EUR,electricity,-7,,52
+resid heating modern EUR,gas,-20,,52
+resid heating modern EUR,refined liquids,-2,,52
+resid heating modern EUR,district heat,-5,,52
+resid heating modern EUR,water heat pump,-8,,52
+resid cooling modern EUR,electricity,-16,,52
+resid cooling modern EUR,gas,-2,,52
+resid cooking modern EUR,biomass,-7,,52
+resid cooking coal EUR,coal,-7,,52
+resid cooking modern EUR,electricity,-15,,52
+resid cooking modern EUR,gas,-4,,52
+resid cooking modern EUR,refined liquids,-13,,52
+resid other appliance modern EUR,electricity,-13,,52
+resid hot water modern EUR,biomass,-5,,52
+resid hot water coal EUR,coal,-20,,52
+resid hot water modern EUR,electricity,-19,,52
+resid hot water modern EUR,gas,-8,,52
+resid hot water modern EUR,refined liquids,-4,,52
+resid hot water modern EUR,district heat,-5,,52
+resid hot water modern EUR,water heat pump,-10,,52
+resid others modern EUR,biomass,-7,,52
+resid others coal EUR,coal,-20,,52
+resid others modern EUR,electricity,-16,,52
+resid others modern EUR,gas,-19,,52
+resid others modern EUR,refined liquids,-10,,52
+comm heating EUR,biomass,-8,,52
+comm heating EUR,coal,-2,,52
+comm heating EUR,electricity,-10,,52
+comm heating EUR,gas,-1,,52
+comm heating EUR,refined liquids,-3,,52
+comm heating EUR,district heat,-8,,52
+comm heating EUR,water heat pump,-4,,52
+comm cooling EUR,electricity,-4,,52
+comm cooling EUR,gas,-8,,52
+comm others EUR,biomass,-1,,52
+comm others EUR,coal,-16,,52
+comm others EUR,electricity,-19,,52
+comm others EUR,gas,-19,,52
+comm others EUR,refined liquids,-19,,52
+comm others EUR,district heat,-2,,52
+resid heating modern EUR,biomass,-18,,53
+resid heating coal EUR,coal,-4,,53
+resid heating modern EUR,electricity,-4,,53
+resid heating modern EUR,gas,-14,,53
+resid heating modern EUR,refined liquids,-19,,53
+resid heating modern EUR,district heat,-10,,53
+resid heating modern EUR,water heat pump,-9,,53
+resid cooling modern EUR,electricity,-3,,53
+resid cooling modern EUR,gas,-2,,53
+resid cooking modern EUR,biomass,-4,,53
+resid cooking coal EUR,coal,-18,,53
+resid cooking modern EUR,electricity,-19,,53
+resid cooking modern EUR,gas,-11,,53
+resid cooking modern EUR,refined liquids,-5,,53
+resid other appliance modern EUR,electricity,-6,,53
+resid hot water modern EUR,biomass,-1,,53
+resid hot water coal EUR,coal,-12,,53
+resid hot water modern EUR,electricity,-19,,53
+resid hot water modern EUR,gas,-19,,53
+resid hot water modern EUR,refined liquids,-2,,53
+resid hot water modern EUR,district heat,-5,,53
+resid hot water modern EUR,water heat pump,-12,,53
+resid others modern EUR,biomass,-5,,53
+resid others coal EUR,coal,-2,,53
+resid others modern EUR,electricity,-16,,53
+resid others modern EUR,gas,-19,,53
+resid others modern EUR,refined liquids,-14,,53
+comm heating EUR,biomass,-19,,53
+comm heating EUR,coal,-4,,53
+comm heating EUR,electricity,-4,,53
+comm heating EUR,gas,-13,,53
+comm heating EUR,refined liquids,-8,,53
+comm heating EUR,district heat,-20,,53
+comm heating EUR,water heat pump,-15,,53
+comm cooling EUR,electricity,-4,,53
+comm cooling EUR,gas,-1,,53
+comm others EUR,biomass,-12,,53
+comm others EUR,coal,-6,,53
+comm others EUR,electricity,-2,,53
+comm others EUR,gas,-20,,53
+comm others EUR,refined liquids,-8,,53
+comm others EUR,district heat,-16,,53
+resid heating modern EUR,biomass,-13,,54
+resid heating coal EUR,coal,-5,,54
+resid heating modern EUR,electricity,-19,,54
+resid heating modern EUR,gas,-7,,54
+resid heating modern EUR,refined liquids,-11,,54
+resid heating modern EUR,district heat,-12,,54
+resid heating modern EUR,water heat pump,-9,,54
+resid cooling modern EUR,electricity,-14,,54
+resid cooling modern EUR,gas,-6,,54
+resid cooking modern EUR,biomass,-3,,54
+resid cooking coal EUR,coal,-9,,54
+resid cooking modern EUR,electricity,-7,,54
+resid cooking modern EUR,gas,-20,,54
+resid cooking modern EUR,refined liquids,-13,,54
+resid other appliance modern EUR,electricity,-20,,54
+resid hot water modern EUR,biomass,-12,,54
+resid hot water coal EUR,coal,-4,,54
+resid hot water modern EUR,electricity,-9,,54
+resid hot water modern EUR,gas,-9,,54
+resid hot water modern EUR,refined liquids,-1,,54
+resid hot water modern EUR,district heat,-2,,54
+resid hot water modern EUR,water heat pump,-1,,54
+resid others modern EUR,biomass,-3,,54
+resid others coal EUR,coal,-1,,54
+resid others modern EUR,electricity,-10,,54
+resid others modern EUR,gas,-19,,54
+resid others modern EUR,refined liquids,-11,,54
+comm heating EUR,biomass,-8,,54
+comm heating EUR,coal,-13,,54
+comm heating EUR,electricity,-5,,54
+comm heating EUR,gas,-7,,54
+comm heating EUR,refined liquids,-17,,54
+comm heating EUR,district heat,-9,,54
+comm heating EUR,water heat pump,-7,,54
+comm cooling EUR,electricity,-14,,54
+comm cooling EUR,gas,-3,,54
+comm others EUR,biomass,-15,,54
+comm others EUR,coal,-12,,54
+comm others EUR,electricity,-12,,54
+comm others EUR,gas,-6,,54
+comm others EUR,refined liquids,-4,,54
+comm others EUR,district heat,-4,,54
+resid heating modern EUR,biomass,-11,,55
+resid heating coal EUR,coal,-11,,55
+resid heating modern EUR,electricity,-1,,55
+resid heating modern EUR,gas,-8,,55
+resid heating modern EUR,refined liquids,-9,,55
+resid heating modern EUR,district heat,-10,,55
+resid heating modern EUR,water heat pump,-18,,55
+resid cooling modern EUR,electricity,-17,,55
+resid cooling modern EUR,gas,-11,,55
+resid cooking modern EUR,biomass,-1,,55
+resid cooking coal EUR,coal,-14,,55
+resid cooking modern EUR,electricity,-16,,55
+resid cooking modern EUR,gas,-5,,55
+resid cooking modern EUR,refined liquids,-14,,55
+resid other appliance modern EUR,electricity,-19,,55
+resid hot water modern EUR,biomass,-12,,55
+resid hot water coal EUR,coal,-9,,55
+resid hot water modern EUR,electricity,-5,,55
+resid hot water modern EUR,gas,-15,,55
+resid hot water modern EUR,refined liquids,-18,,55
+resid hot water modern EUR,district heat,-3,,55
+resid hot water modern EUR,water heat pump,-20,,55
+resid others modern EUR,biomass,-4,,55
+resid others coal EUR,coal,-7,,55
+resid others modern EUR,electricity,-13,,55
+resid others modern EUR,gas,-11,,55
+resid others modern EUR,refined liquids,-20,,55
+comm heating EUR,biomass,-9,,55
+comm heating EUR,coal,-6,,55
+comm heating EUR,electricity,-3,,55
+comm heating EUR,gas,-11,,55
+comm heating EUR,refined liquids,-13,,55
+comm heating EUR,district heat,-20,,55
+comm heating EUR,water heat pump,-8,,55
+comm cooling EUR,electricity,-13,,55
+comm cooling EUR,gas,-18,,55
+comm others EUR,biomass,-6,,55
+comm others EUR,coal,-19,,55
+comm others EUR,electricity,-17,,55
+comm others EUR,gas,-17,,55
+comm others EUR,refined liquids,-10,,55
+comm others EUR,district heat,-19,,55
+resid heating modern EUR,biomass,-5,,56
+resid heating coal EUR,coal,-8,,56
+resid heating modern EUR,electricity,-19,,56
+resid heating modern EUR,gas,-6,,56
+resid heating modern EUR,refined liquids,-5,,56
+resid heating modern EUR,district heat,-18,,56
+resid heating modern EUR,water heat pump,-1,,56
+resid cooling modern EUR,electricity,-15,,56
+resid cooling modern EUR,gas,-3,,56
+resid cooking modern EUR,biomass,-13,,56
+resid cooking coal EUR,coal,-5,,56
+resid cooking modern EUR,electricity,-8,,56
+resid cooking modern EUR,gas,-5,,56
+resid cooking modern EUR,refined liquids,-18,,56
+resid other appliance modern EUR,electricity,-11,,56
+resid hot water modern EUR,biomass,-3,,56
+resid hot water coal EUR,coal,-12,,56
+resid hot water modern EUR,electricity,-8,,56
+resid hot water modern EUR,gas,-3,,56
+resid hot water modern EUR,refined liquids,-18,,56
+resid hot water modern EUR,district heat,-5,,56
+resid hot water modern EUR,water heat pump,-5,,56
+resid others modern EUR,biomass,-6,,56
+resid others coal EUR,coal,-6,,56
+resid others modern EUR,electricity,-12,,56
+resid others modern EUR,gas,-20,,56
+resid others modern EUR,refined liquids,-7,,56
+comm heating EUR,biomass,-4,,56
+comm heating EUR,coal,-5,,56
+comm heating EUR,electricity,-12,,56
+comm heating EUR,gas,-2,,56
+comm heating EUR,refined liquids,-17,,56
+comm heating EUR,district heat,-3,,56
+comm heating EUR,water heat pump,-16,,56
+comm cooling EUR,electricity,-5,,56
+comm cooling EUR,gas,-13,,56
+comm others EUR,biomass,-15,,56
+comm others EUR,coal,-11,,56
+comm others EUR,electricity,-13,,56
+comm others EUR,gas,-7,,56
+comm others EUR,refined liquids,-15,,56
+comm others EUR,district heat,-6,,56
+resid heating modern EUR,biomass,-16,,57
+resid heating coal EUR,coal,-5,,57
+resid heating modern EUR,electricity,-5,,57
+resid heating modern EUR,gas,-1,,57
+resid heating modern EUR,refined liquids,-16,,57
+resid heating modern EUR,district heat,-15,,57
+resid heating modern EUR,water heat pump,-11,,57
+resid cooling modern EUR,electricity,-16,,57
+resid cooling modern EUR,gas,-11,,57
+resid cooking modern EUR,biomass,-10,,57
+resid cooking coal EUR,coal,-2,,57
+resid cooking modern EUR,electricity,-12,,57
+resid cooking modern EUR,gas,-15,,57
+resid cooking modern EUR,refined liquids,-8,,57
+resid other appliance modern EUR,electricity,-4,,57
+resid hot water modern EUR,biomass,-7,,57
+resid hot water coal EUR,coal,-7,,57
+resid hot water modern EUR,electricity,-10,,57
+resid hot water modern EUR,gas,-7,,57
+resid hot water modern EUR,refined liquids,-20,,57
+resid hot water modern EUR,district heat,-11,,57
+resid hot water modern EUR,water heat pump,-1,,57
+resid others modern EUR,biomass,-19,,57
+resid others coal EUR,coal,-6,,57
+resid others modern EUR,electricity,-11,,57
+resid others modern EUR,gas,-6,,57
+resid others modern EUR,refined liquids,-2,,57
+comm heating EUR,biomass,-9,,57
+comm heating EUR,coal,-2,,57
+comm heating EUR,electricity,-13,,57
+comm heating EUR,gas,-9,,57
+comm heating EUR,refined liquids,-8,,57
+comm heating EUR,district heat,-15,,57
+comm heating EUR,water heat pump,-9,,57
+comm cooling EUR,electricity,-17,,57
+comm cooling EUR,gas,-13,,57
+comm others EUR,biomass,-7,,57
+comm others EUR,coal,-13,,57
+comm others EUR,electricity,-1,,57
+comm others EUR,gas,-17,,57
+comm others EUR,refined liquids,-14,,57
+comm others EUR,district heat,-3,,57
+resid heating modern EUR,biomass,-15,,58
+resid heating coal EUR,coal,-20,,58
+resid heating modern EUR,electricity,-14,,58
+resid heating modern EUR,gas,-10,,58
+resid heating modern EUR,refined liquids,-17,,58
+resid heating modern EUR,district heat,-1,,58
+resid heating modern EUR,water heat pump,-9,,58
+resid cooling modern EUR,electricity,-14,,58
+resid cooling modern EUR,gas,-15,,58
+resid cooking modern EUR,biomass,-15,,58
+resid cooking coal EUR,coal,-14,,58
+resid cooking modern EUR,electricity,-8,,58
+resid cooking modern EUR,gas,-17,,58
+resid cooking modern EUR,refined liquids,-7,,58
+resid other appliance modern EUR,electricity,-1,,58
+resid hot water modern EUR,biomass,-4,,58
+resid hot water coal EUR,coal,-6,,58
+resid hot water modern EUR,electricity,-16,,58
+resid hot water modern EUR,gas,-13,,58
+resid hot water modern EUR,refined liquids,-10,,58
+resid hot water modern EUR,district heat,-11,,58
+resid hot water modern EUR,water heat pump,-17,,58
+resid others modern EUR,biomass,-8,,58
+resid others coal EUR,coal,-19,,58
+resid others modern EUR,electricity,-12,,58
+resid others modern EUR,gas,-3,,58
+resid others modern EUR,refined liquids,-3,,58
+comm heating EUR,biomass,-14,,58
+comm heating EUR,coal,-20,,58
+comm heating EUR,electricity,-14,,58
+comm heating EUR,gas,-3,,58
+comm heating EUR,refined liquids,-11,,58
+comm heating EUR,district heat,-10,,58
+comm heating EUR,water heat pump,-7,,58
+comm cooling EUR,electricity,-20,,58
+comm cooling EUR,gas,-2,,58
+comm others EUR,biomass,-16,,58
+comm others EUR,coal,-7,,58
+comm others EUR,electricity,-8,,58
+comm others EUR,gas,-2,,58
+comm others EUR,refined liquids,-16,,58
+comm others EUR,district heat,-3,,58
+resid heating modern EUR,biomass,-20,,59
+resid heating coal EUR,coal,-14,,59
+resid heating modern EUR,electricity,-7,,59
+resid heating modern EUR,gas,-3,,59
+resid heating modern EUR,refined liquids,-5,,59
+resid heating modern EUR,district heat,-3,,59
+resid heating modern EUR,water heat pump,-8,,59
+resid cooling modern EUR,electricity,-6,,59
+resid cooling modern EUR,gas,-15,,59
+resid cooking modern EUR,biomass,-17,,59
+resid cooking coal EUR,coal,-11,,59
+resid cooking modern EUR,electricity,-1,,59
+resid cooking modern EUR,gas,-9,,59
+resid cooking modern EUR,refined liquids,-6,,59
+resid other appliance modern EUR,electricity,-10,,59
+resid hot water modern EUR,biomass,-16,,59
+resid hot water coal EUR,coal,-14,,59
+resid hot water modern EUR,electricity,-20,,59
+resid hot water modern EUR,gas,-12,,59
+resid hot water modern EUR,refined liquids,-8,,59
+resid hot water modern EUR,district heat,-13,,59
+resid hot water modern EUR,water heat pump,-14,,59
+resid others modern EUR,biomass,-10,,59
+resid others coal EUR,coal,-8,,59
+resid others modern EUR,electricity,-19,,59
+resid others modern EUR,gas,-18,,59
+resid others modern EUR,refined liquids,-16,,59
+comm heating EUR,biomass,-13,,59
+comm heating EUR,coal,-10,,59
+comm heating EUR,electricity,-9,,59
+comm heating EUR,gas,-16,,59
+comm heating EUR,refined liquids,-11,,59
+comm heating EUR,district heat,-14,,59
+comm heating EUR,water heat pump,-12,,59
+comm cooling EUR,electricity,-8,,59
+comm cooling EUR,gas,-16,,59
+comm others EUR,biomass,-20,,59
+comm others EUR,coal,-11,,59
+comm others EUR,electricity,-7,,59
+comm others EUR,gas,-11,,59
+comm others EUR,refined liquids,-10,,59
+comm others EUR,district heat,-9,,59
+resid heating modern EUR,biomass,-16,,60
+resid heating coal EUR,coal,-20,,60
+resid heating modern EUR,electricity,-11,,60
+resid heating modern EUR,gas,-14,,60
+resid heating modern EUR,refined liquids,-5,,60
+resid heating modern EUR,district heat,-9,,60
+resid heating modern EUR,water heat pump,-19,,60
+resid cooling modern EUR,electricity,-4,,60
+resid cooling modern EUR,gas,-4,,60
+resid cooking modern EUR,biomass,-16,,60
+resid cooking coal EUR,coal,-20,,60
+resid cooking modern EUR,electricity,-12,,60
+resid cooking modern EUR,gas,-3,,60
+resid cooking modern EUR,refined liquids,-8,,60
+resid other appliance modern EUR,electricity,-2,,60
+resid hot water modern EUR,biomass,-16,,60
+resid hot water coal EUR,coal,-7,,60
+resid hot water modern EUR,electricity,-17,,60
+resid hot water modern EUR,gas,-11,,60
+resid hot water modern EUR,refined liquids,-9,,60
+resid hot water modern EUR,district heat,-3,,60
+resid hot water modern EUR,water heat pump,-2,,60
+resid others modern EUR,biomass,-17,,60
+resid others coal EUR,coal,-8,,60
+resid others modern EUR,electricity,-5,,60
+resid others modern EUR,gas,-5,,60
+resid others modern EUR,refined liquids,-2,,60
+comm heating EUR,biomass,-14,,60
+comm heating EUR,coal,-11,,60
+comm heating EUR,electricity,-6,,60
+comm heating EUR,gas,-6,,60
+comm heating EUR,refined liquids,-18,,60
+comm heating EUR,district heat,-8,,60
+comm heating EUR,water heat pump,-14,,60
+comm cooling EUR,electricity,-13,,60
+comm cooling EUR,gas,-11,,60
+comm others EUR,biomass,-6,,60
+comm others EUR,coal,-18,,60
+comm others EUR,electricity,-9,,60
+comm others EUR,gas,-13,,60
+comm others EUR,refined liquids,-5,,60
+comm others EUR,district heat,-12,,60
+resid heating modern EUR,biomass,-17,,61
+resid heating coal EUR,coal,-16,,61
+resid heating modern EUR,electricity,-4,,61
+resid heating modern EUR,gas,-2,,61
+resid heating modern EUR,refined liquids,-12,,61
+resid heating modern EUR,district heat,-16,,61
+resid heating modern EUR,water heat pump,-1,,61
+resid cooling modern EUR,electricity,-10,,61
+resid cooling modern EUR,gas,-16,,61
+resid cooking modern EUR,biomass,-11,,61
+resid cooking coal EUR,coal,-3,,61
+resid cooking modern EUR,electricity,-16,,61
+resid cooking modern EUR,gas,-14,,61
+resid cooking modern EUR,refined liquids,-15,,61
+resid other appliance modern EUR,electricity,-4,,61
+resid hot water modern EUR,biomass,-5,,61
+resid hot water coal EUR,coal,-5,,61
+resid hot water modern EUR,electricity,-12,,61
+resid hot water modern EUR,gas,-13,,61
+resid hot water modern EUR,refined liquids,-5,,61
+resid hot water modern EUR,district heat,-7,,61
+resid hot water modern EUR,water heat pump,-8,,61
+resid others modern EUR,biomass,-20,,61
+resid others coal EUR,coal,-8,,61
+resid others modern EUR,electricity,-15,,61
+resid others modern EUR,gas,-20,,61
+resid others modern EUR,refined liquids,-1,,61
+comm heating EUR,biomass,-13,,61
+comm heating EUR,coal,-11,,61
+comm heating EUR,electricity,-18,,61
+comm heating EUR,gas,-12,,61
+comm heating EUR,refined liquids,-3,,61
+comm heating EUR,district heat,-7,,61
+comm heating EUR,water heat pump,-1,,61
+comm cooling EUR,electricity,-14,,61
+comm cooling EUR,gas,-1,,61
+comm others EUR,biomass,-14,,61
+comm others EUR,coal,-19,,61
+comm others EUR,electricity,-10,,61
+comm others EUR,gas,-4,,61
+comm others EUR,refined liquids,-19,,61
+comm others EUR,district heat,-12,,61
+resid heating modern EUR,biomass,-5,,62
+resid heating coal EUR,coal,-6,,62
+resid heating modern EUR,electricity,-7,,62
+resid heating modern EUR,gas,-2,,62
+resid heating modern EUR,refined liquids,-9,,62
+resid heating modern EUR,district heat,-2,,62
+resid heating modern EUR,water heat pump,-14,,62
+resid cooling modern EUR,electricity,-4,,62
+resid cooling modern EUR,gas,-6,,62
+resid cooking modern EUR,biomass,-1,,62
+resid cooking coal EUR,coal,-11,,62
+resid cooking modern EUR,electricity,-16,,62
+resid cooking modern EUR,gas,-8,,62
+resid cooking modern EUR,refined liquids,-18,,62
+resid other appliance modern EUR,electricity,-15,,62
+resid hot water modern EUR,biomass,-5,,62
+resid hot water coal EUR,coal,-15,,62
+resid hot water modern EUR,electricity,-2,,62
+resid hot water modern EUR,gas,-3,,62
+resid hot water modern EUR,refined liquids,-8,,62
+resid hot water modern EUR,district heat,-10,,62
+resid hot water modern EUR,water heat pump,-8,,62
+resid others modern EUR,biomass,-14,,62
+resid others coal EUR,coal,-1,,62
+resid others modern EUR,electricity,-8,,62
+resid others modern EUR,gas,-12,,62
+resid others modern EUR,refined liquids,-18,,62
+comm heating EUR,biomass,-5,,62
+comm heating EUR,coal,-19,,62
+comm heating EUR,electricity,-20,,62
+comm heating EUR,gas,-14,,62
+comm heating EUR,refined liquids,-1,,62
+comm heating EUR,district heat,-1,,62
+comm heating EUR,water heat pump,-9,,62
+comm cooling EUR,electricity,-7,,62
+comm cooling EUR,gas,-11,,62
+comm others EUR,biomass,-11,,62
+comm others EUR,coal,-5,,62
+comm others EUR,electricity,-11,,62
+comm others EUR,gas,-8,,62
+comm others EUR,refined liquids,-9,,62
+comm others EUR,district heat,-15,,62
+resid heating modern EUR,biomass,-15,,63
+resid heating coal EUR,coal,-14,,63
+resid heating modern EUR,electricity,-17,,63
+resid heating modern EUR,gas,-17,,63
+resid heating modern EUR,refined liquids,-18,,63
+resid heating modern EUR,district heat,-20,,63
+resid heating modern EUR,water heat pump,-9,,63
+resid cooling modern EUR,electricity,-20,,63
+resid cooling modern EUR,gas,-20,,63
+resid cooking modern EUR,biomass,-9,,63
+resid cooking coal EUR,coal,-5,,63
+resid cooking modern EUR,electricity,-5,,63
+resid cooking modern EUR,gas,-7,,63
+resid cooking modern EUR,refined liquids,-17,,63
+resid other appliance modern EUR,electricity,-11,,63
+resid hot water modern EUR,biomass,-13,,63
+resid hot water coal EUR,coal,-9,,63
+resid hot water modern EUR,electricity,-19,,63
+resid hot water modern EUR,gas,-7,,63
+resid hot water modern EUR,refined liquids,-5,,63
+resid hot water modern EUR,district heat,-19,,63
+resid hot water modern EUR,water heat pump,-14,,63
+resid others modern EUR,biomass,-12,,63
+resid others coal EUR,coal,-13,,63
+resid others modern EUR,electricity,-19,,63
+resid others modern EUR,gas,-3,,63
+resid others modern EUR,refined liquids,-8,,63
+comm heating EUR,biomass,-7,,63
+comm heating EUR,coal,-18,,63
+comm heating EUR,electricity,-18,,63
+comm heating EUR,gas,-19,,63
+comm heating EUR,refined liquids,-12,,63
+comm heating EUR,district heat,-1,,63
+comm heating EUR,water heat pump,-4,,63
+comm cooling EUR,electricity,-7,,63
+comm cooling EUR,gas,-5,,63
+comm others EUR,biomass,-18,,63
+comm others EUR,coal,-20,,63
+comm others EUR,electricity,-4,,63
+comm others EUR,gas,-17,,63
+comm others EUR,refined liquids,-15,,63
+comm others EUR,district heat,-1,,63
+resid heating modern EUR,biomass,-16,,64
+resid heating coal EUR,coal,-1,,64
+resid heating modern EUR,electricity,-13,,64
+resid heating modern EUR,gas,-1,,64
+resid heating modern EUR,refined liquids,-15,,64
+resid heating modern EUR,district heat,-9,,64
+resid heating modern EUR,water heat pump,-18,,64
+resid cooling modern EUR,electricity,-18,,64
+resid cooling modern EUR,gas,-4,,64
+resid cooking modern EUR,biomass,-13,,64
+resid cooking coal EUR,coal,-19,,64
+resid cooking modern EUR,electricity,-19,,64
+resid cooking modern EUR,gas,-11,,64
+resid cooking modern EUR,refined liquids,-3,,64
+resid other appliance modern EUR,electricity,-11,,64
+resid hot water modern EUR,biomass,-12,,64
+resid hot water coal EUR,coal,-7,,64
+resid hot water modern EUR,electricity,-5,,64
+resid hot water modern EUR,gas,-1,,64
+resid hot water modern EUR,refined liquids,-18,,64
+resid hot water modern EUR,district heat,-12,,64
+resid hot water modern EUR,water heat pump,-18,,64
+resid others modern EUR,biomass,-13,,64
+resid others coal EUR,coal,-18,,64
+resid others modern EUR,electricity,-15,,64
+resid others modern EUR,gas,-6,,64
+resid others modern EUR,refined liquids,-4,,64
+comm heating EUR,biomass,-3,,64
+comm heating EUR,coal,-9,,64
+comm heating EUR,electricity,-13,,64
+comm heating EUR,gas,-5,,64
+comm heating EUR,refined liquids,-6,,64
+comm heating EUR,district heat,-13,,64
+comm heating EUR,water heat pump,-19,,64
+comm cooling EUR,electricity,-3,,64
+comm cooling EUR,gas,-1,,64
+comm others EUR,biomass,-8,,64
+comm others EUR,coal,-3,,64
+comm others EUR,electricity,-16,,64
+comm others EUR,gas,-20,,64
+comm others EUR,refined liquids,-14,,64
+comm others EUR,district heat,-16,,64
+resid heating modern EUR,biomass,-1,,65
+resid heating coal EUR,coal,-10,,65
+resid heating modern EUR,electricity,-20,,65
+resid heating modern EUR,gas,-8,,65
+resid heating modern EUR,refined liquids,-12,,65
+resid heating modern EUR,district heat,-8,,65
+resid heating modern EUR,water heat pump,-11,,65
+resid cooling modern EUR,electricity,-15,,65
+resid cooling modern EUR,gas,-13,,65
+resid cooking modern EUR,biomass,-13,,65
+resid cooking coal EUR,coal,-14,,65
+resid cooking modern EUR,electricity,-1,,65
+resid cooking modern EUR,gas,-16,,65
+resid cooking modern EUR,refined liquids,-16,,65
+resid other appliance modern EUR,electricity,-13,,65
+resid hot water modern EUR,biomass,-17,,65
+resid hot water coal EUR,coal,-15,,65
+resid hot water modern EUR,electricity,-18,,65
+resid hot water modern EUR,gas,-12,,65
+resid hot water modern EUR,refined liquids,-15,,65
+resid hot water modern EUR,district heat,-9,,65
+resid hot water modern EUR,water heat pump,-9,,65
+resid others modern EUR,biomass,-18,,65
+resid others coal EUR,coal,-19,,65
+resid others modern EUR,electricity,-3,,65
+resid others modern EUR,gas,-11,,65
+resid others modern EUR,refined liquids,-17,,65
+comm heating EUR,biomass,-4,,65
+comm heating EUR,coal,-7,,65
+comm heating EUR,electricity,-11,,65
+comm heating EUR,gas,-3,,65
+comm heating EUR,refined liquids,-20,,65
+comm heating EUR,district heat,-11,,65
+comm heating EUR,water heat pump,-20,,65
+comm cooling EUR,electricity,-11,,65
+comm cooling EUR,gas,-20,,65
+comm others EUR,biomass,-10,,65
+comm others EUR,coal,-11,,65
+comm others EUR,electricity,-10,,65
+comm others EUR,gas,-19,,65
+comm others EUR,refined liquids,-11,,65
+comm others EUR,district heat,-12,,65
+resid heating modern EUR,biomass,-8,,66
+resid heating coal EUR,coal,-10,,66
+resid heating modern EUR,electricity,-9,,66
+resid heating modern EUR,gas,-3,,66
+resid heating modern EUR,refined liquids,-2,,66
+resid heating modern EUR,district heat,-2,,66
+resid heating modern EUR,water heat pump,-19,,66
+resid cooling modern EUR,electricity,-20,,66
+resid cooling modern EUR,gas,-2,,66
+resid cooking modern EUR,biomass,-5,,66
+resid cooking coal EUR,coal,-13,,66
+resid cooking modern EUR,electricity,-11,,66
+resid cooking modern EUR,gas,-17,,66
+resid cooking modern EUR,refined liquids,-16,,66
+resid other appliance modern EUR,electricity,-8,,66
+resid hot water modern EUR,biomass,-3,,66
+resid hot water coal EUR,coal,-6,,66
+resid hot water modern EUR,electricity,-2,,66
+resid hot water modern EUR,gas,-8,,66
+resid hot water modern EUR,refined liquids,-1,,66
+resid hot water modern EUR,district heat,-10,,66
+resid hot water modern EUR,water heat pump,-13,,66
+resid others modern EUR,biomass,-14,,66
+resid others coal EUR,coal,-14,,66
+resid others modern EUR,electricity,-20,,66
+resid others modern EUR,gas,-2,,66
+resid others modern EUR,refined liquids,-1,,66
+comm heating EUR,biomass,-19,,66
+comm heating EUR,coal,-5,,66
+comm heating EUR,electricity,-9,,66
+comm heating EUR,gas,-4,,66
+comm heating EUR,refined liquids,-16,,66
+comm heating EUR,district heat,-2,,66
+comm heating EUR,water heat pump,-3,,66
+comm cooling EUR,electricity,-19,,66
+comm cooling EUR,gas,-6,,66
+comm others EUR,biomass,-11,,66
+comm others EUR,coal,-2,,66
+comm others EUR,electricity,-15,,66
+comm others EUR,gas,-8,,66
+comm others EUR,refined liquids,-16,,66
+comm others EUR,district heat,-8,,66
+resid heating modern EUR,biomass,-20,,67
+resid heating coal EUR,coal,-7,,67
+resid heating modern EUR,electricity,-13,,67
+resid heating modern EUR,gas,-19,,67
+resid heating modern EUR,refined liquids,-4,,67
+resid heating modern EUR,district heat,-5,,67
+resid heating modern EUR,water heat pump,-14,,67
+resid cooling modern EUR,electricity,-1,,67
+resid cooling modern EUR,gas,-12,,67
+resid cooking modern EUR,biomass,-6,,67
+resid cooking coal EUR,coal,-11,,67
+resid cooking modern EUR,electricity,-13,,67
+resid cooking modern EUR,gas,-11,,67
+resid cooking modern EUR,refined liquids,-5,,67
+resid other appliance modern EUR,electricity,-7,,67
+resid hot water modern EUR,biomass,-7,,67
+resid hot water coal EUR,coal,-13,,67
+resid hot water modern EUR,electricity,-18,,67
+resid hot water modern EUR,gas,-18,,67
+resid hot water modern EUR,refined liquids,-7,,67
+resid hot water modern EUR,district heat,-13,,67
+resid hot water modern EUR,water heat pump,-1,,67
+resid others modern EUR,biomass,-20,,67
+resid others coal EUR,coal,-17,,67
+resid others modern EUR,electricity,-18,,67
+resid others modern EUR,gas,-7,,67
+resid others modern EUR,refined liquids,-15,,67
+comm heating EUR,biomass,-3,,67
+comm heating EUR,coal,-4,,67
+comm heating EUR,electricity,-13,,67
+comm heating EUR,gas,-7,,67
+comm heating EUR,refined liquids,-13,,67
+comm heating EUR,district heat,-20,,67
+comm heating EUR,water heat pump,-8,,67
+comm cooling EUR,electricity,-11,,67
+comm cooling EUR,gas,-4,,67
+comm others EUR,biomass,-1,,67
+comm others EUR,coal,-12,,67
+comm others EUR,electricity,-17,,67
+comm others EUR,gas,-1,,67
+comm others EUR,refined liquids,-4,,67
+comm others EUR,district heat,-13,,67
+resid heating modern EUR,biomass,-17,,68
+resid heating coal EUR,coal,-1,,68
+resid heating modern EUR,electricity,-4,,68
+resid heating modern EUR,gas,-8,,68
+resid heating modern EUR,refined liquids,-16,,68
+resid heating modern EUR,district heat,-8,,68
+resid heating modern EUR,water heat pump,-18,,68
+resid cooling modern EUR,electricity,-14,,68
+resid cooling modern EUR,gas,-10,,68
+resid cooking modern EUR,biomass,-7,,68
+resid cooking coal EUR,coal,-11,,68
+resid cooking modern EUR,electricity,-12,,68
+resid cooking modern EUR,gas,-17,,68
+resid cooking modern EUR,refined liquids,-5,,68
+resid other appliance modern EUR,electricity,-10,,68
+resid hot water modern EUR,biomass,-13,,68
+resid hot water coal EUR,coal,-10,,68
+resid hot water modern EUR,electricity,-2,,68
+resid hot water modern EUR,gas,-7,,68
+resid hot water modern EUR,refined liquids,-17,,68
+resid hot water modern EUR,district heat,-5,,68
+resid hot water modern EUR,water heat pump,-3,,68
+resid others modern EUR,biomass,-15,,68
+resid others coal EUR,coal,-7,,68
+resid others modern EUR,electricity,-17,,68
+resid others modern EUR,gas,-9,,68
+resid others modern EUR,refined liquids,-11,,68
+comm heating EUR,biomass,-2,,68
+comm heating EUR,coal,-7,,68
+comm heating EUR,electricity,-17,,68
+comm heating EUR,gas,-6,,68
+comm heating EUR,refined liquids,-3,,68
+comm heating EUR,district heat,-16,,68
+comm heating EUR,water heat pump,-4,,68
+comm cooling EUR,electricity,-17,,68
+comm cooling EUR,gas,-8,,68
+comm others EUR,biomass,-11,,68
+comm others EUR,coal,-16,,68
+comm others EUR,electricity,-8,,68
+comm others EUR,gas,-5,,68
+comm others EUR,refined liquids,-20,,68
+comm others EUR,district heat,-9,,68
+resid heating modern EUR,biomass,-17,,69
+resid heating coal EUR,coal,-3,,69
+resid heating modern EUR,electricity,-6,,69
+resid heating modern EUR,gas,-16,,69
+resid heating modern EUR,refined liquids,-5,,69
+resid heating modern EUR,district heat,-19,,69
+resid heating modern EUR,water heat pump,-6,,69
+resid cooling modern EUR,electricity,-5,,69
+resid cooling modern EUR,gas,-20,,69
+resid cooking modern EUR,biomass,-18,,69
+resid cooking coal EUR,coal,-16,,69
+resid cooking modern EUR,electricity,-16,,69
+resid cooking modern EUR,gas,-17,,69
+resid cooking modern EUR,refined liquids,-11,,69
+resid other appliance modern EUR,electricity,-6,,69
+resid hot water modern EUR,biomass,-1,,69
+resid hot water coal EUR,coal,-18,,69
+resid hot water modern EUR,electricity,-15,,69
+resid hot water modern EUR,gas,-9,,69
+resid hot water modern EUR,refined liquids,-6,,69
+resid hot water modern EUR,district heat,-3,,69
+resid hot water modern EUR,water heat pump,-4,,69
+resid others modern EUR,biomass,-2,,69
+resid others coal EUR,coal,-19,,69
+resid others modern EUR,electricity,-4,,69
+resid others modern EUR,gas,-3,,69
+resid others modern EUR,refined liquids,-11,,69
+comm heating EUR,biomass,-20,,69
+comm heating EUR,coal,-16,,69
+comm heating EUR,electricity,-10,,69
+comm heating EUR,gas,-17,,69
+comm heating EUR,refined liquids,-11,,69
+comm heating EUR,district heat,-6,,69
+comm heating EUR,water heat pump,-8,,69
+comm cooling EUR,electricity,-9,,69
+comm cooling EUR,gas,-10,,69
+comm others EUR,biomass,-11,,69
+comm others EUR,coal,-11,,69
+comm others EUR,electricity,-6,,69
+comm others EUR,gas,-7,,69
+comm others EUR,refined liquids,-8,,69
+comm others EUR,district heat,-13,,69
+resid heating modern EUR,biomass,-16,,70
+resid heating coal EUR,coal,-7,,70
+resid heating modern EUR,electricity,-8,,70
+resid heating modern EUR,gas,-16,,70
+resid heating modern EUR,refined liquids,-17,,70
+resid heating modern EUR,district heat,-4,,70
+resid heating modern EUR,water heat pump,-7,,70
+resid cooling modern EUR,electricity,-19,,70
+resid cooling modern EUR,gas,-2,,70
+resid cooking modern EUR,biomass,-19,,70
+resid cooking coal EUR,coal,-5,,70
+resid cooking modern EUR,electricity,-20,,70
+resid cooking modern EUR,gas,-18,,70
+resid cooking modern EUR,refined liquids,-10,,70
+resid other appliance modern EUR,electricity,-13,,70
+resid hot water modern EUR,biomass,-15,,70
+resid hot water coal EUR,coal,-9,,70
+resid hot water modern EUR,electricity,-13,,70
+resid hot water modern EUR,gas,-13,,70
+resid hot water modern EUR,refined liquids,-13,,70
+resid hot water modern EUR,district heat,-19,,70
+resid hot water modern EUR,water heat pump,-9,,70
+resid others modern EUR,biomass,-17,,70
+resid others coal EUR,coal,-10,,70
+resid others modern EUR,electricity,-18,,70
+resid others modern EUR,gas,-8,,70
+resid others modern EUR,refined liquids,-13,,70
+comm heating EUR,biomass,-20,,70
+comm heating EUR,coal,-7,,70
+comm heating EUR,electricity,-11,,70
+comm heating EUR,gas,-3,,70
+comm heating EUR,refined liquids,-9,,70
+comm heating EUR,district heat,-19,,70
+comm heating EUR,water heat pump,-10,,70
+comm cooling EUR,electricity,-12,,70
+comm cooling EUR,gas,-8,,70
+comm others EUR,biomass,-16,,70
+comm others EUR,coal,-12,,70
+comm others EUR,electricity,-1,,70
+comm others EUR,gas,-2,,70
+comm others EUR,refined liquids,-17,,70
+comm others EUR,district heat,-14,,70
+resid heating modern EUR,biomass,-8,,71
+resid heating coal EUR,coal,-5,,71
+resid heating modern EUR,electricity,-17,,71
+resid heating modern EUR,gas,-10,,71
+resid heating modern EUR,refined liquids,-13,,71
+resid heating modern EUR,district heat,-15,,71
+resid heating modern EUR,water heat pump,-4,,71
+resid cooling modern EUR,electricity,-1,,71
+resid cooling modern EUR,gas,-18,,71
+resid cooking modern EUR,biomass,-8,,71
+resid cooking coal EUR,coal,-1,,71
+resid cooking modern EUR,electricity,-9,,71
+resid cooking modern EUR,gas,-17,,71
+resid cooking modern EUR,refined liquids,-13,,71
+resid other appliance modern EUR,electricity,-9,,71
+resid hot water modern EUR,biomass,-10,,71
+resid hot water coal EUR,coal,-6,,71
+resid hot water modern EUR,electricity,-7,,71
+resid hot water modern EUR,gas,-5,,71
+resid hot water modern EUR,refined liquids,-5,,71
+resid hot water modern EUR,district heat,-14,,71
+resid hot water modern EUR,water heat pump,-19,,71
+resid others modern EUR,biomass,-11,,71
+resid others coal EUR,coal,-12,,71
+resid others modern EUR,electricity,-8,,71
+resid others modern EUR,gas,-19,,71
+resid others modern EUR,refined liquids,-5,,71
+comm heating EUR,biomass,-18,,71
+comm heating EUR,coal,-1,,71
+comm heating EUR,electricity,-12,,71
+comm heating EUR,gas,-16,,71
+comm heating EUR,refined liquids,-16,,71
+comm heating EUR,district heat,-8,,71
+comm heating EUR,water heat pump,-18,,71
+comm cooling EUR,electricity,-8,,71
+comm cooling EUR,gas,-7,,71
+comm others EUR,biomass,-10,,71
+comm others EUR,coal,-11,,71
+comm others EUR,electricity,-17,,71
+comm others EUR,gas,-13,,71
+comm others EUR,refined liquids,-14,,71
+comm others EUR,district heat,-10,,71
+resid heating modern EUR,biomass,-12,,72
+resid heating coal EUR,coal,-15,,72
+resid heating modern EUR,electricity,-20,,72
+resid heating modern EUR,gas,-20,,72
+resid heating modern EUR,refined liquids,-6,,72
+resid heating modern EUR,district heat,-20,,72
+resid heating modern EUR,water heat pump,-10,,72
+resid cooling modern EUR,electricity,-4,,72
+resid cooling modern EUR,gas,-16,,72
+resid cooking modern EUR,biomass,-6,,72
+resid cooking coal EUR,coal,-20,,72
+resid cooking modern EUR,electricity,-20,,72
+resid cooking modern EUR,gas,-1,,72
+resid cooking modern EUR,refined liquids,-12,,72
+resid other appliance modern EUR,electricity,-7,,72
+resid hot water modern EUR,biomass,-19,,72
+resid hot water coal EUR,coal,-2,,72
+resid hot water modern EUR,electricity,-8,,72
+resid hot water modern EUR,gas,-6,,72
+resid hot water modern EUR,refined liquids,-4,,72
+resid hot water modern EUR,district heat,-6,,72
+resid hot water modern EUR,water heat pump,-16,,72
+resid others modern EUR,biomass,-9,,72
+resid others coal EUR,coal,-8,,72
+resid others modern EUR,electricity,-6,,72
+resid others modern EUR,gas,-19,,72
+resid others modern EUR,refined liquids,-5,,72
+comm heating EUR,biomass,-4,,72
+comm heating EUR,coal,-11,,72
+comm heating EUR,electricity,-8,,72
+comm heating EUR,gas,-12,,72
+comm heating EUR,refined liquids,-12,,72
+comm heating EUR,district heat,-19,,72
+comm heating EUR,water heat pump,-15,,72
+comm cooling EUR,electricity,-6,,72
+comm cooling EUR,gas,-4,,72
+comm others EUR,biomass,-1,,72
+comm others EUR,coal,-2,,72
+comm others EUR,electricity,-10,,72
+comm others EUR,gas,-13,,72
+comm others EUR,refined liquids,-20,,72
+comm others EUR,district heat,-13,,72
+resid heating modern EUR,biomass,-5,,73
+resid heating coal EUR,coal,-10,,73
+resid heating modern EUR,electricity,-12,,73
+resid heating modern EUR,gas,-7,,73
+resid heating modern EUR,refined liquids,-13,,73
+resid heating modern EUR,district heat,-1,,73
+resid heating modern EUR,water heat pump,-9,,73
+resid cooling modern EUR,electricity,-9,,73
+resid cooling modern EUR,gas,-1,,73
+resid cooking modern EUR,biomass,-15,,73
+resid cooking coal EUR,coal,-15,,73
+resid cooking modern EUR,electricity,-2,,73
+resid cooking modern EUR,gas,-3,,73
+resid cooking modern EUR,refined liquids,-5,,73
+resid other appliance modern EUR,electricity,-17,,73
+resid hot water modern EUR,biomass,-10,,73
+resid hot water coal EUR,coal,-6,,73
+resid hot water modern EUR,electricity,-11,,73
+resid hot water modern EUR,gas,-13,,73
+resid hot water modern EUR,refined liquids,-16,,73
+resid hot water modern EUR,district heat,-4,,73
+resid hot water modern EUR,water heat pump,-14,,73
+resid others modern EUR,biomass,-13,,73
+resid others coal EUR,coal,-13,,73
+resid others modern EUR,electricity,-9,,73
+resid others modern EUR,gas,-19,,73
+resid others modern EUR,refined liquids,-3,,73
+comm heating EUR,biomass,-19,,73
+comm heating EUR,coal,-15,,73
+comm heating EUR,electricity,-11,,73
+comm heating EUR,gas,-11,,73
+comm heating EUR,refined liquids,-18,,73
+comm heating EUR,district heat,-8,,73
+comm heating EUR,water heat pump,-12,,73
+comm cooling EUR,electricity,-4,,73
+comm cooling EUR,gas,-14,,73
+comm others EUR,biomass,-14,,73
+comm others EUR,coal,-20,,73
+comm others EUR,electricity,-5,,73
+comm others EUR,gas,-2,,73
+comm others EUR,refined liquids,-19,,73
+comm others EUR,district heat,-1,,73
+resid heating modern EUR,biomass,-6,,74
+resid heating coal EUR,coal,-15,,74
+resid heating modern EUR,electricity,-17,,74
+resid heating modern EUR,gas,-17,,74
+resid heating modern EUR,refined liquids,-9,,74
+resid heating modern EUR,district heat,-19,,74
+resid heating modern EUR,water heat pump,-11,,74
+resid cooling modern EUR,electricity,-19,,74
+resid cooling modern EUR,gas,-14,,74
+resid cooking modern EUR,biomass,-12,,74
+resid cooking coal EUR,coal,-9,,74
+resid cooking modern EUR,electricity,-7,,74
+resid cooking modern EUR,gas,-5,,74
+resid cooking modern EUR,refined liquids,-15,,74
+resid other appliance modern EUR,electricity,-12,,74
+resid hot water modern EUR,biomass,-7,,74
+resid hot water coal EUR,coal,-18,,74
+resid hot water modern EUR,electricity,-11,,74
+resid hot water modern EUR,gas,-12,,74
+resid hot water modern EUR,refined liquids,-2,,74
+resid hot water modern EUR,district heat,-8,,74
+resid hot water modern EUR,water heat pump,-17,,74
+resid others modern EUR,biomass,-19,,74
+resid others coal EUR,coal,-17,,74
+resid others modern EUR,electricity,-6,,74
+resid others modern EUR,gas,-12,,74
+resid others modern EUR,refined liquids,-3,,74
+comm heating EUR,biomass,-14,,74
+comm heating EUR,coal,-18,,74
+comm heating EUR,electricity,-14,,74
+comm heating EUR,gas,-10,,74
+comm heating EUR,refined liquids,-5,,74
+comm heating EUR,district heat,-20,,74
+comm heating EUR,water heat pump,-15,,74
+comm cooling EUR,electricity,-20,,74
+comm cooling EUR,gas,-16,,74
+comm others EUR,biomass,-16,,74
+comm others EUR,coal,-17,,74
+comm others EUR,electricity,-8,,74
+comm others EUR,gas,-4,,74
+comm others EUR,refined liquids,-1,,74
+comm others EUR,district heat,-5,,74
+resid heating modern EUR,biomass,-4,,75
+resid heating coal EUR,coal,-14,,75
+resid heating modern EUR,electricity,-19,,75
+resid heating modern EUR,gas,-14,,75
+resid heating modern EUR,refined liquids,-18,,75
+resid heating modern EUR,district heat,-6,,75
+resid heating modern EUR,water heat pump,-8,,75
+resid cooling modern EUR,electricity,-17,,75
+resid cooling modern EUR,gas,-16,,75
+resid cooking modern EUR,biomass,-6,,75
+resid cooking coal EUR,coal,-17,,75
+resid cooking modern EUR,electricity,-7,,75
+resid cooking modern EUR,gas,-5,,75
+resid cooking modern EUR,refined liquids,-15,,75
+resid other appliance modern EUR,electricity,-15,,75
+resid hot water modern EUR,biomass,-8,,75
+resid hot water coal EUR,coal,-15,,75
+resid hot water modern EUR,electricity,-18,,75
+resid hot water modern EUR,gas,-3,,75
+resid hot water modern EUR,refined liquids,-14,,75
+resid hot water modern EUR,district heat,-13,,75
+resid hot water modern EUR,water heat pump,-6,,75
+resid others modern EUR,biomass,-16,,75
+resid others coal EUR,coal,-14,,75
+resid others modern EUR,electricity,-3,,75
+resid others modern EUR,gas,-10,,75
+resid others modern EUR,refined liquids,-11,,75
+comm heating EUR,biomass,-2,,75
+comm heating EUR,coal,-17,,75
+comm heating EUR,electricity,-5,,75
+comm heating EUR,gas,-10,,75
+comm heating EUR,refined liquids,-4,,75
+comm heating EUR,district heat,-19,,75
+comm heating EUR,water heat pump,-11,,75
+comm cooling EUR,electricity,-9,,75
+comm cooling EUR,gas,-5,,75
+comm others EUR,biomass,-13,,75
+comm others EUR,coal,-16,,75
+comm others EUR,electricity,-15,,75
+comm others EUR,gas,-17,,75
+comm others EUR,refined liquids,-9,,75
+comm others EUR,district heat,-11,,75
+resid heating modern EUR,biomass,-13,,76
+resid heating coal EUR,coal,-18,,76
+resid heating modern EUR,electricity,-18,,76
+resid heating modern EUR,gas,-9,,76
+resid heating modern EUR,refined liquids,-19,,76
+resid heating modern EUR,district heat,-16,,76
+resid heating modern EUR,water heat pump,-8,,76
+resid cooling modern EUR,electricity,-16,,76
+resid cooling modern EUR,gas,-13,,76
+resid cooking modern EUR,biomass,-13,,76
+resid cooking coal EUR,coal,-5,,76
+resid cooking modern EUR,electricity,-18,,76
+resid cooking modern EUR,gas,-13,,76
+resid cooking modern EUR,refined liquids,-7,,76
+resid other appliance modern EUR,electricity,-5,,76
+resid hot water modern EUR,biomass,-5,,76
+resid hot water coal EUR,coal,-18,,76
+resid hot water modern EUR,electricity,-13,,76
+resid hot water modern EUR,gas,-1,,76
+resid hot water modern EUR,refined liquids,-3,,76
+resid hot water modern EUR,district heat,-10,,76
+resid hot water modern EUR,water heat pump,-4,,76
+resid others modern EUR,biomass,-18,,76
+resid others coal EUR,coal,-18,,76
+resid others modern EUR,electricity,-18,,76
+resid others modern EUR,gas,-18,,76
+resid others modern EUR,refined liquids,-19,,76
+comm heating EUR,biomass,-13,,76
+comm heating EUR,coal,-3,,76
+comm heating EUR,electricity,-11,,76
+comm heating EUR,gas,-11,,76
+comm heating EUR,refined liquids,-9,,76
+comm heating EUR,district heat,-9,,76
+comm heating EUR,water heat pump,-13,,76
+comm cooling EUR,electricity,-12,,76
+comm cooling EUR,gas,-9,,76
+comm others EUR,biomass,-12,,76
+comm others EUR,coal,-10,,76
+comm others EUR,electricity,-20,,76
+comm others EUR,gas,-9,,76
+comm others EUR,refined liquids,-10,,76
+comm others EUR,district heat,-1,,76
+resid heating modern EUR,biomass,-15,,77
+resid heating coal EUR,coal,-13,,77
+resid heating modern EUR,electricity,-10,,77
+resid heating modern EUR,gas,-19,,77
+resid heating modern EUR,refined liquids,-16,,77
+resid heating modern EUR,district heat,-16,,77
+resid heating modern EUR,water heat pump,-20,,77
+resid cooling modern EUR,electricity,-9,,77
+resid cooling modern EUR,gas,-18,,77
+resid cooking modern EUR,biomass,-20,,77
+resid cooking coal EUR,coal,-15,,77
+resid cooking modern EUR,electricity,-13,,77
+resid cooking modern EUR,gas,-12,,77
+resid cooking modern EUR,refined liquids,-11,,77
+resid other appliance modern EUR,electricity,-17,,77
+resid hot water modern EUR,biomass,-20,,77
+resid hot water coal EUR,coal,-14,,77
+resid hot water modern EUR,electricity,-7,,77
+resid hot water modern EUR,gas,-20,,77
+resid hot water modern EUR,refined liquids,-17,,77
+resid hot water modern EUR,district heat,-16,,77
+resid hot water modern EUR,water heat pump,-10,,77
+resid others modern EUR,biomass,-15,,77
+resid others coal EUR,coal,-15,,77
+resid others modern EUR,electricity,-15,,77
+resid others modern EUR,gas,-7,,77
+resid others modern EUR,refined liquids,-19,,77
+comm heating EUR,biomass,-6,,77
+comm heating EUR,coal,-1,,77
+comm heating EUR,electricity,-9,,77
+comm heating EUR,gas,-1,,77
+comm heating EUR,refined liquids,-20,,77
+comm heating EUR,district heat,-3,,77
+comm heating EUR,water heat pump,-3,,77
+comm cooling EUR,electricity,-16,,77
+comm cooling EUR,gas,-12,,77
+comm others EUR,biomass,-2,,77
+comm others EUR,coal,-13,,77
+comm others EUR,electricity,-11,,77
+comm others EUR,gas,-18,,77
+comm others EUR,refined liquids,-18,,77
+comm others EUR,district heat,-14,,77
+resid heating modern EUR,biomass,-1,,78
+resid heating coal EUR,coal,-6,,78
+resid heating modern EUR,electricity,-15,,78
+resid heating modern EUR,gas,-13,,78
+resid heating modern EUR,refined liquids,-8,,78
+resid heating modern EUR,district heat,-17,,78
+resid heating modern EUR,water heat pump,-1,,78
+resid cooling modern EUR,electricity,-6,,78
+resid cooling modern EUR,gas,-14,,78
+resid cooking modern EUR,biomass,-18,,78
+resid cooking coal EUR,coal,-2,,78
+resid cooking modern EUR,electricity,-10,,78
+resid cooking modern EUR,gas,-19,,78
+resid cooking modern EUR,refined liquids,-3,,78
+resid other appliance modern EUR,electricity,-2,,78
+resid hot water modern EUR,biomass,-10,,78
+resid hot water coal EUR,coal,-19,,78
+resid hot water modern EUR,electricity,-20,,78
+resid hot water modern EUR,gas,-3,,78
+resid hot water modern EUR,refined liquids,-13,,78
+resid hot water modern EUR,district heat,-9,,78
+resid hot water modern EUR,water heat pump,-17,,78
+resid others modern EUR,biomass,-18,,78
+resid others coal EUR,coal,-10,,78
+resid others modern EUR,electricity,-5,,78
+resid others modern EUR,gas,-20,,78
+resid others modern EUR,refined liquids,-3,,78
+comm heating EUR,biomass,-6,,78
+comm heating EUR,coal,-18,,78
+comm heating EUR,electricity,-9,,78
+comm heating EUR,gas,-20,,78
+comm heating EUR,refined liquids,-19,,78
+comm heating EUR,district heat,-14,,78
+comm heating EUR,water heat pump,-19,,78
+comm cooling EUR,electricity,-2,,78
+comm cooling EUR,gas,-17,,78
+comm others EUR,biomass,-16,,78
+comm others EUR,coal,-4,,78
+comm others EUR,electricity,-6,,78
+comm others EUR,gas,-18,,78
+comm others EUR,refined liquids,-5,,78
+comm others EUR,district heat,-7,,78
+resid heating modern EUR,biomass,-7,,79
+resid heating coal EUR,coal,-14,,79
+resid heating modern EUR,electricity,-19,,79
+resid heating modern EUR,gas,-15,,79
+resid heating modern EUR,refined liquids,-14,,79
+resid heating modern EUR,district heat,-9,,79
+resid heating modern EUR,water heat pump,-18,,79
+resid cooling modern EUR,electricity,-16,,79
+resid cooling modern EUR,gas,-15,,79
+resid cooking modern EUR,biomass,-18,,79
+resid cooking coal EUR,coal,-13,,79
+resid cooking modern EUR,electricity,-6,,79
+resid cooking modern EUR,gas,-6,,79
+resid cooking modern EUR,refined liquids,-12,,79
+resid other appliance modern EUR,electricity,-20,,79
+resid hot water modern EUR,biomass,-3,,79
+resid hot water coal EUR,coal,-2,,79
+resid hot water modern EUR,electricity,-6,,79
+resid hot water modern EUR,gas,-2,,79
+resid hot water modern EUR,refined liquids,-20,,79
+resid hot water modern EUR,district heat,-16,,79
+resid hot water modern EUR,water heat pump,-9,,79
+resid others modern EUR,biomass,-6,,79
+resid others coal EUR,coal,-16,,79
+resid others modern EUR,electricity,-3,,79
+resid others modern EUR,gas,-19,,79
+resid others modern EUR,refined liquids,-13,,79
+comm heating EUR,biomass,-11,,79
+comm heating EUR,coal,-15,,79
+comm heating EUR,electricity,-18,,79
+comm heating EUR,gas,-10,,79
+comm heating EUR,refined liquids,-6,,79
+comm heating EUR,district heat,-4,,79
+comm heating EUR,water heat pump,-9,,79
+comm cooling EUR,electricity,-5,,79
+comm cooling EUR,gas,-2,,79
+comm others EUR,biomass,-5,,79
+comm others EUR,coal,-14,,79
+comm others EUR,electricity,-19,,79
+comm others EUR,gas,-3,,79
+comm others EUR,refined liquids,-3,,79
+comm others EUR,district heat,-3,,79
+resid heating modern EUR,biomass,-4,,80
+resid heating coal EUR,coal,-16,,80
+resid heating modern EUR,electricity,-14,,80
+resid heating modern EUR,gas,-16,,80
+resid heating modern EUR,refined liquids,-7,,80
+resid heating modern EUR,district heat,-19,,80
+resid heating modern EUR,water heat pump,-17,,80
+resid cooling modern EUR,electricity,-4,,80
+resid cooling modern EUR,gas,-5,,80
+resid cooking modern EUR,biomass,-4,,80
+resid cooking coal EUR,coal,-14,,80
+resid cooking modern EUR,electricity,-8,,80
+resid cooking modern EUR,gas,-3,,80
+resid cooking modern EUR,refined liquids,-3,,80
+resid other appliance modern EUR,electricity,-4,,80
+resid hot water modern EUR,biomass,-10,,80
+resid hot water coal EUR,coal,-7,,80
+resid hot water modern EUR,electricity,-12,,80
+resid hot water modern EUR,gas,-20,,80
+resid hot water modern EUR,refined liquids,-18,,80
+resid hot water modern EUR,district heat,-1,,80
+resid hot water modern EUR,water heat pump,-17,,80
+resid others modern EUR,biomass,-11,,80
+resid others coal EUR,coal,-3,,80
+resid others modern EUR,electricity,-9,,80
+resid others modern EUR,gas,-9,,80
+resid others modern EUR,refined liquids,-7,,80
+comm heating EUR,biomass,-2,,80
+comm heating EUR,coal,-19,,80
+comm heating EUR,electricity,-5,,80
+comm heating EUR,gas,-9,,80
+comm heating EUR,refined liquids,-3,,80
+comm heating EUR,district heat,-18,,80
+comm heating EUR,water heat pump,-12,,80
+comm cooling EUR,electricity,-12,,80
+comm cooling EUR,gas,-20,,80
+comm others EUR,biomass,-7,,80
+comm others EUR,coal,-8,,80
+comm others EUR,electricity,-8,,80
+comm others EUR,gas,-18,,80
+comm others EUR,refined liquids,-18,,80
+comm others EUR,district heat,-7,,80
+resid heating modern EUR,biomass,-14,,81
+resid heating coal EUR,coal,-6,,81
+resid heating modern EUR,electricity,-20,,81
+resid heating modern EUR,gas,-20,,81
+resid heating modern EUR,refined liquids,-18,,81
+resid heating modern EUR,district heat,-2,,81
+resid heating modern EUR,water heat pump,-8,,81
+resid cooling modern EUR,electricity,-12,,81
+resid cooling modern EUR,gas,-2,,81
+resid cooking modern EUR,biomass,-3,,81
+resid cooking coal EUR,coal,-18,,81
+resid cooking modern EUR,electricity,-7,,81
+resid cooking modern EUR,gas,-6,,81
+resid cooking modern EUR,refined liquids,-19,,81
+resid other appliance modern EUR,electricity,-2,,81
+resid hot water modern EUR,biomass,-6,,81
+resid hot water coal EUR,coal,-19,,81
+resid hot water modern EUR,electricity,-19,,81
+resid hot water modern EUR,gas,-18,,81
+resid hot water modern EUR,refined liquids,-20,,81
+resid hot water modern EUR,district heat,-11,,81
+resid hot water modern EUR,water heat pump,-1,,81
+resid others modern EUR,biomass,-16,,81
+resid others coal EUR,coal,-16,,81
+resid others modern EUR,electricity,-2,,81
+resid others modern EUR,gas,-11,,81
+resid others modern EUR,refined liquids,-9,,81
+comm heating EUR,biomass,-4,,81
+comm heating EUR,coal,-3,,81
+comm heating EUR,electricity,-1,,81
+comm heating EUR,gas,-11,,81
+comm heating EUR,refined liquids,-7,,81
+comm heating EUR,district heat,-4,,81
+comm heating EUR,water heat pump,-6,,81
+comm cooling EUR,electricity,-12,,81
+comm cooling EUR,gas,-17,,81
+comm others EUR,biomass,-10,,81
+comm others EUR,coal,-20,,81
+comm others EUR,electricity,-15,,81
+comm others EUR,gas,-17,,81
+comm others EUR,refined liquids,-1,,81
+comm others EUR,district heat,-7,,81
+resid heating modern EUR,biomass,-20,,82
+resid heating coal EUR,coal,-16,,82
+resid heating modern EUR,electricity,-14,,82
+resid heating modern EUR,gas,-18,,82
+resid heating modern EUR,refined liquids,-14,,82
+resid heating modern EUR,district heat,-5,,82
+resid heating modern EUR,water heat pump,-1,,82
+resid cooling modern EUR,electricity,-8,,82
+resid cooling modern EUR,gas,-19,,82
+resid cooking modern EUR,biomass,-3,,82
+resid cooking coal EUR,coal,-12,,82
+resid cooking modern EUR,electricity,-17,,82
+resid cooking modern EUR,gas,-10,,82
+resid cooking modern EUR,refined liquids,-15,,82
+resid other appliance modern EUR,electricity,-8,,82
+resid hot water modern EUR,biomass,-20,,82
+resid hot water coal EUR,coal,-15,,82
+resid hot water modern EUR,electricity,-2,,82
+resid hot water modern EUR,gas,-7,,82
+resid hot water modern EUR,refined liquids,-20,,82
+resid hot water modern EUR,district heat,-10,,82
+resid hot water modern EUR,water heat pump,-5,,82
+resid others modern EUR,biomass,-5,,82
+resid others coal EUR,coal,-7,,82
+resid others modern EUR,electricity,-3,,82
+resid others modern EUR,gas,-18,,82
+resid others modern EUR,refined liquids,-18,,82
+comm heating EUR,biomass,-11,,82
+comm heating EUR,coal,-13,,82
+comm heating EUR,electricity,-3,,82
+comm heating EUR,gas,-20,,82
+comm heating EUR,refined liquids,-14,,82
+comm heating EUR,district heat,-20,,82
+comm heating EUR,water heat pump,-11,,82
+comm cooling EUR,electricity,-5,,82
+comm cooling EUR,gas,-11,,82
+comm others EUR,biomass,-1,,82
+comm others EUR,coal,-9,,82
+comm others EUR,electricity,-17,,82
+comm others EUR,gas,-3,,82
+comm others EUR,refined liquids,-11,,82
+comm others EUR,district heat,-9,,82
+resid heating modern EUR,biomass,-5,,83
+resid heating coal EUR,coal,-17,,83
+resid heating modern EUR,electricity,-19,,83
+resid heating modern EUR,gas,-12,,83
+resid heating modern EUR,refined liquids,-2,,83
+resid heating modern EUR,district heat,-7,,83
+resid heating modern EUR,water heat pump,-7,,83
+resid cooling modern EUR,electricity,-18,,83
+resid cooling modern EUR,gas,-9,,83
+resid cooking modern EUR,biomass,-15,,83
+resid cooking coal EUR,coal,-6,,83
+resid cooking modern EUR,electricity,-16,,83
+resid cooking modern EUR,gas,-13,,83
+resid cooking modern EUR,refined liquids,-13,,83
+resid other appliance modern EUR,electricity,-16,,83
+resid hot water modern EUR,biomass,-14,,83
+resid hot water coal EUR,coal,-15,,83
+resid hot water modern EUR,electricity,-4,,83
+resid hot water modern EUR,gas,-13,,83
+resid hot water modern EUR,refined liquids,-1,,83
+resid hot water modern EUR,district heat,-9,,83
+resid hot water modern EUR,water heat pump,-13,,83
+resid others modern EUR,biomass,-20,,83
+resid others coal EUR,coal,-1,,83
+resid others modern EUR,electricity,-19,,83
+resid others modern EUR,gas,-14,,83
+resid others modern EUR,refined liquids,-8,,83
+comm heating EUR,biomass,-6,,83
+comm heating EUR,coal,-3,,83
+comm heating EUR,electricity,-7,,83
+comm heating EUR,gas,-11,,83
+comm heating EUR,refined liquids,-10,,83
+comm heating EUR,district heat,-15,,83
+comm heating EUR,water heat pump,-17,,83
+comm cooling EUR,electricity,-11,,83
+comm cooling EUR,gas,-2,,83
+comm others EUR,biomass,-18,,83
+comm others EUR,coal,-1,,83
+comm others EUR,electricity,-17,,83
+comm others EUR,gas,-11,,83
+comm others EUR,refined liquids,-14,,83
+comm others EUR,district heat,-15,,83
+resid heating modern EUR,biomass,-10,,84
+resid heating coal EUR,coal,-12,,84
+resid heating modern EUR,electricity,-17,,84
+resid heating modern EUR,gas,-6,,84
+resid heating modern EUR,refined liquids,-15,,84
+resid heating modern EUR,district heat,-20,,84
+resid heating modern EUR,water heat pump,-8,,84
+resid cooling modern EUR,electricity,-19,,84
+resid cooling modern EUR,gas,-18,,84
+resid cooking modern EUR,biomass,-16,,84
+resid cooking coal EUR,coal,-2,,84
+resid cooking modern EUR,electricity,-12,,84
+resid cooking modern EUR,gas,-15,,84
+resid cooking modern EUR,refined liquids,-12,,84
+resid other appliance modern EUR,electricity,-13,,84
+resid hot water modern EUR,biomass,-10,,84
+resid hot water coal EUR,coal,-17,,84
+resid hot water modern EUR,electricity,-3,,84
+resid hot water modern EUR,gas,-12,,84
+resid hot water modern EUR,refined liquids,-15,,84
+resid hot water modern EUR,district heat,-8,,84
+resid hot water modern EUR,water heat pump,-18,,84
+resid others modern EUR,biomass,-17,,84
+resid others coal EUR,coal,-2,,84
+resid others modern EUR,electricity,-12,,84
+resid others modern EUR,gas,-5,,84
+resid others modern EUR,refined liquids,-2,,84
+comm heating EUR,biomass,-10,,84
+comm heating EUR,coal,-9,,84
+comm heating EUR,electricity,-20,,84
+comm heating EUR,gas,-15,,84
+comm heating EUR,refined liquids,-3,,84
+comm heating EUR,district heat,-16,,84
+comm heating EUR,water heat pump,-6,,84
+comm cooling EUR,electricity,-12,,84
+comm cooling EUR,gas,-7,,84
+comm others EUR,biomass,-18,,84
+comm others EUR,coal,-18,,84
+comm others EUR,electricity,-3,,84
+comm others EUR,gas,-19,,84
+comm others EUR,refined liquids,-9,,84
+comm others EUR,district heat,-13,,84
+resid heating modern EUR,biomass,-19,,85
+resid heating coal EUR,coal,-16,,85
+resid heating modern EUR,electricity,-9,,85
+resid heating modern EUR,gas,-14,,85
+resid heating modern EUR,refined liquids,-19,,85
+resid heating modern EUR,district heat,-7,,85
+resid heating modern EUR,water heat pump,-2,,85
+resid cooling modern EUR,electricity,-8,,85
+resid cooling modern EUR,gas,-5,,85
+resid cooking modern EUR,biomass,-16,,85
+resid cooking coal EUR,coal,-12,,85
+resid cooking modern EUR,electricity,-10,,85
+resid cooking modern EUR,gas,-7,,85
+resid cooking modern EUR,refined liquids,-17,,85
+resid other appliance modern EUR,electricity,-14,,85
+resid hot water modern EUR,biomass,-10,,85
+resid hot water coal EUR,coal,-14,,85
+resid hot water modern EUR,electricity,-4,,85
+resid hot water modern EUR,gas,-9,,85
+resid hot water modern EUR,refined liquids,-4,,85
+resid hot water modern EUR,district heat,-5,,85
+resid hot water modern EUR,water heat pump,-19,,85
+resid others modern EUR,biomass,-12,,85
+resid others coal EUR,coal,-2,,85
+resid others modern EUR,electricity,-12,,85
+resid others modern EUR,gas,-4,,85
+resid others modern EUR,refined liquids,-9,,85
+comm heating EUR,biomass,-18,,85
+comm heating EUR,coal,-8,,85
+comm heating EUR,electricity,-8,,85
+comm heating EUR,gas,-14,,85
+comm heating EUR,refined liquids,-12,,85
+comm heating EUR,district heat,-1,,85
+comm heating EUR,water heat pump,-17,,85
+comm cooling EUR,electricity,-8,,85
+comm cooling EUR,gas,-2,,85
+comm others EUR,biomass,-8,,85
+comm others EUR,coal,-17,,85
+comm others EUR,electricity,-3,,85
+comm others EUR,gas,-14,,85
+comm others EUR,refined liquids,-13,,85
+comm others EUR,district heat,-13,,85
+resid heating modern EUR,biomass,-10,,86
+resid heating coal EUR,coal,-2,,86
+resid heating modern EUR,electricity,-18,,86
+resid heating modern EUR,gas,-7,,86
+resid heating modern EUR,refined liquids,-18,,86
+resid heating modern EUR,district heat,-15,,86
+resid heating modern EUR,water heat pump,-9,,86
+resid cooling modern EUR,electricity,-2,,86
+resid cooling modern EUR,gas,-18,,86
+resid cooking modern EUR,biomass,-13,,86
+resid cooking coal EUR,coal,-14,,86
+resid cooking modern EUR,electricity,-5,,86
+resid cooking modern EUR,gas,-7,,86
+resid cooking modern EUR,refined liquids,-19,,86
+resid other appliance modern EUR,electricity,-17,,86
+resid hot water modern EUR,biomass,-14,,86
+resid hot water coal EUR,coal,-13,,86
+resid hot water modern EUR,electricity,-3,,86
+resid hot water modern EUR,gas,-1,,86
+resid hot water modern EUR,refined liquids,-19,,86
+resid hot water modern EUR,district heat,-12,,86
+resid hot water modern EUR,water heat pump,-4,,86
+resid others modern EUR,biomass,-13,,86
+resid others coal EUR,coal,-18,,86
+resid others modern EUR,electricity,-1,,86
+resid others modern EUR,gas,-6,,86
+resid others modern EUR,refined liquids,-10,,86
+comm heating EUR,biomass,-4,,86
+comm heating EUR,coal,-3,,86
+comm heating EUR,electricity,-7,,86
+comm heating EUR,gas,-9,,86
+comm heating EUR,refined liquids,-19,,86
+comm heating EUR,district heat,-18,,86
+comm heating EUR,water heat pump,-2,,86
+comm cooling EUR,electricity,-8,,86
+comm cooling EUR,gas,-20,,86
+comm others EUR,biomass,-17,,86
+comm others EUR,coal,-5,,86
+comm others EUR,electricity,-2,,86
+comm others EUR,gas,-12,,86
+comm others EUR,refined liquids,-7,,86
+comm others EUR,district heat,-17,,86
+resid heating modern EUR,biomass,-2,,87
+resid heating coal EUR,coal,-2,,87
+resid heating modern EUR,electricity,-5,,87
+resid heating modern EUR,gas,-10,,87
+resid heating modern EUR,refined liquids,-19,,87
+resid heating modern EUR,district heat,-16,,87
+resid heating modern EUR,water heat pump,-8,,87
+resid cooling modern EUR,electricity,-10,,87
+resid cooling modern EUR,gas,-5,,87
+resid cooking modern EUR,biomass,-20,,87
+resid cooking coal EUR,coal,-8,,87
+resid cooking modern EUR,electricity,-17,,87
+resid cooking modern EUR,gas,-19,,87
+resid cooking modern EUR,refined liquids,-18,,87
+resid other appliance modern EUR,electricity,-19,,87
+resid hot water modern EUR,biomass,-2,,87
+resid hot water coal EUR,coal,-1,,87
+resid hot water modern EUR,electricity,-20,,87
+resid hot water modern EUR,gas,-15,,87
+resid hot water modern EUR,refined liquids,-18,,87
+resid hot water modern EUR,district heat,-14,,87
+resid hot water modern EUR,water heat pump,-13,,87
+resid others modern EUR,biomass,-18,,87
+resid others coal EUR,coal,-12,,87
+resid others modern EUR,electricity,-11,,87
+resid others modern EUR,gas,-3,,87
+resid others modern EUR,refined liquids,-6,,87
+comm heating EUR,biomass,-7,,87
+comm heating EUR,coal,-14,,87
+comm heating EUR,electricity,-8,,87
+comm heating EUR,gas,-17,,87
+comm heating EUR,refined liquids,-6,,87
+comm heating EUR,district heat,-8,,87
+comm heating EUR,water heat pump,-5,,87
+comm cooling EUR,electricity,-3,,87
+comm cooling EUR,gas,-20,,87
+comm others EUR,biomass,-19,,87
+comm others EUR,coal,-9,,87
+comm others EUR,electricity,-2,,87
+comm others EUR,gas,-20,,87
+comm others EUR,refined liquids,-6,,87
+comm others EUR,district heat,-19,,87
+resid heating modern EUR,biomass,-4,,88
+resid heating coal EUR,coal,-5,,88
+resid heating modern EUR,electricity,-7,,88
+resid heating modern EUR,gas,-4,,88
+resid heating modern EUR,refined liquids,-7,,88
+resid heating modern EUR,district heat,-17,,88
+resid heating modern EUR,water heat pump,-9,,88
+resid cooling modern EUR,electricity,-11,,88
+resid cooling modern EUR,gas,-1,,88
+resid cooking modern EUR,biomass,-17,,88
+resid cooking coal EUR,coal,-9,,88
+resid cooking modern EUR,electricity,-12,,88
+resid cooking modern EUR,gas,-18,,88
+resid cooking modern EUR,refined liquids,-7,,88
+resid other appliance modern EUR,electricity,-8,,88
+resid hot water modern EUR,biomass,-10,,88
+resid hot water coal EUR,coal,-9,,88
+resid hot water modern EUR,electricity,-2,,88
+resid hot water modern EUR,gas,-16,,88
+resid hot water modern EUR,refined liquids,-13,,88
+resid hot water modern EUR,district heat,-12,,88
+resid hot water modern EUR,water heat pump,-6,,88
+resid others modern EUR,biomass,-12,,88
+resid others coal EUR,coal,-12,,88
+resid others modern EUR,electricity,-11,,88
+resid others modern EUR,gas,-2,,88
+resid others modern EUR,refined liquids,-6,,88
+comm heating EUR,biomass,-18,,88
+comm heating EUR,coal,-17,,88
+comm heating EUR,electricity,-5,,88
+comm heating EUR,gas,-12,,88
+comm heating EUR,refined liquids,-4,,88
+comm heating EUR,district heat,-6,,88
+comm heating EUR,water heat pump,-9,,88
+comm cooling EUR,electricity,-15,,88
+comm cooling EUR,gas,-2,,88
+comm others EUR,biomass,-17,,88
+comm others EUR,coal,-19,,88
+comm others EUR,electricity,-11,,88
+comm others EUR,gas,-16,,88
+comm others EUR,refined liquids,-13,,88
+comm others EUR,district heat,-15,,88
+resid heating modern EUR,biomass,-6,,89
+resid heating coal EUR,coal,-12,,89
+resid heating modern EUR,electricity,-16,,89
+resid heating modern EUR,gas,-13,,89
+resid heating modern EUR,refined liquids,-19,,89
+resid heating modern EUR,district heat,-19,,89
+resid heating modern EUR,water heat pump,-6,,89
+resid cooling modern EUR,electricity,-19,,89
+resid cooling modern EUR,gas,-15,,89
+resid cooking modern EUR,biomass,-14,,89
+resid cooking coal EUR,coal,-9,,89
+resid cooking modern EUR,electricity,-14,,89
+resid cooking modern EUR,gas,-15,,89
+resid cooking modern EUR,refined liquids,-13,,89
+resid other appliance modern EUR,electricity,-14,,89
+resid hot water modern EUR,biomass,-17,,89
+resid hot water coal EUR,coal,-12,,89
+resid hot water modern EUR,electricity,-1,,89
+resid hot water modern EUR,gas,-15,,89
+resid hot water modern EUR,refined liquids,-9,,89
+resid hot water modern EUR,district heat,-4,,89
+resid hot water modern EUR,water heat pump,-16,,89
+resid others modern EUR,biomass,-8,,89
+resid others coal EUR,coal,-4,,89
+resid others modern EUR,electricity,-18,,89
+resid others modern EUR,gas,-10,,89
+resid others modern EUR,refined liquids,-16,,89
+comm heating EUR,biomass,-4,,89
+comm heating EUR,coal,-13,,89
+comm heating EUR,electricity,-6,,89
+comm heating EUR,gas,-19,,89
+comm heating EUR,refined liquids,-1,,89
+comm heating EUR,district heat,-16,,89
+comm heating EUR,water heat pump,-6,,89
+comm cooling EUR,electricity,-1,,89
+comm cooling EUR,gas,-18,,89
+comm others EUR,biomass,-6,,89
+comm others EUR,coal,-17,,89
+comm others EUR,electricity,-12,,89
+comm others EUR,gas,-17,,89
+comm others EUR,refined liquids,-20,,89
+comm others EUR,district heat,-8,,89
+resid heating modern EUR,biomass,-15,,90
+resid heating coal EUR,coal,-16,,90
+resid heating modern EUR,electricity,-20,,90
+resid heating modern EUR,gas,-13,,90
+resid heating modern EUR,refined liquids,-14,,90
+resid heating modern EUR,district heat,-14,,90
+resid heating modern EUR,water heat pump,-18,,90
+resid cooling modern EUR,electricity,-2,,90
+resid cooling modern EUR,gas,-3,,90
+resid cooking modern EUR,biomass,-7,,90
+resid cooking coal EUR,coal,-12,,90
+resid cooking modern EUR,electricity,-19,,90
+resid cooking modern EUR,gas,-14,,90
+resid cooking modern EUR,refined liquids,-19,,90
+resid other appliance modern EUR,electricity,-11,,90
+resid hot water modern EUR,biomass,-3,,90
+resid hot water coal EUR,coal,-14,,90
+resid hot water modern EUR,electricity,-10,,90
+resid hot water modern EUR,gas,-13,,90
+resid hot water modern EUR,refined liquids,-3,,90
+resid hot water modern EUR,district heat,-14,,90
+resid hot water modern EUR,water heat pump,-3,,90
+resid others modern EUR,biomass,-19,,90
+resid others coal EUR,coal,-18,,90
+resid others modern EUR,electricity,-9,,90
+resid others modern EUR,gas,-19,,90
+resid others modern EUR,refined liquids,-15,,90
+comm heating EUR,biomass,-5,,90
+comm heating EUR,coal,-20,,90
+comm heating EUR,electricity,-12,,90
+comm heating EUR,gas,-7,,90
+comm heating EUR,refined liquids,-14,,90
+comm heating EUR,district heat,-12,,90
+comm heating EUR,water heat pump,-8,,90
+comm cooling EUR,electricity,-18,,90
+comm cooling EUR,gas,-7,,90
+comm others EUR,biomass,-20,,90
+comm others EUR,coal,-7,,90
+comm others EUR,electricity,-14,,90
+comm others EUR,gas,-2,,90
+comm others EUR,refined liquids,-1,,90
+comm others EUR,district heat,-4,,90
+resid heating modern EUR,biomass,-8,,91
+resid heating coal EUR,coal,-8,,91
+resid heating modern EUR,electricity,-1,,91
+resid heating modern EUR,gas,-19,,91
+resid heating modern EUR,refined liquids,-13,,91
+resid heating modern EUR,district heat,-20,,91
+resid heating modern EUR,water heat pump,-11,,91
+resid cooling modern EUR,electricity,-9,,91
+resid cooling modern EUR,gas,-13,,91
+resid cooking modern EUR,biomass,-7,,91
+resid cooking coal EUR,coal,-18,,91
+resid cooking modern EUR,electricity,-5,,91
+resid cooking modern EUR,gas,-17,,91
+resid cooking modern EUR,refined liquids,-13,,91
+resid other appliance modern EUR,electricity,-19,,91
+resid hot water modern EUR,biomass,-8,,91
+resid hot water coal EUR,coal,-16,,91
+resid hot water modern EUR,electricity,-10,,91
+resid hot water modern EUR,gas,-14,,91
+resid hot water modern EUR,refined liquids,-19,,91
+resid hot water modern EUR,district heat,-2,,91
+resid hot water modern EUR,water heat pump,-17,,91
+resid others modern EUR,biomass,-9,,91
+resid others coal EUR,coal,-20,,91
+resid others modern EUR,electricity,-13,,91
+resid others modern EUR,gas,-12,,91
+resid others modern EUR,refined liquids,-2,,91
+comm heating EUR,biomass,-20,,91
+comm heating EUR,coal,-6,,91
+comm heating EUR,electricity,-15,,91
+comm heating EUR,gas,-2,,91
+comm heating EUR,refined liquids,-10,,91
+comm heating EUR,district heat,-20,,91
+comm heating EUR,water heat pump,-5,,91
+comm cooling EUR,electricity,-8,,91
+comm cooling EUR,gas,-12,,91
+comm others EUR,biomass,-10,,91
+comm others EUR,coal,-3,,91
+comm others EUR,electricity,-11,,91
+comm others EUR,gas,-10,,91
+comm others EUR,refined liquids,-13,,91
+comm others EUR,district heat,-6,,91
+resid heating modern EUR,biomass,-9,,92
+resid heating coal EUR,coal,-13,,92
+resid heating modern EUR,electricity,-15,,92
+resid heating modern EUR,gas,-6,,92
+resid heating modern EUR,refined liquids,-8,,92
+resid heating modern EUR,district heat,-4,,92
+resid heating modern EUR,water heat pump,-5,,92
+resid cooling modern EUR,electricity,-13,,92
+resid cooling modern EUR,gas,-20,,92
+resid cooking modern EUR,biomass,-19,,92
+resid cooking coal EUR,coal,-11,,92
+resid cooking modern EUR,electricity,-1,,92
+resid cooking modern EUR,gas,-18,,92
+resid cooking modern EUR,refined liquids,-12,,92
+resid other appliance modern EUR,electricity,-11,,92
+resid hot water modern EUR,biomass,-19,,92
+resid hot water coal EUR,coal,-20,,92
+resid hot water modern EUR,electricity,-18,,92
+resid hot water modern EUR,gas,-7,,92
+resid hot water modern EUR,refined liquids,-3,,92
+resid hot water modern EUR,district heat,-16,,92
+resid hot water modern EUR,water heat pump,-19,,92
+resid others modern EUR,biomass,-1,,92
+resid others coal EUR,coal,-11,,92
+resid others modern EUR,electricity,-3,,92
+resid others modern EUR,gas,-20,,92
+resid others modern EUR,refined liquids,-10,,92
+comm heating EUR,biomass,-3,,92
+comm heating EUR,coal,-10,,92
+comm heating EUR,electricity,-11,,92
+comm heating EUR,gas,-19,,92
+comm heating EUR,refined liquids,-9,,92
+comm heating EUR,district heat,-14,,92
+comm heating EUR,water heat pump,-11,,92
+comm cooling EUR,electricity,-6,,92
+comm cooling EUR,gas,-10,,92
+comm others EUR,biomass,-11,,92
+comm others EUR,coal,-3,,92
+comm others EUR,electricity,-5,,92
+comm others EUR,gas,-3,,92
+comm others EUR,refined liquids,-11,,92
+comm others EUR,district heat,-17,,92
+resid heating modern EUR,biomass,-5,,93
+resid heating coal EUR,coal,-16,,93
+resid heating modern EUR,electricity,-2,,93
+resid heating modern EUR,gas,-12,,93
+resid heating modern EUR,refined liquids,-13,,93
+resid heating modern EUR,district heat,-1,,93
+resid heating modern EUR,water heat pump,-16,,93
+resid cooling modern EUR,electricity,-11,,93
+resid cooling modern EUR,gas,-19,,93
+resid cooking modern EUR,biomass,-9,,93
+resid cooking coal EUR,coal,-9,,93
+resid cooking modern EUR,electricity,-14,,93
+resid cooking modern EUR,gas,-16,,93
+resid cooking modern EUR,refined liquids,-11,,93
+resid other appliance modern EUR,electricity,-17,,93
+resid hot water modern EUR,biomass,-17,,93
+resid hot water coal EUR,coal,-12,,93
+resid hot water modern EUR,electricity,-19,,93
+resid hot water modern EUR,gas,-20,,93
+resid hot water modern EUR,refined liquids,-5,,93
+resid hot water modern EUR,district heat,-12,,93
+resid hot water modern EUR,water heat pump,-11,,93
+resid others modern EUR,biomass,-17,,93
+resid others coal EUR,coal,-13,,93
+resid others modern EUR,electricity,-19,,93
+resid others modern EUR,gas,-1,,93
+resid others modern EUR,refined liquids,-9,,93
+comm heating EUR,biomass,-19,,93
+comm heating EUR,coal,-10,,93
+comm heating EUR,electricity,-20,,93
+comm heating EUR,gas,-14,,93
+comm heating EUR,refined liquids,-1,,93
+comm heating EUR,district heat,-13,,93
+comm heating EUR,water heat pump,-10,,93
+comm cooling EUR,electricity,-14,,93
+comm cooling EUR,gas,-1,,93
+comm others EUR,biomass,-13,,93
+comm others EUR,coal,-17,,93
+comm others EUR,electricity,-4,,93
+comm others EUR,gas,-11,,93
+comm others EUR,refined liquids,-5,,93
+comm others EUR,district heat,-14,,93
+resid heating modern EUR,biomass,-1,,94
+resid heating coal EUR,coal,-12,,94
+resid heating modern EUR,electricity,-19,,94
+resid heating modern EUR,gas,-9,,94
+resid heating modern EUR,refined liquids,-3,,94
+resid heating modern EUR,district heat,-3,,94
+resid heating modern EUR,water heat pump,-8,,94
+resid cooling modern EUR,electricity,-2,,94
+resid cooling modern EUR,gas,-7,,94
+resid cooking modern EUR,biomass,-20,,94
+resid cooking coal EUR,coal,-1,,94
+resid cooking modern EUR,electricity,-5,,94
+resid cooking modern EUR,gas,-8,,94
+resid cooking modern EUR,refined liquids,-13,,94
+resid other appliance modern EUR,electricity,-15,,94
+resid hot water modern EUR,biomass,-8,,94
+resid hot water coal EUR,coal,-13,,94
+resid hot water modern EUR,electricity,-11,,94
+resid hot water modern EUR,gas,-7,,94
+resid hot water modern EUR,refined liquids,-15,,94
+resid hot water modern EUR,district heat,-15,,94
+resid hot water modern EUR,water heat pump,-7,,94
+resid others modern EUR,biomass,-2,,94
+resid others coal EUR,coal,-17,,94
+resid others modern EUR,electricity,-12,,94
+resid others modern EUR,gas,-5,,94
+resid others modern EUR,refined liquids,-17,,94
+comm heating EUR,biomass,-13,,94
+comm heating EUR,coal,-1,,94
+comm heating EUR,electricity,-2,,94
+comm heating EUR,gas,-14,,94
+comm heating EUR,refined liquids,-7,,94
+comm heating EUR,district heat,-6,,94
+comm heating EUR,water heat pump,-10,,94
+comm cooling EUR,electricity,-10,,94
+comm cooling EUR,gas,-19,,94
+comm others EUR,biomass,-12,,94
+comm others EUR,coal,-5,,94
+comm others EUR,electricity,-1,,94
+comm others EUR,gas,-2,,94
+comm others EUR,refined liquids,-20,,94
+comm others EUR,district heat,-3,,94
+resid heating modern EUR,biomass,-4,,95
+resid heating coal EUR,coal,-13,,95
+resid heating modern EUR,electricity,-2,,95
+resid heating modern EUR,gas,-17,,95
+resid heating modern EUR,refined liquids,-7,,95
+resid heating modern EUR,district heat,-3,,95
+resid heating modern EUR,water heat pump,-2,,95
+resid cooling modern EUR,electricity,-3,,95
+resid cooling modern EUR,gas,-10,,95
+resid cooking modern EUR,biomass,-15,,95
+resid cooking coal EUR,coal,-12,,95
+resid cooking modern EUR,electricity,-11,,95
+resid cooking modern EUR,gas,-9,,95
+resid cooking modern EUR,refined liquids,-6,,95
+resid other appliance modern EUR,electricity,-14,,95
+resid hot water modern EUR,biomass,-8,,95
+resid hot water coal EUR,coal,-5,,95
+resid hot water modern EUR,electricity,-7,,95
+resid hot water modern EUR,gas,-17,,95
+resid hot water modern EUR,refined liquids,-17,,95
+resid hot water modern EUR,district heat,-4,,95
+resid hot water modern EUR,water heat pump,-2,,95
+resid others modern EUR,biomass,-16,,95
+resid others coal EUR,coal,-3,,95
+resid others modern EUR,electricity,-15,,95
+resid others modern EUR,gas,-16,,95
+resid others modern EUR,refined liquids,-16,,95
+comm heating EUR,biomass,-5,,95
+comm heating EUR,coal,-20,,95
+comm heating EUR,electricity,-4,,95
+comm heating EUR,gas,-8,,95
+comm heating EUR,refined liquids,-14,,95
+comm heating EUR,district heat,-8,,95
+comm heating EUR,water heat pump,-6,,95
+comm cooling EUR,electricity,-15,,95
+comm cooling EUR,gas,-5,,95
+comm others EUR,biomass,-13,,95
+comm others EUR,coal,-16,,95
+comm others EUR,electricity,-15,,95
+comm others EUR,gas,-18,,95
+comm others EUR,refined liquids,-20,,95
+comm others EUR,district heat,-6,,95
+resid heating modern EUR,biomass,-5,,96
+resid heating coal EUR,coal,-16,,96
+resid heating modern EUR,electricity,-1,,96
+resid heating modern EUR,gas,-19,,96
+resid heating modern EUR,refined liquids,-4,,96
+resid heating modern EUR,district heat,-8,,96
+resid heating modern EUR,water heat pump,-4,,96
+resid cooling modern EUR,electricity,-6,,96
+resid cooling modern EUR,gas,-20,,96
+resid cooking modern EUR,biomass,-19,,96
+resid cooking coal EUR,coal,-7,,96
+resid cooking modern EUR,electricity,-14,,96
+resid cooking modern EUR,gas,-17,,96
+resid cooking modern EUR,refined liquids,-7,,96
+resid other appliance modern EUR,electricity,-6,,96
+resid hot water modern EUR,biomass,-10,,96
+resid hot water coal EUR,coal,-10,,96
+resid hot water modern EUR,electricity,-8,,96
+resid hot water modern EUR,gas,-5,,96
+resid hot water modern EUR,refined liquids,-6,,96
+resid hot water modern EUR,district heat,-16,,96
+resid hot water modern EUR,water heat pump,-11,,96
+resid others modern EUR,biomass,-1,,96
+resid others coal EUR,coal,-13,,96
+resid others modern EUR,electricity,-14,,96
+resid others modern EUR,gas,-20,,96
+resid others modern EUR,refined liquids,-12,,96
+comm heating EUR,biomass,-15,,96
+comm heating EUR,coal,-15,,96
+comm heating EUR,electricity,-16,,96
+comm heating EUR,gas,-6,,96
+comm heating EUR,refined liquids,-11,,96
+comm heating EUR,district heat,-1,,96
+comm heating EUR,water heat pump,-18,,96
+comm cooling EUR,electricity,-15,,96
+comm cooling EUR,gas,-1,,96
+comm others EUR,biomass,-17,,96
+comm others EUR,coal,-3,,96
+comm others EUR,electricity,-2,,96
+comm others EUR,gas,-18,,96
+comm others EUR,refined liquids,-8,,96
+comm others EUR,district heat,-15,,96
+resid heating modern EUR,biomass,-18,,97
+resid heating coal EUR,coal,-20,,97
+resid heating modern EUR,electricity,-20,,97
+resid heating modern EUR,gas,-4,,97
+resid heating modern EUR,refined liquids,-3,,97
+resid heating modern EUR,district heat,-7,,97
+resid heating modern EUR,water heat pump,-14,,97
+resid cooling modern EUR,electricity,-15,,97
+resid cooling modern EUR,gas,-11,,97
+resid cooking modern EUR,biomass,-4,,97
+resid cooking coal EUR,coal,-6,,97
+resid cooking modern EUR,electricity,-1,,97
+resid cooking modern EUR,gas,-16,,97
+resid cooking modern EUR,refined liquids,-14,,97
+resid other appliance modern EUR,electricity,-8,,97
+resid hot water modern EUR,biomass,-9,,97
+resid hot water coal EUR,coal,-18,,97
+resid hot water modern EUR,electricity,-18,,97
+resid hot water modern EUR,gas,-3,,97
+resid hot water modern EUR,refined liquids,-9,,97
+resid hot water modern EUR,district heat,-6,,97
+resid hot water modern EUR,water heat pump,-15,,97
+resid others modern EUR,biomass,-6,,97
+resid others coal EUR,coal,-2,,97
+resid others modern EUR,electricity,-20,,97
+resid others modern EUR,gas,-20,,97
+resid others modern EUR,refined liquids,-18,,97
+comm heating EUR,biomass,-19,,97
+comm heating EUR,coal,-14,,97
+comm heating EUR,electricity,-9,,97
+comm heating EUR,gas,-1,,97
+comm heating EUR,refined liquids,-19,,97
+comm heating EUR,district heat,-14,,97
+comm heating EUR,water heat pump,-10,,97
+comm cooling EUR,electricity,-5,,97
+comm cooling EUR,gas,-19,,97
+comm others EUR,biomass,-12,,97
+comm others EUR,coal,-15,,97
+comm others EUR,electricity,-16,,97
+comm others EUR,gas,-6,,97
+comm others EUR,refined liquids,-15,,97
+comm others EUR,district heat,-11,,97
+resid heating modern EUR,biomass,-10,,98
+resid heating coal EUR,coal,-15,,98
+resid heating modern EUR,electricity,-4,,98
+resid heating modern EUR,gas,-7,,98
+resid heating modern EUR,refined liquids,-16,,98
+resid heating modern EUR,district heat,-7,,98
+resid heating modern EUR,water heat pump,-3,,98
+resid cooling modern EUR,electricity,-7,,98
+resid cooling modern EUR,gas,-4,,98
+resid cooking modern EUR,biomass,-17,,98
+resid cooking coal EUR,coal,-7,,98
+resid cooking modern EUR,electricity,-11,,98
+resid cooking modern EUR,gas,-14,,98
+resid cooking modern EUR,refined liquids,-3,,98
+resid other appliance modern EUR,electricity,-1,,98
+resid hot water modern EUR,biomass,-8,,98
+resid hot water coal EUR,coal,-3,,98
+resid hot water modern EUR,electricity,-8,,98
+resid hot water modern EUR,gas,-1,,98
+resid hot water modern EUR,refined liquids,-17,,98
+resid hot water modern EUR,district heat,-16,,98
+resid hot water modern EUR,water heat pump,-4,,98
+resid others modern EUR,biomass,-8,,98
+resid others coal EUR,coal,-7,,98
+resid others modern EUR,electricity,-4,,98
+resid others modern EUR,gas,-7,,98
+resid others modern EUR,refined liquids,-16,,98
+comm heating EUR,biomass,-13,,98
+comm heating EUR,coal,-14,,98
+comm heating EUR,electricity,-15,,98
+comm heating EUR,gas,-1,,98
+comm heating EUR,refined liquids,-7,,98
+comm heating EUR,district heat,-12,,98
+comm heating EUR,water heat pump,-9,,98
+comm cooling EUR,electricity,-13,,98
+comm cooling EUR,gas,-16,,98
+comm others EUR,biomass,-9,,98
+comm others EUR,coal,-8,,98
+comm others EUR,electricity,-3,,98
+comm others EUR,gas,-8,,98
+comm others EUR,refined liquids,-17,,98
+comm others EUR,district heat,-7,,98
+resid heating modern EUR,biomass,-13,,99
+resid heating coal EUR,coal,-6,,99
+resid heating modern EUR,electricity,-16,,99
+resid heating modern EUR,gas,-12,,99
+resid heating modern EUR,refined liquids,-17,,99
+resid heating modern EUR,district heat,-14,,99
+resid heating modern EUR,water heat pump,-16,,99
+resid cooling modern EUR,electricity,-20,,99
+resid cooling modern EUR,gas,-6,,99
+resid cooking modern EUR,biomass,-16,,99
+resid cooking coal EUR,coal,-7,,99
+resid cooking modern EUR,electricity,-5,,99
+resid cooking modern EUR,gas,-16,,99
+resid cooking modern EUR,refined liquids,-5,,99
+resid other appliance modern EUR,electricity,-3,,99
+resid hot water modern EUR,biomass,-8,,99
+resid hot water coal EUR,coal,-5,,99
+resid hot water modern EUR,electricity,-12,,99
+resid hot water modern EUR,gas,-3,,99
+resid hot water modern EUR,refined liquids,-3,,99
+resid hot water modern EUR,district heat,-20,,99
+resid hot water modern EUR,water heat pump,-7,,99
+resid others modern EUR,biomass,-15,,99
+resid others coal EUR,coal,-3,,99
+resid others modern EUR,electricity,-13,,99
+resid others modern EUR,gas,-14,,99
+resid others modern EUR,refined liquids,-8,,99
+comm heating EUR,biomass,-14,,99
+comm heating EUR,coal,-11,,99
+comm heating EUR,electricity,-7,,99
+comm heating EUR,gas,-3,,99
+comm heating EUR,refined liquids,-19,,99
+comm heating EUR,district heat,-18,,99
+comm heating EUR,water heat pump,-12,,99
+comm cooling EUR,electricity,-8,,99
+comm cooling EUR,gas,-6,,99
+comm others EUR,biomass,-8,,99
+comm others EUR,coal,-19,,99
+comm others EUR,electricity,-5,,99
+comm others EUR,gas,-17,,99
+comm others EUR,refined liquids,-20,,99
+comm others EUR,district heat,-15,,99
+resid heating modern EUR,biomass,-16,,100
+resid heating coal EUR,coal,-7,,100
+resid heating modern EUR,electricity,-13,,100
+resid heating modern EUR,gas,-14,,100
+resid heating modern EUR,refined liquids,-4,,100
+resid heating modern EUR,district heat,-14,,100
+resid heating modern EUR,water heat pump,-5,,100
+resid cooling modern EUR,electricity,-7,,100
+resid cooling modern EUR,gas,-12,,100
+resid cooking modern EUR,biomass,-16,,100
+resid cooking coal EUR,coal,-7,,100
+resid cooking modern EUR,electricity,-18,,100
+resid cooking modern EUR,gas,-7,,100
+resid cooking modern EUR,refined liquids,-17,,100
+resid other appliance modern EUR,electricity,-5,,100
+resid hot water modern EUR,biomass,-2,,100
+resid hot water coal EUR,coal,-19,,100
+resid hot water modern EUR,electricity,-20,,100
+resid hot water modern EUR,gas,-7,,100
+resid hot water modern EUR,refined liquids,-9,,100
+resid hot water modern EUR,district heat,-9,,100
+resid hot water modern EUR,water heat pump,-7,,100
+resid others modern EUR,biomass,-2,,100
+resid others coal EUR,coal,-13,,100
+resid others modern EUR,electricity,-15,,100
+resid others modern EUR,gas,-12,,100
+resid others modern EUR,refined liquids,-8,,100
+comm heating EUR,biomass,-15,,100
+comm heating EUR,coal,-19,,100
+comm heating EUR,electricity,-10,,100
+comm heating EUR,gas,-18,,100
+comm heating EUR,refined liquids,-7,,100
+comm heating EUR,district heat,-14,,100
+comm heating EUR,water heat pump,-12,,100
+comm cooling EUR,electricity,-5,,100
+comm cooling EUR,gas,-1,,100
+comm others EUR,biomass,-6,,100
+comm others EUR,coal,-5,,100
+comm others EUR,electricity,-1,,100
+comm others EUR,gas,-9,,100
+comm others EUR,refined liquids,-17,,100
+comm others EUR,district heat,-18,,100

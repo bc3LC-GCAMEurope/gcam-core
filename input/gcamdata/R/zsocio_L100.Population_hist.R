@@ -59,7 +59,7 @@ module_socio_L100.Population_hist <- function(command, ...) {
     pop_thous_ctry_reg <- Maddison_population %>%
       rename(Maddison_ctry = Country, pop = value) %>%  # Change name to match iso_ctry_Maddison mapping file
       left_join(iso_ctry_Maddison, by = "Maddison_ctry") # Join with iso codes
-    socioeconomics.UN_HISTORICAL_YEARS <- c(1950, 1971:2021)
+
     # Second, estimate population values prior to 1950 for countries in aggregate regions. This is what we want: pop_country_t = (pop_aggregate_t / pop_aggregate_1950) * pop_country_1950
     # Generate a scalar for population in each aggregate region in 1950 (to generate the population ratios)
     agg_ratio <- pop_thous_ctry_reg %>%

@@ -46,7 +46,7 @@ module_water_L145.water_demand_municipal <- function(command, ...) {
     municipal_water_use_efficiency <- get_data(all_data, "water/municipal_water_use_efficiency")
     mfg_water_mapping <- get_data(all_data, "water/mfg_water_mapping")
 
-    L100.Pop_thous_ctry_Yh <- get_data(all_data, "L100.Pop_thous_ctry_Yh") %>% filter(year <= MODEL_FINAL_BASE_YEAR)
+    L100.Pop_thous_ctry_Yh <- get_data(all_data, "L100.Pop_thous_ctry_Yh")
 
     # The first sequence just cleans and completes the data. Because the years in Aquastat may be more recent than the
     # historical time years (e.g., our final data year is 2010 but the aquastat data goes to 2012). and because there's

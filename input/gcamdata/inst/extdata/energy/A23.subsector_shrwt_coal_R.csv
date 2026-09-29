@@ -5,4 +5,4 @@
 # Column types: cccnnn 
 # ----------
 region,supplysector,subsector,final-calibration-year,initial-future-year,2035
-USA,electricity,coal,1,1,1
+USA,electricity,coal,1,0,1

@@ -6,6 +6,6 @@
 supplysector,subsector,technology,1971,final-calibration-year,initial-future-year,2100
 transportation,coal,coal,1,1,1,1
 transportation,electricity,electricity,1,1,1,1
-transportation,hydrogen,hydrogen,0,0,0,1
+transportation,hydrogen,hydrogen,0,0,1,1
 transportation,gas,gas,1,1,1,1
 transportation,refined liquids,refined liquids,1,1,1,1

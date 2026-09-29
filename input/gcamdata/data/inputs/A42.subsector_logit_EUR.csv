@@ -1,0 +1,601 @@
+supplysector,subsector,logit.exponent,logit.type,iteration
+building,biomass,-5,,1
+building,coal,-12,,1
+building,district heat,-18,,1
+building,electricity,-13,,1
+building,gas,-18,,1
+building,refined liquids,-13,,1
+building,biomass,-15,,2
+building,coal,-18,,2
+building,district heat,-17,,2
+building,electricity,-17,,2
+building,gas,-10,,2
+building,refined liquids,-18,,2
+building,biomass,-14,,3
+building,coal,-1,,3
+building,district heat,-15,,3
+building,electricity,-16,,3
+building,gas,-6,,3
+building,refined liquids,-17,,3
+building,biomass,-6,,4
+building,coal,-13,,4
+building,district heat,-17,,4
+building,electricity,-8,,4
+building,gas,-7,,4
+building,refined liquids,-12,,4
+building,biomass,-17,,5
+building,coal,-6,,5
+building,district heat,-3,,5
+building,electricity,-14,,5
+building,gas,-19,,5
+building,refined liquids,-16,,5
+building,biomass,-7,,6
+building,coal,-7,,6
+building,district heat,-14,,6
+building,electricity,-14,,6
+building,gas,-8,,6
+building,refined liquids,-14,,6
+building,biomass,-1,,7
+building,coal,-8,,7
+building,district heat,-7,,7
+building,electricity,-12,,7
+building,gas,-16,,7
+building,refined liquids,-10,,7
+building,biomass,-2,,8
+building,coal,-11,,8
+building,district heat,-12,,8
+building,electricity,-5,,8
+building,gas,-2,,8
+building,refined liquids,-17,,8
+building,biomass,-5,,9
+building,coal,-20,,9
+building,district heat,-17,,9
+building,electricity,-19,,9
+building,gas,-14,,9
+building,refined liquids,-2,,9
+building,biomass,-14,,10
+building,coal,-4,,10
+building,district heat,-8,,10
+building,electricity,-13,,10
+building,gas,-8,,10
+building,refined liquids,-18,,10
+building,biomass,-7,,11
+building,coal,-15,,11
+building,district heat,-7,,11
+building,electricity,-14,,11
+building,gas,-15,,11
+building,refined liquids,-15,,11
+building,biomass,-14,,12
+building,coal,-12,,12
+building,district heat,-2,,12
+building,electricity,-5,,12
+building,gas,-3,,12
+building,refined liquids,-8,,12
+building,biomass,-11,,13
+building,coal,-3,,13
+building,district heat,-3,,13
+building,electricity,-17,,13
+building,gas,-2,,13
+building,refined liquids,-5,,13
+building,biomass,-9,,14
+building,coal,-2,,14
+building,district heat,-9,,14
+building,electricity,-5,,14
+building,gas,-1,,14
+building,refined liquids,-16,,14
+building,biomass,-13,,15
+building,coal,-5,,15
+building,district heat,-13,,15
+building,electricity,-10,,15
+building,gas,-12,,15
+building,refined liquids,-14,,15
+building,biomass,-1,,16
+building,coal,-10,,16
+building,district heat,-9,,16
+building,electricity,-7,,16
+building,gas,-10,,16
+building,refined liquids,-15,,16
+building,biomass,-13,,17
+building,coal,-19,,17
+building,district heat,-16,,17
+building,electricity,-2,,17
+building,gas,-10,,17
+building,refined liquids,-19,,17
+building,biomass,-9,,18
+building,coal,-15,,18
+building,district heat,-10,,18
+building,electricity,-3,,18
+building,gas,-1,,18
+building,refined liquids,-10,,18
+building,biomass,-12,,19
+building,coal,-11,,19
+building,district heat,-12,,19
+building,electricity,-15,,19
+building,gas,-16,,19
+building,refined liquids,-17,,19
+building,biomass,-14,,20
+building,coal,-8,,20
+building,district heat,-8,,20
+building,electricity,-6,,20
+building,gas,-5,,20
+building,refined liquids,-14,,20
+building,biomass,-16,,21
+building,coal,-1,,21
+building,district heat,-15,,21
+building,electricity,-11,,21
+building,gas,-1,,21
+building,refined liquids,-11,,21
+building,biomass,-2,,22
+building,coal,-12,,22
+building,district heat,-14,,22
+building,electricity,-16,,22
+building,gas,-18,,22
+building,refined liquids,-15,,22
+building,biomass,-15,,23
+building,coal,-3,,23
+building,district heat,-10,,23
+building,electricity,-7,,23
+building,gas,-12,,23
+building,refined liquids,-17,,23
+building,biomass,-19,,24
+building,coal,-2,,24
+building,district heat,-15,,24
+building,electricity,-16,,24
+building,gas,-12,,24
+building,refined liquids,-5,,24
+building,biomass,-11,,25
+building,coal,-12,,25
+building,district heat,-18,,25
+building,electricity,-14,,25
+building,gas,-19,,25
+building,refined liquids,-11,,25
+building,biomass,-12,,26
+building,coal,-2,,26
+building,district heat,-12,,26
+building,electricity,-7,,26
+building,gas,-15,,26
+building,refined liquids,-16,,26
+building,biomass,-2,,27
+building,coal,-11,,27
+building,district heat,-3,,27
+building,electricity,-2,,27
+building,gas,-12,,27
+building,refined liquids,-15,,27
+building,biomass,-8,,28
+building,coal,-14,,28
+building,district heat,-9,,28
+building,electricity,-20,,28
+building,gas,-20,,28
+building,refined liquids,-10,,28
+building,biomass,-12,,29
+building,coal,-13,,29
+building,district heat,-15,,29
+building,electricity,-18,,29
+building,gas,-10,,29
+building,refined liquids,-9,,29
+building,biomass,-20,,30
+building,coal,-3,,30
+building,district heat,-2,,30
+building,electricity,-19,,30
+building,gas,-3,,30
+building,refined liquids,-5,,30
+building,biomass,-11,,31
+building,coal,-17,,31
+building,district heat,-13,,31
+building,electricity,-19,,31
+building,gas,-16,,31
+building,refined liquids,-3,,31
+building,biomass,-4,,32
+building,coal,-19,,32
+building,district heat,-16,,32
+building,electricity,-13,,32
+building,gas,-16,,32
+building,refined liquids,-5,,32
+building,biomass,-9,,33
+building,coal,-13,,33
+building,district heat,-6,,33
+building,electricity,-15,,33
+building,gas,-8,,33
+building,refined liquids,-4,,33
+building,biomass,-20,,34
+building,coal,-18,,34
+building,district heat,-11,,34
+building,electricity,-17,,34
+building,gas,-20,,34
+building,refined liquids,-5,,34
+building,biomass,-9,,35
+building,coal,-2,,35
+building,district heat,-4,,35
+building,electricity,-7,,35
+building,gas,-14,,35
+building,refined liquids,-5,,35
+building,biomass,-11,,36
+building,coal,-19,,36
+building,district heat,-9,,36
+building,electricity,-20,,36
+building,gas,-6,,36
+building,refined liquids,-5,,36
+building,biomass,-10,,37
+building,coal,-19,,37
+building,district heat,-1,,37
+building,electricity,-4,,37
+building,gas,-11,,37
+building,refined liquids,-9,,37
+building,biomass,-10,,38
+building,coal,-4,,38
+building,district heat,-6,,38
+building,electricity,-13,,38
+building,gas,-7,,38
+building,refined liquids,-5,,38
+building,biomass,-3,,39
+building,coal,-19,,39
+building,district heat,-7,,39
+building,electricity,-8,,39
+building,gas,-3,,39
+building,refined liquids,-6,,39
+building,biomass,-7,,40
+building,coal,-17,,40
+building,district heat,-5,,40
+building,electricity,-17,,40
+building,gas,-18,,40
+building,refined liquids,-13,,40
+building,biomass,-12,,41
+building,coal,-13,,41
+building,district heat,-2,,41
+building,electricity,-18,,41
+building,gas,-14,,41
+building,refined liquids,-19,,41
+building,biomass,-5,,42
+building,coal,-16,,42
+building,district heat,-17,,42
+building,electricity,-3,,42
+building,gas,-5,,42
+building,refined liquids,-1,,42
+building,biomass,-2,,43
+building,coal,-16,,43
+building,district heat,-5,,43
+building,electricity,-20,,43
+building,gas,-17,,43
+building,refined liquids,-11,,43
+building,biomass,-15,,44
+building,coal,-17,,44
+building,district heat,-20,,44
+building,electricity,-1,,44
+building,gas,-1,,44
+building,refined liquids,-20,,44
+building,biomass,-16,,45
+building,coal,-11,,45
+building,district heat,-12,,45
+building,electricity,-16,,45
+building,gas,-16,,45
+building,refined liquids,-6,,45
+building,biomass,-13,,46
+building,coal,-16,,46
+building,district heat,-8,,46
+building,electricity,-3,,46
+building,gas,-6,,46
+building,refined liquids,-12,,46
+building,biomass,-9,,47
+building,coal,-9,,47
+building,district heat,-20,,47
+building,electricity,-19,,47
+building,gas,-3,,47
+building,refined liquids,-11,,47
+building,biomass,-9,,48
+building,coal,-5,,48
+building,district heat,-10,,48
+building,electricity,-7,,48
+building,gas,-8,,48
+building,refined liquids,-6,,48
+building,biomass,-17,,49
+building,coal,-10,,49
+building,district heat,-8,,49
+building,electricity,-10,,49
+building,gas,-9,,49
+building,refined liquids,-12,,49
+building,biomass,-14,,50
+building,coal,-7,,50
+building,district heat,-19,,50
+building,electricity,-20,,50
+building,gas,-12,,50
+building,refined liquids,-9,,50
+building,biomass,-16,,51
+building,coal,-8,,51
+building,district heat,-3,,51
+building,electricity,-9,,51
+building,gas,-12,,51
+building,refined liquids,-3,,51
+building,biomass,-13,,52
+building,coal,-12,,52
+building,district heat,-6,,52
+building,electricity,-16,,52
+building,gas,-5,,52
+building,refined liquids,-16,,52
+building,biomass,-10,,53
+building,coal,-17,,53
+building,district heat,-13,,53
+building,electricity,-17,,53
+building,gas,-5,,53
+building,refined liquids,-11,,53
+building,biomass,-2,,54
+building,coal,-2,,54
+building,district heat,-8,,54
+building,electricity,-13,,54
+building,gas,-3,,54
+building,refined liquids,-10,,54
+building,biomass,-2,,55
+building,coal,-12,,55
+building,district heat,-17,,55
+building,electricity,-20,,55
+building,gas,-1,,55
+building,refined liquids,-10,,55
+building,biomass,-9,,56
+building,coal,-11,,56
+building,district heat,-7,,56
+building,electricity,-15,,56
+building,gas,-1,,56
+building,refined liquids,-7,,56
+building,biomass,-12,,57
+building,coal,-14,,57
+building,district heat,-6,,57
+building,electricity,-9,,57
+building,gas,-18,,57
+building,refined liquids,-13,,57
+building,biomass,-19,,58
+building,coal,-4,,58
+building,district heat,-6,,58
+building,electricity,-10,,58
+building,gas,-7,,58
+building,refined liquids,-18,,58
+building,biomass,-14,,59
+building,coal,-19,,59
+building,district heat,-1,,59
+building,electricity,-12,,59
+building,gas,-1,,59
+building,refined liquids,-18,,59
+building,biomass,-9,,60
+building,coal,-2,,60
+building,district heat,-12,,60
+building,electricity,-14,,60
+building,gas,-10,,60
+building,refined liquids,-18,,60
+building,biomass,-1,,61
+building,coal,-5,,61
+building,district heat,-12,,61
+building,electricity,-16,,61
+building,gas,-3,,61
+building,refined liquids,-15,,61
+building,biomass,-8,,62
+building,coal,-19,,62
+building,district heat,-9,,62
+building,electricity,-19,,62
+building,gas,-16,,62
+building,refined liquids,-5,,62
+building,biomass,-15,,63
+building,coal,-4,,63
+building,district heat,-12,,63
+building,electricity,-3,,63
+building,gas,-6,,63
+building,refined liquids,-13,,63
+building,biomass,-3,,64
+building,coal,-20,,64
+building,district heat,-4,,64
+building,electricity,-10,,64
+building,gas,-18,,64
+building,refined liquids,-12,,64
+building,biomass,-14,,65
+building,coal,-16,,65
+building,district heat,-5,,65
+building,electricity,-8,,65
+building,gas,-10,,65
+building,refined liquids,-1,,65
+building,biomass,-15,,66
+building,coal,-14,,66
+building,district heat,-8,,66
+building,electricity,-19,,66
+building,gas,-17,,66
+building,refined liquids,-7,,66
+building,biomass,-6,,67
+building,coal,-16,,67
+building,district heat,-16,,67
+building,electricity,-18,,67
+building,gas,-16,,67
+building,refined liquids,-10,,67
+building,biomass,-1,,68
+building,coal,-9,,68
+building,district heat,-10,,68
+building,electricity,-10,,68
+building,gas,-20,,68
+building,refined liquids,-6,,68
+building,biomass,-6,,69
+building,coal,-12,,69
+building,district heat,-5,,69
+building,electricity,-14,,69
+building,gas,-14,,69
+building,refined liquids,-11,,69
+building,biomass,-11,,70
+building,coal,-5,,70
+building,district heat,-3,,70
+building,electricity,-17,,70
+building,gas,-17,,70
+building,refined liquids,-9,,70
+building,biomass,-20,,71
+building,coal,-13,,71
+building,district heat,-13,,71
+building,electricity,-2,,71
+building,gas,-6,,71
+building,refined liquids,-17,,71
+building,biomass,-8,,72
+building,coal,-2,,72
+building,district heat,-4,,72
+building,electricity,-19,,72
+building,gas,-12,,72
+building,refined liquids,-4,,72
+building,biomass,-20,,73
+building,coal,-5,,73
+building,district heat,-6,,73
+building,electricity,-4,,73
+building,gas,-18,,73
+building,refined liquids,-1,,73
+building,biomass,-20,,74
+building,coal,-6,,74
+building,district heat,-13,,74
+building,electricity,-15,,74
+building,gas,-6,,74
+building,refined liquids,-4,,74
+building,biomass,-13,,75
+building,coal,-17,,75
+building,district heat,-15,,75
+building,electricity,-18,,75
+building,gas,-3,,75
+building,refined liquids,-9,,75
+building,biomass,-3,,76
+building,coal,-3,,76
+building,district heat,-2,,76
+building,electricity,-10,,76
+building,gas,-20,,76
+building,refined liquids,-15,,76
+building,biomass,-9,,77
+building,coal,-5,,77
+building,district heat,-2,,77
+building,electricity,-5,,77
+building,gas,-17,,77
+building,refined liquids,-4,,77
+building,biomass,-10,,78
+building,coal,-12,,78
+building,district heat,-6,,78
+building,electricity,-20,,78
+building,gas,-9,,78
+building,refined liquids,-20,,78
+building,biomass,-1,,79
+building,coal,-7,,79
+building,district heat,-13,,79
+building,electricity,-16,,79
+building,gas,-4,,79
+building,refined liquids,-8,,79
+building,biomass,-15,,80
+building,coal,-13,,80
+building,district heat,-16,,80
+building,electricity,-4,,80
+building,gas,-8,,80
+building,refined liquids,-18,,80
+building,biomass,-19,,81
+building,coal,-18,,81
+building,district heat,-1,,81
+building,electricity,-17,,81
+building,gas,-17,,81
+building,refined liquids,-18,,81
+building,biomass,-11,,82
+building,coal,-14,,82
+building,district heat,-3,,82
+building,electricity,-7,,82
+building,gas,-7,,82
+building,refined liquids,-4,,82
+building,biomass,-13,,83
+building,coal,-8,,83
+building,district heat,-12,,83
+building,electricity,-8,,83
+building,gas,-5,,83
+building,refined liquids,-18,,83
+building,biomass,-9,,84
+building,coal,-10,,84
+building,district heat,-15,,84
+building,electricity,-3,,84
+building,gas,-19,,84
+building,refined liquids,-10,,84
+building,biomass,-2,,85
+building,coal,-16,,85
+building,district heat,-2,,85
+building,electricity,-5,,85
+building,gas,-15,,85
+building,refined liquids,-18,,85
+building,biomass,-17,,86
+building,coal,-5,,86
+building,district heat,-13,,86
+building,electricity,-11,,86
+building,gas,-11,,86
+building,refined liquids,-10,,86
+building,biomass,-3,,87
+building,coal,-18,,87
+building,district heat,-4,,87
+building,electricity,-20,,87
+building,gas,-9,,87
+building,refined liquids,-15,,87
+building,biomass,-7,,88
+building,coal,-4,,88
+building,district heat,-20,,88
+building,electricity,-10,,88
+building,gas,-14,,88
+building,refined liquids,-15,,88
+building,biomass,-2,,89
+building,coal,-14,,89
+building,district heat,-2,,89
+building,electricity,-16,,89
+building,gas,-19,,89
+building,refined liquids,-5,,89
+building,biomass,-4,,90
+building,coal,-19,,90
+building,district heat,-13,,90
+building,electricity,-3,,90
+building,gas,-4,,90
+building,refined liquids,-14,,90
+building,biomass,-5,,91
+building,coal,-10,,91
+building,district heat,-6,,91
+building,electricity,-12,,91
+building,gas,-11,,91
+building,refined liquids,-7,,91
+building,biomass,-20,,92
+building,coal,-9,,92
+building,district heat,-3,,92
+building,electricity,-15,,92
+building,gas,-16,,92
+building,refined liquids,-2,,92
+building,biomass,-13,,93
+building,coal,-18,,93
+building,district heat,-4,,93
+building,electricity,-19,,93
+building,gas,-6,,93
+building,refined liquids,-7,,93
+building,biomass,-19,,94
+building,coal,-16,,94
+building,district heat,-3,,94
+building,electricity,-6,,94
+building,gas,-10,,94
+building,refined liquids,-20,,94
+building,biomass,-11,,95
+building,coal,-5,,95
+building,district heat,-5,,95
+building,electricity,-11,,95
+building,gas,-4,,95
+building,refined liquids,-14,,95
+building,biomass,-7,,96
+building,coal,-13,,96
+building,district heat,-20,,96
+building,electricity,-18,,96
+building,gas,-13,,96
+building,refined liquids,-18,,96
+building,biomass,-14,,97
+building,coal,-2,,97
+building,district heat,-12,,97
+building,electricity,-18,,97
+building,gas,-12,,97
+building,refined liquids,-9,,97
+building,biomass,-2,,98
+building,coal,-7,,98
+building,district heat,-3,,98
+building,electricity,-5,,98
+building,gas,-20,,98
+building,refined liquids,-2,,98
+building,biomass,-6,,99
+building,coal,-11,,99
+building,district heat,-18,,99
+building,electricity,-3,,99
+building,gas,-3,,99
+building,refined liquids,-16,,99
+building,biomass,-1,,100
+building,coal,-1,,100
+building,district heat,-14,,100
+building,electricity,-16,,100
+building,gas,-5,,100
+building,refined liquids,-16,,100

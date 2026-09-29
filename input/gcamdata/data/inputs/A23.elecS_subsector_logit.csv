@@ -1,0 +1,1101 @@
+supplysector,subsector,logit.exponent,logit.type,iteration
+electricity,coal,-2,relative-cost-logit,1
+electricity,gas,-17,relative-cost-logit,1
+electricity,refined liquids,-1,relative-cost-logit,1
+electricity,biomass,-2,relative-cost-logit,1
+electricity,nuclear,-14,relative-cost-logit,1
+electricity,wind,-4,relative-cost-logit,1
+electricity,solar,-18,relative-cost-logit,1
+electricity,geothermal,-19,relative-cost-logit,1
+electricity,hydro,-16,relative-cost-logit,1
+elect_td_bld,rooftop_pv,-6,relative-cost-logit,1
+peak generation,grid_storage,-6,relative-cost-logit,1
+electricity,coal,-20,relative-cost-logit,2
+electricity,gas,-2,relative-cost-logit,2
+electricity,refined liquids,-20,relative-cost-logit,2
+electricity,biomass,-9,relative-cost-logit,2
+electricity,nuclear,-2,relative-cost-logit,2
+electricity,wind,-11,relative-cost-logit,2
+electricity,solar,-8,relative-cost-logit,2
+electricity,geothermal,-9,relative-cost-logit,2
+electricity,hydro,-20,relative-cost-logit,2
+elect_td_bld,rooftop_pv,-8,relative-cost-logit,2
+peak generation,grid_storage,-11,relative-cost-logit,2
+electricity,coal,-8,relative-cost-logit,3
+electricity,gas,-19,relative-cost-logit,3
+electricity,refined liquids,-11,relative-cost-logit,3
+electricity,biomass,-17,relative-cost-logit,3
+electricity,nuclear,-3,relative-cost-logit,3
+electricity,wind,-1,relative-cost-logit,3
+electricity,solar,-11,relative-cost-logit,3
+electricity,geothermal,-19,relative-cost-logit,3
+electricity,hydro,-4,relative-cost-logit,3
+elect_td_bld,rooftop_pv,-17,relative-cost-logit,3
+peak generation,grid_storage,-11,relative-cost-logit,3
+electricity,coal,-2,relative-cost-logit,4
+electricity,gas,-20,relative-cost-logit,4
+electricity,refined liquids,-17,relative-cost-logit,4
+electricity,biomass,-7,relative-cost-logit,4
+electricity,nuclear,-11,relative-cost-logit,4
+electricity,wind,-8,relative-cost-logit,4
+electricity,solar,-8,relative-cost-logit,4
+electricity,geothermal,-11,relative-cost-logit,4
+electricity,hydro,-2,relative-cost-logit,4
+elect_td_bld,rooftop_pv,-10,relative-cost-logit,4
+peak generation,grid_storage,-6,relative-cost-logit,4
+electricity,coal,-2,relative-cost-logit,5
+electricity,gas,-6,relative-cost-logit,5
+electricity,refined liquids,-12,relative-cost-logit,5
+electricity,biomass,-14,relative-cost-logit,5
+electricity,nuclear,-5,relative-cost-logit,5
+electricity,wind,-9,relative-cost-logit,5
+electricity,solar,-10,relative-cost-logit,5
+electricity,geothermal,-14,relative-cost-logit,5
+electricity,hydro,-14,relative-cost-logit,5
+elect_td_bld,rooftop_pv,-16,relative-cost-logit,5
+peak generation,grid_storage,-15,relative-cost-logit,5
+electricity,coal,-8,relative-cost-logit,6
+electricity,gas,-20,relative-cost-logit,6
+electricity,refined liquids,-18,relative-cost-logit,6
+electricity,biomass,-6,relative-cost-logit,6
+electricity,nuclear,-11,relative-cost-logit,6
+electricity,wind,-2,relative-cost-logit,6
+electricity,solar,-20,relative-cost-logit,6
+electricity,geothermal,-8,relative-cost-logit,6
+electricity,hydro,-4,relative-cost-logit,6
+elect_td_bld,rooftop_pv,-13,relative-cost-logit,6
+peak generation,grid_storage,-6,relative-cost-logit,6
+electricity,coal,-19,relative-cost-logit,7
+electricity,gas,-16,relative-cost-logit,7
+electricity,refined liquids,-20,relative-cost-logit,7
+electricity,biomass,-14,relative-cost-logit,7
+electricity,nuclear,-12,relative-cost-logit,7
+electricity,wind,-17,relative-cost-logit,7
+electricity,solar,-5,relative-cost-logit,7
+electricity,geothermal,-4,relative-cost-logit,7
+electricity,hydro,-16,relative-cost-logit,7
+elect_td_bld,rooftop_pv,-19,relative-cost-logit,7
+peak generation,grid_storage,-15,relative-cost-logit,7
+electricity,coal,-20,relative-cost-logit,8
+electricity,gas,-14,relative-cost-logit,8
+electricity,refined liquids,-8,relative-cost-logit,8
+electricity,biomass,-6,relative-cost-logit,8
+electricity,nuclear,-4,relative-cost-logit,8
+electricity,wind,-19,relative-cost-logit,8
+electricity,solar,-8,relative-cost-logit,8
+electricity,geothermal,-4,relative-cost-logit,8
+electricity,hydro,-9,relative-cost-logit,8
+elect_td_bld,rooftop_pv,-16,relative-cost-logit,8
+peak generation,grid_storage,-10,relative-cost-logit,8
+electricity,coal,-1,relative-cost-logit,9
+electricity,gas,-5,relative-cost-logit,9
+electricity,refined liquids,-7,relative-cost-logit,9
+electricity,biomass,-18,relative-cost-logit,9
+electricity,nuclear,-17,relative-cost-logit,9
+electricity,wind,-17,relative-cost-logit,9
+electricity,solar,-11,relative-cost-logit,9
+electricity,geothermal,-18,relative-cost-logit,9
+electricity,hydro,-19,relative-cost-logit,9
+elect_td_bld,rooftop_pv,-12,relative-cost-logit,9
+peak generation,grid_storage,-3,relative-cost-logit,9
+electricity,coal,-14,relative-cost-logit,10
+electricity,gas,-19,relative-cost-logit,10
+electricity,refined liquids,-12,relative-cost-logit,10
+electricity,biomass,-20,relative-cost-logit,10
+electricity,nuclear,-19,relative-cost-logit,10
+electricity,wind,-8,relative-cost-logit,10
+electricity,solar,-5,relative-cost-logit,10
+electricity,geothermal,-1,relative-cost-logit,10
+electricity,hydro,-4,relative-cost-logit,10
+elect_td_bld,rooftop_pv,-8,relative-cost-logit,10
+peak generation,grid_storage,-2,relative-cost-logit,10
+electricity,coal,-10,relative-cost-logit,11
+electricity,gas,-10,relative-cost-logit,11
+electricity,refined liquids,-16,relative-cost-logit,11
+electricity,biomass,-9,relative-cost-logit,11
+electricity,nuclear,-16,relative-cost-logit,11
+electricity,wind,-15,relative-cost-logit,11
+electricity,solar,-6,relative-cost-logit,11
+electricity,geothermal,-2,relative-cost-logit,11
+electricity,hydro,-13,relative-cost-logit,11
+elect_td_bld,rooftop_pv,-13,relative-cost-logit,11
+peak generation,grid_storage,-6,relative-cost-logit,11
+electricity,coal,-3,relative-cost-logit,12
+electricity,gas,-19,relative-cost-logit,12
+electricity,refined liquids,-12,relative-cost-logit,12
+electricity,biomass,-7,relative-cost-logit,12
+electricity,nuclear,-13,relative-cost-logit,12
+electricity,wind,-2,relative-cost-logit,12
+electricity,solar,-2,relative-cost-logit,12
+electricity,geothermal,-19,relative-cost-logit,12
+electricity,hydro,-14,relative-cost-logit,12
+elect_td_bld,rooftop_pv,-17,relative-cost-logit,12
+peak generation,grid_storage,-3,relative-cost-logit,12
+electricity,coal,-14,relative-cost-logit,13
+electricity,gas,-9,relative-cost-logit,13
+electricity,refined liquids,-15,relative-cost-logit,13
+electricity,biomass,-10,relative-cost-logit,13
+electricity,nuclear,-3,relative-cost-logit,13
+electricity,wind,-19,relative-cost-logit,13
+electricity,solar,-14,relative-cost-logit,13
+electricity,geothermal,-7,relative-cost-logit,13
+electricity,hydro,-4,relative-cost-logit,13
+elect_td_bld,rooftop_pv,-9,relative-cost-logit,13
+peak generation,grid_storage,-15,relative-cost-logit,13
+electricity,coal,-3,relative-cost-logit,14
+electricity,gas,-10,relative-cost-logit,14
+electricity,refined liquids,-3,relative-cost-logit,14
+electricity,biomass,-18,relative-cost-logit,14
+electricity,nuclear,-18,relative-cost-logit,14
+electricity,wind,-7,relative-cost-logit,14
+electricity,solar,-14,relative-cost-logit,14
+electricity,geothermal,-12,relative-cost-logit,14
+electricity,hydro,-2,relative-cost-logit,14
+elect_td_bld,rooftop_pv,-14,relative-cost-logit,14
+peak generation,grid_storage,-15,relative-cost-logit,14
+electricity,coal,-4,relative-cost-logit,15
+electricity,gas,-3,relative-cost-logit,15
+electricity,refined liquids,-2,relative-cost-logit,15
+electricity,biomass,-20,relative-cost-logit,15
+electricity,nuclear,-3,relative-cost-logit,15
+electricity,wind,-13,relative-cost-logit,15
+electricity,solar,-14,relative-cost-logit,15
+electricity,geothermal,-10,relative-cost-logit,15
+electricity,hydro,-16,relative-cost-logit,15
+elect_td_bld,rooftop_pv,-11,relative-cost-logit,15
+peak generation,grid_storage,-7,relative-cost-logit,15
+electricity,coal,-4,relative-cost-logit,16
+electricity,gas,-5,relative-cost-logit,16
+electricity,refined liquids,-12,relative-cost-logit,16
+electricity,biomass,-12,relative-cost-logit,16
+electricity,nuclear,-1,relative-cost-logit,16
+electricity,wind,-1,relative-cost-logit,16
+electricity,solar,-5,relative-cost-logit,16
+electricity,geothermal,-20,relative-cost-logit,16
+electricity,hydro,-16,relative-cost-logit,16
+elect_td_bld,rooftop_pv,-7,relative-cost-logit,16
+peak generation,grid_storage,-12,relative-cost-logit,16
+electricity,coal,-1,relative-cost-logit,17
+electricity,gas,-17,relative-cost-logit,17
+electricity,refined liquids,-16,relative-cost-logit,17
+electricity,biomass,-10,relative-cost-logit,17
+electricity,nuclear,-20,relative-cost-logit,17
+electricity,wind,-8,relative-cost-logit,17
+electricity,solar,-20,relative-cost-logit,17
+electricity,geothermal,-10,relative-cost-logit,17
+electricity,hydro,-17,relative-cost-logit,17
+elect_td_bld,rooftop_pv,-12,relative-cost-logit,17
+peak generation,grid_storage,-5,relative-cost-logit,17
+electricity,coal,-3,relative-cost-logit,18
+electricity,gas,-7,relative-cost-logit,18
+electricity,refined liquids,-20,relative-cost-logit,18
+electricity,biomass,-13,relative-cost-logit,18
+electricity,nuclear,-11,relative-cost-logit,18
+electricity,wind,-17,relative-cost-logit,18
+electricity,solar,-12,relative-cost-logit,18
+electricity,geothermal,-11,relative-cost-logit,18
+electricity,hydro,-11,relative-cost-logit,18
+elect_td_bld,rooftop_pv,-17,relative-cost-logit,18
+peak generation,grid_storage,-16,relative-cost-logit,18
+electricity,coal,-17,relative-cost-logit,19
+electricity,gas,-10,relative-cost-logit,19
+electricity,refined liquids,-18,relative-cost-logit,19
+electricity,biomass,-10,relative-cost-logit,19
+electricity,nuclear,-8,relative-cost-logit,19
+electricity,wind,-6,relative-cost-logit,19
+electricity,solar,-1,relative-cost-logit,19
+electricity,geothermal,-1,relative-cost-logit,19
+electricity,hydro,-4,relative-cost-logit,19
+elect_td_bld,rooftop_pv,-2,relative-cost-logit,19
+peak generation,grid_storage,-12,relative-cost-logit,19
+electricity,coal,-3,relative-cost-logit,20
+electricity,gas,-7,relative-cost-logit,20
+electricity,refined liquids,-8,relative-cost-logit,20
+electricity,biomass,-1,relative-cost-logit,20
+electricity,nuclear,-14,relative-cost-logit,20
+electricity,wind,-13,relative-cost-logit,20
+electricity,solar,-11,relative-cost-logit,20
+electricity,geothermal,-12,relative-cost-logit,20
+electricity,hydro,-1,relative-cost-logit,20
+elect_td_bld,rooftop_pv,-6,relative-cost-logit,20
+peak generation,grid_storage,-14,relative-cost-logit,20
+electricity,coal,-11,relative-cost-logit,21
+electricity,gas,-15,relative-cost-logit,21
+electricity,refined liquids,-8,relative-cost-logit,21
+electricity,biomass,-16,relative-cost-logit,21
+electricity,nuclear,-2,relative-cost-logit,21
+electricity,wind,-12,relative-cost-logit,21
+electricity,solar,-19,relative-cost-logit,21
+electricity,geothermal,-14,relative-cost-logit,21
+electricity,hydro,-17,relative-cost-logit,21
+elect_td_bld,rooftop_pv,-3,relative-cost-logit,21
+peak generation,grid_storage,-15,relative-cost-logit,21
+electricity,coal,-8,relative-cost-logit,22
+electricity,gas,-7,relative-cost-logit,22
+electricity,refined liquids,-5,relative-cost-logit,22
+electricity,biomass,-19,relative-cost-logit,22
+electricity,nuclear,-10,relative-cost-logit,22
+electricity,wind,-16,relative-cost-logit,22
+electricity,solar,-9,relative-cost-logit,22
+electricity,geothermal,-10,relative-cost-logit,22
+electricity,hydro,-20,relative-cost-logit,22
+elect_td_bld,rooftop_pv,-6,relative-cost-logit,22
+peak generation,grid_storage,-20,relative-cost-logit,22
+electricity,coal,-4,relative-cost-logit,23
+electricity,gas,-15,relative-cost-logit,23
+electricity,refined liquids,-5,relative-cost-logit,23
+electricity,biomass,-1,relative-cost-logit,23
+electricity,nuclear,-9,relative-cost-logit,23
+electricity,wind,-9,relative-cost-logit,23
+electricity,solar,-6,relative-cost-logit,23
+electricity,geothermal,-9,relative-cost-logit,23
+electricity,hydro,-2,relative-cost-logit,23
+elect_td_bld,rooftop_pv,-8,relative-cost-logit,23
+peak generation,grid_storage,-15,relative-cost-logit,23
+electricity,coal,-6,relative-cost-logit,24
+electricity,gas,-13,relative-cost-logit,24
+electricity,refined liquids,-7,relative-cost-logit,24
+electricity,biomass,-20,relative-cost-logit,24
+electricity,nuclear,-20,relative-cost-logit,24
+electricity,wind,-2,relative-cost-logit,24
+electricity,solar,-1,relative-cost-logit,24
+electricity,geothermal,-6,relative-cost-logit,24
+electricity,hydro,-5,relative-cost-logit,24
+elect_td_bld,rooftop_pv,-13,relative-cost-logit,24
+peak generation,grid_storage,-10,relative-cost-logit,24
+electricity,coal,-18,relative-cost-logit,25
+electricity,gas,-13,relative-cost-logit,25
+electricity,refined liquids,-5,relative-cost-logit,25
+electricity,biomass,-1,relative-cost-logit,25
+electricity,nuclear,-8,relative-cost-logit,25
+electricity,wind,-1,relative-cost-logit,25
+electricity,solar,-11,relative-cost-logit,25
+electricity,geothermal,-10,relative-cost-logit,25
+electricity,hydro,-15,relative-cost-logit,25
+elect_td_bld,rooftop_pv,-14,relative-cost-logit,25
+peak generation,grid_storage,-1,relative-cost-logit,25
+electricity,coal,-19,relative-cost-logit,26
+electricity,gas,-1,relative-cost-logit,26
+electricity,refined liquids,-5,relative-cost-logit,26
+electricity,biomass,-3,relative-cost-logit,26
+electricity,nuclear,-9,relative-cost-logit,26
+electricity,wind,-4,relative-cost-logit,26
+electricity,solar,-5,relative-cost-logit,26
+electricity,geothermal,-9,relative-cost-logit,26
+electricity,hydro,-11,relative-cost-logit,26
+elect_td_bld,rooftop_pv,-5,relative-cost-logit,26
+peak generation,grid_storage,-20,relative-cost-logit,26
+electricity,coal,-15,relative-cost-logit,27
+electricity,gas,-15,relative-cost-logit,27
+electricity,refined liquids,-18,relative-cost-logit,27
+electricity,biomass,-2,relative-cost-logit,27
+electricity,nuclear,-17,relative-cost-logit,27
+electricity,wind,-5,relative-cost-logit,27
+electricity,solar,-18,relative-cost-logit,27
+electricity,geothermal,-14,relative-cost-logit,27
+electricity,hydro,-3,relative-cost-logit,27
+elect_td_bld,rooftop_pv,-1,relative-cost-logit,27
+peak generation,grid_storage,-9,relative-cost-logit,27
+electricity,coal,-11,relative-cost-logit,28
+electricity,gas,-16,relative-cost-logit,28
+electricity,refined liquids,-20,relative-cost-logit,28
+electricity,biomass,-1,relative-cost-logit,28
+electricity,nuclear,-6,relative-cost-logit,28
+electricity,wind,-11,relative-cost-logit,28
+electricity,solar,-4,relative-cost-logit,28
+electricity,geothermal,-6,relative-cost-logit,28
+electricity,hydro,-8,relative-cost-logit,28
+elect_td_bld,rooftop_pv,-20,relative-cost-logit,28
+peak generation,grid_storage,-17,relative-cost-logit,28
+electricity,coal,-17,relative-cost-logit,29
+electricity,gas,-13,relative-cost-logit,29
+electricity,refined liquids,-15,relative-cost-logit,29
+electricity,biomass,-4,relative-cost-logit,29
+electricity,nuclear,-17,relative-cost-logit,29
+electricity,wind,-7,relative-cost-logit,29
+electricity,solar,-20,relative-cost-logit,29
+electricity,geothermal,-15,relative-cost-logit,29
+electricity,hydro,-12,relative-cost-logit,29
+elect_td_bld,rooftop_pv,-6,relative-cost-logit,29
+peak generation,grid_storage,-12,relative-cost-logit,29
+electricity,coal,-1,relative-cost-logit,30
+electricity,gas,-2,relative-cost-logit,30
+electricity,refined liquids,-11,relative-cost-logit,30
+electricity,biomass,-17,relative-cost-logit,30
+electricity,nuclear,-14,relative-cost-logit,30
+electricity,wind,-4,relative-cost-logit,30
+electricity,solar,-3,relative-cost-logit,30
+electricity,geothermal,-8,relative-cost-logit,30
+electricity,hydro,-8,relative-cost-logit,30
+elect_td_bld,rooftop_pv,-3,relative-cost-logit,30
+peak generation,grid_storage,-13,relative-cost-logit,30
+electricity,coal,-5,relative-cost-logit,31
+electricity,gas,-3,relative-cost-logit,31
+electricity,refined liquids,-17,relative-cost-logit,31
+electricity,biomass,-16,relative-cost-logit,31
+electricity,nuclear,-17,relative-cost-logit,31
+electricity,wind,-4,relative-cost-logit,31
+electricity,solar,-10,relative-cost-logit,31
+electricity,geothermal,-18,relative-cost-logit,31
+electricity,hydro,-2,relative-cost-logit,31
+elect_td_bld,rooftop_pv,-6,relative-cost-logit,31
+peak generation,grid_storage,-9,relative-cost-logit,31
+electricity,coal,-16,relative-cost-logit,32
+electricity,gas,-7,relative-cost-logit,32
+electricity,refined liquids,-6,relative-cost-logit,32
+electricity,biomass,-13,relative-cost-logit,32
+electricity,nuclear,-11,relative-cost-logit,32
+electricity,wind,-6,relative-cost-logit,32
+electricity,solar,-4,relative-cost-logit,32
+electricity,geothermal,-6,relative-cost-logit,32
+electricity,hydro,-4,relative-cost-logit,32
+elect_td_bld,rooftop_pv,-1,relative-cost-logit,32
+peak generation,grid_storage,-17,relative-cost-logit,32
+electricity,coal,-15,relative-cost-logit,33
+electricity,gas,-16,relative-cost-logit,33
+electricity,refined liquids,-16,relative-cost-logit,33
+electricity,biomass,-5,relative-cost-logit,33
+electricity,nuclear,-10,relative-cost-logit,33
+electricity,wind,-9,relative-cost-logit,33
+electricity,solar,-8,relative-cost-logit,33
+electricity,geothermal,-1,relative-cost-logit,33
+electricity,hydro,-9,relative-cost-logit,33
+elect_td_bld,rooftop_pv,-4,relative-cost-logit,33
+peak generation,grid_storage,-7,relative-cost-logit,33
+electricity,coal,-10,relative-cost-logit,34
+electricity,gas,-12,relative-cost-logit,34
+electricity,refined liquids,-3,relative-cost-logit,34
+electricity,biomass,-18,relative-cost-logit,34
+electricity,nuclear,-17,relative-cost-logit,34
+electricity,wind,-19,relative-cost-logit,34
+electricity,solar,-15,relative-cost-logit,34
+electricity,geothermal,-5,relative-cost-logit,34
+electricity,hydro,-6,relative-cost-logit,34
+elect_td_bld,rooftop_pv,-19,relative-cost-logit,34
+peak generation,grid_storage,-11,relative-cost-logit,34
+electricity,coal,-18,relative-cost-logit,35
+electricity,gas,-9,relative-cost-logit,35
+electricity,refined liquids,-16,relative-cost-logit,35
+electricity,biomass,-3,relative-cost-logit,35
+electricity,nuclear,-4,relative-cost-logit,35
+electricity,wind,-14,relative-cost-logit,35
+electricity,solar,-13,relative-cost-logit,35
+electricity,geothermal,-13,relative-cost-logit,35
+electricity,hydro,-6,relative-cost-logit,35
+elect_td_bld,rooftop_pv,-12,relative-cost-logit,35
+peak generation,grid_storage,-1,relative-cost-logit,35
+electricity,coal,-19,relative-cost-logit,36
+electricity,gas,-6,relative-cost-logit,36
+electricity,refined liquids,-9,relative-cost-logit,36
+electricity,biomass,-8,relative-cost-logit,36
+electricity,nuclear,-19,relative-cost-logit,36
+electricity,wind,-18,relative-cost-logit,36
+electricity,solar,-4,relative-cost-logit,36
+electricity,geothermal,-7,relative-cost-logit,36
+electricity,hydro,-18,relative-cost-logit,36
+elect_td_bld,rooftop_pv,-5,relative-cost-logit,36
+peak generation,grid_storage,-20,relative-cost-logit,36
+electricity,coal,-3,relative-cost-logit,37
+electricity,gas,-8,relative-cost-logit,37
+electricity,refined liquids,-20,relative-cost-logit,37
+electricity,biomass,-20,relative-cost-logit,37
+electricity,nuclear,-11,relative-cost-logit,37
+electricity,wind,-13,relative-cost-logit,37
+electricity,solar,-15,relative-cost-logit,37
+electricity,geothermal,-17,relative-cost-logit,37
+electricity,hydro,-12,relative-cost-logit,37
+elect_td_bld,rooftop_pv,-16,relative-cost-logit,37
+peak generation,grid_storage,-11,relative-cost-logit,37
+electricity,coal,-10,relative-cost-logit,38
+electricity,gas,-2,relative-cost-logit,38
+electricity,refined liquids,-2,relative-cost-logit,38
+electricity,biomass,-20,relative-cost-logit,38
+electricity,nuclear,-17,relative-cost-logit,38
+electricity,wind,-15,relative-cost-logit,38
+electricity,solar,-19,relative-cost-logit,38
+electricity,geothermal,-3,relative-cost-logit,38
+electricity,hydro,-20,relative-cost-logit,38
+elect_td_bld,rooftop_pv,-17,relative-cost-logit,38
+peak generation,grid_storage,-18,relative-cost-logit,38
+electricity,coal,-13,relative-cost-logit,39
+electricity,gas,-8,relative-cost-logit,39
+electricity,refined liquids,-16,relative-cost-logit,39
+electricity,biomass,-9,relative-cost-logit,39
+electricity,nuclear,-12,relative-cost-logit,39
+electricity,wind,-11,relative-cost-logit,39
+electricity,solar,-6,relative-cost-logit,39
+electricity,geothermal,-12,relative-cost-logit,39
+electricity,hydro,-14,relative-cost-logit,39
+elect_td_bld,rooftop_pv,-7,relative-cost-logit,39
+peak generation,grid_storage,-5,relative-cost-logit,39
+electricity,coal,-3,relative-cost-logit,40
+electricity,gas,-3,relative-cost-logit,40
+electricity,refined liquids,-7,relative-cost-logit,40
+electricity,biomass,-12,relative-cost-logit,40
+electricity,nuclear,-6,relative-cost-logit,40
+electricity,wind,-9,relative-cost-logit,40
+electricity,solar,-9,relative-cost-logit,40
+electricity,geothermal,-10,relative-cost-logit,40
+electricity,hydro,-6,relative-cost-logit,40
+elect_td_bld,rooftop_pv,-18,relative-cost-logit,40
+peak generation,grid_storage,-4,relative-cost-logit,40
+electricity,coal,-11,relative-cost-logit,41
+electricity,gas,-18,relative-cost-logit,41
+electricity,refined liquids,-11,relative-cost-logit,41
+electricity,biomass,-17,relative-cost-logit,41
+electricity,nuclear,-1,relative-cost-logit,41
+electricity,wind,-15,relative-cost-logit,41
+electricity,solar,-13,relative-cost-logit,41
+electricity,geothermal,-6,relative-cost-logit,41
+electricity,hydro,-9,relative-cost-logit,41
+elect_td_bld,rooftop_pv,-6,relative-cost-logit,41
+peak generation,grid_storage,-9,relative-cost-logit,41
+electricity,coal,-10,relative-cost-logit,42
+electricity,gas,-3,relative-cost-logit,42
+electricity,refined liquids,-17,relative-cost-logit,42
+electricity,biomass,-18,relative-cost-logit,42
+electricity,nuclear,-11,relative-cost-logit,42
+electricity,wind,-12,relative-cost-logit,42
+electricity,solar,-2,relative-cost-logit,42
+electricity,geothermal,-7,relative-cost-logit,42
+electricity,hydro,-7,relative-cost-logit,42
+elect_td_bld,rooftop_pv,-6,relative-cost-logit,42
+peak generation,grid_storage,-2,relative-cost-logit,42
+electricity,coal,-18,relative-cost-logit,43
+electricity,gas,-3,relative-cost-logit,43
+electricity,refined liquids,-11,relative-cost-logit,43
+electricity,biomass,-16,relative-cost-logit,43
+electricity,nuclear,-10,relative-cost-logit,43
+electricity,wind,-14,relative-cost-logit,43
+electricity,solar,-5,relative-cost-logit,43
+electricity,geothermal,-10,relative-cost-logit,43
+electricity,hydro,-18,relative-cost-logit,43
+elect_td_bld,rooftop_pv,-6,relative-cost-logit,43
+peak generation,grid_storage,-10,relative-cost-logit,43
+electricity,coal,-9,relative-cost-logit,44
+electricity,gas,-1,relative-cost-logit,44
+electricity,refined liquids,-9,relative-cost-logit,44
+electricity,biomass,-20,relative-cost-logit,44
+electricity,nuclear,-16,relative-cost-logit,44
+electricity,wind,-17,relative-cost-logit,44
+electricity,solar,-8,relative-cost-logit,44
+electricity,geothermal,-12,relative-cost-logit,44
+electricity,hydro,-15,relative-cost-logit,44
+elect_td_bld,rooftop_pv,-5,relative-cost-logit,44
+peak generation,grid_storage,-10,relative-cost-logit,44
+electricity,coal,-3,relative-cost-logit,45
+electricity,gas,-15,relative-cost-logit,45
+electricity,refined liquids,-10,relative-cost-logit,45
+electricity,biomass,-10,relative-cost-logit,45
+electricity,nuclear,-5,relative-cost-logit,45
+electricity,wind,-7,relative-cost-logit,45
+electricity,solar,-9,relative-cost-logit,45
+electricity,geothermal,-14,relative-cost-logit,45
+electricity,hydro,-12,relative-cost-logit,45
+elect_td_bld,rooftop_pv,-12,relative-cost-logit,45
+peak generation,grid_storage,-15,relative-cost-logit,45
+electricity,coal,-13,relative-cost-logit,46
+electricity,gas,-18,relative-cost-logit,46
+electricity,refined liquids,-16,relative-cost-logit,46
+electricity,biomass,-18,relative-cost-logit,46
+electricity,nuclear,-12,relative-cost-logit,46
+electricity,wind,-19,relative-cost-logit,46
+electricity,solar,-1,relative-cost-logit,46
+electricity,geothermal,-20,relative-cost-logit,46
+electricity,hydro,-10,relative-cost-logit,46
+elect_td_bld,rooftop_pv,-11,relative-cost-logit,46
+peak generation,grid_storage,-4,relative-cost-logit,46
+electricity,coal,-7,relative-cost-logit,47
+electricity,gas,-2,relative-cost-logit,47
+electricity,refined liquids,-5,relative-cost-logit,47
+electricity,biomass,-17,relative-cost-logit,47
+electricity,nuclear,-14,relative-cost-logit,47
+electricity,wind,-12,relative-cost-logit,47
+electricity,solar,-18,relative-cost-logit,47
+electricity,geothermal,-18,relative-cost-logit,47
+electricity,hydro,-16,relative-cost-logit,47
+elect_td_bld,rooftop_pv,-20,relative-cost-logit,47
+peak generation,grid_storage,-1,relative-cost-logit,47
+electricity,coal,-17,relative-cost-logit,48
+electricity,gas,-8,relative-cost-logit,48
+electricity,refined liquids,-10,relative-cost-logit,48
+electricity,biomass,-3,relative-cost-logit,48
+electricity,nuclear,-12,relative-cost-logit,48
+electricity,wind,-14,relative-cost-logit,48
+electricity,solar,-1,relative-cost-logit,48
+electricity,geothermal,-16,relative-cost-logit,48
+electricity,hydro,-18,relative-cost-logit,48
+elect_td_bld,rooftop_pv,-19,relative-cost-logit,48
+peak generation,grid_storage,-14,relative-cost-logit,48
+electricity,coal,-2,relative-cost-logit,49
+electricity,gas,-13,relative-cost-logit,49
+electricity,refined liquids,-1,relative-cost-logit,49
+electricity,biomass,-10,relative-cost-logit,49
+electricity,nuclear,-13,relative-cost-logit,49
+electricity,wind,-1,relative-cost-logit,49
+electricity,solar,-4,relative-cost-logit,49
+electricity,geothermal,-13,relative-cost-logit,49
+electricity,hydro,-5,relative-cost-logit,49
+elect_td_bld,rooftop_pv,-15,relative-cost-logit,49
+peak generation,grid_storage,-15,relative-cost-logit,49
+electricity,coal,-3,relative-cost-logit,50
+electricity,gas,-1,relative-cost-logit,50
+electricity,refined liquids,-17,relative-cost-logit,50
+electricity,biomass,-18,relative-cost-logit,50
+electricity,nuclear,-5,relative-cost-logit,50
+electricity,wind,-2,relative-cost-logit,50
+electricity,solar,-9,relative-cost-logit,50
+electricity,geothermal,-14,relative-cost-logit,50
+electricity,hydro,-2,relative-cost-logit,50
+elect_td_bld,rooftop_pv,-7,relative-cost-logit,50
+peak generation,grid_storage,-6,relative-cost-logit,50
+electricity,coal,-16,relative-cost-logit,51
+electricity,gas,-16,relative-cost-logit,51
+electricity,refined liquids,-19,relative-cost-logit,51
+electricity,biomass,-9,relative-cost-logit,51
+electricity,nuclear,-7,relative-cost-logit,51
+electricity,wind,-2,relative-cost-logit,51
+electricity,solar,-8,relative-cost-logit,51
+electricity,geothermal,-9,relative-cost-logit,51
+electricity,hydro,-10,relative-cost-logit,51
+elect_td_bld,rooftop_pv,-12,relative-cost-logit,51
+peak generation,grid_storage,-1,relative-cost-logit,51
+electricity,coal,-12,relative-cost-logit,52
+electricity,gas,-17,relative-cost-logit,52
+electricity,refined liquids,-4,relative-cost-logit,52
+electricity,biomass,-4,relative-cost-logit,52
+electricity,nuclear,-18,relative-cost-logit,52
+electricity,wind,-1,relative-cost-logit,52
+electricity,solar,-4,relative-cost-logit,52
+electricity,geothermal,-20,relative-cost-logit,52
+electricity,hydro,-11,relative-cost-logit,52
+elect_td_bld,rooftop_pv,-6,relative-cost-logit,52
+peak generation,grid_storage,-10,relative-cost-logit,52
+electricity,coal,-15,relative-cost-logit,53
+electricity,gas,-2,relative-cost-logit,53
+electricity,refined liquids,-4,relative-cost-logit,53
+electricity,biomass,-4,relative-cost-logit,53
+electricity,nuclear,-8,relative-cost-logit,53
+electricity,wind,-19,relative-cost-logit,53
+electricity,solar,-17,relative-cost-logit,53
+electricity,geothermal,-11,relative-cost-logit,53
+electricity,hydro,-18,relative-cost-logit,53
+elect_td_bld,rooftop_pv,-11,relative-cost-logit,53
+peak generation,grid_storage,-19,relative-cost-logit,53
+electricity,coal,-11,relative-cost-logit,54
+electricity,gas,-16,relative-cost-logit,54
+electricity,refined liquids,-6,relative-cost-logit,54
+electricity,biomass,-17,relative-cost-logit,54
+electricity,nuclear,-16,relative-cost-logit,54
+electricity,wind,-16,relative-cost-logit,54
+electricity,solar,-20,relative-cost-logit,54
+electricity,geothermal,-8,relative-cost-logit,54
+electricity,hydro,-14,relative-cost-logit,54
+elect_td_bld,rooftop_pv,-10,relative-cost-logit,54
+peak generation,grid_storage,-10,relative-cost-logit,54
+electricity,coal,-2,relative-cost-logit,55
+electricity,gas,-18,relative-cost-logit,55
+electricity,refined liquids,-20,relative-cost-logit,55
+electricity,biomass,-8,relative-cost-logit,55
+electricity,nuclear,-11,relative-cost-logit,55
+electricity,wind,-11,relative-cost-logit,55
+electricity,solar,-19,relative-cost-logit,55
+electricity,geothermal,-4,relative-cost-logit,55
+electricity,hydro,-13,relative-cost-logit,55
+elect_td_bld,rooftop_pv,-18,relative-cost-logit,55
+peak generation,grid_storage,-9,relative-cost-logit,55
+electricity,coal,-11,relative-cost-logit,56
+electricity,gas,-20,relative-cost-logit,56
+electricity,refined liquids,-2,relative-cost-logit,56
+electricity,biomass,-15,relative-cost-logit,56
+electricity,nuclear,-20,relative-cost-logit,56
+electricity,wind,-9,relative-cost-logit,56
+electricity,solar,-3,relative-cost-logit,56
+electricity,geothermal,-17,relative-cost-logit,56
+electricity,hydro,-5,relative-cost-logit,56
+elect_td_bld,rooftop_pv,-10,relative-cost-logit,56
+peak generation,grid_storage,-10,relative-cost-logit,56
+electricity,coal,-13,relative-cost-logit,57
+electricity,gas,-13,relative-cost-logit,57
+electricity,refined liquids,-20,relative-cost-logit,57
+electricity,biomass,-15,relative-cost-logit,57
+electricity,nuclear,-13,relative-cost-logit,57
+electricity,wind,-11,relative-cost-logit,57
+electricity,solar,-6,relative-cost-logit,57
+electricity,geothermal,-4,relative-cost-logit,57
+electricity,hydro,-17,relative-cost-logit,57
+elect_td_bld,rooftop_pv,-1,relative-cost-logit,57
+peak generation,grid_storage,-8,relative-cost-logit,57
+electricity,coal,-4,relative-cost-logit,58
+electricity,gas,-8,relative-cost-logit,58
+electricity,refined liquids,-9,relative-cost-logit,58
+electricity,biomass,-6,relative-cost-logit,58
+electricity,nuclear,-14,relative-cost-logit,58
+electricity,wind,-3,relative-cost-logit,58
+electricity,solar,-7,relative-cost-logit,58
+electricity,geothermal,-14,relative-cost-logit,58
+electricity,hydro,-13,relative-cost-logit,58
+elect_td_bld,rooftop_pv,-14,relative-cost-logit,58
+peak generation,grid_storage,-19,relative-cost-logit,58
+electricity,coal,-16,relative-cost-logit,59
+electricity,gas,-14,relative-cost-logit,59
+electricity,refined liquids,-1,relative-cost-logit,59
+electricity,biomass,-17,relative-cost-logit,59
+electricity,nuclear,-6,relative-cost-logit,59
+electricity,wind,-7,relative-cost-logit,59
+electricity,solar,-9,relative-cost-logit,59
+electricity,geothermal,-5,relative-cost-logit,59
+electricity,hydro,-15,relative-cost-logit,59
+elect_td_bld,rooftop_pv,-2,relative-cost-logit,59
+peak generation,grid_storage,-10,relative-cost-logit,59
+electricity,coal,-4,relative-cost-logit,60
+electricity,gas,-18,relative-cost-logit,60
+electricity,refined liquids,-3,relative-cost-logit,60
+electricity,biomass,-16,relative-cost-logit,60
+electricity,nuclear,-5,relative-cost-logit,60
+electricity,wind,-7,relative-cost-logit,60
+electricity,solar,-2,relative-cost-logit,60
+electricity,geothermal,-20,relative-cost-logit,60
+electricity,hydro,-20,relative-cost-logit,60
+elect_td_bld,rooftop_pv,-16,relative-cost-logit,60
+peak generation,grid_storage,-11,relative-cost-logit,60
+electricity,coal,-10,relative-cost-logit,61
+electricity,gas,-19,relative-cost-logit,61
+electricity,refined liquids,-2,relative-cost-logit,61
+electricity,biomass,-10,relative-cost-logit,61
+electricity,nuclear,-10,relative-cost-logit,61
+electricity,wind,-19,relative-cost-logit,61
+electricity,solar,-9,relative-cost-logit,61
+electricity,geothermal,-14,relative-cost-logit,61
+electricity,hydro,-2,relative-cost-logit,61
+elect_td_bld,rooftop_pv,-20,relative-cost-logit,61
+peak generation,grid_storage,-6,relative-cost-logit,61
+electricity,coal,-20,relative-cost-logit,62
+electricity,gas,-19,relative-cost-logit,62
+electricity,refined liquids,-11,relative-cost-logit,62
+electricity,biomass,-16,relative-cost-logit,62
+electricity,nuclear,-6,relative-cost-logit,62
+electricity,wind,-6,relative-cost-logit,62
+electricity,solar,-7,relative-cost-logit,62
+electricity,geothermal,-17,relative-cost-logit,62
+electricity,hydro,-20,relative-cost-logit,62
+elect_td_bld,rooftop_pv,-13,relative-cost-logit,62
+peak generation,grid_storage,-10,relative-cost-logit,62
+electricity,coal,-20,relative-cost-logit,63
+electricity,gas,-11,relative-cost-logit,63
+electricity,refined liquids,-9,relative-cost-logit,63
+electricity,biomass,-13,relative-cost-logit,63
+electricity,nuclear,-14,relative-cost-logit,63
+electricity,wind,-1,relative-cost-logit,63
+electricity,solar,-14,relative-cost-logit,63
+electricity,geothermal,-4,relative-cost-logit,63
+electricity,hydro,-15,relative-cost-logit,63
+elect_td_bld,rooftop_pv,-12,relative-cost-logit,63
+peak generation,grid_storage,-16,relative-cost-logit,63
+electricity,coal,-7,relative-cost-logit,64
+electricity,gas,-6,relative-cost-logit,64
+electricity,refined liquids,-14,relative-cost-logit,64
+electricity,biomass,-2,relative-cost-logit,64
+electricity,nuclear,-12,relative-cost-logit,64
+electricity,wind,-4,relative-cost-logit,64
+electricity,solar,-2,relative-cost-logit,64
+electricity,geothermal,-13,relative-cost-logit,64
+electricity,hydro,-19,relative-cost-logit,64
+elect_td_bld,rooftop_pv,-20,relative-cost-logit,64
+peak generation,grid_storage,-7,relative-cost-logit,64
+electricity,coal,-3,relative-cost-logit,65
+electricity,gas,-20,relative-cost-logit,65
+electricity,refined liquids,-12,relative-cost-logit,65
+electricity,biomass,-18,relative-cost-logit,65
+electricity,nuclear,-5,relative-cost-logit,65
+electricity,wind,-6,relative-cost-logit,65
+electricity,solar,-4,relative-cost-logit,65
+electricity,geothermal,-6,relative-cost-logit,65
+electricity,hydro,-1,relative-cost-logit,65
+elect_td_bld,rooftop_pv,-3,relative-cost-logit,65
+peak generation,grid_storage,-15,relative-cost-logit,65
+electricity,coal,-2,relative-cost-logit,66
+electricity,gas,-16,relative-cost-logit,66
+electricity,refined liquids,-7,relative-cost-logit,66
+electricity,biomass,-15,relative-cost-logit,66
+electricity,nuclear,-11,relative-cost-logit,66
+electricity,wind,-12,relative-cost-logit,66
+electricity,solar,-16,relative-cost-logit,66
+electricity,geothermal,-18,relative-cost-logit,66
+electricity,hydro,-8,relative-cost-logit,66
+elect_td_bld,rooftop_pv,-5,relative-cost-logit,66
+peak generation,grid_storage,-19,relative-cost-logit,66
+electricity,coal,-14,relative-cost-logit,67
+electricity,gas,-20,relative-cost-logit,67
+electricity,refined liquids,-19,relative-cost-logit,67
+electricity,biomass,-19,relative-cost-logit,67
+electricity,nuclear,-6,relative-cost-logit,67
+electricity,wind,-11,relative-cost-logit,67
+electricity,solar,-11,relative-cost-logit,67
+electricity,geothermal,-15,relative-cost-logit,67
+electricity,hydro,-6,relative-cost-logit,67
+elect_td_bld,rooftop_pv,-18,relative-cost-logit,67
+peak generation,grid_storage,-19,relative-cost-logit,67
+electricity,coal,-3,relative-cost-logit,68
+electricity,gas,-9,relative-cost-logit,68
+electricity,refined liquids,-1,relative-cost-logit,68
+electricity,biomass,-19,relative-cost-logit,68
+electricity,nuclear,-12,relative-cost-logit,68
+electricity,wind,-19,relative-cost-logit,68
+electricity,solar,-9,relative-cost-logit,68
+electricity,geothermal,-6,relative-cost-logit,68
+electricity,hydro,-11,relative-cost-logit,68
+elect_td_bld,rooftop_pv,-12,relative-cost-logit,68
+peak generation,grid_storage,-2,relative-cost-logit,68
+electricity,coal,-6,relative-cost-logit,69
+electricity,gas,-5,relative-cost-logit,69
+electricity,refined liquids,-16,relative-cost-logit,69
+electricity,biomass,-2,relative-cost-logit,69
+electricity,nuclear,-6,relative-cost-logit,69
+electricity,wind,-4,relative-cost-logit,69
+electricity,solar,-18,relative-cost-logit,69
+electricity,geothermal,-8,relative-cost-logit,69
+electricity,hydro,-18,relative-cost-logit,69
+elect_td_bld,rooftop_pv,-10,relative-cost-logit,69
+peak generation,grid_storage,-19,relative-cost-logit,69
+electricity,coal,-5,relative-cost-logit,70
+electricity,gas,-19,relative-cost-logit,70
+electricity,refined liquids,-17,relative-cost-logit,70
+electricity,biomass,-6,relative-cost-logit,70
+electricity,nuclear,-6,relative-cost-logit,70
+electricity,wind,-17,relative-cost-logit,70
+electricity,solar,-9,relative-cost-logit,70
+electricity,geothermal,-17,relative-cost-logit,70
+electricity,hydro,-11,relative-cost-logit,70
+elect_td_bld,rooftop_pv,-12,relative-cost-logit,70
+peak generation,grid_storage,-11,relative-cost-logit,70
+electricity,coal,-19,relative-cost-logit,71
+electricity,gas,-9,relative-cost-logit,71
+electricity,refined liquids,-1,relative-cost-logit,71
+electricity,biomass,-6,relative-cost-logit,71
+electricity,nuclear,-16,relative-cost-logit,71
+electricity,wind,-18,relative-cost-logit,71
+electricity,solar,-8,relative-cost-logit,71
+electricity,geothermal,-11,relative-cost-logit,71
+electricity,hydro,-12,relative-cost-logit,71
+elect_td_bld,rooftop_pv,-15,relative-cost-logit,71
+peak generation,grid_storage,-5,relative-cost-logit,71
+electricity,coal,-13,relative-cost-logit,72
+electricity,gas,-18,relative-cost-logit,72
+electricity,refined liquids,-4,relative-cost-logit,72
+electricity,biomass,-6,relative-cost-logit,72
+electricity,nuclear,-5,relative-cost-logit,72
+electricity,wind,-13,relative-cost-logit,72
+electricity,solar,-6,relative-cost-logit,72
+electricity,geothermal,-9,relative-cost-logit,72
+electricity,hydro,-9,relative-cost-logit,72
+elect_td_bld,rooftop_pv,-15,relative-cost-logit,72
+peak generation,grid_storage,-17,relative-cost-logit,72
+electricity,coal,-10,relative-cost-logit,73
+electricity,gas,-16,relative-cost-logit,73
+electricity,refined liquids,-2,relative-cost-logit,73
+electricity,biomass,-4,relative-cost-logit,73
+electricity,nuclear,-17,relative-cost-logit,73
+electricity,wind,-16,relative-cost-logit,73
+electricity,solar,-12,relative-cost-logit,73
+electricity,geothermal,-20,relative-cost-logit,73
+electricity,hydro,-2,relative-cost-logit,73
+elect_td_bld,rooftop_pv,-13,relative-cost-logit,73
+peak generation,grid_storage,-10,relative-cost-logit,73
+electricity,coal,-15,relative-cost-logit,74
+electricity,gas,-5,relative-cost-logit,74
+electricity,refined liquids,-19,relative-cost-logit,74
+electricity,biomass,-1,relative-cost-logit,74
+electricity,nuclear,-8,relative-cost-logit,74
+electricity,wind,-18,relative-cost-logit,74
+electricity,solar,-7,relative-cost-logit,74
+electricity,geothermal,-20,relative-cost-logit,74
+electricity,hydro,-20,relative-cost-logit,74
+elect_td_bld,rooftop_pv,-6,relative-cost-logit,74
+peak generation,grid_storage,-2,relative-cost-logit,74
+electricity,coal,-12,relative-cost-logit,75
+electricity,gas,-1,relative-cost-logit,75
+electricity,refined liquids,-8,relative-cost-logit,75
+electricity,biomass,-15,relative-cost-logit,75
+electricity,nuclear,-4,relative-cost-logit,75
+electricity,wind,-4,relative-cost-logit,75
+electricity,solar,-8,relative-cost-logit,75
+electricity,geothermal,-10,relative-cost-logit,75
+electricity,hydro,-14,relative-cost-logit,75
+elect_td_bld,rooftop_pv,-7,relative-cost-logit,75
+peak generation,grid_storage,-19,relative-cost-logit,75
+electricity,coal,-4,relative-cost-logit,76
+electricity,gas,-1,relative-cost-logit,76
+electricity,refined liquids,-10,relative-cost-logit,76
+electricity,biomass,-15,relative-cost-logit,76
+electricity,nuclear,-2,relative-cost-logit,76
+electricity,wind,-10,relative-cost-logit,76
+electricity,solar,-12,relative-cost-logit,76
+electricity,geothermal,-13,relative-cost-logit,76
+electricity,hydro,-7,relative-cost-logit,76
+elect_td_bld,rooftop_pv,-1,relative-cost-logit,76
+peak generation,grid_storage,-20,relative-cost-logit,76
+electricity,coal,-14,relative-cost-logit,77
+electricity,gas,-15,relative-cost-logit,77
+electricity,refined liquids,-13,relative-cost-logit,77
+electricity,biomass,-16,relative-cost-logit,77
+electricity,nuclear,-1,relative-cost-logit,77
+electricity,wind,-6,relative-cost-logit,77
+electricity,solar,-14,relative-cost-logit,77
+electricity,geothermal,-3,relative-cost-logit,77
+electricity,hydro,-9,relative-cost-logit,77
+elect_td_bld,rooftop_pv,-18,relative-cost-logit,77
+peak generation,grid_storage,-11,relative-cost-logit,77
+electricity,coal,-19,relative-cost-logit,78
+electricity,gas,-3,relative-cost-logit,78
+electricity,refined liquids,-8,relative-cost-logit,78
+electricity,biomass,-20,relative-cost-logit,78
+electricity,nuclear,-11,relative-cost-logit,78
+electricity,wind,-16,relative-cost-logit,78
+electricity,solar,-12,relative-cost-logit,78
+electricity,geothermal,-11,relative-cost-logit,78
+electricity,hydro,-19,relative-cost-logit,78
+elect_td_bld,rooftop_pv,-17,relative-cost-logit,78
+peak generation,grid_storage,-18,relative-cost-logit,78
+electricity,coal,-7,relative-cost-logit,79
+electricity,gas,-2,relative-cost-logit,79
+electricity,refined liquids,-11,relative-cost-logit,79
+electricity,biomass,-19,relative-cost-logit,79
+electricity,nuclear,-9,relative-cost-logit,79
+electricity,wind,-8,relative-cost-logit,79
+electricity,solar,-17,relative-cost-logit,79
+electricity,geothermal,-11,relative-cost-logit,79
+electricity,hydro,-18,relative-cost-logit,79
+elect_td_bld,rooftop_pv,-6,relative-cost-logit,79
+peak generation,grid_storage,-9,relative-cost-logit,79
+electricity,coal,-18,relative-cost-logit,80
+electricity,gas,-13,relative-cost-logit,80
+electricity,refined liquids,-4,relative-cost-logit,80
+electricity,biomass,-18,relative-cost-logit,80
+electricity,nuclear,-3,relative-cost-logit,80
+electricity,wind,-5,relative-cost-logit,80
+electricity,solar,-18,relative-cost-logit,80
+electricity,geothermal,-7,relative-cost-logit,80
+electricity,hydro,-10,relative-cost-logit,80
+elect_td_bld,rooftop_pv,-20,relative-cost-logit,80
+peak generation,grid_storage,-5,relative-cost-logit,80
+electricity,coal,-19,relative-cost-logit,81
+electricity,gas,-18,relative-cost-logit,81
+electricity,refined liquids,-20,relative-cost-logit,81
+electricity,biomass,-15,relative-cost-logit,81
+electricity,nuclear,-11,relative-cost-logit,81
+electricity,wind,-9,relative-cost-logit,81
+electricity,solar,-16,relative-cost-logit,81
+electricity,geothermal,-8,relative-cost-logit,81
+electricity,hydro,-10,relative-cost-logit,81
+elect_td_bld,rooftop_pv,-13,relative-cost-logit,81
+peak generation,grid_storage,-2,relative-cost-logit,81
+electricity,coal,-4,relative-cost-logit,82
+electricity,gas,-15,relative-cost-logit,82
+electricity,refined liquids,-15,relative-cost-logit,82
+electricity,biomass,-17,relative-cost-logit,82
+electricity,nuclear,-1,relative-cost-logit,82
+electricity,wind,-4,relative-cost-logit,82
+electricity,solar,-6,relative-cost-logit,82
+electricity,geothermal,-14,relative-cost-logit,82
+electricity,hydro,-4,relative-cost-logit,82
+elect_td_bld,rooftop_pv,-7,relative-cost-logit,82
+peak generation,grid_storage,-11,relative-cost-logit,82
+electricity,coal,-1,relative-cost-logit,83
+electricity,gas,-11,relative-cost-logit,83
+electricity,refined liquids,-2,relative-cost-logit,83
+electricity,biomass,-12,relative-cost-logit,83
+electricity,nuclear,-18,relative-cost-logit,83
+electricity,wind,-8,relative-cost-logit,83
+electricity,solar,-20,relative-cost-logit,83
+electricity,geothermal,-8,relative-cost-logit,83
+electricity,hydro,-15,relative-cost-logit,83
+elect_td_bld,rooftop_pv,-5,relative-cost-logit,83
+peak generation,grid_storage,-16,relative-cost-logit,83
+electricity,coal,-7,relative-cost-logit,84
+electricity,gas,-19,relative-cost-logit,84
+electricity,refined liquids,-13,relative-cost-logit,84
+electricity,biomass,-7,relative-cost-logit,84
+electricity,nuclear,-20,relative-cost-logit,84
+electricity,wind,-16,relative-cost-logit,84
+electricity,solar,-19,relative-cost-logit,84
+electricity,geothermal,-11,relative-cost-logit,84
+electricity,hydro,-8,relative-cost-logit,84
+elect_td_bld,rooftop_pv,-13,relative-cost-logit,84
+peak generation,grid_storage,-4,relative-cost-logit,84
+electricity,coal,-17,relative-cost-logit,85
+electricity,gas,-20,relative-cost-logit,85
+electricity,refined liquids,-2,relative-cost-logit,85
+electricity,biomass,-11,relative-cost-logit,85
+electricity,nuclear,-17,relative-cost-logit,85
+electricity,wind,-15,relative-cost-logit,85
+electricity,solar,-19,relative-cost-logit,85
+electricity,geothermal,-3,relative-cost-logit,85
+electricity,hydro,-15,relative-cost-logit,85
+elect_td_bld,rooftop_pv,-9,relative-cost-logit,85
+peak generation,grid_storage,-2,relative-cost-logit,85
+electricity,coal,-10,relative-cost-logit,86
+electricity,gas,-6,relative-cost-logit,86
+electricity,refined liquids,-13,relative-cost-logit,86
+electricity,biomass,-4,relative-cost-logit,86
+electricity,nuclear,-1,relative-cost-logit,86
+electricity,wind,-11,relative-cost-logit,86
+electricity,solar,-12,relative-cost-logit,86
+electricity,geothermal,-1,relative-cost-logit,86
+electricity,hydro,-1,relative-cost-logit,86
+elect_td_bld,rooftop_pv,-4,relative-cost-logit,86
+peak generation,grid_storage,-9,relative-cost-logit,86
+electricity,coal,-8,relative-cost-logit,87
+electricity,gas,-18,relative-cost-logit,87
+electricity,refined liquids,-1,relative-cost-logit,87
+electricity,biomass,-16,relative-cost-logit,87
+electricity,nuclear,-13,relative-cost-logit,87
+electricity,wind,-18,relative-cost-logit,87
+electricity,solar,-3,relative-cost-logit,87
+electricity,geothermal,-19,relative-cost-logit,87
+electricity,hydro,-9,relative-cost-logit,87
+elect_td_bld,rooftop_pv,-3,relative-cost-logit,87
+peak generation,grid_storage,-6,relative-cost-logit,87
+electricity,coal,-2,relative-cost-logit,88
+electricity,gas,-1,relative-cost-logit,88
+electricity,refined liquids,-17,relative-cost-logit,88
+electricity,biomass,-18,relative-cost-logit,88
+electricity,nuclear,-19,relative-cost-logit,88
+electricity,wind,-18,relative-cost-logit,88
+electricity,solar,-18,relative-cost-logit,88
+electricity,geothermal,-13,relative-cost-logit,88
+electricity,hydro,-1,relative-cost-logit,88
+elect_td_bld,rooftop_pv,-8,relative-cost-logit,88
+peak generation,grid_storage,-11,relative-cost-logit,88
+electricity,coal,-8,relative-cost-logit,89
+electricity,gas,-14,relative-cost-logit,89
+electricity,refined liquids,-12,relative-cost-logit,89
+electricity,biomass,-3,relative-cost-logit,89
+electricity,nuclear,-13,relative-cost-logit,89
+electricity,wind,-11,relative-cost-logit,89
+electricity,solar,-12,relative-cost-logit,89
+electricity,geothermal,-2,relative-cost-logit,89
+electricity,hydro,-18,relative-cost-logit,89
+elect_td_bld,rooftop_pv,-6,relative-cost-logit,89
+peak generation,grid_storage,-16,relative-cost-logit,89
+electricity,coal,-14,relative-cost-logit,90
+electricity,gas,-3,relative-cost-logit,90
+electricity,refined liquids,-19,relative-cost-logit,90
+electricity,biomass,-5,relative-cost-logit,90
+electricity,nuclear,-6,relative-cost-logit,90
+electricity,wind,-10,relative-cost-logit,90
+electricity,solar,-18,relative-cost-logit,90
+electricity,geothermal,-8,relative-cost-logit,90
+electricity,hydro,-14,relative-cost-logit,90
+elect_td_bld,rooftop_pv,-4,relative-cost-logit,90
+peak generation,grid_storage,-17,relative-cost-logit,90
+electricity,coal,-17,relative-cost-logit,91
+electricity,gas,-11,relative-cost-logit,91
+electricity,refined liquids,-19,relative-cost-logit,91
+electricity,biomass,-8,relative-cost-logit,91
+electricity,nuclear,-2,relative-cost-logit,91
+electricity,wind,-11,relative-cost-logit,91
+electricity,solar,-20,relative-cost-logit,91
+electricity,geothermal,-4,relative-cost-logit,91
+electricity,hydro,-19,relative-cost-logit,91
+elect_td_bld,rooftop_pv,-3,relative-cost-logit,91
+peak generation,grid_storage,-13,relative-cost-logit,91
+electricity,coal,-18,relative-cost-logit,92
+electricity,gas,-15,relative-cost-logit,92
+electricity,refined liquids,-6,relative-cost-logit,92
+electricity,biomass,-11,relative-cost-logit,92
+electricity,nuclear,-9,relative-cost-logit,92
+electricity,wind,-9,relative-cost-logit,92
+electricity,solar,-5,relative-cost-logit,92
+electricity,geothermal,-1,relative-cost-logit,92
+electricity,hydro,-9,relative-cost-logit,92
+elect_td_bld,rooftop_pv,-8,relative-cost-logit,92
+peak generation,grid_storage,-17,relative-cost-logit,92
+electricity,coal,-20,relative-cost-logit,93
+electricity,gas,-11,relative-cost-logit,93
+electricity,refined liquids,-16,relative-cost-logit,93
+electricity,biomass,-15,relative-cost-logit,93
+electricity,nuclear,-15,relative-cost-logit,93
+electricity,wind,-7,relative-cost-logit,93
+electricity,solar,-13,relative-cost-logit,93
+electricity,geothermal,-18,relative-cost-logit,93
+electricity,hydro,-19,relative-cost-logit,93
+elect_td_bld,rooftop_pv,-5,relative-cost-logit,93
+peak generation,grid_storage,-10,relative-cost-logit,93
+electricity,coal,-16,relative-cost-logit,94
+electricity,gas,-17,relative-cost-logit,94
+electricity,refined liquids,-10,relative-cost-logit,94
+electricity,biomass,-2,relative-cost-logit,94
+electricity,nuclear,-20,relative-cost-logit,94
+electricity,wind,-15,relative-cost-logit,94
+electricity,solar,-18,relative-cost-logit,94
+electricity,geothermal,-15,relative-cost-logit,94
+electricity,hydro,-13,relative-cost-logit,94
+elect_td_bld,rooftop_pv,-9,relative-cost-logit,94
+peak generation,grid_storage,-15,relative-cost-logit,94
+electricity,coal,-5,relative-cost-logit,95
+electricity,gas,-19,relative-cost-logit,95
+electricity,refined liquids,-13,relative-cost-logit,95
+electricity,biomass,-10,relative-cost-logit,95
+electricity,nuclear,-6,relative-cost-logit,95
+electricity,wind,-9,relative-cost-logit,95
+electricity,solar,-10,relative-cost-logit,95
+electricity,geothermal,-14,relative-cost-logit,95
+electricity,hydro,-13,relative-cost-logit,95
+elect_td_bld,rooftop_pv,-8,relative-cost-logit,95
+peak generation,grid_storage,-2,relative-cost-logit,95
+electricity,coal,-19,relative-cost-logit,96
+electricity,gas,-14,relative-cost-logit,96
+electricity,refined liquids,-11,relative-cost-logit,96
+electricity,biomass,-11,relative-cost-logit,96
+electricity,nuclear,-9,relative-cost-logit,96
+electricity,wind,-3,relative-cost-logit,96
+electricity,solar,-16,relative-cost-logit,96
+electricity,geothermal,-4,relative-cost-logit,96
+electricity,hydro,-11,relative-cost-logit,96
+elect_td_bld,rooftop_pv,-6,relative-cost-logit,96
+peak generation,grid_storage,-2,relative-cost-logit,96
+electricity,coal,-4,relative-cost-logit,97
+electricity,gas,-19,relative-cost-logit,97
+electricity,refined liquids,-4,relative-cost-logit,97
+electricity,biomass,-2,relative-cost-logit,97
+electricity,nuclear,-7,relative-cost-logit,97
+electricity,wind,-13,relative-cost-logit,97
+electricity,solar,-10,relative-cost-logit,97
+electricity,geothermal,-15,relative-cost-logit,97
+electricity,hydro,-12,relative-cost-logit,97
+elect_td_bld,rooftop_pv,-15,relative-cost-logit,97
+peak generation,grid_storage,-4,relative-cost-logit,97
+electricity,coal,-2,relative-cost-logit,98
+electricity,gas,-10,relative-cost-logit,98
+electricity,refined liquids,-11,relative-cost-logit,98
+electricity,biomass,-1,relative-cost-logit,98
+electricity,nuclear,-18,relative-cost-logit,98
+electricity,wind,-17,relative-cost-logit,98
+electricity,solar,-19,relative-cost-logit,98
+electricity,geothermal,-2,relative-cost-logit,98
+electricity,hydro,-11,relative-cost-logit,98
+elect_td_bld,rooftop_pv,-7,relative-cost-logit,98
+peak generation,grid_storage,-15,relative-cost-logit,98
+electricity,coal,-2,relative-cost-logit,99
+electricity,gas,-11,relative-cost-logit,99
+electricity,refined liquids,-14,relative-cost-logit,99
+electricity,biomass,-11,relative-cost-logit,99
+electricity,nuclear,-3,relative-cost-logit,99
+electricity,wind,-18,relative-cost-logit,99
+electricity,solar,-7,relative-cost-logit,99
+electricity,geothermal,-12,relative-cost-logit,99
+electricity,hydro,-9,relative-cost-logit,99
+elect_td_bld,rooftop_pv,-17,relative-cost-logit,99
+peak generation,grid_storage,-9,relative-cost-logit,99
+electricity,coal,-6,relative-cost-logit,100
+electricity,gas,-3,relative-cost-logit,100
+electricity,refined liquids,-7,relative-cost-logit,100
+electricity,biomass,-19,relative-cost-logit,100
+electricity,nuclear,-13,relative-cost-logit,100
+electricity,wind,-7,relative-cost-logit,100
+electricity,solar,-7,relative-cost-logit,100
+electricity,geothermal,-5,relative-cost-logit,100
+electricity,hydro,-2,relative-cost-logit,100
+elect_td_bld,rooftop_pv,-6,relative-cost-logit,100
+peak generation,grid_storage,-19,relative-cost-logit,100

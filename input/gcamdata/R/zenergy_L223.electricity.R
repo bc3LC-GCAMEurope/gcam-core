@@ -1116,7 +1116,13 @@ module_energy_L223.electricity <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["StubTechSecOut"]])
 
     # ===================================================
-
+    message('Loading new hidncasting csv')
+    L223.GlobalTechCapital_elec <- read.csv('data/inputs/L223.GlobalTechCapital_elec_2015replaceHINDC.csv')  %>%
+      select(-X) %>%
+      as_tibble()
+    L223.GlobalIntTechCapital_elec <- read.csv('data/inputs/L223.GlobalIntTechCapital_elec_2015replaceHINDC.csv')  %>%
+      select(-X) %>%
+      as_tibble()
     # Produce outputs
 
     L223.Supplysector_elec %>%

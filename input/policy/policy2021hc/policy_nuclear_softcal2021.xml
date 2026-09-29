@@ -1,0 +1,2266 @@
+<?xml version="1.0" encoding="UTF-8"?><scenario>
+    <world>
+        <region name="Belgium">
+            <supplysector name="base load generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_base">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.435872746</output-scalar>
+                                <output-scalar year="2025">1.037778098</output-scalar>
+                                <output-scalar year="2030">1.037778098</output-scalar>
+                                <output-scalar year="2035">1.037778098</output-scalar>
+                                <output-scalar year="2040">1.037778098</output-scalar>
+                                <output-scalar year="2045">1.037778098</output-scalar>
+                                <output-scalar year="2050">1.037778098</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.435872746</output-scalar>
+                                <output-scalar year="2025">1.037778098</output-scalar>
+                                <output-scalar year="2030">1.037778098</output-scalar>
+                                <output-scalar year="2035">1.037778098</output-scalar>
+                                <output-scalar year="2040">1.037778098</output-scalar>
+                                <output-scalar year="2045">1.037778098</output-scalar>
+                                <output-scalar year="2050">1.037778098</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.435872746</output-scalar>
+                                <output-scalar year="2025">1.037778098</output-scalar>
+                                <output-scalar year="2030">1.037778098</output-scalar>
+                                <output-scalar year="2035">1.037778098</output-scalar>
+                                <output-scalar year="2040">1.037778098</output-scalar>
+                                <output-scalar year="2045">1.037778098</output-scalar>
+                                <output-scalar year="2050">1.037778098</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_int">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.435872746</output-scalar>
+                                <output-scalar year="2025">1.037778098</output-scalar>
+                                <output-scalar year="2030">1.037778098</output-scalar>
+                                <output-scalar year="2035">1.037778098</output-scalar>
+                                <output-scalar year="2040">1.037778098</output-scalar>
+                                <output-scalar year="2045">1.037778098</output-scalar>
+                                <output-scalar year="2050">1.037778098</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.435872746</output-scalar>
+                                <output-scalar year="2025">1.037778098</output-scalar>
+                                <output-scalar year="2030">1.037778098</output-scalar>
+                                <output-scalar year="2035">1.037778098</output-scalar>
+                                <output-scalar year="2040">1.037778098</output-scalar>
+                                <output-scalar year="2045">1.037778098</output-scalar>
+                                <output-scalar year="2050">1.037778098</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.435872746</output-scalar>
+                                <output-scalar year="2025">1.037778098</output-scalar>
+                                <output-scalar year="2030">1.037778098</output-scalar>
+                                <output-scalar year="2035">1.037778098</output-scalar>
+                                <output-scalar year="2040">1.037778098</output-scalar>
+                                <output-scalar year="2045">1.037778098</output-scalar>
+                                <output-scalar year="2050">1.037778098</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_peak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.435872746</output-scalar>
+                                <output-scalar year="2025">1.037778098</output-scalar>
+                                <output-scalar year="2030">1.037778098</output-scalar>
+                                <output-scalar year="2035">1.037778098</output-scalar>
+                                <output-scalar year="2040">1.037778098</output-scalar>
+                                <output-scalar year="2045">1.037778098</output-scalar>
+                                <output-scalar year="2050">1.037778098</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.435872746</output-scalar>
+                                <output-scalar year="2025">1.037778098</output-scalar>
+                                <output-scalar year="2030">1.037778098</output-scalar>
+                                <output-scalar year="2035">1.037778098</output-scalar>
+                                <output-scalar year="2040">1.037778098</output-scalar>
+                                <output-scalar year="2045">1.037778098</output-scalar>
+                                <output-scalar year="2050">1.037778098</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.435872746</output-scalar>
+                                <output-scalar year="2025">1.037778098</output-scalar>
+                                <output-scalar year="2030">1.037778098</output-scalar>
+                                <output-scalar year="2035">1.037778098</output-scalar>
+                                <output-scalar year="2040">1.037778098</output-scalar>
+                                <output-scalar year="2045">1.037778098</output-scalar>
+                                <output-scalar year="2050">1.037778098</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_subpeak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.435872746</output-scalar>
+                                <output-scalar year="2025">1.037778098</output-scalar>
+                                <output-scalar year="2030">1.037778098</output-scalar>
+                                <output-scalar year="2035">1.037778098</output-scalar>
+                                <output-scalar year="2040">1.037778098</output-scalar>
+                                <output-scalar year="2045">1.037778098</output-scalar>
+                                <output-scalar year="2050">1.037778098</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.435872746</output-scalar>
+                                <output-scalar year="2025">1.037778098</output-scalar>
+                                <output-scalar year="2030">1.037778098</output-scalar>
+                                <output-scalar year="2035">1.037778098</output-scalar>
+                                <output-scalar year="2040">1.037778098</output-scalar>
+                                <output-scalar year="2045">1.037778098</output-scalar>
+                                <output-scalar year="2050">1.037778098</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.435872746</output-scalar>
+                                <output-scalar year="2025">1.037778098</output-scalar>
+                                <output-scalar year="2030">1.037778098</output-scalar>
+                                <output-scalar year="2035">1.037778098</output-scalar>
+                                <output-scalar year="2040">1.037778098</output-scalar>
+                                <output-scalar year="2045">1.037778098</output-scalar>
+                                <output-scalar year="2050">1.037778098</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+        </region>
+        <region name="Bulgaria">
+            <supplysector name="base load generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_base">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.175879037</output-scalar>
+                                <output-scalar year="2025">1.137963497</output-scalar>
+                                <output-scalar year="2030">1.137963497</output-scalar>
+                                <output-scalar year="2035">1.137963497</output-scalar>
+                                <output-scalar year="2040">1.137963497</output-scalar>
+                                <output-scalar year="2045">1.137963497</output-scalar>
+                                <output-scalar year="2050">1.137963497</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.175879037</output-scalar>
+                                <output-scalar year="2025">1.137963497</output-scalar>
+                                <output-scalar year="2030">1.137963497</output-scalar>
+                                <output-scalar year="2035">1.137963497</output-scalar>
+                                <output-scalar year="2040">1.137963497</output-scalar>
+                                <output-scalar year="2045">1.137963497</output-scalar>
+                                <output-scalar year="2050">1.137963497</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.175879037</output-scalar>
+                                <output-scalar year="2025">1.137963497</output-scalar>
+                                <output-scalar year="2030">1.137963497</output-scalar>
+                                <output-scalar year="2035">1.137963497</output-scalar>
+                                <output-scalar year="2040">1.137963497</output-scalar>
+                                <output-scalar year="2045">1.137963497</output-scalar>
+                                <output-scalar year="2050">1.137963497</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_int">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.175879037</output-scalar>
+                                <output-scalar year="2025">1.137963497</output-scalar>
+                                <output-scalar year="2030">1.137963497</output-scalar>
+                                <output-scalar year="2035">1.137963497</output-scalar>
+                                <output-scalar year="2040">1.137963497</output-scalar>
+                                <output-scalar year="2045">1.137963497</output-scalar>
+                                <output-scalar year="2050">1.137963497</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.175879037</output-scalar>
+                                <output-scalar year="2025">1.137963497</output-scalar>
+                                <output-scalar year="2030">1.137963497</output-scalar>
+                                <output-scalar year="2035">1.137963497</output-scalar>
+                                <output-scalar year="2040">1.137963497</output-scalar>
+                                <output-scalar year="2045">1.137963497</output-scalar>
+                                <output-scalar year="2050">1.137963497</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.175879037</output-scalar>
+                                <output-scalar year="2025">1.137963497</output-scalar>
+                                <output-scalar year="2030">1.137963497</output-scalar>
+                                <output-scalar year="2035">1.137963497</output-scalar>
+                                <output-scalar year="2040">1.137963497</output-scalar>
+                                <output-scalar year="2045">1.137963497</output-scalar>
+                                <output-scalar year="2050">1.137963497</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_peak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.175879037</output-scalar>
+                                <output-scalar year="2025">1.137963497</output-scalar>
+                                <output-scalar year="2030">1.137963497</output-scalar>
+                                <output-scalar year="2035">1.137963497</output-scalar>
+                                <output-scalar year="2040">1.137963497</output-scalar>
+                                <output-scalar year="2045">1.137963497</output-scalar>
+                                <output-scalar year="2050">1.137963497</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.175879037</output-scalar>
+                                <output-scalar year="2025">1.137963497</output-scalar>
+                                <output-scalar year="2030">1.137963497</output-scalar>
+                                <output-scalar year="2035">1.137963497</output-scalar>
+                                <output-scalar year="2040">1.137963497</output-scalar>
+                                <output-scalar year="2045">1.137963497</output-scalar>
+                                <output-scalar year="2050">1.137963497</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.175879037</output-scalar>
+                                <output-scalar year="2025">1.137963497</output-scalar>
+                                <output-scalar year="2030">1.137963497</output-scalar>
+                                <output-scalar year="2035">1.137963497</output-scalar>
+                                <output-scalar year="2040">1.137963497</output-scalar>
+                                <output-scalar year="2045">1.137963497</output-scalar>
+                                <output-scalar year="2050">1.137963497</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_subpeak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.175879037</output-scalar>
+                                <output-scalar year="2025">1.137963497</output-scalar>
+                                <output-scalar year="2030">1.137963497</output-scalar>
+                                <output-scalar year="2035">1.137963497</output-scalar>
+                                <output-scalar year="2040">1.137963497</output-scalar>
+                                <output-scalar year="2045">1.137963497</output-scalar>
+                                <output-scalar year="2050">1.137963497</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.175879037</output-scalar>
+                                <output-scalar year="2025">1.137963497</output-scalar>
+                                <output-scalar year="2030">1.137963497</output-scalar>
+                                <output-scalar year="2035">1.137963497</output-scalar>
+                                <output-scalar year="2040">1.137963497</output-scalar>
+                                <output-scalar year="2045">1.137963497</output-scalar>
+                                <output-scalar year="2050">1.137963497</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.175879037</output-scalar>
+                                <output-scalar year="2025">1.137963497</output-scalar>
+                                <output-scalar year="2030">1.137963497</output-scalar>
+                                <output-scalar year="2035">1.137963497</output-scalar>
+                                <output-scalar year="2040">1.137963497</output-scalar>
+                                <output-scalar year="2045">1.137963497</output-scalar>
+                                <output-scalar year="2050">1.137963497</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+        </region>
+        <region name="Czech Republic">
+            <supplysector name="base load generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_base">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.211668975</output-scalar>
+                                <output-scalar year="2025">1.378113083</output-scalar>
+                                <output-scalar year="2030">1.378113083</output-scalar>
+                                <output-scalar year="2035">1.378113083</output-scalar>
+                                <output-scalar year="2040">1.378113083</output-scalar>
+                                <output-scalar year="2045">1.378113083</output-scalar>
+                                <output-scalar year="2050">1.378113083</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.211668975</output-scalar>
+                                <output-scalar year="2025">1.378113083</output-scalar>
+                                <output-scalar year="2030">1.378113083</output-scalar>
+                                <output-scalar year="2035">1.378113083</output-scalar>
+                                <output-scalar year="2040">1.378113083</output-scalar>
+                                <output-scalar year="2045">1.378113083</output-scalar>
+                                <output-scalar year="2050">1.378113083</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.211668975</output-scalar>
+                                <output-scalar year="2025">1.378113083</output-scalar>
+                                <output-scalar year="2030">1.378113083</output-scalar>
+                                <output-scalar year="2035">1.378113083</output-scalar>
+                                <output-scalar year="2040">1.378113083</output-scalar>
+                                <output-scalar year="2045">1.378113083</output-scalar>
+                                <output-scalar year="2050">1.378113083</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_int">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.211668975</output-scalar>
+                                <output-scalar year="2025">1.378113083</output-scalar>
+                                <output-scalar year="2030">1.378113083</output-scalar>
+                                <output-scalar year="2035">1.378113083</output-scalar>
+                                <output-scalar year="2040">1.378113083</output-scalar>
+                                <output-scalar year="2045">1.378113083</output-scalar>
+                                <output-scalar year="2050">1.378113083</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.211668975</output-scalar>
+                                <output-scalar year="2025">1.378113083</output-scalar>
+                                <output-scalar year="2030">1.378113083</output-scalar>
+                                <output-scalar year="2035">1.378113083</output-scalar>
+                                <output-scalar year="2040">1.378113083</output-scalar>
+                                <output-scalar year="2045">1.378113083</output-scalar>
+                                <output-scalar year="2050">1.378113083</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.211668975</output-scalar>
+                                <output-scalar year="2025">1.378113083</output-scalar>
+                                <output-scalar year="2030">1.378113083</output-scalar>
+                                <output-scalar year="2035">1.378113083</output-scalar>
+                                <output-scalar year="2040">1.378113083</output-scalar>
+                                <output-scalar year="2045">1.378113083</output-scalar>
+                                <output-scalar year="2050">1.378113083</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_peak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.211668975</output-scalar>
+                                <output-scalar year="2025">1.378113083</output-scalar>
+                                <output-scalar year="2030">1.378113083</output-scalar>
+                                <output-scalar year="2035">1.378113083</output-scalar>
+                                <output-scalar year="2040">1.378113083</output-scalar>
+                                <output-scalar year="2045">1.378113083</output-scalar>
+                                <output-scalar year="2050">1.378113083</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.211668975</output-scalar>
+                                <output-scalar year="2025">1.378113083</output-scalar>
+                                <output-scalar year="2030">1.378113083</output-scalar>
+                                <output-scalar year="2035">1.378113083</output-scalar>
+                                <output-scalar year="2040">1.378113083</output-scalar>
+                                <output-scalar year="2045">1.378113083</output-scalar>
+                                <output-scalar year="2050">1.378113083</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.211668975</output-scalar>
+                                <output-scalar year="2025">1.378113083</output-scalar>
+                                <output-scalar year="2030">1.378113083</output-scalar>
+                                <output-scalar year="2035">1.378113083</output-scalar>
+                                <output-scalar year="2040">1.378113083</output-scalar>
+                                <output-scalar year="2045">1.378113083</output-scalar>
+                                <output-scalar year="2050">1.378113083</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_subpeak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.211668975</output-scalar>
+                                <output-scalar year="2025">1.378113083</output-scalar>
+                                <output-scalar year="2030">1.378113083</output-scalar>
+                                <output-scalar year="2035">1.378113083</output-scalar>
+                                <output-scalar year="2040">1.378113083</output-scalar>
+                                <output-scalar year="2045">1.378113083</output-scalar>
+                                <output-scalar year="2050">1.378113083</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.211668975</output-scalar>
+                                <output-scalar year="2025">1.378113083</output-scalar>
+                                <output-scalar year="2030">1.378113083</output-scalar>
+                                <output-scalar year="2035">1.378113083</output-scalar>
+                                <output-scalar year="2040">1.378113083</output-scalar>
+                                <output-scalar year="2045">1.378113083</output-scalar>
+                                <output-scalar year="2050">1.378113083</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.211668975</output-scalar>
+                                <output-scalar year="2025">1.378113083</output-scalar>
+                                <output-scalar year="2030">1.378113083</output-scalar>
+                                <output-scalar year="2035">1.378113083</output-scalar>
+                                <output-scalar year="2040">1.378113083</output-scalar>
+                                <output-scalar year="2045">1.378113083</output-scalar>
+                                <output-scalar year="2050">1.378113083</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+        </region>
+        <region name="Finland">
+            <supplysector name="base load generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_base">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.084093723</output-scalar>
+                                <output-scalar year="2025">1.593111101</output-scalar>
+                                <output-scalar year="2030">1.593111101</output-scalar>
+                                <output-scalar year="2035">1.593111101</output-scalar>
+                                <output-scalar year="2040">1.593111101</output-scalar>
+                                <output-scalar year="2045">1.593111101</output-scalar>
+                                <output-scalar year="2050">1.593111101</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.084093723</output-scalar>
+                                <output-scalar year="2025">1.593111101</output-scalar>
+                                <output-scalar year="2030">1.593111101</output-scalar>
+                                <output-scalar year="2035">1.593111101</output-scalar>
+                                <output-scalar year="2040">1.593111101</output-scalar>
+                                <output-scalar year="2045">1.593111101</output-scalar>
+                                <output-scalar year="2050">1.593111101</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.084093723</output-scalar>
+                                <output-scalar year="2025">1.593111101</output-scalar>
+                                <output-scalar year="2030">1.593111101</output-scalar>
+                                <output-scalar year="2035">1.593111101</output-scalar>
+                                <output-scalar year="2040">1.593111101</output-scalar>
+                                <output-scalar year="2045">1.593111101</output-scalar>
+                                <output-scalar year="2050">1.593111101</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_int">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.084093723</output-scalar>
+                                <output-scalar year="2025">1.593111101</output-scalar>
+                                <output-scalar year="2030">1.593111101</output-scalar>
+                                <output-scalar year="2035">1.593111101</output-scalar>
+                                <output-scalar year="2040">1.593111101</output-scalar>
+                                <output-scalar year="2045">1.593111101</output-scalar>
+                                <output-scalar year="2050">1.593111101</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.084093723</output-scalar>
+                                <output-scalar year="2025">1.593111101</output-scalar>
+                                <output-scalar year="2030">1.593111101</output-scalar>
+                                <output-scalar year="2035">1.593111101</output-scalar>
+                                <output-scalar year="2040">1.593111101</output-scalar>
+                                <output-scalar year="2045">1.593111101</output-scalar>
+                                <output-scalar year="2050">1.593111101</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.084093723</output-scalar>
+                                <output-scalar year="2025">1.593111101</output-scalar>
+                                <output-scalar year="2030">1.593111101</output-scalar>
+                                <output-scalar year="2035">1.593111101</output-scalar>
+                                <output-scalar year="2040">1.593111101</output-scalar>
+                                <output-scalar year="2045">1.593111101</output-scalar>
+                                <output-scalar year="2050">1.593111101</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_peak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.084093723</output-scalar>
+                                <output-scalar year="2025">1.593111101</output-scalar>
+                                <output-scalar year="2030">1.593111101</output-scalar>
+                                <output-scalar year="2035">1.593111101</output-scalar>
+                                <output-scalar year="2040">1.593111101</output-scalar>
+                                <output-scalar year="2045">1.593111101</output-scalar>
+                                <output-scalar year="2050">1.593111101</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.084093723</output-scalar>
+                                <output-scalar year="2025">1.593111101</output-scalar>
+                                <output-scalar year="2030">1.593111101</output-scalar>
+                                <output-scalar year="2035">1.593111101</output-scalar>
+                                <output-scalar year="2040">1.593111101</output-scalar>
+                                <output-scalar year="2045">1.593111101</output-scalar>
+                                <output-scalar year="2050">1.593111101</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.084093723</output-scalar>
+                                <output-scalar year="2025">1.593111101</output-scalar>
+                                <output-scalar year="2030">1.593111101</output-scalar>
+                                <output-scalar year="2035">1.593111101</output-scalar>
+                                <output-scalar year="2040">1.593111101</output-scalar>
+                                <output-scalar year="2045">1.593111101</output-scalar>
+                                <output-scalar year="2050">1.593111101</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_subpeak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.084093723</output-scalar>
+                                <output-scalar year="2025">1.593111101</output-scalar>
+                                <output-scalar year="2030">1.593111101</output-scalar>
+                                <output-scalar year="2035">1.593111101</output-scalar>
+                                <output-scalar year="2040">1.593111101</output-scalar>
+                                <output-scalar year="2045">1.593111101</output-scalar>
+                                <output-scalar year="2050">1.593111101</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.084093723</output-scalar>
+                                <output-scalar year="2025">1.593111101</output-scalar>
+                                <output-scalar year="2030">1.593111101</output-scalar>
+                                <output-scalar year="2035">1.593111101</output-scalar>
+                                <output-scalar year="2040">1.593111101</output-scalar>
+                                <output-scalar year="2045">1.593111101</output-scalar>
+                                <output-scalar year="2050">1.593111101</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.084093723</output-scalar>
+                                <output-scalar year="2025">1.593111101</output-scalar>
+                                <output-scalar year="2030">1.593111101</output-scalar>
+                                <output-scalar year="2035">1.593111101</output-scalar>
+                                <output-scalar year="2040">1.593111101</output-scalar>
+                                <output-scalar year="2045">1.593111101</output-scalar>
+                                <output-scalar year="2050">1.593111101</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+        </region>
+        <region name="France">
+            <supplysector name="base load generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_base">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.870802494</output-scalar>
+                                <output-scalar year="2025">1.016110716</output-scalar>
+                                <output-scalar year="2030">1.016110716</output-scalar>
+                                <output-scalar year="2035">1.016110716</output-scalar>
+                                <output-scalar year="2040">1.016110716</output-scalar>
+                                <output-scalar year="2045">1.016110716</output-scalar>
+                                <output-scalar year="2050">1.016110716</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.870802494</output-scalar>
+                                <output-scalar year="2025">1.016110716</output-scalar>
+                                <output-scalar year="2030">1.016110716</output-scalar>
+                                <output-scalar year="2035">1.016110716</output-scalar>
+                                <output-scalar year="2040">1.016110716</output-scalar>
+                                <output-scalar year="2045">1.016110716</output-scalar>
+                                <output-scalar year="2050">1.016110716</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.870802494</output-scalar>
+                                <output-scalar year="2025">1.016110716</output-scalar>
+                                <output-scalar year="2030">1.016110716</output-scalar>
+                                <output-scalar year="2035">1.016110716</output-scalar>
+                                <output-scalar year="2040">1.016110716</output-scalar>
+                                <output-scalar year="2045">1.016110716</output-scalar>
+                                <output-scalar year="2050">1.016110716</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_int">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.870802494</output-scalar>
+                                <output-scalar year="2025">1.016110716</output-scalar>
+                                <output-scalar year="2030">1.016110716</output-scalar>
+                                <output-scalar year="2035">1.016110716</output-scalar>
+                                <output-scalar year="2040">1.016110716</output-scalar>
+                                <output-scalar year="2045">1.016110716</output-scalar>
+                                <output-scalar year="2050">1.016110716</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.870802494</output-scalar>
+                                <output-scalar year="2025">1.016110716</output-scalar>
+                                <output-scalar year="2030">1.016110716</output-scalar>
+                                <output-scalar year="2035">1.016110716</output-scalar>
+                                <output-scalar year="2040">1.016110716</output-scalar>
+                                <output-scalar year="2045">1.016110716</output-scalar>
+                                <output-scalar year="2050">1.016110716</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.870802494</output-scalar>
+                                <output-scalar year="2025">1.016110716</output-scalar>
+                                <output-scalar year="2030">1.016110716</output-scalar>
+                                <output-scalar year="2035">1.016110716</output-scalar>
+                                <output-scalar year="2040">1.016110716</output-scalar>
+                                <output-scalar year="2045">1.016110716</output-scalar>
+                                <output-scalar year="2050">1.016110716</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_peak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.870802494</output-scalar>
+                                <output-scalar year="2025">1.016110716</output-scalar>
+                                <output-scalar year="2030">1.016110716</output-scalar>
+                                <output-scalar year="2035">1.016110716</output-scalar>
+                                <output-scalar year="2040">1.016110716</output-scalar>
+                                <output-scalar year="2045">1.016110716</output-scalar>
+                                <output-scalar year="2050">1.016110716</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.870802494</output-scalar>
+                                <output-scalar year="2025">1.016110716</output-scalar>
+                                <output-scalar year="2030">1.016110716</output-scalar>
+                                <output-scalar year="2035">1.016110716</output-scalar>
+                                <output-scalar year="2040">1.016110716</output-scalar>
+                                <output-scalar year="2045">1.016110716</output-scalar>
+                                <output-scalar year="2050">1.016110716</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.870802494</output-scalar>
+                                <output-scalar year="2025">1.016110716</output-scalar>
+                                <output-scalar year="2030">1.016110716</output-scalar>
+                                <output-scalar year="2035">1.016110716</output-scalar>
+                                <output-scalar year="2040">1.016110716</output-scalar>
+                                <output-scalar year="2045">1.016110716</output-scalar>
+                                <output-scalar year="2050">1.016110716</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_subpeak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.870802494</output-scalar>
+                                <output-scalar year="2025">1.016110716</output-scalar>
+                                <output-scalar year="2030">1.016110716</output-scalar>
+                                <output-scalar year="2035">1.016110716</output-scalar>
+                                <output-scalar year="2040">1.016110716</output-scalar>
+                                <output-scalar year="2045">1.016110716</output-scalar>
+                                <output-scalar year="2050">1.016110716</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.870802494</output-scalar>
+                                <output-scalar year="2025">1.016110716</output-scalar>
+                                <output-scalar year="2030">1.016110716</output-scalar>
+                                <output-scalar year="2035">1.016110716</output-scalar>
+                                <output-scalar year="2040">1.016110716</output-scalar>
+                                <output-scalar year="2045">1.016110716</output-scalar>
+                                <output-scalar year="2050">1.016110716</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.870802494</output-scalar>
+                                <output-scalar year="2025">1.016110716</output-scalar>
+                                <output-scalar year="2030">1.016110716</output-scalar>
+                                <output-scalar year="2035">1.016110716</output-scalar>
+                                <output-scalar year="2040">1.016110716</output-scalar>
+                                <output-scalar year="2045">1.016110716</output-scalar>
+                                <output-scalar year="2050">1.016110716</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+        </region>
+        <region name="Germany">
+            <supplysector name="base load generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_base">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.759702828</output-scalar>
+                                <output-scalar year="2025">0</output-scalar>
+                                <output-scalar year="2030">0</output-scalar>
+                                <output-scalar year="2035">0</output-scalar>
+                                <output-scalar year="2040">0</output-scalar>
+                                <output-scalar year="2045">0</output-scalar>
+                                <output-scalar year="2050">0</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.759702828</output-scalar>
+                                <output-scalar year="2025">0</output-scalar>
+                                <output-scalar year="2030">0</output-scalar>
+                                <output-scalar year="2035">0</output-scalar>
+                                <output-scalar year="2040">0</output-scalar>
+                                <output-scalar year="2045">0</output-scalar>
+                                <output-scalar year="2050">0</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.759702828</output-scalar>
+                                <output-scalar year="2025">0</output-scalar>
+                                <output-scalar year="2030">0</output-scalar>
+                                <output-scalar year="2035">0</output-scalar>
+                                <output-scalar year="2040">0</output-scalar>
+                                <output-scalar year="2045">0</output-scalar>
+                                <output-scalar year="2050">0</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_int">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.759702828</output-scalar>
+                                <output-scalar year="2025">0</output-scalar>
+                                <output-scalar year="2030">0</output-scalar>
+                                <output-scalar year="2035">0</output-scalar>
+                                <output-scalar year="2040">0</output-scalar>
+                                <output-scalar year="2045">0</output-scalar>
+                                <output-scalar year="2050">0</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.759702828</output-scalar>
+                                <output-scalar year="2025">0</output-scalar>
+                                <output-scalar year="2030">0</output-scalar>
+                                <output-scalar year="2035">0</output-scalar>
+                                <output-scalar year="2040">0</output-scalar>
+                                <output-scalar year="2045">0</output-scalar>
+                                <output-scalar year="2050">0</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.759702828</output-scalar>
+                                <output-scalar year="2025">0</output-scalar>
+                                <output-scalar year="2030">0</output-scalar>
+                                <output-scalar year="2035">0</output-scalar>
+                                <output-scalar year="2040">0</output-scalar>
+                                <output-scalar year="2045">0</output-scalar>
+                                <output-scalar year="2050">0</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_peak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.759702828</output-scalar>
+                                <output-scalar year="2025">0</output-scalar>
+                                <output-scalar year="2030">0</output-scalar>
+                                <output-scalar year="2035">0</output-scalar>
+                                <output-scalar year="2040">0</output-scalar>
+                                <output-scalar year="2045">0</output-scalar>
+                                <output-scalar year="2050">0</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.759702828</output-scalar>
+                                <output-scalar year="2025">0</output-scalar>
+                                <output-scalar year="2030">0</output-scalar>
+                                <output-scalar year="2035">0</output-scalar>
+                                <output-scalar year="2040">0</output-scalar>
+                                <output-scalar year="2045">0</output-scalar>
+                                <output-scalar year="2050">0</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.759702828</output-scalar>
+                                <output-scalar year="2025">0</output-scalar>
+                                <output-scalar year="2030">0</output-scalar>
+                                <output-scalar year="2035">0</output-scalar>
+                                <output-scalar year="2040">0</output-scalar>
+                                <output-scalar year="2045">0</output-scalar>
+                                <output-scalar year="2050">0</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_subpeak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.759702828</output-scalar>
+                                <output-scalar year="2025">0</output-scalar>
+                                <output-scalar year="2030">0</output-scalar>
+                                <output-scalar year="2035">0</output-scalar>
+                                <output-scalar year="2040">0</output-scalar>
+                                <output-scalar year="2045">0</output-scalar>
+                                <output-scalar year="2050">0</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.759702828</output-scalar>
+                                <output-scalar year="2025">0</output-scalar>
+                                <output-scalar year="2030">0</output-scalar>
+                                <output-scalar year="2035">0</output-scalar>
+                                <output-scalar year="2040">0</output-scalar>
+                                <output-scalar year="2045">0</output-scalar>
+                                <output-scalar year="2050">0</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.759702828</output-scalar>
+                                <output-scalar year="2025">0</output-scalar>
+                                <output-scalar year="2030">0</output-scalar>
+                                <output-scalar year="2035">0</output-scalar>
+                                <output-scalar year="2040">0</output-scalar>
+                                <output-scalar year="2045">0</output-scalar>
+                                <output-scalar year="2050">0</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+        </region>
+        <region name="Hungary">
+            <supplysector name="base load generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_base">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.101358561</output-scalar>
+                                <output-scalar year="2025">1.175270177</output-scalar>
+                                <output-scalar year="2030">1.175270177</output-scalar>
+                                <output-scalar year="2035">1.175270177</output-scalar>
+                                <output-scalar year="2040">1.175270177</output-scalar>
+                                <output-scalar year="2045">1.175270177</output-scalar>
+                                <output-scalar year="2050">1.175270177</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.101358561</output-scalar>
+                                <output-scalar year="2025">1.175270177</output-scalar>
+                                <output-scalar year="2030">1.175270177</output-scalar>
+                                <output-scalar year="2035">1.175270177</output-scalar>
+                                <output-scalar year="2040">1.175270177</output-scalar>
+                                <output-scalar year="2045">1.175270177</output-scalar>
+                                <output-scalar year="2050">1.175270177</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.101358561</output-scalar>
+                                <output-scalar year="2025">1.175270177</output-scalar>
+                                <output-scalar year="2030">1.175270177</output-scalar>
+                                <output-scalar year="2035">1.175270177</output-scalar>
+                                <output-scalar year="2040">1.175270177</output-scalar>
+                                <output-scalar year="2045">1.175270177</output-scalar>
+                                <output-scalar year="2050">1.175270177</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_int">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.101358561</output-scalar>
+                                <output-scalar year="2025">1.175270177</output-scalar>
+                                <output-scalar year="2030">1.175270177</output-scalar>
+                                <output-scalar year="2035">1.175270177</output-scalar>
+                                <output-scalar year="2040">1.175270177</output-scalar>
+                                <output-scalar year="2045">1.175270177</output-scalar>
+                                <output-scalar year="2050">1.175270177</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.101358561</output-scalar>
+                                <output-scalar year="2025">1.175270177</output-scalar>
+                                <output-scalar year="2030">1.175270177</output-scalar>
+                                <output-scalar year="2035">1.175270177</output-scalar>
+                                <output-scalar year="2040">1.175270177</output-scalar>
+                                <output-scalar year="2045">1.175270177</output-scalar>
+                                <output-scalar year="2050">1.175270177</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.101358561</output-scalar>
+                                <output-scalar year="2025">1.175270177</output-scalar>
+                                <output-scalar year="2030">1.175270177</output-scalar>
+                                <output-scalar year="2035">1.175270177</output-scalar>
+                                <output-scalar year="2040">1.175270177</output-scalar>
+                                <output-scalar year="2045">1.175270177</output-scalar>
+                                <output-scalar year="2050">1.175270177</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_peak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.101358561</output-scalar>
+                                <output-scalar year="2025">1.175270177</output-scalar>
+                                <output-scalar year="2030">1.175270177</output-scalar>
+                                <output-scalar year="2035">1.175270177</output-scalar>
+                                <output-scalar year="2040">1.175270177</output-scalar>
+                                <output-scalar year="2045">1.175270177</output-scalar>
+                                <output-scalar year="2050">1.175270177</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.101358561</output-scalar>
+                                <output-scalar year="2025">1.175270177</output-scalar>
+                                <output-scalar year="2030">1.175270177</output-scalar>
+                                <output-scalar year="2035">1.175270177</output-scalar>
+                                <output-scalar year="2040">1.175270177</output-scalar>
+                                <output-scalar year="2045">1.175270177</output-scalar>
+                                <output-scalar year="2050">1.175270177</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.101358561</output-scalar>
+                                <output-scalar year="2025">1.175270177</output-scalar>
+                                <output-scalar year="2030">1.175270177</output-scalar>
+                                <output-scalar year="2035">1.175270177</output-scalar>
+                                <output-scalar year="2040">1.175270177</output-scalar>
+                                <output-scalar year="2045">1.175270177</output-scalar>
+                                <output-scalar year="2050">1.175270177</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_subpeak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.101358561</output-scalar>
+                                <output-scalar year="2025">1.175270177</output-scalar>
+                                <output-scalar year="2030">1.175270177</output-scalar>
+                                <output-scalar year="2035">1.175270177</output-scalar>
+                                <output-scalar year="2040">1.175270177</output-scalar>
+                                <output-scalar year="2045">1.175270177</output-scalar>
+                                <output-scalar year="2050">1.175270177</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.101358561</output-scalar>
+                                <output-scalar year="2025">1.175270177</output-scalar>
+                                <output-scalar year="2030">1.175270177</output-scalar>
+                                <output-scalar year="2035">1.175270177</output-scalar>
+                                <output-scalar year="2040">1.175270177</output-scalar>
+                                <output-scalar year="2045">1.175270177</output-scalar>
+                                <output-scalar year="2050">1.175270177</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.101358561</output-scalar>
+                                <output-scalar year="2025">1.175270177</output-scalar>
+                                <output-scalar year="2030">1.175270177</output-scalar>
+                                <output-scalar year="2035">1.175270177</output-scalar>
+                                <output-scalar year="2040">1.175270177</output-scalar>
+                                <output-scalar year="2045">1.175270177</output-scalar>
+                                <output-scalar year="2050">1.175270177</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+        </region>
+        <region name="Netherlands">
+            <supplysector name="base load generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_base">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.083236044</output-scalar>
+                                <output-scalar year="2025">1.117939097</output-scalar>
+                                <output-scalar year="2030">1.117939097</output-scalar>
+                                <output-scalar year="2035">1.117939097</output-scalar>
+                                <output-scalar year="2040">1.117939097</output-scalar>
+                                <output-scalar year="2045">1.117939097</output-scalar>
+                                <output-scalar year="2050">1.117939097</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.083236044</output-scalar>
+                                <output-scalar year="2025">1.117939097</output-scalar>
+                                <output-scalar year="2030">1.117939097</output-scalar>
+                                <output-scalar year="2035">1.117939097</output-scalar>
+                                <output-scalar year="2040">1.117939097</output-scalar>
+                                <output-scalar year="2045">1.117939097</output-scalar>
+                                <output-scalar year="2050">1.117939097</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.083236044</output-scalar>
+                                <output-scalar year="2025">1.117939097</output-scalar>
+                                <output-scalar year="2030">1.117939097</output-scalar>
+                                <output-scalar year="2035">1.117939097</output-scalar>
+                                <output-scalar year="2040">1.117939097</output-scalar>
+                                <output-scalar year="2045">1.117939097</output-scalar>
+                                <output-scalar year="2050">1.117939097</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_int">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.083236044</output-scalar>
+                                <output-scalar year="2025">1.117939097</output-scalar>
+                                <output-scalar year="2030">1.117939097</output-scalar>
+                                <output-scalar year="2035">1.117939097</output-scalar>
+                                <output-scalar year="2040">1.117939097</output-scalar>
+                                <output-scalar year="2045">1.117939097</output-scalar>
+                                <output-scalar year="2050">1.117939097</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.083236044</output-scalar>
+                                <output-scalar year="2025">1.117939097</output-scalar>
+                                <output-scalar year="2030">1.117939097</output-scalar>
+                                <output-scalar year="2035">1.117939097</output-scalar>
+                                <output-scalar year="2040">1.117939097</output-scalar>
+                                <output-scalar year="2045">1.117939097</output-scalar>
+                                <output-scalar year="2050">1.117939097</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.083236044</output-scalar>
+                                <output-scalar year="2025">1.117939097</output-scalar>
+                                <output-scalar year="2030">1.117939097</output-scalar>
+                                <output-scalar year="2035">1.117939097</output-scalar>
+                                <output-scalar year="2040">1.117939097</output-scalar>
+                                <output-scalar year="2045">1.117939097</output-scalar>
+                                <output-scalar year="2050">1.117939097</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_peak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.083236044</output-scalar>
+                                <output-scalar year="2025">1.117939097</output-scalar>
+                                <output-scalar year="2030">1.117939097</output-scalar>
+                                <output-scalar year="2035">1.117939097</output-scalar>
+                                <output-scalar year="2040">1.117939097</output-scalar>
+                                <output-scalar year="2045">1.117939097</output-scalar>
+                                <output-scalar year="2050">1.117939097</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.083236044</output-scalar>
+                                <output-scalar year="2025">1.117939097</output-scalar>
+                                <output-scalar year="2030">1.117939097</output-scalar>
+                                <output-scalar year="2035">1.117939097</output-scalar>
+                                <output-scalar year="2040">1.117939097</output-scalar>
+                                <output-scalar year="2045">1.117939097</output-scalar>
+                                <output-scalar year="2050">1.117939097</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.083236044</output-scalar>
+                                <output-scalar year="2025">1.117939097</output-scalar>
+                                <output-scalar year="2030">1.117939097</output-scalar>
+                                <output-scalar year="2035">1.117939097</output-scalar>
+                                <output-scalar year="2040">1.117939097</output-scalar>
+                                <output-scalar year="2045">1.117939097</output-scalar>
+                                <output-scalar year="2050">1.117939097</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_subpeak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.083236044</output-scalar>
+                                <output-scalar year="2025">1.117939097</output-scalar>
+                                <output-scalar year="2030">1.117939097</output-scalar>
+                                <output-scalar year="2035">1.117939097</output-scalar>
+                                <output-scalar year="2040">1.117939097</output-scalar>
+                                <output-scalar year="2045">1.117939097</output-scalar>
+                                <output-scalar year="2050">1.117939097</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.083236044</output-scalar>
+                                <output-scalar year="2025">1.117939097</output-scalar>
+                                <output-scalar year="2030">1.117939097</output-scalar>
+                                <output-scalar year="2035">1.117939097</output-scalar>
+                                <output-scalar year="2040">1.117939097</output-scalar>
+                                <output-scalar year="2045">1.117939097</output-scalar>
+                                <output-scalar year="2050">1.117939097</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.083236044</output-scalar>
+                                <output-scalar year="2025">1.117939097</output-scalar>
+                                <output-scalar year="2030">1.117939097</output-scalar>
+                                <output-scalar year="2035">1.117939097</output-scalar>
+                                <output-scalar year="2040">1.117939097</output-scalar>
+                                <output-scalar year="2045">1.117939097</output-scalar>
+                                <output-scalar year="2050">1.117939097</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+        </region>
+        <region name="Romania">
+            <supplysector name="base load generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_base">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.068122633</output-scalar>
+                                <output-scalar year="2025">1.089343866</output-scalar>
+                                <output-scalar year="2030">1.089343866</output-scalar>
+                                <output-scalar year="2035">1.089343866</output-scalar>
+                                <output-scalar year="2040">1.089343866</output-scalar>
+                                <output-scalar year="2045">1.089343866</output-scalar>
+                                <output-scalar year="2050">1.089343866</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.068122633</output-scalar>
+                                <output-scalar year="2025">1.089343866</output-scalar>
+                                <output-scalar year="2030">1.089343866</output-scalar>
+                                <output-scalar year="2035">1.089343866</output-scalar>
+                                <output-scalar year="2040">1.089343866</output-scalar>
+                                <output-scalar year="2045">1.089343866</output-scalar>
+                                <output-scalar year="2050">1.089343866</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.068122633</output-scalar>
+                                <output-scalar year="2025">1.089343866</output-scalar>
+                                <output-scalar year="2030">1.089343866</output-scalar>
+                                <output-scalar year="2035">1.089343866</output-scalar>
+                                <output-scalar year="2040">1.089343866</output-scalar>
+                                <output-scalar year="2045">1.089343866</output-scalar>
+                                <output-scalar year="2050">1.089343866</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_int">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.068122633</output-scalar>
+                                <output-scalar year="2025">1.089343866</output-scalar>
+                                <output-scalar year="2030">1.089343866</output-scalar>
+                                <output-scalar year="2035">1.089343866</output-scalar>
+                                <output-scalar year="2040">1.089343866</output-scalar>
+                                <output-scalar year="2045">1.089343866</output-scalar>
+                                <output-scalar year="2050">1.089343866</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.068122633</output-scalar>
+                                <output-scalar year="2025">1.089343866</output-scalar>
+                                <output-scalar year="2030">1.089343866</output-scalar>
+                                <output-scalar year="2035">1.089343866</output-scalar>
+                                <output-scalar year="2040">1.089343866</output-scalar>
+                                <output-scalar year="2045">1.089343866</output-scalar>
+                                <output-scalar year="2050">1.089343866</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.068122633</output-scalar>
+                                <output-scalar year="2025">1.089343866</output-scalar>
+                                <output-scalar year="2030">1.089343866</output-scalar>
+                                <output-scalar year="2035">1.089343866</output-scalar>
+                                <output-scalar year="2040">1.089343866</output-scalar>
+                                <output-scalar year="2045">1.089343866</output-scalar>
+                                <output-scalar year="2050">1.089343866</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_peak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.068122633</output-scalar>
+                                <output-scalar year="2025">1.089343866</output-scalar>
+                                <output-scalar year="2030">1.089343866</output-scalar>
+                                <output-scalar year="2035">1.089343866</output-scalar>
+                                <output-scalar year="2040">1.089343866</output-scalar>
+                                <output-scalar year="2045">1.089343866</output-scalar>
+                                <output-scalar year="2050">1.089343866</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.068122633</output-scalar>
+                                <output-scalar year="2025">1.089343866</output-scalar>
+                                <output-scalar year="2030">1.089343866</output-scalar>
+                                <output-scalar year="2035">1.089343866</output-scalar>
+                                <output-scalar year="2040">1.089343866</output-scalar>
+                                <output-scalar year="2045">1.089343866</output-scalar>
+                                <output-scalar year="2050">1.089343866</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.068122633</output-scalar>
+                                <output-scalar year="2025">1.089343866</output-scalar>
+                                <output-scalar year="2030">1.089343866</output-scalar>
+                                <output-scalar year="2035">1.089343866</output-scalar>
+                                <output-scalar year="2040">1.089343866</output-scalar>
+                                <output-scalar year="2045">1.089343866</output-scalar>
+                                <output-scalar year="2050">1.089343866</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_subpeak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.068122633</output-scalar>
+                                <output-scalar year="2025">1.089343866</output-scalar>
+                                <output-scalar year="2030">1.089343866</output-scalar>
+                                <output-scalar year="2035">1.089343866</output-scalar>
+                                <output-scalar year="2040">1.089343866</output-scalar>
+                                <output-scalar year="2045">1.089343866</output-scalar>
+                                <output-scalar year="2050">1.089343866</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.068122633</output-scalar>
+                                <output-scalar year="2025">1.089343866</output-scalar>
+                                <output-scalar year="2030">1.089343866</output-scalar>
+                                <output-scalar year="2035">1.089343866</output-scalar>
+                                <output-scalar year="2040">1.089343866</output-scalar>
+                                <output-scalar year="2045">1.089343866</output-scalar>
+                                <output-scalar year="2050">1.089343866</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.068122633</output-scalar>
+                                <output-scalar year="2025">1.089343866</output-scalar>
+                                <output-scalar year="2030">1.089343866</output-scalar>
+                                <output-scalar year="2035">1.089343866</output-scalar>
+                                <output-scalar year="2040">1.089343866</output-scalar>
+                                <output-scalar year="2045">1.089343866</output-scalar>
+                                <output-scalar year="2050">1.089343866</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+        </region>
+        <region name="Slovakia">
+            <supplysector name="base load generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_base">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.09519151</output-scalar>
+                                <output-scalar year="2025">1.46011381</output-scalar>
+                                <output-scalar year="2030">1.46011381</output-scalar>
+                                <output-scalar year="2035">1.46011381</output-scalar>
+                                <output-scalar year="2040">1.46011381</output-scalar>
+                                <output-scalar year="2045">1.46011381</output-scalar>
+                                <output-scalar year="2050">1.46011381</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.09519151</output-scalar>
+                                <output-scalar year="2025">1.46011381</output-scalar>
+                                <output-scalar year="2030">1.46011381</output-scalar>
+                                <output-scalar year="2035">1.46011381</output-scalar>
+                                <output-scalar year="2040">1.46011381</output-scalar>
+                                <output-scalar year="2045">1.46011381</output-scalar>
+                                <output-scalar year="2050">1.46011381</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.09519151</output-scalar>
+                                <output-scalar year="2025">1.46011381</output-scalar>
+                                <output-scalar year="2030">1.46011381</output-scalar>
+                                <output-scalar year="2035">1.46011381</output-scalar>
+                                <output-scalar year="2040">1.46011381</output-scalar>
+                                <output-scalar year="2045">1.46011381</output-scalar>
+                                <output-scalar year="2050">1.46011381</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_int">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.09519151</output-scalar>
+                                <output-scalar year="2025">1.46011381</output-scalar>
+                                <output-scalar year="2030">1.46011381</output-scalar>
+                                <output-scalar year="2035">1.46011381</output-scalar>
+                                <output-scalar year="2040">1.46011381</output-scalar>
+                                <output-scalar year="2045">1.46011381</output-scalar>
+                                <output-scalar year="2050">1.46011381</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.09519151</output-scalar>
+                                <output-scalar year="2025">1.46011381</output-scalar>
+                                <output-scalar year="2030">1.46011381</output-scalar>
+                                <output-scalar year="2035">1.46011381</output-scalar>
+                                <output-scalar year="2040">1.46011381</output-scalar>
+                                <output-scalar year="2045">1.46011381</output-scalar>
+                                <output-scalar year="2050">1.46011381</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.09519151</output-scalar>
+                                <output-scalar year="2025">1.46011381</output-scalar>
+                                <output-scalar year="2030">1.46011381</output-scalar>
+                                <output-scalar year="2035">1.46011381</output-scalar>
+                                <output-scalar year="2040">1.46011381</output-scalar>
+                                <output-scalar year="2045">1.46011381</output-scalar>
+                                <output-scalar year="2050">1.46011381</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_peak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.09519151</output-scalar>
+                                <output-scalar year="2025">1.46011381</output-scalar>
+                                <output-scalar year="2030">1.46011381</output-scalar>
+                                <output-scalar year="2035">1.46011381</output-scalar>
+                                <output-scalar year="2040">1.46011381</output-scalar>
+                                <output-scalar year="2045">1.46011381</output-scalar>
+                                <output-scalar year="2050">1.46011381</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.09519151</output-scalar>
+                                <output-scalar year="2025">1.46011381</output-scalar>
+                                <output-scalar year="2030">1.46011381</output-scalar>
+                                <output-scalar year="2035">1.46011381</output-scalar>
+                                <output-scalar year="2040">1.46011381</output-scalar>
+                                <output-scalar year="2045">1.46011381</output-scalar>
+                                <output-scalar year="2050">1.46011381</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.09519151</output-scalar>
+                                <output-scalar year="2025">1.46011381</output-scalar>
+                                <output-scalar year="2030">1.46011381</output-scalar>
+                                <output-scalar year="2035">1.46011381</output-scalar>
+                                <output-scalar year="2040">1.46011381</output-scalar>
+                                <output-scalar year="2045">1.46011381</output-scalar>
+                                <output-scalar year="2050">1.46011381</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_subpeak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.09519151</output-scalar>
+                                <output-scalar year="2025">1.46011381</output-scalar>
+                                <output-scalar year="2030">1.46011381</output-scalar>
+                                <output-scalar year="2035">1.46011381</output-scalar>
+                                <output-scalar year="2040">1.46011381</output-scalar>
+                                <output-scalar year="2045">1.46011381</output-scalar>
+                                <output-scalar year="2050">1.46011381</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.09519151</output-scalar>
+                                <output-scalar year="2025">1.46011381</output-scalar>
+                                <output-scalar year="2030">1.46011381</output-scalar>
+                                <output-scalar year="2035">1.46011381</output-scalar>
+                                <output-scalar year="2040">1.46011381</output-scalar>
+                                <output-scalar year="2045">1.46011381</output-scalar>
+                                <output-scalar year="2050">1.46011381</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.09519151</output-scalar>
+                                <output-scalar year="2025">1.46011381</output-scalar>
+                                <output-scalar year="2030">1.46011381</output-scalar>
+                                <output-scalar year="2035">1.46011381</output-scalar>
+                                <output-scalar year="2040">1.46011381</output-scalar>
+                                <output-scalar year="2045">1.46011381</output-scalar>
+                                <output-scalar year="2050">1.46011381</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+        </region>
+        <region name="Slovenia">
+            <supplysector name="base load generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_base">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.217037143</output-scalar>
+                                <output-scalar year="2025">1.18956704</output-scalar>
+                                <output-scalar year="2030">1.18956704</output-scalar>
+                                <output-scalar year="2035">1.18956704</output-scalar>
+                                <output-scalar year="2040">1.18956704</output-scalar>
+                                <output-scalar year="2045">1.18956704</output-scalar>
+                                <output-scalar year="2050">1.18956704</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.217037143</output-scalar>
+                                <output-scalar year="2025">1.18956704</output-scalar>
+                                <output-scalar year="2030">1.18956704</output-scalar>
+                                <output-scalar year="2035">1.18956704</output-scalar>
+                                <output-scalar year="2040">1.18956704</output-scalar>
+                                <output-scalar year="2045">1.18956704</output-scalar>
+                                <output-scalar year="2050">1.18956704</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.217037143</output-scalar>
+                                <output-scalar year="2025">1.18956704</output-scalar>
+                                <output-scalar year="2030">1.18956704</output-scalar>
+                                <output-scalar year="2035">1.18956704</output-scalar>
+                                <output-scalar year="2040">1.18956704</output-scalar>
+                                <output-scalar year="2045">1.18956704</output-scalar>
+                                <output-scalar year="2050">1.18956704</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_int">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.217037143</output-scalar>
+                                <output-scalar year="2025">1.18956704</output-scalar>
+                                <output-scalar year="2030">1.18956704</output-scalar>
+                                <output-scalar year="2035">1.18956704</output-scalar>
+                                <output-scalar year="2040">1.18956704</output-scalar>
+                                <output-scalar year="2045">1.18956704</output-scalar>
+                                <output-scalar year="2050">1.18956704</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.217037143</output-scalar>
+                                <output-scalar year="2025">1.18956704</output-scalar>
+                                <output-scalar year="2030">1.18956704</output-scalar>
+                                <output-scalar year="2035">1.18956704</output-scalar>
+                                <output-scalar year="2040">1.18956704</output-scalar>
+                                <output-scalar year="2045">1.18956704</output-scalar>
+                                <output-scalar year="2050">1.18956704</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.217037143</output-scalar>
+                                <output-scalar year="2025">1.18956704</output-scalar>
+                                <output-scalar year="2030">1.18956704</output-scalar>
+                                <output-scalar year="2035">1.18956704</output-scalar>
+                                <output-scalar year="2040">1.18956704</output-scalar>
+                                <output-scalar year="2045">1.18956704</output-scalar>
+                                <output-scalar year="2050">1.18956704</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_peak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.217037143</output-scalar>
+                                <output-scalar year="2025">1.18956704</output-scalar>
+                                <output-scalar year="2030">1.18956704</output-scalar>
+                                <output-scalar year="2035">1.18956704</output-scalar>
+                                <output-scalar year="2040">1.18956704</output-scalar>
+                                <output-scalar year="2045">1.18956704</output-scalar>
+                                <output-scalar year="2050">1.18956704</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.217037143</output-scalar>
+                                <output-scalar year="2025">1.18956704</output-scalar>
+                                <output-scalar year="2030">1.18956704</output-scalar>
+                                <output-scalar year="2035">1.18956704</output-scalar>
+                                <output-scalar year="2040">1.18956704</output-scalar>
+                                <output-scalar year="2045">1.18956704</output-scalar>
+                                <output-scalar year="2050">1.18956704</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.217037143</output-scalar>
+                                <output-scalar year="2025">1.18956704</output-scalar>
+                                <output-scalar year="2030">1.18956704</output-scalar>
+                                <output-scalar year="2035">1.18956704</output-scalar>
+                                <output-scalar year="2040">1.18956704</output-scalar>
+                                <output-scalar year="2045">1.18956704</output-scalar>
+                                <output-scalar year="2050">1.18956704</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_subpeak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.217037143</output-scalar>
+                                <output-scalar year="2025">1.18956704</output-scalar>
+                                <output-scalar year="2030">1.18956704</output-scalar>
+                                <output-scalar year="2035">1.18956704</output-scalar>
+                                <output-scalar year="2040">1.18956704</output-scalar>
+                                <output-scalar year="2045">1.18956704</output-scalar>
+                                <output-scalar year="2050">1.18956704</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.217037143</output-scalar>
+                                <output-scalar year="2025">1.18956704</output-scalar>
+                                <output-scalar year="2030">1.18956704</output-scalar>
+                                <output-scalar year="2035">1.18956704</output-scalar>
+                                <output-scalar year="2040">1.18956704</output-scalar>
+                                <output-scalar year="2045">1.18956704</output-scalar>
+                                <output-scalar year="2050">1.18956704</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.217037143</output-scalar>
+                                <output-scalar year="2025">1.18956704</output-scalar>
+                                <output-scalar year="2030">1.18956704</output-scalar>
+                                <output-scalar year="2035">1.18956704</output-scalar>
+                                <output-scalar year="2040">1.18956704</output-scalar>
+                                <output-scalar year="2045">1.18956704</output-scalar>
+                                <output-scalar year="2050">1.18956704</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+        </region>
+        <region name="Spain">
+            <supplysector name="base load generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_base">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.097835995</output-scalar>
+                                <output-scalar year="2025">1.070990117</output-scalar>
+                                <output-scalar year="2030">1.070990117</output-scalar>
+                                <output-scalar year="2035">1.070990117</output-scalar>
+                                <output-scalar year="2040">1.070990117</output-scalar>
+                                <output-scalar year="2045">1.070990117</output-scalar>
+                                <output-scalar year="2050">1.070990117</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.097835995</output-scalar>
+                                <output-scalar year="2025">1.070990117</output-scalar>
+                                <output-scalar year="2030">1.070990117</output-scalar>
+                                <output-scalar year="2035">1.070990117</output-scalar>
+                                <output-scalar year="2040">1.070990117</output-scalar>
+                                <output-scalar year="2045">1.070990117</output-scalar>
+                                <output-scalar year="2050">1.070990117</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.097835995</output-scalar>
+                                <output-scalar year="2025">1.070990117</output-scalar>
+                                <output-scalar year="2030">1.070990117</output-scalar>
+                                <output-scalar year="2035">1.070990117</output-scalar>
+                                <output-scalar year="2040">1.070990117</output-scalar>
+                                <output-scalar year="2045">1.070990117</output-scalar>
+                                <output-scalar year="2050">1.070990117</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_int">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.097835995</output-scalar>
+                                <output-scalar year="2025">1.070990117</output-scalar>
+                                <output-scalar year="2030">1.070990117</output-scalar>
+                                <output-scalar year="2035">1.070990117</output-scalar>
+                                <output-scalar year="2040">1.070990117</output-scalar>
+                                <output-scalar year="2045">1.070990117</output-scalar>
+                                <output-scalar year="2050">1.070990117</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.097835995</output-scalar>
+                                <output-scalar year="2025">1.070990117</output-scalar>
+                                <output-scalar year="2030">1.070990117</output-scalar>
+                                <output-scalar year="2035">1.070990117</output-scalar>
+                                <output-scalar year="2040">1.070990117</output-scalar>
+                                <output-scalar year="2045">1.070990117</output-scalar>
+                                <output-scalar year="2050">1.070990117</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.097835995</output-scalar>
+                                <output-scalar year="2025">1.070990117</output-scalar>
+                                <output-scalar year="2030">1.070990117</output-scalar>
+                                <output-scalar year="2035">1.070990117</output-scalar>
+                                <output-scalar year="2040">1.070990117</output-scalar>
+                                <output-scalar year="2045">1.070990117</output-scalar>
+                                <output-scalar year="2050">1.070990117</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_peak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.097835995</output-scalar>
+                                <output-scalar year="2025">1.070990117</output-scalar>
+                                <output-scalar year="2030">1.070990117</output-scalar>
+                                <output-scalar year="2035">1.070990117</output-scalar>
+                                <output-scalar year="2040">1.070990117</output-scalar>
+                                <output-scalar year="2045">1.070990117</output-scalar>
+                                <output-scalar year="2050">1.070990117</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.097835995</output-scalar>
+                                <output-scalar year="2025">1.070990117</output-scalar>
+                                <output-scalar year="2030">1.070990117</output-scalar>
+                                <output-scalar year="2035">1.070990117</output-scalar>
+                                <output-scalar year="2040">1.070990117</output-scalar>
+                                <output-scalar year="2045">1.070990117</output-scalar>
+                                <output-scalar year="2050">1.070990117</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.097835995</output-scalar>
+                                <output-scalar year="2025">1.070990117</output-scalar>
+                                <output-scalar year="2030">1.070990117</output-scalar>
+                                <output-scalar year="2035">1.070990117</output-scalar>
+                                <output-scalar year="2040">1.070990117</output-scalar>
+                                <output-scalar year="2045">1.070990117</output-scalar>
+                                <output-scalar year="2050">1.070990117</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_subpeak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.097835995</output-scalar>
+                                <output-scalar year="2025">1.070990117</output-scalar>
+                                <output-scalar year="2030">1.070990117</output-scalar>
+                                <output-scalar year="2035">1.070990117</output-scalar>
+                                <output-scalar year="2040">1.070990117</output-scalar>
+                                <output-scalar year="2045">1.070990117</output-scalar>
+                                <output-scalar year="2050">1.070990117</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.097835995</output-scalar>
+                                <output-scalar year="2025">1.070990117</output-scalar>
+                                <output-scalar year="2030">1.070990117</output-scalar>
+                                <output-scalar year="2035">1.070990117</output-scalar>
+                                <output-scalar year="2040">1.070990117</output-scalar>
+                                <output-scalar year="2045">1.070990117</output-scalar>
+                                <output-scalar year="2050">1.070990117</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">1.097835995</output-scalar>
+                                <output-scalar year="2025">1.070990117</output-scalar>
+                                <output-scalar year="2030">1.070990117</output-scalar>
+                                <output-scalar year="2035">1.070990117</output-scalar>
+                                <output-scalar year="2040">1.070990117</output-scalar>
+                                <output-scalar year="2045">1.070990117</output-scalar>
+                                <output-scalar year="2050">1.070990117</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+        </region>
+        <region name="Sweden">
+            <supplysector name="base load generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_base">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.941026032</output-scalar>
+                                <output-scalar year="2025">0.935473059</output-scalar>
+                                <output-scalar year="2030">0.935473059</output-scalar>
+                                <output-scalar year="2035">0.935473059</output-scalar>
+                                <output-scalar year="2040">0.935473059</output-scalar>
+                                <output-scalar year="2045">0.935473059</output-scalar>
+                                <output-scalar year="2050">0.935473059</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.941026032</output-scalar>
+                                <output-scalar year="2025">0.935473059</output-scalar>
+                                <output-scalar year="2030">0.935473059</output-scalar>
+                                <output-scalar year="2035">0.935473059</output-scalar>
+                                <output-scalar year="2040">0.935473059</output-scalar>
+                                <output-scalar year="2045">0.935473059</output-scalar>
+                                <output-scalar year="2050">0.935473059</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.941026032</output-scalar>
+                                <output-scalar year="2025">0.935473059</output-scalar>
+                                <output-scalar year="2030">0.935473059</output-scalar>
+                                <output-scalar year="2035">0.935473059</output-scalar>
+                                <output-scalar year="2040">0.935473059</output-scalar>
+                                <output-scalar year="2045">0.935473059</output-scalar>
+                                <output-scalar year="2050">0.935473059</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_int">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.941026032</output-scalar>
+                                <output-scalar year="2025">0.935473059</output-scalar>
+                                <output-scalar year="2030">0.935473059</output-scalar>
+                                <output-scalar year="2035">0.935473059</output-scalar>
+                                <output-scalar year="2040">0.935473059</output-scalar>
+                                <output-scalar year="2045">0.935473059</output-scalar>
+                                <output-scalar year="2050">0.935473059</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.941026032</output-scalar>
+                                <output-scalar year="2025">0.935473059</output-scalar>
+                                <output-scalar year="2030">0.935473059</output-scalar>
+                                <output-scalar year="2035">0.935473059</output-scalar>
+                                <output-scalar year="2040">0.935473059</output-scalar>
+                                <output-scalar year="2045">0.935473059</output-scalar>
+                                <output-scalar year="2050">0.935473059</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.941026032</output-scalar>
+                                <output-scalar year="2025">0.935473059</output-scalar>
+                                <output-scalar year="2030">0.935473059</output-scalar>
+                                <output-scalar year="2035">0.935473059</output-scalar>
+                                <output-scalar year="2040">0.935473059</output-scalar>
+                                <output-scalar year="2045">0.935473059</output-scalar>
+                                <output-scalar year="2050">0.935473059</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_peak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.941026032</output-scalar>
+                                <output-scalar year="2025">0.935473059</output-scalar>
+                                <output-scalar year="2030">0.935473059</output-scalar>
+                                <output-scalar year="2035">0.935473059</output-scalar>
+                                <output-scalar year="2040">0.935473059</output-scalar>
+                                <output-scalar year="2045">0.935473059</output-scalar>
+                                <output-scalar year="2050">0.935473059</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.941026032</output-scalar>
+                                <output-scalar year="2025">0.935473059</output-scalar>
+                                <output-scalar year="2030">0.935473059</output-scalar>
+                                <output-scalar year="2035">0.935473059</output-scalar>
+                                <output-scalar year="2040">0.935473059</output-scalar>
+                                <output-scalar year="2045">0.935473059</output-scalar>
+                                <output-scalar year="2050">0.935473059</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.941026032</output-scalar>
+                                <output-scalar year="2025">0.935473059</output-scalar>
+                                <output-scalar year="2030">0.935473059</output-scalar>
+                                <output-scalar year="2035">0.935473059</output-scalar>
+                                <output-scalar year="2040">0.935473059</output-scalar>
+                                <output-scalar year="2045">0.935473059</output-scalar>
+                                <output-scalar year="2050">0.935473059</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+<nesting-subsector name="nuclear"> <subsector name="Gen_II_LWR_subpeak">
+                    <stub-technology name="Gen_II_LWR (once through)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.941026032</output-scalar>
+                                <output-scalar year="2025">0.935473059</output-scalar>
+                                <output-scalar year="2030">0.935473059</output-scalar>
+                                <output-scalar year="2035">0.935473059</output-scalar>
+                                <output-scalar year="2040">0.935473059</output-scalar>
+                                <output-scalar year="2045">0.935473059</output-scalar>
+                                <output-scalar year="2050">0.935473059</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (recirculating)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.941026032</output-scalar>
+                                <output-scalar year="2025">0.935473059</output-scalar>
+                                <output-scalar year="2030">0.935473059</output-scalar>
+                                <output-scalar year="2035">0.935473059</output-scalar>
+                                <output-scalar year="2040">0.935473059</output-scalar>
+                                <output-scalar year="2045">0.935473059</output-scalar>
+                                <output-scalar year="2050">0.935473059</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+                    <stub-technology name="Gen_II_LWR (seawater)">
+                        <period year="2015">
+                            <exogenous-shutdown-decider name="exogenous.shutdown">
+                                <output-scalar year="2021">0.941026032</output-scalar>
+                                <output-scalar year="2025">0.935473059</output-scalar>
+                                <output-scalar year="2030">0.935473059</output-scalar>
+                                <output-scalar year="2035">0.935473059</output-scalar>
+                                <output-scalar year="2040">0.935473059</output-scalar>
+                                <output-scalar year="2045">0.935473059</output-scalar>
+                                <output-scalar year="2050">0.935473059</output-scalar>
+                            </exogenous-shutdown-decider>
+                        </period>
+                    </stub-technology>
+ </subsector> </nesting-subsector>
+            </supplysector>
+        </region>
+    </world>
+</scenario>

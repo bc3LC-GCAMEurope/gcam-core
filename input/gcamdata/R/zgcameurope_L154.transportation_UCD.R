@@ -91,7 +91,7 @@ module_gcameurope_L154.transportation_UCD <- function(command, ...) {
 
     L101.in_EJ_R_trn_Fi_Yh_EUR <- get_data(all_data, "L101.in_EJ_R_trn_Fi_Yh_EUR")
     L131.in_EJ_R_Senduse_F_Yh_EUR <- get_data(all_data, "L131.in_EJ_R_Senduse_F_Yh_EUR")
-    L100.Pop_thous_ctry_Yh <- get_data(all_data, "L100.Pop_thous_ctry_Yh") %>% filter(year <= MODEL_FINAL_BASE_YEAR)
+    L100.Pop_thous_ctry_Yh <- get_data(all_data, "L100.Pop_thous_ctry_Yh")
 
     #kbn 2019-10-07: Read new size class assignments
     Size_class_New<- get_data(all_data, "energy/mappings/UCD_size_class_revisions")

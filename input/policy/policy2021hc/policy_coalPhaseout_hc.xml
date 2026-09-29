@@ -1,0 +1,1138 @@
+<?xml version="1.0" encoding="UTF-8"?><scenario>
+    <world>
+        <region name="Austria">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Belgium">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Bulgaria">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Croatia">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Cyprus">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Czech Republic">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Denmark">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Estonia">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Finland">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="France">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Germany">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Greece">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Hungary">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Ireland">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Italy">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Latvia">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Lithuania">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Luxembourg">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Malta">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Netherlands">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Poland">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Portugal">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Romania">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Slovakia">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Slovenia">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Spain">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+        <region name="Sweden">
+            <supplysector name="base load generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="intermediate generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="peak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+            <supplysector name="subpeak generation">
+                <nesting-subsector name="coal">
+                    <interpolation-rule apply-to="share-weight" delete="1" from-year="2015" to-year="2030">
+<interpolation-function name="fixed"/> <overwrite-policy warn="0">NEVER</overwrite-policy>
+                    </interpolation-rule>
+                    <share-weight year="2021">0</share-weight>
+                    <share-weight year="2025">0</share-weight>
+                    <share-weight year="2030">0</share-weight>
+                </subsector>
+            </supplysector>
+        </region>
+    </world>
+</scenario>

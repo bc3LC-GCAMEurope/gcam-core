@@ -44,7 +44,7 @@ module_gcameurope_L143.HDDCDD <- function(command, ...) {
     # Load required inputs
     iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID")
     GIS_ctry <- get_data(all_data, "energy/GIS_ctry")
-    L100.Pop_thous_ctry_Yh <- get_data(all_data, "L100.Pop_thous_ctry_Yh") %>% filter(year <= MODEL_FINAL_BASE_YEAR)
+    L100.Pop_thous_ctry_Yh <- get_data(all_data, "L100.Pop_thous_ctry_Yh")
     L100.Pop_thous_SSP_ctry_Yfut <- get_data(all_data, "L100.Pop_thous_SSP_ctry_Yfut")
     CDD_CCSM3x_A2 <- get_data(all_data, "energy/GIS/population_weighted_CDD_CCSM3x_A2")
     CDD_CCSM3x_B1 <- get_data(all_data, "energy/GIS/population_weighted_CDD_CCSM3x_B1")
