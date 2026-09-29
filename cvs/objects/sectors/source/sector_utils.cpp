@@ -89,20 +89,6 @@ NationalAccountContainer const* getNationalAccountContainer( const gcamstr& aReg
             return ret;
         }
         else {
-            // Log this at most once per region name, and protect the
-            // static tracking set with a mutex since sector calculations
-            // may run this in parallel across solver threads.
-            static std::set<gcamstr> sRegionsWithoutAccountsWarned;
-            static std::mutex sNoAccountsLogMutex;
-            std::lock_guard<std::mutex> lock( sNoAccountsLogMutex );
-            if( sRegionsWithoutAccountsWarned.insert( aRegionName ).second ) {
-                ILogger& mainLog = ILogger::getLogger( "main_log" );
-                mainLog.setLevel( ILogger::NOTICE );
-                mainLog << "NationalAccountContainer not initialized in " << aRegionName
-                        << " -- treating as a region with no national accounts (e.g. a "
-                        << "trade or electricity-grid hub region); GDP-dependent "
-                        << "calculations for it will use neutral default values." << endl;
-            }
             return 0;
         }
     }
