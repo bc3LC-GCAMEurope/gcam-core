@@ -45,8 +45,6 @@ module_gcameurope_en_supply_xml <- function(command, ...) {
                      "L239.Production_reg_dom_EUR",
                      "L239.Consumption_intraregional_EUR",
                      "L239.CarbonCoef_EUR",
-                     "L239.Pop_europeSingleMarket",
-                     "L239.GDP_europeSingleMarket",
                      "L281.TechAccountOutput_entrade_EUR",
                      "L281.TechAccountInput_entrade")
   if(command == driver.DECLARE_INPUTS) {
@@ -129,8 +127,6 @@ module_gcameurope_en_supply_xml <- function(command, ...) {
       add_xml_data(L239.Consumption_intraregional_EUR, "Production") %>%
       add_xml_data(L239.PrimaryConsKeyword_en_EUR, "PrimaryConsKeywordff") %>%
       add_xml_data(L239.CarbonCoef_EUR, "CarbonCoef") %>%
-      add_xml_data(L239.Pop_europeSingleMarket, "Pop") %>%
-      add_xml_data(L239.GDP_europeSingleMarket, "GDP") %>%
       add_xml_data(L221.StubTechCalInput_bioOil_EUR, "StubTechCalInput") %>%
       add_xml_data(L221.StubTechInterp_bioOil_EUR, "StubTechInterp") %>%
       add_xml_data(L221.StubTechShrwt_bioOil_EUR, "StubTechShrwt") %>%

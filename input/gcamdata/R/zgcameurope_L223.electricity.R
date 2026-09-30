@@ -47,6 +47,7 @@ module_gcameurope_L223.electricity <- function(command, ...) {
                      "L1231.in_EJ_R_elec_F_tech_Yh",
                      "L1231.out_EJ_R_elec_F_tech_Yh",
                      "L1231.eff_R_elec_F_tech_Yh",
+                     "L210.SmthRenewRsrcCurves_offshore_wind",
                      OUTPUTS_TO_COPY_FILTER)
 
   MODULE_OUTPUTS <- c("L223.StubTechCalInput_elec_EUR",
@@ -82,7 +83,23 @@ module_gcameurope_L223.electricity <- function(command, ...) {
     copy_filter_europe(all_data, OUTPUTS_TO_COPY_FILTER,
                        regions_to_keep = union(grid_regions$region, gcameurope.EUROSTAT_COUNTRIES))
 
-    #L223.StubTechCost_offshore_wind_EUR <- L223.StubTechCost_offshore_wind_EUR %>% filter(region != "Slovenia")
+    # No offshore wind technologies in regions without offshore resource (maxSubResource == 0).
+    # The global L223 tables keep a wind_offshore stub tech in every region because the L120 chunk zero-fills
+    # regions without NREL data. Same criterion as in zgcameurope_L210.resources.
+    # Restricted to the Eurostat countries: those are the regions whose resources are rebuilt in zgcameurope_L210
+    # (resources_EUR.xml). Regions outside that set (e.g. Switzerland, Belarus) keep their offshore stub tech
+    # because their offshore resource is still defined by the global resources.xml.
+    no_offshore_regions <- L210.SmthRenewRsrcCurves_offshore_wind %>%
+      filter(maxSubResource == 0, region %in% gcameurope.EUROSTAT_COUNTRIES) %>%
+      pull(region) %>%
+      unique()
+
+    L223.StubTech_elec_EUR <- L223.StubTech_elec_EUR %>%
+      filter(!(stub.technology == "wind_offshore" & region %in% no_offshore_regions))
+    L223.StubTechCapFactor_elec_EUR <- L223.StubTechCapFactor_elec_EUR %>%
+      filter(!(stub.technology == "wind_offshore" & region %in% no_offshore_regions))
+    L223.StubTechCost_offshore_wind_EUR <- L223.StubTechCost_offshore_wind_EUR %>%
+      filter(!region %in% no_offshore_regions)
 
     # 0. Add in switzerland to eurostat data ---------------------
     L1231.in_EJ_R_elec_F_tech_Yh_EUR <- replace_with_eurostat(L1231.in_EJ_R_elec_F_tech_Yh, L1231.in_EJ_R_elec_F_tech_Yh_EUR) %>%

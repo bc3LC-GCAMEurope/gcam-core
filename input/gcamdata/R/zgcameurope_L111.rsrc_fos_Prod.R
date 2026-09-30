@@ -77,6 +77,23 @@ module_gcameurope_L111.rsrc_fos_Prod <- function(command, ...) {
     L111.Prod_EJ_R_F_Yh_EUR_unadj <- L1012.en_bal_EJ_R_Si_Fi_Yh_EUR %>%
       filter(sector == "out_resources", fuel %in% energy.RSRC_FUELS, year %in% HISTORICAL_YEARS)
 
+    # STABILITY FIX: pre-1990 production of ex-Soviet republics is an allocation of Former Soviet Union
+    # totals (e.g. Lithuania crude oil 1975 = 0.41 EJ vs 0.0005 EJ in 1990; Ukraine 2.5 EJ vs 0.22 EJ).
+    # L210 sizes the 1975 reserve additions as production * lifetime, so these produce "phantom" reserves
+    # (Ukraine ~100 EJ, Lithuania ~16 EJ) that were never produced. In the future those reserves make regional
+    # resource supply extremely price-elastic (ill-conditioned crude oil markets in the solver).
+    # Hold pre-1990 production of these regions at their 1990 level. The regional shares below are re-normalised,
+    # so total European production is conserved (redistributed to the other regions).
+    FSU_REPUBLICS <- c("Ukraine", "Lithuania", "Latvia", "Estonia", "Belarus", "Moldova")
+    FSU_IDs <- GCAM_region_names %>%
+      filter(region %in% FSU_REPUBLICS) %>%
+      pull(GCAM_region_ID)
+    L111.Prod_EJ_R_F_Yh_EUR_unadj <- L111.Prod_EJ_R_F_Yh_EUR_unadj %>%
+      group_by(GCAM_region_ID, sector, fuel) %>%
+      mutate(value = if_else(GCAM_region_ID %in% FSU_IDs & year < 1990 & any(year == 1990),
+                             value[year == 1990][1], value)) %>%
+      ungroup()
+
     L111.Prod_share_R_F_Yh_EUR <- L111.Prod_EJ_R_F_Yh_EUR_unadj %>%
       group_by(sector, fuel, year) %>%
       mutate(share = value / sum(value)) %>%
@@ -159,7 +176,7 @@ module_gcameurope_L111.rsrc_fos_Prod <- function(command, ...) {
         filter_regions_europe() %>%
         select(-region) %>%
         left_join_error_no_match(distinct(A11.fos_curves, resource, subresource, grade, extractioncost),
-                                  by = c("resource", "subresource", "grade"))
+                                 by = c("resource", "subresource", "grade"))
 
       L111.RsrcCurves_EJ_R_Ffos_EUR %>%
         add_title("Fossil resource supply curves for Eurostat", overwrite = TRUE) %>%

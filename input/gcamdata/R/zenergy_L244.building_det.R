@@ -1,4 +1,3 @@
-
 # Copyright 2019 Battelle Memorial Institute; see the LICENSE file.
 
 #' module_energy_L244.building_det
@@ -1342,9 +1341,8 @@ module_energy_L244.building_det <- function(command, ...) {
     # The demand for traditional fuels (coal and TradBio) decreases as income raises -> Need to use a different functional form
     # From historical data we fit a function that includes:
     # - Negative income effect
-    # - Positive quadratic income effect (represents an horizontal asymptot): Note that for coal this effect is not significant with the used data (b3 = 0)
     # - For price, the data does not show a clear trend, so negative price elasticities are taken from literature (could be easily changed by the user):
-    #   -0.4 for TradBio and -0.5 for coal. Given the fitted logarithmic model, they can be directly set as elasticieties n the regression.
+    #   -2 for TradBio and -0.5 for coal. Given the fitted logarithmic model, they can be directly set as elasticieties n the regression.
 
     prelast_tradBio <- -2
     prelast_coal <- -0.5
@@ -1371,6 +1369,12 @@ module_energy_L244.building_det <- function(command, ...) {
              log_sq_pcgdp_thous = log_pcgdp_thous^2,
              GCAM_region_ID = as.character(GCAM_region_ID))
 
+    # Restrict the fitting sample to lower/middle-income observations: a handful of wealthy,
+    # legacy-fuel-use regions have small but non-monotonic trad-fuel consumption (amenity/legacy
+    # use, not poverty-driven) that otherwise contaminates the income slope estimated below.
+    tradbio_income_cutoff_thous <- 15
+    serv_coal <- serv_coal %>% filter(pcgdp_thous <= tradbio_income_cutoff_thous)
+
     # Split by sector to get a better fit:
     serv_coal_heat <- serv_coal %>% filter(grepl("heating", service))
     serv_coal_oth <- serv_coal %>% filter(grepl("other", service))
@@ -1381,7 +1385,6 @@ module_energy_L244.building_det <- function(command, ...) {
 
     b1_coal_heat <- as.numeric(fit_coal_heat$coefficients[1])
     b2_coal_heat <- as.numeric(fit_coal_heat$coefficients[2])
-    b3_coal_heat <- 0 # Non-significant
 
     # Non-thermal services
     fit_coal_oth <- lm(log_en_EJ_flsp ~ log_pcgdp_thous  + GCAM_region_ID,
@@ -1389,7 +1392,6 @@ module_energy_L244.building_det <- function(command, ...) {
 
     b1_coal_oth <- as.numeric(fit_coal_oth$coefficients[1])
     b2_coal_oth <- as.numeric(fit_coal_oth$coefficients[2])
-    b3_coal_oth <- 0 # Non-significant
 
 
     # Same for traditional biomass:
@@ -1414,25 +1416,26 @@ module_energy_L244.building_det <- function(command, ...) {
              log_sq_pcgdp_thous = log_pcgdp_thous^2,
              GCAM_region_ID = as.character(GCAM_region_ID))
 
+    # Same income-cutoff restriction as above, for the same reason
+    serv_TradBio <- serv_TradBio %>% filter(pcgdp_thous <= tradbio_income_cutoff_thous)
+
     serv_tradBio_heat <- serv_TradBio %>% filter(grepl("heating", service))
     serv_tradBio_oth <- serv_TradBio %>% filter(grepl("other", service))
 
 
     # Heating
-    fit_tradBio_heat = lm(log_en_EJ_flsp ~ log_pcgdp_thous + log_sq_pcgdp_thous + GCAM_region_ID,
+    fit_tradBio_heat = lm(log_en_EJ_flsp ~ log_pcgdp_thous + GCAM_region_ID,
                           data = serv_tradBio_heat)
 
     b1_tradBio_heat <- as.numeric(fit_tradBio_heat$coefficients[1])
     b2_tradBio_heat <- as.numeric(fit_tradBio_heat$coefficients[2])
-    b3_tradBio_heat <- as.numeric(fit_tradBio_heat$coefficients[3])
 
     # Non-thermal
-    fit_tradBio_oth = lm(log_en_EJ_flsp ~ log_pcgdp_thous + log_sq_pcgdp_thous + GCAM_region_ID,
+    fit_tradBio_oth = lm(log_en_EJ_flsp ~ log_pcgdp_thous +  GCAM_region_ID,
                          data = serv_tradBio_oth)
 
     b1_tradBio_oth <- as.numeric(fit_tradBio_oth$coefficients[1])
     b2_tradBio_oth <- as.numeric(fit_tradBio_oth$coefficients[2])
-    b3_tradBio_oth <- as.numeric(fit_tradBio_oth$coefficients[3])
 
     #------------------------------------------------------
     # In order to make the function flexible to the implementation of multiple consumers, the satiation impedance (mu) and the calibration coefficent (k)
@@ -1759,16 +1762,16 @@ module_energy_L244.building_det <- function(command, ...) {
       mutate(serv=(satiation.level * (1-exp((-log(2)/`satiation-impedance`)*afford))) * base.building.size) %>%
       # Adjust coal and TradBio
       mutate(serv = if_else(grepl("heating coal",building.service.input),
-                            exp(b1_coal_heat + b2_coal_heat * log(pcGDP_thous90USD_gr) + b3_coal_heat * (log(pcGDP_thous90USD_gr)^2) + prelast_coal * log(price)) * base.building.size,
+                            exp(b1_coal_heat + b2_coal_heat * log(pcGDP_thous90USD_gr) + prelast_coal * log(price)) * base.building.size,
                             serv)) %>%
       mutate(serv = if_else(grepl("others coal",building.service.input),
-                            exp(b1_coal_oth + b2_coal_oth * log(pcGDP_thous90USD_gr) + b3_coal_oth * (log(pcGDP_thous90USD_gr)^2) + prelast_coal * log(price)) * base.building.size,
+                            exp(b1_coal_oth + b2_coal_oth * log(pcGDP_thous90USD_gr) +  prelast_coal * log(price)) * base.building.size,
                             serv)) %>%
       mutate(serv = if_else(grepl("heating TradBio",building.service.input),
-                            exp(b1_tradBio_heat + b2_tradBio_heat * log(pcGDP_thous90USD_gr) + b3_tradBio_heat * (log(pcGDP_thous90USD_gr)^2) + prelast_tradBio * log(price)) * base.building.size,
+                            exp(b1_tradBio_heat + b2_tradBio_heat * log(pcGDP_thous90USD_gr)  + prelast_tradBio * log(price)) * base.building.size,
                             serv)) %>%
       mutate(serv = if_else(grepl("others TradBio",building.service.input),
-                            exp(b1_tradBio_oth + b2_tradBio_oth * log(pcGDP_thous90USD_gr) + b3_tradBio_oth * (log(pcGDP_thous90USD_gr)^2) + prelast_tradBio * log(price)) * base.building.size,
+                            exp(b1_tradBio_oth + b2_tradBio_oth * log(pcGDP_thous90USD_gr) +  prelast_tradBio * log(price)) * base.building.size,
                             serv)) %>%
       mutate(serv = if_else(afford == 0, 0, serv))
 
@@ -1849,16 +1852,16 @@ module_energy_L244.building_det <- function(command, ...) {
       mutate(serv=(satiation.level * (1-exp((-log(2)/`satiation-impedance`)*afford))) * base.building.size) %>%
       # Adjust coal and TradBio
       mutate(serv = if_else(grepl("heating coal",thermal.building.service.input),
-                            exp(b1_coal_heat + b2_coal_heat * log(pcGDP_thous90USD_gr) + b3_coal_heat * (log(pcGDP_thous90USD_gr)^2) + prelast_coal * log(price)) * base.building.size,
+                            exp(b1_coal_heat + b2_coal_heat * log(pcGDP_thous90USD_gr) + prelast_coal * log(price)) * base.building.size,
                             serv)) %>%
       mutate(serv = if_else(grepl("others coal",thermal.building.service.input),
-                            exp(b1_coal_oth + b2_coal_oth * log(pcGDP_thous90USD_gr) + b3_coal_oth * (log(pcGDP_thous90USD_gr)^2) + prelast_coal * log(price)) * base.building.size,
+                            exp(b1_coal_oth + b2_coal_oth * log(pcGDP_thous90USD_gr) + prelast_coal * log(price)) * base.building.size,
                             serv)) %>%
       mutate(serv = if_else(grepl("heating TradBio",thermal.building.service.input),
-                            exp(b1_tradBio_heat + b2_tradBio_heat * log(pcGDP_thous90USD_gr) + b3_tradBio_heat * (log(pcGDP_thous90USD_gr)^2) + prelast_tradBio * log(price)) * base.building.size,
+                            exp(b1_tradBio_heat + b2_tradBio_heat * log(pcGDP_thous90USD_gr)  + prelast_tradBio * log(price)) * base.building.size,
                             serv)) %>%
       mutate(serv = if_else(grepl("others TradBio",thermal.building.service.input),
-                            exp(b1_tradBio_oth + b2_tradBio_oth * log(pcGDP_thous90USD_gr) + b3_tradBio_oth * (log(pcGDP_thous90USD_gr)^2) + prelast_tradBio * log(price)) * base.building.size,
+                            exp(b1_tradBio_oth + b2_tradBio_oth * log(pcGDP_thous90USD_gr) + prelast_tradBio * log(price)) * base.building.size,
                             serv)) %>%
       mutate(serv = if_else(afford == 0, 0, serv))
 
@@ -1904,8 +1907,7 @@ module_energy_L244.building_det <- function(command, ...) {
              !grepl("modern", building.service.input)) %>%
       select(-base.service) %>%
       mutate(b1 = if_else(grepl("coal", building.service.input), b1_coal_oth, b1_tradBio_oth),
-             b2 = if_else(grepl("coal", building.service.input), b2_coal_oth, b2_tradBio_oth),
-             b3 = if_else(grepl("coal", building.service.input), b3_coal_oth, b3_tradBio_oth)) %>%
+             b2 = if_else(grepl("coal", building.service.input), b2_coal_oth, b2_tradBio_oth)) %>%
       separate(gcam.consumer, c("gcam.consumer", "group")) %>%
       mutate(gcam.consumer = paste0(gcam.consumer, "_", group),
              building.service.input = paste0(building.service.input, "_", group)) %>%
@@ -1919,8 +1921,7 @@ module_energy_L244.building_det <- function(command, ...) {
              !grepl("modern", thermal.building.service.input)) %>%
       select(-base.service) %>%
       mutate(b1 = if_else(grepl("coal", thermal.building.service.input), b1_coal_heat, b1_tradBio_heat),
-             b2 = if_else(grepl("coal", thermal.building.service.input), b2_coal_heat, b2_tradBio_heat),
-             b3 = if_else(grepl("coal", thermal.building.service.input), b3_coal_heat, b3_tradBio_heat)) %>%
+             b2 = if_else(grepl("coal", thermal.building.service.input), b2_coal_heat, b2_tradBio_heat)) %>%
       separate(gcam.consumer, c("gcam.consumer", "group")) %>%
       mutate(gcam.consumer = paste0(gcam.consumer, "_", group),
              thermal.building.service.input = paste0(thermal.building.service.input, "_", group)) %>%
@@ -1936,6 +1937,18 @@ module_energy_L244.building_det <- function(command, ...) {
     # To ensure that all the consumers are in the same path, make those consumer-specific adders transition to a common adder in 2030
     # This adder is calculated using regional data, and equally spliting the regional adder across consumer-groups.
     # This transition in three periods avoids drastic jumps from final calibration year to first model period.
+
+    # Region-level per-capita income projection, used below to decay the trad-fuel bias adder
+    # toward zero with rising income after it converges to a single region-wide value
+    # (Adder.Conv.Year). Region-level only (not by gcam.consumer/decile): future-year,
+    # decile-level population is not available in this data system (L101.Pop_thous_R_Yh only
+    # covers historical years), and this also preserves the "converge to one shared adder by
+    # Adder.Conv.Year" design intent, so deciles keep moving together after convergence.
+    L244.RegionIncomeProj <- L102.pcgdp_thous90USD_Scen_R_Y %>%
+      filter(scenario == socioeconomics.BASE_GDP_SCENARIO) %>%
+      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
+      rename(pcGDP_thous90USD = value) %>%
+      select(region, year, pcGDP_thous90USD)
 
     # 1- Generic services
     trad_fuels_oth<-c("resid others coal","resid others TradBio")
@@ -1993,6 +2006,22 @@ module_energy_L244.building_det <- function(command, ...) {
       group_by(region,gcam.consumer, nodeInput,building.node.input,building.service.input) %>%
       mutate(bias.adder = approx_fun(year, bias.adder, rule = 1)) %>%
       ungroup() %>%
+      # Decay the (now-flat, region-common) bias adder toward zero as income rises past
+      # Adder.Conv.Year, using the same income elasticity estimated for the trad-fuel demand
+      # function above. Without this, the additive bias adder is held flat forever while
+      # floorspace keeps growing, so it never vanishes and can even dominate demand growth.
+      # decay_factor is capped at 1 so it can only shrink the adder, never amplify it.
+      mutate(b2_decay = if_else(grepl("coal", building.service.input), b2_coal_oth, b2_tradBio_oth)) %>%
+      left_join_error_no_match(L244.RegionIncomeProj, by = c("region", "year")) %>%
+      left_join_error_no_match(L244.RegionIncomeProj %>%
+                                 filter(year == Adder.Conv.Year) %>%
+                                 select(region, pcGDP_conv = pcGDP_thous90USD),
+                               by = "region") %>%
+      mutate(decay_factor = if_else(year >= Adder.Conv.Year,
+                                    exp(b2_decay * (log(pcGDP_thous90USD) - log(pcGDP_conv))),
+                                    1),
+             decay_factor = pmin(decay_factor, 1),
+             bias.adder = bias.adder * decay_factor) %>%
       select(LEVEL2_DATA_NAMES[["GenericServiceAdder"]])
 
     # Modern
@@ -2123,6 +2152,23 @@ module_energy_L244.building_det <- function(command, ...) {
       group_by(region,gcam.consumer, nodeInput,building.node.input,thermal.building.service.input) %>%
       mutate(bias.adder = approx_fun(year, bias.adder, rule = 1)) %>%
       ungroup() %>%
+      # Same bias-adder income decay as for generic services above, applied to the thermal
+      # (heating/cooling) trad-fuel services. Cooling gets b2_decay = 0 (unchanged/flat) since
+      # there is no dedicated trad-fuel regression for cooling.
+      mutate(b2_decay = case_when(
+        grepl("heating coal", thermal.building.service.input) ~ b2_coal_heat,
+        grepl("heating TradBio", thermal.building.service.input) ~ b2_tradBio_heat,
+        TRUE ~ 0)) %>%
+      left_join_error_no_match(L244.RegionIncomeProj, by = c("region", "year")) %>%
+      left_join_error_no_match(L244.RegionIncomeProj %>%
+                                 filter(year == Adder.Conv.Year) %>%
+                                 select(region, pcGDP_conv = pcGDP_thous90USD),
+                               by = "region") %>%
+      mutate(decay_factor = if_else(year >= Adder.Conv.Year,
+                                    exp(b2_decay * (log(pcGDP_thous90USD) - log(pcGDP_conv))),
+                                    1),
+             decay_factor = pmin(decay_factor, 1),
+             bias.adder = bias.adder * decay_factor) %>%
       select(LEVEL2_DATA_NAMES[["ThermalServiceAdder"]])
 
     # Modern

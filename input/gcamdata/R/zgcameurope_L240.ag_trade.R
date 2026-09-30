@@ -183,8 +183,12 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
       select(-ag_region, -trade_region) %>%
       distinct()
 
+    # STABILITY TEST: the original filter dropped the trial markets of ALL traded crops (both the Single Market
+    # copy and the global/USA one), leaving 15 global crop prices as plain lagged markets. Upstream GCAM keeps a
+    # trial market for every traded sector. Keep the global (USA) crop trial markets; drop only the SM copies,
+    # since the SM crop sectors are rewritten to the regional aggregate in the xml step.
     L240.SectorUseTrialMarket_tra_EUR <- copy_for_EUR(L240.SectorUseTrialMarket_tra) %>%
-      filter(!supplysector %in% TRADED_CROPS)
+      filter(!(region == SINGLE_MARKET_NAME & supplysector %in% TRADED_CROPS))
 
     # 1b: Add euro market to subsector ------------------------------------
     L240.SubsectorAll_tra_EUR <- add_single_market(L240.SubsectorAll_tra)  %>%

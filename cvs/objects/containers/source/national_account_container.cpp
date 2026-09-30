@@ -134,10 +134,10 @@ void NationalAccountContainer::completeInit( const gcamstr& aRegionName, const D
     }
     
     // complete initializations
-    if( !Configuration::getInstance()->getBool( "FixedGDP-Path" ) && !mGdpMacroFunction ) {
-        ILogger& mainLog = ILogger::getLogger( "main_log" );
-        mainLog.setLevel( ILogger::SEVERE );
-        mainLog << "No GDP macro function parameters set and not running Fixed GDP." << endl;
+    if (!Configuration::getInstance()->getBool("FixedGDP-Path") && !mGdpMacroFunction) {
+        ILogger& mainLog = ILogger::getLogger("main_log");
+        mainLog.setLevel(ILogger::SEVERE);
+        mainLog << "No GDP macro function parameters set and not running Fixed GDP. Region: " << mRegionName << endl;
         abort();
     }
     else if( mGdpMacroFunction ) {
@@ -214,7 +214,7 @@ void NationalAccountContainer::initCalc( const Demographic* aDemographics, const
             mNationalAccounts[aPeriod]->initCalc( mNationalAccounts[aPeriod], aPeriod );
         }
         
-        mGdpMacroFunction->initCalc( mRegionName, mNationalAccounts[aPeriod], aPeriod );
+        mGdpMacroFunction->initCalc(mRegionName, mNationalAccounts[aPeriod], aPeriod);
         const bool isFixedGDP = Configuration::getInstance()->getBool("FixedGDP-Path");
         const Modeltime* modeltime = scenario->getModeltime();
         double currTFP = isFixedGDP || aPeriod <= modeltime->getFinalCalibrationPeriod() ? 1.0 : mNationalAccounts[aPeriod]->getAccountValue(NationalAccount::TOTAL_FACTOR_PRODUCTIVITY);
@@ -403,6 +403,14 @@ void NationalAccountContainer::postCalc( const int aPeriod ) {
         
         mGdpMacroFunction->postCalc( mRegionName, mNationalAccounts[aPeriod], aPeriod );
         mNationalAccounts[aPeriod]->postCalc();
+    }
+
+    else {
+
+        // Ensure that GDPpcPPP is set even if not running the MACRO module
+        double gdpPerCapPPP = getMarketGDPperCapita(aPeriod) * mPPPConversion;
+        mNationalAccounts[aPeriod]->setAccount(NationalAccount::GDP_PER_CAPITA_PPP, gdpPerCapPPP);
+
     }
 }
 

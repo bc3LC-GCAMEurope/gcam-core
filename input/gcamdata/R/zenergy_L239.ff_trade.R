@@ -73,7 +73,7 @@ module_energy_L239.ff_trade <- function(command, ...) {
     # No reason to have regions with no resources as potential exporters/domestic use
     zero_resource_R_f <- L210.RsrcCurves_fos %>%
       group_by(region, resource) %>%
-      filter(all(available == 0)) %>%
+      filter(all(round(available, 3) == 0)) %>%
       ungroup %>%
       distinct(region, resource)
 

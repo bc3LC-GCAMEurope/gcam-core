@@ -387,8 +387,8 @@ generate_level2_data_names <- function() {
   level2_data_names[["ThermalServicePrice"]] <- c("region","gcam.consumer","nodeInput","building.node.input","thermal.building.service.input","price")
   level2_data_names[["GenericBaseDens"]] <- c("region", "gcam.consumer", "nodeInput", "building.node.input", "building.service.input", "base.density")
   level2_data_names[["ThermalBaseDens"]] <- c("region", "gcam.consumer", "nodeInput", "building.node.input", "thermal.building.service.input", "base.density")
-  level2_data_names[["GenericTradFuelParams"]] <- c("region","gcam.consumer","nodeInput","building.node.input","building.service.input", "prelast","b1","b2","b3")
-  level2_data_names[["ThermalTradFuelParams"]] <- c("region","gcam.consumer","nodeInput","building.node.input","thermal.building.service.input", "prelast","b1","b2","b3")
+  level2_data_names[["GenericTradFuelParams"]] <- c("region","gcam.consumer","nodeInput","building.node.input","building.service.input", "prelast","b1","b2")
+  level2_data_names[["ThermalTradFuelParams"]] <- c("region","gcam.consumer","nodeInput","building.node.input","thermal.building.service.input", "prelast","b1","b2")
 
     # Land types
   level2_data_names[["LN0_Land"]] <- c("region", "LandAllocatorRoot", "year.fillout", "landAllocation")

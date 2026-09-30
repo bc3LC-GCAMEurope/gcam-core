@@ -65,6 +65,7 @@ class Marketplace;
  *          are merged with the first having lowest priority and last has highest:
  *              - Market type for all regions (no region attribute parsed).
  *              - Market type for a single region.
+ *              - Good name for all regions (no region attribute parsed).
  *              - Fully qualified market by giving a good name and the region.
  *
  *          The solution info parameters which will be read are:
