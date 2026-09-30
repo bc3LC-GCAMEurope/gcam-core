@@ -7,7 +7,7 @@
 		<Value name="GHGInputFileName">../input/magicc/inputs/input_gases.emk</Value>
 		<Value write-output="1" append-scenario-name="0" name="xmldb-location">../../outputs_gcam/hindcasting</Value>
 		<Value write-output="1" append-scenario-name="0" name="restart">./restart/restart</Value>
-		<Value write-output="1" append-scenario-name="1" name="xmlDebugFileName">debug.xml</Value>
+		<Value write-output="0" append-scenario-name="1" name="xmlDebugFileName">debug.xml</Value>
 		<Value write-output="1" append-scenario-name="0" name="hector-output">../output/gcam-hector-outputstream.csv</Value>
 		<Value write-output="1" append-scenario-name="1" name="costCurvesOutputFileName">cost_curves.xml</Value>
 		<Value write-output="0" append-scenario-name="0" name="supplyDemandOutputFileName">SDCurves.csv</Value>
@@ -153,7 +153,7 @@
 		<Value name = "policy">../input/policy/eea_trade_tax2021.xml</Value>
 		<Value name = "policy">../input/policy/EEAoil_0sw.xml</Value>
 
-		<Value name = "policy">../input/policy/policy2021hc/co2ndctax_nonEU_hc.xml</Value>
+		<!--Value name = "policy">../input/policy/policy2021hc/co2ndctax1_nonEU_hc.xml</Value-->
 		<Value name = "policy">../input/policy/policy2021hc/policy_ccap_eu_hc.xml</Value>
 		<Value name = "policy">../input/policy/policy2021hc/policy_coalPhaseout_hc.xml</Value>
 		<Value name = "policy">../input/policy/policy2021hc/policy_coalshut_2021_eums.xml</Value>
@@ -164,7 +164,7 @@
 
 	</ScenarioComponents>
 	<Strings>
-		<Value name="scenarioName">BaseYear2015_policy_test_and_electricitySector</Value>
+		<Value name="scenarioName">BaseYear2015_policy</Value>
 		<Value name="debug-region">USA</Value>
 		<Value name="AbatedGasForCostCurves">CO2</Value>
 	</Strings>
