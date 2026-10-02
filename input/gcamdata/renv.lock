@@ -47,6 +47,17 @@
       ],
       "Hash": "5ea2700d21e038ace58269ecdbeb9ec0"
     },
+    "ambrosia": {
+      "Package": "ambrosia",
+      "Version": "2.0.0",
+      "Source": "GitHub",
+      "RemoteType": "github",
+      "RemoteHost": "api.github.com",
+      "RemoteUsername": "JGCRI",
+      "RemoteRepo": "ambrosia",
+      "RemoteRef": "master",
+      "RemoteSha": "78f8985d8b5c46cdb2b155835040bfe21b010418"
+    },
     "askpass": {
       "Package": "askpass",
       "Version": "1.2.0",
@@ -799,6 +810,11 @@
         "utils"
       ],
       "Hash": "fec5f52652d60615fdb3957b3d74324a"
+    },
+    "nloptr": {
+      "Package": "nloptr",
+      "Version": "2.2.1",
+      "Source": "Repository"
     },
     "openssl": {
       "Package": "openssl",
@@ -1650,6 +1666,11 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "fcc4bd8e6da2d2011eb64a5e5cc685ab"
+    },
+    "zoo": {
+      "Package": "zoo",
+      "Version": "1.8-14",
+      "Source": "Repository"
     }
   }
 }
