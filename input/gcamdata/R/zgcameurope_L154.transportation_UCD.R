@@ -1219,7 +1219,9 @@ module_gcameurope_L154.transportation_UCD <- function(command, ...) {
     # Expandir esas filas hacia adelante
     JRC_fuel_share_in_cat_ext_forward <- base_2005to_extend %>%
       select(-year) %>%
-      tidyr::crossing(year = 2006:MODEL_FINAL_BASE_YEAR)
+      tidyr::crossing(year = 2006:MODEL_FINAL_BASE_YEAR) %>%
+      # HINDCAST2005: with MODEL_FINAL_BASE_YEAR = 2005, 2006:2005 would be c(2006, 2005) and duplicate 2005 rows
+      filter(year > 2005, year <= MODEL_FINAL_BASE_YEAR)
 
     # Unir al dataset original
     JRC_fuel_share_in_cat <- bind_rows(

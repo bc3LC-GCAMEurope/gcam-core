@@ -312,7 +312,7 @@ module_gcameurope_L2326.aluminum <- function(command, ...) {
                        supplysector, subsector, technology, minicam.energy.input, terminal_coef, year),
                 by = c("supplysector", "subsector", stub.technology = "technology", "minicam.energy.input","year")) %>%
       group_by(region, supplysector, subsector, stub.technology, minicam.energy.input) %>%
-      mutate(coefficient = if_else(year == 2010 & is.na(coefficient), terminal_coef, coefficient),
+      mutate(coefficient = if_else(year == 2010 & 2010 %in% MODEL_BASE_YEARS & is.na(coefficient), terminal_coef, coefficient),
              coefficient = if_else(year == 2020 & coefficient[year == 2015] ==0, terminal_coef, coefficient),
              coefficient = round(approx_fun(year, coefficient,rule = 2), energy.DIGITS_COEFFICIENT)) %>%
       ungroup() %>%

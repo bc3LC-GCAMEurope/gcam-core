@@ -120,7 +120,7 @@ module_gcameurope_L111.rsrc_fos_Prod <- function(command, ...) {
                                               !country_name %in% gsub("UK", "United Kingdom", MULT_REGIONS)),
                                           iso != "rou", iso != "lie") %>%
                                    distinct(iso, GCAM_region_ID), by = "GCAM_region_ID") %>%
-        filter(year >= 2010) %>%
+        filter(year >= min(2010, max(HISTORICAL_YEARS) - 5)) %>% # HINDCAST2005: production window ends at the base year, so start it 5 years earlier
         group_by(iso, resource = fuel, GCAM_region_ID) %>%
         summarise(CumulSum = sum(value)) %>%
         ungroup

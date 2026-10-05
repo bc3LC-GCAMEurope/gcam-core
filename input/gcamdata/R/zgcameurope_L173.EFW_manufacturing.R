@@ -142,7 +142,7 @@ module_gcameurope_L173.EFW_manufacturing <- function(command, ...) {
 
     # Using inner_join due to some minor countries in Liu inventory that aren't in the GDP data (e.g., South Sudan, Vatican City)
     L173.trtshr_2010 <- Liu_EFW_inventory[c("iso", "trtshr")] %>%
-      mutate(year = 2010) %>%
+      mutate(year = min(2010, max(HISTORICAL_YEARS))) %>% # HINDCAST2005: Liu 2010 shares matched to latest historical pcGDP
       inner_join(L102.pcgdp_thous90USD_ctry_Yh, by = c("iso", "year"))
 
     #linear model

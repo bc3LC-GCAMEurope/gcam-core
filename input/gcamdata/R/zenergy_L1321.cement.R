@@ -265,7 +265,7 @@ module_energy_L1321.cement <- function(command, ...) {
       filter(!is.na(`1971`), !is.na(`2015`)) %>%
       #join in 2015 cement production to weight the average
       left_join_error_no_match( L1321.out_Mt_C_cement_Yh_corrected %>%
-                                  filter(year == 2015) %>%
+                                  filter(year == min(2015, max(L1321.out_Mt_C_cement_Yh_corrected$year))) %>% # HINDCAST2005: weight by latest available production year if 2015 is truncated
                                   left_join(cement_regions %>% unique, by = c('iso')) %>%
                                   mutate(Country = IEA_intensity_region) %>%
                                   select(Country, value) %>%

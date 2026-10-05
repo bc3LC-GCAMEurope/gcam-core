@@ -38,7 +38,7 @@ module_energy_L115.roofPV <- function(command, ...) {
     # ===================================================
     # Categorizing countries and regions to GCAM Region ID; selecting population in 2010
     L100.Pop_thous_ctry_Yh %>%
-      filter(year == 2010) %>%
+      filter(year == min(2010, max(HISTORICAL_YEARS))) %>% # HINDCAST2005: 2010 population not in historical data when base year < 2010
       left_join_error_no_match(iso_GCAM_regID, by = "iso") %>%
       select(-iso, -country_name, -year) ->
       x

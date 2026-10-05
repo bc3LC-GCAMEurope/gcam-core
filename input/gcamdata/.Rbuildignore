@@ -16,3 +16,4 @@ R/README.html
 ^data-raw$
 coverage.R
 ^appveyor\.yml$
+^hindcast2005_find_failing_chunks\.R$

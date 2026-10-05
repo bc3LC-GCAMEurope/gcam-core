@@ -116,6 +116,8 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
       # Since there is only one filled year, 2012, copy the value to all HISTORICAL_YEARS
       mutate(value_pcflsp = ifelse(is.na(value_pcflsp), value_pcflsp[year == 2012], value_pcflsp)) %>%
       ungroup() %>%
+      # HINDCAST2005: drop the 2012 source year once it has been copied to the (shorter) historical period
+      filter(year %in% HISTORICAL_YEARS) %>%
       # Remove NAs from group regions and missing dweling / household size values
       filter(complete.cases(.)) ->
       L144.pcflsp_m2_EUR_Yh

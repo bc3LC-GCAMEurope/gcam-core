@@ -403,7 +403,7 @@ module_energy_L2326.aluminum <- function(command, ...) {
       left_join(select(L2326.GlobalTechCoef_aluminum %>% rename(terminal_coef = coefficient,supplysector = sector.name,subsector = subsector.name),
                        supplysector, subsector, technology, minicam.energy.input, terminal_coef, year),
                 by = c("supplysector", "subsector", stub.technology = "technology", "minicam.energy.input","year")) %>%
-      mutate(coefficient = if_else(year == 2010 & is.na(coefficient), terminal_coef, coefficient),
+      mutate(coefficient = if_else(year == 2010 & 2010 %in% MODEL_BASE_YEARS & is.na(coefficient), terminal_coef, coefficient),
              coefficient = if_else(year == 2015 & coefficient ==0, terminal_coef, coefficient)) %>%
       select(-terminal_coef) %>%
       group_by(region, supplysector, subsector, stub.technology, minicam.energy.input) %>%

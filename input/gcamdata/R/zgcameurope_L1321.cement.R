@@ -275,7 +275,7 @@ module_gcameurope_L1321.cement <- function(command, ...) {
       filter_regions_europe() %>%
       #join in 2018 cement production to weight the average
       left_join( L1321.out_Mt_C_cement_Yh_corrected %>%
-                   filter(year == 2018) %>%
+                   filter(year == min(2018, max(L1321.out_Mt_C_cement_Yh_corrected$year))) %>% # HINDCAST2005: weight by latest available production year if 2018 is truncated
                    left_join(cement_regions %>% unique, by = c('iso')) %>%
                    mutate(Country = IEA_intensity_region) %>%
                    select(Country, value) %>%

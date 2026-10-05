@@ -10,6 +10,12 @@ UNDER_TIMESHIFT          <- FALSE
 YEAR_PATTERN             <- "^(1|2)[0-9]{3}$"   # a 1 or 2 followed by three digits, and nothing else
 LOGIT_TYPE_COLNAME       <- "logit.type"        # will be removed by test code before old-new comparison
 DISABLED_MODULES         <- "policy"              # Any functions containing this case-sensitive string will be disabled. "none" will disable module_gcamusa_L2231.nonewcoal
+# HINDCAST2005: gcam-usa chunks hard-code 2010/2015 as base years and their XMLs are not loaded by GCAM-Europe,
+# so they are disabled (see find_chunks in utils.R) except the four whose outputs feed global/EUR emissions chunks
+# (L112.ceds_ghg_en, L114.bcoc_en, L253.emission_controls). Set to FALSE to restore standard behaviour.
+HINDCAST_DISABLE_GCAMUSA <- TRUE
+HINDCAST_GCAMUSA_KEEP    <- c("module_gcamusa_L101.nonghg_en_S_T_Y", "module_gcamusa_L103.ghg_an_S_T_Y",
+                              "module_gcamusa_L104.bcoc_en_S_T_Y", "module_gcamusa_L277.nonghg_prc")
 
 
 # Flags ======================================================================
@@ -24,7 +30,7 @@ FLAG_XML             <- "FLAG_XML"              # xml data
 
 # Historical years for level 1 data processing. All chunks that produce historical data
 # for mod el calibration are required to produce annual data covering this entire span.
-HISTORICAL_YEARS        <- 1971:2015
+HISTORICAL_YEARS        <- 1971:2005   # HINDCAST2005 (was 1971:2015 in hindcasting2015, 1971:2021 in GCAM-Europe)
 
 # Future years for level 1 data processing, for the few chunks that
 # produce future data (e.g., population projections)
@@ -32,11 +38,11 @@ FUTURE_YEARS            <- (max(HISTORICAL_YEARS)+1):2100
 FUTURE_YEARS[FUTURE_YEARS == 2020] <- 2021
 FUTURE_YEARS <- unique(FUTURE_YEARS)
 # Calibrated periods in the model. Only level 2 chunks should reference these
-MODEL_BASE_YEARS        <- unique(c(1975, 1990, 2005, 2010, 2015, max(HISTORICAL_YEARS)))
+MODEL_BASE_YEARS        <- unique(c(1975, 1990, 2005, max(HISTORICAL_YEARS)))   # HINDCAST2005: 2010 and 2015 become projected periods
 MODEL_FINAL_BASE_YEAR   <- max(MODEL_BASE_YEARS)
 
 # Future (not calibrated) model periods. Only level 2 chunks should reference these
-MODEL_FUTURE_YEARS      <- seq(2020, 2100, 5)
+MODEL_FUTURE_YEARS      <- seq(2010, 2100, 5)   # HINDCAST2005: 2010, 2015, 2021, 2025, ...
 MODEL_FUTURE_YEARS[MODEL_FUTURE_YEARS == 2020] <- 2021
 # Make sure years are consistent
 if (min(MODEL_FUTURE_YEARS) <= max(HISTORICAL_YEARS)) {
@@ -213,11 +219,11 @@ SO2_SHIP_LIMIT_POLICY_MULTIPLIER <- 0.001 * 2
 
 # Time
 aglu.MODEL_MEAN_PERIOD_LENGTH <- 3       # AgLU data use a moving average over this period length in LA.100
-aglu.MODEL_PRICE_YEARS      <- 2014:2016 # consistent with aglu.MODEL_SUA_MEAN_PERIODS
-aglu.MODEL_MACRONUTRIENT_YEARS <- 2014:2016   # consistent with aglu.MODEL_SUA_MEAN_PERIODS; FAO only has data for after 2010
-aglu.MODEL_COST_YEARS       <- 2008:2014
+aglu.MODEL_PRICE_YEARS      <- 2010:2012 # HINDCAST2005: FAO producer prices start in 2010; earliest years used as proxy (documented leakage) # consistent with aglu.MODEL_SUA_MEAN_PERIODS
+aglu.MODEL_MACRONUTRIENT_YEARS <- 2010:2012 # HINDCAST2005: FAO SUA starts in 2010; proxy (documented leakage)   # consistent with aglu.MODEL_SUA_MEAN_PERIODS; FAO only has data for after 2010
+aglu.MODEL_COST_YEARS       <- 2001:2005 # HINDCAST2005 (USDA cost data 1996-2018)
 aglu.DEFLATOR_BASE_YEAR     <- MODEL_FINAL_BASE_YEAR      # year used as the basis for computing regional price deflators
-aglu.FALLOW_YEARS           <- 2014:2016 # Years used for calculating the % of fallow land
+aglu.FALLOW_YEARS           <- 2004:2006 # HINDCAST2005 (FAO land data 1970-2022) # Years used for calculating the % of fallow land
 aglu.AGLU_HISTORICAL_YEARS  <- 1973:MODEL_FINAL_BASE_YEAR
 aglu.BASE_YEAR_IFA          <- 2006       # Base year of International Fertilizer Industry Association (IFA) fertilizer application data
 aglu.BIO_START_YEAR         <- 2025       # Also set in aglu/A_bio_ghost_share
@@ -289,7 +295,7 @@ aglu.MAX_MGDFOR_FRAC  <- 1    # Maximum percentage of any region/GLUs forest tha
 # GDP constraints
 aglu.HIGH_GROWTH_PCGDP <- 12.275 # GDP per capita high threshold for SSP4 region groupings, thousand 2010$ per person
 aglu.LOW_GROWTH_PCGDP  <- 2.75   # GDP per capita low threshold for SSP4 region groupings, thousand 2010$ per person
-aglu.PCGDP_YEAR <- 2010          # Year to compare to PCGDP thresholds
+aglu.PCGDP_YEAR <- 2005 # HINDCAST2005 (was 2010, now a projected period)          # Year to compare to PCGDP thresholds
 
 # AgLu multipliers
 aglu.MGMT_YIELD_ADJ <- 0.2       # Yield multiplier that goes from the observed yield to the "high" and "low" yields: observed plus or minus observed times this number.
@@ -400,7 +406,7 @@ aglu.MIN_VEG_CARBON_DENSITY  <- 0
 aglu.MIN_SOIL_CARBON_DENSITY <- 0
 
 #This is the model carbon year. Carbon outputs are scaled to this year
-MODEL_CARBON_YEAR <- 2010
+MODEL_CARBON_YEAR <- 2005 # HINDCAST2005 (was 2010)
 
 # These are the default values of carbon densities from Houghton (in MgC/ha) by
 # land type. moirai only outputs carbon for unmanaged land. Therefore, we need
@@ -702,15 +708,15 @@ energy.FOOD_PROCESSING.ENERGY_INFILL_MIN_EJ_PCAL_COEF <- 0.000413 # minimum valu
 # Socioeconomics constants ======================================================================
 
 socioeconomics.GCAMFAOSTAT_GDP_Dollar_Year <- 2015 # dollar year in FAO GDP (we have an assertion in gcamfaostat)
-Socioeconomic.PWT.LastYear <- 2015 # the latest year in PWT
-socioeconomics.Global_Macro_Database_LastYear <- 2015 # the latest year in GMD
+Socioeconomic.PWT.LastYear <- 2005 # HINDCAST2005 # the latest year in PWT
+socioeconomics.Global_Macro_Database_LastYear <- 2005 # HINDCAST2005 # the latest year in GMD
 socioeconomics.GCAM_GDP_Dollar_Year <- 1990 # GDP dollar year in GCAM
-socioeconomics.SSP_DB_BASEYEAR <- 2015 # base year of SSP data base v3.2 Beta
-socioeconomics.SSP_DB_Labor_StartYear <- 2015 # start year of population by age (to derive work-age pop) in SSP data base v3.2 Beta
+socioeconomics.SSP_DB_BASEYEAR <- 2005 # HINDCAST2005 # base year of SSP data base v3.2 Beta
+socioeconomics.SSP_DB_Labor_StartYear <- 2005 # HINDCAST2005 # start year of population by age (to derive work-age pop) in SSP data base v3.2 Beta
 socioeconomics.GDP_ADJ_MOVING_AVERAGE_ISO <- NULL
 socioeconomics.GDP_ADG_MOVING_AVERAGE_DURATION <- 15 # used for smoothing GDP for South_America_North
 socioeconomics.GDP_ADJ_NO_NEG_GROWTH_ISO <- c("twn")
-socioeconomics.GDP_ADJ_NO_NEG_GROWTH_YEAR <- 2015 # used for adjusting GDP projection to avoid negative GDP growth after this year (for Taiwan and South_America_North)
+socioeconomics.GDP_ADJ_NO_NEG_GROWTH_YEAR <- 2005 # HINDCAST2005 # used for adjusting GDP projection to avoid negative GDP growth after this year (for Taiwan and South_America_North)
 
 socioeconomics.CORE_GCAM_SCENARIO <- "SSP2"
 socioeconomics.SSP_EUR <- TRUE  # used for using Population & GDP European SSP2 data projections
@@ -936,12 +942,12 @@ emissions.UNCONVENTIONAL.OIL.FUG.CH4.EMFACT <- 0.0882
 emissions.UNCONVENTIONAL.OIL.FUG.N2O.EMFACT <- 0.000000939
 
 # Time
-emissions.CEDS_YEARS              <- 1970:2015           # Year coverage for CEDS inventory.
+emissions.CEDS_YEARS              <- 1970:2005           # HINDCAST2005           # Year coverage for CEDS inventory.
 emissions.CTRL_BASE_YEAR          <- 1975                # Year to read in pollution controls
 emissions.DEFOREST_COEF_YEARS     <- c(2000, 2005)
 emissions.EDGAR_YEARS             <- 1971:2008
 emissions.EPA_HISTORICAL_YEARS    <- 1971:2002
-emissions.EPA_MACC_YEAR           <- seq(2015, 2050, 5)        # based on 2019 EPA nonCO2 report
+emissions.EPA_MACC_YEAR           <- seq(2015, 2050, 5)   # HINDCAST2005: kept; EPA data has no 2010, so no MAC in the 2010 period        # based on 2019 EPA nonCO2 report
 emissions.EPA_MACC_YEAR[emissions.EPA_MACC_YEAR == 2020] <- 2021
 emissions.EPA_MACC_YEAR <- unique(emissions.EPA_MACC_YEAR)
 emissions.EPA_MACC_FUTURE_YEAR    <- seq(2055, 2100, 5)        # EPA report only covers till 2050
@@ -951,12 +957,12 @@ emissions.FINAL_EMISS_YEAR        <- min(MODEL_FINAL_BASE_YEAR, 2005)
 emissions.GAINS_BASE_YEAR         <- 2005
 emissions.GAINS_YEARS             <- c(2010, 2020, 2030)
 emissions.GHG_CONTROL_READIN_YEAR <- 1975
-emissions.HFC_MODEL_BASE_YEARS    <- MODEL_YEARS[MODEL_YEARS <= 2010] # We don't want this to change in timeshift
-emissions.INVENTORY_MATCH_YEAR    <- 2009                # Select year from which to calculate fuel emissions coefficients (2009 is currently the most recent)
+emissions.HFC_MODEL_BASE_YEARS    <- MODEL_BASE_YEARS   # HINDCAST2005 (was MODEL_YEARS <= 2010) # We don't want this to change in timeshift
+emissions.INVENTORY_MATCH_YEAR    <- 2005 # HINDCAST2005 (was 2009)                # Select year from which to calculate fuel emissions coefficients (2009 is currently the most recent)
 emissions.MODEL_BASE_YEARS        <- MODEL_BASE_YEARS
 emissions.NH3_EXTRA_YEARS         <- 1971:1989
 emissions.NH3_HISTORICAL_YEARS    <- 1990:2002
-emissions.SSP_FUTURE_YEARS        <- MODEL_YEARS[MODEL_YEARS %in% 2015:2100]
+emissions.SSP_FUTURE_YEARS        <- MODEL_YEARS[MODEL_YEARS %in% 2010:2100]   # HINDCAST2005 (was 2015:2100)
 emissions.HFC_FUT_YEAR            <- 2030            # max year for emissions factors in L241.fgas
 emissions.GV_YEARS                <- c(2020, 2030)   # years to fill in from Guus Velders data
 

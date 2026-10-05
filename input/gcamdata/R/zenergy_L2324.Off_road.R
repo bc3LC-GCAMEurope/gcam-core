@@ -153,7 +153,8 @@ module_energy_L2324.Off_road <- function(command, ...) {
     #change interplate for the regions where baseyear biomass share weight is 1
     L2324.SubsectorInterp_Off_road %>%
       filter(region %in% energy.OFF_ROAD.BIOMASS_GROWTH,subsector=="biomass",supplysector == "agricultural energy use") %>%
-      mutate(from.year=2015,to.year = 2020,interpolation.function="linear") ->
+      mutate(from.year=min(2015, MODEL_FINAL_BASE_YEAR),to.year = 2020, # HINDCAST2005: anchor on last calibrated year
+             interpolation.function="linear") ->
       L2324.SubsectorInterp_Off_road_add
 
     L2324.SubsectorInterp_Off_road_add %>%

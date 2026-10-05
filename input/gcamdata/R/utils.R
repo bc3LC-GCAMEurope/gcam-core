@@ -401,7 +401,9 @@ find_chunks <- function(pattern = "^module_[a-zA-Z\\.]*_.*$", include_disabled =
 
   ls(name = parent.env(environment()), pattern = pattern) %>%
     tibble::tibble(name = .,
-                   disabled = grepl("_DISABLED$", name) | grepl(paste0("^module_.*", DISABLE), name)) %>%
+                   disabled = grepl("_DISABLED$", name) | grepl(paste0("^module_.*", DISABLE), name) |
+                     # HINDCAST2005: disable gcam-usa chunks except those GCAM-Europe needs (constants.R)
+                     (HINDCAST_DISABLE_GCAMUSA & grepl("^module_gcamusa_", name) & !name %in% HINDCAST_GCAMUSA_KEEP)) %>%
     filter(include_disabled | !disabled) %>%
     tidyr::separate(name, into = c("x", "module", "chunk"), remove = FALSE,
                     sep = "_", extra = "merge") %>%
