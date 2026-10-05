@@ -15,6 +15,9 @@
 #   source("hindcast2005_find_failing_chunks.R")
 #
 # Output: hindcast2005_chunk_report.csv (one row per chunk) and a short console summary.
+#
+# Metadata checks (precursors not declared as inputs, etc.) are reported in the column
+# `metadata_warning` but do NOT count as failures, matching driver_drake(), which skips them.
 
 suppressPackageStartupMessages({
   devtools::load_all(".", quiet = TRUE)   # loads gcamdata with the constants of this branch
@@ -39,6 +42,7 @@ tolerant_driver <- function(report_file = "hindcast2005_chunk_report.csv") {
   status        <- setNames(rep("pending", length(chunklist$name)), chunklist$name)
   errors        <- setNames(rep(NA_character_, length(chunklist$name)), chunklist$name)
   seconds       <- setNames(rep(NA_real_, length(chunklist$name)), chunklist$name)
+  meta_warn     <- setNames(rep(NA_character_, length(chunklist$name)), chunklist$name)
   failed_inputs <- character(0)             # file inputs that could not be read
 
   repeat {
@@ -70,11 +74,18 @@ tolerant_driver <- function(report_file = "hindcast2005_chunk_report.csv") {
 
       if (!inherits(res, "error")) {
         po  <- subset(chunkoutputs, name == chunk)
-        chk <- tryCatch(check_chunk_outputs(chunk, res, inputs$input,
-                                            promised_outputs = po$output,
-                                            outputs_xml = po$to_xml),
-                        error = function(e) e)
-        if (inherits(chk, "error")) res <- chk
+        # Only a missing promised output is a real failure; other metadata problems
+        # (undeclared precursors, ...) are recorded but tolerated, as in driver_drake()
+        if (!all(po$output %in% names(res))) {
+          res <- simpleError(paste("chunk did not return:",
+                                   paste(setdiff(po$output, names(res)), collapse = ", ")))
+        } else {
+          chk <- tryCatch(suppressMessages(check_chunk_outputs(chunk, res, inputs$input,
+                                                               promised_outputs = po$output,
+                                                               outputs_xml = po$to_xml)),
+                          error = function(e) e)
+          if (inherits(chk, "error")) meta_warn[chunk] <- gsub("[\r\n]+", " ", conditionMessage(chk))
+        }
       }
 
       if (inherits(res, "error")) {
@@ -96,6 +107,8 @@ tolerant_driver <- function(report_file = "hindcast2005_chunk_report.csv") {
 
       to_run <- setdiff(to_run, chunk); progressed <- TRUE
     }
+    message("  pass done: ", sum(status == "ok"), " ok, ", sum(status == "FAILED"), " failed, ",
+            length(to_run), " left to try")
     if (!progressed || !length(to_run)) break
   }
 
@@ -103,19 +116,23 @@ tolerant_driver <- function(report_file = "hindcast2005_chunk_report.csv") {
   producer_of <- setNames(chunkoutputs$name, chunkoutputs$output)
   failed      <- names(status)[status == "FAILED"]
 
-  # upstream root causes of every chunk that never ran
-  root_causes <- function(chunk, seen = character(0)) {
-    if (chunk %in% seen) return(character(0))
-    ins <- filter(chunkinputs, name == chunk, !optional)$input
+  # upstream root causes of every chunk that never ran (memoised: the graph is large)
+  req_inputs <- split(chunkinputs$input[!chunkinputs$optional], chunkinputs$name[!chunkinputs$optional])
+  memo <- new.env()
+  root_causes <- function(chunk) {
+    if (!is.null(memo[[chunk]])) return(memo[[chunk]])
+    assign(chunk, character(0), envir = memo)          # guard against cycles
     out <- character(0)
-    for (i in ins) {
+    for (i in req_inputs[[chunk]]) {
       if (i %in% failed_inputs) { out <- c(out, paste0("FILE:", i)); next }
-      p <- producer_of[i]
+      p <- unname(producer_of[i])
       if (is.na(p)) next
       if (p %in% failed) out <- c(out, p)
-      else if (status[p] != "ok") out <- c(out, root_causes(p, c(seen, chunk)))
+      else if (!identical(unname(status[p]), "ok")) out <- c(out, root_causes(p))
     }
-    unique(out)
+    out <- unique(out)
+    assign(chunk, out, envir = memo)
+    out
   }
 
   blocked <- names(status)[status == "pending"]
@@ -126,6 +143,7 @@ tolerant_driver <- function(report_file = "hindcast2005_chunk_report.csv") {
   report <- tibble(chunk = names(status), status = unname(status),
                    error = unname(errors[names(status)]),
                    blocked_by = unname(blocked_by),
+                   metadata_warning = unname(meta_warn[names(status)]),
                    seconds = round(unname(seconds[names(status)]), 1)) %>%
     mutate(n_blocked = vapply(chunk, function(ch) sum(grepl(ch, blocked_by, fixed = TRUE)), integer(1))) %>%
     arrange(factor(status, levels = c("FAILED", "blocked", "ok")), desc(n_blocked), chunk)
