@@ -142,6 +142,10 @@ module_aglu_L100.IMAGE_downscale_ctry_yr <- function(command, ...) {
     # so that the total pasture_fodder matches IMAGE values in base year
 
     aglu.MODEL_MeatWaterContent_YEARS <- aglu.MODEL_PRICE_YEARS
+    # HINDCAST2005: price years (2010:2012) lie after the final base year, but L101.an_Prod_Mt_ctry_C_Y stops there
+    if(max(aglu.MODEL_MeatWaterContent_YEARS) > MODEL_FINAL_BASE_YEAR) {
+      aglu.MODEL_MeatWaterContent_YEARS <- (MODEL_FINAL_BASE_YEAR - 2):MODEL_FINAL_BASE_YEAR
+    }
 
     L101.an_Prod_Mt_ctry_C_Y %>%
       filter(year %in% aglu.MODEL_MeatWaterContent_YEARS) %>%

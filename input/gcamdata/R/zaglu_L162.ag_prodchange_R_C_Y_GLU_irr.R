@@ -138,6 +138,9 @@ module_aglu_L162.ag_prodchange_R_C_Y_GLU_irr <- function(command, ...) {
       # calculate yield multipliers
       group_by(CROSIT_ctry, CROSIT_crop, Irr_Rfd) %>%
       mutate(Mult = yield_kgHa / first(yield_kgHa)) %>%
+      # HINDCAST2005: with base year 2005 the first yield is the raw CROSIT 2005 value, which can be 0 while later
+      # years are not (NaN in 2005, Inf later). Drop the whole combination, as intended by the na.omit below.
+      filter(all(is.finite(Mult))) %>%
       ungroup() %>%
       select(-yield_kgHa) %>%
       # Drop the NaN's = crops with zero base year production / harvested area

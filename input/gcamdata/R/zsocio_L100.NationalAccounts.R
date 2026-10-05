@@ -474,7 +474,7 @@ module_socio_L100.NationalAccounts <- function(command, ...) {
     assertthat::assert_that(Capital_Compensation_Share_R_Yh %>% filter(year == Socioeconomic.PWT.LastYear) %>%
                               filter(var == "capital.share.pwt") %>% pull(value) %>% min > 0.15, msg = "check min value in data")
     assertthat::assert_that(Capital_Compensation_Share_R_Yh %>% filter(year == Socioeconomic.PWT.LastYear) %>%
-                              filter(var == "capital.share.pwt") %>% pull(value) %>% max < 0.7, msg = "check max value in data")
+                              filter(var == "capital.share.pwt") %>% pull(value) %>% max < 0.75, msg = "check max value in data") # HINDCAST2005: Middle East is ~0.71 in 2005 (0.68 in 2015)
 
 
     ## Bind all national account shares ----

@@ -140,11 +140,13 @@ tolerant_driver <- function(report_file = "hindcast2005_chunk_report.csv") {
   blocked_by <- setNames(rep(NA_character_, length(status)), names(status))
   for (b in blocked) blocked_by[b] <- paste(root_causes(b), collapse = "; ")
 
-  report <- tibble(chunk = names(status), status = unname(status),
-                   error = unname(errors[names(status)]),
-                   blocked_by = unname(blocked_by),
-                   metadata_warning = unname(meta_warn[names(status)]),
-                   seconds = round(unname(seconds[names(status)]), 1)) %>%
+  # NB: compute everything outside tibble(): inside it, the new `status` column would mask the named vector
+  ch <- names(status)
+  report <- tibble(chunk = ch, status = unname(status[ch]),
+                   error = unname(errors[ch]),
+                   blocked_by = unname(blocked_by[ch]),
+                   metadata_warning = unname(meta_warn[ch]),
+                   seconds = round(unname(seconds[ch]), 1)) %>%
     mutate(n_blocked = vapply(chunk, function(ch) sum(grepl(ch, blocked_by, fixed = TRUE)), integer(1))) %>%
     arrange(factor(status, levels = c("FAILED", "blocked", "ok")), desc(n_blocked), chunk)
 
