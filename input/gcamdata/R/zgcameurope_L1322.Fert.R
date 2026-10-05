@@ -306,7 +306,9 @@ module_gcameurope_L1322.Fert <- function(command, ...) {
 
     # Obtain fertilizer input-output cofficient for natural gas in aglu.FERT_PRICE_YEAR
     L1322.IO_R_Fert_F_Yh_EUR %>%
-      filter(year == aglu.FERT_PRICE_YEAR,
+      # HINDCAST2005: historical IO coefficients stop at the final base year (< aglu.FERT_PRICE_YEAR = 2010);
+      # use the latest historical year not after the fertilizer price year
+      filter(year == min(aglu.FERT_PRICE_YEAR, max(HISTORICAL_YEARS)),
              GCAM_region_ID == gcam.DEU_CODE,
              fuel == "gas") %>%
       pull(value) -> # Save coefficient as single number

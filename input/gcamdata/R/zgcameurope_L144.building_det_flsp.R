@@ -98,7 +98,9 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
              deg_urb == 'TOTAL', # all urbanization types by country
              hhtyp == 'TOTAL') %>%  # all household types by country)
       select(geo, year = TIME_PERIOD, value_flsp = OBS_VALUE) %>%
-      filter(year %in% HISTORICAL_YEARS) %>% # Ensure within historical time period
+      # HINDCAST2005: the only observation is 2012, which is after the 2005 base year; keep it (it is dropped below
+      # after being copied to all historical years)
+      filter(year %in% c(HISTORICAL_YEARS, 2012)) %>% # Ensure within historical time period
       left_join_error_no_match(EUR_avHousehold %>%
                                  filter(freq == 'A', # annual frequency
                                         unit == 'AVG') %>% # average values

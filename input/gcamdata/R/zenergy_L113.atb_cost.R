@@ -587,6 +587,11 @@ module_energy_L113.atb_cost <- function(command, ...) {
     # energy.ATB_BASE_YEAR, and approx_fun() returns NA with a single point (all ATB-only technologies ended up NA).
     # Add each technology's first ATB year as a second point, so historical years take the earliest ATB cost
     # (as they did with base year 2015). No effect when MODEL_FINAL_BASE_YEAR >= the first ATB year.
+    L113.improvement_param <- function(x, year) {
+      v <- x[year == energy.ATB_LATEST_YEAR & !is.na(x)]
+      if(!length(v)) v <- x[year == energy.ATB_BASE_YEAR & !is.na(x)]
+      if(length(v)) v[1] else NA_real_
+    }
     L113.atb_first_year <- L113.globaltech_cost_atb_temp %>%
       filter(!is.na(value)) %>%
       group_by(technology, input, case) %>%
@@ -605,9 +610,12 @@ module_energy_L113.atb_cost <- function(command, ...) {
       # add in user defined values from A23 files
       bind_rows(A23.globaltech_cost_keep) %>%
       group_by(supplysector, subsector, technology, input, case) %>%
+      # HINDCAST2005: when ATB_LATEST_YEAR (= final base year) precedes the ATB data, its row has no improvement
+      # parameters (NA), which left every ATB-only technology without future extrapolation (NA costs/O&M after the
+      # base year). Fall back to the parameters of the ATB base year row. Unchanged when the latest-year row has them.
       mutate(value = approx_fun(year, value, rule = 2),
-             improvement.max = if_else(is.na(improvement.max),improvement.max[year == energy.ATB_LATEST_YEAR],improvement.max),
-             improvement.rate = if_else(is.na(improvement.rate), improvement.rate[year == energy.ATB_LATEST_YEAR],improvement.rate)) %>%
+             improvement.max = if_else(is.na(improvement.max), L113.improvement_param(improvement.max, year), improvement.max),
+             improvement.rate = if_else(is.na(improvement.rate), L113.improvement_param(improvement.rate, year), improvement.rate)) %>%
       ungroup() %>%
       arrange(subsector, technology, input, case) %>%
       # Filter for costs < the users specified ATB base year
