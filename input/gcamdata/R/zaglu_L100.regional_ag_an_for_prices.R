@@ -134,10 +134,20 @@ module_aglu_L100.regional_ag_an_for_prices <- function(command, ...) {
     # Data has no NA in aglu.MODEL_PRICE_YEARS
     # left_join_error_no_match should be replaced by inner_join if NA is an issue
 
+    # HINDCAST2005: with price years 2010:2012, Sudan (former) has prices in 2010-2011 but no deflator for those
+    # years. As suggested above, drop price rows without a deflator instead of failing (reported in a message).
     L100.FAO_ag_an_ProducerPrice <-
       L100.FAO_ag_an_ProducerPrice_1 %>%
-      left_join_error_no_match(L100.FAO_GDP_Deflators,
-                               by = c("area_code", "area", "year"))
+      inner_join(L100.FAO_GDP_Deflators %>% filter(is.finite(currentUSD_per_baseyearUSD)),
+                 by = c("area_code", "area", "year"))
+    if(nrow(L100.FAO_ag_an_ProducerPrice) < nrow(L100.FAO_ag_an_ProducerPrice_1)) {
+      L100.FAO_ag_an_ProducerPrice_1 %>%
+        anti_join(L100.FAO_ag_an_ProducerPrice, by = c("area_code", "area", "year")) %>%
+        distinct(area, year) %>%
+        mutate(lbl = paste0(area, " ", year)) %>% pull(lbl) %>%
+        paste(collapse = ", ") %>%
+        message("module_aglu_L100.regional_ag_an_for_prices: price rows dropped (no GDP deflator): ", .)
+    }
 
     ## clean a bit ----
     rm(GCAMFAOSTAT_ProdPrice,

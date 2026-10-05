@@ -580,6 +580,24 @@ module_energy_L113.atb_cost <- function(command, ...) {
       filter(is.na(value[year==energy.ATB_LATEST_YEAR])) %>%
       ungroup() %>%
       select(-value, -improvement.max, -improvement.rate) %>%
+      distinct() ->
+      L113.A23_years_to_fill
+
+    # HINDCAST2005: when the final base year precedes the ATB data, the only A23 year that matches the ATB series is
+    # energy.ATB_BASE_YEAR, and approx_fun() returns NA with a single point (all ATB-only technologies ended up NA).
+    # Add each technology's first ATB year as a second point, so historical years take the earliest ATB cost
+    # (as they did with base year 2015). No effect when MODEL_FINAL_BASE_YEAR >= the first ATB year.
+    L113.atb_first_year <- L113.globaltech_cost_atb_temp %>%
+      filter(!is.na(value)) %>%
+      group_by(technology, input, case) %>%
+      summarise(first_year = min(year), .groups = "drop") %>%
+      filter(first_year > MODEL_FINAL_BASE_YEAR, first_year != energy.ATB_BASE_YEAR)
+    L113.A23_years_to_fill %>%
+      bind_rows(L113.A23_years_to_fill %>%
+                  filter(year == energy.ATB_BASE_YEAR) %>%
+                  inner_join(L113.atb_first_year, by = c("technology", "input", "case")) %>%
+                  mutate(year = first_year) %>%
+                  select(-first_year)) %>%
       distinct() %>%
       # Need to retain the values from the time series
       # Need to use left_join because the A23 file doesn't have all combinations
