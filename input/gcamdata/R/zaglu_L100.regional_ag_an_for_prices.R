@@ -76,10 +76,24 @@ module_aglu_L100.regional_ag_an_for_prices <- function(command, ...) {
     # 1. Process region-specific GDP deflator ----
     #    used for deflating regional ag an for prices
 
+    # HINDCAST2005: some areas have no deflator in aglu.DEFLATOR_BASE_YEAR (Serbia and Montenegro start in 2006,
+    # Sudan and South Sudan in 2012) but do have prices in aglu.MODEL_PRICE_YEARS. Extrapolate their index back to
+    # the base year with the average annual growth of their first (up to) 5 years of data.
+    deflator_base_value <- function(year, value, base) {
+      v <- value[year == base]
+      if(length(v) == 1 && !is.na(v)) return(v)
+      ok <- !is.na(value) & year > base
+      if(sum(ok) < 2) return(NA_real_)
+      y <- year[ok]; x <- value[ok]
+      y0 <- min(y); y1 <- min(max(y), y0 + 5)
+      g <- (x[y == y1] / x[y == y0]) ^ (1 / (y1 - y0))
+      x[y == y0] / g ^ (y0 - base)
+    }
+
     L100.FAO_GDP_Deflators <-
       FAO_GDP_Deflators %>% gather_years() %>%
       group_by(area, area_code) %>%
-      mutate(currentUSD_per_baseyearUSD = (value / value[year == aglu.DEFLATOR_BASE_YEAR])) %>%
+      mutate(currentUSD_per_baseyearUSD = value / deflator_base_value(year, value, aglu.DEFLATOR_BASE_YEAR)) %>%
       ungroup() %>%
       select(area, area_code, year, currentUSD_per_baseyearUSD)
 

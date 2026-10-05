@@ -107,8 +107,9 @@ module_energy_L120.offshore_wind <- function(command, ...) {
 
     L113.globaltech_OMfixed_ATB %>%
       gather_years() %>%
-      filter(technology == "wind_offshore",
-             year == MODEL_FINAL_BASE_YEAR) %>%
+      filter(technology == "wind_offshore", !is.na(value)) %>%
+      # HINDCAST2005: use the final base year if available, otherwise the first year with data
+      filter(year == if_else(MODEL_FINAL_BASE_YEAR %in% year, MODEL_FINAL_BASE_YEAR, min(year))) %>%
       distinct(value) %>%
       as.numeric() -> L120.offshore_wind_OMfixed
 
@@ -197,6 +198,15 @@ module_energy_L120.offshore_wind <- function(command, ...) {
     if(nrow(missing_regions_mid_price_df)>0){
       L120.mid.price <- L120.mid.price %>%
         dplyr::bind_rows(missing_regions_mid_price_df)}
+
+    # HINDCAST2005: diagnostic before the join that failed with base year 2005
+    L120.missing_mid <- setdiff(unique(L120.offshore_wind_curve$GCAM_region_ID), L120.mid.price$GCAM_region_ID)
+    if(length(L120.missing_mid)) {
+      message("L120.offshore_wind: no mid.price for GCAM_region_ID ", paste(L120.missing_mid, collapse = ", "),
+              " | OM.fixed = ", paste(L120.offshore_wind_OMfixed, collapse = "/"),
+              " | fcr = ", paste(L120.offshore_wind_fcr, collapse = "/"))
+      print(as.data.frame(filter(L120.offshore_wind_curve, GCAM_region_ID %in% L120.missing_mid)))
+    }
 
     L120.offshore_wind_curve %>%
       left_join_error_no_match(L120.mid.price, by = c("GCAM_region_ID")) -> L120.offshore_wind_curve
