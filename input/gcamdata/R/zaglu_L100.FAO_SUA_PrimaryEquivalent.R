@@ -130,9 +130,20 @@ module_aglu_L100.FAO_SUA_PrimaryEquivalent <- function(command, ...) {
       mutate(value = -value) ->
       DF_INTRA_REG_TRADE
 
+    # HINDCAST2005: FAOSTAT bilateral trade starts in 2010. If no model base year is covered, use the first
+    # available year relabelled as the final base year; it only gives the structure of gross flows, net trade
+    # is recalibrated to GCAM base-year net trade in module_gcameurope_L240.ag_trade.
+    if(!any(MODEL_BASE_YEARS %in% GCAMFAOSTAT_BiTrade_regID$year)) {
+      GCAMFAOSTAT_BiTrade_regID_EUR <- GCAMFAOSTAT_BiTrade_regID %>%
+        filter(year == min(year)) %>%
+        mutate(year = MODEL_FINAL_BASE_YEAR)
+    } else {
+      GCAMFAOSTAT_BiTrade_regID_EUR <- GCAMFAOSTAT_BiTrade_regID
+    }
+
     # Filter to only trade involving european single market regions to later define double armington market for ag
     # also to calculate inter-regional trade for any grouped ag regions
-    EuroSingleMarket_BiTrade_Ag_crops <- GCAMFAOSTAT_BiTrade_regID %>%
+    EuroSingleMarket_BiTrade_Ag_crops <- GCAMFAOSTAT_BiTrade_regID_EUR %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       left_join_error_no_match(GCAM_region_names %>% rename(source_region = region),
                                by = c("source_GCAM_region_ID" = "GCAM_region_ID")) %>%
@@ -162,7 +173,7 @@ module_aglu_L100.FAO_SUA_PrimaryEquivalent <- function(command, ...) {
       ungroup() %>%
       filter( GCAM_commodity %in% aglu.TRADED_CROPS)
 
-    EuroSingleMarket_BiTrade_Ag_noncrops <- GCAMFAOSTAT_BiTrade_regID %>%
+    EuroSingleMarket_BiTrade_Ag_noncrops <- GCAMFAOSTAT_BiTrade_regID_EUR %>%
       left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       left_join_error_no_match(GCAM_region_names %>% rename(source_region = region),
                                by = c("source_GCAM_region_ID" = "GCAM_region_ID")) %>%

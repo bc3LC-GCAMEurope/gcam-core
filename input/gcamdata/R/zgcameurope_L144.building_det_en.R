@@ -201,7 +201,8 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     # Some regions are missing resid others, so we calculate the average service share in the regions with resid others
     # and add in those shares (with electricity) NOTE: Shares will be slightly less than average share since we add to sum
     MEAN_RESID_OTHER_ELEC_PROP <- EUR_hhEnergyConsum_R_Y_S %>%
-      filter(year == MODEL_FINAL_BASE_YEAR) %>%
+      # HINDCAST2005: Eurostat household data start in 2010; use the first available year if the base year is earlier
+      filter(year == max(min(year), MODEL_FINAL_BASE_YEAR)) %>%
       group_by(GCAM_region_ID) %>%
       filter(any(service == "resid others modern EUR" & fuel == "electricity")) %>%
       summarise(resid_other_elec_prop = value_eurostat[service == "resid others modern EUR" & fuel == "electricity"] / sum(value_eurostat)) %>%

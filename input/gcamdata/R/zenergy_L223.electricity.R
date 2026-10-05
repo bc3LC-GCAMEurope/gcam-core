@@ -946,7 +946,15 @@ module_energy_L223.electricity <- function(command, ...) {
     # ------------------------------------------------------------------------------------
 
     # Interpolate values for fixed output of future hydropower
-    L118.out_EJ_R_elec_hydro_Yfut %>%
+    # HINDCAST2005: the prebuilt L118.out_EJ_R_elec_hydro_Yfut starts at 2021; anchor the interpolation on the
+    # final-base-year hydro output so that future periods before the first projected year (2010, 2015) are filled
+    L1231.out_EJ_R_elec_F_tech_Yh %>%
+      filter(fuel == "hydro", year == MODEL_FINAL_BASE_YEAR) %>%
+      group_by(GCAM_region_ID, sector, fuel, year) %>%
+      summarise(value = sum(value), .groups = "drop") %>%
+      anti_join(L118.out_EJ_R_elec_hydro_Yfut, by = c("GCAM_region_ID", "sector", "fuel", "year")) %>%
+      bind_rows(L118.out_EJ_R_elec_hydro_Yfut) %>%
+      semi_join(L118.out_EJ_R_elec_hydro_Yfut, by = c("GCAM_region_ID", "sector", "fuel")) %>%
       complete(nesting(GCAM_region_ID, sector, fuel), year = c(year, MODEL_FUTURE_YEARS)) %>%
       arrange(GCAM_region_ID, year) %>%
       group_by(GCAM_region_ID, sector, fuel) %>%

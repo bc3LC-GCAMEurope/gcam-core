@@ -87,7 +87,8 @@ module_gcameurope_L121.liquids <- function(command, ...) {
     # Adjust data from EU_AGR outlook to match the required format
     EU_AGR_OUTLOOK_biofuel_production_adj <- EU_AGR_OUTLOOK_biofuel_production %>%
       gather(year, value, -Region, -Biofuel, -Crop, -Source) %>%
-      filter(year == MODEL_FINAL_BASE_YEAR) %>%
+      # HINDCAST2005: EU AGR outlook data start in 2010; use the first available year if the base year is earlier
+      filter(as.numeric(year) == max(min(as.numeric(year)), MODEL_FINAL_BASE_YEAR)) %>%
       select(-year)
 
     EU_AGR_OUTLOOK_biofuel_production_fin <- EU_AGR_OUTLOOK_biofuel_production_adj %>%
