@@ -311,6 +311,16 @@ module_aglu_L203.ag_an_demand_input <- function(command, ...) {
       # Create NAs for future years, use left_join instead
       left_join(L203.ag_an_kcalg_R_C_Y, by = c("region", "technology" = "GCAM_commodity", "year")) %>%
       mutate(efficiency = round(value, aglu.DIGITS_CALOUTPUT)) %>%
+      # HINDCAST2005: regions with no food consumption of a commodity in the base years (e.g. OilPalm in Canada and
+      # most of Europe in the pre-2010 FAO food balances) get a calorie content of 0. GCAM uses it as an efficiency
+      # (coefficient = 1/efficiency), so demand = 0 * Inf = NaN, which propagated to food demand, food processing and
+      # CO2 from 1975 on. Use the median calorie content of the regions with data for that commodity and year instead.
+      # Output and share-weights of these technologies remain zero, so calibration is unaffected.
+      group_by(technology, year) %>%
+      mutate(efficiency = if_else(year <= MODEL_FINAL_BASE_YEAR & (is.na(efficiency) | efficiency <= 0),
+                                  suppressWarnings(stats::median(efficiency[efficiency > 0], na.rm = TRUE)),
+                                  efficiency)) %>%
+      ungroup() %>%
       # For each region / commodity,
       group_by(region, subsector0, subsector, technology) %>%
       # Calorie content are held constant in the future, so set value for future years at the final base year value
