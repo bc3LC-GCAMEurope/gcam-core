@@ -158,7 +158,10 @@ module_aglu_L100.FAO_SUA_connection <- function(command, ...) {
       mutate(moving_avg = Moving_average(value, periods = aglu.MODEL_MEAN_PERIOD_LENGTH)) %>%
       ungroup() %>%
       mutate(value = if_else(is.na(moving_avg), value, moving_avg)) %>%
-      select(-moving_avg) %>%
+      select(-moving_avg)
+    # HINDCAST2005: keep all years (incl. aglu.MODEL_MACRONUTRIENT_YEARS) for the calorie-content calculation below
+    L100.FAO_SUA_APE_balance_allyears <- L100.FAO_SUA_APE_balance
+    L100.FAO_SUA_APE_balance <- L100.FAO_SUA_APE_balance %>%
       filter(year %in% aglu.AGLU_HISTORICAL_YEARS)
 
 
@@ -279,6 +282,21 @@ module_aglu_L100.FAO_SUA_connection <- function(command, ...) {
 
     # 3 Food consumption in SUA and Calories----
 
+    # HINDCAST2005: calories per gram = MKcal / food mass must use the same years. MKcal is averaged over
+    # aglu.MODEL_MACRONUTRIENT_YEARS (FAO SUA, 2010+); the food mass used to be taken in MODEL_FINAL_BASE_YEAR,
+    # which lies inside those years in standard runs. With base year 2005 it does not, and regions with zero
+    # 2010-2012 calories but positive 2005 food (e.g. palm oil in Canada/EU, cottonseed oil in Japan) got 0 kcal/g,
+    # i.e. zero calibrated food demand. Use the mean food mass over the macronutrient years in that case.
+    if(MODEL_FINAL_BASE_YEAR %in% aglu.MODEL_MACRONUTRIENT_YEARS) {
+      L100.Food_Mt_for_kcal <- L100.FAO_SUA_APE_balance %>% # Unit is Mt
+        filter(element == "Food", year == MODEL_FINAL_BASE_YEAR)
+    } else {
+      L100.Food_Mt_for_kcal <- L100.FAO_SUA_APE_balance_allyears %>% # Unit is Mt
+        filter(element == "Food", year %in% aglu.MODEL_MACRONUTRIENT_YEARS) %>%
+        group_by(GCAM_region_ID, GCAM_commodity, element) %>%
+        summarise(value = mean(value), .groups = "drop")
+    }
+
     FAO_Food_Macronutrient_All %>%
       filter(year %in% aglu.MODEL_MACRONUTRIENT_YEARS) %>%
       # Aggregate to region and GCAM commodity
@@ -293,12 +311,7 @@ module_aglu_L100.FAO_SUA_connection <- function(command, ...) {
       DF_Macronutrient_FoodItem1 %>%
       # NEC is removed by joining
       # though not all food items are consumed in all regions (deal with NA later)
-      right_join(
-        L100.FAO_SUA_APE_balance %>% # Unit is Mt
-          filter(element == "Food",
-                 year == MODEL_FINAL_BASE_YEAR),
-        by = c("GCAM_region_ID", "GCAM_commodity")
-      ) %>%
+      right_join(L100.Food_Mt_for_kcal, by = c("GCAM_region_ID", "GCAM_commodity")) %>%
     # Both data were average already
     transmute(GCAM_region_ID, GCAM_commodity,
               calperg = MKcal / value / 1000,
@@ -325,6 +338,8 @@ module_aglu_L100.FAO_SUA_connection <- function(command, ...) {
       # But we use the max of the conversion of the corresponding SUA items to limit the value here
       # mainly for avoiding too different macronutrient rates across regions
       mutate(value = pmin(value, max_macronutrient_value)) %>%
+      # HINDCAST2005: zero or non-finite rates (no calories but positive food, or 0/0) are treated as missing
+      mutate(value = if_else(is.finite(value) & value > 0, value, NA_real_)) %>%
       select(-max_macronutrient_value) %>%
       # There are sill NA values e.g., palm oil is not consumed in Canada
       # And fiber crop is not consumed in few regions
