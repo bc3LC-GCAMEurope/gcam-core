@@ -158,10 +158,11 @@ vector<SolutionInfoParamParser::SolutionInfoValues*> SolutionInfoParamParser::ge
     
     pair<string, string> marketPair;
     vector<SolutionInfoValues*> retValuesToSet;
-    
+
     // Determine if the user intended this to be by good or market type.
-    // Note that an empty region name is only allowed for market type since
-    // that implies global.
+    // Note that an empty region name is allowed for either good or market
+    // type since that implies global (i.e. applies to that good/market type
+    // in every region).
     if( !goodName.empty() && !regionName.empty() ){
         marketPair.first = goodName;
         marketPair.second = regionName;
@@ -173,6 +174,10 @@ vector<SolutionInfoParamParser::SolutionInfoValues*> SolutionInfoParamParser::ge
     else if( !marketType.empty() && regionName.empty() ){
         marketPair.first = marketType;
         // marketPair.second is empty
+    }
+    else if( !goodName.empty() && regionName.empty() ){
+        marketPair.first = goodName;
+        // marketPair.second is empty, this means: this good name, in every region
     }
     else{
         ILogger& mainLog = ILogger::getLogger( "main_log" );
@@ -201,8 +206,8 @@ vector<SolutionInfoParamParser::SolutionInfoValues*> SolutionInfoParamParser::ge
  * \details A SolutionInfo will be responsible for setting the values as well as
  *          checking defaults where appropriate.  The values that will be returned
  *          will be a merged result of values in ascending precedence: matching
- *          market type/global(no region name), market type/region name, and good
- *          name/region name.
+ *          market type/global (no region name), market type/region name, good
+ *          name/global (no region name), and good name/region name.
  * \param aGoodName The name of the good to get the info for.
  * \param aRegionName The name of the region the good is in.
  * \param aMarketType The market type string for the solution info.
@@ -234,14 +239,24 @@ SolutionInfoParamParser::SolutionInfoValues SolutionInfoParamParser::getSolution
     if( valuesIter != currMap.end() ) {
         retMergedValues.mergeValues( (*valuesIter).second );
     }
-    
-    // finally look up using the good name
+
+    // next try for the good name in a global context (empty region name), i.e.
+    // this good name applies in every region
     marketNamePair.first = aGoodName;
+    marketNamePair.second = "";
     valuesIter = currMap.find( marketNamePair );
     if( valuesIter != currMap.end() ) {
         retMergedValues.mergeValues( (*valuesIter).second );
     }
-    
+
+    // finally look up using the good name and the given region name; this is the
+    // most specific match and so takes precedence over all of the above
+    marketNamePair.second = aRegionName;
+    valuesIter = currMap.find( marketNamePair );
+    if( valuesIter != currMap.end() ) {
+        retMergedValues.mergeValues( (*valuesIter).second );
+    }
+
     return retMergedValues;
 }
     

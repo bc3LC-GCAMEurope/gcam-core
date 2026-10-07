@@ -67,6 +67,7 @@ module_energy_L223.electricity <- function(command, ...) {
              "L1231.eff_R_elec_F_tech_Yh",
              "L120.GridCost_offshore_wind",
              "L120.RegCapFactor_offshore_wind",
+             "L120.RsrcCurves_EJ_R_offshore_wind",
              "L1232.desalsecout_R_elec_F_tech",
              "L100.gdp_mil90usd_ctry_Yh"))
   } else if(command == driver.DECLARE_OUTPUTS) {
@@ -163,6 +164,7 @@ module_energy_L223.electricity <- function(command, ...) {
     L119.Irradiance_rel_R <- get_data(all_data, "L119.Irradiance_rel_R")
     L120.GridCost_offshore_wind <- get_data(all_data, "L120.GridCost_offshore_wind")
     L120.RegCapFactor_offshore_wind <- get_data(all_data, "L120.RegCapFactor_offshore_wind")
+    L120.RsrcCurves_EJ_R_offshore_wind <- get_data(all_data, "L120.RsrcCurves_EJ_R_offshore_wind", strip_attributes = TRUE)
     L1231.in_EJ_R_elec_F_tech_Yh <- get_data(all_data, "L1231.in_EJ_R_elec_F_tech_Yh")
     L1231.out_EJ_R_elec_F_tech_Yh <- get_data(all_data, "L1231.out_EJ_R_elec_F_tech_Yh")
     L1231.eff_R_elec_F_tech_Yh <- get_data(all_data, "L1231.eff_R_elec_F_tech_Yh")
@@ -328,8 +330,24 @@ module_energy_L223.electricity <- function(command, ...) {
 
     # Identify stub technologies of electricity generation for all regions to generate L223.StubTech_elec
     # Note: assuming that technology list in the shareweight table includes the full set (any others would default to a 0 shareweight)
+    # Offshore Wind regions to keep
+    # Regions without offshore potential (maxSubResource == 0 in L120) get no offshore wind technology; this mirrors the
+    # resource removal in zenergy_L210.resources. Eurostat regions are handled in zgcameurope_L223.electricity.
+    no_offshore_regions <- L120.RsrcCurves_EJ_R_offshore_wind %>%
+      filter(round(maxSubResource, energy.DIGITS_MAX_SUB_RESOURCE) == 0) %>%
+      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
+      pull(region) %>%
+      unique() %>%
+      setdiff(gcameurope.EUROSTAT_COUNTRIES)
+
+    offshore_wind_regions <- L120.RegCapFactor_offshore_wind %>%
+      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
+      filter(!region %in% no_offshore_regions)
+
     A23.globaltech_shrwt %>%
       write_to_all_regions(c(LEVEL2_DATA_NAMES[["Tech"]]), GCAM_region_names) %>%
+      filter(!(technology == "wind_offshore" &
+                 !region %in% offshore_wind_regions$region)) %>%
       rename(stub.technology = technology) ->
       L223.StubTech_elec
 
@@ -949,10 +967,13 @@ module_energy_L223.electricity <- function(command, ...) {
 
     # Adding capacity factors to the main electricity table
     L223.StubTechCapFactor_elec %>%
-      filter(stub.technology == "wind") %>%
+      filter(stub.technology == "wind",
+             region %in% L120.RegCapFactor_offshore_wind$region,
+             !region %in% no_offshore_regions) %>%
       mutate(stub.technology = "wind_offshore") %>%
-      left_join_error_no_match(L120.RegCapFactor_offshore_wind ,
-                               by = c("region")) %>%
+      # No error_no_match because some EU regions don't have offshore
+      left_join(L120.RegCapFactor_offshore_wind ,
+                by = c("region")) %>%
       mutate(capacity.factor = round(CFmax, energy.DIGITS_CAPACITY_FACTOR)) %>%
       select(region, supplysector, subsector, stub.technology, year, capacity.factor) -> L223.StubTechCapFactor_elec_offshore_wind
 
@@ -965,7 +986,7 @@ module_energy_L223.electricity <- function(command, ...) {
     L1233.globaltech_capital_ATB %>%
       filter(technology == "wind_offshore") %>%
       select(supplysector, subsector, technology, year) %>%
-      repeat_add_columns(tibble(region = gcam_regions)) %>%
+      repeat_add_columns(tibble(region = setdiff(unique(L120.GridCost_offshore_wind$region), no_offshore_regions))) %>%
       mutate(minicam.non.energy.input = "regional price adjustment") %>%
       left_join_error_no_match(L120.GridCost_offshore_wind, by = c("region")) %>%
       rename(input.cost = grid.cost) %>%

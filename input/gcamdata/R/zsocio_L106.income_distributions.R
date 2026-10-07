@@ -17,7 +17,8 @@ module_socio_L106.income_distributions <- function(command, ...) {
   } else if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "common/GCAM_region_names",
              FILE = "socioeconomics/income_shares",
-             FILE = "socioeconomics/Rao_multimodel_income_deciles"))
+             FILE = "socioeconomics/Rao_multimodel_income_deciles",
+             FILE = "socioeconomics/Rao_multimodel_income_deciles_DIAMOND"))
   } else if(command == driver.MAKE) {
 
     # Set SSP and Model type that we want to use
@@ -30,10 +31,20 @@ module_socio_L106.income_distributions <- function(command, ...) {
     region_map <- get_data(all_data, "common/GCAM_region_names")
     income_dist_row <- get_data(all_data, "socioeconomics/income_shares") %>%
       select(-gdp_pcap_decile)
-    income_dist_eur <- get_data(all_data, "socioeconomics/Rao_multimodel_income_deciles") %>%
+    income_dist_eur_original <- get_data(all_data, "socioeconomics/Rao_multimodel_income_deciles") %>%
       left_join_error_no_match(region_map, by = "GCAM_region_ID")
+    income_dist_eur_DIAMOND <- get_data(all_data, "socioeconomics/Rao_multimodel_income_deciles_DIAMOND") %>%
+      left_join_error_no_match(region_map, by = "GCAM_region_ID") %>%
+      filter(year > 2015)
 
-    # Create a income distribution datasets that substitutes non-Europe coutires by latest data (socioeconomics/income_shares)
+    # Consider default Rao data for non-available DIAMOND preprocessed data
+    # NOTE: Moldova, Serbia and Montenegro, and Romania are left unchanged (GCAMEUR regions)
+    income_dist_eur <- income_dist_eur_original %>%
+      left_join(income_dist_eur_DIAMOND, by = c("GCAM_region_ID", "year", "category", "sce", "model", "region")) %>%
+      mutate(shares = if_else(!is.na(shares.y), shares.y, shares.x))
+
+
+    # Create a income distribution datasets that substitutes non-Europe countries by latest data (socioeconomics/income_shares)
     income_dist_pre <- income_dist_eur %>%
       anti_join(income_dist_row, by = "region") %>%
       bind_rows(income_dist_row) %>%

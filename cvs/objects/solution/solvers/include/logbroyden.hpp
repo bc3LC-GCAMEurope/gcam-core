@@ -77,10 +77,10 @@ public:
   LogBroyden(Marketplace *mktplc, World *world, CalcCounter *ccounter, int itmax=250,
              double ftol=1.0e-4) :
       SolverComponent(mktplc,world,ccounter), mMaxIter( itmax ), mFTOL( ftol ),
-      mLogPricep( true ), mMaxJacobainReuse( 100 ), mSolutionInfoFilter(0) {}
+      mLogPricep( true ), mMaxJacobainReuse( 100 ), mMaxPriceStep( 0.0 ), mSolutionInfoFilter(0) {}
     LogBroyden() :
         SolverComponent(), mMaxIter( 250 ), mFTOL( 1.0e-4 ),
-        mLogPricep( true ), mMaxJacobainReuse( 100 ), mSolutionInfoFilter(0) {}
+        mLogPricep( true ), mMaxJacobainReuse( 100 ), mMaxPriceStep( 0.0 ), mSolutionInfoFilter(0) {}
   virtual ~LogBroyden() {
       delete mSolutionInfoFilter;
   }
@@ -121,6 +121,11 @@ protected:
         //! Control the number of times we can re-use the Jacobian using Broyden's method
         //! which if set to zero implies this algorithm just collapse to a regular NR algorithm
         DEFINE_VARIABLE( SIMPLE, "max-jacobian-reuse", mMaxJacobainReuse, int ),
+        
+        //! Maximum factor by which any price may change in one Newton/Broyden step
+        //! (0 = disabled, the default).  If a proposed step exceeds it the whole step
+        //! is scaled down, preserving its direction.
+        DEFINE_VARIABLE( SIMPLE | NOT_PARSABLE, "max-price-step", mMaxPriceStep, double ),
         
         //! A filter which will be used to determine which SolutionInfos with solver component
         //! will work on.

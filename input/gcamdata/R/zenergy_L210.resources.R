@@ -773,6 +773,30 @@ module_energy_L210.resources <- function(command, ...) {
 
     # ===================================================
 
+    # Offshore wind: remove the resource in regions with no offshore potential --------------------
+    # zenergy_L120.offshore_wind zero-fills regions without NREL offshore potential (maxSubResource = 0 with a dummy
+    # mid.price / curve.exponent). Those degenerate resources create a resource market plus a trial-supply market
+    # that never has any demand (RED explodes), which hurts solver stability. Generic rule: no resource, no technology.
+    # Eurostat regions are rebuilt (with the same rule) in zgcameurope_L210.resources, so only the rest is handled here
+    # (e.g. Belarus, Switzerland).
+    no_offshore_regions <- L210.SmthRenewRsrcCurves_offshore_wind %>%
+      filter(maxSubResource == 0) %>%
+      pull(region) %>%
+      unique() %>%
+      setdiff(gcameurope.EUROSTAT_COUNTRIES)
+
+    L210.RenewRsrc <- L210.RenewRsrc %>%
+      filter(!(renewresource == "offshore wind resource" & region %in% no_offshore_regions))
+    L210.RenewRsrcPrice <- L210.RenewRsrcPrice %>%
+      filter(!(renewresource == "offshore wind resource" & region %in% no_offshore_regions))
+    L210.ResTechShrwt <- L210.ResTechShrwt %>%
+      filter(!(resource == "offshore wind resource" & region %in% no_offshore_regions))
+    L210.SmthRenewRsrcCurves_offshore_wind <- L210.SmthRenewRsrcCurves_offshore_wind %>%
+      filter(!region %in% no_offshore_regions)
+    L210.SmthRenewRsrcTechChange_offshore_wind <- L210.SmthRenewRsrcTechChange_offshore_wind %>%
+      filter(!region %in% no_offshore_regions)
+
+
     # Produce outputs
 
     L210.ResTechCost %>%

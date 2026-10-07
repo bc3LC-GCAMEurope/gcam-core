@@ -6,7 +6,7 @@
 * CONTRACTOR MAKES ANY WARRANTY, EXPRESS OR IMPLIED, OR ASSUMES ANY
 * LIABILITY FOR THE USE OF THIS SOFTWARE. This notice including this
 * sentence must appear on any copies of this computer software.
-* 
+*
 * EXPORT CONTROL
 * User agrees that the Software will not be shipped, transferred or
 * exported into any country or used in any manner prohibited by the
@@ -21,11 +21,11 @@
 * (including without limitation Iran, Syria, Sudan, Cuba, and North Korea)
 *     and that User is not otherwise prohibited
 * under the Export Laws from receiving the Software.
-* 
+*
 * Copyright 2011 Battelle Memorial Institute.  All Rights Reserved.
-* Distributed as open-source under the terms of the Educational Community 
+* Distributed as open-source under the terms of the Educational Community
 * License version 2.0 (ECL 2.0). http://www.opensource.org/licenses/ecl2.php
-* 
+*
 * For further details, see: http://www.globalchange.umd.edu/models/gcam/
 *
 */
@@ -124,25 +124,25 @@ RegionMiniCAM::~RegionMiniCAM() {
 }
 
 //! Clear member variables and initialize elemental members.
-void RegionMiniCAM::clear(){
+void RegionMiniCAM::clear() {
 
-    for ( FinalDemandIterator demIter = mFinalDemands.begin(); demIter != mFinalDemands.end(); ++demIter ) {
-        delete *demIter;
+    for (FinalDemandIterator demIter = mFinalDemands.begin(); demIter != mFinalDemands.end(); ++demIter) {
+        delete* demIter;
     }
 
-    for( CConsumerIterator consumerIter = mConsumers.begin(); consumerIter != mConsumers.end(); ++consumerIter ) {
-        delete *consumerIter;
+    for (CConsumerIterator consumerIter = mConsumers.begin(); consumerIter != mConsumers.end(); ++consumerIter) {
+        delete* consumerIter;
     }
-    
+
     delete mNationalAccountContainer;
     delete mLandAllocator;
 }
 
-bool RegionMiniCAM::XMLParse(rapidxml::xml_node<char>* & aNode) {
+bool RegionMiniCAM::XMLParse(rapidxml::xml_node<char>*& aNode) {
     string nodeName = XMLParseHelper::getNodeName(aNode);
-    if( nodeName == "PrimaryFuelCO2Coef" ) {
+    if (nodeName == "PrimaryFuelCO2Coef") {
         map<string, string> attrs = XMLParseHelper::getAllAttrs(aNode);
-        mPrimaryFuelCO2Coef[ gcamstr(attrs["name"]) ] = XMLParseHelper::getValue<double>( aNode );
+        mPrimaryFuelCO2Coef[gcamstr(attrs["name"])] = XMLParseHelper::getValue<double>(aNode);
         return true;
     }
     else {
@@ -161,119 +161,124 @@ void RegionMiniCAM::completeInit() {
     Region::completeInit();
 
     // Region info has no parent Info.
-    mRegionInfo = InfoFactory::constructInfo( 0, mName );
+    mRegionInfo = InfoFactory::constructInfo(0, mName);
 
     // Add the interest rate to the region info.
     // TODO: mInterestRate is currently not used in GCAM and could be removed
-    mRegionInfo->setDouble( gcamstr("interest-rate"), mInterestRate );
-    
+    mRegionInfo->setDouble(gcamstr("interest-rate"), mInterestRate);
+
     // Add the social discount rate to the region info.
-    mRegionInfo->setDouble( gcamstr("social-discount-rate"), mSocialDiscountRate );
-    
+    mRegionInfo->setDouble(gcamstr("social-discount-rate"), mSocialDiscountRate);
+
     // Add the land private discount rate to the region info.
-    mRegionInfo->setDouble( gcamstr("private-discount-rate-land"), mPrivateDiscountRateLand );
+    mRegionInfo->setDouble(gcamstr("private-discount-rate-land"), mPrivateDiscountRateLand);
 
     // initialize demographic
-    if( mDemographic ){
+    if (mDemographic) {
         mDemographic->completeInit();
     }
-    
+
     // Complete initialization for national accounts for all periods
-    if( mNationalAccountContainer ){
-        mNationalAccountContainer->completeInit( mName, mDemographic );
+    if (mNationalAccountContainer) {
+        mNationalAccountContainer->completeInit(mName, mDemographic);
     }
 
-    for( SectorIterator sectorIter = mSupplySector.begin(); sectorIter != mSupplySector.end(); ++sectorIter ) {
-        ( *sectorIter )->setNames( mName );
-        ( *sectorIter )->completeInit( mRegionInfo, mLandAllocator );
+    for (SectorIterator sectorIter = mSupplySector.begin(); sectorIter != mSupplySector.end(); ++sectorIter) {
+        (*sectorIter)->setNames(mName);
+        (*sectorIter)->completeInit(mRegionInfo, mLandAllocator);
     }
 
-    if ( mLandAllocator ) {
-        mLandAllocator->completeInit( mName, mRegionInfo );
+    if (mLandAllocator) {
+        mLandAllocator->completeInit(mName, mRegionInfo);
     }
 
-    for( FinalDemandIterator demandSectorIter = mFinalDemands.begin();
-        demandSectorIter != mFinalDemands.end(); ++demandSectorIter )
+    for (FinalDemandIterator demandSectorIter = mFinalDemands.begin();
+        demandSectorIter != mFinalDemands.end(); ++demandSectorIter)
     {
-        ( *demandSectorIter )->completeInit( mName, mRegionInfo );
+        (*demandSectorIter)->completeInit(mName, mRegionInfo);
     }
 
-    for( ConsumerIterator consumerIter = mConsumers.begin(); consumerIter != mConsumers.end();
-         ++consumerIter )
+    for (ConsumerIterator consumerIter = mConsumers.begin(); consumerIter != mConsumers.end();
+        ++consumerIter)
     {
-        ( *consumerIter )->completeInit( mName, "", "" );
+        (*consumerIter)->completeInit(mName, "", "");
     }
-    
+
     // Set the CO2 coefficients into the Marketplace before the Technologies and
     // GHGs are initialized so they can be accessed.  Note that these are set during
     // completeInit so that we can be sure that they will always be available
     // during initCalc when they will be retrieved.
-    for( int period = 0; period < scenario->getModeltime()->getmaxper(); ++period ) {
-        setCO2CoefsIntoMarketplace( period );
+    for (int period = 0; period < scenario->getModeltime()->getmaxper(); ++period) {
+        setCO2CoefsIntoMarketplace(period);
     }
-    
+
     // Wrap objects which are used to calculate the region so that they can
     // be sorted into a global ordering and called directly from the world.
     // Note that the region continues to own and manage these object.  The memory
     // for the wrappers is managed by the market dependency finder.
     MarketDependencyFinder* markDepFinder = scenario->getMarketplace()->getDependencyFinder();
-    for( int i = 0; i < mResources.size(); ++i ) {
-        markDepFinder->resolveActivityToDependency( mName, mResources[ i ]->getName(),
-            new ResourceActivity( mResources[ i ], mName ) );
+    for (int i = 0; i < mResources.size(); ++i) {
+        markDepFinder->resolveActivityToDependency(mName, mResources[i]->getName(),
+            new ResourceActivity(mResources[i], mName));
     }
-    for( int i = 0; i < mSupplySector.size(); ++i ) {
+    for (int i = 0; i < mSupplySector.size(); ++i) {
         SectorActivity* tempSectorActivity(
-            new SectorActivity( mSupplySector[ i ], mName ) );
-        markDepFinder->resolveActivityToDependency( mName, mSupplySector[ i ]->getName(),
+            new SectorActivity(mSupplySector[i], mName));
+        markDepFinder->resolveActivityToDependency(mName, mSupplySector[i]->getName(),
             tempSectorActivity->getSectorDemandActivity(),
-            tempSectorActivity->getSectorPriceActivity() );
+            tempSectorActivity->getSectorPriceActivity());
     }
-    for( int i = 0; i < mFinalDemands.size(); ++i ) {
-        markDepFinder->resolveActivityToDependency( mName, mFinalDemands[ i ]->getName(),
-            new FinalDemandActivity( mFinalDemands[ i ], mDemographic, mName ) );
+    for (int i = 0; i < mFinalDemands.size(); ++i) {
+        markDepFinder->resolveActivityToDependency(mName, mFinalDemands[i]->getName(),
+            new FinalDemandActivity(mFinalDemands[i], mDemographic, mName));
     }
-    if( mLandAllocator ) {
-        markDepFinder->resolveActivityToDependency( mName, "land-allocator",
-            new LandAllocatorActivity( mLandAllocator, mName ) );
+    if (mLandAllocator) {
+        markDepFinder->resolveActivityToDependency(mName, "land-allocator",
+            new LandAllocatorActivity(mLandAllocator, mName));
     }
-    for( int i = 0; i < mConsumers.size(); ++i ) {
-        markDepFinder->resolveActivityToDependency( mName, mConsumers[ i ]->getName(),
-            new ConsumerActivity( mConsumers[ i ], mDemographic, mName ) );
+    for (int i = 0; i < mConsumers.size(); ++i) {
+        markDepFinder->resolveActivityToDependency(mName, mConsumers[i]->getName(),
+            new ConsumerActivity(mConsumers[i], mDemographic, mName));
     }
     //for dynamic in-period GDP calculation or GDP Calibration
-    markDepFinder->resolveActivityToDependency( mName, mNationalAccountContainer->getGDPActivityName(), new NationalAccountContainerActivity( mNationalAccountContainer, mName ) );
+    // NOTE: guarded against regions that intentionally have no nationalAccountContainer
+    // (e.g. GCAM-Europe's "European_Single_Market" trade hub region, which has no
+    // national accounts of its own).
+    if (mNationalAccountContainer) {
+        markDepFinder->resolveActivityToDependency(mName, mNationalAccountContainer->getGDPActivityName(), new NationalAccountContainerActivity(mNationalAccountContainer, mName));
+    }
 
 }
 
-void RegionMiniCAM::toDebugXMLDerived( const int period, std::ostream& out, Tabs* tabs ) const {
+void RegionMiniCAM::toDebugXMLDerived(const int period, std::ostream& out, Tabs* tabs) const {
     // write out basic datamembers
-    XMLWriteElement( mInterestRate, "interest-rate", out, tabs );
-    XMLWriteElement( mSocialDiscountRate, "social-discount-rate", out, tabs );
-    XMLWriteElement( mPrivateDiscountRateLand, "private-discount-rate-land", out, tabs );
-    
+    XMLWriteElement(mInterestRate, "interest-rate", out, tabs);
+    XMLWriteElement(mSocialDiscountRate, "social-discount-rate", out, tabs);
+    XMLWriteElement(mPrivateDiscountRateLand, "private-discount-rate-land", out, tabs);
+
     // Write out the Co2 Coefficients.
-    for( map<gcamstr,double>::const_iterator coefAllIter = mPrimaryFuelCO2Coef.begin(); coefAllIter != mPrimaryFuelCO2Coef.end(); coefAllIter++ ) {
-        XMLWriteElement( coefAllIter->second, "PrimaryFuelCO2Coef", out, tabs, 0, coefAllIter->first );
+    for (map<gcamstr, double>::const_iterator coefAllIter = mPrimaryFuelCO2Coef.begin(); coefAllIter != mPrimaryFuelCO2Coef.end(); coefAllIter++) {
+        XMLWriteElement(coefAllIter->second, "PrimaryFuelCO2Coef", out, tabs, 0, coefAllIter->first);
     }
-    
+
     // write out national accounts
-    if( mNationalAccountContainer ){
+    if (mNationalAccountContainer) {
         mNationalAccountContainer->toDebugXML(period, out, tabs);
     }
-    
+
     // Write out the land allocator.
-    if ( mLandAllocator ) {
-        mLandAllocator->toDebugXML( period, out, tabs );
+    if (mLandAllocator) {
+        mLandAllocator->toDebugXML(period, out, tabs);
     }
 
     // write out demand sector objects.
-    for( CFinalDemandIterator currSector = mFinalDemands.begin(); currSector != mFinalDemands.end(); ++currSector ){
-        (*currSector)->toDebugXML( period, out, tabs );
+    for (CFinalDemandIterator currSector = mFinalDemands.begin(); currSector != mFinalDemands.end(); ++currSector) {
+        (*currSector)->toDebugXML(period, out, tabs);
     }
 
     // write out consumer objects.
-    for( CConsumerIterator consumerIter = mConsumers.begin(); consumerIter != mConsumers.end(); consumerIter++ ){
-        ( *consumerIter )->toDebugXML( period, out, tabs );
+    for (CConsumerIterator consumerIter = mConsumers.begin(); consumerIter != mConsumers.end(); consumerIter++) {
+        (*consumerIter)->toDebugXML(period, out, tabs);
     }
 }
 
@@ -324,17 +329,17 @@ NationalAccountContainer const* RegionMiniCAM::getNationalAccounts() const {
 *        not accurate.
 * \return Boolean true if calibration is ok.
 */
-bool RegionMiniCAM::isAllCalibrated( const int period, double calAccuracy, const bool printWarnings ) const {
-    const static bool calOn = Configuration::getInstance()->getBool( "CalibrationActive" );
-    
+bool RegionMiniCAM::isAllCalibrated(const int period, double calAccuracy, const bool printWarnings) const {
+    const static bool calOn = Configuration::getInstance()->getBool("CalibrationActive");
+
     // Don't check calibration in the base period or if calibration is off.
-    if( !calOn || period == 0 ){
+    if (!calOn || period == 0) {
         return true;
     }
 
     bool returnVal = true;
-    for ( unsigned int i = 0; i < mSupplySector.size(); i++ ) {
-        if ( !mSupplySector[ i ]->isAllCalibrated( period, calAccuracy, printWarnings ) ) {
+    for (unsigned int i = 0; i < mSupplySector.size(); i++) {
+        if (!mSupplySector[i]->isAllCalibrated(period, calAccuracy, printWarnings)) {
             returnVal = false;
         }
     }
@@ -348,33 +353,33 @@ bool RegionMiniCAM::isAllCalibrated( const int period, double calAccuracy, const
 * \param period Model period
 * \todo Once postCalc is present, add a check to verify that aggregate emissions worked properly
 */
-void RegionMiniCAM::initCalc( const int period )
+void RegionMiniCAM::initCalc(const int period)
 {
-    Region::initCalc( period );
-    if( mNationalAccountContainer ){
-        mNationalAccountContainer->initCalc( mDemographic, period );
+    Region::initCalc(period);
+    if (mNationalAccountContainer) {
+        mNationalAccountContainer->initCalc(mDemographic, period);
     }
-    
-    for( SectorIterator currSector = mSupplySector.begin(); currSector != mSupplySector.end(); ++currSector ){
-        (*currSector)->initCalc( mDemographic, period );
+
+    for (SectorIterator currSector = mSupplySector.begin(); currSector != mSupplySector.end(); ++currSector) {
+        (*currSector)->initCalc(mDemographic, period);
     }
-    for ( FinalDemandIterator currSector = mFinalDemands.begin(); currSector != mFinalDemands.end(); ++currSector ) {
-        (*currSector)->initCalc( mName, mDemographic, period );
+    for (FinalDemandIterator currSector = mFinalDemands.begin(); currSector != mFinalDemands.end(); ++currSector) {
+        (*currSector)->initCalc(mName, mDemographic, period);
     }
-    for( ResourceIterator currResource = mResources.begin(); currResource != mResources.end(); ++currResource ){
-        (*currResource)->initCalc( mName, period );
+    for (ResourceIterator currResource = mResources.begin(); currResource != mResources.end(); ++currResource) {
+        (*currResource)->initCalc(mName, period);
     }
-    
-    for( ConsumerIterator currConsumer = mConsumers.begin(); currConsumer != mConsumers.end(); ++currConsumer ) {
+
+    for (ConsumerIterator currConsumer = mConsumers.begin(); currConsumer != mConsumers.end(); ++currConsumer) {
         // TODO: pass correct container?
         NationalAccount nationalAccount;
-        (*currConsumer)->initCalc( mName, "", nationalAccount, mDemographic, 0, period );
+        (*currConsumer)->initCalc(mName, "", nationalAccount, mDemographic, 0, period);
     }
 
     // Call initCalc for land allocator last. It needs profit from the ag sectors
     // before it can calculate share weights
-    if ( mLandAllocator ) {
-        mLandAllocator->initCalc( mName, period );
+    if (mLandAllocator) {
+        mLandAllocator->initCalc(mName, period);
     }
 }
 
@@ -385,23 +390,23 @@ void RegionMiniCAM::initCalc( const int period )
 *          into the Marketplace, so that Technologies and GHGs can access them.
 * \param aPeriod Period.
 */
-void RegionMiniCAM::setCO2CoefsIntoMarketplace( const int aPeriod ){
+void RegionMiniCAM::setCO2CoefsIntoMarketplace(const int aPeriod) {
     const static gcamstr CO2COEF("CO2coefficient");
     Marketplace* marketplace = scenario->getMarketplace();
-    for( map<gcamstr, double>::const_iterator coef = mPrimaryFuelCO2Coef.begin();
-        coef != mPrimaryFuelCO2Coef.end(); ++coef )
+    for (map<gcamstr, double>::const_iterator coef = mPrimaryFuelCO2Coef.begin();
+        coef != mPrimaryFuelCO2Coef.end(); ++coef)
     {
         // Markets may not exist for incorrect fuel names.
-        IInfo* fuelInfo = marketplace->getMarketInfo( coef->first, mName, aPeriod, false );
-        if( fuelInfo ){
-            fuelInfo->setDouble( CO2COEF, coef->second );
+        IInfo* fuelInfo = marketplace->getMarketInfo(coef->first, mName, aPeriod, false);
+        if (fuelInfo) {
+            fuelInfo->setDouble(CO2COEF, coef->second);
         }
         else {
-            ILogger& mainLog = ILogger::getLogger( "main_log" );
-            mainLog.setLevel( ILogger::DEBUG );
+            ILogger& mainLog = ILogger::getLogger("main_log");
+            mainLog.setLevel(ILogger::DEBUG);
             mainLog << "Cannot set emissions factor of zero for fuel " << coef->first
-                    << " for region " << mName
-                    << " because the name does not match the market name or market does not exist." << endl;
+                << " for region " << mName
+                << " because the name does not match the market name or market does not exist." << endl;
         }
     }
 }
@@ -413,17 +418,22 @@ void RegionMiniCAM::setCO2CoefsIntoMarketplace( const int aPeriod ){
  * \author Sonny Kim
  * \param aPeriod Model period
  */
-void RegionMiniCAM::postCalc( const int aPeriod ) {
-    Region::postCalc( aPeriod );
+void RegionMiniCAM::postCalc(const int aPeriod) {
+    Region::postCalc(aPeriod);
 
-    for( CConsumerIterator consumerIter = mConsumers.begin(); consumerIter != mConsumers.end(); ++consumerIter ) {
-        (*consumerIter)->postCalc( mName, "", aPeriod );
+    for (CConsumerIterator consumerIter = mConsumers.begin(); consumerIter != mConsumers.end(); ++consumerIter) {
+        (*consumerIter)->postCalc(mName, "", aPeriod);
     }
-    
-    if( mLandAllocator ) {
-        mLandAllocator->postCalc( mName, aPeriod );
+
+    if (mLandAllocator) {
+        mLandAllocator->postCalc(mName, aPeriod);
     }
-    mNationalAccountContainer->postCalc( aPeriod );
+    // NOTE: guarded against regions that intentionally have no nationalAccountContainer
+    // (e.g. GCAM-Europe's "European_Single_Market" trade hub region, which has no
+    // national accounts of its own).
+    if (mNationalAccountContainer) {
+        mNationalAccountContainer->postCalc(aPeriod);
+    }
 
 }
 
@@ -432,9 +442,9 @@ void RegionMiniCAM::postCalc( const int aPeriod ) {
 * \author Josh Lurz
 */
 bool RegionMiniCAM::ensureDemographics() const {
-    if( !mDemographic ){
-        ILogger& mainLog = ILogger::getLogger( "main_log" );
-        mainLog.setLevel( ILogger::ERROR );
+    if (!mDemographic) {
+        ILogger& mainLog = ILogger::getLogger("main_log");
+        mainLog.setLevel(ILogger::ERROR);
         mainLog << "Population object has not been created and is required. "
             << "Check for a region name mismatch." << endl;
         return false;
@@ -446,29 +456,29 @@ bool RegionMiniCAM::ensureDemographics() const {
 * \param aVisitor Visitor to update.
 * \param aPeriod Period to update.
 */
-void RegionMiniCAM::accept( IVisitor* aVisitor, const int aPeriod ) const {
-    aVisitor->startVisitRegionMiniCAM( this, aPeriod );
-    Region::accept( aVisitor, aPeriod );
+void RegionMiniCAM::accept(IVisitor* aVisitor, const int aPeriod) const {
+    aVisitor->startVisitRegionMiniCAM(this, aPeriod);
+    Region::accept(aVisitor, aPeriod);
 
     // Visit national accounts
-    if( mNationalAccountContainer ){
-        mNationalAccountContainer->accept( aVisitor, aPeriod );
+    if (mNationalAccountContainer) {
+        mNationalAccountContainer->accept(aVisitor, aPeriod);
     }
-    
+
     // Visit LandAllocator object
-    if ( mLandAllocator ){
-        mLandAllocator->accept( aVisitor, aPeriod );
+    if (mLandAllocator) {
+        mLandAllocator->accept(aVisitor, aPeriod);
     }
 
     // loop for final demand sectors.
-    for( CFinalDemandIterator currDem = mFinalDemands.begin(); currDem != mFinalDemands.end(); ++currDem ){
-        (*currDem)->accept( aVisitor, aPeriod );
+    for (CFinalDemandIterator currDem = mFinalDemands.begin(); currDem != mFinalDemands.end(); ++currDem) {
+        (*currDem)->accept(aVisitor, aPeriod);
     }
 
     // Visit Consumers
-    for( CConsumerIterator consumerIter = mConsumers.begin(); consumerIter != mConsumers.end(); ++consumerIter ) {
-        (*consumerIter)->accept( aVisitor, aPeriod );
+    for (CConsumerIterator consumerIter = mConsumers.begin(); consumerIter != mConsumers.end(); ++consumerIter) {
+        (*consumerIter)->accept(aVisitor, aPeriod);
     }
-    
-    aVisitor->endVisitRegionMiniCAM( this, aPeriod );
+
+    aVisitor->endVisitRegionMiniCAM(this, aPeriod);
 }
