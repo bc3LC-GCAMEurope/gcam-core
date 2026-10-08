@@ -128,6 +128,24 @@ module_gcameurope_L224.heat <- function(command, ...) {
              share.weight = subs.share.weight) %>%
       select(-value) -> L224.StubTechCalInput_heat_EUR
 
+    # HINDCAST2005: regions whose district heat comes only from the fixed electricity output in the final base year
+    # (e.g. Italy in 2005) get calibrated share-weights of 0 for every fuel subsector, and the "fixed" interpolation
+    # rule keeps them at 0 in all future periods, so any growth in district heat demand cannot be supplied (unsolvable
+    # market). For these regions drop the fixed rule so the future share-weights fall back to the read-in fillout (1).
+    L224.noFuelHeat_regions <- L224.StubTechCalInput_heat_EUR %>%
+      filter(year == MODEL_FINAL_BASE_YEAR, supplysector == "district heat") %>%
+      group_by(region) %>%
+      summarise(calibrated.value = sum(calibrated.value)) %>%
+      ungroup %>%
+      filter(calibrated.value == 0) %>%
+      pull(region)
+    if(length(L224.noFuelHeat_regions) > 0) {
+      message("HINDCAST2005 L224.heat_EUR: no fuel-based district heat in ", MODEL_FINAL_BASE_YEAR, " in ",
+              paste(L224.noFuelHeat_regions, collapse = ", "), "; future fuel share-weights not fixed to 0")
+      L224.SubsectorInterp_heat_EUR <- L224.SubsectorInterp_heat_EUR %>%
+        filter(!(region %in% L224.noFuelHeat_regions & supplysector == "district heat"))
+    }
+
     # L224.StubTechCoef_heat_EUR ------------
     L224.StubTechCoef_heat_EUR <- L124.coef_R_heat_F_Yh_EUR %>%
       left_join(GCAM_region_names, by = "GCAM_region_ID") %>%
