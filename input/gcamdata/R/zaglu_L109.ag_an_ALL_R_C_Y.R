@@ -253,6 +253,9 @@ module_aglu_L109.ag_an_ALL_R_C_Y <- function(command, ...) {
 
 
     # For South Korea sugar crop, Argentina palm had data problem
+    # HINDCAST2005: also applied in the final base year (here and for animals below). Before 2010 (FBSH) imports of
+    # processed products are not converted to primary equivalent, so e.g. South Korea sugar crop has positive stocks
+    # but zero consumption in 2005; with no consumption the storage share-weight is 0 and the SugarCrop market cannot clear.
     # Adding dummy other use as 1% of stock in historical MODEL_BASE_YEARS, when no current consumption
     # Stocks is adjusted
 
@@ -264,7 +267,7 @@ module_aglu_L109.ag_an_ALL_R_C_Y <- function(command, ...) {
     # in historical years due to losses and gaps
 
     L109.ag_ALL_Mt_R_C_Y_4 %>%
-      filter(year %in% MODEL_BASE_YEARS[MODEL_BASE_YEARS != max(MODEL_BASE_YEARS)],
+      filter(year %in% MODEL_BASE_YEARS,
              `Closing stocks` > 0 & CurrentConsumption == 0,
              GCAM_commodity %in% Storage_commodities) %>%
       mutate(OtherUses_Mt = 0.01 * `Closing stocks`,
@@ -274,7 +277,7 @@ module_aglu_L109.ag_an_ALL_R_C_Y <- function(command, ...) {
 
     # Bind rows to get full table
     L109.ag_ALL_Mt_R_C_Y_4 %>%
-      filter(!(year %in% MODEL_BASE_YEARS[MODEL_BASE_YEARS != max(MODEL_BASE_YEARS)] &
+      filter(!(year %in% MODEL_BASE_YEARS &
                  `Closing stocks` > 0 & CurrentConsumption == 0 &
                  GCAM_commodity %in% Storage_commodities)) %>%
       bind_rows(
@@ -515,7 +518,7 @@ module_aglu_L109.ag_an_ALL_R_C_Y <- function(command, ...) {
     # Pakistain Pork will have issue
 
     L109.an_ALL_Mt_R_C_Y_4 %>%
-      filter(year %in% MODEL_BASE_YEARS[MODEL_BASE_YEARS != max(MODEL_BASE_YEARS)],
+      filter(year %in% MODEL_BASE_YEARS,
              `Closing stocks` > 0 & CurrentConsumption == 0,
              GCAM_commodity %in% Storage_commodities) %>%
       mutate(OtherUses_Mt = 0.01 * `Closing stocks`,
@@ -525,7 +528,7 @@ module_aglu_L109.ag_an_ALL_R_C_Y <- function(command, ...) {
 
     # Bind rows to get full table
     L109.an_ALL_Mt_R_C_Y_4 %>%
-      filter(!(year %in% MODEL_BASE_YEARS[MODEL_BASE_YEARS != max(MODEL_BASE_YEARS)] &
+      filter(!(year %in% MODEL_BASE_YEARS &
                  `Closing stocks` > 0 & CurrentConsumption == 0 &
                  GCAM_commodity %in% Storage_commodities)) %>%
       bind_rows(
