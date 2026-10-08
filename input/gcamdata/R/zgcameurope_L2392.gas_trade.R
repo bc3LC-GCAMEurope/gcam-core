@@ -652,6 +652,24 @@ module_gcameurope_L2392.gas_trade <- function(command, ...) {
       filter(supplysector == "regional natural gas") %>%
       mutate(subsector0 = subsector)
 
+    # HINDCAST2005: regions with no regional natural gas at all in the final base year (e.g. Africa_Eastern in 2005)
+    # get technology share-weights of 0 in that year, and the "fixed" technology interpolation rule copies that 0 to
+    # every future period (the fixed function keeps the from-year value), so the sector can never supply gas and its
+    # market stays uncleared. For these regions drop the rule so the read-in future share-weights (1) are used.
+    L2392.zeroNG_regions <- bind_rows(L2392.Production_reg_imp_NG_EUR, L2392.Production_reg_dom_NG_EUR) %>%
+      filter(year == MODEL_FINAL_BASE_YEAR) %>%
+      group_by(region) %>%
+      summarise(calOutputValue = sum(calOutputValue)) %>%
+      ungroup %>%
+      filter(calOutputValue == 0) %>%
+      pull(region)
+    if(length(L2392.zeroNG_regions) > 0) {
+      message("HINDCAST2005 L2392.gas_trade_EUR: no regional natural gas in ", MODEL_FINAL_BASE_YEAR, " in ",
+              paste(L2392.zeroNG_regions, collapse = ", "), "; technology share-weights not fixed to 0")
+      L2392.TechInterp_reg_NG_EUR <- L2392.TechInterp_reg_NG_EUR %>%
+        filter(!region %in% L2392.zeroNG_regions)
+    }
+
     # Produce outputs --------------------------------
     L2392.Delete_Supplysector_tra_NG_EUR %>%
       add_title("Delete traded natural gas supplysector") %>%
