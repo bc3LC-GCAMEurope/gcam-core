@@ -158,7 +158,10 @@ module_aglu_L142.ag_Fert_IO_R_C_Y_GLU <- function(command, ...) {
       summarise(Fert_Cons_MtN = sum(Fert_Cons_MtN)) %>%
       ungroup() %>%
       # Match in agricultural production by GCAM region / commodity / GLU in the base year; this creates NAs
-      left_join(filter(L101.ag_Prod_Mt_R_C_Y_GLU, year %in% aglu.BASE_YEAR_IFA),
+      # HINDCAST2005: L101 production stops at max(HISTORICAL_YEARS) (2005 < aglu.BASE_YEAR_IFA = 2006). Without this,
+      # the join gives NA production -> all crop N-fertilizer IO coefficients = 0 (ammonia demand vanishes and the
+      # calibrated gas/coal/oil resource markets do not clear). Use the latest historical year not after the IFA year.
+      left_join(filter(L101.ag_Prod_Mt_R_C_Y_GLU, year %in% min(aglu.BASE_YEAR_IFA, max(HISTORICAL_YEARS))),
                 by = c("GCAM_region_ID", "GCAM_commodity", "GCAM_subsector", "GLU")) %>%
       # Calculate unscaled input-output coefficients as unscaled fertilizer demands divided by agricultural production
       mutate(Fert_IO_unscaled = Fert_Cons_MtN / value,

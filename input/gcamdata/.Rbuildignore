@@ -17,3 +17,5 @@ R/README.html
 coverage.R
 ^appveyor\.yml$
 ^hindcast2005_find_failing_chunks\.R$
+^hindcast2005_build_capital_costs\.py$
+^hindcast2005_chunk_report\.csv$

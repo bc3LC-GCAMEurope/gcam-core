@@ -202,15 +202,36 @@ module_gcameurope_L241.fgas <- function(command, ...) {
 
     # Combine the updated cooling and non-cooling hfc gas emission
     # factor data frames together.
+    # HINDCAST2005: non-cooling HFC factors only exist for emissions.GV_YEARS (2020, 2030), so the first future
+    # period (2010 with base year 2005) fell before the data and approx_fun() returned NA. When that happens,
+    # anchor the interpolation on the final-base-year (MAX_DATA_YEAR) factors of the same region/technology/gas.
+    if(min(MODEL_FUTURE_YEARS) < min(emissions.GV_YEARS)) {
+      L241.hfc_ef_maxhistyr %>%
+        semi_join(L241.hfc_ef_update_all,
+                  by = c("region", "supplysector", "subsector", "stub.technology", "Non.CO2")) %>%
+        transmute(region, supplysector, subsector, stub.technology, Non.CO2,
+                  year = as.numeric(MAX_DATA_YEAR),
+                  emiss.coeff = round(value, emissions.DIGITS_EMISSIONS),
+                  hindcast_anchor = TRUE) ->
+        L241.hfc_ef_anchor
+    } else {
+      L241.hfc_ef_anchor <- tibble()
+    }
+
     L241.hfc_ef_update_all %>%
       bind_rows(L241.hfc_cool_ef_update_filtered) %>%
       mutate(emiss.coeff = round(value, emissions.DIGITS_EMISSIONS),
              year = as.numeric(year)) %>%
       select(region, supplysector, subsector, stub.technology, year, Non.CO2, emiss.coeff) %>%
+      # HINDCAST2005: anchor rows (final base year), removed after interpolation
+      mutate(hindcast_anchor = FALSE) %>%
+      bind_rows(L241.hfc_ef_anchor) %>%
       group_by(region, supplysector, subsector, stub.technology, Non.CO2) %>%
       tidyr::complete(year = min(MODEL_FUTURE_YEARS)) %>%
       mutate(emiss.coeff = approx_fun(year, emiss.coeff)) %>%
       ungroup() %>%
+      filter(!hindcast_anchor %in% TRUE) %>%
+      select(-hindcast_anchor) %>%
       # note: we actually allow some base year rows in the "future" table because we
       # need to include some emissions factors for some missing regions
       filter(year %in% MODEL_YEARS) ->

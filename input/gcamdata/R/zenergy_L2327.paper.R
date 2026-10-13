@@ -396,7 +396,10 @@ module_energy_L2327.paper <- function(command, ...) {
       group_by(region, supplysector, subsector, stub.technology, minicam.energy.input, market.name) %>%
       complete(year = MODEL_YEARS) %>%
       mutate(coefficient = approx_fun(year, coefficient, rule=2)) %>%
-      ungroup() ->
+      ungroup() %>%
+      # HINDCAST2005: regions without valid coefficients in any base year (Central Asia with base year 2005) get NA
+      # in all years; drop them so the global technology coefficients (L2327.GlobalTechCoef_paper) apply
+      filter(!is.na(coefficient)) ->
       L2327.StubTechCoef_paper
 
 

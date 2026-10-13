@@ -73,7 +73,7 @@
         </broyden-solver-component>
     </user-configurable-solver>
 
-<user-configurable-solver year="2015" fillout="1">
+<user-configurable-solver year="2005" fillout="1">
         <solution-tolerance>0.005</solution-tolerance>
         <solution-floor>0.0001</solution-floor>
         <calibration-tolerance>0.02</calibration-tolerance>
@@ -109,11 +109,11 @@
     </user-configurable-solver>
 
 
-    <user-configurable-solver year="2021" fillout="1">
+    <user-configurable-solver year="2010" fillout="1">
         <solution-tolerance>0.003</solution-tolerance>
         <solution-floor>0.0005</solution-floor>
         <calibration-tolerance>0.005</calibration-tolerance>
-        <max-model-calcs>25000</max-model-calcs>
+        <max-model-calcs>30000</max-model-calcs>
 
         <preconditioner-solver-component>
             <solution-info-filter>solvable</solution-info-filter>
@@ -258,6 +258,8 @@
 		<solution-floor fillout="1" region="Greece" market-type="district heat">0.01</solution-floor>
 		<solution-floor fillout="1" region="Germany" market-type="district heat">0.01</solution-floor>
 		<solution-tolerance fillout="1" region="Albania" period="3" market-type="crude oil">0.05</solution-tolerance>
+		<!-- HINDCAST2005: Albania coal in 2010 keeps a tiny excess supply (~0.0006 EJ) even at zero price (production from 2005 reserves) -->
+		<solution-floor fillout="1" region="Albania" period="3" market-type="coal">0.001</solution-floor>
 
 
         <!-- applies to all regions since region attribute is not included -->

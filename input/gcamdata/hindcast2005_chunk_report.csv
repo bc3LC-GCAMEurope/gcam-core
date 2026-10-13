@@ -1,0 +1,457 @@
+chunk,status,error,blocked_by,metadata_warning,seconds,n_blocked
+module_aglu_L100.0_LDS_preprocessing,ok,NA,NA,NA,32.8,0
+module_aglu_L100.FAO_SUA_PrimaryEquivalent,ok,NA,NA,Some precursors for 'GCAM_AgLU_SUA_APE' aren't inputs - chunk module_aglu_L100.FAO_SUA_PrimaryEquivalent,249.5,0
+module_aglu_L100.FAO_SUA_connection,ok,NA,NA,NA,32,0
+module_aglu_L100.FAO_preprocessing_OtherData,ok,NA,NA,NA,11.9,0
+module_aglu_L100.GTAP_downscale_ctry,ok,NA,NA,NA,0.2,0
+module_aglu_L100.IMAGE_downscale_ctry_yr,ok,NA,NA,NA,3.1,0
+module_aglu_L100.regional_ag_an_for_prices,ok,NA,NA,NA,0.9,0
+module_aglu_L101.ag_FAO_R_C_Y,ok,NA,NA,NA,1.7,0
+module_aglu_L107.an_IMAGE_R_C_Sys_Fd_Y,ok,NA,NA,NA,1.1,0
+module_aglu_L108.ag_Feed_R_C_Y,ok,NA,NA,NA,0.5,0
+module_aglu_L109.ag_an_ALL_R_C_Y,ok,NA,NA,NA,1.5,0
+module_aglu_L110.For_FAO_R_Y,ok,NA,NA,NA,0.5,0
+module_aglu_L111.ag_resbio_R_C,ok,NA,NA,NA,0.2,0
+module_aglu_L113_ag_storage,ok,NA,NA,NA,0.6,0
+module_aglu_L120.LC_GIS_R_LTgis_Yh_GLU,ok,NA,NA,NA,18.2,0
+module_aglu_L121.Carbon_LT,ok,NA,NA,NA,0.4,0
+module_aglu_L122.LC_R_Cropland_Yh_GLU,ok,NA,NA,NA,1.6,0
+module_aglu_L123.LC_R_MgdPastFor_Yh_GLU,ok,NA,NA,NA,0.8,0
+module_aglu_L124.LC_R_UnMgd_Yh_GLU,ok,NA,NA,NA,0.3,0
+module_aglu_L125.LC_tot,ok,NA,NA,NA,0.3,0
+module_aglu_L131.LV_R_GLU,ok,NA,NA,NA,0,0
+module_aglu_L133.ag_Costs_C_2005,ok,NA,NA,NA,0.3,0
+module_aglu_L141.ag_Fert_IFA_ctry_crop,ok,NA,NA,NA,0.9,0
+module_aglu_L142.ag_Fert_IO_R_C_Y_GLU,ok,NA,NA,NA,0.8,0
+module_aglu_L151.ag_MIRCA_ctry_C_GLU_irr,ok,NA,NA,NA,0.3,0
+module_aglu_L152.ag_GTAP_R_C_GLU_irr,ok,NA,NA,NA,0.5,0
+module_aglu_L161.ag_R_C_Y_GLU_irr,ok,NA,NA,NA,0.6,0
+module_aglu_L162.ag_prodchange_R_C_Y_GLU_irr,ok,NA,NA,NA,12.2,0
+module_aglu_L163.bio_Yield_R_GLU_irr,ok,NA,NA,NA,0.3,0
+module_aglu_L164.ag_Costs_C_2005_irr,ok,NA,NA,NA,0.1,0
+module_aglu_L165.ag_water_R_C_Y_GLU_irr,ok,NA,NA,NA,4.5,0
+module_aglu_L171.LC_R_Cropland_Yh_GLU_irr,ok,NA,NA,NA,3.6,0
+module_aglu_L181.ag_R_C_Y_GLU_irr_mgmt,ok,NA,NA,NA,8.6,0
+module_aglu_L2012.ag_For_Past_bio_input_irr_mgmt,ok,NA,NA,NA,18.9,0
+module_aglu_L202.an_input,ok,NA,NA,NA,2.7,0
+module_aglu_L203.ag_an_demand_input,ok,NA,NA,L203.DemandFunction_food_ConsumerGroups is character,183.1,0
+module_aglu_L2042.resbio_input_irr_mgmt,ok,NA,NA,NA,1.5,0
+module_aglu_L2052.ag_prodchange_cost_irr_mgmt,ok,NA,NA,NA,6.3,0
+module_aglu_L2062.ag_Fert_irr_mgmt,ok,NA,NA,NA,1,0
+module_aglu_L2072.ag_water_irr_mgmt,ok,NA,NA,NA,3.6,0
+module_aglu_L221.land_input_1,ok,NA,NA,NA,0.9,0
+module_aglu_L222.land_input_2,ok,NA,NA,NA,0.5,0
+module_aglu_L2231.land_input_3_irr,ok,NA,NA,NA,1,0
+module_aglu_L2242.land_input_4_irr_mgmt,ok,NA,NA,NA,0.4,0
+module_aglu_L2252.land_input_5_irr_mgmt,ok,NA,NA,NA,12.2,0
+module_aglu_L2253.unmanaged_land_adjust,ok,NA,NA,Some precursors for 'L222.LN2_UnmgdAllocation_adj' aren't inputs - chunk module_aglu_L2253.unmanaged_land_adjust,0.2,0
+module_aglu_L240.ag_trade,ok,NA,NA,NA,0.8,0
+module_aglu_L242.ssp34_pasture,ok,NA,NA,NA,0.2,0
+module_aglu_L243.bio_trade_input,ok,NA,NA,NA,0.6,0
+module_aglu_ag_Fert_IRR_MGMT_xml,ok,NA,NA,NA,0,0
+module_aglu_ag_For_Past_bio_base_IRR_MGMT_xml,ok,NA,NA,NA,0.2,0
+module_aglu_ag_an_demand_input_xml,ok,NA,NA,Some precursors for 'ag_an_demand_input_multiple_consumers.xml' aren't inputs - chunk module_aglu_ag_an_demand_input_xml,0.5,0
+module_aglu_ag_cost_IRR_MGMT_xml,ok,NA,NA,NA,0,0
+module_aglu_ag_prodchange_ref_IRR_MGMT_xml,ok,NA,NA,NA,0,0
+module_aglu_ag_prodchange_ssp1_IRR_MGMT_xml,ok,NA,NA,NA,0,0
+module_aglu_ag_prodchange_ssp2_IRR_MGMT_xml,ok,NA,NA,NA,0,0
+module_aglu_ag_prodchange_ssp3_IRR_MGMT_xml,ok,NA,NA,NA,0,0
+module_aglu_ag_prodchange_ssp4_IRR_MGMT_xml,ok,NA,NA,NA,0,0
+module_aglu_ag_prodchange_ssp5_IRR_MGMT_xml,ok,NA,NA,NA,0,0
+module_aglu_ag_trade_xml,ok,NA,NA,NA,0.1,0
+module_aglu_ag_water_input_IRR_MGMT_xml,ok,NA,NA,NA,0,0
+module_aglu_an_input_xml,ok,NA,NA,NA,0.2,0
+module_aglu_batch_ag_storage_xml,ok,NA,NA,NA,0.1,0
+module_aglu_bio_trade_xml,ok,NA,NA,NA,0,0
+module_aglu_food_SSP1_xml,ok,NA,NA,NA,0,0
+module_aglu_land_input_1_xml,ok,NA,NA,NA,0,0
+module_aglu_land_input_2_xml,ok,NA,NA,NA,0,0
+module_aglu_land_input_3_IRR_xml,ok,NA,NA,NA,0,0
+module_aglu_land_input_4_IRR_MGMT_xml,ok,NA,NA,NA,0,0
+module_aglu_land_input_5_IRR_MGMT_xml,ok,NA,NA,NA,0.1,0
+module_aglu_paper_delete_ag_demand_xml,ok,NA,NA,NA,0,0
+module_aglu_pasture_ssp34_xml,ok,NA,NA,NA,0,0
+module_aglu_protected_land_input_2_xml,ok,NA,NA,NA,0,0
+module_aglu_protected_land_input_3_xml,ok,NA,NA,NA,0,0
+module_aglu_prune_empty_ag_xml,ok,NA,NA,NA,1.7,0
+module_aglu_resbio_input_IRR_MGMT_xml,ok,NA,NA,NA,0.7,0
+module_aglu_ssp3_bio_trade_xml,ok,NA,NA,NA,0,0
+module_aglu_ssp4_ag_bio_trade_xml,ok,NA,NA,NA,0,0
+module_climate_no_climate_model_xml,ok,NA,NA,NA,0,0
+module_climate_xml_hector_xml,ok,NA,NA,NA,0,0
+module_emissions_L102.nonco2_ceds_R_S_Y,ok,NA,NA,NA,0.5,0
+module_emissions_L112.ceds_ghg_en_R_S_T_Y,ok,NA,NA,NA,147.9,0
+module_emissions_L114.bcoc_en_R_S_T_Y,ok,NA,NA,NA,0.5,0
+module_emissions_L1211.nonco2_awb_R_S_T_Y_IRR,ok,NA,NA,NA,5.9,0
+module_emissions_L1221.ghg_agr_R_S_T_Y_IRR,ok,NA,NA,NA,2.5,0
+module_emissions_L123.bcoc_awb_R_S_T_Y,ok,NA,NA,NA,0.2,0
+module_emissions_L141.hfc_R_S_T_Y,ok,NA,NA,NA,4,0
+module_emissions_L142.pfc_R_S_T_Y,ok,NA,NA,NA,2.9,0
+module_emissions_L151.ctrl_R_en_S_T,ok,NA,NA,NA,0.2,0
+module_emissions_L152.MACC,ok,NA,NA,NA,6.6,0
+module_emissions_L161.nonghg_en_ssp_R_S_T_Y,ok,NA,NA,NA,117.1,0
+module_emissions_L169.nonghg_NEI_scaling,ok,NA,NA,NA,26.5,0
+module_emissions_L170.nonghg_ceds_scaling,ok,NA,NA,NA,2,0
+module_emissions_L201.en_nonco2,ok,NA,NA,NA,1.8,0
+module_emissions_L211.ag_nonco2,ok,NA,NA,NA,2.2,0
+module_emissions_L2111.ag_nonco2_IRR,ok,NA,NA,NA,4.6,0
+module_emissions_L2112.ag_nonco2_IRR_MGMT,ok,NA,NA,NA,3.9,0
+module_emissions_L212.unmgd_nonco2,ok,NA,NA,NA,1.8,0
+module_emissions_L231.proc_sector,ok,NA,NA,NA,0.5,0
+module_emissions_L232.prc_nonco2,ok,NA,NA,NA,0.2,0
+module_emissions_L241.en_newtech_nonco2,ok,NA,NA,NA,1.2,0
+module_emissions_L241.fgas,ok,NA,NA,NA,5.7,0
+module_emissions_L251.en_ssp_nonco2,ok,NA,NA,NA,15.1,0
+module_emissions_L252.MACC,ok,NA,NA,NA,62.8,0
+module_emissions_L253.emission_controls,ok,NA,NA,NA,1.7,0
+module_emissions_L270.nonghg_nei_to_gcam,ok,NA,NA,NA,1.5,0
+module_emissions_MACC_TC_SSP_xml,ok,NA,NA,NA,0.2,0
+module_emissions_all_aglu_emissions_IRR_MGMT_xml,ok,NA,NA,NA,0.9,0
+module_emissions_all_energy_emissions_xml,ok,NA,NA,NA,0.2,0
+module_emissions_all_fgas_emissions_xml,ok,NA,NA,NA,0.1,0
+module_emissions_all_protected_unmgd_emissions_xml,ok,NA,NA,NA,0,0
+module_emissions_all_unmgd_emissions_xml,ok,NA,NA,NA,0.1,0
+module_emissions_delete_gdp_control_xml,ok,NA,NA,NA,0,0
+module_emissions_emission_controls_xml,ok,NA,NA,Some precursors for 'emission_factor_controls.xml' aren't inputs - chunk module_emissions_emission_controls_xml,0.2,0
+module_emissions_ind_urb_processing_sectors_xml,ok,NA,NA,NA,0.1,0
+module_emissions_ssp15_emissions_factors_xml,ok,NA,NA,NA,0,0
+module_emissions_ssp2_emissions_factors_xml,ok,NA,NA,NA,0.3,0
+module_emissions_ssp34_emissions_factors_xml,ok,NA,NA,NA,0,0
+module_energy_Ccoef_xml,ok,NA,NA,NA,0,0
+module_energy_Cstorage_xml,ok,NA,NA,NA,0,0
+module_energy_HDDCDD_xml,ok,NA,NA,NA,0.1,0
+module_energy_L100.CDIAC_downscale_ctry,ok,NA,NA,NA,0.2,0
+module_energy_L100.IEA_downscale_ctry,ok,NA,NA,NA,0,0
+module_energy_L101.en_bal_IEA,ok,NA,NA,NA,0.1,0
+module_energy_L1011.en_bal_adj,ok,NA,NA,NA,1.3,0
+module_energy_L1011.ff_GrossTrade,ok,NA,NA,NA,6.5,0
+module_energy_L1012.en_bal_EFW,ok,NA,NA,NA,1.6,0
+module_energy_L102.en_emiss_CDIAC,ok,NA,NA,NA,0.3,0
+module_energy_L1092.iron_steel_GrossTrade,ok,NA,NA,NA,9.8,0
+module_energy_L111.rsrc_fos_Prod,ok,NA,NA,NA,0.3,0
+module_energy_L112.U,ok,NA,NA,NA,0,0
+module_energy_L113.MSW,ok,NA,NA,NA,0,0
+module_energy_L113.atb_cost,ok,NA,NA,NA,12.2,0
+module_energy_L114.wind,ok,NA,NA,NA,4.4,0
+module_energy_L115.roofPV,ok,NA,NA,NA,0,0
+module_energy_L116.geo,ok,NA,NA,NA,0.2,0
+module_energy_L117.tradbio,ok,NA,NA,NA,0.1,0
+module_energy_L118.hydro,ok,NA,NA,NA,0,0
+module_energy_L119.solar,ok,NA,NA,NA,0.2,0
+module_energy_L120.offshore_wind,ok,NA,NA,NA,1.1,0
+module_energy_L121.liquids,ok,NA,NA,NA,0,0
+module_energy_L122.gasproc_refining,ok,NA,NA,NA,0.9,0
+module_energy_L123.electricity,ok,NA,NA,NA,0.4,0
+module_energy_L1231.elec_tech,ok,NA,NA,NA,0.3,0
+module_energy_L1232.desal_from_elec,ok,NA,NA,NA,0.1,0
+module_energy_L124.heat,ok,NA,NA,NA,0.4,0
+module_energy_L125.hydrogen,ok,NA,NA,NA,0.7,0
+module_energy_L126.distribution,ok,NA,NA,NA,0.2,0
+module_energy_L131.enduse,ok,NA,NA,NA,0.7,0
+module_energy_L132.industry,ok,NA,NA,NA,0.6,0
+module_energy_L1321.cement,ok,NA,NA,NA,2.3,0
+module_energy_L1322.Fert,ok,NA,NA,NA,0.3,0
+module_energy_L1323.iron_steel,ok,NA,NA,NA,0.8,0
+module_energy_L1324.Off_road,ok,NA,NA,NA,1.1,0
+module_energy_L1325.chemical,ok,NA,NA,NA,0.9,0
+module_energy_L1326.aluminum,ok,NA,NA,NA,0.5,0
+module_energy_L1327.paper,ok,NA,NA,NA,1,0
+module_energy_L1328.food_processing,ok,NA,NA,NA,0.6,0
+module_energy_L142.building_agg,ok,NA,NA,NA,0.6,0
+module_energy_L143.HDDCDD,ok,NA,NA,NA,2.6,0
+module_energy_L144.building_det_en,ok,NA,NA,NA,7,0
+module_energy_L144.building_det_flsp,ok,NA,NA,NA,3.2,0
+module_energy_L152.transportation,ok,NA,NA,NA,0.3,0
+module_energy_L154.transportation_UCD,ok,NA,NA,NA,182.4,0
+module_energy_L161.Cstorage,ok,NA,NA,NA,0.2,0
+module_energy_L162.dac,ok,NA,NA,NA,0,0
+module_energy_L2011.ff_ALL_R_C_Y,ok,NA,NA,NA,0.3,0
+module_energy_L202.Ccoef,ok,NA,NA,NA,0,0
+module_energy_L210.resources,ok,NA,NA,NA,8.9,0
+module_energy_L221.en_supply,ok,NA,NA,NA,0.6,0
+module_energy_L222.en_transformation,ok,NA,NA,NA,1,0
+module_energy_L223.electricity,ok,NA,NA,NA,3.1,0
+module_energy_L2231.wind_update,ok,NA,NA,NA,0.9,0
+module_energy_L224.heat,ok,NA,NA,NA,0.3,0
+module_energy_L225.hydrogen,ok,NA,NA,NA,0.5,0
+module_energy_L226.en_distribution,ok,NA,NA,NA,0.5,0
+module_energy_L232.other_industry,ok,NA,NA,NA,1.3,0
+module_energy_L2321.cement,ok,NA,NA,NA,0.9,0
+module_energy_L2322.Fert,ok,NA,NA,NA,0.6,0
+module_energy_L2323.iron_steel,ok,NA,NA,NA,1.2,0
+module_energy_L2324.Off_road,ok,NA,NA,NA,0.7,0
+module_energy_L2325.chemical,ok,NA,NA,NA,0.8,0
+module_energy_L2326.aluminum,ok,NA,NA,NA,1,0
+module_energy_L2327.paper,ok,NA,NA,NA,1.6,0
+module_energy_L2328.food_processing,ok,NA,NA,NA,1.4,0
+module_energy_L238.iron_steel_trade,ok,NA,NA,NA,0.2,0
+module_energy_L239.ff_trade,ok,NA,NA,NA,0.4,0
+module_energy_L2391.gas_trade_flows,ok,NA,NA,NA,0.7,0
+module_energy_L2392.gas_trade,ok,NA,NA,NA,1.3,0
+module_energy_L242.building_agg,ok,NA,NA,NA,0.5,0
+module_energy_L244.building_det,ok,NA,NA,Some precursors for 'L244.GenericServiceImpedance' aren't inputs - chunk module_energy_L244.building_det,27.8,0
+module_energy_L252.transportation,ok,NA,NA,NA,0.4,0
+module_energy_L254.transportation_UCD,ok,NA,NA,NA,15.7,0
+module_energy_L261.Cstorage,ok,NA,NA,NA,0.3,0
+module_energy_L262.dac,ok,NA,NA,NA,0.7,0
+module_energy_L270.limits,ok,NA,NA,NA,0.4,0
+module_energy_Off_road_xml,ok,NA,NA,NA,0.1,0
+module_energy_aluminum_xml,ok,NA,NA,NA,0.1,0
+module_energy_bio_externality_xml,ok,NA,NA,NA,0,0
+module_energy_building_agg_xml,ok,NA,NA,NA,0,0
+module_energy_building_det_xml,ok,NA,NA,NA,0.4,0
+module_energy_ccs_supply_high_xml,ok,NA,NA,NA,0,0
+module_energy_ccs_supply_low_xml,ok,NA,NA,NA,0,0
+module_energy_ccs_supply_lowest_xml,ok,NA,NA,NA,0,0
+module_energy_cement_xml,ok,NA,NA,NA,0,0
+module_energy_chemical_xml,ok,NA,NA,NA,0.1,0
+module_energy_dac_xml,ok,NA,NA,NA,0.2,0
+module_energy_elec_bio_low_xml,ok,NA,NA,NA,0,0
+module_energy_electricity_xml,ok,NA,NA,NA,0.1,0
+module_energy_en_Fert_xml,ok,NA,NA,NA,0.2,0
+module_energy_en_distribution_xml,ok,NA,NA,NA,0.1,0
+module_energy_en_supply_xml,ok,NA,NA,NA,0.3,0
+module_energy_en_transformation_low_xml,ok,NA,NA,NA,0,0
+module_energy_en_transformation_xml,ok,NA,NA,NA,0.1,0
+module_energy_food_processing_xml,ok,NA,NA,NA,0.1,0
+module_energy_gas_trade_xml,ok,NA,NA,NA,0.3,0
+module_energy_geo_adv_xml,ok,NA,NA,NA,0,0
+module_energy_geo_low_xml,ok,NA,NA,NA,0,0
+module_energy_geo_tech_adv_xml,ok,NA,NA,NA,0,0
+module_energy_heat_xml,ok,NA,NA,NA,0,0
+module_energy_high_cost_ccs_xml,ok,NA,NA,NA,0,0
+module_energy_hydrogen_xml,ok,NA,NA,NA,0,0
+module_energy_iron_steel_trade_xml,ok,NA,NA,NA,0.1,0
+module_energy_iron_steel_xml,ok,NA,NA,NA,0.1,0
+module_energy_liquids_limits_xml,ok,NA,NA,NA,0,0
+module_energy_negative_emissions_budget_xml,ok,NA,NA,NA,0,0
+module_energy_no_offshore_ccs_xml,ok,NA,NA,NA,0,0
+module_energy_nuclear_adv_xml,ok,NA,NA,NA,0,0
+module_energy_nuclear_low_xml,ok,NA,NA,NA,0,0
+module_energy_onshore_wind_xml,ok,NA,NA,NA,0,0
+module_energy_other_industry_xml,ok,NA,NA,NA,0.1,0
+module_energy_paper_xml,ok,NA,NA,NA,0.1,0
+module_energy_resources_SSP_xml,ok,NA,NA,NA,0.1,0
+module_energy_resources_xml,ok,NA,NA,NA,0.1,0
+module_energy_solar_adv_xml,ok,NA,NA,NA,0.1,0
+module_energy_solar_low_xml,ok,NA,NA,NA,0,0
+module_energy_transportation_UCD_CORE_xml,ok,NA,NA,Some precursors for 'transportation_UCD_CORE.xml' aren't inputs - chunk module_energy_transportation_UCD_CORE_xml,1.4,0
+module_energy_turn_off_ccs_xml,ok,NA,NA,NA,0,0
+module_energy_wind_adv_xml,ok,NA,NA,NA,0,0
+module_energy_wind_low_xml,ok,NA,NA,NA,0,0
+module_gcameurope_2324.Off_road_Inc_Elas_scenarios,ok,NA,NA,Some precursors for 'L2324.IncomeElasticity_Off_road_Scen_EUR' aren't inputs - chunk module_gcameurope_2324.Off_road_Inc_Elas_scenarios,0.1,0
+module_gcameurope_EFW_input_coefs_xml,ok,NA,NA,NA,0,0
+module_gcameurope_EFW_irrigation_xml,ok,NA,NA,NA,0,0
+module_gcameurope_EFW_manufacturing_xml,ok,NA,NA,NA,0,0
+module_gcameurope_EFW_municipal_xml,ok,NA,NA,NA,0,0
+module_gcameurope_HDDCDD_xml,ok,NA,NA,NA,0,0
+module_gcameurope_IncomeElasticity_xml,ok,NA,NA,NA,0.1,0
+module_gcameurope_L101.en_bal_Eurostat,ok,NA,NA,NA,36.3,0
+module_gcameurope_L101.nonghg_en_S_T_Y,ok,NA,NA,NA,1.1,0
+module_gcameurope_L1011.ff_GrossTrade_EUR,ok,NA,NA,NA,31.1,0
+module_gcameurope_L1012.en_bal_EFW,ok,NA,NA,NA,1.1,0
+module_gcameurope_L102.en_emiss_CDIAC,ok,NA,NA,Some precursors for 'L102.CO2_Mt_R_F_Yh_EUR' aren't inputs - chunk module_gcameurope_L102.en_emiss_CDIAC,0.2,0
+module_gcameurope_L107.en_consumption_shares,ok,NA,NA,NA,0,0
+module_gcameurope_L110.water_demand_primary,ok,NA,NA,NA,0.2,0
+module_gcameurope_L111.rsrc_fos_Prod,ok,NA,NA,Some precursors for 'L111.Prod_EJ_R_F_Yh_EUR' aren't inputs - chunk module_gcameurope_L111.rsrc_fos_Prod,0.2,0
+module_gcameurope_L112.ceds_ghg_en_R_S_T_Y,ok,NA,NA,Some precursors for 'L111.nonghg_tg_R_en_S_F_Yh_EUR' aren't inputs - chunk module_gcameurope_L112.ceds_ghg_en_R_S_T_Y,53090.8,0
+module_gcameurope_L114.bcoc_en_R_S_T_Y,ok,NA,NA,NA,0.4,0
+module_gcameurope_L121.liquids,ok,NA,NA,Some precursors for 'L121.share_R_TPES_biofuel_tech_EUR' aren't inputs - chunk module_gcameurope_L121.liquids,0.2,0
+module_gcameurope_L122.gasproc_refining,ok,NA,NA,Some precursors for 'L122.out_EJ_R_gasproc_F_Yh_EUR' aren't inputs - chunk module_gcameurope_L122.gasproc_refining,1.6,0
+module_gcameurope_L123.electricity,ok,NA,NA,NA,0.3,0
+module_gcameurope_L1231.elec_tech,ok,NA,NA,NA,0.1,0
+module_gcameurope_L1232.Elec_subregions,ok,NA,NA,NA,0,0
+module_gcameurope_L1233.Elec_water,ok,NA,NA,NA,0.9,0
+module_gcameurope_L1233.elec_water_grid,ok,NA,NA,Some precursors for 'L1233.out_EJ_R_elecS_F_tech_cool_EUR' aren't inputs - chunk module_gcameurope_L1233.elec_water_grid,0.1,0
+module_gcameurope_L1234.elec_gridregions,ok,NA,NA,NA,0,0
+module_gcameurope_L1235.elec_load_segments,ok,NA,NA,NA,0.1,0
+module_gcameurope_L1236.elec_load_segments_solver,ok,NA,NA,NA,3.8,0
+module_gcameurope_L1239.elec_ctry_fractions,ok,NA,NA,Some precursors for 'L1239.R_elec_supply' aren't inputs - chunk module_gcameurope_L1239.elec_ctry_fractions,0.1,0
+module_gcameurope_L124.heat,ok,NA,NA,Some precursors for 'L124.in_EJ_R_heat_F_Yh_EUR' aren't inputs - chunk module_gcameurope_L124.heat,0.3,0
+module_gcameurope_L126.distribution,ok,NA,NA,NA,0.5,0
+module_gcameurope_L126.distribution_grid_regions,ok,NA,NA,NA,0.7,0
+module_gcameurope_L1261.elec_trade,ok,NA,NA,Some precursors for 'L1261.out_EJ_R_elecownuse_F_Yh_EUR' aren't inputs - chunk module_gcameurope_L1261.elec_trade,0.5,0
+module_gcameurope_L131.enduse,ok,NA,NA,Some precursors for 'L131.in_EJ_R_Senduse_F_Yh_EUR' aren't inputs - chunk module_gcameurope_L131.enduse,0.6,0
+module_gcameurope_L132.industry,ok,NA,NA,NA,0.3,0
+module_gcameurope_L132.water_demand_manufacturing,ok,NA,NA,NA,0.7,0
+module_gcameurope_L1321.cement,ok,NA,NA,Some precursors for 'L1321.in_EJ_R_indenergy_F_Yh_EUR' aren't inputs - chunk module_gcameurope_L1321.cement,1.2,0
+module_gcameurope_L1322.Fert,ok,NA,NA,NA,0.2,0
+module_gcameurope_L1323.iron_steel,ok,NA,NA,NA,0.7,0
+module_gcameurope_L1324.Off_road,ok,NA,NA,NA,0.7,0
+module_gcameurope_L1325.chemical,ok,NA,NA,NA,0.6,0
+module_gcameurope_L1326.aluminum,ok,NA,NA,Some precursors for 'L1326.in_EJ_R_indenergy_F_Yh_EUR' aren't inputs - chunk module_gcameurope_L1326.aluminum,0.5,0
+module_gcameurope_L1327.paper,ok,NA,NA,Some precursors for 'L1327.out_Mt_R_paper_Yh_EUR' aren't inputs - chunk module_gcameurope_L1327.paper,0.6,0
+module_gcameurope_L1328.food_processing,ok,NA,NA,NA,0.5,0
+module_gcameurope_L141.hfc_R_S_T_Y,ok,NA,NA,NA,5.4,0
+module_gcameurope_L142.building_agg,ok,NA,NA,NA,0.2,0
+module_gcameurope_L142.pfc_R_S_T_Y,ok,NA,NA,Some precursors for 'L142.pfc_R_S_T_Yh_EUR' aren't inputs - chunk module_gcameurope_L142.pfc_R_S_T_Y,1.9,0
+module_gcameurope_L143.HDDCDD,ok,NA,NA,NA,3.1,0
+module_gcameurope_L144.building_det_en,ok,NA,NA,Some precursors for 'L144.end_use_eff_EUR' aren't inputs - chunk module_gcameurope_L144.building_det_en,35.9,0
+module_gcameurope_L144.building_det_flsp,ok,NA,NA,NA,1.6,0
+module_gcameurope_L151.ctrl_R_en_S_T,ok,NA,NA,Some precursors for 'L151.nonghg_ctrl_R_en_S_T_EUR' aren't inputs - chunk module_gcameurope_L151.ctrl_R_en_S_T,0.1,0
+module_gcameurope_L154.transportation_UCD,ok,NA,NA,Some precursors for 'L154.in_EJ_R_trn_m_sz_tech_F_Yh_EUR' aren't inputs - chunk module_gcameurope_L154.transportation_UCD,255,0
+module_gcameurope_L161.nonghg_en_ssp_R_S_T_Y,ok,NA,NA,NA,160.2,0
+module_gcameurope_L171.desalination,ok,NA,NA,NA,0.6,0
+module_gcameurope_L172.EFW_irrigation,ok,NA,NA,NA,0.2,0
+module_gcameurope_L173.EFW_manufacturing,ok,NA,NA,NA,0.8,0
+module_gcameurope_L174.EFW_municipal,ok,NA,NA,NA,0.8,0
+module_gcameurope_L201.en_nonco2,ok,NA,NA,NA,2,0
+module_gcameurope_L201.water_resources_constrained,ok,NA,NA,NA,0.8,0
+module_gcameurope_L2011.ff_ALL_R_C_Y,ok,NA,NA,NA,0.8,0
+module_gcameurope_L202.an_input,ok,NA,NA,NA,2,0
+module_gcameurope_L203.water_td,ok,NA,NA,Some precursors for 'L203.Production_watertd_EUR' aren't inputs - chunk module_gcameurope_L203.water_td,0.5,0
+module_gcameurope_L210.resources,ok,NA,NA,Some precursors for 'L210.ResTechShrwt_EUR' aren't inputs - chunk module_gcameurope_L210.resources,0.6,0
+module_gcameurope_L210.water_demand_primary,ok,NA,NA,NA,0.1,0
+module_gcameurope_L211.ag_nonco2,ok,NA,NA,NA,0.8,0
+module_gcameurope_L221.en_supply,ok,NA,NA,NA,0.5,0
+module_gcameurope_L222.en_transformation,ok,NA,NA,Some precursors for 'L222.StubTechProd_gasproc_EUR' aren't inputs - chunk module_gcameurope_L222.en_transformation,0.4,0
+module_gcameurope_L223.electricity,ok,NA,NA,Some precursors for 'L223.StubTechCapFactor_elec_EUR' aren't inputs - chunk module_gcameurope_L223.electricity,0.5,0
+module_gcameurope_L2231.electricity_grid,ok,NA,NA,Some precursors for 'L2231.PassthroughSector_elec_EUR' aren't inputs - chunk module_gcameurope_L2231.electricity_grid,0.1,0
+module_gcameurope_L2231.wind_update,ok,NA,NA,Some precursors for 'L2231.SmthRenewRsrcCurves_onshore_wind_EUR' aren't inputs - chunk module_gcameurope_L2231.wind_update,0.1,0
+module_gcameurope_L2232.electricity_trade,ok,NA,NA,Some precursors for 'L2232.SubsectorShrwtFllt_EURelec' aren't inputs - chunk module_gcameurope_L2232.electricity_trade,0.6,0
+module_gcameurope_L2233.electricity_water,ok,NA,NA,Some precursors for 'L2233.StubTechTrackCapital_elec_EUR' aren't inputs - chunk module_gcameurope_L2233.electricity_water,0.5,0
+module_gcameurope_L2234.elec_segments,ok,NA,NA,Some precursors for 'L2234.SubsectorShrwtInterp_elecS_EUR' aren't inputs - chunk module_gcameurope_L2234.elec_segments,2.1,0
+module_gcameurope_L2235.elec_segments_water,ok,NA,NA,Some precursors for 'L2235.GlobalTechEff_elecS_cool_EUR' aren't inputs - chunk module_gcameurope_L2235.elec_segments_water,3.7,0
+module_gcameurope_L2236.elecS_emissions,ok,NA,NA,NA,0.3,0
+module_gcameurope_L224.heat,ok,NA,NA,Some precursors for 'L224.StubTechCalInput_heat_EUR' aren't inputs - chunk module_gcameurope_L224.heat,0.5,0
+module_gcameurope_L226.en_distribution,ok,NA,NA,Some precursors for 'L226.StubTechCoef_elecownuse_EUR' aren't inputs - chunk module_gcameurope_L226.en_distribution,0.3,0
+module_gcameurope_L231.proc_sector,ok,NA,NA,NA,0.4,0
+module_gcameurope_L232.other_industry,ok,NA,NA,Some precursors for 'L232.StubTechCalInput_indenergy_EUR' aren't inputs - chunk module_gcameurope_L232.other_industry,1.5,0
+module_gcameurope_L232.prc_nonco2,ok,NA,NA,NA,0.2,0
+module_gcameurope_L232.water_demand_manufacturing,ok,NA,NA,NA,1.9,0
+module_gcameurope_L2321.cement,ok,NA,NA,Some precursors for 'L2321.IncomeElasticity_cement_Scen_EUR' aren't inputs - chunk module_gcameurope_L2321.cement,0.9,0
+module_gcameurope_L2322.Fert,ok,NA,NA,NA,1.1,0
+module_gcameurope_L2323.iron_steel,ok,NA,NA,NA,1.1,0
+module_gcameurope_L2323.iron_steel_Inc_Elas_scenarios,ok,NA,NA,Some precursors for 'L2323.IncomeElasticity_iron_steel_Scen_EUR' aren't inputs - chunk module_gcameurope_L2323.iron_steel_Inc_Elas_scenarios,0.2,0
+module_gcameurope_L2324.Off_road,ok,NA,NA,NA,0.6,0
+module_gcameurope_L2325.chemical,ok,NA,NA,NA,0.8,0
+module_gcameurope_L2325.chemical_Inc_Elas_scenarios,ok,NA,NA,Some precursors for 'L2325.IncomeElasticity_chemical_Scen_EUR' aren't inputs - chunk module_gcameurope_L2325.chemical_Inc_Elas_scenarios,0,0
+module_gcameurope_L2326.aluminum,ok,NA,NA,Some precursors for 'L2326.StubTechCoef_aluminum_EUR' aren't inputs - chunk module_gcameurope_L2326.aluminum,1.2,0
+module_gcameurope_L2326.aluminum_Inc_Elas_scenarios,ok,NA,NA,Some precursors for 'L2326.IncomeElasticity_aluminum_Scen_EUR' aren't inputs - chunk module_gcameurope_L2326.aluminum_Inc_Elas_scenarios,0.2,0
+module_gcameurope_L2327.paper,ok,NA,NA,NA,1.7,0
+module_gcameurope_L2327.paper_Inc_Elas_scenarios,ok,NA,NA,Some precursors for 'L2327.IncomeElasticity_paper_Scen_EUR' aren't inputs - chunk module_gcameurope_L2327.paper_Inc_Elas_scenarios,0,0
+module_gcameurope_L2328.food_processing,ok,NA,NA,Some precursors for 'L2328.StubTechCalInput_food_heat_EUR' aren't inputs - chunk module_gcameurope_L2328.food_processing,1.4,0
+module_gcameurope_L238.iron_steel_trade,ok,NA,NA,NA,0.5,0
+module_gcameurope_L239.ff_trade,ok,NA,NA,Some precursors for 'L239.Production_tra_EUR' aren't inputs - chunk module_gcameurope_L239.ff_trade,0.7,0
+module_gcameurope_L2391.gas_trade_flows,ok,NA,NA,NA,0.9,0
+module_gcameurope_L2392.gas_trade,ok,NA,NA,Some precursors for 'L2392.CarbonCoef_NG_EUR' aren't inputs - chunk module_gcameurope_L2392.gas_trade,1.4,0
+module_gcameurope_L240.ag_trade,ok,NA,NA,"No output precursors, but there are inputs - chunk module_gcameurope_L240.ag_trade",4.9,0
+module_gcameurope_L241.en_newtech_nonco2,ok,NA,NA,NA,1.2,0
+module_gcameurope_L241.fgas,ok,NA,NA,NA,8.5,0
+module_gcameurope_L243.bio_trade_input,ok,NA,NA,Some precursors for 'L243.Supplysector_Bio_EUR' aren't inputs - chunk module_gcameurope_L243.bio_trade_input,0.4,0
+module_gcameurope_L244.building_det,ok,NA,NA,Some precursors for 'L244.SatiationAdder_EUR' aren't inputs - chunk module_gcameurope_L244.building_det,60.2,0
+module_gcameurope_L251.en_ssp_nonco2,ok,NA,NA,NA,20.9,0
+module_gcameurope_L252.MACC,ok,NA,NA,NA,19.3,0
+module_gcameurope_L254.transportation_UCD,ok,NA,NA,Some precursors for 'L254.Supplysector_trn_EUR' aren't inputs - chunk module_gcameurope_L254.transportation_UCD,10.8,0
+module_gcameurope_L270.EFW_input_coefs,ok,NA,NA,NA,0.6,0
+module_gcameurope_L271.desalination,ok,NA,NA,Some precursors for 'L271.StubTechProd_desal_EUR' aren't inputs - chunk module_gcameurope_L271.desalination,0,0
+module_gcameurope_L272.EFW_irrigation,ok,NA,NA,Some precursors for 'L272.StubTechCoef_irr_EUR' aren't inputs - chunk module_gcameurope_L272.EFW_irrigation,0,0
+module_gcameurope_L273.EFW_manufacturing,ok,NA,NA,Some precursors for 'L273.StubTechCoef_ind_EUR' aren't inputs - chunk module_gcameurope_L273.EFW_manufacturing,0.1,0
+module_gcameurope_L274.EFW_municipal,ok,NA,NA,Some precursors for 'L274.StubTechCoef_muni_EUR' aren't inputs - chunk module_gcameurope_L274.EFW_municipal,0,0
+module_gcameurope_L281.macro_account_tracking,ok,NA,NA,Some precursors for 'L281.TechAccountOutput_entrade_EUR' aren't inputs - chunk module_gcameurope_L281.macro_account_tracking,0,0
+module_gcameurope_Off_road_xml,ok,NA,NA,NA,0.1,0
+module_gcameurope_ag_trade_xml,ok,NA,NA,NA,0.5,0
+module_gcameurope_all_energy_emissions_xml,ok,NA,NA,NA,0.5,0
+module_gcameurope_all_fgas_emissions_xml,ok,NA,NA,NA,0,0
+module_gcameurope_aluminum_xml,ok,NA,NA,NA,0,0
+module_gcameurope_an_input_xml,ok,NA,NA,NA,0.2,0
+module_gcameurope_bio_trade_xml,ok,NA,NA,NA,0.1,0
+module_gcameurope_building_det_xml,ok,NA,NA,NA,0.1,0
+module_gcameurope_cement_xml,ok,NA,NA,NA,0,0
+module_gcameurope_chemical_xml,ok,NA,NA,NA,0,0
+module_gcameurope_desalination_xml,ok,NA,NA,NA,0,0
+module_gcameurope_elecS_ghg_emissions_water_xml,ok,NA,NA,NA,0,0
+module_gcameurope_elec_segments_water_xml,ok,NA,NA,NA,0.5,0
+module_gcameurope_electricity_water_xml,ok,NA,NA,NA,0.2,0
+module_gcameurope_electricity_xml,ok,NA,NA,NA,0.1,0
+module_gcameurope_en_Fert_xml,ok,NA,NA,NA,0,0
+module_gcameurope_en_distribution_xml,ok,NA,NA,NA,0,0
+module_gcameurope_en_supply_xml,ok,NA,NA,NA,0.1,0
+module_gcameurope_en_transformation_xml,ok,NA,NA,NA,0,0
+module_gcameurope_food_processing_xml,ok,NA,NA,NA,0.1,0
+module_gcameurope_gas_trade_xml,ok,NA,NA,NA,0.2,0
+module_gcameurope_heat_xml,ok,NA,NA,NA,0.1,0
+module_gcameurope_ind_urb_processing_sectors_xml,ok,NA,NA,NA,0,0
+module_gcameurope_iron_steel_trade_xml,ok,NA,NA,NA,0.1,0
+module_gcameurope_iron_steel_xml,ok,NA,NA,NA,0,0
+module_gcameurope_onshore_wind_xml,ok,NA,NA,NA,0,0
+module_gcameurope_other_industry_xml,ok,NA,NA,NA,0,0
+module_gcameurope_paper_xml,ok,NA,NA,NA,0.1,0
+module_gcameurope_prune_empty_ag_xml,ok,NA,NA,NA,0.9,0
+module_gcameurope_resources_xml,ok,NA,NA,NA,0,0
+module_gcameurope_ssp2_emissions_factors_xml,ok,NA,NA,NA,0,0
+module_gcameurope_transportation_UCD_CORE_xml,ok,NA,NA,NA,0.8,0
+module_gcameurope_water_demand_industry_xml,ok,NA,NA,NA,0,0
+module_gcameurope_water_demand_primary_xml,ok,NA,NA,NA,0,0
+module_gcameurope_water_supply_constrained_xml,ok,NA,NA,NA,0,0
+module_gcameurope_water_td_xml,ok,NA,NA,NA,0.1,0
+module_gcamusa_L101.nonghg_en_S_T_Y,ok,NA,NA,NA,0.7,0
+module_gcamusa_L103.ghg_an_S_T_Y,ok,NA,NA,NA,0.1,0
+module_gcamusa_L104.bcoc_en_S_T_Y,ok,NA,NA,NA,0.1,0
+module_gcamusa_L277.nonghg_prc,ok,NA,NA,NA,0.5,0
+module_modeltime_L200.modeltime,ok,NA,NA,NA,0,0
+module_modeltime_modeltime_xml,ok,NA,NA,NA,0,0
+module_sample_sample,ok,NA,NA,NA,0,0
+module_socio_IncomeElasticity_xml,ok,NA,NA,NA,0.2,0
+module_socio_L100.GDP_hist,ok,NA,NA,NA,0.2,0
+module_socio_L100.GTAP,ok,NA,NA,NA,0,0
+module_socio_L100.NationalAccounts,ok,NA,NA,NA,1.3,0
+module_socio_L100.Population_hist,ok,NA,NA,NA,13.3,0
+module_socio_L100.SSP_database,ok,NA,NA,NA,11.5,0
+module_socio_L101.Population,ok,NA,NA,NA,0.6,0
+module_socio_L102.GDP,ok,NA,NA,NA,0.4,0
+module_socio_L103.NationalAccounts,ok,NA,NA,NA,0.5,0
+module_socio_L106.income_distributions,ok,NA,NA,NA,0.4,0
+module_socio_L201.Pop_GDP_scenarios,ok,NA,NA,NA,0.1,0
+module_socio_L203.NationalAccounts,ok,NA,NA,NA,0.1,0
+module_socio_L2323.iron_steel_Inc_Elas_scenarios,ok,NA,NA,NA,0.3,0
+module_socio_L2324.Off_road_Inc_Elas_scenarios,ok,NA,NA,NA,0.1,0
+module_socio_L2325.chemical_Inc_Elas_scenarios,ok,NA,NA,NA,0,0
+module_socio_L2326.aluminum_Inc_Elas_scenarios,ok,NA,NA,NA,0.2,0
+module_socio_L2327.paper_Inc_Elas_scenarios,ok,NA,NA,NA,0,0
+module_socio_L281.macro_account_tracking,ok,NA,NA,NA,0.2,0
+module_socio_SSP_xml,ok,NA,NA,NA,0.1,0
+module_socioeconomics_macro_xml,ok,NA,NA,NA,0,0
+module_water_EFW_WWtrt_coefs_SSP_xml,ok,NA,NA,NA,0.1,0
+module_water_EFW_input_coefs_xml,ok,NA,NA,NA,0.1,0
+module_water_EFW_irrigation_xml,ok,NA,NA,NA,0,0
+module_water_EFW_manufacturing_xml,ok,NA,NA,NA,0,0
+module_water_EFW_municipal_xml,ok,NA,NA,NA,0,0
+module_water_L100.water_supply_runoff,ok,NA,NA,NA,0.1,0
+module_water_L101.water_supply_groundwater,ok,NA,NA,NA,0.3,0
+module_water_L102.water_supply_unlimited,ok,NA,NA,NA,0,0
+module_water_L103.water_basin_mapping,ok,NA,NA,NA,0.1,0
+module_water_L110.water_demand_primary,ok,NA,NA,NA,0.2,0
+module_water_L1233.Elec_water,ok,NA,NA,NA,2.4,0
+module_water_L132.water_demand_manufacturing,ok,NA,NA,NA,0.4,0
+module_water_L133.water_demand_livestock,ok,NA,NA,NA,0.3,0
+module_water_L145.water_demand_municipal,ok,NA,NA,NA,1.3,0
+module_water_L171.desalination,ok,NA,NA,NA,0.8,0
+module_water_L172.EFW_irrigation,ok,NA,NA,NA,0.1,0
+module_water_L173.EFW_manufacturing,ok,NA,NA,NA,1.2,0
+module_water_L174.EFW_municipal,ok,NA,NA,NA,1.4,0
+module_water_L201.water_resources_constrained,ok,NA,NA,NA,1.4,0
+module_water_L202.water_resources_unlimited,ok,NA,NA,NA,0.1,0
+module_water_L203.water_td,ok,NA,NA,NA,0.7,0
+module_water_L210.water_demand_primary,ok,NA,NA,NA,0.2,0
+module_water_L2233.electricity_water,ok,NA,NA,NA,1.6,0
+module_water_L232.water_demand_manufacturing,ok,NA,NA,NA,2.4,0
+module_water_L233.water_demand_livestock,ok,NA,NA,NA,0.1,0
+module_water_L245.water_demand_municipal,ok,NA,NA,NA,0.6,0
+module_water_L270.EFW_input_coefs,ok,NA,NA,NA,1,0
+module_water_L271.desalination,ok,NA,NA,NA,0.3,0
+module_water_L272.EFW_irrigation,ok,NA,NA,NA,0.2,0
+module_water_L273.EFW_manufacturing,ok,NA,NA,NA,0.4,0
+module_water_L274.EFW_municipal,ok,NA,NA,NA,0.2,0
+module_water_desalination_xml,ok,NA,NA,NA,0,0
+module_water_electricity_water_coefs_xml,ok,NA,NA,NA,0,0
+module_water_electricity_water_xml,ok,NA,NA,NA,0.3,0
+module_water_unlimited_water_supply_xml,ok,NA,NA,NA,0,0
+module_water_water_demand_industry_xml,ok,NA,NA,NA,0,0
+module_water_water_demand_livestock_xml,ok,NA,NA,NA,0,0
+module_water_water_demand_municipal_xml,ok,NA,NA,NA,0.1,0
+module_water_water_demand_primary_xml,ok,NA,NA,NA,0,0
+module_water_water_elec_liquids_limits_xml,ok,NA,NA,NA,0,0
+module_water_water_supply_constrained_xml,ok,NA,NA,NA,0.1,0
+module_water_water_supply_uncalibrated_xml,ok,NA,NA,NA,0,0
+module_water_water_td_xml,ok,NA,NA,NA,0.2,0

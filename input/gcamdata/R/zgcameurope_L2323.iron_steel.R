@@ -108,6 +108,10 @@ module_gcameurope_L2323.iron_steel <- function(command, ...) {
 
     TZ_steel_production_costs %>%
       # filter non-energy costs for GCAM model years
+      # HINDCAST2005: TransitionZero costs cover 2015-2021; if no model base year is covered, use the first
+      # available year (2015, as with base year 2015) relabelled as the final base year
+      mutate(Model_Year = if (any(Model_Year %in% MODEL_BASE_YEARS)) Model_Year else
+               if_else(Model_Year == min(Model_Year), as.integer(MODEL_FINAL_BASE_YEAR), as.integer(Model_Year))) %>%
       filter(Model_Year %in% c(MODEL_BASE_YEARS)) %>%
       rename(year=Model_Year,subsector= Primary_Production_Route,value=Value)%>%
       # remove energy and total costs from data
