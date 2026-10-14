@@ -408,14 +408,17 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       select(sector.name = supplysector, subsector.name = subsector, technology, year = period, lifetime, steepness, half.life) %>%
       bind_rows(L2234.GlobalTechSCurve_elecS_EUR)
 
-    # Adding an scurve behavior for renewables in 2015 so they don't all retire at once
+    # Smooth retirement of wind and solar for ALL vintages (not only the final base year), so that blocks built
+    # in the same period do not all retire at once (2025 and 2030 blocks otherwise die abruptly in 2055 and 2060).
+    # The median life (half.life) equals the GCAM-core hard lifetime (30 yr; 25 yr offshore), so on average the
+    # fleet lives as long as in core; the s-curve is truncated at lifetime + 10.
     L2234.GlobalIntTechSCurve_elecS_EUR <- L2234.GlobalIntTechLifetime_elecS_EUR %>%
       filter(subsector.name %in% c("solar", "wind"),
-             year == MODEL_FINAL_BASE_YEAR) %>%
-      # extend lifetime since we are adding s-curve
-      mutate(lifetime = lifetime + 10,
-             steepness = 0.1,
-             half.life = (lifetime / 2) + 5)
+             year >= MODEL_FINAL_BASE_YEAR) %>%
+      mutate(half.life = lifetime,
+             lifetime = lifetime + 10,
+             steepness = 0.15) %>%
+      select(sector.name, subsector.name, intermittent.technology, year, lifetime, steepness, half.life)
 
     # Energy Inputs for additional technologies such as battery
     L2234.StubTechEff_battery_elecS_EUR <- write_to_all_states(A23.elecS_stubtech_energy_inputs,
