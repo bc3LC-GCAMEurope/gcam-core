@@ -7,7 +7,9 @@
 region,sector,subsector,technology,1990,2005,2010,2015,2021,Units
 China,H2 central production,biomass,biomass to H2,0,0,0,0,0,MTC
 China,H2 central production,gas,natural gas steam reforming,0,0,0,0,0,MTC
-China,H2 wholesale dispensing,forecourt production,natural gas steam reforming,0,0,0,0,0,MTC
+China,H2 LDV,onsite production,natural gas steam reforming,0,0,0,0,0,MTC
+China,H2 MHDV,onsite production,natural gas steam reforming,0,0,0,0,0,MTC
+China,LH2,onsite production,natural gas steam reforming,0,0,0,0,0,MTC
 China,agricultural energy use,mobile,refined liquids,9.73505,9.73333,9.27303,11.6285,13.343,MTC
 China,agricultural energy use,stationary,biomass,1.29E-04,1.20E-04,5.29E-05,0,0,MTC
 China,agricultural energy use,stationary,coal,12.0426,10.9124,12.7945,15.5852,10.541,MTC

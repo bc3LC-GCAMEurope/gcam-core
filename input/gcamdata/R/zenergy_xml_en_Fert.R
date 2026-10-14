@@ -43,20 +43,30 @@ module_energy_en_Fert_xml <- function(command, ...) {
 
     all_data <- list(...)[[1]]
 
+    # Subsectors of the traded ammonia sector that belong to the European single market. In the EUR tables these live in
+    # the European_Single_Market region (the exporting members). The core tables (filtered by region = USA, which is where
+    # ALL traded technologies sit) still carry the same subsectors/technologies for the members, so they must be dropped
+    # here. Otherwise the USA traded ammonia sector gets extra fixed outputs (calOutputValue, no input) that are not
+    # matched by any demand, and GCAM scales down every calibrated ammonia export (and the ammonia production) to compensate.
+    ESM_member_subs <- get_data(all_data, "L2322.TechShrwt_TradedFert_EUR") %>%
+      filter(region != gcam.USA_REGION, !grepl("^global", subsector)) %>%
+      distinct(subsector)
+    drop_esm_members <- function(df) dplyr::anti_join(df, ESM_member_subs, by = "subsector")
+
     # Load required inputs
     L2322.Supplysector_Fert <- get_data(all_data, "L2322.Supplysector_Fert") %>% filter_regions_europe(inverse = TRUE)
     L2322.SectorUseTrialMarket_tra <- get_data(all_data, "L2322.SectorUseTrialMarket_tra") %>% filter_regions_europe(inverse = TRUE)
     L2322.FinalEnergyKeyword_Fert <- get_data(all_data, "L2322.FinalEnergyKeyword_Fert") %>% filter_regions_europe(inverse = TRUE)
-    L2322.SubsectorLogit_Fert <- get_data(all_data, "L2322.SubsectorLogit_Fert") %>% filter_regions_europe(inverse = TRUE)
-    L2322.SubsectorShrwtFllt_Fert <- get_data(all_data, "L2322.SubsectorShrwtFllt_Fert") %>% filter_regions_europe(inverse = TRUE)
-    L2322.SubsectorInterp_Fert <- get_data(all_data, "L2322.SubsectorInterp_Fert") %>% filter_regions_europe(inverse = TRUE)
+    L2322.SubsectorLogit_Fert <- get_data(all_data, "L2322.SubsectorLogit_Fert") %>% filter_regions_europe(inverse = TRUE) %>% drop_esm_members()
+    L2322.SubsectorShrwtFllt_Fert <- get_data(all_data, "L2322.SubsectorShrwtFllt_Fert") %>% filter_regions_europe(inverse = TRUE) %>% drop_esm_members()
+    L2322.SubsectorInterp_Fert <- get_data(all_data, "L2322.SubsectorInterp_Fert") %>% filter_regions_europe(inverse = TRUE) %>% drop_esm_members()
     L2322.StubTech_Fert <- get_data(all_data, "L2322.StubTech_Fert") %>% filter_regions_europe(inverse = TRUE)
     L2322.GlobalTechShrwt_Fert <- get_data(all_data, "L2322.GlobalTechShrwt_Fert") %>% filter_regions_europe(inverse = TRUE)
-    L2322.TechShrwt_TradedFert <- get_data(all_data, "L2322.TechShrwt_TradedFert") %>% filter_regions_europe(inverse = TRUE)
+    L2322.TechShrwt_TradedFert <- get_data(all_data, "L2322.TechShrwt_TradedFert") %>% filter_regions_europe(inverse = TRUE) %>% drop_esm_members()
     L2322.TechShrwt_TradedFert_EUR <- get_data(all_data, "L2322.TechShrwt_TradedFert_EUR")
     L2322.GlobalTechCoef_Fert <- get_data(all_data, "L2322.GlobalTechCoef_Fert") %>% filter_regions_europe(inverse = TRUE)
     L2322.TechCoef_TradedFert_EUR <- get_data(all_data, "L2322.TechCoef_TradedFert_EUR")
-    L2322.TechCoef_TradedFert <- get_data(all_data, "L2322.TechCoef_TradedFert") %>% filter_regions_europe(inverse = TRUE)
+    L2322.TechCoef_TradedFert <- get_data(all_data, "L2322.TechCoef_TradedFert") %>% filter_regions_europe(inverse = TRUE) %>% drop_esm_members()
     L2322.StubTechMarket_FertImports <- get_data(all_data, "L2322.StubTechMarket_FertImports") %>% filter_regions_europe(inverse = TRUE)
     L2322.GlobalTechCost_Fert <- get_data(all_data, "L2322.GlobalTechCost_Fert") %>% filter_regions_europe(inverse = TRUE)
     L2322.GlobalTechCapture_Fert <- get_data(all_data, "L2322.GlobalTechCapture_Fert") %>% filter_regions_europe(inverse = TRUE)
@@ -64,7 +74,7 @@ module_energy_en_Fert_xml <- function(command, ...) {
     L2322.GlobalTechProfitShutdown_Fert <- get_data(all_data, "L2322.GlobalTechProfitShutdown_Fert") %>% filter_regions_europe(inverse = TRUE)
     L2322.StubTechProd_FertProd <- get_data(all_data, "L2322.StubTechProd_FertProd") %>% filter_regions_europe(inverse = TRUE)
     L2322.StubTechCoef_Fert <- get_data(all_data, "L2322.StubTechCoef_Fert") %>% filter_regions_europe(inverse = TRUE)
-    L2322.Production_FertExport <- get_data(all_data, "L2322.Production_FertExport") %>% filter_regions_europe(inverse = TRUE)
+    L2322.Production_FertExport <- get_data(all_data, "L2322.Production_FertExport") %>% filter_regions_europe(inverse = TRUE) %>% drop_esm_members()
     L2322.Production_FertExport_EUR <- get_data(all_data, "L2322.Production_FertExport_EUR")
     L2322.StubTechProd_FertImport <- get_data(all_data, "L2322.StubTechProd_FertImport") %>% filter_regions_europe(inverse = TRUE)
     L2322.StubTechProd_FertDomCons <- get_data(all_data, "L2322.StubTechProd_FertDomCons") %>% filter_regions_europe(inverse = TRUE)

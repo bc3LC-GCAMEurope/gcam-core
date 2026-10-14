@@ -108,7 +108,6 @@ module_energy_L120.offshore_wind <- function(command, ...) {
     L1233.globaltech_OMfixed_ATB %>%
       filter(technology == "wind_offshore",
              year == MODEL_FINAL_BASE_YEAR) %>%
-      distinct(value) %>%
       pull(OM.fixed) -> L120.offshore_wind_OMfixed
 
     # NOTE that the process for calculating supply/ price is different for offshore wind (vs. onshore wind).  For offshore wind, we

@@ -21,7 +21,6 @@
 module_energy_L1323.iron_steel <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "energy/steel_prod_process",
-             FILE = "energy/steel_intensity",
              FILE = "energy/WSA_direct_reduced_iron_2008_2019.csv",
              FILE = "common/iso_GCAM_regID",
              FILE = "common/GCAM_region_names",
@@ -236,9 +235,6 @@ module_energy_L1323.iron_steel <- function(command, ...) {
              scalar = if_else(scalar>=1.5, 1.5, scalar), # clip the scaling to a max of 1.5x and min of 1/1.5x the bottom-up estimates, to ensure reasonable IOcoefs
              scalar = if_else(scalar<=1/1.5, 1/1.5, scalar)) -> Scaler
 
-
-
-
     # Intensity scaled = Intensity from the literature times scaler.
     Intensity_literature %>%
       left_join(Scaler %>% select(GCAM_region_ID, year, fuel, scalar),by = c("GCAM_region_ID", "fuel", "year")) %>%
@@ -257,7 +253,6 @@ module_energy_L1323.iron_steel <- function(command, ...) {
       left_join(Intensity_scaled %>%
                   rename(technology=subsector), by = c("GCAM_region_ID", "year", "technology", "fuel")) %>%
       na.omit
-
 
     # Use IO to calculate energy input
     L1323.out_Mt_R_iron_steel_Yh %>%

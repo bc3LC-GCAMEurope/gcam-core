@@ -182,6 +182,7 @@ CONV_BTU_KJ <- 1.055056
 CONV_MMBTU_GJ <- 1.055056
 CONV_MMBTU_KGH2 <- 0.113939965425114 # MMBTU/kg H2 - LHV Source: H2 CCTP Workbook.xls (Used for older GCAM assumptions)
 CONV_GJ_KGH2 <- 0.12021 #GJ/kg H2 - LHV
+CONV_NG_HHV_LHV <- 0.905
 
 # Distance
 CONV_MILE_KM <- 1.60934 # Mile to km
@@ -487,7 +488,7 @@ aglu.CROP_GLU_DELIMITER   <- "_"  # delimiter between the crop name and GLU name
 aglu.GLU_NDIGITS          <- 3    # number of digits in the geographic land unit identifier codes
 aglu.IRR_DELIMITER        <- "_"  # delimiter between the appended crop x GLU and irrigation level
 aglu.LT_GLU_DELIMITER     <-      # delimiter between the land use type name and GLU name. should be the same as the crop-glu delimiter
-aglu.MGMT_DELIMITER       <- "_"  # delimiter between appended tech name and management level
+  aglu.MGMT_DELIMITER       <- "_"  # delimiter between appended tech name and management level
 
 # AgLU digits constants to control the number of digits for rounding going into XMLs.
 aglu.DIGITS_AGPRODCHANGE  <- 4 # rate of change in yield values
@@ -531,10 +532,10 @@ energy.SATIATION_YEAR             <- MODEL_FINAL_BASE_YEAR # Needs to be the las
 energy.UCD_EN_YEAR                <- 2005        # UCD transportation year to use to compute shares for allocation of energy to mode/technology/fuel within category/fuel
 energy.WIND.BASE.COST.YEAR        <- 2005        # Base cost year for wind, used in capacity factor calculations
 energy.FUEL_PRICES_MEAN_PERIOD    <- 5           # number of years used for calculating moving average for annual fossil fuel prices
-
+energy.H2A_CURRENT_YEAR           <- 2020        # Year of H2A "current" assumptions
 energy.ELEC_USE_BACKUP <- FALSE # constant for switching to old approach to variable renewable integration
-                                # FALSE (default) uses new value factor approach
-                                # TRUE eschews new approach and uses older backup capacity / backup electricity approach
+# FALSE (default) uses new value factor approach
+# TRUE eschews new approach and uses older backup capacity / backup electricity approach
 energy.BACKUP_SECTORS <- c("backup_electricity", "csp_backup")
 
 energy.REG_NG_MARKET <- "regional natural gas" #Name of the regional natural gas market

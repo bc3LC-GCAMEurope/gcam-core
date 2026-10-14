@@ -14,7 +14,9 @@ module_gcameurope_L144.building_det_en(command, ...)
 \value{
 Depends on \code{command}: either a vector of required inputs,
 a vector of output names, or (if \code{command} is "MAKE") all
-the generated outputs: \code{L144.end_use_eff_EUR}, \code{L144.shell_eff_R_Y_EUR}, \code{L144.in_EJ_R_bld_serv_F_Yh_EUR}, \code{L144.in_EJ_R_bld_serv_tech_F_Yh_EUR}, \code{L144.NEcost_75USDGJ_EUR}, \code{L144.internal_gains_EUR}, \code{L144.base_service_EJ_serv_EUR}, \code{L144.prices_bld_EUR}. The corresponding file in the
+the generated outputs: \code{L144.end_use_eff_EUR}, \code{L144.shell_eff_R_Y_EUR}, \code{L144.in_EJ_R_bld_serv_F_Yh_EUR}, \code{L144.in_EJ_R_bld_serv_tech_F_Yh_EUR},
+\code{L144.NEcost_75USDGJ_EUR}, \code{L144.internal_gains_EUR}, \code{L144.base_service_EJ_serv_EUR}, \code{L144.prices_bld_EUR}, \code{L144.base_service_EJ_serv_hh_EUR},
+\code{L144.base_service_EJ_serv_fuel_hh_EUR}. The corresponding file in the
 original data system was \code{LA144.building_det_en.R} (energy level1).
 }
 \description{

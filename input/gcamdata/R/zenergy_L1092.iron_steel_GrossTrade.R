@@ -112,7 +112,7 @@ module_energy_L1092.iron_steel_GrossTrade <- function(command, ...){
         filter(Metric == WSA_metric)-> WS
       names(WS)[4] <- value_name
       return(WS)
-      }
+    }
 
     WSA_steel_prod <- WSA_trade_data("Crude Steel Production","production")
     WSA_steel_cons <- WSA_trade_data("Apparent Steel Consumption (Crude Eq.)","consumption")
@@ -149,24 +149,24 @@ module_energy_L1092.iron_steel_GrossTrade <- function(command, ...){
       #if production is equal to zero in the model base-year add a minimum calibration value of 0.01 Mt
       #This minimum calibration value is 5 times less than the smallest producer of steel in 2015
       mutate(#production=ifelse(production==0 & year == MODEL_FINAL_BASE_YEAR,0.01,production),
-             #estimate the imports and exports scaling factor to match the reported WSA steel consumption data
-             #calculate scaling factor (x) so that consumption = production - x*exports + x*imports
-             scaling_factor=(consumption-production)/(imports-exports),
-             #re-evaluate the exports and imports by multiplying with the scaling factor
-             exports_reval=scaling_factor*exports,imports_reval=scaling_factor*imports,
-             #for regions with negative scaling factors use the WSA imports and exports
-             exports_reval=if_else(exports_reval<0,exports,exports_reval),imports_reval=if_else(imports_reval<0,imports,imports_reval),
-             #estimate the % increase in imports and exports after scaling
-             diff_exports=if_else(exports==0,0,((exports_reval-exports)/exports)*100),
-             diff_imports=if_else(imports==0,0,((imports_reval-imports)/imports)*100),
-             #for regions with % increase in imports and exports greater than 10% (tolerance level) use the reported WSA imports and exports
-             exports_reval=if_else(diff_exports>=10 | diff_exports <=-10,exports,exports_reval),imports_reval=if_else(diff_imports >=10 |diff_imports <=-10,imports,imports_reval),
-             #estimate the domestic supply of iron and steel (production minus exports)
-             #if this value is negative assume exports and imports for this region are 0
-             exports_reval=if_else(production-exports_reval<0,0,exports_reval),imports_reval=if_else(production-exports_reval<0,0,imports_reval),
-             domestic_supply=production-exports_reval,
-             #estimate steel consumption using the final scaled imports and exports
-             consumption_reval=production-exports_reval+imports_reval) %>%
+        #estimate the imports and exports scaling factor to match the reported WSA steel consumption data
+        #calculate scaling factor (x) so that consumption = production - x*exports + x*imports
+        scaling_factor=(consumption-production)/(imports-exports),
+        #re-evaluate the exports and imports by multiplying with the scaling factor
+        exports_reval=scaling_factor*exports,imports_reval=scaling_factor*imports,
+        #for regions with negative scaling factors use the WSA imports and exports
+        exports_reval=if_else(exports_reval<0,exports,exports_reval),imports_reval=if_else(imports_reval<0,imports,imports_reval),
+        #estimate the % increase in imports and exports after scaling
+        diff_exports=if_else(exports==0,0,((exports_reval-exports)/exports)*100),
+        diff_imports=if_else(imports==0,0,((imports_reval-imports)/imports)*100),
+        #for regions with % increase in imports and exports greater than 10% (tolerance level) use the reported WSA imports and exports
+        exports_reval=if_else(diff_exports>=10 | diff_exports <=-10,exports,exports_reval),imports_reval=if_else(diff_imports >=10 |diff_imports <=-10,imports,imports_reval),
+        #estimate the domestic supply of iron and steel (production minus exports)
+        #if this value is negative assume exports and imports for this region are 0
+        exports_reval=if_else(production-exports_reval<0,0,exports_reval),imports_reval=if_else(production-exports_reval<0,0,imports_reval),
+        domestic_supply=production-exports_reval,
+        #estimate steel consumption using the final scaled imports and exports
+        consumption_reval=production-exports_reval+imports_reval) %>%
       select(GCAM_region,year,production,imports_reval,exports_reval,consumption_reval,domestic_supply) %>%
       mutate(production=replace_na(production,0),imports_reval=replace_na(imports_reval,0),exports_reval=replace_na(exports_reval,0),
              consumption_reval=replace_na(consumption_reval,0),domestic_supply=replace_na(domestic_supply,0)) -> LB1092.Tradebalance_iron_steel_Mt_R_Y
@@ -254,10 +254,37 @@ module_energy_L1092.iron_steel_GrossTrade <- function(command, ...){
 
     #remove intra region trade from imports and exports and add this amount to domestic supply
     LB1092.Tradebalance_iron_steel_Mt_R_Y %>%
-      left_join(intra_regional_trade_Mt_R_Y,by=c("GCAM_region","year"))%>%
-      mutate(value=if_else(metric %in% c("exports_reval","imports_reval"),value-intra_exports,value),
-             value=if_else(metric %in% c("domestic_supply"),value+intra_exports,value))%>%
-      select(-intra_exports)-> LB1092.Tradebalance_iron_steel_Mt_R_Y
+      filter(metric %in% c("production","consumption_reval"))-> prod_cons
+
+    # Adjust imports by subtracting intra-regional exports
+    LB1092.Tradebalance_iron_steel_Mt_R_Y %>%
+      filter(metric == "imports_reval") %>%
+      left_join(intra_regional_trade_Mt_R_Y,by=c("GCAM_region","year")) %>%
+      mutate(value_adj=if_else(value > intra_exports,value-intra_exports,value)) %>%
+      mutate(dom_supply_adjust=if_else(value > intra_exports,intra_exports,0)) %>%
+      select(-value)%>%
+      rename(value=value_adj)-> imports
+
+    # Adjust exports by removing intra-regional contribution
+    LB1092.Tradebalance_iron_steel_Mt_R_Y %>%
+      filter(metric == "exports_reval") %>%
+      left_join(imports %>%
+                  select(-value,-intra_exports,-metric),by=c("GCAM_region","year")) %>%
+      mutate(value=value-dom_supply_adjust) %>%
+      select(-dom_supply_adjust)-> exports
+
+    # Adjust domestic supply by adding back the intra-regional trade adjustment
+    LB1092.Tradebalance_iron_steel_Mt_R_Y %>%
+      filter(metric == "domestic_supply") %>%
+      left_join(imports %>%
+                  select(-value,-intra_exports,-metric),by=c("GCAM_region","year")) %>%
+      mutate(value=value+dom_supply_adjust) %>%
+      select(-dom_supply_adjust)-> dom_supply
+
+    # Combine all adjusted data
+    LB1092.Tradebalance_iron_steel_Mt_R_Y_ADJ <- rbind(prod_cons,imports %>%
+                                                         select(-dom_supply_adjust,
+                                                                -intra_exports),dom_supply,exports)
 
     # GCAM Europe Single Market Trade
     LB1092.Single_Market_Trade_Steel <- Rt_iron_steel_bilateral_trade_data %>%

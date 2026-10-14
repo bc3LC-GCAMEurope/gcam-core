@@ -217,9 +217,9 @@ module_energy_L225.hydrogen <- function(command, ...) {
                                                               ref_scenario_table = L225.GlobalTechCost_h2_ref,
                                                               value_var = "input.cost")
     L225.GlobalTechCost_h2_lotech <- generate_alt_scenario_table(full_table = L225.GlobalTechCost_h2_scen,
-                                                                 alt_scenario_name = "high",
-                                                                 ref_scenario_table = L225.GlobalTechCost_h2_ref,
-                                                                 value_var = "input.cost")
+                                                              alt_scenario_name = "high",
+                                                              ref_scenario_table = L225.GlobalTechCost_h2_ref,
+                                                              value_var = "input.cost")
 
     # L225.StubTechCost_h2_[scen]: Costs of global technologies for hydrogen by scenario
     # Stub-technology costs include two components:
@@ -453,8 +453,8 @@ module_energy_L225.hydrogen <- function(command, ...) {
       select(-value)
 
     L225.GlobalTechCoef_h2_ref <- left_join_error_no_match(L225.GlobalTechCoef_h2_ref, L225.globaltech_losses,
-                                                           by = c(sector.name = "supplysector", subsector.name = "subsector", "technology", "minicam.energy.input", "year"),
-                                                           ignore_columns = c("Non.CO2", "multiplier")) %>%
+                                        by = c(sector.name = "supplysector", subsector.name = "subsector", "technology", "minicam.energy.input", "year"),
+                                        ignore_columns = c("Non.CO2", "multiplier")) %>%
       mutate(coefficient = if_else(is.na(multiplier),
                                    coefficient,
                                    round(coefficient * multiplier, energy.DIGITS_COEFFICIENT))) %>%

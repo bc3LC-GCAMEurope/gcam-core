@@ -8,8 +8,9 @@
 #' @param ... other optional parameters, depending on command
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
-#' the generated outputs: \code{L125.globaltech_coef},  \code{L125.globaltech_cost},  \code{L125.Electrolyzer_IdleRatio_Params}.
-#' @details Takes inputs from H2A and generates GCAM's assumptions by technology and year
+#' the generated outputs: \code{L125.globaltech_coef},  \code{L125.globaltech_cost},
+#' \code{L125.StubTechCost_h2_hybrid_scen}, \code{L125.StubTechCoef_h2_hybrid_scen}.
+#' @details Takes inputs from H2A-Lite and generates GCAM's assumptions by technology and year
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr arrange filter group_by mutate select if_else
 #' @importFrom tidyr complete nesting
@@ -62,10 +63,10 @@ module_energy_L125.hydrogen <- function(command, ...) {
     L1233.globaltech_OMfixed_ATB <- get_data(all_data, "L1233.globaltech_OMfixed_ATB", strip_attributes = TRUE)
     L223.StubTechCapFactor_elec <- get_data(all_data, "L223.StubTechCapFactor_elec", strip_attributes = TRUE)
 
-
     # ===================================================
 
     # Process data
+
     H2ALite_TEAdata %>%
       filter(Region=="US Average",
              Technology %in% unique(H2ALite_TEA_mapping$TechnologyH2A)) %>%
@@ -112,10 +113,12 @@ module_energy_L125.hydrogen <- function(command, ...) {
       ungroup() %>%
       inner_join(H2ALite_TEA_mapping, by = "TechnologyH2A") %>%
       select(Scenario, sector.name, subsector.name, technology, year, minicam.energy.input, coefficient) %>%
+      # GCAM-Europe: hydrogen has its own electricity (elect_td_h2, elect_td_en) and gas (delivered gas h2) T&D sectors
       mutate(minicam.energy.input = if_else(subsector.name == "onsite production" & minicam.energy.input == "regional natural gas",
-                                            "delivered gas", minicam.energy.input),
+                                            "delivered gas h2", minicam.energy.input),
              minicam.energy.input = if_else(subsector.name == "onsite production" & minicam.energy.input == "elect_td_ind" & sector.name != "H2 industrial",
-                                            "elect_td_trn", minicam.energy.input),
+                                            "elect_td_h2", minicam.energy.input),
+             minicam.energy.input = if_else(minicam.energy.input == "elect_td_ind", "elect_td_en", minicam.energy.input),
              minicam.energy.input = if_else(subsector.name == "nuclear", "nuclearFuelGenIII", minicam.energy.input),
              coefficient = if_else(subsector.name == "nuclear", coefficient * 3, coefficient))
 
@@ -142,7 +145,7 @@ module_energy_L125.hydrogen <- function(command, ...) {
 
     # Multiply the non-fuel LCOE (cost of electricity) by the hydrogen IOcoef
     L125.nuclear_hydrogen_costs_scen <- left_join_error_no_match(L125.nuclear_elec_costs_scen, L125.nuc_IO,
-                                                                 by = "year") %>%
+                                                             by = "year") %>%
       mutate(minicam.non.energy.input = "nuclear electricity generation",
              input.cost = round(nonfuel.LCOE * coefficient, energy.DIGITS_COST)) %>%
       select(Scenario, sector.name, subsector.name, technology, year, minicam.non.energy.input, input.cost)

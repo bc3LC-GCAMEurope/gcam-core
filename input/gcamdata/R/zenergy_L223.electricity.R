@@ -973,7 +973,7 @@ module_energy_L223.electricity <- function(command, ...) {
       mutate(stub.technology = "wind_offshore") %>%
       # No error_no_match because some EU regions don't have offshore
       left_join(L120.RegCapFactor_offshore_wind ,
-                by = c("region")) %>%
+                               by = c("region")) %>%
       mutate(capacity.factor = round(CFmax, energy.DIGITS_CAPACITY_FACTOR)) %>%
       select(region, supplysector, subsector, stub.technology, year, capacity.factor) -> L223.StubTechCapFactor_elec_offshore_wind
 
@@ -1452,19 +1452,19 @@ module_energy_L223.electricity <- function(command, ...) {
       L223.StubTechSecOut_desal
 
     return_data(L223.Supplysector_elec, L223.ElecReserve, L223.SectorUseTrialMarket_elec, L223.SubsectorLogit_elec, L223.SubsectorShrwt_elec,
-                L223.SubsectorShrwtFllt_elec, L223.SubsectorShrwt_coal, L223.SubsectorShrwt_nuc, L223.SubsectorShrwt_renew,
-                L223.SubsectorInterp_elec, L223.SubsectorInterpTo_elec, L223.StubTech_elec,
-                L223.GlobalIntTechEff_elec, L223.GlobalTechEff_elec, L223.GlobalTechCapFac_elec,
-                L223.GlobalIntTechCapFac_elec, L223.GlobalTechCapital_elec, L223.GlobalIntTechCapital_elec,
-                L223.GlobalTechOMfixed_elec, L223.GlobalIntTechOMfixed_elec, L223.GlobalTechOMvar_elec,
-                L223.GlobalIntTechOMvar_elec, L223.GlobalTechShrwt_elec, L223.GlobalTechInterp_elec,
-                L223.GlobalIntTechShrwt_elec, L223.PrimaryRenewKeyword_elec, L223.PrimaryRenewKeywordInt_elec,
-                L223.AvgFossilEffKeyword_elec, L223.GlobalTechCapture_elec, L223.GlobalIntTechValueFactor_elec, L223.GlobalIntTechBackup_elec,
-                L223.StubTechCapFactor_elec,L223.StubTechCost_offshore_wind, L223.GlobalTechShutdown_elec,
-                L223.GlobalIntTechShutdown_elec, L223.GlobalTechSCurve_elec, L223.GlobalIntTechSCurve_elec,
-                L223.GlobalTechLifetime_elec, L223.GlobalIntTechLifetime_elec, L223.GlobalTechProfitShutdown_elec,
-                L223.GlobalIntTechProfitShutdown_elec, L223.StubTechCalInput_elec, L223.StubTechFixOut_elec,
-                L223.StubTechFixOut_hydro, L223.StubTechProd_elec, L223.StubTechEff_elec, L223.StubTechSecOut_desal)
+     L223.SubsectorShrwtFllt_elec, L223.SubsectorShrwt_coal, L223.SubsectorShrwt_nuc, L223.SubsectorShrwt_renew,
+      L223.SubsectorInterp_elec, L223.SubsectorInterpTo_elec, L223.StubTech_elec,
+      L223.GlobalIntTechEff_elec, L223.GlobalTechEff_elec, L223.GlobalTechCapFac_elec,
+      L223.GlobalIntTechCapFac_elec, L223.GlobalTechCapital_elec, L223.GlobalIntTechCapital_elec,
+      L223.GlobalTechOMfixed_elec, L223.GlobalIntTechOMfixed_elec, L223.GlobalTechOMvar_elec,
+      L223.GlobalIntTechOMvar_elec, L223.GlobalTechShrwt_elec, L223.GlobalTechInterp_elec,
+      L223.GlobalIntTechShrwt_elec, L223.PrimaryRenewKeyword_elec, L223.PrimaryRenewKeywordInt_elec,
+       L223.AvgFossilEffKeyword_elec, L223.GlobalTechCapture_elec, L223.GlobalIntTechValueFactor_elec, L223.GlobalIntTechBackup_elec,
+       L223.StubTechCapFactor_elec,L223.StubTechCost_offshore_wind, L223.GlobalTechShutdown_elec,
+       L223.GlobalIntTechShutdown_elec, L223.GlobalTechSCurve_elec, L223.GlobalIntTechSCurve_elec,
+       L223.GlobalTechLifetime_elec, L223.GlobalIntTechLifetime_elec, L223.GlobalTechProfitShutdown_elec,
+       L223.GlobalIntTechProfitShutdown_elec, L223.StubTechCalInput_elec, L223.StubTechFixOut_elec,
+       L223.StubTechFixOut_hydro, L223.StubTechProd_elec, L223.StubTechEff_elec, L223.StubTechSecOut_desal)
   } else {
     stop("Unknown command")
   }

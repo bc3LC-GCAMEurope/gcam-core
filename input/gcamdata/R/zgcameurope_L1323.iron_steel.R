@@ -21,13 +21,12 @@
 module_gcameurope_L1323.iron_steel <- function(command, ...) {
   if(command == driver.DECLARE_INPUTS) {
     return(c(FILE = "energy/steel_prod_process",
-             FILE = "energy/steel_intensity",
              FILE = "energy/WSA_direct_reduced_iron_2008_2019.csv",
              FILE = "common/iso_GCAM_regID",
              FILE = "common/GCAM_region_names",
-             FILE = "energy/A323.globaltech_coef",
              FILE = "gcam-europe/mappings/enduse_fuel_aggregation",
              FILE = "energy/A323.subsector_interp",
+             FILE = "energy/A323.globaltech_coef",
              FILE = "energy/calibrated_techs",
              FILE = "energy/A_regions",
              "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
@@ -57,14 +56,14 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
     L1322.in_EJ_R_indenergy_F_Yh_EUR <- get_data(all_data, "L1322.in_EJ_R_indenergy_F_Yh_EUR", strip_attributes = TRUE)
     LB1092.Tradebalance_iron_steel_Mt_R_Y <- get_data(all_data, "LB1092.Tradebalance_iron_steel_Mt_R_Y", strip_attributes = TRUE)
     L1012.en_bal_EJ_R_Si_Fi_Yh_EUR <- get_data(all_data, "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", strip_attributes = TRUE)
-    iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID", strip_attributes = TRUE) %>%
+    iso_GCAM_regID <- get_data(all_data, "common/iso_GCAM_regID") %>%
       filter_regions_europe()
-    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names", strip_attributes = TRUE) %>%
+    GCAM_region_names <- get_data(all_data, "common/GCAM_region_names") %>%
       filter_regions_europe()
-    enduse_fuel_aggregation <- get_data(all_data, "gcam-europe/mappings/enduse_fuel_aggregation", strip_attributes = TRUE)
+    enduse_fuel_aggregation <- get_data(all_data, "gcam-europe/mappings/enduse_fuel_aggregation")
     A_regions <- get_data(all_data, "energy/A_regions", strip_attributes = TRUE)
-    A323.globaltech_coef <- get_data(all_data,"energy/A323.globaltech_coef",strip_attributes = TRUE)
-    calibrated_techs <- get_data(all_data,"energy/calibrated_techs", strip_attributes = TRUE)
+    A323.globaltech_coef <- get_data(all_data, "energy/A323.globaltech_coef", strip_attributes = TRUE)
+    calibrated_techs <- get_data(all_data, "energy/calibrated_techs", strip_attributes = TRUE)
 
     # 1. Estimate DRI (direct reduced iron) consumption ============================================================
     # from country-wise WSA DRI production, imports, and exports data
@@ -176,10 +175,10 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
     # It is important to linearly interpolate these sub sector share weights to 1 since we add a negligible steel production to these sub sectors in the base-year for future growth (line 78),
     # which leads to incredibly low share-weights in the base-year and therefore no future expansion
     L1323.SubsectorInterp_iron_steel_EUR$to.year[which(L1323.SubsectorInterp_iron_steel_EUR$region %in% unique((L1323.index %>%
-                                                                                                          filter(BLASTFUR == 0 |`EAF with scrap`== 0 |`EAF with DRI` == 0))$region))] <- 2100
+                                                                                                                  filter(BLASTFUR == 0 |`EAF with scrap`== 0 |`EAF with DRI` == 0))$region))] <- 2100
 
     L1323.SubsectorInterp_iron_steel_EUR$interpolation.function[which(L1323.SubsectorInterp_iron_steel_EUR$region %in% unique((L1323.index %>%
-                                                                                                                         filter(BLASTFUR == 0 |`EAF with scrap`== 0 |`EAF with DRI` == 0))$region))] <- "linear"
+                                                                                                                                 filter(BLASTFUR == 0 |`EAF with scrap`== 0 |`EAF with DRI` == 0))$region))] <- "linear"
 
     # 4a. Calculate energy consumption ==============================================================
     # Get steel energy use from Eurostat energy balances
@@ -207,7 +206,7 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
       rename(fuel=minicam.energy.input, value=`1971`)
 
     # Calculate bottom-up energy consumption = production * intensity from literature
-    Intensity_literature <- L1323.out_Mt_R_iron_steel_Yh %>%
+    Intensity_literature <- L1323.out_Mt_R_iron_steel_Yh_EUR %>%
       rename(output = value) %>%
       left_join(A_regions, by = "GCAM_region_ID") %>%
       select(GCAM_region_ID, year, subsector, output, steel_region) %>%
@@ -292,6 +291,7 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
       L1323.in_EJ_R_indenergy_F_Yh_EUR
 
     # 4b. Adjust negative energy use ============================================================
+
     # Identify rows with negative energy use
     L1323.in_EJ_R_indenergy_F_Yh_EUR_tmp %>%
       filter(value < 0) %>%
@@ -304,6 +304,8 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
       mutate(coefficient = if_else(replace_na(value, 0) < 0, 0, coefficient),value = NULL) ->
       L1323.IO_GJkg_R_iron_steel_F_Yh_EUR
 
+    #Recalculate
+
     # Recalculate the input steel energy with revised IO coefficients
     L1323.out_Mt_R_iron_steel_Yh_EUR %>%
       # 10/11/2019 gpk modification: in order to avoid assigning output (and energy consumption) to technologies that do
@@ -315,7 +317,7 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
       select(GCAM_region_ID, year, subsector, technology, fuel, value) %>%
       rename(minicam.energy.input=fuel)%>%
       left_join(calibrated_techs, by=c("subsector","technology","minicam.energy.input")) %>%
-      select(GCAM_region_ID,year,subsector,technology,fuel,value)-> L1323.in_EJ_R_iron_steel_F_Y
+      select(GCAM_region_ID,year,subsector,technology,fuel,value)-> L1323.in_EJ_R_iron_steel_F_Y_EUR
 
     # Redo the iron and steel energy use and other industrial energy use subtraction
     L1322.in_EJ_R_indenergy_F_Yh_EUR %>%
@@ -326,6 +328,7 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
       replace_na(list(value = 0)) %>%
       mutate(value = raw - value , raw = NULL) ->
       L1323.in_EJ_R_indenergy_F_Yh_EUR
+
 
     # Produce outputs ===================================================
     L1323.out_Mt_R_iron_steel_Yh_EUR %>%
@@ -342,7 +345,7 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
       add_units("GJ/kg steel") %>%
       add_comments("IO coefficients for steel") %>%
       add_legacy_name("L1323.IO_GJkg_R_iron_steel_F_Yh_EUR") %>%
-      add_precursors( "energy/steel_prod_process", "L1012.en_bal_EJ_R_Si_Fi_Yh", "energy/mappings/enduse_fuel_aggregation",
+      add_precursors( "energy/steel_prod_process", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "gcam-europe/mappings/enduse_fuel_aggregation",
                       "energy/calibrated_techs", "energy/A_regions") ->
       L1323.IO_GJkg_R_iron_steel_F_Yh_EUR
 
@@ -351,7 +354,7 @@ module_gcameurope_L1323.iron_steel <- function(command, ...) {
       add_units("Exajoules") %>%
       add_comments("Calculated by steel production and IO coefficients") %>%
       add_legacy_name("L1323.in_EJ_R_iron_steel_F_Y_EUR") %>%
-      add_precursors("energy/steel_prod_process","energy/A323.globaltech_coef", "L1012.en_bal_EJ_R_Si_Fi_Yh", "energy/mappings/enduse_fuel_aggregation") ->
+      add_precursors("energy/steel_prod_process","energy/A323.globaltech_coef", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "gcam-europe/mappings/enduse_fuel_aggregation") ->
       L1323.in_EJ_R_iron_steel_F_Y_EUR
 
     L1323.in_EJ_R_indenergy_F_Yh_EUR %>%

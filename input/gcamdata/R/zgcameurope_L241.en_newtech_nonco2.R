@@ -309,6 +309,7 @@ module_gcameurope_L241.en_newtech_nonco2 <- function(command, ...) {
                      "energy/A23.globaltech_input_driver",
                      "energy/A25.globaltech_input_driver",
                      "energy/A26.globaltech_input_driver",
+                     "emissions/A41.H2_globaltech_input_driver",
                      "L111.nonghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR",
                      "L112.ghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR")  ->
       L241.nonco2_tech_coeff_EUR
@@ -351,7 +352,6 @@ module_gcameurope_L241.en_newtech_nonco2 <- function(command, ...) {
                      "emissions/A41.tech_coeff",
                      "gcam-europe/A51.max_reduction_EUR",
                      "gcam-europe/A51.steepness_EUR",
-                     "emissions/A41.H2_globaltech_input_driver",
                      "L111.nonghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR",
                      "L112.ghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR")  ->
       L241.nonco2_steepness_EUR

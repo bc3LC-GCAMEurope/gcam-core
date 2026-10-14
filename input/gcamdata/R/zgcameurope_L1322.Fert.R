@@ -26,6 +26,7 @@ module_gcameurope_L1322.Fert <- function(command, ...) {
       FILE = "energy/mappings/IEA_ctry",
       FILE = "energy/IEA_Fert_fuel_data",
       "L142.ag_Fert_Prod_MtN_ctry_Y",
+      "L1322.Fert_GrossTrade_Mt_R_Y",
       FILE = "energy/H2A_Prod_Tech",
       FILE = "energy/A21.globaltech_cost",
       FILE = "energy/A22.globaltech_cost",
@@ -38,7 +39,8 @@ module_gcameurope_L1322.Fert <- function(command, ...) {
       "L1322.IO_R_Fert_F_Yh_EUR",
       "L1322.in_EJ_R_indenergy_F_Yh_EUR",
       "L1322.in_EJ_R_indfeed_F_Yh_EUR",
-      "L1322.Fert_NEcost_75USDkgNH3_F_EUR")
+      "L1322.Fert_NEcost_75USDkgNH3_F_EUR",
+      "L1322.Fert_GrossTrade_Mt_R_Y_EUR")
 
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -378,6 +380,42 @@ module_gcameurope_L1322.Fert <- function(command, ...) {
                                                                    L1322.Fert_NEcost_75USDkgNH3_oil,
                                                                    L1322.Fert_NEcost_75USDkgNH3_H2))
 
+    # Creating final output table "Fertilizer gross trade by GCAM region / year" ----
+    # Gross exports and imports of ammonia in the final base year are calculated globally in the core module L1322.Fert
+    # (bilateral trade scaled to FAO net exports). Here we keep the European regions and re-apply the final adjustment
+    # (exports cannot exceed production) using the fertilizer production of this chunk (L1322.Fert_Prod_MtNH3_R_F_Y_EUR)
+    L1322.Fert_Prod_MtN_R_fby_EUR <- L1322.Fert_Prod_MtNH3_R_F_Y_EUR %>%
+      filter(year == max(MODEL_BASE_YEARS)) %>%
+      group_by(GCAM_region_ID) %>%
+      summarise(Prod_MtN = sum(value) * CONV_NH3_N) %>%
+      ungroup()
+
+    L1322.Fert_GrossTrade_Mt_R_Y %>%
+      filter(GCAM_region_ID %in% list_GCAM_region_ID) ->
+      L1322.Fert_GrossTrade_Mt_R_Y_EUR_core
+
+    L1322.Fert_GrossTrade_Mt_R_Y_EUR_core %>%
+      filter(year == max(MODEL_BASE_YEARS)) %>%
+      left_join_error_no_match(L1322.Fert_Prod_MtN_R_fby_EUR, by = "GCAM_region_ID") %>%
+      # If we reduce trade by the reported export quantity, then all exports go to zero. If we reduce trade by the discrepancy
+      # between production and exports, then all domestic use of own production will be zero. This approach takes the midpoint.
+      mutate(TradeReduction_Mt = if_else(Exports_Mt > Prod_MtN, (2 * Exports_Mt - Prod_MtN) / 2, 0),
+             Exports_Mt = Exports_Mt - TradeReduction_Mt,
+             Imports_Mt = Imports_Mt - TradeReduction_Mt,
+             # The midpoint reduction above can push gross imports below zero when net exports exceed half of the
+             # production (Belgium, Netherlands, Norway, Lithuania and Slovakia in the final base year). The model drops
+             # negative calibration values ("Negative calibration value for technology imported ammonia. Calibration
+             # removed"), but the negative imports were still counted in the ammonia balance of the European single market
+             # (L2322), so supply and demand of the single market traded ammonia did not match and every European exporter
+             # overshot its calibrated output. Keep imports >= 0 and move the excess to exports: net exports
+             # (= FAO production minus consumption) are unchanged and exports (= net exports) cannot exceed production.
+             Exports_Mt = if_else(Imports_Mt < 0, Exports_Mt - Imports_Mt, Exports_Mt),
+             Imports_Mt = pmax(Imports_Mt, 0)) %>%
+      select(-Prod_MtN, -TradeReduction_Mt) %>%
+      bind_rows(filter(L1322.Fert_GrossTrade_Mt_R_Y_EUR_core, year != max(MODEL_BASE_YEARS))) %>%
+      arrange(GCAM_region_ID, year) ->
+      L1322.Fert_GrossTrade_Mt_R_Y_EUR
+
     # Done ----
 
     L1322.Fert_Prod_MtNH3_R_F_Y_EUR %>%
@@ -444,6 +482,19 @@ module_gcameurope_L1322.Fert <- function(command, ...) {
       add_precursors("energy/H2A_Prod_Tech",
                      "energy/A21.globaltech_cost", "energy/A22.globaltech_cost") ->
       L1322.Fert_NEcost_75USDkgNH3_F_EUR
+
+    L1322.Fert_GrossTrade_Mt_R_Y_EUR %>%
+      add_title("Ammonia gross exports and imports by European GCAM region / year") %>%
+      add_units("Mt N") %>%
+      add_comments("Gross trade from the core L1322.Fert_GrossTrade_Mt_R_Y for the European regions") %>%
+      add_comments("Final base year exports are capped to the fertilizer production of the European regions (L1322.Fert_Prod_MtNH3_R_F_Y_EUR)") %>%
+      add_legacy_name("L1322.Fert_GrossTrade_Mt_R_Y_EUR") %>%
+      add_precursors("L1322.Fert_GrossTrade_Mt_R_Y",
+                     "common/iso_GCAM_regID",
+                     "energy/mappings/IEA_ctry",
+                     "energy/IEA_Fert_fuel_data",
+                     "L142.ag_Fert_Prod_MtN_ctry_Y") ->
+      L1322.Fert_GrossTrade_Mt_R_Y_EUR
 
     return_data(MODULE_OUTPUTS)
   } else {

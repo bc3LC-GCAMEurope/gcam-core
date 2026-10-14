@@ -81,8 +81,8 @@ module_energy_L2325.chemical <- function(command, ...) {
     A325.globaltech_eff <- get_data(all_data, "energy/A325.globaltech_eff", strip_attributes = TRUE)
     A325.globaltech_co2capture <- get_data(all_data, "energy/A325.globaltech_co2capture", strip_attributes = TRUE)
     A325.globaltech_cost <- get_data(all_data, "energy/A325.globaltech_cost", strip_attributes = TRUE)
-	  A325.globaltech_retirement <- get_data(all_data, "energy/A325.globaltech_retirement", strip_attributes = TRUE)
-	  A325.nonenergy_Cseq <- get_data(all_data, "energy/A325.nonenergy_Cseq", strip_attributes = TRUE)
+    A325.globaltech_retirement <- get_data(all_data, "energy/A325.globaltech_retirement", strip_attributes = TRUE)
+    A325.nonenergy_Cseq <- get_data(all_data, "energy/A325.nonenergy_Cseq", strip_attributes = TRUE)
     A325.globaltech_shrwt <- get_data(all_data, "energy/A325.globaltech_shrwt", strip_attributes = TRUE)
     A325.demand <- get_data(all_data, "energy/A325.demand", strip_attributes = TRUE)
     A23.chp_elecratio  <- get_data(all_data, "energy/A23.chp_elecratio", strip_attributes = TRUE)
@@ -335,9 +335,9 @@ module_energy_L2325.chemical <- function(command, ...) {
     # L2325.StubTechCalInput_indenergy: calibrated input of industrial energy use technologies (including cogen)
     L2325.GlobalTechEff_chemical %>%
       rename(supplysector = sector.name,
-           subsector = subsector.name,
-           stub.technology = technology,
-           coefficient = efficiency) %>%
+             subsector = subsector.name,
+             stub.technology = technology,
+             coefficient = efficiency) %>%
       mutate(efficiency = NULL) %>%
       filter(year %in% MODEL_BASE_YEARS) %>%
       write_to_all_regions(c(LEVEL2_DATA_NAMES[["StubTechCoef"]]), GCAM_region_names) %>%
@@ -454,7 +454,7 @@ module_energy_L2325.chemical <- function(command, ...) {
       ungroup()  ->
       L2325.BaseService_chemical
 
-    #For regions with 0 in base year, modify Subsector shareweight and interpolation
+    #For regions with 0 production in base year, modify Subsector shareweight interpolation (from fixed to linear)
     L2325.out_EJ_R_ind_serv_F_Yh %>%
       group_by(region,supplysector, GCAM_region_ID, year) %>%
       summarise(value = sum(calOutputValue)) %>%
@@ -462,12 +462,6 @@ module_energy_L2325.chemical <- function(command, ...) {
       select(region, year, supplysector,value) %>%
       filter(value == 0, year == MODEL_FINAL_BASE_YEAR)  ->
       nobaseyear
-
-    L2325.SubsectorShrwtFllt_chemical %>%
-      left_join(nobaseyear, by = c("region", "supplysector")) %>%
-      mutate(value = replace_na(value,1),share.weight = if_else(value ==0,0.5,share.weight),year = NULL,value = NULL) ->
-      L2325.SubsectorShrwtFllt_chemical
-
 
     L2325.SubsectorInterp_chemical %>%
       left_join(nobaseyear, by = c("region", "supplysector")) %>%
@@ -645,12 +639,12 @@ module_energy_L2325.chemical <- function(command, ...) {
       L2325.StubTechProd_chemical
 
     L2325.StubTechCalInput_chemical %>%
-       add_title("calibrated chemical production") %>%
-       add_units("EJ") %>%
-       add_comments("Values are calculated using L1325.in_EJ_R_chemical_F_Y then added GCAM region information and supplysector, subsector, technology, and input information") %>%
-       add_legacy_name("L2325.StubTechCalInput_chemical") %>%
-       add_precursors("energy/calibrated_techs", "L1325.in_EJ_R_chemical_F_Y", "common/GCAM_region_names") ->
-       L2325.StubTechCalInput_chemical
+      add_title("calibrated chemical production") %>%
+      add_units("EJ") %>%
+      add_comments("Values are calculated using L1325.in_EJ_R_chemical_F_Y then added GCAM region information and supplysector, subsector, technology, and input information") %>%
+      add_legacy_name("L2325.StubTechCalInput_chemical") %>%
+      add_precursors("energy/calibrated_techs", "L1325.in_EJ_R_chemical_F_Y", "common/GCAM_region_names") ->
+      L2325.StubTechCalInput_chemical
 
     L2325.StubTechCoef_chemical %>%
       add_title("region-specific coefficients of chemical production technologies") %>%
@@ -660,7 +654,7 @@ module_energy_L2325.chemical <- function(command, ...) {
       add_precursors("energy/calibrated_techs", "common/GCAM_region_names","energy/A325.globaltech_coef") ->
       L2325.StubTechCoef_chemical
 
-      L2325.PerCapitaBased_chemical %>%
+    L2325.PerCapitaBased_chemical %>%
       add_title("per-capita based flag for chemical exports final demand") %>%
       add_units("NA") %>%
       add_comments("Per-capita based flags for chemical from A325.demand are expanded into all GCAM regions") %>%
@@ -700,15 +694,15 @@ module_energy_L2325.chemical <- function(command, ...) {
       add_precursors("energy/A23.chp_elecratio", "energy/A325.globaltech_eff") ->
       L2325.GlobalTechSecOut_chemical
 
-      return_data(L2325.Supplysector_chemical, L2325.FinalEnergyKeyword_chemical, L2325.SubsectorLogit_chemical,
-                  L2325.SubsectorShrwtFllt_chemical, L2325.SubsectorInterp_chemical,
-                  L2325.StubTech_chemical, L2325.GlobalTechShrwt_chemical,L2325.GlobalTechCSeq_ind,
-                  L2325.GlobalTechCoef_chemical, L2325.GlobalTechCost_chemical,L2325.GlobalTechShutdown_chemical,
-                  L2325.GlobalTechSCurve_chemical, L2325.GlobalTechLifetime_chemical, L2325.GlobalTechProfitShutdown_chemical,
-                  L2325.StubTechCalInput_chemical,L2325.StubTechCoef_chemical,L2325.StubTechProd_chemical,
-                  L2325.PerCapitaBased_chemical, L2325.BaseService_chemical,L2325.GlobalTechSecOut_chemical,
-                  L2325.PriceElasticity_chemical,L2325.GlobalTechCapture_chemical,L2325.GlobalTechEff_chemical,
-                  L2325.GlobalTechTrackCapital_chemical)
+    return_data(L2325.Supplysector_chemical, L2325.FinalEnergyKeyword_chemical, L2325.SubsectorLogit_chemical,
+                L2325.SubsectorShrwtFllt_chemical, L2325.SubsectorInterp_chemical,
+                L2325.StubTech_chemical, L2325.GlobalTechShrwt_chemical,L2325.GlobalTechCSeq_ind,
+                L2325.GlobalTechCoef_chemical, L2325.GlobalTechCost_chemical,L2325.GlobalTechShutdown_chemical,
+                L2325.GlobalTechSCurve_chemical, L2325.GlobalTechLifetime_chemical, L2325.GlobalTechProfitShutdown_chemical,
+                L2325.StubTechCalInput_chemical,L2325.StubTechCoef_chemical,L2325.StubTechProd_chemical,
+                L2325.PerCapitaBased_chemical, L2325.BaseService_chemical,L2325.GlobalTechSecOut_chemical,
+                L2325.PriceElasticity_chemical,L2325.GlobalTechCapture_chemical,L2325.GlobalTechEff_chemical,
+                L2325.GlobalTechTrackCapital_chemical)
 
 
   } else {

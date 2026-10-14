@@ -40,8 +40,9 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
                      FILE = "gcam-europe/A23.elecS_stubtech_energy_inputs",
                      FILE = "gcam-europe/A23.elecS_naming",
                      FILE = "gcam-europe/elecS_time_fraction",
-                     FILE = "gcam-europe/elecS_globaltech_capital_battery_ATB",
+                     FILE = "gcam-europe/A23.elecS_globaltech_non_energy_inputs",
                      "L1239.R_elec_supply",
+                     "L1233.globaltech_capital_ATB_battery",
                      "L223.StubTechEff_elec_EUR",
                      "L223.StubTechCalInput_elec_EUR",
                      "L223.StubTechProd_elec_EUR",
@@ -352,7 +353,27 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       distinct(supplysector,subsector, elecS_tech = technology)
 
 
-    L2234.elecS_globaltech_capital_battery_ATB <- elecS_globaltech_capital_battery_ATB %>%
+    # Battery: same approach as the former L113.elecS_globaltech_capital_battery_ATB of GCAM-core/GCAM-USA.
+    # The cost structure (lifetime, S-curve, FCR, capacity factor) is read from A23.elecS_globaltech_non_energy_inputs
+    # (the same file as in GCAM-USA), while the costs (capital, fixed OM and variable OM) come from the 2024 ATB / ReEDS
+    # battery costs (L1233.globaltech_capital_ATB_battery, Moderate case)
+    L2234.battery_ATB_costs <- L1233.globaltech_capital_ATB_battery %>%
+      filter(case == "Moderate") %>%
+      select(technology, period = year, capital.cost, fixed.om, variable.om) %>%
+      mutate(capital.cost = round(capital.cost, energy.DIGITS_CAPITAL),
+             fixed.om = round(fixed.om, energy.DIGITS_OM),
+             variable.om = round(variable.om, energy.DIGITS_OM))
+
+    L2234.elecS_globaltech_capital_battery_ATB <- A23.elecS_globaltech_non_energy_inputs %>%
+      # expand to all model years (e.g. the final base year may not be in the assumption file) and fill the structure
+      # parameters from the next available period
+      tidyr::expand(tidyr::nesting(supplysector, subsector, technology),
+                    period = unique(c(A23.elecS_globaltech_non_energy_inputs$period, MODEL_YEARS))) %>%
+      left_join(A23.elecS_globaltech_non_energy_inputs, by = c("supplysector", "subsector", "technology", "period")) %>%
+      select(-capital.cost, -fixed.om, -variable.om) %>%
+      tidyr::fill(lifetime, steepness, half.life, fcr, capacity.factor, .direction = "up") %>%
+      filter(period %in% MODEL_YEARS) %>%
+      left_join_error_no_match(L2234.battery_ATB_costs, by = c("technology", "period")) %>%
       left_join_error_no_match(grid_storage_elecS, by = c("supplysector", "subsector")) %>%
       select(-technology) %>%
       rename(technology = elecS_tech)
@@ -663,7 +684,8 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       add_units("unitless") %>%
       add_comments("Global capacity factors for electricity load segments generation technologies") %>%
       add_precursors("gcam-europe/elecS_time_fraction",
-                     "gcam-europe/elecS_globaltech_capital_battery_ATB",
+                     "gcam-europe/A23.elecS_globaltech_non_energy_inputs",
+                     "L1233.globaltech_capital_ATB_battery",
                      "L223.GlobalTechCapFac_elec") ->
       L2234.GlobalTechCapFac_elecS_EUR
 

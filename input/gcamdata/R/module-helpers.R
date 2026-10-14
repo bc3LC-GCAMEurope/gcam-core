@@ -511,7 +511,7 @@ get_ssp_regions <- function(pcGDP, reg_names, income_group,
 #' @importFrom tidyr complete
 #' @importFrom assertthat assert_that
 #' @author Pralit Patel
-fill_exp_decay_extrapolate <- function(d, tech_colnames = c("supplysector", "subsector", "technology")){
+fill_exp_decay_extrapolate <- function(d, out_years, tech_colnames = c("supplysector", "subsector", "technology")){
   . <- value <- year <- improvement.rate <- improvement.max <-
     improvement.shadow.technology <- technology <- year_base <-
     value_base <- shadow.value <- NULL  # silence package check notes
