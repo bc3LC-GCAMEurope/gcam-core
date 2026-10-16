@@ -40,8 +40,9 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
                      FILE = "gcam-europe/A23.elecS_stubtech_energy_inputs",
                      FILE = "gcam-europe/A23.elecS_naming",
                      FILE = "gcam-europe/elecS_time_fraction",
-                     FILE = "gcam-europe/elecS_globaltech_capital_battery_ATB",
+                     FILE = "gcam-europe/A23.elecS_globaltech_non_energy_inputs",
                      "L1239.R_elec_supply",
+                     "L1233.globaltech_capital_ATB_battery",
                      "L223.StubTechEff_elec_EUR",
                      "L223.StubTechCalInput_elec_EUR",
                      "L223.StubTechProd_elec_EUR",
@@ -352,7 +353,27 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       distinct(supplysector,subsector, elecS_tech = technology)
 
 
-    L2234.elecS_globaltech_capital_battery_ATB <- elecS_globaltech_capital_battery_ATB %>%
+    # Battery: same approach as the former L113.elecS_globaltech_capital_battery_ATB of GCAM-core/GCAM-USA.
+    # The cost structure (lifetime, S-curve, FCR, capacity factor) is read from A23.elecS_globaltech_non_energy_inputs
+    # (the same file as in GCAM-USA), while the costs (capital, fixed OM and variable OM) come from the 2024 ATB / ReEDS
+    # battery costs (L1233.globaltech_capital_ATB_battery, Moderate case)
+    L2234.battery_ATB_costs <- L1233.globaltech_capital_ATB_battery %>%
+      filter(case == "Moderate") %>%
+      select(technology, period = year, capital.cost, fixed.om, variable.om) %>%
+      mutate(capital.cost = round(capital.cost, energy.DIGITS_CAPITAL),
+             fixed.om = round(fixed.om, energy.DIGITS_OM),
+             variable.om = round(variable.om, energy.DIGITS_OM))
+
+    L2234.elecS_globaltech_capital_battery_ATB <- A23.elecS_globaltech_non_energy_inputs %>%
+      # expand to all model years (e.g. the final base year may not be in the assumption file) and fill the structure
+      # parameters from the next available period
+      tidyr::expand(tidyr::nesting(supplysector, subsector, technology),
+                    period = unique(c(A23.elecS_globaltech_non_energy_inputs$period, MODEL_YEARS))) %>%
+      left_join(A23.elecS_globaltech_non_energy_inputs, by = c("supplysector", "subsector", "technology", "period")) %>%
+      select(-capital.cost, -fixed.om, -variable.om) %>%
+      tidyr::fill(lifetime, steepness, half.life, fcr, capacity.factor, .direction = "up") %>%
+      filter(period %in% MODEL_YEARS) %>%
+      left_join_error_no_match(L2234.battery_ATB_costs, by = c("technology", "period")) %>%
       left_join_error_no_match(grid_storage_elecS, by = c("supplysector", "subsector")) %>%
       select(-technology) %>%
       rename(technology = elecS_tech)
@@ -387,14 +408,17 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       select(sector.name = supplysector, subsector.name = subsector, technology, year = period, lifetime, steepness, half.life) %>%
       bind_rows(L2234.GlobalTechSCurve_elecS_EUR)
 
-    # Adding an scurve behavior for renewables in 2015 so they don't all retire at once
+    # Smooth retirement of wind and solar for ALL vintages (not only the final base year), so that blocks built
+    # in the same period do not all retire at once (2025 and 2030 blocks otherwise die abruptly in 2055 and 2060).
+    # The median life (half.life) equals the GCAM-core hard lifetime (30 yr; 25 yr offshore), so on average the
+    # fleet lives as long as in core; the s-curve is truncated at lifetime + 10.
     L2234.GlobalIntTechSCurve_elecS_EUR <- L2234.GlobalIntTechLifetime_elecS_EUR %>%
       filter(subsector.name %in% c("solar", "wind"),
-             year == MODEL_FINAL_BASE_YEAR) %>%
-      # extend lifetime since we are adding s-curve
-      mutate(lifetime = lifetime + 10,
-             steepness = 0.1,
-             half.life = (lifetime / 2) + 5)
+             year >= MODEL_FINAL_BASE_YEAR) %>%
+      mutate(half.life = lifetime,
+             lifetime = lifetime + 10,
+             steepness = 0.15) %>%
+      select(sector.name, subsector.name, intermittent.technology, year, lifetime, steepness, half.life)
 
     # Energy Inputs for additional technologies such as battery
     L2234.StubTechEff_battery_elecS_EUR <- write_to_all_states(A23.elecS_stubtech_energy_inputs,
@@ -663,7 +687,8 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       add_units("unitless") %>%
       add_comments("Global capacity factors for electricity load segments generation technologies") %>%
       add_precursors("gcam-europe/elecS_time_fraction",
-                     "gcam-europe/elecS_globaltech_capital_battery_ATB",
+                     "gcam-europe/A23.elecS_globaltech_non_energy_inputs",
+                     "L1233.globaltech_capital_ATB_battery",
                      "L223.GlobalTechCapFac_elec") ->
       L2234.GlobalTechCapFac_elecS_EUR
 

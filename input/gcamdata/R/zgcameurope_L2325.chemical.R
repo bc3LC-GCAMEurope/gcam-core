@@ -334,7 +334,7 @@ module_gcameurope_L2325.chemical <- function(command, ...) {
       ungroup()  ->
       L2325.BaseService_chemical_EUR
 
-    #For regions with 0 in base year, modify Subsector shareweight and interpolation
+    #For regions with 0 production in base year, modify Subsector shareweight interpolation (from fixed to linear)
     L2325.out_EJ_R_ind_serv_F_Yh %>%
       group_by(region,supplysector, GCAM_region_ID, year) %>%
       summarise(value = sum(calOutputValue)) %>%
@@ -342,12 +342,6 @@ module_gcameurope_L2325.chemical <- function(command, ...) {
       select(region, year, supplysector,value) %>%
       filter(value == 0, year == MODEL_FINAL_BASE_YEAR)  ->
       nobaseyear
-
-    L2325.SubsectorShrwtFllt_chemical_EUR %>%
-      left_join(nobaseyear, by = c("region", "supplysector")) %>%
-      mutate(value = replace_na(value,1),share.weight = if_else(value ==0,0.5,share.weight),year = NULL,value = NULL) ->
-      L2325.SubsectorShrwtFllt_chemical_EUR
-
 
     L2325.SubsectorInterp_chemical_EUR %>%
       left_join(nobaseyear, by = c("region", "supplysector")) %>%

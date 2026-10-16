@@ -19,7 +19,8 @@ policy_fueltax_jap.xml,Japan,delivered gas transport,delivered gas transport,del
 IRA_PTC,USA,electricity,biomass,biomass (conv),tax-credit,-0.79,-0.79,-0.67,-0.67,-0.67,-0.67,-0.67
 IRA_PTC,USA,electricity,biomass,biomass (IGCC),tax-credit,-0.79,-0.79,-0.67,-0.67,-0.67,-0.67,-0.67
 IRA_PTC,USA,electricity,geothermal,geothermal,tax-credit,-1.58,-1.58,-1.33,-1.33,-1.33,-1.33,-1.33
-IRA_PTC,USA,electricity,nuclear,Gen_III,tax-credit,-0.98,-0.98,-0.39,-0.39,-0.39,-0.39,-0.39
+IRA_PTC,USA,electricity,nuclear,large reactor,tax-credit,-0.98,-0.98,-0.39,-0.39,-0.39,-0.39,-0.39
+IRA_PTC,USA,electricity,nuclear,SMR,tax-credit,-0.98,-0.98,-0.39,-0.39,-0.39,-0.39,-0.39
 IRA_PTC,USA,electricity,solar,CSP,tax-credit,-1.58,-1.58,-1.33,-1.33,-1.33,-1.33,-1.33
 IRA_PTC,USA,electricity,solar,CSP_storage,tax-credit,-1.58,-1.58,-1.33,-1.33,-1.33,-1.33,-1.33
 IRA_PTC,USA,electricity,solar,PV,tax-credit,-1.58,-1.58,-1.33,-1.33,-1.33,-1.33,-1.33
@@ -55,8 +56,10 @@ IRA_H2_subsidy_mid,USA,H2 central production,electricity,electrolysis,subsidy,,,
 IRA_H2_subsidy_mid,USA,H2 central production,nuclear,thermal splitting,subsidy,-4.102,-4.102,-4.102,-4.102,-4.102,-4.102,-4.102
 IRA_H2_subsidy_mid,USA,H2 central production,solar,electrolysis,subsidy,-4.102,-4.102,-4.102,-4.102,-4.102,-4.102,-4.102
 IRA_H2_subsidy_mid,USA,H2 central production,wind,electrolysis,subsidy,-4.102,-4.102,-4.102,-4.102,-4.102,-4.102,-4.102
-IRA_H2_subsidy_mid,USA,H2 wholesale dispensing,forecourt production,electrolysis,subsidy,,,-1.0255,-1.0255,-1.0255,-1.0255,-1.0255
-IRA_H2_subsidy_mid,USA,H2 industrial,forecourt production,electrolysis,subsidy,,,-1.0255,-1.0255,-1.0255,-1.0255,-1.0255
+IRA_H2_subsidy_mid,USA,H2 LDV,onsite production,electrolysis,subsidy,,,-1.0255,-1.0255,-1.0255,-1.0255,-1.0255
+IRA_H2_subsidy_mid,USA,H2 MHDV,onsite production,electrolysis,subsidy,,,-1.0255,-1.0255,-1.0255,-1.0255,-1.0255
+IRA_H2_subsidy_mid,USA,LH2,onsite production,electrolysis,subsidy,,,-1.0255,-1.0255,-1.0255,-1.0255,-1.0255
+IRA_H2_subsidy_mid,USA,H2 industrial,onsite production,electrolysis,subsidy,,,-1.0255,-1.0255,-1.0255,-1.0255,-1.0255
 IRA_45Q,USA,carbon-storage,onshore carbon-storage,onshore carbon-storage,subsidy,,-103.4462,-103.4462,-103.4462,-103.4462,-103.4462,-103.4462
 IRA_45Q,USA,carbon-storage,offshore carbon-storage,offshore carbon-storage,subsidy,,-103.4462,-103.4462,-103.4462,-103.4462,-103.4462,-103.4462
 IRA_45Q,USA,CO2 removal,dac,hightemp DAC NG,subsidy,,-0.0564,-0.0564,-0.0564,-0.0564,-0.0564,-0.0564

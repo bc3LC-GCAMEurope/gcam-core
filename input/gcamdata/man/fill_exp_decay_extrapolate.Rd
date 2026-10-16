@@ -4,7 +4,11 @@
 \alias{fill_exp_decay_extrapolate}
 \title{fill_exp_decay_extrapolate}
 \usage{
-fill_exp_decay_extrapolate(d, out_years)
+fill_exp_decay_extrapolate(
+  d,
+  out_years,
+  tech_colnames = c("supplysector", "subsector", "technology")
+)
 }
 \arguments{
 \item{d}{The wide format tibble with values under year columns that will be filled

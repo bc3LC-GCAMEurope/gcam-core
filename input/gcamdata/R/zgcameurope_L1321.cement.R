@@ -107,7 +107,7 @@ module_gcameurope_L1321.cement <- function(command, ...) {
 
       Andrew_cement_emissions_duplicate <- Andrew_cement_emissions %>%
         filter(Year == Andrew_last_year)
-      Andrew_cement_emissions_add <- do.call(bind_rows, replicate(n = 3, Andrew_cement_emissionsn_duplicate, simplify = F) )
+      Andrew_cement_emissions_add <- do.call(bind_rows, replicate(n = 3, Andrew_cement_emissions_duplicate, simplify = F) )
       Andrew_cement_emissions_add$Year <- ADDITIONAL_YEARS
       Andrew_cement_emissions <- Andrew_cement_emissions %>%
         bind_rows(Andrew_cement_emissions_add)

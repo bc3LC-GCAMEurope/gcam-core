@@ -14,16 +14,17 @@ module_energy_L125.hydrogen(command, ...)
 \value{
 Depends on \code{command}: either a vector of required inputs,
 a vector of output names, or (if \code{command} is "MAKE") all
-the generated outputs: \code{L125.globaltech_coef},  \code{L125.globaltech_cost},  \code{L125.Electrolyzer_IdleRatio_Params}.
+the generated outputs: \code{L125.globaltech_coef},  \code{L125.globaltech_cost},
+\code{L125.StubTechCost_h2_hybrid_scen}, \code{L125.StubTechCoef_h2_hybrid_scen}.
 }
 \description{
 Provides supply sector information, subsector information, technology information for hydrogen sectors.
 }
 \details{
-Takes inputs from H2A and generates GCAM's assumptions by technology and year
+Takes inputs from H2A-Lite and generates GCAM's assumptions by technology and year
 }
 \author{
-GPK/JF/PW July 2021
+YZ/GPK April 2025
 
 
 # Note:  NREL H2A v2018 did not include the following H2 production technologies:

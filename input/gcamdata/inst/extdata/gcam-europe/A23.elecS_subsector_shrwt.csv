@@ -12,9 +12,11 @@ electricity,biomass,end-year,1
 electricity,geothermal,end-year,1
 electricity,nuclear,initial-future-year,0
 electricity,nuclear,2025,0
-electricity,nuclear,2030,1
-electricity,nuclear,2035,1
-electricity,nuclear,end-year,1
+electricity,nuclear,2030,0
+electricity,nuclear,2035,0
+electricity,nuclear,2040,0
+electricity,nuclear,2060,0.3
+electricity,nuclear,end-year,0.3
 electricity,wind,end-year,0
 electricity,solar,end-year,1
 electricity,solar,2030,1

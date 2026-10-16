@@ -19,8 +19,7 @@ the generated outputs: \code{L2321.SectorLogitTables[[ curr_table ]]$data}, \cod
 \code{L2321.SubsectorInterp_cement_EUR}, \code{L2321.StubTech_cement_EUR}, \code{L2321.GlobalTechShrwt_cement_EUR}, \code{L2321.GlobalTechCoef_cement_EUR},
 \code{L2321.GlobalTechCost_cement_EUR}, \code{L2321.GlobalTechCapture_cement_EUR}, \code{L2321.StubTechProd_cement_EUR}, \code{L2321.StubTechCalInput_cement_heat_EUR},
 \code{L2321.StubTechCoef_cement_EUR}, \code{L2321.PerCapitaBased_cement_EUR}, \code{L2321.BaseService_cement_EUR}, \code{L2321.PriceElasticity_cement_EUR},
-\code{object}. The corresponding file in the
-original data system was \code{L2321.cement.R} (energy level2).
+\code{L2321.IncomeElasticity_cement_Scen_EUR}, \code{object}. The corresponding file in the original data system was \code{L2321.cement.R} (energy level2).
 }
 \description{
 Compute a variety of final energy keyword, sector, share weight, and technology information for cement-related GCAM inputs.
@@ -29,5 +28,5 @@ Compute a variety of final energy keyword, sector, share weight, and technology 
 The chunk provides final energy keyword, supplysector/subsector information, supplysector/subsector interpolation information, global technology share weight, global technology efficiency, global technology coefficients, global technology cost, price elasticity, stub technology information, stub technology interpolation information, stub technology calibrated inputs, and etc for cement sector.
 }
 \author{
-LF October 2017
+CR 2026 Jan
 }

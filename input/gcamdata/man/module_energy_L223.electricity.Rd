@@ -29,13 +29,7 @@ the generated outputs: \code{L223.Supplysector_elec}, \code{L223.ElecReserve}, \
 \code{L223.GlobalTechSCurve_elec}, \code{L223.GlobalIntTechSCurve_elec}, \code{L223.GlobalTechLifetime_elec},
 \code{L223.GlobalIntTechLifetime_elec}, \code{L223.GlobalTechProfitShutdown_elec}, \code{L223.GlobalIntTechProfitShutdown_elec},
 \code{L223.StubTechCalInput_elec}, \code{L223.StubTechFixOut_elec}, \code{L223.StubTechFixOut_hydro},
-\code{L223.StubTechProd_elec}, \code{L223.StubTechEff_elec}, \code{L223.StubTechSecOut_desal},
-\code{L223.GlobalTechCapital_sol_adv}, \code{L223.GlobalIntTechCapital_sol_adv}, \code{L223.GlobalTechCapital_wind_adv},
-\code{L223.GlobalIntTechCapital_wind_adv}, \code{L223.GlobalTechCapital_geo_adv},
-\code{L223.GlobalTechCapital_nuc_adv}, \code{L223.GlobalTechCapital_sol_low},
-\code{L223.GlobalIntTechCapital_sol_low}, \code{L223.GlobalTechCapital_wind_low},
-\code{L223.GlobalIntTechCapital_wind_low}, \code{L223.GlobalTechCapital_geo_low},
-\code{L223.GlobalTechCapital_nuc_low}, \code{L223.GlobalTechCapital_bio_low}. The corresponding file in the
+\code{L223.StubTechProd_elec}, \code{L223.StubTechEff_elec}, \code{L223.StubTechSecOut_desal}. The corresponding file in the
 original data system was \code{L223.electricity.R} (energy level2).
 }
 \description{

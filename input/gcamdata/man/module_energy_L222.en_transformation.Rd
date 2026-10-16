@@ -21,7 +21,7 @@ the generated outputs: \code{L222.SectorLogitTables[[ curr_table ]]$data}, \code
  \code{L222.GlobalTechCost_en}, \code{L222.GlobalTechShrwt_en}, \code{L222.GlobalTechCapture_en},
  \code{L222.GlobalTechShutdown_en}, \code{L222.GlobalTechSCurve_en}, \code{L222.GlobalTechLifetime_en},
  \code{L222.GlobalTechProfitShutdown_en}, \code{L222.StubTechProd_gasproc}, \code{L222.StubTechProd_refining},
-  \code{L222.StubTechCoef_refining}, \code{L222.GlobalTechCost_low_en}. The corresponding file in the
+  \code{L222.StubTechCoef_refining}, The corresponding file in the
 original data system was \code{L222.en_transformation.R} (energy level2).
 }
 \description{

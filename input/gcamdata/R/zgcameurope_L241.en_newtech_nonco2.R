@@ -29,6 +29,7 @@ module_gcameurope_L241.en_newtech_nonco2 <- function(command, ...) {
              FILE = "energy/A23.globaltech_input_driver",
              FILE = "energy/A25.globaltech_input_driver",
              FILE = "energy/A26.globaltech_input_driver",
+             FILE = "emissions/A41.H2_globaltech_input_driver",
              "L111.nonghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR",
              "L112.ghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR",
              "L223.GlobalTechEff_elec"))
@@ -63,7 +64,8 @@ module_gcameurope_L241.en_newtech_nonco2 <- function(command, ...) {
       get_data(all_data, "energy/A22.globaltech_input_driver"),
       get_data(all_data, "energy/A23.globaltech_input_driver"),
       get_data(all_data, "energy/A25.globaltech_input_driver"),
-      get_data(all_data, "energy/A26.globaltech_input_driver")
+      get_data(all_data, "energy/A26.globaltech_input_driver"),
+      get_data(all_data, "emissions/A41.H2_globaltech_input_driver")
     ) %>%
       rename(stub.technology = technology) ->
       EnTechInputMap
@@ -307,6 +309,7 @@ module_gcameurope_L241.en_newtech_nonco2 <- function(command, ...) {
                      "energy/A23.globaltech_input_driver",
                      "energy/A25.globaltech_input_driver",
                      "energy/A26.globaltech_input_driver",
+                     "emissions/A41.H2_globaltech_input_driver",
                      "L111.nonghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR",
                      "L112.ghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR")  ->
       L241.nonco2_tech_coeff_EUR

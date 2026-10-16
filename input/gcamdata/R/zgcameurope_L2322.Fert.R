@@ -51,7 +51,7 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
                      "L1322.Fert_Prod_MtNH3_R_F_Y_EUR",
                      "L1322.IO_R_Fert_F_Yh_EUR",
                      "L1322.Fert_NEcost_75USDkgNH3_F_EUR",
-                     "L142.ag_Fert_NetExp_MtN_R_Y",
+                     "L1322.Fert_GrossTrade_Mt_R_Y_EUR",
                      "Europe_Single_Market_Regions",
                      GLOBAL_INPUTS_ADJUST)
   MODULE_OUTPUTS <- paste0(GLOBAL_INPUTS_ADJUST, "_EUR")
@@ -67,7 +67,7 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = T)
 
     GCAM_region_names <- filter_regions_europe(GCAM_region_names)
-    L142.ag_Fert_NetExp_MtN_R_Y <- L142.ag_Fert_NetExp_MtN_R_Y %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
+    L1322.Fert_GrossTrade_Mt_R_Y_EUR <- L1322.Fert_GrossTrade_Mt_R_Y_EUR %>% filter_regions_europe(region_ID_mapping = GCAM_region_names)
     SINGLE_MARKET_NAME <- unique(A_ff_RegionalTechnology_EUR$market.name[A_ff_RegionalTechnology_EUR$market.name != "regional"])
 
     # 1a. Supplysector information --------------------------
@@ -259,12 +259,11 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
       L2322.StubTechCoef_Fert_EUR
 
     # 2b. Regional ammonia calibration -----------------------------
-    # Ammonia Exports = NetExports where positive
-    L142.ag_Fert_NetExp_MtN_R_Y %>%
-      select(GCAM_region_ID, year, calOutputValue = value) %>%
+    # Ammonia Exports
+    L1322.Fert_GrossTrade_Mt_R_Y_EUR %>%
+      select(GCAM_region_ID, year, Exports_Mt) %>%
       filter(year %in% MODEL_BASE_YEARS) %>%
-      mutate(calOutputValue = if_else(calOutputValue < 0, 0,
-                                      round(calOutputValue / CONV_NH3_N, energy.DIGITS_CALOUTPUT))) %>%   # Convert N export to NH3
+      mutate(calOutputValue = round(Exports_Mt / CONV_NH3_N, energy.DIGITS_CALOUTPUT)) %>%   # Convert N export to NH3
       left_join_error_no_match(GCAM_region_names,
                                by = "GCAM_region_ID") %>%
       rename(market.name = region) %>%
@@ -276,12 +275,11 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
       select(LEVEL2_DATA_NAMES[["Production"]]) ->
       L2322.Production_FertExport_EUR
 
-    # Ammonia Imports = NetExports where negative
-    L142.ag_Fert_NetExp_MtN_R_Y %>%
-      select(GCAM_region_ID, year, calOutputValue = value) %>%
+    # Ammonia Imports
+    L1322.Fert_GrossTrade_Mt_R_Y_EUR %>%
+      select(GCAM_region_ID, year, Imports_Mt) %>%
       filter(year %in% MODEL_BASE_YEARS) %>%
-      mutate(calOutputValue = if_else(calOutputValue > 0, 0,
-                                      round(calOutputValue * -1 / CONV_NH3_N, energy.DIGITS_CALOUTPUT))) %>%   # Convert N import to NH3
+      mutate(calOutputValue = round(Imports_Mt / CONV_NH3_N, energy.DIGITS_CALOUTPUT)) %>%   # Convert N import to NH3
       left_join_error_no_match(GCAM_region_names,
                                by = "GCAM_region_ID") %>%
       left_join_error_no_match(filter(L2322.StubTech_Fert_EUR, grepl("imported", subsector)),
@@ -450,7 +448,16 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
       mutate(region = SINGLE_MARKET_NAME,
              sector = stringr::str_remove(sector, "imported "))
 
-    Europe_exports <- L2322.Production_FertExport %>%
+    # Exports of the European regions: use the Europe-specific table from section 2b (built from
+    # L1322.Fert_GrossTrade_Mt_R_Y_EUR, i.e. the same trade data used for the domestic consumption and the imports above)
+    # instead of the core table L2322.Production_FertExport, so that exports, imports, domestic consumption and the
+    # single-market scaling below all come from the same numbers. The traded sectors live in the USA region, so the
+    # tables are combined by subsector (not by region, as combine_EUR_global does)
+    L2322.Production_FertExport_mix <- L2322.Production_FertExport %>%
+      anti_join(L2322.Production_FertExport_EUR, by = c("region", "supplysector", "subsector", "year")) %>%
+      bind_rows(L2322.Production_FertExport_EUR)
+
+    Europe_exports <- L2322.Production_FertExport_mix %>%
       mutate(region_export = stringr::str_extract(subsector, ".*(?= traded)")) %>%
       filter(region_export %in% Europe_Single_Market_Regions$GCAMEU_region) %>%
       group_by(sector = supplysector, year) %>%
@@ -502,7 +509,7 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
              subsector = paste(region, "traded", sector, sep = " ")) %>%
       select(subsector, year, value)
 
-    L2322.Production_FertExport_EUR <- L2322.Production_FertExport %>%
+    L2322.Production_FertExport_EUR <- L2322.Production_FertExport_mix %>%
       # this will add in global/Europe single markets, but the cal output values are wrong
       add_single_market %>%
       left_join(Europe_net_trade_calib_calc, by = c("subsector", "year")) %>%
@@ -615,14 +622,14 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
       add_units("Mt NH3") %>%
       add_comments("Calibrated exports of ammonia") %>%
       same_precursors_as(L2322.TechCoef_TradedFert_EUR) %>%
-      add_precursors("L142.ag_Fert_NetExp_MtN_R_Y") ->
+      add_precursors("L1322.Fert_GrossTrade_Mt_R_Y_EUR") ->
       L2322.Production_FertExport_EUR
 
     L2322.StubTechProd_FertImport_EUR %>%
       add_title("calibrated base-year imports of ammonia") %>%
       add_units("Mt NH3") %>%
       add_comments("Calibrated imports of ammonia") %>%
-      add_precursors("L142.ag_Fert_NetExp_MtN_R_Y",
+      add_precursors("L1322.Fert_GrossTrade_Mt_R_Y_EUR",
                      "common/GCAM_region_names",
                      "energy/A322.globaltech_shrwt") ->
       L2322.StubTechProd_FertImport_EUR
@@ -631,7 +638,7 @@ module_gcameurope_L2322.Fert <- function(command, ...) {
       add_title("calibrated base-year consumption of domestically produced ammonia") %>%
       add_units("Mt NH3") %>%
       add_comments("Calculated as production minus exports") %>%
-      add_precursors("L142.ag_Fert_NetExp_MtN_R_Y",
+      add_precursors("L1322.Fert_GrossTrade_Mt_R_Y_EUR",
                      "common/GCAM_region_names",
                      "energy/A322.globaltech_shrwt") ->
       L2322.StubTechProd_FertDomCons_EUR

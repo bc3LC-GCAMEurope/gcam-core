@@ -23,5 +23,5 @@ Compute a variety of final energy keyword, sector, share weight, and technology 
 The chunk provides final energy keyword, supplysector/subsector information, supplysector/subsector interpolation information, supplysector/subsector share weights, global technology share weight, global technology efficiency, global technology coefficients, global technology cost, price elasticity, stub technology information, stub technology interpolation information, stub technology calibrated inputs, and etc.
 }
 \author{
-LF October 2017
+CR 2026 Jan
 }

@@ -1720,6 +1720,18 @@ module_gcameurope_L244.building_det <- function(command, ...) {
     # This adder is calculated using regional data, and equally spliting the regional adder across consumer-groups.
     # This transition in three periods avoids drastic jumps from final calibration year to first model period.
 
+    # Region-level per-capita income projection, used below to decay the coal bias adder
+    # toward zero with rising income after it converges to a single region-wide value
+    # (Adder.Conv.Year). Region-level only (not by gcam.consumer/decile): future-year,
+    # decile-level population is not available in this data system, and this also preserves the
+    # "converge to one shared adder by Adder.Conv.Year" design intent, so deciles keep moving
+    # together after convergence.
+    L244.RegionIncomeProj_EUR <- L102.pcgdp_thous90USD_Scen_R_Y_EUR %>%
+      filter(scenario == socioeconomics.BASE_GDP_SCENARIO) %>%
+      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
+      rename(pcGDP_thous90USD = value) %>%
+      select(region, year, pcGDP_thous90USD)
+
     # 1- Generic services
     trad_fuels_oth<-c("resid cooking coal EUR", "resid hot water coal EUR", "resid others coal EUR")
     modern_fuels_oth<-c("resid cooking modern EUR", "resid hot water modern EUR", "resid other appliance modern EUR", "resid others modern EUR")
@@ -1776,6 +1788,25 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       group_by(region,gcam.consumer, nodeInput,building.node.input,building.service.input) %>%
       mutate(bias.adder = approx_fun(year, bias.adder, rule = 1)) %>%
       ungroup() %>%
+      # Decay the (now-flat, region-common) bias adder toward zero as income rises past
+      # Adder.Conv.Year, using the same income elasticity estimated for the coal demand
+      # function above. Without this, the additive bias adder is held flat forever while
+      # floorspace keeps growing, so it never vanishes and can even dominate demand growth.
+      # decay_factor is capped at 1 so it can only shrink the adder, never amplify it.
+      mutate(b2_decay = case_when(
+        grepl("cooking", building.service.input) ~ b2_coal_cooking,
+        grepl("hot water", building.service.input) ~ b2_coal_hotwater,
+        TRUE ~ b2_coal_oth)) %>%
+      left_join_error_no_match(L244.RegionIncomeProj_EUR, by = c("region", "year")) %>%
+      left_join_error_no_match(L244.RegionIncomeProj_EUR %>%
+                                 filter(year == Adder.Conv.Year) %>%
+                                 select(region, pcGDP_conv = pcGDP_thous90USD),
+                               by = "region") %>%
+      mutate(decay_factor = if_else(year >= Adder.Conv.Year,
+                                    exp(b2_decay * (log(pcGDP_thous90USD) - log(pcGDP_conv))),
+                                    1),
+             decay_factor = pmin(decay_factor, 1),
+             bias.adder = bias.adder * decay_factor) %>%
       select(LEVEL2_DATA_NAMES[["GenericServiceAdder"]])
 
     # Modern
@@ -1884,6 +1915,20 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       group_by(region,gcam.consumer, nodeInput,building.node.input,thermal.building.service.input) %>%
       mutate(bias.adder = approx_fun(year, bias.adder, rule = 1)) %>%
       ungroup() %>%
+      # Same bias-adder income decay as for generic services above, applied to the thermal
+      # (heating/cooling) coal services. Cooling gets b2_decay = 0 (unchanged/flat) since
+      # there is no dedicated coal regression for cooling.
+      mutate(b2_decay = if_else(grepl("heating", thermal.building.service.input), b2_coal_heat, 0)) %>%
+      left_join_error_no_match(L244.RegionIncomeProj_EUR, by = c("region", "year")) %>%
+      left_join_error_no_match(L244.RegionIncomeProj_EUR %>%
+                                 filter(year == Adder.Conv.Year) %>%
+                                 select(region, pcGDP_conv = pcGDP_thous90USD),
+                               by = "region") %>%
+      mutate(decay_factor = if_else(year >= Adder.Conv.Year,
+                                    exp(b2_decay * (log(pcGDP_thous90USD) - log(pcGDP_conv))),
+                                    1),
+             decay_factor = pmin(decay_factor, 1),
+             bias.adder = bias.adder * decay_factor) %>%
       select(LEVEL2_DATA_NAMES[["ThermalServiceAdder"]])
 
     # Modern

@@ -35,10 +35,17 @@ BIOFUEL_ALL_PLUS_H2,refining,biomass liquids,corn ethanol
 BIOFUEL_ALL_PLUS_H2,refining,biomass liquids,sugar cane ethanol
 BIOFUEL_ALL_PLUS_H2,refining,biomass liquids,biodiesel
 BIOFUEL_ALL_PLUS_H2,refining,biomass liquids,BTL with hydrogen
-BIOFUEL_ALL_PLUS_H2,H2 wholesale dispensing,H2 delivery,H2 liquid truck
-BIOFUEL_ALL_PLUS_H2,H2 wholesale dispensing,H2 delivery,H2 pipeline
-BIOFUEL_ALL_PLUS_H2,H2 wholesale dispensing,forecourt production,electrolysis
-BIOFUEL_ALL_PLUS_H2,H2 wholesale dispensing,forecourt production,natural gas steam reforming
+BIOFUEL_ALL_PLUS_H2,H2 LDV,H2 delivery,H2 liquid truck
+BIOFUEL_ALL_PLUS_H2,H2 MHDV,H2 delivery,H2 liquid truck
+BIOFUEL_ALL_PLUS_H2,H2 LDV,H2 delivery,H2 pipeline
+BIOFUEL_ALL_PLUS_H2,H2 MHDV,H2 delivery,H2 pipeline
+BIOFUEL_ALL_PLUS_H2,LH2,H2 delivery,H2 pipeline
+BIOFUEL_ALL_PLUS_H2,H2 LDV,onsite production,electrolysis
+BIOFUEL_ALL_PLUS_H2,H2 MHDV,onsite production,electrolysis
+BIOFUEL_ALL_PLUS_H2,LH2,onsite production,electrolysis
+BIOFUEL_ALL_PLUS_H2,H2 LDV,onsite production,natural gas steam reforming
+BIOFUEL_ALL_PLUS_H2,H2 MHDV,onsite production,natural gas steam reforming
+BIOFUEL_ALL_PLUS_H2,LH2,onsite production,natural gas steam reforming
 BIOFUEL_FOODFEED,refining,biomass liquids,corn ethanol
 BIOFUEL_FOODFEED,refining,biomass liquids,sugar cane ethanol
 BIOFUEL_FOODFEED,refining,biomass liquids,biodiesel
@@ -58,7 +65,8 @@ ELEC_BIO,electricity,biomass,biomass (conv CCS)
 ELEC_COAL_NO_CCS,electricity,coal,coal (conv pul)
 ELEC_COAL_NO_CCS,electricity,coal,coal (IGCC)
 ELEC_GEO,electricity,geothermal,geothermal
-ELEC_NUCLEAR,electricity,nuclear,Gen_III
+ELEC_NUCLEAR,electricity,nuclear,large reactor
+ELEC_NUCLEAR,electricity,nuclear,SMR
 ELEC_NUCLEAR,electricity,nuclear,Gen_II_LWR
 ELEC_PV,electricity,solar,PV
 ELEC_PV,electricity,solar,PV_storage
@@ -92,7 +100,8 @@ ELEC_NON_RENEWABLE,electricity,gas,gas (CC)
 ELEC_NON_RENEWABLE,electricity,gas,gas (steam/CT)
 ELEC_NON_RENEWABLE,electricity,refined liquids,refined liquids (CC)
 ELEC_NON_RENEWABLE,electricity,refined liquids,refined liquids (steam/CT)
-ELEC_NON_RENEWABLE,electricity,nuclear,Gen_III
+ELEC_NON_RENEWABLE,electricity,nuclear,large reactor
+ELEC_NON_RENEWABLE,electricity,nuclear,SMR
 ELEC_NON_RENEWABLE,electricity,nuclear,Gen_II_LWR
 ELEC_RENEWABLE,electricity,biomass,biomass (IGCC)
 ELEC_RENEWABLE,electricity,biomass,biomass (conv)
@@ -164,10 +173,14 @@ EN_CARRIER_ELEC_NF,elec_biomass (IGCC CCS),biomass (IGCC CCS),biomass (IGCC CCS)
 EN_CARRIER_ELEC_NF,elec_biomass (IGCC CCS),biomass (IGCC CCS),biomass (IGCC CCS) (seawater)
 EN_CARRIER_ELEC_NF,elec_biomass (IGCC CCS),biomass (IGCC CCS),biomass (IGCC CCS) (recirculating)
 EN_CARRIER_ELEC_NF,elec_biomass (IGCC CCS),biomass (IGCC CCS),biomass (IGCC CCS) (dry cooling)
-EN_CARRIER_ELEC_NF,elec_Gen_III,Gen_III,Gen_III (cooling pond)
-EN_CARRIER_ELEC_NF,elec_Gen_III,Gen_III,Gen_III (once through)
-EN_CARRIER_ELEC_NF,elec_Gen_III,Gen_III,Gen_III (recirculating)
-EN_CARRIER_ELEC_NF,elec_Gen_III,Gen_III,Gen_III (seawater)
+EN_CARRIER_ELEC_NF,elec_large reactor,large reactor,large reactor (cooling pond)
+EN_CARRIER_ELEC_NF,elec_SMR,SMR,SMR (cooling pond)
+EN_CARRIER_ELEC_NF,elec_large reactor,large reactor,large reactor (once through)
+EN_CARRIER_ELEC_NF,elec_SMR,SMR,SMR (once through)
+EN_CARRIER_ELEC_NF,elec_large reactor,large reactor,large reactor (recirculating)
+EN_CARRIER_ELEC_NF,elec_SMR,SMR,SMR (recirculating)
+EN_CARRIER_ELEC_NF,elec_large reactor,large reactor,large reactor (seawater)
+EN_CARRIER_ELEC_NF,elec_SMR,SMR,SMR (seawater)
 EN_CARRIER_ELEC_NF,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (cooling pond)
 EN_CARRIER_ELEC_NF,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (once through)
 EN_CARRIER_ELEC_NF,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (recirculating)
@@ -198,13 +211,19 @@ FE_EED_noDH,refined liquids enduse,refined liquids enduse,refined liquids enduse
 FE_EED_noDH,refined liquids transport,refined liquids transport,refined liquids transport
 FE_EED_noDH,refined liquids industrial,refined liquids industrial,refined liquids industrial
 FE_EED_noDH,H2 retail delivery,H2 retail delivery,H2 retail delivery
-FE_EED_noDH,H2 retail dispensing,H2 retail dispensing,H2 retail dispensing
 FE_EED_noDH,H2 wholesale delivery,H2 liquid truck,H2 liquid truck
 FE_EED_noDH,H2 wholesale delivery,H2 pipeline,H2 pipeline
-FE_EED_noDH,H2 wholesale dispensing,H2 delivery,H2 liquid truck
-FE_EED_noDH,H2 wholesale dispensing,H2 delivery,H2 pipeline
-FE_EED_noDH,H2 wholesale dispensing,forecourt production,electrolysis
-FE_EED_noDH,H2 wholesale dispensing,forecourt production,natural gas steam reforming
+FE_EED_noDH,H2 LDV,H2 delivery,H2 liquid truck
+FE_EED_noDH,H2 MHDV,H2 delivery,H2 liquid truck
+FE_EED_noDH,H2 LDV,H2 delivery,H2 pipeline
+FE_EED_noDH,H2 MHDV,H2 delivery,H2 pipeline
+FE_EED_noDH,LH2,H2 delivery,H2 pipeline
+FE_EED_noDH,H2 LDV,onsite production,electrolysis
+FE_EED_noDH,H2 MHDV,onsite production,electrolysis
+FE_EED_noDH,LH2,onsite production,electrolysis
+FE_EED_noDH,H2 LDV,onsite production,natural gas steam reforming
+FE_EED_noDH,H2 MHDV,onsite production,natural gas steam reforming
+FE_EED_noDH,LH2,onsite production,natural gas steam reforming
 FE_EED_noDH,elect_td_bld,elect_td_bld,elect_td_bld
 FE_EED_noDH,elect_td_ind,elect_td_ind,elect_td_ind
 FE_EED_noDH,elect_td_trn,elect_td_trn,elect_td_trn
@@ -221,10 +240,17 @@ FE_NO_PV,refined liquids industrial,refined liquids industrial,refined liquids i
 FE_NO_PV,H2 wholesale delivery,H2 liquid truck,H2 liquid truck
 FE_NO_PV,H2 wholesale delivery,H2 pipeline,H2 pipeline
 FE_NO_PV,H2 industrial,onsite production,electrolysis
-FE_NO_PV,H2 wholesale dispensing,H2 delivery,H2 liquid truck
-FE_NO_PV,H2 wholesale dispensing,H2 delivery,H2 pipeline
-FE_NO_PV,H2 wholesale dispensing,forecourt production,electrolysis
-FE_NO_PV,H2 wholesale dispensing,forecourt production,natural gas steam reforming
+FE_NO_PV,H2 LDV,H2 delivery,H2 liquid truck
+FE_NO_PV,H2 MHDV,H2 delivery,H2 liquid truck
+FE_NO_PV,H2 LDV,H2 delivery,H2 pipeline
+FE_NO_PV,H2 MHDV,H2 delivery,H2 pipeline
+FE_NO_PV,LH2,H2 delivery,H2 pipeline
+FE_NO_PV,H2 LDV,onsite production,electrolysis
+FE_NO_PV,H2 MHDV,onsite production,electrolysis
+FE_NO_PV,LH2,onsite production,electrolysis
+FE_NO_PV,H2 LDV,onsite production,natural gas steam reforming
+FE_NO_PV,H2 MHDV,onsite production,natural gas steam reforming
+FE_NO_PV,LH2,onsite production,natural gas steam reforming
 FE_NO_PV,elect_td_bld,elect_td_bld,elect_td_bld
 FE_NO_PV,elect_td_ind,elect_td_ind,elect_td_ind
 FE_NO_PV,elect_td_trn,elect_td_trn,elect_td_trn
@@ -245,7 +271,9 @@ GREEN_H2_ELECTROLYSIS,H2 central production,electricity,electrolysis
 GREEN_H2_ELECTROLYSIS,H2 central production,wind,electrolysis
 GREEN_H2_ELECTROLYSIS,H2 central production,solar,electrolysis
 GREEN_H2_ELECTROLYSIS,H2 industrial,onsite production,electrolysis
-GREEN_H2_ELECTROLYSIS,H2 wholesale dispensing,forecourt production,electrolysis
+GREEN_H2_ELECTROLYSIS,H2 LDV,onsite production,electrolysis
+GREEN_H2_ELECTROLYSIS,H2 MHDV,onsite production,electrolysis
+GREEN_H2_ELECTROLYSIS,LH2,onsite production,electrolysis
 H2_ALL,H2 central production,coal,coal chemical
 H2_ALL,H2 central production,coal,coal chemical CCS
 H2_ALL,H2 central production,gas,natural gas steam reforming
@@ -257,8 +285,12 @@ H2_ALL,H2 central production,electricity,electrolysis
 H2_ALL,H2 central production,wind,electrolysis
 H2_ALL,H2 central production,solar,electrolysis
 H2_ALL,H2 industrial,onsite production,electrolysis
-H2_ALL,H2 wholesale dispensing,forecourt production,natural gas steam reforming
-H2_ALL,H2 wholesale dispensing,forecourt production,electrolysis
+H2_ALL,H2 LDV,onsite production,natural gas steam reforming
+H2_ALL,H2 MHDV,onsite production,natural gas steam reforming
+H2_ALL,LH2,onsite production,natural gas steam reforming
+H2_ALL,H2 LDV,onsite production,electrolysis
+H2_ALL,H2 MHDV,onsite production,electrolysis
+H2_ALL,LH2,onsite production,electrolysis
 H2_NOGREEN,H2 central production,coal,coal chemical
 H2_NOGREEN,H2 central production,coal,coal chemical CCS
 H2_NOGREEN,H2 central production,gas,natural gas steam reforming
@@ -266,8 +298,12 @@ H2_NOGREEN,H2 central production,gas,gas ATR CCS
 H2_NOGREEN,H2 central production,nuclear,electrolysis
 H2_NOGREEN,H2 central production,electricity,electrolysis
 H2_NOGREEN,H2 industrial,onsite production,electrolysis
-H2_NOGREEN,H2 wholesale dispensing,forecourt production,natural gas steam reforming
-H2_NOGREEN,H2 wholesale dispensing,forecourt production,electrolysis
+H2_NOGREEN,H2 LDV,onsite production,natural gas steam reforming
+H2_NOGREEN,H2 MHDV,onsite production,natural gas steam reforming
+H2_NOGREEN,LH2,onsite production,natural gas steam reforming
+H2_NOGREEN,H2 LDV,onsite production,electrolysis
+H2_NOGREEN,H2 MHDV,onsite production,electrolysis
+H2_NOGREEN,LH2,onsite production,electrolysis
 IND_EN,elect_td_ind,elect_td_ind,elect_td_ind
 IND_EN,refined liquids industrial,refined liquids industrial,refined liquids industrial
 IND_EN,delivered coal industry,delivered coal industry,delivered coal industry
@@ -292,10 +328,14 @@ PRIMARY_ENERGY,elec_CSP,CSP,CSP (dry_hybrid)
 PRIMARY_ENERGY,elec_CSP,CSP,CSP (recirculating)
 PRIMARY_ENERGY,elec_CSP_storage,CSP_storage,CSP_storage (dry_hybrid)
 PRIMARY_ENERGY,elec_CSP_storage,CSP_storage,CSP_storage (recirculating)
-PRIMARY_ENERGY,elec_Gen_III,Gen_III,Gen_III (cooling pond)
-PRIMARY_ENERGY,elec_Gen_III,Gen_III,Gen_III (once through)
-PRIMARY_ENERGY,elec_Gen_III,Gen_III,Gen_III (recirculating)
-PRIMARY_ENERGY,elec_Gen_III,Gen_III,Gen_III (seawater)
+PRIMARY_ENERGY,elec_large reactor,large reactor,large reactor (cooling pond)
+PRIMARY_ENERGY,elec_SMR,SMR,SMR (cooling pond)
+PRIMARY_ENERGY,elec_large reactor,large reactor,large reactor (once through)
+PRIMARY_ENERGY,elec_SMR,SMR,SMR (once through)
+PRIMARY_ENERGY,elec_large reactor,large reactor,large reactor (recirculating)
+PRIMARY_ENERGY,elec_SMR,SMR,SMR (recirculating)
+PRIMARY_ENERGY,elec_large reactor,large reactor,large reactor (seawater)
+PRIMARY_ENERGY,elec_SMR,SMR,SMR (seawater)
 PRIMARY_ENERGY,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (cooling pond)
 PRIMARY_ENERGY,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (once through)
 PRIMARY_ENERGY,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (recirculating)
@@ -352,10 +392,14 @@ TPES_CHINA,elec_CSP,CSP,CSP (dry_hybrid)
 TPES_CHINA,elec_CSP,CSP,CSP (recirculating)
 TPES_CHINA,elec_CSP_storage,CSP_storage,CSP_storage (dry_hybrid)
 TPES_CHINA,elec_CSP_storage,CSP_storage,CSP_storage (recirculating)
-TPES_CHINA,elec_Gen_III,Gen_III,Gen_III (cooling pond)
-TPES_CHINA,elec_Gen_III,Gen_III,Gen_III (once through)
-TPES_CHINA,elec_Gen_III,Gen_III,Gen_III (recirculating)
-TPES_CHINA,elec_Gen_III,Gen_III,Gen_III (seawater)
+TPES_CHINA,elec_large reactor,large reactor,large reactor (cooling pond)
+TPES_CHINA,elec_SMR,SMR,SMR (cooling pond)
+TPES_CHINA,elec_large reactor,large reactor,large reactor (once through)
+TPES_CHINA,elec_SMR,SMR,SMR (once through)
+TPES_CHINA,elec_large reactor,large reactor,large reactor (recirculating)
+TPES_CHINA,elec_SMR,SMR,SMR (recirculating)
+TPES_CHINA,elec_large reactor,large reactor,large reactor (seawater)
+TPES_CHINA,elec_SMR,SMR,SMR (seawater)
 TPES_CHINA,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (cooling pond)
 TPES_CHINA,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (once through)
 TPES_CHINA,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (recirculating)
@@ -390,10 +434,14 @@ TPES_GAS,elec_CSP,CSP,CSP (dry_hybrid)
 TPES_GAS,elec_CSP,CSP,CSP (recirculating)
 TPES_GAS,elec_CSP_storage,CSP_storage,CSP_storage (dry_hybrid)
 TPES_GAS,elec_CSP_storage,CSP_storage,CSP_storage (recirculating)
-TPES_GAS,elec_Gen_III,Gen_III,Gen_III (cooling pond)
-TPES_GAS,elec_Gen_III,Gen_III,Gen_III (once through)
-TPES_GAS,elec_Gen_III,Gen_III,Gen_III (recirculating)
-TPES_GAS,elec_Gen_III,Gen_III,Gen_III (seawater)
+TPES_GAS,elec_large reactor,large reactor,large reactor (cooling pond)
+TPES_GAS,elec_SMR,SMR,SMR (cooling pond)
+TPES_GAS,elec_large reactor,large reactor,large reactor (once through)
+TPES_GAS,elec_SMR,SMR,SMR (once through)
+TPES_GAS,elec_large reactor,large reactor,large reactor (recirculating)
+TPES_GAS,elec_SMR,SMR,SMR (recirculating)
+TPES_GAS,elec_large reactor,large reactor,large reactor (seawater)
+TPES_GAS,elec_SMR,SMR,SMR (seawater)
 TPES_GAS,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (cooling pond)
 TPES_GAS,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (once through)
 TPES_GAS,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (recirculating)
@@ -419,10 +467,14 @@ TPES_RENEWABLE,elec_CSP,CSP,CSP (dry_hybrid)
 TPES_RENEWABLE,elec_CSP,CSP,CSP (recirculating)
 TPES_RENEWABLE,elec_CSP_storage,CSP_storage,CSP_storage (dry_hybrid)
 TPES_RENEWABLE,elec_CSP_storage,CSP_storage,CSP_storage (recirculating)
-TPES_RENEWABLE,elec_Gen_III,Gen_III,Gen_III (cooling pond)
-TPES_RENEWABLE,elec_Gen_III,Gen_III,Gen_III (once through)
-TPES_RENEWABLE,elec_Gen_III,Gen_III,Gen_III (recirculating)
-TPES_RENEWABLE,elec_Gen_III,Gen_III,Gen_III (seawater)
+TPES_RENEWABLE,elec_large reactor,large reactor,large reactor (cooling pond)
+TPES_RENEWABLE,elec_SMR,SMR,SMR (cooling pond)
+TPES_RENEWABLE,elec_large reactor,large reactor,large reactor (once through)
+TPES_RENEWABLE,elec_SMR,SMR,SMR (once through)
+TPES_RENEWABLE,elec_large reactor,large reactor,large reactor (recirculating)
+TPES_RENEWABLE,elec_SMR,SMR,SMR (recirculating)
+TPES_RENEWABLE,elec_large reactor,large reactor,large reactor (seawater)
+TPES_RENEWABLE,elec_SMR,SMR,SMR (seawater)
 TPES_RENEWABLE,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (cooling pond)
 TPES_RENEWABLE,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (once through)
 TPES_RENEWABLE,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (recirculating)
@@ -449,10 +501,14 @@ TPES_RENEWABLE_FEEDSTOCKSRL,elec_CSP,CSP,CSP (dry_hybrid)
 TPES_RENEWABLE_FEEDSTOCKSRL,elec_CSP,CSP,CSP (recirculating)
 TPES_RENEWABLE_FEEDSTOCKSRL,elec_CSP_storage,CSP_storage,CSP_storage (dry_hybrid)
 TPES_RENEWABLE_FEEDSTOCKSRL,elec_CSP_storage,CSP_storage,CSP_storage (recirculating)
-TPES_RENEWABLE_FEEDSTOCKSRL,elec_Gen_III,Gen_III,Gen_III (cooling pond)
-TPES_RENEWABLE_FEEDSTOCKSRL,elec_Gen_III,Gen_III,Gen_III (once through)
-TPES_RENEWABLE_FEEDSTOCKSRL,elec_Gen_III,Gen_III,Gen_III (recirculating)
-TPES_RENEWABLE_FEEDSTOCKSRL,elec_Gen_III,Gen_III,Gen_III (seawater)
+TPES_RENEWABLE_FEEDSTOCKSRL,elec_large reactor,large reactor,large reactor (cooling pond)
+TPES_RENEWABLE_FEEDSTOCKSRL,elec_SMR,SMR,SMR (cooling pond)
+TPES_RENEWABLE_FEEDSTOCKSRL,elec_large reactor,large reactor,large reactor (once through)
+TPES_RENEWABLE_FEEDSTOCKSRL,elec_SMR,SMR,SMR (once through)
+TPES_RENEWABLE_FEEDSTOCKSRL,elec_large reactor,large reactor,large reactor (recirculating)
+TPES_RENEWABLE_FEEDSTOCKSRL,elec_SMR,SMR,SMR (recirculating)
+TPES_RENEWABLE_FEEDSTOCKSRL,elec_large reactor,large reactor,large reactor (seawater)
+TPES_RENEWABLE_FEEDSTOCKSRL,elec_SMR,SMR,SMR (seawater)
 TPES_RENEWABLE_FEEDSTOCKSRL,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (cooling pond)
 TPES_RENEWABLE_FEEDSTOCKSRL,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (once through)
 TPES_RENEWABLE_FEEDSTOCKSRL,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (recirculating)
@@ -474,10 +530,14 @@ TPES_RES_elec,elec_CSP,CSP,CSP (dry_hybrid)
 TPES_RES_elec,elec_CSP,CSP,CSP (recirculating)
 TPES_RES_elec,elec_CSP_storage,CSP_storage,CSP_storage (dry_hybrid)
 TPES_RES_elec,elec_CSP_storage,CSP_storage,CSP_storage (recirculating)
-TPES_RES_elec,elec_Gen_III,Gen_III,Gen_III (cooling pond)
-TPES_RES_elec,elec_Gen_III,Gen_III,Gen_III (once through)
-TPES_RES_elec,elec_Gen_III,Gen_III,Gen_III (recirculating)
-TPES_RES_elec,elec_Gen_III,Gen_III,Gen_III (seawater)
+TPES_RES_elec,elec_large reactor,large reactor,large reactor (cooling pond)
+TPES_RES_elec,elec_SMR,SMR,SMR (cooling pond)
+TPES_RES_elec,elec_large reactor,large reactor,large reactor (once through)
+TPES_RES_elec,elec_SMR,SMR,SMR (once through)
+TPES_RES_elec,elec_large reactor,large reactor,large reactor (recirculating)
+TPES_RES_elec,elec_SMR,SMR,SMR (recirculating)
+TPES_RES_elec,elec_large reactor,large reactor,large reactor (seawater)
+TPES_RES_elec,elec_SMR,SMR,SMR (seawater)
 TPES_RES_elec,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (cooling pond)
 TPES_RES_elec,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (once through)
 TPES_RES_elec,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (recirculating)
@@ -545,10 +605,14 @@ PRIMARY_ENERGY,elec_CSP,CSP,CSP (dry_hybrid)
 PRIMARY_ENERGY,elec_CSP,CSP,CSP (recirculating)
 PRIMARY_ENERGY,elec_CSP_storage,CSP_storage,CSP_storage (dry_hybrid)
 PRIMARY_ENERGY,elec_CSP_storage,CSP_storage,CSP_storage (recirculating)
-PRIMARY_ENERGY,elec_Gen_III,Gen_III,Gen_III (cooling pond)
-PRIMARY_ENERGY,elec_Gen_III,Gen_III,Gen_III (once through)
-PRIMARY_ENERGY,elec_Gen_III,Gen_III,Gen_III (recirculating)
-PRIMARY_ENERGY,elec_Gen_III,Gen_III,Gen_III (seawater)
+PRIMARY_ENERGY,elec_large reactor,large reactor,large reactor (cooling pond)
+PRIMARY_ENERGY,elec_SMR,SMR,SMR (cooling pond)
+PRIMARY_ENERGY,elec_large reactor,large reactor,large reactor (once through)
+PRIMARY_ENERGY,elec_SMR,SMR,SMR (once through)
+PRIMARY_ENERGY,elec_large reactor,large reactor,large reactor (recirculating)
+PRIMARY_ENERGY,elec_SMR,SMR,SMR (recirculating)
+PRIMARY_ENERGY,elec_large reactor,large reactor,large reactor (seawater)
+PRIMARY_ENERGY,elec_SMR,SMR,SMR (seawater)
 PRIMARY_ENERGY,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (cooling pond)
 PRIMARY_ENERGY,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (once through)
 PRIMARY_ENERGY,elec_Gen_II_LWR,Gen_II_LWR,Gen_II_LWR (recirculating)
@@ -710,13 +774,19 @@ FE_RES_DENOM,refined liquids transport,refined liquids transport,refined liquids
 FE_RES_DENOM,refined liquids industrial,refined liquids industrial,refined liquids industrial
 FE_RES_DENOM,refined liquids bunkers av,refined liquids bunkers av,refined liquids bunkers av
 FE_RES_DENOM,H2 retail delivery,H2 retail delivery,H2 retail delivery
-FE_RES_DENOM,H2 retail dispensing,H2 retail dispensing,H2 retail dispensing
 FE_RES_DENOM,H2 wholesale delivery,H2 liquid truck,H2 liquid truck
 FE_RES_DENOM,H2 wholesale delivery,H2 pipeline,H2 pipeline
-FE_RES_DENOM,H2 wholesale dispensing,H2 delivery,H2 liquid truck
-FE_RES_DENOM,H2 wholesale dispensing,H2 delivery,H2 pipeline
-FE_RES_DENOM,H2 wholesale dispensing,forecourt production,electrolysis
-FE_RES_DENOM,H2 wholesale dispensing,forecourt production,natural gas steam reforming
+FE_RES_DENOM,H2 LDV,H2 delivery,H2 liquid truck
+FE_RES_DENOM,H2 MHDV,H2 delivery,H2 liquid truck
+FE_RES_DENOM,H2 LDV,H2 delivery,H2 pipeline
+FE_RES_DENOM,H2 MHDV,H2 delivery,H2 pipeline
+FE_RES_DENOM,LH2,H2 delivery,H2 pipeline
+FE_RES_DENOM,H2 LDV,onsite production,electrolysis
+FE_RES_DENOM,H2 MHDV,onsite production,electrolysis
+FE_RES_DENOM,LH2,onsite production,electrolysis
+FE_RES_DENOM,H2 LDV,onsite production,natural gas steam reforming
+FE_RES_DENOM,H2 MHDV,onsite production,natural gas steam reforming
+FE_RES_DENOM,LH2,onsite production,natural gas steam reforming
 FE_RES_DENOM,elect_td_bld,elect_td_bld,elect_td_bld
 FE_RES_DENOM,elect_td_bld,rooftop_pv,rooftop_pv
 FE_RES_DENOM,elect_td_ind,elect_td_ind,elect_td_ind

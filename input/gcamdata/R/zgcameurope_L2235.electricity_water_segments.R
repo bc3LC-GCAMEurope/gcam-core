@@ -434,20 +434,20 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       select(region, supplysector, subsector0, subsector, stub.technology, calibrated.value, subs.share.weight, future.subs.shrwt, tech.share.weight,
              from.year, to.year, to.value, interpolation.function)
 
-    # Lastly, for CCS and nuclear Gen 3 techs, which are not in L2235.StubTechProd_elecS_cool_SW_EUR
-    # we assume that share weights of cooling technologies for that particular state remain similar
+    # Lastly, for CCS and new nuclear techs (large reactor and SMR), which are not in L2235.StubTechProd_elecS_cool_SW_EUR
+    # we assume that share weights of cooling technologies for that particular region remain similar
     # to the old power plant (Gen 2 or without CCS)
     L2235.StubTechInterpTo_elecS_mapped_EUR <- L2235.GlobalTechShrwt_elecS_cool_EUR %>%
       distinct(supplysector = sector.name, subsector0 = subsector.name0, subsector = subsector.name,
                stub.technology = technology) %>%
       anti_join(L2235.StubTechInterp_elecS_cool_EUR_pre, by = c("supplysector", "subsector0", "subsector", "stub.technology")) %>%
-      filter(grepl("CCS|Gen_III", subsector)) %>%
+      filter(grepl("CCS|large reactor|SMR", subsector)) %>%
       mutate(subsector.to.copy = subsector,
              subsector.to.copy = gsub(" CCS", "", subsector.to.copy),
-             subsector.to.copy = gsub("Gen_III", "Gen_II_LWR", subsector.to.copy),
+             subsector.to.copy = gsub("large reactor|SMR", "Gen_II_LWR", subsector.to.copy),
              stubtech.to.copy = stub.technology,
              stubtech.to.copy = gsub(" CCS", "", stubtech.to.copy),
-             stubtech.to.copy = gsub("Gen_III", "Gen_II_LWR", stubtech.to.copy)) %>%
+             stubtech.to.copy = gsub("large reactor|SMR", "Gen_II_LWR", stubtech.to.copy)) %>%
       left_join(L2235.StubTechInterp_elecS_cool_EUR_pre, by = c("supplysector", "subsector0",
                                                                 "subsector.to.copy" = "subsector", "stubtech.to.copy" = "stub.technology")) %>%
       filter(!is.na(region)) %>%
