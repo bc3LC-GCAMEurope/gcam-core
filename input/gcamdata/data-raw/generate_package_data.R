@@ -632,6 +632,9 @@ prebuilt_data_names <- c(
   "L1328.en_bal_frac_industry_food_inonspec_R_Yh",
   "L1328.en_bal_frac_industry_food_inonspec_R_Yh_EUR",
 
+  # output of module_emissions_L152.MACC to cover large raw EPA MACC data
+  "L152.MAC_pct_R_S_Proc_EPA",
+
   # output of module_socio_L100.GTAP
   "L100.GTAP_capital_stock",
   "L100.GTAPCostShare_AgLU_reg_comm"
