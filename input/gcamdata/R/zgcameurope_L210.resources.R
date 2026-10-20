@@ -45,38 +45,38 @@ module_gcameurope_L210.resources <- function(command, ...) {
                                "L210.ResTechCoef",
                                "L210.ResTechCost")
   MODULE_INPUTS <- c(FILE = "common/GCAM_region_names",
-                    FILE = "energy/A_regions",
-                    FILE = "energy/A10.rsrc_info_fossils",
-                    FILE = "energy/A10.rsrc_info_renewables_others",
-                    FILE = "energy/A10.rsrc_info_uranium",
-                    FILE = "gcam-europe/A10.subrsrc_info_EUR",
-                    FILE = "energy/A10.TechChange",
-                    FILE = "energy/A10.TechChange_SSPs",
-                    FILE = "energy/A10.EnvironCost_SSPs",
-                    FILE = "energy/A15.roofPV_TechChange",
-                    FILE = "gcam-europe/A10.ResSubresourceProdLifetime",
-                    FILE = "energy/A10.SubresourcePriceAdder",
-                    FILE = "energy/A10.ResReserveTechLifetime",
-                    FILE = "energy/A10.ResReserveTechDeclinePhase",
-                    FILE = "energy/A10.ResReserveTechProfitShutdown",
-                    FILE = "energy/A21.globalrsrctech_cost",
-                    FILE = "energy/A21.globalrsrctech_coef",
-                    "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
-                    "L111.RsrcCurves_EJ_R_Ffos_EUR",
-                    "L111.Prod_EJ_R_F_Yh_EUR",
-                    "L112.RsrcCurves_Mt_R_U",
-                    "L113.RsrcCurves_EJ_R_MSW",
-                    "L114.RsrcCurves_EJ_R_wind",
-                    "L115.RsrcCurves_EJ_R_roofPV",
-                    "L116.RsrcCurves_EJ_R_geo",
-                    "L116.RsrcCurves_EJ_R_EGS",
-                    "L120.RsrcCurves_EJ_R_offshore_wind",
-                    "L120.TechChange_offshore_wind",
-                    "L102.pcgdp_thous90USD_Scen_R_Y",
-                    "L210.RenewRsrc",
-                    "L210.RenewRsrcPrice",
-                    "L210.ResTechShrwt",
-                    OUTPUTS_TO_COPY_FILTER)
+                     FILE = "energy/A_regions",
+                     FILE = "energy/A10.rsrc_info_fossils",
+                     FILE = "energy/A10.rsrc_info_renewables_others",
+                     FILE = "energy/A10.rsrc_info_uranium",
+                     FILE = "gcam-europe/A10.subrsrc_info_EUR",
+                     FILE = "energy/A10.TechChange",
+                     FILE = "energy/A10.TechChange_SSPs",
+                     FILE = "energy/A10.EnvironCost_SSPs",
+                     FILE = "energy/A15.roofPV_TechChange",
+                     FILE = "gcam-europe/A10.ResSubresourceProdLifetime",
+                     FILE = "energy/A10.SubresourcePriceAdder",
+                     FILE = "energy/A10.ResReserveTechLifetime",
+                     FILE = "energy/A10.ResReserveTechDeclinePhase",
+                     FILE = "energy/A10.ResReserveTechProfitShutdown",
+                     FILE = "energy/A21.globalrsrctech_cost",
+                     FILE = "energy/A21.globalrsrctech_coef",
+                     "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
+                     "L111.RsrcCurves_EJ_R_Ffos_EUR",
+                     "L111.Prod_EJ_R_F_Yh_EUR",
+                     "L112.RsrcCurves_Mt_R_U",
+                     "L113.RsrcCurves_EJ_R_MSW",
+                     "L114.RsrcCurves_EJ_R_wind",
+                     "L115.RsrcCurves_EJ_R_roofPV",
+                     "L116.RsrcCurves_EJ_R_geo",
+                     "L116.RsrcCurves_EJ_R_EGS",
+                     "L120.RsrcCurves_EJ_R_offshore_wind",
+                     "L120.TechChange_offshore_wind",
+                     "L102.pcgdp_thous90USD_Scen_R_Y",
+                     "L210.RenewRsrc",
+                     "L210.RenewRsrcPrice",
+                     "L210.ResTechShrwt",
+                     OUTPUTS_TO_COPY_FILTER)
   MODULE_OUTPUTS <- c("L210.RenewRsrc_EUR",
                       "L210.RenewRsrcPrice_EUR",
                       "L210.ResTechShrwt_EUR",
@@ -187,63 +187,76 @@ module_gcameurope_L210.resources <- function(command, ...) {
     # Kind of a level 1.5 we are going to calculate / update historical energy
     # but the years we choose as the model base years matter
 
-    GCAM_timesteps <- diff(MODEL_BASE_YEARS)
-    start.year.timestep <- modeltime.PERIOD0_TIMESTEP
-    model_year_timesteps <- tibble(year = MODEL_BASE_YEARS, timestep = c(start.year.timestep, GCAM_timesteps))
-
-    # a pipelne helper function to help back calculate new additions to reserve
-    # from historical production
-    lag_prod_helper <- function(year, value, year_operate, final_year) {
-      ret <- value
-      for(i in seq_along(year)) {
-        if(i == 1) {
-          # first year assume all production in this vintage
-          ret[i] <- value[i]
-        } else if( year_operate[i] > final_year[i]) {
-          if(year_operate[i -1] >= final_year[i]) {
-            # retired
-            ret[i] <- 0
-          } else {
-            # final timestep that is operating so we must adjust the production
-            # by the number of years into the timestep it should have operated
-            # incase lifetime and timesteps do not neatly overlap
-            ret[i] <- ret[i - 1] * (year_operate[i] - final_year[i]) / (year_operate[i] - year_operate[i-1])
-          }
-        } else if(year_operate[i] > year[i]) {
-          # assume a vintage that as already invested continues at full
-          # capacity
-          ret[i] <- ret[i -1]
-        } else {
-          # to determine new investment we take the difference between
-          # what the total should be and subtract off production from
-          # previous vintages that are still operating
-          ret[i] <- 0
-          ret[i] <- pmax(value[i] - sum(ret[year_operate == year[i]]), 0)
-        }
-      }
-      ret
-    }
     # 2B. Fossil: RESOURCE RESERVE ADDITIONS  ----------------------------------
     # Back calculate reserve additions to be exactly enough given our historical production
     # and assumed production lifetime.  Note production lifetimes may not cover the entire
-    # historical period making the calculation a bit more tricky.  We use the lag_prod_helper
-    # to help project forward production by each historical vintage so we can take this into
-    # account.
+    # historical period and production may dip below capacity making the calculation a bit more
+    # tricky.
+    # NOTE: GCAM-Europe deliberately keeps its own (legacy, GCAM-core <= 7.2 style) algorithm here instead
+    # of the module helper resource_reserve_back_calculate used by GCAM-core since 8.0 (and 8.11).  In this
+    # algorithm every historical vintage produces at full capacity during its production lifetime, retires,
+    # and is then reinvested (reserve = production * lifetime).  With the GCAM-core algorithm, which tracks the
+    # depletion of each vintage, the 2025 solution of the European fossil resources does not converge (the
+    # historical vintages of several regions are depleted by 2021 and 2025 production relies on new reserves
+    # of very elastic supply curves).
+    # Note: because we are back calculating this our choice of MODEL_BASE_YEARS matters, which is
+    # why this is Level2 processing.
+    reserve_back_calculate_legacy_EUR <- function(data) {
+      model_year_timesteps <- tibble(year = MODEL_BASE_YEARS,
+                                     timestep = c(modeltime.PERIOD0_TIMESTEP, diff(MODEL_BASE_YEARS)))
+
+      # a pipeline helper function to help back calculate new additions to reserve
+      # from historical production (GCAM-Europe <= 8.10)
+      lag_prod_helper <- function(year, value, year_operate, final_year) {
+        ret <- value
+        for(i in seq_along(year)) {
+          if(i == 1) {
+            # first year assume all production in this vintage
+            ret[i] <- value[i]
+          } else if( year_operate[i] > final_year[i]) {
+            if(year_operate[i -1] >= final_year[i]) {
+              # retired
+              ret[i] <- 0
+            } else {
+              # final timestep that is operating so we must adjust the production
+              # by the number of years into the timestep it should have operated
+              # incase lifetime and timesteps do not neatly overlap
+              ret[i] <- ret[i - 1] * (year_operate[i] - final_year[i]) / (year_operate[i] - year_operate[i-1])
+            }
+          } else if(year_operate[i] > year[i]) {
+            # assume a vintage that as already invested continues at full
+            # capacity
+            ret[i] <- ret[i -1]
+          } else {
+            # to determine new investment we take the difference between
+            # what the total should be and subtract off production from
+            # previous vintages that are still operating
+            ret[i] <- 0
+            ret[i] <- pmax(value[i] - sum(ret[year_operate == year[i]]), 0)
+          }
+        }
+        ret
+      }
+
+      data %>%
+        filter(year %in% MODEL_BASE_YEARS) %>%
+        arrange(year) %>%
+        left_join_error_no_match(model_year_timesteps, by = "year") %>%
+        repeat_add_columns(tibble(year_operate = MODEL_BASE_YEARS)) %>%
+        mutate(final_year = pmin(MODEL_BASE_YEARS[length(MODEL_BASE_YEARS)], (year - timestep + lifetime))) %>%
+        filter(year_operate >= year - timestep + 1) %>%
+        mutate(value = lag_prod_helper(year, value, year_operate, final_year)) %>%
+        filter(year == year_operate) %>%
+        mutate(value = value * lifetime) %>%
+        select(year, value)
+    }
+
     L111.Prod_EJ_R_F_Yh_EUR %>%
-      filter(year %in% MODEL_BASE_YEARS) %>%
-      arrange(year) %>%
       left_join_error_no_match(select(A10.ResSubresourceProdLifetime, resource, lifetime = avg.prod.lifetime, reserve.subresource) %>% distinct(),
                                by=c("fuel" = "resource", "technology" = "reserve.subresource")) %>%
-      left_join_error_no_match(model_year_timesteps, by = c("year")) %>%
-      repeat_add_columns(tibble(year_operate = MODEL_BASE_YEARS)) %>%
-      mutate(final_year = pmin(MODEL_BASE_YEARS[length(MODEL_BASE_YEARS)], (year - timestep + lifetime))) %>%
-      filter(year_operate >= year - timestep + 1) %>%
-      group_by(GCAM_region_ID, sector, fuel, technology) %>%
-      mutate(value = lag_prod_helper(year, value, year_operate, final_year)) %>%
-      ungroup() %>%
-      filter(year == year_operate) %>%
-      mutate(value = value * lifetime) %>%
-      select(-lifetime, -timestep, -year_operate) ->
+      tidyr::nest(data = -c(GCAM_region_ID, sector, fuel, technology)) %>%
+      mutate(data = lapply(data, reserve_back_calculate_legacy_EUR)) %>%
+      tidyr::unnest(cols = data) ->
       L210.Reserve_EJ_R_F_Yh
 
     # Given the mismatch between data sets for historical production / regional supply curves / and
@@ -438,6 +451,18 @@ module_gcameurope_L210.resources <- function(command, ...) {
       filter(!region %in% no_offshore_regions)
     L210.SmthRenewRsrcTechChange_offshore_wind_EUR <- L210.SmthRenewRsrcTechChange_offshore_wind_EUR %>%
       filter(!region %in% no_offshore_regions)
+
+    # 6. GCAM-core 8.11: zero calibrated production for the unconventional oil subresources ------
+    # The 8.11 C++ (ReserveSubResource::initCalc) aborts if a subresource has calibrated reserve but
+    # no calibrated production. L210.ReserveCalReserve_EUR already has zero reserves for
+    # crude oil / unconventional oil in regions without it, so add the matching zero production.
+    # Done at the end on purpose: RsrcFixOut, no_hist_production and the shareweights above must
+    # keep seeing the original L210.RsrcCalProd_EUR.
+    L210.ReserveCalReserve_EUR.uncon_other_reg %>%
+      rename(subresource = reserve.subresource,
+             cal.production = cal.reserve) %>%
+      bind_rows(L210.RsrcCalProd_EUR, .) ->
+      L210.RsrcCalProd_EUR
 
     # Produce outputs ===================================================
     L210.RenewRsrc_EUR %>%
