@@ -4,7 +4,7 @@ library(devtools)
 # We could potentially use drake to speed up the process of updating the package
 # data which otherwise requires multiple runs of driver.  However, given drake
 # is optional we default to not use it.
-USE_DRIVER_DRAKE <- FALSE
+USE_DRIVER_DRAKE <- TRUE
 
 # Note: the methods below explicitly name XML tags as expected by GCAM and/or
 # the model interface headers thus will need to be maintained to be consistent.
@@ -171,6 +171,7 @@ generate_level2_data_names <- function() {
   level2_data_names[["ResReserveTechProfitShutdown"]] <- c("region", "resource", "reserve.subresource", "resource.reserve.technology", "year", "median.shutdown.point", "profit.shutdown.steepness")
   level2_data_names[["ResReserveTechDeclinePhase"]] <- c("region", "resource", "reserve.subresource", "resource.reserve.technology", "year", "decline.phase.percent")
   level2_data_names[["ResReserveTechCoef"]] <- c("region", "resource", "reserve.subresource", "resource.reserve.technology", "year", "minicam.energy.input", "coefficient")
+  level2_data_names[["ResReserveTechCoefMkt"]] <- c("region", "resource", "reserve.subresource", "resource.reserve.technology", "year", "minicam.energy.input", "coefficient", "market.name")
   level2_data_names[["ResTechAccountOutput"]] <- c("region", "resource", "subresource", "technology", "year", "output.accounting", "output.ratio")
   level2_data_names[["ResReserveTechInvestmentInput"]] <- c("region", "resource", "reserve.subresource", "resource.reserve.technology", "year", "minicam.non.energy.input", "capital.coef", "tracking.market")
 
@@ -631,6 +632,9 @@ prebuilt_data_names <- c(
   # output of module_energy_L1328.food_processing, based on IEA data
   "L1328.en_bal_frac_industry_food_inonspec_R_Yh",
   "L1328.en_bal_frac_industry_food_inonspec_R_Yh_EUR",
+
+  # output of module_emissions_L152.MACC to cover large raw EPA MACC data
+  "L152.MAC_pct_R_S_Proc_EPA",
 
   # output of module_socio_L100.GTAP
   "L100.GTAP_capital_stock",

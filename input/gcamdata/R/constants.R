@@ -182,6 +182,10 @@ CONV_BTU_KJ <- 1.055056
 CONV_MMBTU_GJ <- 1.055056
 CONV_MMBTU_KGH2 <- 0.113939965425114 # MMBTU/kg H2 - LHV Source: H2 CCTP Workbook.xls (Used for older GCAM assumptions)
 CONV_GJ_KGH2 <- 0.12021 #GJ/kg H2 - LHV
+CONV_MMCF_EJ <- 1.055e-6 # convert volume of natural gas (million cubic feet) into energy (Table 7.3 in Rogner Chapter 7 Energy Resources and Potentials)
+CONV_BCF_MMCF <- 1000 # convert billion cubic feet into million cubic feet
+CONV_MBBL_EJ <- 6.119 * 1e-3 # million barrels of oil equivalent to EJ
+CONV_TCE_EJ <- 2.9288 * 1e-8 # convert 1 ton of coal equivalent into EJ
 CONV_NG_HHV_LHV <- 0.905
 
 # Distance
@@ -240,7 +244,20 @@ aglu.TRADED_FORESTS         <- c("Forest")
 aglu.IWM_TRADED_COMM        <- c("FodderHerb", "OtherMeat_Fish") # Integrated World Market (IWM)commodities
 aglu.NONTRADED_COMM         <- c("DDGS and feedcakes", "FodderGrass", "Pasture", "Residue", "Scavenging_Other") # non-traded commodities; "Pasture" is modeled as a crop produced from pasture land.
 
-aglu.LAND_TOLERANCE    <- 0.005
+aglu.LAND_TOLERANCE    		<- 0.005 # updated land tolerance to reflect changes in zaglu_L125.LC_tot.R for PR #385.
+aglu.LAND_TOLERANCE_CHANGE <- 3 # added an absolute land change test in zaglu_L125.LC_tot.R for PR #385
+aglu.BIO_CEILING <- 0.0525 # added a maximum yield ceiling of ~30 tonnes per hectare (0.0525 GJ/m2)
+
+# Grazing intensity: the proportion of annual aboveground net primary productivity removed by grazing livestock
+# The global average grazing intensity is about 13%
+# See Wolf et al. (2021) https://www.mdpi.com/2072-4292/13/17/3430
+# To be conservative, we use a uniform 70% value here for now
+aglu.GRAZING_INTENSITY		<- 0.7
+# Because 1. the C yield method used may under estimate the yield
+# 2. we are representing relatively more managed high-quality pasture
+# 3. the world average pasture dry matter yield is ~ 3 DM t/ha
+# 4. the future productivity increase has not been considered yet
+# This value should be revisited later & differentiated by regions
 
 aglu.MIN_PROFIT_MARGIN <- 0.15  # Unitless and is used to ensure that Agricultural Costs (units 1975USD/kg) don't lead to profits below a minimum profit margin.
 aglu.BIO_GHOST_CAL_COST_SCALER <- 0.9 # scale down nonLandVariableCost during ghost calibration
@@ -957,10 +974,12 @@ emissions.UNMGD_LAND_AVG_YRS <- 30 # Years for climatological average for the GF
 emissions.CEDS_SCALE    <- "usa" # iso's that will be scaled to CEDS emissions
 emissions.CH4.GWP.AR4 <- 25 # used for EPA non-CO2 scaling, the 2019 EPA non-CO2 report uses AR4 GWPs
 emissions.N2O.GWP.AR4 <- 298 # used for EPA non-CO2 scaling, the 2019 EPA non-CO2 report uses AR4 GWPs
+emissions.CH4.GWP.AR5 <- 28 # used for EPA state-level ghg emissions from fossil fuel production
+emissions.N2O.GWP.AR5 <- 265 # used for EPA state-level ghg emissions from fossil fuel production
 
 emissions.COAL_SO2_THRESHOLD <- 0.1   # Tg/EJ (here referring to Tg SO2 per EJ of coal electricity)
 emissions.LOW_PCGDP          <- 2.75  # thousand 1990 USD
-emissions.MAC_TAXES          <- c(0, 2, 4, 6, 13, 27, 53, 100, 200, 450, 850, 2000, 3000, 5000) # Range of MAC curve costs to keep to read into GCAM; they are in EPA's units (2010USD_tCO2e)
+emissions.MAC_TAXES          <- c(0, 2, 4, 6, 13, 27, 53, 100, 200, 450, 850, 2000, 3000, 5000) # Range of MAC curve costs to keep to read into GCAM; they are in EPA's units
 emissions.MAC_MARKET         <- "CO2" # Default market that MAC curves will look for
 emissions.MAC_HIGHESTREDUCTION <- 0.95 # a high MAC reduction used to replace calculated values there are greater than 1
 
@@ -1107,7 +1126,7 @@ gcamusa.REGIONAL_FUEL_MARKETS <- c("regional coal", "delivered coal", "wholesale
 
 # Resources that will be modeled at the state level
 gcamusa.STATE_RENEWABLE_RESOURCES <- c("distributed_solar", "geothermal", "onshore wind resource", "offshore wind resource")
-gcamusa.STATE_UNLIMITED_RESOURCES <- c("global solar resource", "limestone", "scrap")
+gcamusa.STATE_UNLIMITED_RESOURCES <- c("global solar resource", "limestone", "scrap", "unconventional oil upscaling")
 
 # Define sector(s) used in L222.en_transformation_USA
 # The supplysector and subsector structure in these sectors are retained
