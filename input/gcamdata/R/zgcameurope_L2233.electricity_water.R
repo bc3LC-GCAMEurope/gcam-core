@@ -154,9 +154,12 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
 
     L2233.TechMap %>%
       select(from.supplysector, from.subsector, from.technology, to.supplysector) %>%
+      # intermittent technologies: the ones of the core (column intermittent.technology) plus the offshore wind
+      # technologies of GCAM-Europe (which replace the core wind_offshore in L223.elec_tech_water_map_EUR)
       filter(from.supplysector %in% A23.globalinttech$supplysector,
              from.subsector %in% A23.globalinttech$subsector,
-             from.technology %in% A23.globalinttech$technology) %>%
+             from.technology %in% c(A23.globalinttech$intermittent.technology,
+                                    A20.offshore_wind_types_EUR$technology)) %>%
       select(to.supplysector) %>% unique -> L2233.elec_cool_Int_supplysectors
 
     L2233.supplysector_info %>%
