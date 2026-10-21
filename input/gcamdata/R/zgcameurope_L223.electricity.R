@@ -11,7 +11,7 @@
 #' the generated outputs:
 #' \code{L223.StubTech_elec}, \code{L223.StubTechCapFactor_elec}, \code{L223.StubTechCost_offshore_wind_EUR},
 #' \code{L223.StubTechCalInput_elec_EUR}, \code{L223.StubTechFixOut_elec_EUR}, \code{L223.StubTechFixOut_hydro_EUR},
-#' \code{L223.StubTechProd_elec_EUR}, \code{L223.StubTechEff_elec_EUR}.
+#' \code{L223.StubTechProd_elec_EUR}, \code{L223.StubTechEff_elec_EUR}, \code{L223.OffshoreWindCalShare_EUR}.
 #' @details Includes all information for the global technology database, including capital and O&M costs, efficiencies, retirement rates, shareweights and interpolation rules.
 #' Often uses interpolation functions to apply assumptions to all model periods.
 #' Solar and wind capacity factor assumptions are scaled using data on irradiance and available wind resource. It also determines future fixed outputs of hydropower.
@@ -47,13 +47,17 @@ module_gcameurope_L223.electricity <- function(command, ...) {
                      "L1231.in_EJ_R_elec_F_tech_Yh",
                      "L1231.out_EJ_R_elec_F_tech_Yh",
                      "L1231.eff_R_elec_F_tech_Yh",
-                     "L210.SmthRenewRsrcCurves_offshore_wind",
+                     "L120.RegCapFactor_offshore_wind_EUR",
+                     "L120.GridCost_offshore_wind_EUR",
+                     FILE = "gcam-europe/A20.offshore_wind_types_EUR",
+                     FILE = "gcam-europe/eurostat_offshore_caloutputs_EUR",
                      OUTPUTS_TO_COPY_FILTER)
 
   MODULE_OUTPUTS <- c("L223.StubTechCalInput_elec_EUR",
                       "L223.StubTechFixOut_elec_EUR",
                       "L223.StubTechProd_elec_EUR",
                       "L223.StubTechEff_elec_EUR",
+                      "L223.OffshoreWindCalShare_EUR",
                       paste0(OUTPUTS_TO_COPY_FILTER, "_EUR"))
 
   if(command == driver.DECLARE_INPUTS) {
@@ -83,23 +87,56 @@ module_gcameurope_L223.electricity <- function(command, ...) {
     copy_filter_europe(all_data, OUTPUTS_TO_COPY_FILTER,
                        regions_to_keep = union(grid_regions$region, gcameurope.EUROSTAT_COUNTRIES))
 
-    # No offshore wind technologies in regions without offshore resource (maxSubResource == 0).
-    # The global L223 tables keep a wind_offshore stub tech in every region because the L120 chunk zero-fills
-    # regions without NREL data. Same criterion as in zgcameurope_L210.resources.
-    # Restricted to the Eurostat countries: those are the regions whose resources are rebuilt in zgcameurope_L210
-    # (resources_EUR.xml). Regions outside that set (e.g. Switzerland, Belarus) keep their offshore stub tech
-    # because their offshore resource is still defined by the global resources.xml.
-    no_offshore_regions <- L210.SmthRenewRsrcCurves_offshore_wind %>%
-      filter(maxSubResource == 0, region %in% gcameurope.EUROSTAT_COUNTRIES) %>%
-      pull(region) %>%
-      unique()
+    # Offshore wind: the global L223 tables have a single wind_offshore stub technology in every region. In GCAM-Europe
+    # it is replaced by wind_offshore_fixed and wind_offshore_floating, which only exist in the regions that have
+    # the corresponding offshore wind resource (region x type pairs of the resource curves built in
+    # zgcameurope_L120.offshore_wind, the same source used in zgcameurope_L210.resources). Regions without any
+    # offshore resource (e.g. Switzerland, landlocked countries) have no offshore wind technology.
+    # The capacity factor and the grid connection cost of each technology come from zgcameurope_L120.offshore_wind.
+    offshore_availability <- offshore_availability_EUR(L120.RegCapFactor_offshore_wind_EUR,
+                                                       A20.offshore_wind_types_EUR, GCAM_region_names)
+
+    # Share of the historical wind output of each region that is offshore wind (Eurostat), assigned to the fixed
+    # offshore wind technology (only fixed is calibrated; floating enters in the future). Used to split the calibrated wind output.
+    L223.OffshoreWindCalShare_EUR <- offshore_cal_share_EUR(eurostat_offshore_caloutputs_EUR, offshore_availability,
+                                                            GCAM_region_names, MODEL_BASE_YEARS)
 
     L223.StubTech_elec_EUR <- L223.StubTech_elec_EUR %>%
-      filter(!(stub.technology == "wind_offshore" & region %in% no_offshore_regions))
+      split_offshore_rows_EUR(A20.offshore_wind_types_EUR) %>%
+      keep_available_offshore_EUR(offshore_availability, A20.offshore_wind_types_EUR)
+
     L223.StubTechCapFactor_elec_EUR <- L223.StubTechCapFactor_elec_EUR %>%
-      filter(!(stub.technology == "wind_offshore" & region %in% no_offshore_regions))
+      split_offshore_rows_EUR(A20.offshore_wind_types_EUR) %>%
+      keep_available_offshore_EUR(offshore_availability, A20.offshore_wind_types_EUR) %>%
+      left_join(rename(offshore_availability, stub.technology = technology), by = c("region", "stub.technology")) %>%
+      mutate(capacity.factor = if_else(is.na(CFmax), capacity.factor, CFmax)) %>%
+      select(-CFmax)
+
     L223.StubTechCost_offshore_wind_EUR <- L223.StubTechCost_offshore_wind_EUR %>%
-      filter(!region %in% no_offshore_regions)
+      split_offshore_rows_EUR(A20.offshore_wind_types_EUR) %>%
+      keep_available_offshore_EUR(offshore_availability, A20.offshore_wind_types_EUR) %>%
+      left_join_error_no_match(L120.GridCost_offshore_wind_EUR %>%
+                                 left_join_error_no_match(distinct(A20.offshore_wind_types_EUR, resource, technology),
+                                                          by = "resource") %>%
+                                 select(region, stub.technology = technology, grid.cost),
+                               by = c("region", "stub.technology")) %>%
+      mutate(input.cost = round(grid.cost, energy.DIGITS_COST)) %>%
+      select(-grid.cost)
+
+    L223.StubTech_elec_EUR %>%
+      add_precursors("L223.StubTech_elec", "L120.RegCapFactor_offshore_wind_EUR",
+                     "gcam-europe/A20.offshore_wind_types_EUR") ->
+      L223.StubTech_elec_EUR
+
+    L223.StubTechCapFactor_elec_EUR %>%
+      add_precursors("L223.StubTechCapFactor_elec", "L120.RegCapFactor_offshore_wind_EUR",
+                     "gcam-europe/A20.offshore_wind_types_EUR") ->
+      L223.StubTechCapFactor_elec_EUR
+
+    L223.StubTechCost_offshore_wind_EUR %>%
+      add_precursors("L223.StubTechCost_offshore_wind", "L120.RegCapFactor_offshore_wind_EUR",
+                     "L120.GridCost_offshore_wind_EUR", "gcam-europe/A20.offshore_wind_types_EUR") ->
+      L223.StubTechCost_offshore_wind_EUR
 
     # 0. Add in switzerland to eurostat data ---------------------
     L1231.in_EJ_R_elec_F_tech_Yh_EUR <- replace_with_eurostat(L1231.in_EJ_R_elec_F_tech_Yh, L1231.in_EJ_R_elec_F_tech_Yh_EUR) %>%
@@ -197,6 +234,10 @@ module_gcameurope_L223.electricity <- function(command, ...) {
       L223.StubTechProd_elec_EUR
     L223.StubTechProd_elec_EUR <-L223.StubTechProd_elec_EUR[c(LEVEL2_DATA_NAMES[["StubTechYr"]], "calOutputValue", "share.weight.year" , "subs.share.weight", "share.weight")]
 
+    # Split the calibrated wind output of each region between onshore wind and offshore wind (Eurostat data)
+    L223.StubTechProd_elec_EUR <- split_wind_calibration_EUR(L223.StubTechProd_elec_EUR, L223.OffshoreWindCalShare_EUR,
+                                                             "calOutputValue", energy.DIGITS_CALOUTPUT)
+
     # Calibrated efficiencies of electricity generation technologies ============================
     # L223.StubTechEff_elec_EUR
 
@@ -244,10 +285,20 @@ module_gcameurope_L223.electricity <- function(command, ...) {
     L223.StubTechProd_elec_EUR %>%
       add_title("Historical calibrated outputs and shareweights of electricity sector by subsector and technology") %>%
       add_units("Exajoules (EJ)/year") %>%
-      add_comments("Calibrated historical outputs interpolated from historical values and shareweights applied (1 to non-zero outputs, else 0") %>%
+      add_comments("Calibrated historical outputs interpolated from historical values and shareweights applied (1 to non-zero outputs, else 0). The wind output is split between onshore wind and offshore wind with the Eurostat shares") %>%
       add_legacy_name("L223.StubTechProd_elec_EUR") %>%
-      add_precursors("L1231.out_EJ_R_elec_F_tech_Yh_EUR", "energy/calibrated_techs", "common/GCAM_region_names") ->
+      add_precursors("L1231.out_EJ_R_elec_F_tech_Yh_EUR", "energy/calibrated_techs", "common/GCAM_region_names",
+                     "L120.RegCapFactor_offshore_wind_EUR", "gcam-europe/A20.offshore_wind_types_EUR",
+                     "gcam-europe/eurostat_offshore_caloutputs_EUR") ->
       L223.StubTechProd_elec_EUR
+
+    L223.OffshoreWindCalShare_EUR %>%
+      add_title("Share of the historical wind output that is offshore wind, by region and base year") %>%
+      add_units("unitless") %>%
+      add_comments("Eurostat percentages of fixed offshore wind output with respect to the total wind output, for the regions with offshore wind technology; offshore.technology is the technology that receives the share") %>%
+      add_precursors("gcam-europe/eurostat_offshore_caloutputs_EUR", "L120.RegCapFactor_offshore_wind_EUR",
+                     "gcam-europe/A20.offshore_wind_types_EUR", "common/GCAM_region_names") ->
+      L223.OffshoreWindCalShare_EUR
 
     L223.StubTechEff_elec_EUR %>%
       add_title("conversion efficiency of fuel to energy in electricity sector") %>%

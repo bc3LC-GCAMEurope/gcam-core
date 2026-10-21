@@ -18,7 +18,8 @@
 module_gcameurope_L1233.elec_water_grid <- function(command, ...) {
   MODULE_INPUTS <- c(FILE = "gcam-europe/mappings/grid_regions",
                      FILE = "common/GCAM_region_names",
-                     FILE = "water/elec_tech_water_map",
+                     "L223.elec_tech_water_map_EUR",
+                     "L223.OffshoreWindCalShare_EUR",
                      FILE = "gcam-europe/A23.elecS_naming",
                      "L1233.out_EJ_R_elec_F_tech_Yh_cool_EUR",
                      "L1233.out_EJ_R_elec_F_tech_Yh_cool",
@@ -33,6 +34,9 @@ module_gcameurope_L1233.elec_water_grid <- function(command, ...) {
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
+
+    # Electricity technology to water type mapping with the offshore wind technologies of GCAM-Europe
+    elec_tech_water_map <- L223.elec_tech_water_map_EUR
 
     # ===================================================
     # Add in solar techs
@@ -53,6 +57,14 @@ module_gcameurope_L1233.elec_water_grid <- function(command, ...) {
     # to ensure switzerland, etc added to grids
     L1233.out_EJ_R_elec_F_tech_Yh_cool_EUR <- replace_with_eurostat(L1233.out_EJ_R_elec_F_tech_Yh_cool, L1233.out_EJ_R_elec_F_tech_Yh_cool_EUR) %>%
       filter_regions_europe(regions_to_keep_name = grid_regions$region, region_ID_mapping = GCAM_region_names)
+
+    # split the wind output of the base years between onshore and offshore wind (Eurostat shares), the same way as
+    # in the calibrated outputs of zgcameurope_L223.electricity (the offshore wind has no cooling system)
+    L1233.out_EJ_R_elec_F_tech_Yh_cool_EUR <- L1233.out_EJ_R_elec_F_tech_Yh_cool_EUR %>%
+      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
+      split_wind_calibration_EUR(L223.OffshoreWindCalShare_EUR, value_col = "value", digits = 9,
+                                 tech_col = "technology") %>%
+      select(-region)
 
     # add in segment options to cooling techs
     L1233.out_EJ_R_elecS_F_tech_cool_EUR <- L1233.out_EJ_R_elec_F_tech_Yh_cool_EUR %>%

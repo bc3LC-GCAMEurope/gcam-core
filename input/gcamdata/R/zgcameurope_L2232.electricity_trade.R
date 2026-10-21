@@ -32,7 +32,9 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
                      "L1235.elecS_horizontal_vertical_GCAM_coeff_EUR",
                      "L1261.elec_trade_R_EJ_EUR",
                      "L223.GlobalIntTechBackup_elec",
-                     "L223.StubTechCost_offshore_wind_EUR")
+                     "L223.GlobalIntTechBackup_offshore_EUR",
+                     "L223.StubTechCost_offshore_wind_EUR",
+                     FILE = "gcam-europe/A20.offshore_wind_types_EUR")
   MODULE_OUTPUTS <- c("L2232.ElecReserve_elecS_grid_vertical_EUR",
                       "L2232.SubsectorShrwtFllt_elecS_grid_vertical_EUR",
                       "L2232.SubsectorShrwtInterp_elecS_grid_vertical_EUR",
@@ -416,16 +418,17 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
     # 3: L2232.StubTechElecMarket_backup_EUR ----------------------------------
     # L2232.StubTechElecMarket_backup_EUR: electric sector name for states
     # Reset the electric sector market to the grid regions (for backup calculations)
+    # offshore wind technologies of GCAM-Europe instead of the core wind_offshore technology; they only have a market
+    # in the regions with the corresponding offshore wind resource (stub technologies of L223.electricity)
     L223.GlobalIntTechBackup_elec %>%
+      replace_offshore_rows_EUR(L223.GlobalIntTechBackup_offshore_EUR) %>%
       distinct(supplysector = sector.name, subsector = subsector.name, stub.technology = backup.intermittent.technology) %>%
       repeat_add_columns(select(grid_regions, region)) %>%
       repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
       left_join_error_no_match(select(grid_regions, electric.sector.market = grid_region, region),
                                by = c("region")) %>%
-      filter(!(stub.technology %in% L223.StubTechCost_offshore_wind_EUR$stub.technology &
-               !region %in% L223.StubTechCost_offshore_wind_EUR$region),
-             !(stub.technology %in% L223.StubTechCost_offshore_wind_EUR$stub.technology &
-                 region == "Slovenia")) ->
+      keep_available_offshore_EUR(distinct(L223.StubTechCost_offshore_wind_EUR, region, technology = stub.technology),
+                                  A20.offshore_wind_types_EUR) ->
       L2232.StubTechElecMarket_backup_EUR
 
 
@@ -599,7 +602,8 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
       add_title("Electric sector name for states") %>%
       add_units("Unitless") %>%
       add_comments("Reset the electric sector market to the grid regions (for backup calculations)") %>%
-      add_precursors("L223.GlobalIntTechBackup_elec",
+      add_precursors("L223.GlobalIntTechBackup_elec", "L223.GlobalIntTechBackup_offshore_EUR",
+                     "L223.StubTechCost_offshore_wind_EUR", "gcam-europe/A20.offshore_wind_types_EUR",
                      "gcam-europe/mappings/grid_regions") ->
       L2232.StubTechElecMarket_backup_EUR
 

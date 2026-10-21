@@ -16,7 +16,8 @@
 #' @importFrom tidyr complete nesting replace_na
 #' @author NTG May 2020
 module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
-  MODULE_INPUTS <- c(FILE = "water/elec_tech_water_map",
+  MODULE_INPUTS <- c("L223.elec_tech_water_map_EUR",
+                     FILE = "gcam-europe/A20.offshore_wind_types_EUR",
                      FILE = "gcam-europe/A23.elecS_naming",
                      FILE = "common/GCAM_region_names",
                      FILE = "gcam-europe/mappings/grid_regions",
@@ -114,6 +115,15 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
     # 0a. Load required inputs ---------------
     get_data_list(all_data, MODULE_INPUTS)
 
+    # Electricity technology to water type mapping with the offshore wind technologies of GCAM-Europe
+    elec_tech_water_map <- L223.elec_tech_water_map_EUR
+
+    # The core L2233 tables of the intermittent technologies have the core wind_offshore technology: it is replaced by the
+    # Europe offshore wind technologies (wind_offshore_fixed and wind_offshore_floating) so that they match the water map
+    for(core_nm in c("L2233.GlobalIntTechCapital_elec_cool", "L2233.GlobalIntTechEff_elec_cool", "L2233.GlobalIntTechCoef_elec_cool")) {
+      assign(core_nm, split_offshore_rows_EUR(get(core_nm), A20.offshore_wind_types_EUR))
+    }
+
     # Define countries that have access to offshore wind as allowing for seawater cooling
     seawater_countries <- unique(L2234.StubTechCost_offshore_wind_elecS_EUR$region)
 
@@ -195,22 +205,22 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
              value = add_global_cooling_techs(get(input_nm)) %>%
                add_title(paste0(attributes(get(input_nm))$title, " - european grid regions"), overwrite = T) %>%
                add_units(attributes(get(input_nm))$unit) %>%
-               add_precursors(c(input_nm, "gcam-europe/A23.elecS_naming", "water/elec_tech_water_map")),
+               add_precursors(c(input_nm, "gcam-europe/A23.elecS_naming", "L223.elec_tech_water_map_EUR")),
              envir = globalenv() )})
 
     # 1b. Adds in data from L2233 cooling data if needed -----------------
     # EFFICIENCY
     L2235.GlobalTechEff_elecS_cool_EUR <- replace_cool_data(data = L2235.GlobalTechEff_elecS_cool_EUR,
-                                                           cols = c("efficiency"),
-                                                           data_replace = L2233.GlobalTechEff_elec_cool)
+                                                            cols = c("efficiency"),
+                                                            data_replace = L2233.GlobalTechEff_elec_cool)
     # PROFIT SHUTDOWN
     L2235.GlobalTechProfitShutdown_elecS_cool_EUR <- replace_cool_data(data = L2235.GlobalTechProfitShutdown_elecS_cool_EUR,
-                                                                      cols = c("median.shutdown.point", "profit.shutdown.steepness"),
-                                                                      data_replace = L2233.GlobalTechProfitShutdown_elec_cool)
+                                                                       cols = c("median.shutdown.point", "profit.shutdown.steepness"),
+                                                                       data_replace = L2233.GlobalTechProfitShutdown_elec_cool)
     # CAPITAL
     L2235.GlobalTechCapital_elecS_cool_EUR <- replace_cool_data(data = L2235.GlobalTechCapital_elecS_cool_EUR,
-                                                                                 cols = c("input.capital", "capital.overnight", "fixed.charge.rate"),
-                                                                                 data_replace = bind_rows(L2233.GlobalTechCapital_elec_cool )) %>%
+                                                                cols = c("input.capital", "capital.overnight", "fixed.charge.rate"),
+                                                                data_replace = bind_rows(L2233.GlobalTechCapital_elec_cool )) %>%
       filter(!subsector.name0 == "grid_storage") %>%
       na.omit() %>%
       bind_rows(L2235.GlobalTechCapital_elecS_cool_EUR)
@@ -234,12 +244,18 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       rename(intermittent.technology = technology)
 
     # 2a. StubTech data ---------------------
+    # Offshore wind technologies available in each region (stub technologies of L223.electricity). The subsector has the
+    # name of the technology with the segment and the stub technology the one of the technology
+    offshore_cool_availability <- add_global_cooling_techs(L2234.StubTechCost_offshore_wind_elecS_EUR) %>%
+      distinct(region, subsector, stub.technology)
     # All techs, except for seawater in landlocked countries
     L2235.StubTech_elecS_cool_EUR <- L2235.GlobalTechShrwt_elecS_cool_EUR %>%
       distinct(supplysector = sector.name, subsector0 = subsector.name0,
                subsector = subsector.name, stub.technology = technology) %>%
       repeat_add_columns(grid_regions %>% distinct(region)) %>%
-      filter(!(grepl("seawater|wind_offshore", stub.technology) & !region %in% seawater_countries))
+      filter(!(grepl("seawater", stub.technology) & !region %in% seawater_countries),
+             !(grepl("wind_offshore", stub.technology) &
+                 !paste(region, stub.technology) %in% paste(offshore_cool_availability$region, offshore_cool_availability$stub.technology)))
 
     # Efficiencies do not change with the addition of cooling techs
     L2235.StubTechEff_elecS_cool_EUR <- add_global_cooling_techs(L2234.StubTechEff_elecS_EUR) %>%
@@ -356,7 +372,8 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
              subsector = technology) %>%
       # we only want future years here, because past years are dictated by state-level production
       filter(year %in% MODEL_FUTURE_YEARS,
-             !(grepl("offshore", subsector) & !region %in% seawater_countries))  %>%
+             !(grepl("wind_offshore", subsector) &
+                 !paste(region, subsector) %in% paste(offshore_cool_availability$region, offshore_cool_availability$subsector)))  %>%
       select(region, supplysector, subsector0, subsector, year, share.weight)
 
 
@@ -428,7 +445,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
 
     # Combine all tech rules
     L2235.StubTechInterp_elecS_cool_EUR_pre <- bind_rows(L2235.StubTechInterpTo_elecS_oncethrough_EUR, L2235.StubTechInterp_elecS_EUR,
-              L2235.StubTechInterpTo_elecS_fut_EUR, L2235.StubTechInterpTo_elecS_fut0_EUR) %>%
+                                                         L2235.StubTechInterpTo_elecS_fut_EUR, L2235.StubTechInterpTo_elecS_fut0_EUR) %>%
       mutate(tech.share.weight = if_else(is.na(tech.share.weight), share.weight, tech.share.weight),
              calibrated.value = if_else(is.na(calibrated.value), calOutputValue, calibrated.value)) %>%
       select(region, supplysector, subsector0, subsector, stub.technology, calibrated.value, subs.share.weight, future.subs.shrwt, tech.share.weight,
@@ -476,7 +493,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
     # Combine all "InterpTo" cases which specify a particular future shareweight value
     L2233.StubTechInterpTo_elecS_cool_EUR <- bind_rows(L2235.StubTechInterp_elecS_cool_EUR_pre, L2235.StubTechInterpTo_elecS_mapped_EUR) %>%
       # remove any technologies which are fixed at calibration values
-       filter(!is.na(to.value))
+      filter(!is.na(to.value))
 
 
     # Make a table with shareweights for start and end points of "InterpTo" rules
@@ -624,7 +641,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       add_units("none") %>%
       add_comments("Electricity Load Segments Intermittent Technology Capital Costs") %>%
       add_precursors("L2234.GlobalIntTechCapital_elecS_EUR",
-                     "L2233.GlobalIntTechCapital_elec_cool") ->
+                     "L2233.GlobalIntTechCapital_elec_cool", "gcam-europe/A20.offshore_wind_types_EUR") ->
       L2235.GlobalIntTechCapital_elecS_cool_EUR
 
     L2235.GlobalIntTechEff_elecS_cool_EUR %>%
@@ -632,7 +649,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       add_units("none") %>%
       add_comments("Electricity Load Segments Intermittent Technology Efficiencies") %>%
       add_precursors("L2234.GlobalIntTechEff_elecS_EUR",
-                     "L2233.GlobalIntTechEff_elec_cool") ->
+                     "L2233.GlobalIntTechEff_elec_cool", "gcam-europe/A20.offshore_wind_types_EUR") ->
       L2235.GlobalIntTechEff_elecS_cool_EUR
 
     L2235.GlobalIntTechLifetime_elecS_cool_EUR %>%
@@ -660,7 +677,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       add_title("Water demand coefs for int techs") %>%
       add_units("none") %>%
       add_comments("Water demand coefs for int techs") %>%
-      add_precursors("L2233.GlobalIntTechCoef_elec_cool") ->
+      add_precursors("L2233.GlobalIntTechCoef_elec_cool", "gcam-europe/A20.offshore_wind_types_EUR") ->
       L2235.GlobalIntTechCoef_elecS_cool_EUR
 
     L2235.PrimaryRenewKeyword_elecS_cool_EUR %>%
