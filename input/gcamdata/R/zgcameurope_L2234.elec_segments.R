@@ -27,10 +27,15 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
                           "L223.GlobalTechCapture_elec",
                           "L223.GlobalIntTechBackup_elec",
                           "L223.GlobalIntTechValueFactor_elec")
+  # tables with the core wind_offshore technology, whose rows are replaced by the ones of the Europe offshore wind
+  # technologies (wind_offshore_fixed and wind_offshore_floating) of zgcameurope_L223.offshore_wind_tech
+  OFFSHORE_TABLES <- AUTO_EXPAND_INPUTS[grepl("Int", AUTO_EXPAND_INPUTS)]
+  OFFSHORE_NEW_TABLES <- sub("_elec$", "_offshore_EUR", OFFSHORE_TABLES)
   MODULE_INPUTS <- c(FILE = "gcam-europe/mappings/grid_regions",
                      FILE = "common/GCAM_region_names",
                      FILE = "energy/A23.sector",
                      FILE = "gcam-europe/A23.globaltech_shrwt",
+                     FILE = "gcam-europe/A20.offshore_wind_shrwt_EUR",
                      FILE = "gcam-europe/A23.elecS_subsector_logit",
                      FILE = "gcam-europe/A23.elecS_subsector_shrwt",
                      FILE = "gcam-europe/A23.elecS_subsector_shrwt_interp",
@@ -52,6 +57,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
                      "L223.GlobalTechCapFac_elec",
                      "L123.eff_R_elec_F_Yh",
                      "L223.StubTechCost_offshore_wind_EUR",
+                     OFFSHORE_NEW_TABLES,
                      AUTO_EXPAND_INPUTS)
   MODULE_OUTPUTS <- c("L2234.Supplysector_elecS_EUR",
                       "L2234.ElecReserve_elecS_EUR",
@@ -108,6 +114,23 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
 
+    # Offshore wind: replace the core wind_offshore rows of the global technology tables and of the shareweights by
+    # the ones of the Europe technologies (wind_offshore_fixed and wind_offshore_floating)
+    for(core_nm in OFFSHORE_TABLES) {
+      assign(core_nm, replace_offshore_rows_EUR(get(core_nm), get(sub("_elec$", "_offshore_EUR", core_nm))))
+    }
+    # Share-weights: the core wind_offshore row is replaced by the rows of the two technologies (same layout as A23.globaltech_shrwt)
+    A23.globaltech_shrwt <- A23.globaltech_shrwt %>%
+      filter(technology != EUR_CORE_OFFSHORE_TECH) %>%
+      bind_rows(A20.offshore_wind_shrwt_EUR)
+    # gather_years needs the year columns in chronological order (the new table has years that A23.globaltech_shrwt does not)
+    shrwt_id_cols <- c("supplysector", "subsector", "technology")
+    shrwt_year_cols <- setdiff(names(A23.globaltech_shrwt), shrwt_id_cols)
+    shrwt_year_num <- ifelse(shrwt_year_cols %in% names(YEAR_RECODE),
+                             YEAR_RECODE[shrwt_year_cols],
+                             suppressWarnings(as.numeric(shrwt_year_cols)))
+    A23.globaltech_shrwt <- A23.globaltech_shrwt[, c(shrwt_id_cols, shrwt_year_cols[order(shrwt_year_num)])]
+
     L2234.load_segments <- unique(A23.elecS_naming$supplysector)
     L2234.R_elec_supply <- L1239.R_elec_supply %>% left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
       select(region, supplysector = segment, subsector = fuel, year, fraction)
@@ -137,7 +160,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
 
     expand_stubtech <- function(df){
       expand_to_segments(df, group_by_cols = c("subsector", "stub.technology"), segments = L2234.load_segments) %>%
-          tech_name_expansion(tech = "stub.technology", mapping = A23.elecS_naming)
+        tech_name_expansion(tech = "stub.technology", mapping = A23.elecS_naming)
     }
 
     # 1. Supplysector information    -----------------------------------------------------------------------------
@@ -172,7 +195,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
     L2234.SubsectorShrwtInterp_elecS_EUR <- expand_to_segments(A23.elecS_subsector_shrwt_interp, group_by_cols = "subsector", segments = L2234.load_segments) %>%
       write_to_all_states( c("region", "supplysector","subsector","apply.to", "from.year","to.year", "interpolation.function"),
                            region_list = grid_regions$region) %>%
-        filter(subsector != "hydro")
+      filter(subsector != "hydro")
 
     L2234.SubsectorShrwtInterpTo_elecS_EUR_preadj  <- expand_to_segments(A23.elecS_subsector_shrwt_interpto, group_by_cols = "subsector", segments = L2234.load_segments) %>%
       write_to_all_states(c("region", "supplysector","subsector", "apply.to", "from.year","to.year","to.value", "interpolation.function"),
@@ -228,7 +251,8 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
              value = expand_globaldb(get(input_nm)) %>%
                add_title(paste0(attributes(get(input_nm))$title, " - european grid regions"), overwrite = T) %>%
                add_units(attributes(get(input_nm))$unit) %>%
-               add_precursors(c(input_nm, "gcam-europe/A23.elecS_naming")),
+               add_precursors(c(input_nm, "gcam-europe/A23.elecS_naming",
+                                if(input_nm %in% OFFSHORE_TABLES) sub("_elec$", "_offshore_EUR", input_nm))),
              envir = globalenv() )})
 
     # 4. Calibration Year Outputs ---------------------------------
@@ -333,11 +357,8 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
     L2234.StubTechCapFactor_elecS_EUR <- expand_stubtech(L223.StubTechCapFactor_elec_EUR)
 
     # Create State-specific non-energy cost adder for offshore wind grid connection cost
-    L2234.StubTechCost_offshore_wind_elecS_EUR <- L2234.StubTechCapFactor_elecS_EUR %>%
-      filter(grepl("_offshore", stub.technology)) %>%
-      select(-capacity.factor) %>%
-      left_join_error_no_match(L223.StubTechCost_offshore_wind_EUR %>% select(-supplysector, -stub.technology),
-                               by = c("region", "subsector", "year"))
+    # (one row per offshore wind technology and region: the cost of each technology comes from L223.electricity)
+    L2234.StubTechCost_offshore_wind_elecS_EUR <- expand_stubtech(L223.StubTechCost_offshore_wind_EUR)
 
     # 4f. Backup markets --------------
     L2234.StubTechElecMarket_backup_elecS_EUR <- L2234.StubTechCapFactor_elecS_EUR %>%
@@ -422,9 +443,9 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
 
     # Energy Inputs for additional technologies such as battery
     L2234.StubTechEff_battery_elecS_EUR <- write_to_all_states(A23.elecS_stubtech_energy_inputs,
-                                                           c("region", "supplysector","subsector","stub.technology",
-                                                             "period", "minicam.energy.input", "market.name", "efficiency"),
-                                                           region_list = grid_regions$region) %>%
+                                                               c("region", "supplysector","subsector","stub.technology",
+                                                                 "period", "minicam.energy.input", "market.name", "efficiency"),
+                                                               region_list = grid_regions$region) %>%
       left_join_error_no_match(grid_regions, by = "region") %>%
       left_join_error_no_match(L2234.elecS_globaltech_capital_battery_ATB %>% distinct(supplysector, subsector, technology)) %>%
       mutate(market.name = if_else(market.name == "grid_region", grid_region, region),
@@ -436,15 +457,15 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
     # 6a. Create horizontal and vertical supplysectors in grid regions. -------------------------------
     L2234.Supplysector_elecS_grid <- write_to_all_states(A23.horiz_sectors,
                                                          c("region", "supplysector", "output.unit", "input.unit", "price.unit",
-                                                            "logit.year.fillout", "logit.exponent", "logit.type" ),
+                                                           "logit.year.fillout", "logit.exponent", "logit.type" ),
                                                          # NOTE: writing to all grid regions, rather than states
                                                          region_list = unique(grid_regions$grid_region))
 
     L2234.Supplysector_elecS_EUR <-  bind_rows(L2234.Supplysector_elecS_EUR, L2234.Supplysector_elecS_grid)
 
     L2234.ElecReserve_elecS_grid <-  write_to_all_states(A23.horiz_sectors,
-                          c("region", "supplysector","electricity.reserve.margin", "average.grid.capacity.factor"),
-                          region_list = unique(grid_regions$grid_region))
+                                                         c("region", "supplysector","electricity.reserve.margin", "average.grid.capacity.factor"),
+                                                         region_list = unique(grid_regions$grid_region))
 
 
     L2234.ElecReserve_elecS_EUR <- bind_rows(L2234.ElecReserve_elecS_EUR, L2234.ElecReserve_elecS_grid)
@@ -543,8 +564,8 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
     # that all the subsector shareweights for baseload gen are zero. This creates problems when the grid then tries
     # to use Albania baseload generation. So the fix here is to have a fixed output in the grid with a zero subsector shareweight
     L2234.TechFixSegOut_elecS_grid_EUR <- bind_rows(L2234.StubTechProd_elecS_EUR %>% rename(prod = calOutputValue),
-                                                        L2234.StubTechCalInput_elecS_EUR %>% rename(prod = calibrated.value),
-                                                        L2234.StubTechFixOut_elecS_EUR %>% rename(prod = fixedOutput)) %>%
+                                                    L2234.StubTechCalInput_elecS_EUR %>% rename(prod = calibrated.value),
+                                                    L2234.StubTechFixOut_elecS_EUR %>% rename(prod = fixedOutput)) %>%
       filter(prod > 0) %>%
       group_by(region, supplysector, year) %>%
       filter(dplyr::n() == 1 & subsector == "hydro") %>%
@@ -679,7 +700,8 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       add_title("Electricity Load Segments Technology Shareweights") %>%
       add_units("NA") %>%
       add_comments("Electricity load segment technology shareweight assumptions") %>%
-      add_precursors("gcam-europe/A23.elecS_globaltech_shrwt") ->
+      add_precursors("gcam-europe/A23.globaltech_shrwt", "gcam-europe/A20.offshore_wind_shrwt_EUR",
+                     "gcam-europe/A23.elecS_globaltech_shrwt") ->
       L2234.GlobalTechShrwt_elecS_EUR
 
     L2234.GlobalTechCapFac_elecS_EUR %>%
@@ -728,7 +750,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       add_title("Cost adders for offshore wind grid connection in USA") %>%
       add_units("Unitless") %>%
       add_comments("State-specific non-energy cost adder for offshore wind grid connection cost") %>%
-      add_precursors("L223.StubTechCost_offshore_wind_EUR") ->
+      add_precursors("L223.StubTechCost_offshore_wind_EUR", "gcam-europe/A23.elecS_naming") ->
       L2234.StubTechCost_offshore_wind_elecS_EUR
 
     L2234.StubTechElecMarket_backup_elecS_EUR %>%

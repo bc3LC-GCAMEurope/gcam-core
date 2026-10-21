@@ -26,7 +26,9 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
                      FILE = "energy/A23.globalinttech",
                      FILE = "energy/A23.globaltech_shrwt",
                      FILE = "energy/A23.sector",
-                     FILE = "water/elec_tech_water_map",
+                     FILE = "gcam-europe/A20.offshore_wind_types_EUR",
+                     "L223.elec_tech_water_map_EUR",
+                     "L223.OffshoreWindCalShare_EUR",
                      FILE = "water/water_td_sectors",
                      FILE = "water/A23.CoolingSystemCosts",
                      FILE = "water/Macknick_elec_water_m3MWh",
@@ -75,7 +77,15 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
 
+    # Electricity technology to water type mapping with the offshore wind technologies of GCAM-Europe
+    elec_tech_water_map <- L223.elec_tech_water_map_EUR
+
     GCAM_region_names <- GCAM_region_names %>%  filter(region %in% gcameurope.EUROSTAT_COUNTRIES)
+
+    # Offshore wind technologies available in each region
+    offshore_stub_availability <- L223.StubTech_elec_EUR %>%
+      filter(stub.technology %in% A20.offshore_wind_types_EUR$technology) %>%
+      distinct(region, technology = stub.technology)
 
     ## BUILD TWO TABLES WITH ALL POSSIBLE TECHNOLOGIES FROM THE OLD AND NEW STRUCTURES -----------------
     # First table (L2233.TechMap) includes all technologies
@@ -97,7 +107,10 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
                                       -calibration, -secondary.output),
                                by = c("sector", "fuel", "technology")) %>%
       rename(stub.technology = technology, calOutputValue = value) %>%
-      mutate(share.weight.year = year) -> StubTechProd_elecPassthru
+      mutate(share.weight.year = year) %>%
+      # split the calibrated wind output between onshore and offshore wind (Eurostat shares)
+      split_wind_calibration_EUR(L223.OffshoreWindCalShare_EUR, "calOutputValue", energy.DIGITS_CALOUTPUT) ->
+      StubTechProd_elecPassthru
 
     # The following replaces the "set_subsector_shrwt" function from the legacy code.
     # We essentially aggregate output for subsectors with multiple technologies and then assign a
@@ -200,9 +213,8 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
       rename(supplysector = to.supplysector,
              subsector = to.subsector,
              stub.technology = to.technology) %>%
-      # no more offshore wind for land-locked countries
-      filter(!(stub.technology == "wind_offshore" &
-                 !region %in% filter(L223.StubTech_elec_EUR, stub.technology == "wind_offshore")$region)) %>%
+      # offshore wind technologies only in the regions that have the resource (stub technologies of L223.electricity)
+      keep_available_offshore_EUR(offshore_stub_availability, A20.offshore_wind_types_EUR) %>%
       select(LEVEL2_DATA_NAMES[["StubTech"]]) ->
       L2233.StubTech_elec_cool_EUR  # --OUTPUT--
 
@@ -247,7 +259,9 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
                                by = c("sector", "fuel", "technology", "cooling_system", "water_type", "plant_type")) %>%
       rename(supplysector = to.supplysector, subsector = to.subsector, stub.technology = to.technology) %>%
       mutate(share.weight.year = year,
-             calOutputValue = round(calOutputValue, 7)) ->
+             calOutputValue = round(calOutputValue, 7)) %>%
+      # split the calibrated wind output between onshore and offshore wind (Eurostat shares)
+      split_wind_calibration_EUR(L223.OffshoreWindCalShare_EUR, "calOutputValue", 7) ->
       L2233.out_EJ_R_elec_F_tech_Yh_cool
 
     L2233.out_EJ_R_elec_F_tech_Yh_cool %>%
@@ -306,7 +320,7 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
       add_units("NA") %>%
       add_comments("Marginal revenue set to electricity; market set to region") %>%
       add_precursors("L223.Supplysector_elec_EUR",
-                     "water/elec_tech_water_map",
+                     "L223.elec_tech_water_map_EUR",
                      "L223.StubTech_elec_EUR") ->
       L2233.PassThroughSector_elec_cool_EUR
 
@@ -315,7 +329,7 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
       add_units("NA") %>%
       add_comments("Composed directly from input data") %>%
       add_precursors("L223.Supplysector_elec_EUR",
-                     "water/elec_tech_water_map",
+                     "L223.elec_tech_water_map_EUR",
                      "L223.StubTech_elec_EUR") ->
       L2233.Supplysector_elec_cool_EUR
 
@@ -325,7 +339,7 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
       add_comments("Factors assumed to be same as for electricity and elect_td_bld") %>%
       add_precursors("energy/A23.sector",
                      "L223.Supplysector_elec_EUR",
-                     "water/elec_tech_water_map",
+                     "L223.elec_tech_water_map_EUR",
                      "L223.StubTech_elec_EUR") ->
       L2233.ElecReserve_elec_cool_EUR
 
@@ -334,7 +348,7 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
       add_units("Unitless") %>%
       add_comments("Assumes that the subsectors are just pass-through") %>%
       add_comments("Assumes cooling system competition takes place at the technology level") %>%
-      add_precursors("water/elec_tech_water_map",
+      add_precursors("L223.elec_tech_water_map_EUR",
                      "L223.Supplysector_elec_EUR",
                      "L223.StubTech_elec_EUR") ->
       L2233.SubsectorShrwtFllt_elec_cool_EUR
@@ -343,7 +357,7 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
       add_title("Logit exponent for cooling system choice", overwrite = TRUE) %>%
       add_units("Unitless") %>%
       add_comments("Default cooling system logit applied to all sectors") %>%
-      add_precursors("water/elec_tech_water_map",
+      add_precursors("L223.elec_tech_water_map_EUR",
                      "L223.Supplysector_elec_EUR",
                      "L223.StubTech_elec_EUR") ->
       L2233.SubsectorLogit_elec_cool_EUR
@@ -368,7 +382,7 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
       add_units("NA") %>%
       add_comments("Technologies repeated across regions") %>%
       add_precursors("common/GCAM_region_names",
-                     "water/elec_tech_water_map") ->
+                     "L223.elec_tech_water_map_EUR") ->
       L2233.StubTech_elec_cool_EUR
 
     L2233.StubTechShrwt_elec_cool_EUR %>%
@@ -376,7 +390,7 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
       add_units("Unitless") %>%
       add_comments("Shareweights joined to L2233.StubTech_elec_cool_EUR") %>%
       add_precursors("common/GCAM_region_names",
-                     "water/elec_tech_water_map",
+                     "L223.elec_tech_water_map_EUR",
                      "L1233.shrwt_R_elec_cool_Yf_EUR") ->
       L2233.StubTechShrwt_elec_cool_EUR
 
@@ -385,7 +399,7 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
       add_units("Unitless") %>%
       add_comments("Expansion of elec_water technologies and their efficiencies for all regions/years") %>%
       add_precursors("common/GCAM_region_names",
-                     "water/elec_tech_water_map", "L223.StubTechEff_elec_EUR") ->
+                     "L223.elec_tech_water_map_EUR", "L223.StubTechEff_elec_EUR") ->
       L2233.StubTechEff_elec_cool_EUR
 
     filter(L2233.StubTechProd_elec_cool_EUR, subsector != "hydro") %>%
@@ -393,7 +407,7 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
       add_units("calOutputValue in EJ; share weights are unitless") %>%
       add_comments("Share weights set to 1 if technology level or aggregated subsector level output > 0") %>%
       add_precursors("common/GCAM_region_names",
-                     "water/elec_tech_water_map",
+                     "L223.elec_tech_water_map_EUR",
                      "L1233.out_EJ_R_elec_F_tech_Yh_cool_EUR") ->
       L2233.StubTechProd_elec_cool_EUR
 
@@ -409,7 +423,7 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
       add_units("EJ") %>%
       add_comments("Created by binding base future year fixed hydro outputs") %>%
       add_precursors("common/GCAM_region_names",
-                     "water/elec_tech_water_map",
+                     "L223.elec_tech_water_map_EUR",
                      "L1233.out_EJ_R_elec_F_tech_Yh_cool_EUR",
                      "L223.StubTechFixOut_hydro_EUR") ->
       L2233.StubTechFixOut_hydro_EUR

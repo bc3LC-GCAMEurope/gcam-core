@@ -93,6 +93,15 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
                      "L2234.TechFixSegOut_elecS_grid_EUR",
 
                      "L2231.InterestRate_grid_EUR",
+                     "L223.PrimaryRenewKeywordInt_offshore_EUR",
+                     "L223.GlobalIntTechCapital_offshore_EUR",
+                     "L223.GlobalIntTechOMfixed_offshore_EUR",
+                     "L223.GlobalIntTechOMvar_offshore_EUR",
+                     "L223.GlobalIntTechEff_offshore_EUR",
+                     "L223.GlobalIntTechLifetime_offshore_EUR",
+                     "L223.GlobalIntTechBackup_offshore_EUR",
+                     "L223.GlobalIntTechValueFactor_offshore_EUR",
+                     "L223.GlobalIntTechShrwt_offshore_EUR",
                      #"L2231.Pop_grid_EUR",
                      #"L2231.GDP_grid_EUR",
 
@@ -177,6 +186,7 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
     if(energy.ELEC_USE_BACKUP) {
       elec_segments_water_EUR.xml %>%
         add_xml_data(L2235.GlobalIntTechBackup_elecS_cool_EUR, "GlobalIntTechBackup") %>%
+        add_xml_data(L223.GlobalIntTechBackup_offshore_EUR, "GlobalIntTechBackup") %>%
         add_xml_data_generate_levels(L2235.StubTechMarket_backup_elecS_cool_EUR,
                                      "StubTechMarket","subsector","nesting-subsector",1,FALSE) %>%
         add_precursors("L2235.GlobalIntTechBackup_elecS_cool_EUR",
@@ -185,6 +195,7 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
     } else {
       elec_segments_water_EUR.xml %>%
         add_xml_data(L2235.GlobalIntTechValueFactor_elecS_cool_EUR, "GlobalIntTechValueFactor") %>%
+        add_xml_data(L223.GlobalIntTechValueFactor_offshore_EUR, "GlobalIntTechValueFactor") %>%
         add_precursors("L2235.GlobalIntTechValueFactor_elecS_cool_EUR") ->
         elec_segments_water_EUR.xml
     }
@@ -294,6 +305,14 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
       add_xml_data(L2233.StubTechCapFactor_elec_cool_EUR, "StubTechCapFactor") %>%
       add_xml_data(L2233.StubTechFixOut_hydro_EUR, "StubTechFixOut") %>%
       add_xml_data(L2233.StubTechShrwt_elec_cool_EUR, "StubTechShrwt") %>%
+      # Global technologies of offshore wind of the regions without segments (Iceland, Turkey): sector "electricity"
+      add_xml_data(rename(L223.PrimaryRenewKeywordInt_offshore_EUR, technology = intermittent.technology), "PrimaryRenewKeywordInt") %>%
+      add_xml_data(L223.GlobalIntTechCapital_offshore_EUR, "GlobalIntTechCapital") %>%
+      add_xml_data(L223.GlobalIntTechOMfixed_offshore_EUR, "GlobalIntTechOMfixed") %>%
+      add_xml_data(L223.GlobalIntTechOMvar_offshore_EUR, "GlobalIntTechOMvar") %>%
+      add_xml_data(L223.GlobalIntTechEff_offshore_EUR, "GlobalIntTechEff") %>%
+      add_xml_data(L223.GlobalIntTechLifetime_offshore_EUR, "GlobalIntTechLifetime") %>%
+      add_xml_data(L223.GlobalIntTechShrwt_offshore_EUR, "GlobalIntTechShrwt") %>%
       add_precursors(MODULE_INPUTS) ->
       elec_segments_water_EUR.xml
 

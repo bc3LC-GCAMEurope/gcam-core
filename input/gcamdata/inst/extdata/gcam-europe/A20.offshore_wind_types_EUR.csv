@@ -1,0 +1,11 @@
+# File: A20.offshore_wind_types_EUR.csv
+# Title: Offshore wind resource types in GCAM-Europe
+# Units: NA
+# Description: Maps each NREL ocean depth class to the offshore wind resource it feeds (fixed-bottom or floating) and to the electricity technology that consumes that resource (the key of the cost tables built in zgcameurope_L1233.elec_cost_data)
+# Source: GCAM-Europe assumption (shallow and transitional depths -> fixed-bottom foundations; deep -> floating foundations)
+# Column types: ccc
+# ----------
+depth_class,resource,technology
+shallow,fixed offshore wind resource,wind_offshore_fixed
+transitional,fixed offshore wind resource,wind_offshore_fixed
+deep,floating offshore wind resource,wind_offshore_floating

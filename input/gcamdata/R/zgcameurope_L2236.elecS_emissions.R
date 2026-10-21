@@ -16,7 +16,7 @@
 #' @author KD August 2018 / YO March 2022 / RH Sept 2024
 module_gcameurope_L2236.elecS_emissions <- function(command, ...) {
   MODULE_INPUTS <- c(FILE = "energy/A23.globaltech_input_driver",
-                     FILE = "water/elec_tech_water_map",
+                     "L223.elec_tech_water_map_EUR",
                      FILE = "gcam-europe/A23.elecS_naming",
                      FILE = "common/GCAM_region_names",
                      'L1231.in_EJ_R_elec_F_tech_Yh_EUR',
@@ -37,6 +37,9 @@ module_gcameurope_L2236.elecS_emissions <- function(command, ...) {
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
+
+    # Electricity technology to water type mapping with the offshore wind technologies of GCAM-Europe
+    elec_tech_water_map <- L223.elec_tech_water_map_EUR
 
     battery_mapping <- L2234.GlobalTechOMfixed_elecS_EUR %>%  filter(grepl("battery", technology)) %>%
       distinct(subsector.name, technology) %>%
