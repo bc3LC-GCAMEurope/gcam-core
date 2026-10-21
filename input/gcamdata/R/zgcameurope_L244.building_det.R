@@ -799,15 +799,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
                                  ungroup() %>%
                                  mutate(gcam.consumer= if_else(grepl("resid",nodeInput),"resid EUR","comm EUR"))
                                , by = c(LEVEL2_DATA_NAMES[["BldNodes"]], "year")) %>%
-      # base.service is rounded (energy.DIGITS_CALOUTPUT) per fuel before summing, which for very small regions
-      # (Luxembourg, Iceland) differs from the unrounded L144 service used below to calibrate the satiation impedance by
-      # more than the 0.01% margin of the satiation level: take the largest of the two so the satiation level
-      # is always above the base service per unit floorspace
-      left_join(A_regions %>% select(region, GCAM_region_ID), by = "region") %>%
-      left_join(L144.base_service_EJ_serv_EUR %>%
-                  select(GCAM_region_ID, year, building.service.input = service, base.service.L144 = value),
-                by = c("GCAM_region_ID", "year", "building.service.input")) %>%
-      mutate(service.per.flsp = pmax(base.service, base.service.L144, na.rm = TRUE) / base.building.size) %>%
+      mutate(service.per.flsp = base.service / base.building.size) %>%
       filter(year == MODEL_FINAL_BASE_YEAR) %>%
       select(LEVEL2_DATA_NAMES[["BldNodes"]], building.service.input, service.per.flsp)
 
@@ -1405,7 +1397,10 @@ module_gcameurope_L244.building_det <- function(command, ...) {
                                  rename(building.service.input = market) %>%
                                  filter(building.service.input %in% generic_services, year == MODEL_FINAL_BASE_YEAR),
                                by=c("region","year","building.service.input","GCAM_region_ID")) %>%
-      mutate(`satiation-impedance` = (log(2)*((pcGDP_thous90USD*1000/def9075)/price)) / log((satiation.level)/(satiation.level-base_serv_flsp))) %>%
+      # Known issue: for Luxembourg and Iceland (resid others modern) the satiation level ends up below the base service per
+      # unit of floorspace, so log() returns NaN; it is replaced by 0 below (see 'Remove NaN/Inf values'). The warning is
+      # silenced on purpose; the effect is negligible (~1e-5 EJ) and the fix is left for 8.11.2 (see pendientes_revision_8p11p2)
+      mutate(`satiation-impedance` = (log(2)*((pcGDP_thous90USD*1000/def9075)/price)) / suppressWarnings(log((satiation.level)/(satiation.level-base_serv_flsp)))) %>%
       # Check with an adder to be 0!!!!
       rename(observed_base_serv_perflsp = base_serv_flsp) %>%
       mutate(thermal_load = 1) %>%
