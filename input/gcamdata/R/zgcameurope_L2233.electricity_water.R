@@ -197,9 +197,9 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
     L223.StubTechCapFactor_elec_EUR %>%
       filter(stub.technology == "rooftop_pv") %>%
       left_join_error_no_match(L223.GlobalIntTechCapital_elec, by=c("supplysector" = "sector.name",
-                                                                     "subsector" = "subsector.name",
-                                                                     "stub.technology" = "intermittent.technology",
-                                                                     "year")) %>%
+                                                                    "subsector" = "subsector.name",
+                                                                    "stub.technology" = "intermittent.technology",
+                                                                    "year")) %>%
       mutate(input.cost = round(capital.overnight * fixed.charge.rate / (capacity.factor * CONV_YEAR_HOURS * CONV_KWH_GJ), energy.DIGITS_COST),
              capital.coef = round(1 / fixed.charge.rate, energy.DIGITS_COST),
              tracking.market = socioeconomics.EN_CAPITAL_MARKET_NAME,
