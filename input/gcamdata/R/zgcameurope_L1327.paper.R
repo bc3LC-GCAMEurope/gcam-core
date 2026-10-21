@@ -395,7 +395,7 @@ module_gcameurope_L1327.paper <- function(command, ...) {
       add_units("Mt") %>%
       add_comments("Output by country from FAO forestry statistics and aggregated to GCAM regions") %>%
       add_legacy_name("L1327.out_Mt_R_paper_Yh_EUR") %>%
-      add_precursors( "aglu/FAO/FAO_Paper_Prod_t_FORESTAT", "aglu/AGLU_ctry", "common/iso_GCAM_regID") ->
+      add_precursors( "aglu/AGLU_ctry", "common/iso_GCAM_regID") ->
       L1327.out_Mt_R_paper_Yh_EUR
 
     L1327.IO_GJkg_R_paper_F_Yh_EUR %>%
@@ -403,7 +403,7 @@ module_gcameurope_L1327.paper <- function(command, ...) {
       add_units("GJ/kg paper") %>%
       add_legacy_name("L1327.IO_GJkg_R_paper_F_Yh_EUR") %>%
       add_comments("IO coefficients for heat energy and electricity are calculated from IEA energy consumption and FAO paper production data") %>%
-      add_precursors("L101.en_bal_EJ_R_Si_Fi_Yh_EUR", "aglu/FAO/FAO_Paper_Prod_t_FORESTAT", "aglu/AGLU_ctry", "energy/A_regions",
+      add_precursors("L101.en_bal_EJ_R_Si_Fi_Yh_EUR", "aglu/AGLU_ctry", "energy/A_regions",
                      "common/iso_GCAM_regID","gcam-europe/mappings/enduse_fuel_aggregation", "L123.in_EJ_R_indchp_F_Yh_EUR",
                      "energy/paper_food_TFE", "energy/A327.globaltech_coef") ->
       L1327.IO_GJkg_R_paper_F_Yh_EUR
@@ -414,8 +414,7 @@ module_gcameurope_L1327.paper <- function(command, ...) {
       add_comments("Subtracted pulp and paper energy use from industrial energy use values in L1326.in_EJ_R_indenergy_F_Yh_EUR") %>%
       add_comments("To determine adjusted input energy for industrial energy use") %>%
       add_legacy_name("L1327.in_EJ_R_indenergy_F_Yh_EUR") %>%
-      add_precursors("L101.en_bal_EJ_R_Si_Fi_Yh_EUR", "L1326.in_EJ_R_indenergy_F_Yh_EUR", "aglu/FAO/FAO_Paper_Prod_t_FORESTAT",
-                     "aglu/AGLU_ctry", "energy/A_regions", "common/iso_GCAM_regID","gcam-europe/mappings/enduse_fuel_aggregation") ->
+      add_precursors("L101.en_bal_EJ_R_Si_Fi_Yh_EUR", "L1326.in_EJ_R_indenergy_F_Yh_EUR", "aglu/AGLU_ctry", "energy/A_regions", "common/iso_GCAM_regID","gcam-europe/mappings/enduse_fuel_aggregation") ->
       L1327.in_EJ_R_indenergy_F_Yh_EUR
 
     L1327.elec_noheat_adj_shwt_R_EUR %>%

@@ -479,7 +479,7 @@ module_gcameurope_L2326.aluminum <- function(command, ...) {
       add_title("region-specific coefficients of aluminum production technologies") %>%
       add_units("unitless") %>%
       add_comments("Coefficients from literature") %>%
-      add_precursors("energy/calibrated_techs", "common/GCAM_region_names","energy/A326.globaltech_coef", "L1326.out_Mt_R_aluminum_Yh_EUR", "L1326.IO_GJkg_R_aluminum_F_Yh_EUR") ->
+      add_precursors("energy/calibrated_techs", "common/GCAM_region_names","gcam-europe/A326.globaltech_coef", "L1326.out_Mt_R_aluminum_Yh_EUR", "L1326.IO_GJkg_R_aluminum_F_Yh_EUR") ->
       L2326.StubTechCoef_aluminum_EUR
 
     L2326.StubTechSecMarket_aluminum_EUR  %>%

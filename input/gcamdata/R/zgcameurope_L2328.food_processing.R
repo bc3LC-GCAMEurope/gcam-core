@@ -492,7 +492,7 @@ module_gcameurope_L2328.food_processing <- function(command, ...) {
       add_comments("Values are calculated using L1328.in_EJ_R_food_F_Yh_EUR then added GCAM region information and supplysector, subsector, technology, and input information") %>%
       add_legacy_name("L2328.StubTechCalInput_food") %>%
       add_precursors("energy/calibrated_techs", "L1328.in_EJ_R_food_F_Yh_EUR", "common/GCAM_region_names",
-                     "L1328.IO_EJPcal_R_food_F_Yh_EUR", "energy/A_regions", "energy/A328.globaltech_coef") ->
+                     "L1328.IO_EJPcal_R_food_F_Yh_EUR", "energy/A_regions", "gcam-europe/A328.globaltech_coef") ->
       L2328.StubTechCalInput_food_heat_EUR
 
     L2328.StubTechCoef_food_EUR %>%

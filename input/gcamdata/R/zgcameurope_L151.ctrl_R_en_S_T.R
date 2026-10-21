@@ -87,7 +87,7 @@ module_gcameurope_L151.ctrl_R_en_S_T <- function(command, ...) {
       add_comments("Compute maximum reduction by region and sector for SO2, CO, NOx, NMVOC (all 2005 reference), BC, and OC (2005)") %>%
       add_legacy_name("L151.nonghg_ctrl_R_en_S_T_EUR") %>%
       add_precursors("gcam-europe/A51.min_coeff_EUR",
-                     "L111.nonghg_tgej_R_en_S_F_Yh_infered_combEF_AP",
+                     "L111.nonghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR",
                      "L106.income_distributions") ->
       L151.nonghg_ctrl_R_en_S_T_EUR
 

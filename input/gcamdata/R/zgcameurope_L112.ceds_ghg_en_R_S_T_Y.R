@@ -1905,7 +1905,7 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
                      "L1327.in_EJ_R_paper_F_Yh_EUR", "L1328.in_EJ_R_food_F_Yh_EUR", "L1328.in_EJ_R_indenergy_infilled_for_food_F_Yh_EUR",
                      "emissions/mappings/UCD_techs_emissions_revised","L154.IEA_histfut_data_times_UCD_shares",
                      "emissions/CEDS/gains_iso_sector_emissions","emissions/CEDS/gains_iso_fuel_emissions",
-                     "L270.nonghg_tg_state_fossil_res_F_Yb", "L270.nonghg_tg_state_refinery_F_Yb", "gcam-usa/emissions/BC_OC_assumptions", "gcam-usa/emissions/BCOC_PM25_ratios") ->
+                     "L270.nonghg_tg_state_fossil_res_F_Yb", "L270.nonghg_tg_state_refinery_F_Yb", "gcam-usa/emissions/BC_OC_assumptions", "gcam-europe/BCOC_PM25_ratios_EUR") ->
       L111.nonghg_tg_R_en_S_F_Yh_EUR
 
     L111.nonghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR %>%
@@ -1931,7 +1931,7 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
                      "L101.in_EJ_R_en_Si_F_Yh_EUR", "emissions/mappings/Trn_subsector_revised", "emissions/EPA/EPA_2019_raw", "emissions/EPA_CH4N2O_map",
                      "gcam-europe/CEDS_sector_tech_combustion_revised_EUR","emissions/mappings/UCD_techs_emissions_revised","L154.IEA_histfut_data_times_UCD_shares",
                      "emissions/CEDS/gains_iso_sector_emissions","emissions/CEDS/gains_iso_fuel_emissions",
-                     "L244.GenericShares_EUR","L244.ThermalShares_EUR","L270.nonghg_tg_state_fossil_res_F_Yb", "gcam-usa/emissions/BC_OC_assumptions", "gcam-usa/emissions/BCOC_PM25_ratios") ->
+                     "L244.GenericShares_EUR","L244.ThermalShares_EUR","L270.nonghg_tg_state_fossil_res_F_Yb", "gcam-usa/emissions/BC_OC_assumptions", "gcam-europe/BCOC_PM25_ratios_EUR") ->
       L112.ghg_tg_R_en_S_F_Yh_EUR
 
     L112.ghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR %>%
@@ -1964,13 +1964,13 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
                      "L1328.in_EJ_R_indenergy_infilled_for_food_F_Yh_EUR",
                      "emissions/EPA/EPA_2019_raw",
                      "emissions/EPA_CH4N2O_map",
-                     "L111.Prod_EJ_R_F_Yh",
+                     "L111.Prod_EJ_R_F_Yh_EUR",
                      "gcam-europe/EPA_country_map_EUR",
                      "gcam-europe/CEDS_sector_tech_combustion_revised_EUR",
                      "emissions/mappings/UCD_techs_emissions_revised",
                      "L270.nonghg_tg_state_fossil_res_F_Yb",
                      "gcam-usa/emissions/BC_OC_assumptions",
-                     "gcam-usa/emissions/BCOC_PM25_ratios",
+                     "gcam-europe/BCOC_PM25_ratios_EUR",
                      "emissions/IPCC_unconventional_oil_fug_emfacts") ->
       L112.ghg_tgej_R_en_S_F_Yh_infered_combEF_AP_EUR
 

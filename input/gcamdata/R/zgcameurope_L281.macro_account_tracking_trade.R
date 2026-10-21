@@ -64,7 +64,7 @@ module_gcameurope_L281.macro_account_tracking <- function(command, ...) {
       add_title("Net energy trade / exports accounting in supplysectors") %>%
       add_units("Unitless") %>%
       add_comments("Sets up accounting secondary outputs to track regional exports of primary energy") %>%
-      add_precursors("L239.TechCoef_tra", "L243.TechCoef_TradedBio", "L2392.TechCoef_tra_NG") ->
+      add_precursors("L239.TechCoef_tra_EUR", "L243.TechCoef_TradedBio_EUR") ->
       L281.TechAccountOutput_entrade_EUR
 
 

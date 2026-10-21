@@ -626,7 +626,6 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       add_units("NA") %>%
       add_comments("Subsector shareweights for electricity load segment subsectors that are fixed at calibration values") %>%
       add_precursors("gcam-europe/mappings/grid_regions",
-                     "gcam-europe/A23.elecS_tech_availability",
                      "gcam-europe/A23.elecS_subsector_shrwt_interp") ->
       L2234.SubsectorShrwtInterp_elecS_EUR
 
@@ -635,7 +634,6 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       add_units("NA") %>%
       add_comments("Subsector shareweights for electricity load segment subsectors which need a to-value") %>%
       add_precursors("gcam-europe/mappings/grid_regions",
-                     "gcam-europe/A23.elecS_tech_availability",
                      "gcam-europe/A23.elecS_subsector_shrwt_interpto",
                      "L223.StubTechProd_elec_EUR",
                      "L1239.R_elec_supply") ->
@@ -646,11 +644,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       add_units("NA") %>%
       add_comments("Subsector shareweights for electricity load segment subsectors at points of inflexion") %>%
       add_precursors("gcam-europe/mappings/grid_regions",
-                     "gcam-europe/A23.elecS_tech_availability",
                      "gcam-europe/A23.elecS_subsector_shrwt",
-                     "gcam-europe/A23.elecS_subsector_shrwt_state_adj",
-                     "gcam-europe/NREL_us_re_technical_potential",
-                     "gcam-europe/A10.renewable_resource_delete",
                      "L223.StubTechProd_elec_EUR",
                      "L1239.R_elec_supply") ->
       L2234.SubsectorShrwt_elecS_EUR
@@ -660,9 +654,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       add_units("unitless") %>%
       add_comments("Efficiencies of multiple load segments coal, oil and gas technologies in base years") %>%
       add_precursors("gcam-europe/mappings/grid_regions",
-                     "gcam-europe/A23.elecS_tech_availability",
                      "gcam-europe/A23.elecS_stubtech_energy_inputs",
-                     "gcam-europe/NREL_us_re_technical_potential",
                      "L123.eff_R_elec_F_Yh",
                      "L223.StubTechEff_elec_EUR") ->
       L2234.StubTechEff_elecS_EUR

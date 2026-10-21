@@ -1808,7 +1808,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       add_comments("Weighted by fuel prices") %>%
       add_legacy_name("L144.prices_bld_EUR") %>%
       add_precursors("gcam-europe/A44.CalPrice_bld_EUR", "gcam-europe/calibrated_techs_bld_det_EUR",
-                     "common/GCAM_region_names", "L144.base_service_EJ_serv_EUR") ->
+                     "common/GCAM_region_names") ->
       L144.prices_bld_EUR
     return_data(L144.end_use_eff_EUR, L144.shell_eff_R_Y_EUR, L144.in_EJ_R_bld_serv_F_Yh_EUR,
                 L144.in_EJ_R_bld_serv_tech_F_Yh_EUR, L144.NEcost_75USDGJ_EUR, L144.internal_gains_EUR,

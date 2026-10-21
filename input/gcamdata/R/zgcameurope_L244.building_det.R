@@ -2380,7 +2380,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_comments("Satiation adder compute using satiation level, per-capita GDP and per-capita floorsapce") %>%
       add_legacy_name("L244.SatiationAdder_EUR") %>%
       add_precursors("energy/A44.satiation_flsp", "gcam-europe/A44.gcam_consumer_EUR", "common/GCAM_region_names", "energy/A_regions",
-                     "L102.pcgdp_thous90USD_Scen_R_Y_EUR", "L101.Pop_thous_R_Yh_EUR",
+                     "L102.pcgdp_thous90USD_Scen_R_Y", "L101.Pop_thous_R_Yh",
                      "L144.flsp_bm2_R_res_Yh_EUR", "L144.flsp_bm2_R_comm_Yh_EUR") ->
       L244.SatiationAdder_EUR
 
@@ -2390,7 +2390,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_comments("Calibrated in the DS for flexibility with multiple consumer groups") %>%
       add_legacy_name("L244.Satiation_impedance_EUR") %>%
       add_precursors("energy/A44.satiation_flsp", "gcam-europe/A44.gcam_consumer_EUR", "common/GCAM_region_names", "energy/A_regions",
-                     "L102.pcgdp_thous90USD_Scen_R_Y_EUR", "L101.Pop_thous_R_Yh_EUR",
+                     "L102.pcgdp_thous90USD_Scen_R_Y", "L101.Pop_thous_R_Yh",
                      "L144.flsp_bm2_R_res_Yh_EUR", "L144.flsp_bm2_R_comm_Yh_EUR") ->
       L244.Satiation_impedance_EUR
 
@@ -2457,7 +2457,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_legacy_name("L244.GenericServiceImpedance_EUR") %>%
       add_precursors("L144.base_service_EJ_serv_EUR", "gcam-europe/calibrated_techs_bld_det_EUR", "common/GCAM_region_names",
                      "L144.flsp_bm2_R_res_Yh_EUR", "L144.flsp_bm2_R_comm_Yh_EUR", "gcam-europe/A44.demand_satiation_mult_EUR",
-                     "L102.pcgdp_thous90USD_Scen_R_Y_EUR", "L101.Pop_thous_R_Yh_EUR","L144.prices_bld_EUR","L106.income_shares") ->
+                     "L102.pcgdp_thous90USD_Scen_R_Y", "L101.Pop_thous_R_Yh","L144.prices_bld_EUR","L106.income_distributions") ->
       L244.GenericServiceImpedance_EUR
 
     L244.ThermalServiceImpedance_EUR %>%
@@ -2467,7 +2467,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_legacy_name("L244.ThermalServiceImpedance_EUR") %>%
       add_precursors("L144.base_service_EJ_serv_EUR", "gcam-europe/calibrated_techs_bld_det_EUR", "common/GCAM_region_names",
                      "L144.flsp_bm2_R_res_Yh_EUR", "L144.flsp_bm2_R_comm_Yh_EUR", "gcam-europe/A44.demand_satiation_mult_EUR",
-                     "L102.pcgdp_thous90USD_Scen_R_Y_EUR", "L101.Pop_thous_R_Yh_EUR","L144.prices_bld_EUR","L106.income_shares",
+                     "L102.pcgdp_thous90USD_Scen_R_Y", "L101.Pop_thous_R_Yh","L144.prices_bld_EUR","L106.income_distributions",
                      "L143.HDDCDD_scen_R_Y_EUR","L144.shell_eff_R_Y_EUR", "L144.internal_gains_EUR") ->
       L244.ThermalServiceImpedance_EUR
 
@@ -2478,7 +2478,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_legacy_name("L244.GenericServiceImpedance_EUR") %>%
       add_precursors("L144.base_service_EJ_serv_EUR", "gcam-europe/calibrated_techs_bld_det_EUR", "common/GCAM_region_names",
                      "L144.flsp_bm2_R_res_Yh_EUR", "L144.flsp_bm2_R_comm_Yh_EUR", "gcam-europe/A44.demand_satiation_mult_EUR",
-                     "L102.pcgdp_thous90USD_Scen_R_Y_EUR", "L101.Pop_thous_R_Yh_EUR","L144.prices_bld_EUR","L106.income_shares") ->
+                     "L102.pcgdp_thous90USD_Scen_R_Y", "L101.Pop_thous_R_Yh","L144.prices_bld_EUR","L106.income_distributions") ->
       L244.GenericServiceAdder_EUR
 
     L244.ThermalServiceAdder_EUR %>%
@@ -2488,7 +2488,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_legacy_name("L244.ThermalServiceAdder_EUR") %>%
       add_precursors("L144.base_service_EJ_serv_EUR", "gcam-europe/calibrated_techs_bld_det_EUR", "common/GCAM_region_names",
                      "L144.flsp_bm2_R_res_Yh_EUR", "L144.flsp_bm2_R_comm_Yh_EUR", "gcam-europe/A44.demand_satiation_mult_EUR",
-                     "L102.pcgdp_thous90USD_Scen_R_Y_EUR", "L101.Pop_thous_R_Yh_EUR","L144.prices_bld_EUR","L106.income_shares",
+                     "L102.pcgdp_thous90USD_Scen_R_Y", "L101.Pop_thous_R_Yh","L144.prices_bld_EUR","L106.income_distributions",
                      "L143.HDDCDD_scen_R_Y_EUR","L144.shell_eff_R_Y_EUR", "L144.internal_gains_EUR") ->
       L244.ThermalServiceAdder_EUR
 
@@ -2498,7 +2498,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_units("Unitless") %>%
       add_legacy_name("L244.GenericServiceCoef_EUR") %>%
       add_precursors("L144.base_service_EJ_serv_EUR", "L144.flsp_bm2_R_res_Yh_EUR", "L144.flsp_bm2_R_comm_Yh_EUR", "gcam-europe/A44.demand_satiation_mult_EUR",
-                     "L102.pcgdp_thous90USD_Scen_R_Y_EUR", "L101.Pop_thous_R_Yh_EUR","L144.prices_bld_EUR",
+                     "L102.pcgdp_thous90USD_Scen_R_Y", "L101.Pop_thous_R_Yh","L144.prices_bld_EUR",
                      "L144.shell_eff_R_Y_EUR","L144.internal_gains_EUR", "L143.HDDCDD_scen_R_Y_EUR") ->
       L244.GenericServiceCoef_EUR
 
@@ -2508,7 +2508,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_units("Unitless") %>%
       add_legacy_name("L244.ThermalServiceCoef_EUR") %>%
       add_precursors("L144.base_service_EJ_serv_EUR", "L144.flsp_bm2_R_res_Yh_EUR", "L144.flsp_bm2_R_comm_Yh_EUR", "gcam-europe/A44.demand_satiation_mult_EUR",
-                     "L102.pcgdp_thous90USD_Scen_R_Y_EUR", "L101.Pop_thous_R_Yh_EUR","L144.prices_bld_EUR",
+                     "L102.pcgdp_thous90USD_Scen_R_Y", "L101.Pop_thous_R_Yh","L144.prices_bld_EUR",
                      "L144.shell_eff_R_Y_EUR","L144.internal_gains_EUR", "L143.HDDCDD_scen_R_Y_EUR") ->
       L244.ThermalServiceCoef_EUR
 
@@ -2588,7 +2588,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
         add_comments("A44.subsector_interp_EUR written to all regions") %>%
         add_legacy_name("L244.SubsectorInterp_bld_EUR") %>%
         add_precursors("gcam-europe/A44.subsector_interp_EUR", "common/GCAM_region_names", "L144.end_use_eff_EUR",
-                       "A44.subsector_interp_heatpump_EUR")  ->
+                       "gcam-europe/A44.subsector_interp_heatpump_EUR")  ->
         L244.SubsectorInterp_bld_EUR
     } else {
       missing_data() %>%
@@ -2688,7 +2688,7 @@ module_gcameurope_L244.building_det <- function(command, ...) {
       add_comments("Identify Keywords of building renewable electric technologies for all model years") %>%
       add_comments("can be multiple lines") %>%
       add_legacy_name("L244.PrimaryRenewKeyword_bld_EUR") %>%
-      add_precursors("energy/A44.globaltech_keyword_EUR") ->
+      add_precursors("gcam-europe/A44.globaltech_keyword_EUR") ->
       L244.PrimaryRenewKeyword_bld_EUR
 
     L244.GlobalTechCost_bld_EUR %>%

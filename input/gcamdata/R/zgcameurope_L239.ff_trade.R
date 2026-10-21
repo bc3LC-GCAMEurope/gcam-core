@@ -323,7 +323,7 @@ module_gcameurope_L239.ff_trade <- function(command, ...) {
       add_units("EJ") %>%
       add_comments("Regional exports of commodities that are traded between GCAM regions") %>%
       add_precursors("common/GCAM_region_names",
-                     "energy/A_ff_tradedTechnology",
+                     "energy/A_ff_TradedTechnology",
                      "L2011.ff_GrossTrade_EJ_R_C_Y_EUR",
                      "L239.Production_tra") ->
       L239.Production_tra_EUR
@@ -333,7 +333,7 @@ module_gcameurope_L239.ff_trade <- function(command, ...) {
       add_units("EJ") %>%
       add_comments("Consumption of commodities that are traded between GCAM regions") %>%
       add_precursors("common/GCAM_region_names",
-                     "energy/A_ff_regionalTechnology",
+                     "energy/A_ff_RegionalTechnology",
                      "L2011.ff_GrossTrade_EJ_R_C_Y_EUR") ->
       L239.Production_reg_imp_EUR
 
@@ -342,7 +342,7 @@ module_gcameurope_L239.ff_trade <- function(command, ...) {
       add_units("EJ") %>%
       add_comments("Consumption of commodities produced within-region") %>%
       add_precursors("common/GCAM_region_names",
-                     "energy/A_ff_regionalTechnology",
+                     "energy/A_ff_RegionalTechnology",
                      "L2011.ff_ALL_EJ_R_C_Y_EUR",
                      "L2011.ff_GrossTrade_EJ_R_C_Y_EUR") ->
       L239.Production_reg_dom_EUR

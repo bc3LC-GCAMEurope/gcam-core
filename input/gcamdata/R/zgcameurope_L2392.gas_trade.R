@@ -657,7 +657,7 @@ module_gcameurope_L2392.gas_trade <- function(command, ...) {
       add_title("Delete traded natural gas supplysector") %>%
       add_units("none") %>%
       add_comments("When running with detailed natural gas trade disaggregation (pipeline and LNG), delete original NG supplysectors") %>%
-      add_precursors("L239.Supplysector_tra") ->
+      add_precursors("L239.Supplysector_tra_EUR") ->
       L2392.Delete_Supplysector_tra_NG_EUR
 
     L2392.Delete_Supplysector_reg_NG_EUR %>%
