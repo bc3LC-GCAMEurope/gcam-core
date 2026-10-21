@@ -98,7 +98,8 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       ) %>%
       filter(value != 0) %>%
       group_by(iso, year, product) %>%
-      summarise(chp_coef = value[sector == "out_chp_elec"] / value[sector == "in_industry_chp"]) %>%
+      # reframe(): groups missing one of the two sectors return 0 rows (dropped), as before with summarise()
+      dplyr::reframe(chp_coef = value[sector == "out_chp_elec"] / value[sector == "in_industry_chp"]) %>%
       ungroup %>%
       left_join_error_no_match(GCAM32_to_EU %>% select(iso, GCAM_region_ID), by = "iso") %>%
       distinct(GCAM_region_ID, product, year, chp_coef)
