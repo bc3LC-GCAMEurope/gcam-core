@@ -526,7 +526,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
       add_comments("Then back out the appropriate income elasticities from industrial output") %>%
       add_comments("Note lower income elasticities for SSP1 are hard-coded.") %>%
       add_legacy_name("L232.IncomeElasticity_ind_EUR") %>%
-      add_precursors("L102.pcgdp_thous90USD_Scen_R_Y", "common/GCAM_region_names", "L1328.in_EJ_R_indenergy_F_Yh_EUR", "L127.in_EJ_R_indchp_F_Yh_EUR", "energy/calibrated_techs", "L1324.in_EJ_R_indfeed_F_Yh_EUR", "energy/A32.globaltech_eff", "energy/A32.globaltech_shrwt", "energy/A32.demand", "L101.Pop_thous_R_Yh", "socioeconomics/A32.inc_elas_output") ->
+      add_precursors("L102.pcgdp_thous90USD_Scen_R_Y", "common/GCAM_region_names", "L1328.in_EJ_R_indenergy_F_Yh_EUR", "L127.in_EJ_R_indchp_F_Yh_EUR", "energy/calibrated_techs", "L1324.in_EJ_R_indfeed_F_Yh_EUR", "gcam-europe/A32.globaltech_eff", "energy/A32.globaltech_shrwt", "energy/A32.demand", "L101.Pop_thous_R_Yh", "socioeconomics/A32.inc_elas_output") ->
       L232.IncomeElasticity_ind_Scen_EUR
 
 
@@ -591,7 +591,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
       add_units("EJ") %>%
       add_comments("Calibrated input of industrial energy use values are calculated using L1328.in_EJ_R_indenergy_F_Yh_EUR then added information such as subsector, technology, minicam.energy.input, calibration, tech.share.weight, and etc.") %>%
       add_legacy_name("L232.StubTechCalInput_indenergy_EUR") %>%
-      add_precursors("L1328.in_EJ_R_indenergy_F_Yh_EUR", "energy/calibrated_techs", "energy/A32.globaltech_eff") ->
+      add_precursors("L1328.in_EJ_R_indenergy_F_Yh_EUR", "energy/calibrated_techs", "gcam-europe/A32.globaltech_eff") ->
       L232.StubTechCalInput_indenergy_EUR
 
     L232.StubTechCalInput_indfeed_EUR %>%
@@ -599,7 +599,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
       add_units("EJ") %>%
       add_comments("calibrated input of industrial feedstock technologies values are calculated using L1324.in_EJ_R_indfeed_F_Yh_EUR then added information such as subsector, technology, minicam.energy.input, calibration, tech.share.weight, and etc.") %>%
       add_legacy_name("L232.StubTechCalInput_indfeed_EUR", overwrite = T) %>%
-      add_precursors("L1324.in_EJ_R_indfeed_F_Yh_EUR", "common/GCAM_region_names", "energy/calibrated_techs", "energy/A32.globaltech_eff") ->
+      add_precursors("L1324.in_EJ_R_indfeed_F_Yh_EUR", "common/GCAM_region_names", "energy/calibrated_techs", "gcam-europe/A32.globaltech_eff") ->
       L232.StubTechCalInput_indfeed_EUR
 
     L232.StubTechProd_industry_EUR %>%
@@ -607,7 +607,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
       add_units("EJ") %>%
       add_comments("Service output values are calculated by technology, for energy-use and feedstocks then aggregated by region") %>%
       add_legacy_name("L232.StubTechProd_industry_EUR") %>%
-      add_precursors("L1328.in_EJ_R_indenergy_F_Yh_EUR", "L127.in_EJ_R_indchp_F_Yh_EUR", "common/GCAM_region_names", "energy/calibrated_techs", "L1324.in_EJ_R_indfeed_F_Yh_EUR", "energy/A32.globaltech_eff", "energy/A32.globaltech_shrwt") ->
+      add_precursors("L1328.in_EJ_R_indenergy_F_Yh_EUR", "L127.in_EJ_R_indchp_F_Yh_EUR", "common/GCAM_region_names", "energy/calibrated_techs", "L1324.in_EJ_R_indfeed_F_Yh_EUR", "gcam-europe/A32.globaltech_eff", "energy/A32.globaltech_shrwt") ->
       L232.StubTechProd_industry_EUR
 
     L232.StubTechCoef_industry_EUR %>%
@@ -615,7 +615,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
       add_units("Unitless") %>%
       add_comments("Service output values were first aggregated by sector to calculate the portion of each input as coefficients, then the coefficients were interpolated to cover last base year, future years and industry coefficient convergence year") %>%
       add_legacy_name("L232.StubTechCoef_industry_EUR") %>%
-      add_precursors("L1328.in_EJ_R_indenergy_F_Yh_EUR", "L127.in_EJ_R_indchp_F_Yh_EUR", "common/GCAM_region_names", "energy/calibrated_techs", "L1324.in_EJ_R_indfeed_F_Yh_EUR", "energy/A32.globaltech_eff", "energy/A32.globaltech_shrwt") ->
+      add_precursors("L1328.in_EJ_R_indenergy_F_Yh_EUR", "L127.in_EJ_R_indchp_F_Yh_EUR", "common/GCAM_region_names", "energy/calibrated_techs", "L1324.in_EJ_R_indfeed_F_Yh_EUR", "gcam-europe/A32.globaltech_eff", "energy/A32.globaltech_shrwt") ->
       L232.StubTechCoef_industry_EUR
 
     L232.FuelPrefElast_indenergy_EUR %>%
@@ -648,7 +648,7 @@ module_gcameurope_L232.other_industry <- function(command, ...) {
       add_units("EJ") %>%
       add_comments("Extracted base-year service output of industry final demand from L232.StubTechProd_industry_EUR") %>%
       add_legacy_name("L232.BaseService_ind_EUR") %>%
-      add_precursors("L1328.in_EJ_R_indenergy_F_Yh_EUR", "L127.in_EJ_R_indchp_F_Yh_EUR", "common/GCAM_region_names", "energy/calibrated_techs", "L1324.in_EJ_R_indfeed_F_Yh_EUR", "energy/A32.globaltech_eff", "energy/A32.globaltech_shrwt", "energy/A32.demand") ->
+      add_precursors("L1328.in_EJ_R_indenergy_F_Yh_EUR", "L127.in_EJ_R_indchp_F_Yh_EUR", "common/GCAM_region_names", "energy/calibrated_techs", "L1324.in_EJ_R_indfeed_F_Yh_EUR", "gcam-europe/A32.globaltech_eff", "energy/A32.globaltech_shrwt", "energy/A32.demand") ->
       L232.BaseService_ind_EUR
 
     L232.StubTechSecOut_ind_EUR %>%

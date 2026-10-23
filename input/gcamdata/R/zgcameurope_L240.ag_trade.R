@@ -114,25 +114,6 @@ module_gcameurope_L240.ag_trade <- function(command, ...) {
       } else { df_subsector_EUR %>% select(-region_tmp) }
     }
 
-    single_euro_mkt <- function(df){
-      df_noEU <- df %>%
-        mutate(region_tmp = stringr::str_extract(subsector, ".*(?= traded)")) %>%
-        filter(!(region_tmp %in% Europe_Single_Market_Regions$GCAMEU_region &
-                   supplysector %in% TRADED_CROPS)) %>%
-        select(-region_tmp)
-
-      df_EU <- df_noEU %>%
-        filter(region == SINGLE_MARKET_NAME & supplysector %in% TRADED_CROPS) %>%
-        mutate(subsector = gsub("global", SINGLE_MARKET_NAME, subsector))
-
-      if ("technology" %in% names(df_EU)){
-        df_EU <- df_EU %>%
-          mutate(technology = gsub("global", SINGLE_MARKET_NAME, technology))
-      }
-
-      bind_rows(df_noEU, df_EU)
-    }
-
     filter_euro_mkt <- function(df){
       df %>%
         filter(!(region == SINGLE_MARKET_NAME & supplysector %in% TRADED_CROPS))

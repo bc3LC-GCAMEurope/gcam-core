@@ -158,7 +158,7 @@ module_gcameurope_L121.liquids <- function(command, ...) {
       add_units("unitless") %>%
       add_comments("Ethanol and biodiesel consumption assigned to feedstock shares") %>%
       add_precursors("aglu/IIASA_biofuel_production", "aglu/IIASA_biofuel_region_mapping",
-                     "gcam-europe/IIASA_biofuel_tech_mapping", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "common/iso_GCAM_regID",
+                     "gcam-europe/IIASA_biofuel_tech_mapping_EUR", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "common/iso_GCAM_regID",
                      "gcam-europe/EU_AGR_OUTLOOK_biofuel_production") ->
       L121.share_R_TPES_biofuel_tech_EUR
 

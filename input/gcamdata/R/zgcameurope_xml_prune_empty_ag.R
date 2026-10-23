@@ -26,6 +26,9 @@ module_gcameurope_prune_empty_ag_xml <- function(command, ...) {
       # in case we prune so far that a region no longer has a crop to trade
       "L240.TechCoef_tra",
       "L240.TechCoef_reg",
+      # Europe-adjusted trade structure: exporter subsectors of European countries are in the single market
+      # region, not in the global (USA) pool, so only existing subsectors can be deleted
+      "L240.SubsectorAll_tra_EUR",
       "L113.StorageTechAndPassThrough",
       # in case we prune so far that we need to remove feed options (FodderGrass)
       "L202.StubTech_in_EUR",
@@ -53,7 +56,7 @@ module_gcameurope_prune_empty_ag_xml <- function(command, ...) {
     AG_REGIONS <- ag_regions %>% distinct(ag_region) %>% pull()
     TOTAL_CROPS <- c(paste0("total ", stringr::str_to_lower(aglu.TRADED_CROPS)), "total nuts_seeds", "total root_tuber")
 
-    for (item in DATA_INPUTS[DATA_INPUTS != 'L240.TechCoef_tra']) {
+    for (item in DATA_INPUTS[!DATA_INPUTS %in% c('L240.TechCoef_tra', 'L240.SubsectorAll_tra_EUR')]) {
       assign(item, get(item) %>%
                filter_regions_europe())
     }
@@ -113,7 +116,9 @@ module_gcameurope_prune_empty_ag_xml <- function(command, ...) {
     L240.TechCoef_tra %>%
       inner_join(prune_agsupply, by=c("minicam.energy.input", "market.name")) %>%
       select(region, supplysector, subsector) %>%
-      distinct() ->
+      distinct() %>%
+      # do not delete exporter subsectors that do not exist in the Europe-adjusted trade structure
+      semi_join(L240.SubsectorAll_tra_EUR, by = c("region", "supplysector", "subsector")) ->
       empty_ag_tra
 
     # do not attempt to get domestic consumption in a region+crop that is empty (imports
@@ -291,6 +296,7 @@ module_gcameurope_prune_empty_ag_xml <- function(command, ...) {
       add_precursors("L2012.AgProduction_ag_irr_mgmt",
                      "L240.TechCoef_tra",
                      "L240.TechCoef_reg",
+                     "L240.SubsectorAll_tra_EUR",
                      "L202.StubTech_in_EUR",
                      "L203.StubTech_demand_nonfood",
                      "L2252.LN5_MgdAllocation_crop",

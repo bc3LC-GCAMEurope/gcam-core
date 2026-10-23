@@ -187,10 +187,8 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
       elec_segments_water_EUR.xml %>%
         add_xml_data(L2235.GlobalIntTechBackup_elecS_cool_EUR, "GlobalIntTechBackup") %>%
         add_xml_data(L223.GlobalIntTechBackup_offshore_EUR, "GlobalIntTechBackup") %>%
-        add_xml_data_generate_levels(L2235.StubTechMarket_backup_elecS_cool_EUR,
-                                     "StubTechMarket","subsector","nesting-subsector",1,FALSE) %>%
-        add_precursors("L2235.GlobalIntTechBackup_elecS_cool_EUR",
-                       "L2235.StubTechMarket_backup_elecS_cool_EUR") ->
+        # GCAM-Europe has no StubTechMarket backup table: the backup market is set with StubTechElecMarket below
+        add_precursors("L2235.GlobalIntTechBackup_elecS_cool_EUR") ->
         elec_segments_water_EUR.xml
     } else {
       elec_segments_water_EUR.xml %>%

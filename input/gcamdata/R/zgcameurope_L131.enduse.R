@@ -224,7 +224,7 @@ module_gcameurope_L131.enduse <- function(command, ...) {
       add_comments("Scalers were used to balance electricity and district heat production and consumption within each region") %>%
       add_legacy_name("L131.in_EJ_R_Senduse_F_Yh_EUR") %>%
       add_precursors("gcam-europe/mappings/enduse_sector_aggregation", "water/EFW_mapping", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
-                     "L121.in_EJ_R_unoil_F_Yh", "L122.in_EJ_R_refining_F_Yh_EUR", "L126.out_EJ_R_electd_F_Yh_EUR") ->
+                     "L122.in_EJ_R_refining_F_Yh_EUR", "L126.out_EJ_R_electd_F_Yh_EUR") ->
       L131.in_EJ_R_Senduse_F_Yh_EUR
 
     L131.share_R_Senduse_heat_Yh_EUR %>%
@@ -234,7 +234,6 @@ module_gcameurope_L131.enduse <- function(command, ...) {
       add_legacy_name("L131.share_R_Senduse_heat_Yh_EUR") %>%
       add_precursors("energy/A_regions", "gcam-europe/mappings/enduse_sector_aggregation",
                      "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR",
-                     "L121.in_EJ_R_unoil_F_Yh",
                      "L122.in_EJ_R_refining_F_Yh_EUR",
                      "L124.out_EJ_R_heat_F_Yh_EUR", "L124.out_EJ_R_heatfromelec_F_Yh_EUR",
                      "L126.out_EJ_R_electd_F_Yh_EUR") ->

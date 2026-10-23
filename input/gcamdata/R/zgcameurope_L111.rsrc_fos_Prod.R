@@ -184,7 +184,7 @@ module_gcameurope_L111.rsrc_fos_Prod <- function(command, ...) {
         add_comments("Downscale GCAM3.0 supply curves to the country level (on the basis of resource") %>%
         add_comments("production) and aggregate by the new GCAM regions.") %>%
         add_comments("Use crude oil production shares as a proxy for unconventional oil resources.") %>%
-        add_precursors("common/iso_GCAM_regID", "energy/A11.fos_curves",
+        add_precursors("energy/A11.fos_curves",
                        "energy/mappings/IEA_product_rsrc", "L100.IEA_en_bal_ctry_hist",
                        "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR") ->
         L111.RsrcCurves_EJ_R_Ffos_EUR

@@ -72,7 +72,7 @@ module_gcameurope_L2325.chemical_Inc_Elas_scenarios <- function(command, ...) {
       add_legacy_name("L2325.IncomeElasticity_chemical_Scen_EUR") %>%
       add_precursors("common/GCAM_region_names",
                      "socioeconomics/A325.inc_elas",
-                     "L102.pcgdp_thous90USD_Scen_R_Y_EUR") ->
+                     "L102.pcgdp_thous90USD_Scen_R_Y") ->
       L2325.IncomeElasticity_chemical_Scen_EUR
 
     return_data(MODULE_OUTPUTS)

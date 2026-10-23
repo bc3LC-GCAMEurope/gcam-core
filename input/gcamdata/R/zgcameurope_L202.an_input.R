@@ -877,8 +877,7 @@ module_gcameurope_L202.an_input <- function(command, ...) {
       add_comments("Calibrated primary sources of animal feed commodities, specific to each region and time period.") %>%
       add_legacy_name("L202.StubTechProd_in_Forest_EUR") %>%
       add_precursors("aglu/A_an_input_technology",
-                     "energy/A_regions", "common/GCAM_region_names",
-                     "L202.StubTechProd_in_EUR") ->
+                     "energy/A_regions", "common/GCAM_region_names") ->
       L202.StubTechProd_in_Forest_EUR
 
     L202.Supplysector_an_EUR %>%

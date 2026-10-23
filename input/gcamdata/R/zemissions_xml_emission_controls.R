@@ -28,7 +28,8 @@ module_emissions_emission_controls_xml <- function(command, ...) {
                      "L253.user_EF_retrofit_USA",
                      "L253.user_EF_NSPS_new_vintage_USA",
                      "L253.user_Retrofit_off_USA",
-                     "L253.user_delete_gdp_control_USA")
+                     "L253.user_delete_gdp_control_USA",
+                     "L2235.StubTech_elecS_cool_EUR")
 
   MODULE_OUTPUTS <- c(XML = "emission_factor_controls.xml",
                       XML = "emission_factor_controls_user.xml",
@@ -56,6 +57,12 @@ module_emissions_emission_controls_xml <- function(command, ...) {
       else assign(MODULE_INPUTS[i], df)
     }
 
+    # Regions with segmented electricity (GCAM-Europe) have no "electricity" supplysector: their new source
+    # performance standards are written to emission_factor_controls_elecS_EUR.xml
+    elecS_regions <- unique(L2235.StubTech_elecS_cool_EUR$region)
+    L253.EF_NSPS_new_vintage <- L253.EF_NSPS_new_vintage %>%
+      filter(!(supplysector == "electricity" & region %in% elecS_regions))
+
     # Produce outputs
     # Output 1
     create_xml("emission_factor_controls.xml") %>%
@@ -66,7 +73,8 @@ module_emissions_emission_controls_xml <- function(command, ...) {
       add_precursors("L253.EF_retrofit",
                      "L253.EF_NSPS_new_vintage",
                      "L253.Retrofit_off",
-                     "L253.delete_gdp_control") -> emission_factor_controls.xml
+                     "L253.delete_gdp_control",
+                     "L2235.StubTech_elecS_cool_EUR") -> emission_factor_controls.xml
 
     # Some data inputs may not actually contain data. If so, do not add_xml_data
     if(exists("L253.EF_retrofit_nesting")) {

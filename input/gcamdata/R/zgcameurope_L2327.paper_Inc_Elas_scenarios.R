@@ -73,7 +73,7 @@ module_gcameurope_L2327.paper_Inc_Elas_scenarios <- function(command, ...) {
       add_legacy_name("L2327.IncomeElasticity_paper_Scen_EUR") %>%
       add_precursors("common/GCAM_region_names",
                      "socioeconomics/A327.inc_elas",
-                     "L102.pcgdp_thous90USD_Scen_R_Y_EUR") ->
+                     "L102.pcgdp_thous90USD_Scen_R_Y") ->
       L2327.IncomeElasticity_paper_Scen_EUR
 
     return_data(MODULE_OUTPUTS)

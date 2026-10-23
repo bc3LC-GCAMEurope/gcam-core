@@ -524,8 +524,6 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       add_units("none") %>%
       add_comments("Electricity Load Segments Technology Efficiencies") %>%
       add_precursors("L2234.GlobalTechEff_elecS_EUR",
-                     "L2241.GlobalTechEff_coal_vintage_EUR",
-                     "L2241.GlobalTechEff_elec_coalret_EUR",
                      "L2233.GlobalTechEff_elec_cool") ->
       L2235.GlobalTechEff_elecS_cool_EUR
 
@@ -534,8 +532,6 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       add_units("none") %>%
       add_comments("Electricity Load Segments Technology Shareweights") %>%
       add_precursors("L2234.GlobalTechShrwt_elecS_EUR",
-                     "L2241.GlobalTechShrwt_coal_vintage_EUR",
-                     "L2241.GlobalTechShrwt_elec_coalret_EUR",
                      "L2233.GlobalTechShrwt_elec_cool") ->
       L2235.GlobalTechShrwt_elec_cool_EUR
 
@@ -544,8 +540,6 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       add_units("none") %>%
       add_comments("Electricity Load Segments Technology Profit Shutdown Decider") %>%
       add_precursors("L2234.GlobalTechProfitShutdown_elecS_EUR",
-                     "L2241.GlobalTechProfitShutdown_elec_coalret_EUR",
-                     "L2241.StubTechProfitShutdown_coal_vintage_EUR",
                      "L2233.GlobalTechProfitShutdown_elec_cool") ->
       L2235.GlobalTechProfitShutdown_elecS_cool_EUR
 
@@ -553,18 +547,14 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       add_title("Electricity Load Segments Technology Variable OM Costs") %>%
       add_units("none") %>%
       add_comments("Electricity Load Segments Technology Variable OM Costs") %>%
-      add_precursors("L2234.GlobalTechOMvar_elecS_EUR",
-                     "L2241.GlobalTechOMvar_coal_vintage_EUR",
-                     "L2241.GlobalTechOMvar_elec_coalret_EUR") ->
+      add_precursors("L2234.GlobalTechOMvar_elecS_EUR") ->
       L2235.GlobalTechOMvar_elecS_cool_EUR
 
     L2235.GlobalTechOMfixed_elecS_cool_EUR %>%
       add_title("Electricity Load Segments Technology Fixed OM Costs") %>%
       add_units("none") %>%
       add_comments("Electricity Load Segments Technology Fixed OM Costs") %>%
-      add_precursors("L2234.GlobalTechOMfixed_elecS_EUR",
-                     "L2241.GlobalTechOMfixed_coal_vintage_EUR",
-                     "L2241.GlobalTechOMfixed_elec_coalret_EUR") ->
+      add_precursors("L2234.GlobalTechOMfixed_elecS_EUR") ->
       L2235.GlobalTechOMfixed_elecS_cool_EUR
 
     L2235.GlobalTechCapital_elecS_cool_EUR %>%
@@ -572,8 +562,6 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       add_units("none") %>%
       add_comments("Electricity Load Segments Technology Capital Costs") %>%
       add_precursors("L2234.GlobalTechCapital_elecS_EUR",
-                     "L2241.GlobalTechCapital_coal_vintage_EUR",
-                     "L2241.GlobalTechCapital_elec_coalret_EUR",
                      "L2233.GlobalTechCapital_elec_cool",
                      "L2233.GlobalTechCapital_elecPassthru") ->
       L2235.GlobalTechCapital_elecS_cool_EUR
@@ -582,9 +570,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       add_title("Global Capacity Factors for Electricity Load Segments Technologies") %>%
       add_units("none") %>%
       add_comments("Global Capacity Factors for Electricity Load Segments Technologies") %>%
-      add_precursors("L2234.GlobalTechCapFac_elecS_EUR",
-                     "L2241.GlobalTechCapFac_coal_vintage_EUR",
-                     "L2241.GlobalTechCapFac_elec_coalret_EUR") ->
+      add_precursors("L2234.GlobalTechCapFac_elecS_EUR") ->
       L2235.GlobalTechCapFac_elecS_cool_EUR
 
     L2235.GlobalTechSCurve_elecS_cool_EUR %>%
@@ -698,9 +684,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       add_title("Electricity Load Segments Base Year Efficiencies") %>%
       add_units("none") %>%
       add_comments("Electricity Load Segments Base Year Efficiencies") %>%
-      add_precursors("L2234.StubTechEff_elecS_EUR",
-                     "L2241.StubTechEff_coal_vintage_EUR",
-                     "L2241.StubTechEff_elec_coalret_EUR") ->
+      add_precursors("L2234.StubTechEff_elecS_EUR") ->
       L2235.StubTechEff_elecS_cool_EUR
 
     # L2235.StubTechCoef_elecS_cool_EUR %>%
@@ -715,9 +699,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       add_units("none") %>%
       add_comments("Electricity Load Segments and Cooling Technology Calibration Outputs") %>%
       add_precursors("L2234.StubTechProd_elecS_EUR",
-                     "L2241.StubTechProd_coal_vintage_EUR",
-                     "L2241.StubTechProd_elec_coalret_EUR",
-                     "L1233.out_EJ_state_elec_F_tech_cool") ->
+                     "L1233.out_EJ_R_elecS_F_tech_cool_EUR") ->
       L2235.StubTechProd_elecS_cool_EUR
 
     L2235.StubTechFixOut_elecS_cool_EUR %>%
