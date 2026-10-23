@@ -168,6 +168,22 @@ module_gcameurope_L1231.elec_tech <- function(command, ...) {
       bind_rows(L1231.eff_R_elec_gas_tech_Yh_EUR) %>%
       select(GCAM_region_ID, sector, fuel, technology, year, efficiency) -> L1231.eff_R_elec_F_tech_Yh_EUR
 
+    # Unphysically low efficiencies. Where the energy balances report fuel input but (almost) no electricity output
+    # (e.g. biomass in Serbia and Montenegro, ~4e-5), the technology would burn thousands of units of fuel per unit of
+    # electricity, and its emissions (which GCAM expresses per unit of output) would explode. Efficiencies below
+    # EFF_MIN are replaced by the median of the other regions for the same technology and year.
+    # Only the final calibration year is corrected: it is the one the future emission coefficients and efficiencies
+    # are built from. In earlier years the correction would change the electricity output (output = input * efficiency)
+    # and unbalance the historical fuel markets, so the energy balances are kept as they are.
+    EFF_MIN <- 0.05
+    L1231.eff_R_elec_F_tech_Yh_EUR <- L1231.eff_R_elec_F_tech_Yh_EUR %>%
+      group_by(sector, fuel, technology, year) %>%
+      mutate(eff_median = median(efficiency[!is.na(efficiency) & efficiency >= EFF_MIN])) %>%
+      ungroup() %>%
+      mutate(efficiency = if_else(!is.na(efficiency) & efficiency < EFF_MIN & !is.na(eff_median) &
+                                    year == MODEL_FINAL_BASE_YEAR, eff_median, efficiency)) %>%
+      select(-eff_median)
+
     # Obtain inputs for technologies (other than gas technologies) and then create final input output by binding rows with the
     # tibble that considers gas technologies only.
     L123.in_EJ_R_elec_F_Yh_EUR %>%
