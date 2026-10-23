@@ -52,7 +52,7 @@ module_gcameurope_L251.en_ssp_nonco2 <- function(command, ...) {
       stub.technology <- agg_sector <- MAC_region <- bio_N2O_coef <- future.emiss.coeff.year <-
       SO2_name <- GAINS_region <- emiss.coeff <- technology <- minicam.energy.input <-
       tranSubsector <- tranTechnology <- input.name <- efficiency <-
-      future.emiss.coeff.year <- NULL # silence package check.
+      future.emiss.coeff.year <- n_pos <- ef_med <- NULL # silence package check.
 
     all_data <- list(...)[[1]]
 
@@ -69,6 +69,27 @@ module_gcameurope_L251.en_ssp_nonco2 <- function(command, ...) {
     L223.GlobalTechEff_elec <- get_data(all_data, "L223.GlobalTechEff_elec")
 
     L106.income_shares<-get_data(all_data, "L106.income_distributions") %>% filter_regions_europe(region_ID_mapping = A_regions)
+
+    # Cap on SSP emission factors relative to the European median.
+    # Each emission coefficient is limited to EF_CAP_MULT times the median (over the European
+    # regions with a positive coefficient) of the same supplysector / subsector / technology /
+    # pollutant / year. The median is only computed when at least EF_CAP_MIN_N regions have a
+    # positive coefficient. Electricity is not affected here: it is handled in the segmented
+    # electricity emissions chunk.
+    EF_CAP_MULT  <- 10
+    EF_CAP_MIN_N <- 8
+    ef_cap_to_median <- function(df) {
+      df %>%
+        group_by(supplysector, subsector, stub.technology, Non.CO2, year) %>%
+        mutate(n_pos  = sum(emiss.coeff > 0, na.rm = TRUE),
+               ef_med = if_else(n_pos >= EF_CAP_MIN_N,
+                                median(emiss.coeff[emiss.coeff > 0], na.rm = TRUE),
+                                NA_real_),
+               emiss.coeff = if_else(!is.na(ef_med) & emiss.coeff > EF_CAP_MULT * ef_med,
+                                     EF_CAP_MULT * ef_med, emiss.coeff)) %>%
+        ungroup() %>%
+        select(-n_pos, -ef_med)
+    }
 
 
     # make a complete mapping to be able to look up with sector + subsector + tech the
@@ -251,6 +272,12 @@ module_gcameurope_L251.en_ssp_nonco2 <- function(command, ...) {
              year = emissions.GHG_CONTROL_READIN_YEAR)->
       L251.ssp34_ef_vin_EUR
 
+    # Cap the non-electricity emission factors relative to the European median
+    # (done before the SO2 renaming so that all regions share the same pollutant name).
+    L251.ssp15_ef_EUR <- ef_cap_to_median(L251.ssp15_ef_EUR)
+    L251.ssp2_ef_EUR  <- ef_cap_to_median(L251.ssp2_ef_EUR)
+    L251.ssp34_ef_EUR <- ef_cap_to_median(L251.ssp34_ef_EUR)
+
     # This section renames SO2 variables so that it has regional SO2 emission species.
     L251.ctrl.delete_EUR <- rename_SO2(L251.ctrl.delete_EUR, A_regions, FALSE)
     L251.ssp15_ef_EUR <- rename_SO2(L251.ssp15_ef_EUR, A_regions, FALSE)
@@ -304,6 +331,7 @@ module_gcameurope_L251.en_ssp_nonco2 <- function(command, ...) {
       add_units("Tg / EJ") %>%
       add_comments("First, the non-CO2 emissions factors for SSP 1/5 are interpolated across years 2010-2100 in 5 year segments.") %>%
       add_comments("Then, regional non-CO2 emission species information is added.") %>%
+      add_comments("Coefficients are capped at a multiple of the European median.") %>%
       add_legacy_name("L251.ssp15_ef_EUR") %>%
       add_precursors("L161.SSP15_EF_EUR",
                      "emissions/A_regions",
@@ -317,6 +345,7 @@ module_gcameurope_L251.en_ssp_nonco2 <- function(command, ...) {
       add_units("Tg / EJ") %>%
       add_comments("First, the non-CO2 emissions factors for SSP 2 are interpolated across years 2010-2100 in 5 year segments.") %>%
       add_comments("Then, regional non-CO2 emission species information is added.") %>%
+      add_comments("Coefficients are capped at a multiple of the European median.") %>%
       add_legacy_name("L251.ssp2_ef_EUR") %>%
       add_precursors("L161.SSP2_EF_EUR",
                      "emissions/A_regions",
@@ -345,6 +374,7 @@ module_gcameurope_L251.en_ssp_nonco2 <- function(command, ...) {
       add_units("Tg / EJ") %>%
       add_comments("First, the non-CO2 emissions factors for SSP 3/4 are interpolated across years 2010-2100 in 5 year segments.") %>%
       add_comments("Then, regional non-CO2 emission species information is added.") %>%
+      add_comments("Coefficients are capped at a multiple of the European median.") %>%
       add_legacy_name("L251.ssp34_ef_EUR") %>%
       add_precursors("L161.SSP34_EF_EUR",
                      "emissions/A_regions",
