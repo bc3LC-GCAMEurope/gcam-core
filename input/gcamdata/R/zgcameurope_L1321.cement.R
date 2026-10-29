@@ -684,7 +684,7 @@ module_gcameurope_L1321.cement <- function(command, ...) {
       add_precursors("L102.CO2_Mt_R_F_Yh_EUR", "L123.in_EJ_R_elec_F_Yh_EUR",
                      "L123.out_EJ_R_elec_F_Yh_EUR", "energy/IEA_cement_elec_kwht",
                      "energy/IEA_cement_thermal_energy_GJt_clinker_global_trend", "energy/mappings/cement_regions",
-                     "energy/IEA_cement_elec_kwht_update", "energy/IEA_cement_TPE_GJt",  "L132.in_EJ_R_indenergy_F_Yh", "common/iso_GCAM_regID") ->
+                     "energy/IEA_cement_elec_kwht_update", "energy/IEA_cement_TPE_GJt",  "L132.in_EJ_R_indenergy_F_Yh_EUR", "common/iso_GCAM_regID") ->
       L1321.in_EJ_R_indenergy_F_Yh_EUR
 
     return_data(L1321.out_Mt_R_cement_Yh_EUR, L1321.IO_GJkg_R_cement_F_Yh_EUR, L1321.in_EJ_R_cement_F_Y_EUR, L1321.in_EJ_R_indenergy_F_Yh_EUR)

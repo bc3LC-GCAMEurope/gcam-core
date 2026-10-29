@@ -457,8 +457,8 @@ module_gcameurope_L2321.cement <- function(command, ...) {
       add_comments("First calculate cement output as the base-year cement output times the GDP ratio raised to the income elasticity") %>%
       add_comments("Then back out the appropriate income elasticities from cement output") %>%
       add_legacy_name("L2321.IncomeElasticity_cement_Scen_EUR") %>%
-      add_precursors("L101.Pop_thous_R_Yh", "L102.pcgdp_thous90USD_Scen_R_Y", "common/GCAM_region_names", "energy/A321.demand", "energy/calibrated_techs",
-                     "L1321.out_Mt_R_cement_Yh", "socioeconomics/A321.inc_elas_output") ->
+      add_precursors("L102.pcgdp_thous90USD_Scen_R_Y", "common/GCAM_region_names", "energy/A321.demand", "energy/calibrated_techs",
+                     "L1321.out_Mt_R_cement_Yh_EUR", "socioeconomics/A321.inc_elas_output") ->
       L2321.IncomeElasticity_cement_Scen_EUR
 
     L2321.Supplysector_cement_EUR %>%

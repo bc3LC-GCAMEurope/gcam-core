@@ -80,8 +80,7 @@ module_gcameurope_L1239.elec_ctry_fractions <- function(command, ...) {
       add_comments("Electricity generation by fuel & state (from L123.out_EJ_state_elec_F) allocated across horizontal load segments.") %>%
       add_comments("This allocation is based on the fraction of fuel in the horizontal load segments by grid region (from L1236.grid_elec_supply_EUR).") %>%
       add_legacy_name("L1239.state_elec_supply") %>%
-      add_precursors("gcam-usa/states_subregions",
-                     "L123.out_EJ_state_elec_F",
+      add_precursors("L123.out_EJ_R_elec_F_Yh_EUR",
                      "L1236.grid_elec_supply_EUR") ->
       L1239.R_elec_supply
 

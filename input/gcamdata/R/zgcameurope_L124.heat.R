@@ -235,7 +235,7 @@ module_gcameurope_L124.heat <- function(command, ...) {
       add_units("EJ") %>%
       add_comments("Input heat is extracted from energy balance, aggregated based on aggregate fuel types") %>%
       add_comments("To avoid processing failure, 0 years have base year (2010) * 1e-3 added") %>%
-      add_precursors("energy/A_regions", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "energy/mappings/enduse_fuel_aggregation") ->
+      add_precursors("energy/A_regions", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "gcam-europe/mappings/enduse_fuel_aggregation") ->
       L124.in_EJ_R_heat_F_Yh_EUR
 
     L124.out_EJ_R_heat_F_Yh_EUR %>%
@@ -256,7 +256,7 @@ module_gcameurope_L124.heat <- function(command, ...) {
       add_title("Heat output from electricity generation by GCAM region / fuel / historical year") %>%
       add_units("EJ") %>%
       add_comments("Data on heat from CHP is read in, aggregated") %>%
-      add_precursors("energy/A_regions", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "energy/mappings/enduse_fuel_aggregation") ->
+      add_precursors("energy/A_regions", "L1012.en_bal_EJ_R_Si_Fi_Yh_EUR", "gcam-europe/mappings/enduse_fuel_aggregation") ->
       L124.out_EJ_R_heatfromelec_F_Yh_EUR
 
     L124.heatoutratio_R_elec_F_tech_Yh_EUR %>%

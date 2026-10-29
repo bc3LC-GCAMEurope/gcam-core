@@ -203,7 +203,7 @@ module_gcameurope_L224.heat <- function(command, ...) {
       add_units("EJ/yr") %>%
       add_comments("L124.in_EJ_R_heat_F_Yh_EUR and calibrated_techs are joined, shareweights assigned") %>%
       add_comments("as 0 if the calibrated value is 0 and 1 if it is not 0") %>%
-      add_precursors("L124.in_EJ_R_heat_F_Yh_EUR", "energy/calibrated_techs", "energy/A_regions", "common/GCAM_region_names") ->
+      add_precursors("L124.in_EJ_R_heat_F_Yh_EUR", "energy/calibrated_techs", "energy/A_regions", "L101.GCAM_EUR_regions", "L2235.StubTech_elecS_cool_EUR") ->
       L224.StubTechCalInput_heat_EUR
 
     return_data(MODULE_OUTPUTS)

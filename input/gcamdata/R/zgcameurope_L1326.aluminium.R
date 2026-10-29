@@ -322,7 +322,7 @@ module_gcameurope_L1326.aluminum <- function(command, ...) {
       add_comments("Subtracted aluminum energy use from industrial energy use values in L1325.in_EJ_R_indenergy_F_Yh_EUR") %>%
       add_comments("To determine adjusted input energy for industrial energy use") %>%
       add_legacy_name("L1326.in_EJ_R_indenergy_F_Yh_EUR") %>%
-      add_precursors("L1325.in_EJ_R_indenergy_F_Yh", "energy/aluminum_prod_region_IAI",
+      add_precursors("L1325.in_EJ_R_indenergy_F_Yh_EUR", "energy/aluminum_prod_region_IAI",
                      "energy/aluminum_prod_USGS", "energy/aluminum_energy_region_IAI", "energy/alumina_energy_region_IAI",
                      "energy/mappings/IAI_ctry_region", "common/iso_GCAM_regID","gcam-europe/mappings/enduse_fuel_aggregation") ->
       L1326.in_EJ_R_indenergy_F_Yh_EUR

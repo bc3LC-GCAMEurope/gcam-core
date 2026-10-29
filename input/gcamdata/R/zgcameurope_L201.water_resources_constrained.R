@@ -373,7 +373,7 @@ module_gcameurope_L201.water_resources_constrained <- function(command, ...) {
       add_title("Water renewable resource technologies") %>%
       add_units("NA") %>%
       add_comments("share weight is 1") %>%
-      add_precursors("L201.RenewRsrcCurves_calib_EUR") ->
+      same_precursors_as(L201.RenewRsrcCurves_calib_EUR) ->
       L201.RenewRsrcTechShrwt_EUR
 
     L201.RsrcTechShrwt_EUR %>%

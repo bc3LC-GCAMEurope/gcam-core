@@ -475,7 +475,7 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
       add_title("Subsector (grid region) share-weights in EUR electricity trade") %>%
       add_units("Unitless") %>%
       add_comments("No need to read in subsector logit exponents, which are applied to the technology competition") %>%
-      add_precursors("gcam-europe/mappings/grid_regionss",
+      add_precursors("gcam-europe/mappings/grid_regions",
                      "gcam-europe/A232.structure") ->
       L2232.SubsectorShrwtFllt_EURelec
 
@@ -499,7 +499,7 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
       add_units("Unitless") %>%
       add_comments("Set the same value across all model years") %>%
       add_precursors("gcam-europe/A232.structure",
-                     "gcam-europe/mappings/grid_regionss") ->
+                     "gcam-europe/mappings/grid_regions") ->
       L2232.TechShrwt_EURelec
 
     L2232.TechCoef_EURelec %>%
@@ -524,7 +524,7 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
       add_units("Unitless") %>%
       add_comments("Include electricity net own use and electricy domestic supply sectors") %>%
       add_precursors("gcam-europe/A232.structure",
-                     "gcam-europe/mappings/grid_regionss") ->
+                     "gcam-europe/mappings/grid_regions") ->
       L2232.Supplysector_elec_EUR_trade
 
     L2232.ElecReserve_EUR_trade %>%
@@ -532,7 +532,7 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
       add_units("Unitless") %>%
       add_comments("For electricity sector") %>%
       add_precursors("energy/A23.sector",
-                     "gcam-europe/mappings/grid_regionss") ->
+                     "gcam-europe/mappings/grid_regions") ->
       L2232.ElecReserve_EUR_trade
 
     L2232.SubsectorShrwtFllt_elec_EUR_trade %>%
@@ -540,7 +540,7 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
       add_units("Unitless") %>%
       add_comments("Include electricity net own use and electricy domestic supply sectors") %>%
       add_precursors("gcam-europe/A232.structure",
-                     "gcam-europe/mappings/grid_regionss") ->
+                     "gcam-europe/mappings/grid_regions") ->
       L2232.SubsectorShrwtFllt_elec_EUR_trade
 
     L2232.SubsectorInterp_elec_EUR_trade %>%
@@ -562,7 +562,7 @@ module_gcameurope_L2232.electricity_trade <- function(command, ...) {
       add_units("Unitless") %>%
       add_comments("Include electricity net own use and electricy domestic supply sectors") %>%
       add_precursors("gcam-europe/A232.structure",
-                     "gcam-europe/mappings/grid_regionss") ->
+                     "gcam-europe/mappings/grid_regions") ->
       L2232.TechShrwt_elec_EUR_trade
 
     L2232.TechCoef_elec_EUR_trade %>%

@@ -179,19 +179,7 @@
     <solution-info-param-parser>
         <!-- Calibration-year residuals found with the no-exception diagnostic run (periods 1-3).
              fillout="0": each exception applies ONLY to the period listed (period index: 1=1990, 2=2005, 3=2010).
-             Natural gas: regional consumption is 0.5-0.9% below domestic supply + imports (Canada, Indonesia 1990;
-             Croatia 1990/2005/2010; Poland, Romania, Ukraine 2005).
              Pasture: tolerance stacking from small animal-product markets (Iceland 1990/2010, Cyprus 2010). -->
-        <solution-tolerance fillout="0" region="Canada" period="1" market-type="natural gas">0.01</solution-tolerance>
-        <solution-tolerance fillout="0" region="Indonesia" period="1" market-type="natural gas">0.01</solution-tolerance>
-        <solution-tolerance fillout="0" region="Croatia" period="1" market-type="natural gas">0.01</solution-tolerance>
-        <solution-tolerance fillout="0" region="Croatia" period="2" market-type="natural gas">0.01</solution-tolerance>
-        <solution-tolerance fillout="0" region="Poland" period="2" market-type="natural gas">0.01</solution-tolerance>
-        <solution-tolerance fillout="0" region="Romania" period="2" market-type="natural gas">0.01</solution-tolerance>
-        <solution-tolerance fillout="0" region="Ukraine" period="2" market-type="natural gas">0.01</solution-tolerance>
-        <solution-tolerance fillout="0" region="Ukraine" period="3" market-type="natural gas">0.01</solution-tolerance>
-        <solution-tolerance fillout="0" region="Croatia" period="3" market-type="natural gas">0.01</solution-tolerance>
-
         <solution-tolerance fillout="0" region="Iceland" period="1" market-type="Pasture">0.03</solution-tolerance>
         <solution-tolerance fillout="0" region="Iceland" period="3" market-type="Pasture">0.03</solution-tolerance>
         <solution-tolerance fillout="0" region="Cyprus" period="3" market-type="Pasture">0.01</solution-tolerance>

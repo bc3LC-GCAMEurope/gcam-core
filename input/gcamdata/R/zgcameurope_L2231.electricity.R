@@ -187,14 +187,14 @@ module_gcameurope_L2231.electricity_grid <- function(command, ...) {
       add_units("Unitless") %>%
       add_comments("Include logit exponent between states") %>%
       add_comments("Use the same logit exponent for states within grid region as for grid regions within the EUR") %>%
-      add_precursors("gcam-europe/states_subregions") ->
+      add_precursors("gcam-europe/mappings/grid_regions") ->
       L2231.Supplysector_elec_grid_EUR
 
     L2231.SubsectorShrwtFllt_elec_grid_EUR %>%
       add_title("Subsector (state) share-weights in grid regions") %>%
       add_units("Unitless") %>%
       add_comments("Set share-weights for states within grid region") %>%
-      add_precursors("gcam-europe/states_subregions") ->
+      add_precursors("gcam-europe/mappings/grid_regions") ->
       L2231.SubsectorShrwtFllt_elec_grid_EUR
 
     L2231.SubsectorInterp_elec_grid_EUR %>%
@@ -231,7 +231,7 @@ module_gcameurope_L2231.electricity_grid <- function(command, ...) {
       add_units("Unitless") %>%
       add_comments("The marginal revenue sector is the region's electricity sector.") %>%
       add_comments("The marginal revenue market is the grid region.") %>%
-      add_precursors("gcam-europe/states_subregions") ->
+      add_precursors("gcam-europe/mappings/grid_regions") ->
       L2231.PassthroughSector_elec_EUR
 
     L2231.PassthroughTech_elec_grid_EUR %>%
@@ -247,28 +247,28 @@ module_gcameurope_L2231.electricity_grid <- function(command, ...) {
       add_units("EJ") %>%
       add_comments("Subsector share-weight is zero if production of all technologies in the subsector is zero") %>%
       add_comments("Technology share-weight is zero if production of the technology is zero") %>%
-      add_precursors("L223.StubTechProd_elec_EUR", "L2231.StubTechProd_elec") ->
+      add_precursors("L223.StubTechProd_elec") ->
       L2231.Production_elec_grid_EUR
 
     L2231.InterestRate_grid_EUR %>%
       add_title("Interest rates in grid regions") %>%
       add_units("Unitless") %>%
       add_comments("Use the default interest rate") %>%
-      add_precursors("gcam-europe/states_subregions") ->
+      add_precursors("gcam-europe/mappings/grid_regions") ->
       L2231.InterestRate_grid_EUR
 
     L2231.Pop_grid_EUR %>%
       add_title("Population in grid regions") %>%
       add_units("Unitless") %>%
       add_comments("The same value is copied to all model years") %>%
-      add_precursors("gcam-europe/states_subregions") ->
+      add_precursors("gcam-europe/mappings/grid_regions") ->
       L2231.Pop_grid_EUR
 
     L2231.GDP_grid_EUR %>%
       add_title("GDP in grid regions") %>%
       add_units("Unitless") %>%
       add_comments("") %>%
-      add_precursors("gcam-europe/states_subregions") ->
+      add_precursors("gcam-europe/mappings/grid_regions") ->
       L2231.GDP_grid_EUR
 
     return_data(MODULE_OUTPUTS)

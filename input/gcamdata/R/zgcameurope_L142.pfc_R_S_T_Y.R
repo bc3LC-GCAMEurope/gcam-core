@@ -488,7 +488,7 @@ module_gcameurope_L142.pfc_R_S_T_Y <- function(command, ...) {
                      "emissions/EPA/EPA_SF6_Semi",
                      "emissions/EPA_fgas_sector_map",
                      "emissions/EPA_GWPs",
-                     "emissions/EPA_country_map_EUR",
+                     "gcam-europe/EPA_country_map_EUR",
                      "L106.income_distributions",
                      "L244.GenericShares_EUR",
                      "L244.ThermalShares_EUR") ->

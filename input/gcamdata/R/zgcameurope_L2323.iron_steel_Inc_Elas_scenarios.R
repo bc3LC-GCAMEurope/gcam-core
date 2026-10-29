@@ -114,8 +114,8 @@ module_gcameurope_L2323.iron_steel_Inc_Elas_scenarios <- function(command, ...) 
       add_precursors("common/GCAM_region_names",
                      "socioeconomics/A323.inc_elas_parameter",
                      "L101.Pop_thous_SSP_R_Yfut",
-                     "L101.Pop_thous_R_Yh_EUR",
-                     "L102.pcgdp_thous90USD_Scen_R_Y_EUR",
+                     "L101.Pop_thous_R_Yh",
+                     "L102.pcgdp_thous90USD_Scen_R_Y",
                      "LB1092.Tradebalance_iron_steel_Mt_R_Y") ->
       L2323.IncomeElasticity_iron_steel_Scen_EUR
 

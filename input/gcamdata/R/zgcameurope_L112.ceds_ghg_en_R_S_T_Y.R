@@ -946,7 +946,8 @@ module_gcameurope_L112.ceds_ghg_en_R_S_T_Y <- function(command, ...) {
     # make sure there are no negative emissions factors resulting from this
     # calculation (if so, the default unconventional oil fug co2 emissions factor could be
     # too high, resulting in unconventional oil emissions higher than total oil emissions)
-    if(any(conventional_oil_new_emfacts$emfact < 0)){
+    # (no regions with unconventional oil in Europe: the table can have 0 rows and no emfact column)
+    if(nrow(conventional_oil_new_emfacts) > 0 && any(conventional_oil_new_emfacts$emfact < 0)){
       stop("An unconventional oil fugitive emissions factor used to split historical crude oil emissions into conventional and unconventional oil resulted in negative emissions factor(s).")
     }
 
