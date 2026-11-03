@@ -39,6 +39,7 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
                      "L1233.globaltech_capital_ATB",
                      "L1233.globaltech_OMfixed_ATB",
                      "L1233.gcam_costs_alltechs",
+                     "L1233.globaltech_capital_ATB_battery",
                      FILE = "gcam-europe/mappings/jrc_gcam_elec_tech_mapping",
                      FILE = "gcam-europe/2040CT_TechnologyAssumptions_Energy_CleanFuels",
                      FILE = "gcam-europe/2040CT_TechnologyAssumptions_Energy_PowerHeat")
@@ -80,6 +81,10 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
     L1233.globaltech_capital_ATB <- get_data(all_data, "L1233.globaltech_capital_ATB", strip_attributes = TRUE)
     L1233.globaltech_OMfixed_ATB <- get_data(all_data, "L1233.globaltech_OMfixed_ATB", strip_attributes = TRUE)
     L1233.gcam_costs_alltechs <- get_data(all_data, "L1233.gcam_costs_alltechs", strip_attributes = TRUE)
+    L1233.globaltech_capital_ATB_battery <- get_data(all_data, "L1233.globaltech_capital_ATB_battery", strip_attributes = TRUE) %>%
+      rename(capital = capital.cost,
+             `OM-fixed` = fixed.om,
+             `OM-var` = variable.om)
 
     # Technology of the core data system that is split into the two offshore wind technologies,
     # ATB case and dollar year of the ATB 2024 data, and ATB technology (tech_type, tech_detail) of each new technology
@@ -283,7 +288,7 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
       bind_rows(
         L1233.gcam_costs_alltechs,
         L1233.globaltech_capital_ATB_battery %>%
-          pivot_longer(cols = c('capital.cost','fixed.om','variable.om'), names_to = 'input', values_to = 'value')
+          pivot_longer(cols = c('capital','OM-fixed','OM-var'), names_to = 'input', values_to = 'value')
       ) %>%
       arrange(case, technology, input, year) %>%
       group_by(case, technology, input) %>%
@@ -295,7 +300,7 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
       bind_rows(
         L1233.gcam_costs_alltechs,
         L1233.globaltech_capital_ATB_battery %>%
-          pivot_longer(cols = c('capital.cost','fixed.om','variable.om'), names_to = 'input', values_to = 'value')
+          pivot_longer(cols = c('capital','OM-fixed','OM-var'), names_to = 'input', values_to = 'value')
       ) %>%
       # take the fist non-hist year (all hist years have the same value, regardless the case)
       filter(year == min(year[!(year %in% HISTORICAL_YEARS)])) %>%
@@ -322,7 +327,6 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
       # join the base year case multipliers
       left_join(
         L1233.gcam_costs_alltechs_case_baseyear %>%
-          ungroup() %>%
           select(technology, input, case_adv, case_con),
         by = c("technology", "input")
       ) %>%
@@ -347,32 +351,35 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
       arrange(case, technology, input, year) %>%
       group_by(case, technology, input) %>%
       mutate(
-        # identify the first future year (e.g., 2025)
-        first_future = min(year[!(year %in% HISTORICAL_YEARS)]),
+        # identify the base year for the case modifiers (the last historical year)
+        last_hist = max(HISTORICAL_YEARS),
 
-        # STEP A: Apply the base year modifier to the first future year only
+        # STEP A: Apply the base year case modifiers (adv/con) to ALL future data points
+        # Because JRC provides real data for 2030, 2040, 2050, we want the Advanced/Conservative
+        # shifts to apply to those native JRC values as well.
         value = case_when(
-          year == first_future & case == "Advanced" & !is.na(case_adv) ~ value * (1 + case_adv),
-          year == first_future & case == "Conservative" & !is.na(case_con) ~ value * (1 + case_con),
+          year > last_hist & case == "Advanced" & !is.na(case_adv) ~ value * (1 + case_adv),
+          year > last_hist & case == "Conservative" & !is.na(case_con) ~ value * (1 + case_con),
           TRUE ~ value
         ),
-        # extract that newly modified base year value to serve as the anchor for future trends
-        anchor_val = value[match(first_future, year)],
+
+        # extract the 2050 value to serve as the anchor for post-2050 trends
+        anchor_val = value[match(2050, year)],
 
         # STEP B: Convert the percentage trend into a period-on-period multiplier
-        # Historical years and the first future year get a multiplier of 1 (no change)
-        # Subsequent years get (1 + trend). Missing trends default to 1 (0% change).
-        step_mult = if_else(year <= first_future, 1, 1 + replace_na(trend, 0)),
+        # Any year up to 2050 gets a multiplier of 1 (we keep the native JRC data)
+        # Subsequent years (2055+) get (1 + trend).
+        step_mult = if_else(year <= 2050, 1, 1 + replace_na(trend, 0)),
+
         # multiply the trends cumulatively across time
         cum_mult = cumprod(step_mult),
 
-        # STEP C: Calculate the final values for all years AFTER the first future year
-        value = if_else(year > first_future, anchor_val * cum_mult, value)
+        # STEP C: Calculate the final values ONLY for years AFTER 2050
+        value = if_else(year > 2050, anchor_val * cum_mult, value)
       ) %>%
 
       # reshape and clean
-      select(-first_future, -case_adv, -case_con, -anchor_val, -step_mult, -cum_mult, -trend) %>%
-
+      select(-last_hist, -case_adv, -case_con, -anchor_val, -step_mult, -cum_mult, -trend) %>%
       # spawn rows for any missing historical years backfilling the newly
       # created NA years (pre-2021) with the 2021 value
       complete(year = unique(c(MODEL_BASE_YEARS, year))) %>%
@@ -449,49 +456,42 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
                  by = "technology", relationship = "many-to-many") %>%
       filter(year %in% MODEL_YEARS) %>%
       select(case, supplysector, subsector, technology, year, input, fixed.charge.rate, value) %>%
+      unique() %>%
       arrange(case, supplysector, subsector, technology, year, input)
 
     L1233.globaltech_capital_JRC_EUR <- filter(L1233.gcam_costs_from_JRC_alltechs, case == "Moderate", input == "capital") %>%
       rename(input.capital = input, capital.overnight = value) %>%
       select(-case)
-    L1233.globaltech_capital_JRC_adv_EUR <- filter(L1233.gcam_costs_alltechs, case == "Advanced", input == "capital") %>%
+    L1233.globaltech_capital_JRC_adv_EUR <- filter(L1233.gcam_costs_from_JRC_alltechs, case == "Advanced", input == "capital") %>%
       rename(input.capital = input, capital.overnight = value) %>%
       select(-case)
-    L1233.globaltech_capital_JRC_low_EUR <- filter(L1233.gcam_costs_alltechs, case == "Conservative", input == "capital") %>%
+    L1233.globaltech_capital_JRC_low_EUR <- filter(L1233.gcam_costs_from_JRC_alltechs, case == "Conservative", input == "capital") %>%
       rename(input.capital = input, capital.overnight = value) %>%
       select(-case)
-    L1233.globaltech_OMfixed_JRC_EUR <- filter(L1233.gcam_costs_alltechs, case == "Moderate", input == "OM-fixed") %>%
+    L1233.globaltech_OMfixed_JRC_EUR <- filter(L1233.gcam_costs_from_JRC_alltechs, case == "Moderate", input == "OM-fixed") %>%
       rename(input.OM.fixed = input, OM.fixed = value) %>%
       select(-case, -fixed.charge.rate)
-    L1233.globaltech_OMfixed_JRC_adv_EUR <- filter(L1233.gcam_costs_alltechs, case == "Advanced", input == "OM-fixed") %>%
+    L1233.globaltech_OMfixed_JRC_adv_EUR <- filter(L1233.gcam_costs_from_JRC_alltechs, case == "Advanced", input == "OM-fixed") %>%
       rename(input.OM.fixed = input, OM.fixed = value) %>%
       select(-case, -fixed.charge.rate)
-    L1233.globaltech_OMfixed_JRC_low_EUR <- filter(L1233.gcam_costs_alltechs, case == "Conservative", input == "OM-fixed") %>%
+    L1233.globaltech_OMfixed_JRC_low_EUR <- filter(L1233.gcam_costs_from_JRC_alltechs, case == "Conservative", input == "OM-fixed") %>%
       rename(input.OM.fixed = input, OM.fixed = value) %>%
       select(-case, -fixed.charge.rate)
-    L1233.globaltech_OMvar_JRC_EUR <- filter(L1233.gcam_costs_alltechs, case == "Moderate", input == "OM-var") %>%
+    L1233.globaltech_OMvar_JRC_EUR <- filter(L1233.gcam_costs_from_JRC_alltechs, case == "Moderate", input == "OM-var") %>%
       rename(input.OM.var = input, OM.var = value) %>%
       select(-case, -fixed.charge.rate)
-    L1233.globaltech_OMvar_JRC_adv_EUR <- filter(L1233.gcam_costs_alltechs, case == "Advanced", input == "OM-var") %>%
+    L1233.globaltech_OMvar_JRC_adv_EUR <- filter(L1233.gcam_costs_from_JRC_alltechs, case == "Advanced", input == "OM-var") %>%
       rename(input.OM.var = input, OM.var = value) %>%
       select(-case, -fixed.charge.rate)
-    L1233.globaltech_OMvar_JRC_low_EUR <- filter(L1233.gcam_costs_alltechs, case == "Conservative", input == "OM-var") %>%
+    L1233.globaltech_OMvar_JRC_low_EUR <- filter(L1233.gcam_costs_from_JRC_alltechs, case == "Conservative", input == "OM-var") %>%
       rename(input.OM.var = input, OM.var = value) %>%
       select(-case, -fixed.charge.rate)
 
     L1233.globaltech_capital_JRC_battery_EUR <- L1233.gcam_costs_from_JRC_wcase %>%
       filter(technology == 'battery',
              year %in% MODEL_YEARS) %>%
-      select(case, technology, year, input, value) %>%
-      complete(nesting(case, technology), year = MODEL_YEARS) %>%
-      group_by(case, technology) %>%
-      mutate(capital.cost = approx_fun(year, capital * gdp_deflator(1975, 2022), rule = 2),
-             fixed.om = approx_fun(year, `OM-fixed` * gdp_deflator(1975, 2022), rule = 2),
-             variable.om = approx_fun(year, `OM-var` * gdp_deflator(1975, 2022), rule = 2)) %>%
-      ungroup() %>%
-      apply_exogenous_techchange(cost_vars = c("capital.cost", "fixed.om", "variable.om"),
-                                 use_default_rate = TRUE) %>%
-      select(case, technology, year, capital.cost, fixed.om, variable.om)
+      pivot_wider(names_from = 'input', values_from = 'value') %>%
+      select(case, technology, year, capital.cost = capital, fixed.om = `OM-fixed`, variable.om = `OM-var`)
 
 
     # ===================================================
