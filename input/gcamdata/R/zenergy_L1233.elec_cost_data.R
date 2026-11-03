@@ -38,7 +38,8 @@ module_energy_L1233.elec_cost_data <- function(command, ...) {
       "L1233.globaltech_OMvar_ATB",
       "L1233.globaltech_OMvar_ATB_adv",
       "L1233.globaltech_OMvar_ATB_low",
-      "L1233.globaltech_capital_ATB_battery")
+      "L1233.globaltech_capital_ATB_battery",
+      "L1233.gcam_costs_alltechs")
 
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)

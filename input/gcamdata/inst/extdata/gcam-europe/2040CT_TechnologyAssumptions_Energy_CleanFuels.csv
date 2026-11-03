@@ -8,7 +8,7 @@
 # ----------
 # Columns index: 1) capital = 'Investment cost per unit of capacity (EUR/kW-output)'; 2) OMfixed = 'Fixed O&M costs (EUR/kW-output)';
 # 3) OMvar = Variable, fuel and emissions cost per unit of stored energy (EUR/MWh)';  4) efficiency = Efficiency (%); 5) lifetime = 'Technical lifetime)'
-Storage technologies,capital,capital,capital,OMfixed,OMfixed,OMfixed,Omvar,OMvar,OMvar,efficiency,efficiency,efficiency,lifetime
+Storage technologies,capital,capital,capital,OMfixed,OMfixed,OMfixed,OMvar,OMvar,OMvar,efficiency,efficiency,efficiency,lifetime
 Period,2020,2030,2050,2020,2030,2050,2020,2030,2050,2020,2030,2050,Years
 "Compressed Air Energy Storage  (per 1 kW)",129550,123344,110931,20.9,20.9,20.9,0.0,0.0,0.0,65,68,70,15
 "Flywheel  (per1 MWh electricity)",1607100,1515400,1332000,52.5,47.3,46.6,0.0,0.0,0.0,85,85,85,15
