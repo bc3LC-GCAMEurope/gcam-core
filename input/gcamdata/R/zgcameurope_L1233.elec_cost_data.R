@@ -447,7 +447,7 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
     # TECHNOLOGY: CSP_storage
     L1233.gcam_costs_from_JRC_wcase <- rbind(
       L1233.gcam_costs_from_JRC_wcase,
-      infer_tech_costs('CSP_storage','CSP')
+      infer_tech_costs('CSP','CSP_storage')
     )
 
     # 4. Reshape and split out into data tables for output
