@@ -215,11 +215,33 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
       # unit conversion (only for `Utility scale batteries - C-rate: C/2 (per
       # 1 MWh electricity)`) technology, as it is the only one that will be used.
       # ATTENTION: needs to be adapted in case other technologies are considered.
-      mutate(value = if_else(`Storage technologies` == 'Utility scale batteries - C-rate: C/2 (per 1 MWh electricity)',
+      mutate(value = if_else(`Storage technologies` == 'Utility scale batteries - C-rate: C/2 (per 1 MWh electricity)' & input == 'capital',
              2*value/1000, value)) %>% # from MWh to kW
+             # 4*ratio_ATB_JRC*cost_multiplier*value/1000, value)) %>% # from MWh to kW
       # clean
       rename(Technology = `Storage technologies`) %>%
       select(Technology, input, year, value)
+
+    # unit conversion:
+    # 1) compute the ATB-JRC conversion ratio
+    # 2) apply the ATB-JRC conversion ratio
+    # 3) transform from 2Hr to 4Hr batteries (like the once considered in GCAM core chunk); only need to multiply by 2, as already multiplied by 2 previously
+    # step 1. C/2 batteries ratio between ATB and JRC data
+    ratio_ATB <- NREL_ATB_capital_2024 %>%
+      filter(tech_detail == 'Utility-Scale Battery Storage - 2Hr',
+             case == 'Moderate') %>%
+      pull(`2022`)
+    ratio_JRC <- L1233.globaltech_JRC_storage %>%
+      filter(Technology == 'Utility scale batteries - C-rate: C/2 (per 1 MWh electricity)',
+             input == 'capital',
+             year == 2020) %>%
+      pull(value)
+    ratio_JRC_ATB <- ratio_ATB / ratio_JRC
+    # step 2-3
+    L1233.globaltech_JRC_storage <- L1233.globaltech_JRC_storage %>%
+      mutate(value = if_else(Technology == 'Utility scale batteries - C-rate: C/2 (per 1 MWh electricity)' & input == 'capital',
+                             2*ratio_JRC_ATB*value, value))
+
 
     L1233.globaltech_JRC_powerheat <- JRC_powerheat %>%
       # set the "period" value to the column name
@@ -264,14 +286,22 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
       bind_rows(
         filter(., year == 2020) %>% mutate(year = max(HISTORICAL_YEARS))
       ) %>%
+      # interpolate years in-between
+      complete(nesting(case, tech_detail), year = unique(.$year)) %>%
+      group_by(case, tech_detail) %>%
+      mutate(capital = approx_fun(year, capital, rule = 2),
+             OMfixed = approx_fun(year, OMfixed, rule = 2),
+             OMvar = approx_fun(year, OMvar, rule = 2)) %>%
+      ungroup() %>%
+      # reorder
       arrange(tech_detail, case, year)
 
     L1233.gcam_costs_from_JRC <- L1233.globaltech_JRC %>%
       inner_join(jrc_gcam_mapping, by = "tech_detail", relationship = "many-to-many") %>%
       group_by(case, technology, year) %>%
-      summarise(capital = mean(capital),
-                `OM-fixed` = mean(OMfixed),
-                `OM-var` = mean(OMvar)) %>%
+      summarise(capital = if (grepl("_storage", technology[1])) sum(capital) else mean(capital),
+                `OM-fixed` = if (grepl("_storage", technology[1])) sum(OMfixed) else mean(OMfixed),
+                `OM-var` = if (grepl("_storage", technology[1])) sum(OMvar) else mean(OMvar)) %>%
       ungroup() %>%
       complete(nesting(case, technology), year = MODEL_FUTURE_YEARS) %>%
       group_by(case, technology) %>%
