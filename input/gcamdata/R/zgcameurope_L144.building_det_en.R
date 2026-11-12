@@ -14,7 +14,7 @@
 #' original data system was \code{LA144.building_det_en.R} (energy level1).
 #' @details Calculates building energy consumption, non-energy costs, energy output by service, internal gains, and end-use technology and shell efficiency
 #' @importFrom assertthat assert_that
-#' @importFrom dplyr bind_rows filter group_by left_join lag mutate pull select summarise rowwise
+#' @importFrom dplyr bind_rows filter group_by left_join lag mutate pull select summarise rowwise rename_with
 #' @importFrom tidyr complete replace_na
 #' @author BC3 2024
 module_gcameurope_L144.building_det_en <- function(command, ...) {
@@ -89,7 +89,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
     nrgbal_to_service_map <- get_data(all_data, "gcam-europe/mappings/nrgbal_to_service_map")
     siec_to_fuel_map <- get_data(all_data, "gcam-europe/mappings/siec_to_fuel_map")
     geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map") %>% filter_regions_europe()
-    nrg_bal_c <- get_data(all_data, "gcam-europe/nrg_bal_c") %>%  filter(geo != "EU27_2020", geo != 'GE')
+    nrg_bal_c <- get_data(all_data, "gcam-europe/nrg_bal_c") %>%  filter(geo != "EU27_2020", geo != 'GE') %>% dplyr::rename_with(~ gsub("^X", "", .x), matches("^X[0-9]{4}$"))
     nrg_bal_c_corrSE <- get_data(all_data, "gcam-europe/nrg_bal_c_corrSE")
     L101.in_EJ_R_bld_Fi_Yh_EUR <- get_data(all_data, "L101.in_EJ_R_bld_Fi_Yh_EUR")
     L142.in_EJ_R_bld_F_Yh_EUR <- get_data(all_data, "L142.in_EJ_R_bld_F_Yh_EUR")
@@ -905,11 +905,10 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
         select(geo, year = TIME_PERIOD, value_eurostat = OBS_VALUE, nrg_bal, siec, unit)
     ) %>%
       # Remove GEorgia, aggregation of regions, UK, and UkrAine (null data for comm, and non-existing data for resid)
-      filter(!geo %in% c("EU27_2020","EA20",'GE', 'UK', 'UA')) %>%
-      # add GCAM regions
-      left_join_error_no_match(geo_to_iso_map, by = "geo") %>%
+      filter(!geo %in% c("EU27_2020","EA20","EA21",'GE', 'UK', 'UA')) %>%
+      # add GCAM regions (Ok to have NAs, already present in the data)
+      left_join(geo_to_iso_map, by = "geo") %>%
       left_join(iso_GCAM_regID, by = 'iso') %>%
-      # Ok to have NAs
       left_join(nrgbal_to_service_map %>%
                   bind_rows(data.frame(
                     nrg_bal = 'FC_OTH_CP_E',
@@ -965,7 +964,7 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       mutate(
         growth_rate = mean(growth_rate, na.rm = T), # Fill the growth rate
         latest_known_year = min(year[!is.na(service_ambient_heat)], na.rm = T), # Find latest known year
-        latest_known_value = service_ambient_heat[year == latest_known_year]    # Get the ambient_hear for the latest known year
+        latest_known_value = service_ambient_heat[year == latest_known_year][1]    # Get the ambient_hear for the latest known year
       ) %>%
       # 3.b. if growth_rate is negative, assume the mean growth_rate by climate region
       group_by(year, service, fuel, climate_group) %>%
@@ -1290,6 +1289,13 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       ungroup() %>%
       mutate(value = if_else(service == 'resid other appliance modern EUR', value + adj_value, value)) %>%
       mutate(value = if_else(service == 'comm cooling EUR', value + adj_value, value)) %>%
+      mutate(adj_value = if_else(service == 'resid other appliance modern EUR' & value < 0, value - 1e-4,
+                                 if_else(service == 'comm cooling EUR' & value < 0, value - 1e-4, 0))) %>%
+      mutate(value = if_else(service == 'resid other appliance modern EUR' & value < 0, 1e-4, value)) %>%
+      group_by(GCAM_region_ID, sector, fuel, year) %>%
+      mutate(adj_value = min(adj_value)) %>%
+      ungroup() %>%
+      mutate(value = if_else(service == 'resid others modern EUR', value + adj_value, value)) %>%
       # aggregate if necessary
       group_by(GCAM_region_ID, sector, fuel, service, year) %>%
       summarise(value = sum(value)) %>%
@@ -1370,9 +1376,15 @@ module_gcameurope_L144.building_det_en <- function(command, ...) {
       mutate(value = if_else(service == 'resid other appliance modern EUR', value + adj_value, value)) %>%
       mutate(value = if_else(service == 'comm cooling EUR', value + adj_value, value)) %>%
       # repeat the process if necessary
-      mutate(adj_value = if_else(service == 'resid other appliance modern EUR' & value < 0 & adj_value != 0, value - 1e-4,
-                                 if_else(service == 'comm cooling EUR' & value < 0 & adj_value != 0, value - 1e-4, 0))) %>%
+      mutate(adj_value = if_else(service == 'resid other appliance modern EUR' & value < 0, value - 1e-4,
+             if_else(service == 'comm cooling EUR' & value < 0, value - 1e-4, 0))) %>%
       mutate(value = if_else(service == 'resid other appliance modern EUR' & value < 0, 1e-4, value)) %>%
+      group_by(GCAM_region_ID, sector, fuel, year) %>%
+      mutate(adj_value = min(adj_value)) %>%
+      ungroup() %>%
+      mutate(value = if_else(service == 'resid others modern EUR', value + adj_value, value)) %>%
+
+
       mutate(value = if_else(service == 'comm cooling EUR' & value < 0, 1e-4, value)) %>%
       group_by(GCAM_region_ID, sector, fuel, year) %>%
       mutate(adj_value = min(adj_value)) %>%
