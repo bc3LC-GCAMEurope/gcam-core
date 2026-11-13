@@ -335,7 +335,7 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
       # take the fist non-hist year (all hist years have the same value, regardless the case)
       filter(year == min(year[!(year %in% HISTORICAL_YEARS)])) %>%
       group_by(technology, input) %>%
-      summarise(case_adv = (value[match('Advanced', case)] - value[match('Moderate', case)]) / value[match('Moderate', case)],
+      summarise(case_adv = (value[match('Advanced', case)] - value[match('Moderate', case)]) / value[match('Advanced', case)],
                 case_con = (value[match('Conservative', case)] - value[match('Moderate', case)]) / value[match('Conservative', case)]) %>%
       ungroup()
 
