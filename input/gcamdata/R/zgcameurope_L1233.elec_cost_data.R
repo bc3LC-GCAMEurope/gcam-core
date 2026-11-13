@@ -266,7 +266,13 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
       separate(input_unit, into = c("input", "units"), sep = "-", extra = "merge") %>%
       select(Technology, input, year, value)
 
-    L1233.globaltech_JRC <- rbind(L1233.globaltech_JRC_powerheat,
+    L1233.globaltech_JRC <- rbind(L1233.globaltech_JRC_powerheat %>%
+                                    # unit conversion: EUR to US-DOLLAR and deflect to 1975 (same unit as GCAM core)
+                                    mutate(value = if_else(input %in% c("capital", "OMfixed", "OMvar"),
+                                                           value * EURO_to_DOLLAR * gdp_deflator(1975, 2020),
+                                                           value)),
+                                    # unit conversion not applied to storage
+                                    # since ATB-JRC ratio already accounts for it
                                   L1233.globaltech_JRC_storage) %>%
       # add columns, reorder and clean data
       mutate(
@@ -277,10 +283,7 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
       ) %>%
       select(tech_detail, input, case, year, value) %>%
       drop_na(value) %>%
-      # unit conversion: EUR to US-DOLLAR and deflect to 1975 (same unit as GCAM core)
-      mutate(value = if_else(input %in% c("capital", "OMfixed", "OMvar"),
-                             value * EURO_to_DOLLAR * gdp_deflator(1975, 2020),
-                             value)) %>%
+      # expand key
       spread(key = input, value = value) %>%
       # expand the 2020 value to 2021 (max(HISTORICAL_YEARS))
       bind_rows(
