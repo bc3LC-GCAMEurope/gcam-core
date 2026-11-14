@@ -38,7 +38,8 @@ module_energy_L1233.elec_cost_data <- function(command, ...) {
       "L1233.globaltech_OMvar_ATB",
       "L1233.globaltech_OMvar_ATB_adv",
       "L1233.globaltech_OMvar_ATB_low",
-      "L1233.globaltech_capital_ATB_battery")
+      "L1233.globaltech_capital_ATB_battery",
+      "L1233.gcam_costs_alltechs")
 
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -67,7 +68,7 @@ module_energy_L1233.elec_cost_data <- function(command, ...) {
           replace_na(list(cost_multiplier = 1))
       } else {
         # if a techchange data table is provided, apply the rates on a technology and scenario-specific basis
-        tc_by_tech_scen <- gather(tc_table, key = "case", value = "rate", -supplysector, -subsector, -technology) %>%
+        tc_by_tech_scen <- tidyr::gather(tc_table, key = "case", value = "rate", -supplysector, -subsector, -technology) %>%
           repeat_add_columns(tibble(year = MODEL_YEARS[MODEL_YEARS >= from.year & MODEL_YEARS <= to.year])) %>%
           mutate(cost_multiplier = (1 - rate)^(year - from.year))
         df_new <- left_join(df, tc_by_tech_scen, by = c("case", "supplysector", "subsector", "technology", "year")) %>%
@@ -100,7 +101,7 @@ module_energy_L1233.elec_cost_data <- function(command, ...) {
     # but ReEDS data will be used to fill in technologies missing from the ATB, and the 2010-2022 years.
 
     # The first left_join is an expanding join, as multiple gcam techs may use the same reeds tech. E.g., reeds/battery_li
-    # maps to gcam/battery, gcam/wind_storage,  and gcam/PV_storage. reeds/Gas- techs are mapped to gcam/refined liquids
+    # maps to gcam/battery, gcam/wind_storage, and gcam/PV_storage. reeds/Gas- techs are mapped to gcam/refined liquids
     # and gcam/gas techs.
     # The second left_join returns missing values in all years prior to 2022, and for all techs in ReEDS but not the ATB
     L1233.reeds_atb_costs <- L1233.reeds_costs %>%
@@ -188,18 +189,18 @@ module_energy_L1233.elec_cost_data <- function(command, ...) {
                                     c("biomass (conv CCS)", "biomass (conv)", "coal (conv pul CCS)", "coal (conv pul)", "coal (IGCC)"),
                                   case == "Moderate") %>%
       bind_rows(filter(L1233.gcam_costs_from_ATB, technology == "coal (IGCC CCS)", case == "Moderate")) %>%
-      gather(key = "input", value = "value", -case, -technology, -year) %>%
+      tidyr::gather(key = "input", value = "value", -case, -technology, -year) %>%
       spread(key = technology, value = value) %>%
       mutate(`biomass (IGCC)` = `biomass (conv)` + `coal (IGCC)` - `coal (conv pul)`,
              `biomass (IGCC CCS)` = `biomass (conv CCS)` + `coal (IGCC CCS)` - `coal (conv pul CCS)`) %>%
-      gather(key = "technology", value = "value", -case, -year, -input) %>%
+      tidyr::gather(key = "technology", value = "value", -case, -year, -input) %>%
       filter(technology %in% c("biomass (IGCC)", "biomass (IGCC CCS)")) %>%
       spread(key = input, value = value)
 
     # Compile the data into a single table, join with A23 to get fully qualified technology names, expand to all model years,
     # apply post-2050 tech change, multiply by dollar conversion
     L1233.gcam_costs_alltechs <- bind_rows(L1233.gcam_costs_from_reeds, L1233.gcam_costs_from_ATB, L1233.gcam_bio_igcc) %>%
-      gather(key = input, value = "value", -case, -technology, -year) %>%
+      tidyr::gather(key = input, value = "value", -case, -technology, -year) %>%
       complete(nesting(case, technology, input), year = MODEL_YEARS) %>%
       group_by(case, technology, input) %>%
       mutate(value = approx_fun(year, value * gdp_deflator(1975, 2022), rule = 2)) %>%
@@ -320,6 +321,14 @@ module_energy_L1233.elec_cost_data <- function(command, ...) {
       same_precursors_as(L1233.globaltech_capital_ATB) ->
       L1233.globaltech_capital_ATB_battery
 
+    L1233.gcam_costs_alltechs %>%
+      add_title("2024 ATB-based capital costs, fixed and variable O&M costs,
+                and utility-scale battery costs for all cases") %>%
+      add_units("1975$/kW; 1975$/kW/yr; 1975$/MWh") %>%
+      add_comments("All costs indicated in a single table") %>%
+      same_precursors_as(L1233.globaltech_capital_ATB) ->
+      L1233.gcam_costs_alltechs
+
     return_data(L1233.globaltech_capital_ATB,
                 L1233.globaltech_capital_ATB_adv,
                 L1233.globaltech_capital_ATB_low,
@@ -329,7 +338,8 @@ module_energy_L1233.elec_cost_data <- function(command, ...) {
                 L1233.globaltech_OMvar_ATB,
                 L1233.globaltech_OMvar_ATB_adv,
                 L1233.globaltech_OMvar_ATB_low,
-                L1233.globaltech_capital_ATB_battery)
+                L1233.globaltech_capital_ATB_battery,
+                L1233.gcam_costs_alltechs)
   } else {
     stop("Unknown command")
   }

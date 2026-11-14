@@ -37,10 +37,27 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
                      FILE = "energy/NREL_ATB_capital_2024",
                      FILE = "energy/NREL_ATB_OMfixed_2024",
                      "L1233.globaltech_capital_ATB",
-                     "L1233.globaltech_OMfixed_ATB")
+                     "L1233.globaltech_OMfixed_ATB",
+                     "L1233.gcam_costs_alltechs",
+                     "L1233.globaltech_capital_ATB_battery",
+                     FILE = "gcam-europe/mappings/jrc_gcam_elec_tech_mapping",
+                     FILE = "gcam-europe/2040CT_TechnologyAssumptions_Energy_CleanFuels",
+                     FILE = "gcam-europe/2040CT_TechnologyAssumptions_Energy_PowerHeat")
 
-  MODULE_OUTPUTS <- c("L1233.globaltech_capital_ATB_offshore_EUR",
-                      "L1233.globaltech_OMfixed_ATB_offshore_EUR")
+  MODULE_OUTPUTS <-
+    c("L1233.globaltech_capital_JRC_EUR",
+      "L1233.globaltech_capital_JRC_adv_EUR",
+      "L1233.globaltech_capital_JRC_low_EUR",
+      "L1233.globaltech_OMfixed_JRC_EUR",
+      "L1233.globaltech_OMfixed_JRC_adv_EUR",
+      "L1233.globaltech_OMfixed_JRC_low_EUR",
+      "L1233.globaltech_OMvar_JRC_EUR",
+      "L1233.globaltech_OMvar_JRC_adv_EUR",
+      "L1233.globaltech_OMvar_JRC_low_EUR",
+      "L1233.globaltech_capital_JRC_battery_EUR",
+      "L1233.globaltech_capital_ATB_offshore_EUR",
+      "L1233.globaltech_OMfixed_ATB_offshore_EUR")
+
 
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -57,8 +74,17 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
     A20.offshore_wind_types_EUR <- get_data(all_data, "gcam-europe/A20.offshore_wind_types_EUR")
     NREL_ATB_capital_2024 <- get_data(all_data, "energy/NREL_ATB_capital_2024")
     NREL_ATB_OMfixed_2024 <- get_data(all_data, "energy/NREL_ATB_OMfixed_2024")
+    jrc_gcam_mapping <- get_data(all_data, "gcam-europe/mappings/jrc_gcam_elec_tech_mapping")
+    JRC_storage <- get_data(all_data, "gcam-europe/2040CT_TechnologyAssumptions_Energy_CleanFuels")
+    JRC_powerheat <- get_data(all_data, "gcam-europe/2040CT_TechnologyAssumptions_Energy_PowerHeat") %>%
+      filter(Technology != 'Refurbishment of existing nuclear reactors') # rm this technology, not used and with values indicated as ranges
     L1233.globaltech_capital_ATB <- get_data(all_data, "L1233.globaltech_capital_ATB", strip_attributes = TRUE)
     L1233.globaltech_OMfixed_ATB <- get_data(all_data, "L1233.globaltech_OMfixed_ATB", strip_attributes = TRUE)
+    L1233.gcam_costs_alltechs <- get_data(all_data, "L1233.gcam_costs_alltechs", strip_attributes = TRUE)
+    L1233.globaltech_capital_ATB_battery <- get_data(all_data, "L1233.globaltech_capital_ATB_battery", strip_attributes = TRUE) %>%
+      rename(capital = capital.cost,
+             `OM-fixed` = fixed.om,
+             `OM-var` = variable.om)
 
     # Technology of the core data system that is split into the two offshore wind technologies,
     # ATB case and dollar year of the ATB 2024 data, and ATB technology (tech_type, tech_detail) of each new technology
@@ -71,6 +97,11 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
       tech_detail = c("Offshore Wind - Class 3", "Offshore Wind - Class 11"))
     # Number of last annual changes of the series used to estimate the decay rate of the extrapolation
     N_DECAY_CHANGES <- 4
+    # EURO - DOLLAR conversion (based on 2020-2022 values)
+    EURO_to_DOLLAR <- 1.15 # 1 euro = 1.15 dollar
+
+    # ======================================
+    # WIND
 
     offshore_techs <- unique(A20.offshore_wind_types_EUR$technology)
     assert_that(setequal(offshore_techs, ATB_OFFSHORE_MAP$technology),
@@ -156,7 +187,351 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
       L1233.globaltech_OMfixed_ATB, OMfixed_series, "OM.fixed") %>%
       mutate(OM.fixed = round(OM.fixed, energy.DIGITS_OM))
 
+
+    # ================================================
+    # REST OF TECHNOLOGIES
+
+    # 1. Reshape the JRC datasets
+    L1233.globaltech_JRC_storage <- JRC_storage %>%
+      # reshape data
+      mutate(across(everything(), as.character)) %>%
+      pivot_longer(
+        cols = -c(`Storage technologies`, lifetime),
+        names_to = c("input", "year"),
+        names_sep = "_",
+        values_to = "value"
+      ) %>%
+      mutate(value = as.numeric(value)) %>%
+      # unit conversion (only for `Utility scale batteries - C-rate: C/2 (per
+      # 1 MWh electricity)`) technology, as it is the only one that will be used.
+      # ATTENTION: needs to be adapted in case other technologies are considered.
+      mutate(value = if_else(`Storage technologies` == 'Utility scale batteries - C-rate: C/2 (per 1 MWh electricity)' & input == 'capital',
+             2*value/1000, value)) %>% # from MWh to kW
+             # 4*ratio_ATB_JRC*cost_multiplier*value/1000, value)) %>% # from MWh to kW
+      # clean
+      rename(Technology = `Storage technologies`) %>%
+      select(Technology, input, year, value)
+
+    # unit conversion:
+    # 1) compute the ATB-JRC conversion ratio
+    # 2) apply the ATB-JRC conversion ratio
+    # 3) transform from 2Hr to 4Hr batteries (like the once considered in GCAM core chunk); only need to multiply by 2, as already multiplied by 2 previously
+    # step 1. C/2 batteries ratio between ATB and JRC data
+    ratio_ATB <- NREL_ATB_capital_2024 %>%
+      filter(tech_detail == 'Utility-Scale Battery Storage - 2Hr',
+             case == 'Moderate') %>%
+      pull(`2022`)
+    ratio_JRC <- L1233.globaltech_JRC_storage %>%
+      filter(Technology == 'Utility scale batteries - C-rate: C/2 (per 1 MWh electricity)',
+             input == 'capital',
+             year == 2020) %>%
+      pull(value)
+    assert_that(length(ratio_ATB) == 1, length(ratio_JRC) == 1,
+                msg = "Battery ATB-JRC ratio: expected one ATB value (2Hr, Moderate, 2022) and one JRC value (C/2, capital, 2020)")
+    # only the C/2 battery is converted below; any other JRC storage technology in the mapping would stay in EUR
+    assert_that(all(intersect(jrc_gcam_mapping$tech_detail, unique(L1233.globaltech_JRC_storage$Technology)) ==
+                      'Utility scale batteries - C-rate: C/2 (per 1 MWh electricity)'),
+                msg = "jrc_gcam_elec_tech_mapping uses a JRC storage technology other than the C/2 battery, which has no unit conversion")
+    ratio_JRC_ATB <- ratio_ATB / ratio_JRC
+    # step 2-3: the ratio (ATB 2022$/kW over JRC EUR/kW) converts EUR to 2022$; the costs are then deflated to 1975$
+    # (ATB_DOLLAR_YEAR, same dollar year as the core battery costs). Capital and fixed O&M (per kW) are scaled from
+    # 2Hr to 4Hr (x2); variable O&M (per MWh) is not
+    L1233.globaltech_JRC_storage <- L1233.globaltech_JRC_storage %>%
+      mutate(value = case_when(
+        Technology == 'Utility scale batteries - C-rate: C/2 (per 1 MWh electricity)' & input %in% c('capital', 'OMfixed') ~
+          2 * ratio_JRC_ATB * value * gdp_deflator(1975, ATB_DOLLAR_YEAR),
+        Technology == 'Utility scale batteries - C-rate: C/2 (per 1 MWh electricity)' & input == 'OMvar' ~
+          ratio_JRC_ATB * value * gdp_deflator(1975, ATB_DOLLAR_YEAR),
+        TRUE ~ value))
+
+
+    L1233.globaltech_JRC_powerheat <- JRC_powerheat %>%
+      # reshape data
+      mutate(across(everything(), as.character)) %>%
+      pivot_longer(
+        cols = -c(Technology, `lifetime-years`),
+        names_to = c("input_unit", "year"),
+        names_sep = "_",
+        values_to = "value"
+      ) %>%
+      # separate the input metric (e.g., 'capital') from its units (e.g., 'EUR/kW')
+      separate(input_unit, into = c("input", "units"), sep = "-", extra = "merge") %>%
+      select(Technology, input, year, value)
+
+    L1233.globaltech_JRC <- rbind(L1233.globaltech_JRC_powerheat %>%
+                                    mutate(value = as.numeric(value)) %>%
+                                    # unit conversion: EUR to US-DOLLAR and deflect to 1975 (same unit as GCAM core)
+                                    mutate(value = if_else(input %in% c("capital", "OMfixed", "OMvar"),
+                                                           value * EURO_to_DOLLAR * gdp_deflator(1975, 2020),
+                                                           value)),
+                                    # storage (battery) already converted to 1975$ in step 2-3
+                                  L1233.globaltech_JRC_storage) %>%
+      # add columns, reorder and clean data
+      mutate(
+        year = as.integer(year),
+        value = as.numeric(value),
+        tech_detail = Technology,
+        case = "Default"
+      ) %>%
+      select(tech_detail, input, case, year, value) %>%
+      drop_na(value) %>%
+      # expand key
+      spread(key = input, value = value) %>%
+      # expand the 2020 value to 2021 (max(HISTORICAL_YEARS))
+      bind_rows(
+        filter(., year == 2020) %>% mutate(year = max(HISTORICAL_YEARS))
+      ) %>%
+      # interpolate years in-between
+      complete(nesting(case, tech_detail), year = unique(.$year)) %>%
+      group_by(case, tech_detail) %>%
+      mutate(capital = approx_fun(year, capital, rule = 2),
+             OMfixed = approx_fun(year, OMfixed, rule = 2),
+             OMvar = approx_fun(year, OMvar, rule = 2)) %>%
+      ungroup() %>%
+      # reorder
+      arrange(tech_detail, case, year)
+
+    L1233.gcam_costs_from_JRC <- L1233.globaltech_JRC %>%
+      inner_join(jrc_gcam_mapping, by = "tech_detail", relationship = "many-to-many") %>%
+      group_by(case, technology, year) %>%
+      summarise(capital = if (grepl("_storage", technology[1])) sum(capital) else mean(capital),
+                `OM-fixed` = if (grepl("_storage", technology[1])) sum(OMfixed) else mean(OMfixed),
+                `OM-var` = if (grepl("_storage", technology[1])) sum(OMvar) else mean(OMvar)) %>%
+      ungroup() %>%
+      complete(nesting(case, technology), year = MODEL_FUTURE_YEARS) %>%
+      group_by(case, technology) %>%
+      mutate(capital = approx_fun(year, capital, rule = 2),
+             `OM-fixed` = approx_fun(year, `OM-fixed`, rule = 2),
+             `OM-var` = approx_fun(year, `OM-var`, rule = 2)) %>%
+      ungroup() %>%
+      arrange(technology, case, year)
+
+
+    # 2. Add case
+    # estimate the 5-year time step change and the percentual difference between cases
+    L1233.gcam_costs_alltechs_trend <-
+      bind_rows(
+        L1233.gcam_costs_alltechs,
+        L1233.globaltech_capital_ATB_battery %>%
+          pivot_longer(cols = c('capital','OM-fixed','OM-var'), names_to = 'input', values_to = 'value')
+      ) %>%
+      arrange(case, technology, input, year) %>%
+      group_by(case, technology, input) %>%
+      mutate(trend = (value - lag(value)) / lag(value)) %>%
+      ungroup() %>%
+      select(case, technology, input, year, trend)
+
+    L1233.gcam_costs_alltechs_case_baseyear <-
+      bind_rows(
+        L1233.gcam_costs_alltechs,
+        L1233.globaltech_capital_ATB_battery %>%
+          pivot_longer(cols = c('capital','OM-fixed','OM-var'), names_to = 'input', values_to = 'value')
+      ) %>%
+      # take the fist non-hist year (all hist years have the same value, regardless the case)
+      filter(year == min(year[!(year %in% HISTORICAL_YEARS)])) %>%
+      group_by(technology, input) %>%
+      summarise(case_adv = (value[match('Advanced', case)] - value[match('Moderate', case)]) / value[match('Advanced', case)],
+                case_con = (value[match('Conservative', case)] - value[match('Moderate', case)]) / value[match('Conservative', case)]) %>%
+      ungroup()
+
+    # apply the difference to the "Default" case
+    L1233.gcam_costs_from_JRC_wcase <- L1233.gcam_costs_from_JRC %>%
+      # reshape
+      pivot_longer(
+        cols = c(capital, `OM-fixed`, `OM-var`),
+        names_to = "input",
+        values_to = "value"
+      ) %>%
+      mutate(case = "Moderate") %>%
+
+      # create the skeleton for the Advanced and Conservative cases
+      bind_rows(
+        mutate(., case = "Advanced"),
+        mutate(., case = "Conservative")
+      ) %>%
+      # join the base year case multipliers
+      left_join(
+        L1233.gcam_costs_alltechs_case_baseyear %>%
+          select(technology, input, case_adv, case_con),
+        by = c("technology", "input")
+      ) %>%
+      # drop Advanced/Conservative skeletons if ALL inputs are NA for that tech
+      group_by(technology, case) %>%
+      filter(
+        case == "Moderate" |
+          (case == "Advanced" & any(!is.na(case_adv))) |
+          (case == "Conservative" & any(!is.na(case_con)))
+      ) %>%
+      ungroup() %>%
+
+      # join future trends by case
+      left_join(
+        L1233.gcam_costs_alltechs_trend %>%
+          ungroup() %>%
+          select(case, technology, input, year, trend),
+        by = c("case", "technology", "input", "year")
+      ) %>%
+
+      # order chronologically and apply 1st the case, then the trend
+      arrange(case, technology, input, year) %>%
+      group_by(case, technology, input) %>%
+      mutate(
+        # identify the base year for the case modifiers (the last historical year)
+        last_hist = max(HISTORICAL_YEARS),
+
+        # STEP A: Apply the base year case modifiers (adv/con) to ALL future data points
+        # Because JRC provides real data for 2030, 2040, 2050, we want the Advanced/Conservative
+        # shifts to apply to those native JRC values as well.
+        value = case_when(
+          year > last_hist & case == "Advanced" & !is.na(case_adv) ~ value * (1 + case_adv),
+          year > last_hist & case == "Conservative" & !is.na(case_con) ~ value * (1 + case_con),
+          TRUE ~ value
+        ),
+
+        # extract the 2050 value to serve as the anchor for post-2050 trends
+        anchor_val = value[match(2050, year)],
+
+        # STEP B: Convert the percentage trend into a period-on-period multiplier
+        # Any year up to 2050 gets a multiplier of 1 (we keep the native JRC data)
+        # Subsequent years (2055+) get (1 + trend).
+        step_mult = if_else(year <= 2050, 1, 1 + replace_na(trend, 0)),
+
+        # multiply the trends cumulatively across time
+        cum_mult = cumprod(step_mult),
+
+        # STEP C: Calculate the final values ONLY for years AFTER 2050
+        value = if_else(year > 2050, anchor_val * cum_mult, value)
+      ) %>%
+
+      # reshape and clean
+      select(-last_hist, -case_adv, -case_con, -anchor_val, -step_mult, -cum_mult, -trend) %>%
+      # spawn rows for any missing historical years backfilling the newly
+      # created NA years (pre-2021) with the 2021 value
+      complete(year = unique(c(MODEL_BASE_YEARS, year))) %>%
+      mutate(value = if_else(year < max(HISTORICAL_YEARS) & is.na(value), value[match(max(HISTORICAL_YEARS), year)], value)) %>%
+      ungroup()
+
+
+    # 3. Add missing technologies from ATB data
+    # Function to infer the 'desired_tech' from the 'base_tech' from the ATB data
+    infer_tech_costs <- function(desired_tech, base_tech) {
+
+      # the base technology must already have JRC costs; otherwise no rows would be returned and the desired
+      # technology would silently keep the ATB costs
+      assert_that(base_tech %in% L1233.gcam_costs_from_JRC_wcase$technology,
+                  msg = paste0("infer_tech_costs: base technology ", base_tech, " has no JRC costs"))
+
+      # STEP A: Calculate the percentage difference from the reference ATB data
+      template_data <- L1233.gcam_costs_alltechs %>%
+        filter(technology %in% c(desired_tech, base_tech)) %>%
+        group_by(case, year, input) %>%
+        summarise(
+          percent_change = (value[match(desired_tech, technology)] -
+                              value[match(base_tech, technology)]) /
+            value[match(base_tech, technology)],
+          .groups = "drop"
+        )
+
+      # STEP B: Apply the difference to the target JRC data
+      new_rows <- L1233.gcam_costs_from_JRC_wcase %>%
+        filter(technology == base_tech) %>%
+        left_join(template_data, by = c('case', 'year', 'input')) %>%
+        mutate(
+          value = value * (1 + percent_change),
+          technology = desired_tech
+        ) %>%
+        # expand backwards the 2021 to 2020
+        group_by(case, input) %>%
+        mutate(value = if_else(year == 2020, value[match(max(HISTORICAL_YEARS), year)], value)) %>%
+        ungroup() %>%
+        select(-percent_change)
+
+      return(new_rows)
+    }
+
+
+    # TECHNOLOGY: biomass (IGCC CCS)
+    # The JRC row "Biomass gasification CC" is a plant without CCS (self-consumption 0.09, the same as coal IGCC
+    # without CCS, versus 0.32-0.34 for the JRC CCS rows), so it is mapped to biomass (IGCC) in
+    # jrc_gcam_elec_tech_mapping. biomass (IGCC CCS) has no JRC row: its costs are the JRC biomass (IGCC) costs
+    # multiplied by the core ratio biomass (IGCC CCS) / biomass (IGCC), by year and input. The core only has
+    # the Moderate case for these two technologies, so only Moderate rows are created.
+    L1233.gcam_costs_from_JRC_wcase <- rbind(
+      L1233.gcam_costs_from_JRC_wcase,
+      infer_tech_costs('biomass (IGCC CCS)','biomass (IGCC)')
+    )
+
+    # TECHNOLOGY: refined liquids (CC)
+    L1233.gcam_costs_from_JRC_wcase <- rbind(
+      L1233.gcam_costs_from_JRC_wcase,
+      infer_tech_costs('refined liquids (CC)','gas (CC)')
+    )
+
+    # TECHNOLOGY: refined liquids (CC CCS)
+    L1233.gcam_costs_from_JRC_wcase <- rbind(
+      L1233.gcam_costs_from_JRC_wcase,
+      infer_tech_costs('refined liquids (CC CCS)','gas (CC CCS)')
+    )
+
+    # TECHNOLOGY: refined liquids (steam/CT)
+    L1233.gcam_costs_from_JRC_wcase <- rbind(
+      L1233.gcam_costs_from_JRC_wcase,
+      infer_tech_costs('refined liquids (steam/CT)','gas (steam/CT)')
+    )
+
+    # TECHNOLOGY: CSP_storage
+    L1233.gcam_costs_from_JRC_wcase <- rbind(
+      L1233.gcam_costs_from_JRC_wcase,
+      infer_tech_costs('CSP','CSP_storage')
+    )
+
+    # 4. Reshape and split out into data tables for output
+    L1233.gcam_costs_from_JRC_alltechs <- L1233.gcam_costs_from_JRC_wcase %>%
+      inner_join(select(L1233.gcam_costs_alltechs, supplysector, subsector, technology, fixed.charge.rate),
+                 by = "technology", relationship = "many-to-many") %>%
+      filter(year %in% MODEL_YEARS) %>%
+      select(case, supplysector, subsector, technology, year, input, fixed.charge.rate, value) %>%
+      unique() %>%
+      arrange(case, supplysector, subsector, technology, year, input)
+
+    L1233.globaltech_capital_JRC_EUR <- filter(L1233.gcam_costs_from_JRC_alltechs, case == "Moderate", input == "capital") %>%
+      rename(input.capital = input, capital.overnight = value) %>%
+      select(-case)
+    L1233.globaltech_capital_JRC_adv_EUR <- filter(L1233.gcam_costs_from_JRC_alltechs, case == "Advanced", input == "capital") %>%
+      rename(input.capital = input, capital.overnight = value) %>%
+      select(-case)
+    L1233.globaltech_capital_JRC_low_EUR <- filter(L1233.gcam_costs_from_JRC_alltechs, case == "Conservative", input == "capital") %>%
+      rename(input.capital = input, capital.overnight = value) %>%
+      select(-case)
+    L1233.globaltech_OMfixed_JRC_EUR <- filter(L1233.gcam_costs_from_JRC_alltechs, case == "Moderate", input == "OM-fixed") %>%
+      rename(input.OM.fixed = input, OM.fixed = value) %>%
+      select(-case, -fixed.charge.rate)
+    L1233.globaltech_OMfixed_JRC_adv_EUR <- filter(L1233.gcam_costs_from_JRC_alltechs, case == "Advanced", input == "OM-fixed") %>%
+      rename(input.OM.fixed = input, OM.fixed = value) %>%
+      select(-case, -fixed.charge.rate)
+    L1233.globaltech_OMfixed_JRC_low_EUR <- filter(L1233.gcam_costs_from_JRC_alltechs, case == "Conservative", input == "OM-fixed") %>%
+      rename(input.OM.fixed = input, OM.fixed = value) %>%
+      select(-case, -fixed.charge.rate)
+    L1233.globaltech_OMvar_JRC_EUR <- filter(L1233.gcam_costs_from_JRC_alltechs, case == "Moderate", input == "OM-var") %>%
+      rename(input.OM.var = input, OM.var = value) %>%
+      select(-case, -fixed.charge.rate)
+    L1233.globaltech_OMvar_JRC_adv_EUR <- filter(L1233.gcam_costs_from_JRC_alltechs, case == "Advanced", input == "OM-var") %>%
+      rename(input.OM.var = input, OM.var = value) %>%
+      select(-case, -fixed.charge.rate)
+    L1233.globaltech_OMvar_JRC_low_EUR <- filter(L1233.gcam_costs_from_JRC_alltechs, case == "Conservative", input == "OM-var") %>%
+      rename(input.OM.var = input, OM.var = value) %>%
+      select(-case, -fixed.charge.rate)
+
+    L1233.globaltech_capital_JRC_battery_EUR <- L1233.gcam_costs_from_JRC_wcase %>%
+      filter(technology == 'battery',
+             year %in% MODEL_YEARS) %>%
+      pivot_wider(names_from = 'input', values_from = 'value') %>%
+      select(case, technology, year, capital.cost = capital, fixed.om = `OM-fixed`, variable.om = `OM-var`)
+
+
+    # ===================================================
     # Produce outputs
+
     L1233.globaltech_capital_ATB_offshore_EUR %>%
       add_title("Capital cost of the offshore wind technologies of GCAM-Europe (fixed-bottom and floating)") %>%
       add_units("1975$/kW") %>%
@@ -172,6 +547,72 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
       add_precursors("gcam-europe/A20.offshore_wind_types_EUR", "energy/NREL_ATB_OMfixed_2024",
                      "L1233.globaltech_OMfixed_ATB") ->
       L1233.globaltech_OMfixed_ATB_offshore_EUR
+
+
+    L1233.globaltech_capital_JRC_EUR %>%
+      add_title("2024 JRC-based capital costs in the Moderate case)") %>%
+      add_units("1975$/kW") %>%
+      add_precursors("L1233.gcam_costs_alltechs",
+                     "gcam-europe/mappings/jrc_gcam_elec_tech_mapping",
+                     "gcam-europe/2040CT_TechnologyAssumptions_Energy_PowerHeat") ->
+      L1233.globaltech_capital_JRC_EUR
+
+    L1233.globaltech_capital_JRC_adv_EUR %>%
+      add_title("2024 JRC-based capital costs in the Advanced case") %>%
+      add_units("1975$/kW") %>%
+      same_precursors_as(L1233.globaltech_capital_JRC_EUR) ->
+      L1233.globaltech_capital_JRC_adv_EUR
+
+    L1233.globaltech_capital_JRC_low_EUR %>%
+      add_title("2024 JRC-based capital costs in the Conservative case") %>%
+      add_units("1975$/kW") %>%
+      same_precursors_as(L1233.globaltech_capital_JRC_EUR) ->
+      L1233.globaltech_capital_JRC_low_EUR
+
+    L1233.globaltech_OMfixed_JRC_EUR %>%
+      add_title("2024 JRC-based fixed O&M costs in the Moderate case") %>%
+      add_units("1975$/kW/yr") %>%
+      same_precursors_as(L1233.globaltech_capital_JRC_EUR) ->
+      L1233.globaltech_OMfixed_JRC_EUR
+
+    L1233.globaltech_OMfixed_JRC_adv_EUR %>%
+      add_title("2024 JRC-based fixed O&M costs in the Advanced case") %>%
+      add_units("1975$/kW/yr") %>%
+      same_precursors_as(L1233.globaltech_capital_JRC_EUR) ->
+      L1233.globaltech_OMfixed_JRC_adv_EUR
+
+    L1233.globaltech_OMfixed_JRC_low_EUR %>%
+      add_title("2024 JRC-based fixed O&M costs in the Conservative case") %>%
+      add_units("1975$/kW/yr") %>%
+      same_precursors_as(L1233.globaltech_capital_JRC_EUR) ->
+      L1233.globaltech_OMfixed_JRC_low_EUR
+
+    L1233.globaltech_OMvar_JRC_EUR %>%
+      add_title("2024 JRC-based variable O&M costs in the Moderate case") %>%
+      add_units("1975$/MWh") %>%
+      same_precursors_as(L1233.globaltech_capital_JRC_EUR) ->
+      L1233.globaltech_OMvar_JRC_EUR
+
+    L1233.globaltech_OMvar_JRC_adv_EUR %>%
+      add_title("2024 JRC-based variable O&M costs in the Advanced case") %>%
+      add_units("1975$/MWh") %>%
+      same_precursors_as(L1233.globaltech_capital_JRC_EUR) ->
+      L1233.globaltech_OMvar_JRC_adv_EUR
+
+    L1233.globaltech_OMvar_JRC_low_EUR %>%
+      add_title("2024 JRC-based variable O&M costs in the Conservative case") %>%
+      add_units("1975$/MWh") %>%
+      same_precursors_as(L1233.globaltech_capital_JRC_EUR) ->
+      L1233.globaltech_OMvar_JRC_low_EUR
+
+    L1233.globaltech_capital_JRC_battery_EUR %>%
+      add_title("2024 JRC-based utility-scale battery costs") %>%
+      add_units("1975$/kW; 1975$/kW/yr; 1975$/MWh") %>%
+      add_precursors("L1233.gcam_costs_alltechs",
+                     "gcam-europe/mappings/jrc_gcam_elec_tech_mapping",
+                     "gcam-europe/2040CT_TechnologyAssumptions_Energy_CleanFuels") ->
+      L1233.globaltech_capital_JRC_battery_EUR
+
 
     return_data(MODULE_OUTPUTS)
   } else {

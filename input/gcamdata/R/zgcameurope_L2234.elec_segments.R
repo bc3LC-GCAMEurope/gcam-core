@@ -31,6 +31,13 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
   # technologies (wind_offshore_fixed and wind_offshore_floating) of zgcameurope_L223.offshore_wind_tech
   OFFSHORE_TABLES <- AUTO_EXPAND_INPUTS[grepl("Int", AUTO_EXPAND_INPUTS)]
   OFFSHORE_NEW_TABLES <- sub("_elec$", "_offshore_EUR", OFFSHORE_TABLES)
+  # core (ATB) cost tables whose values are replaced by the European (JRC) costs of zgcameurope_L1233.elec_cost_data
+  JRC_COST_TABLES <- c("L223.GlobalTechCapital_elec" = "L1233.globaltech_capital_JRC_EUR",
+                       "L223.GlobalIntTechCapital_elec" = "L1233.globaltech_capital_JRC_EUR",
+                       "L223.GlobalTechOMfixed_elec" = "L1233.globaltech_OMfixed_JRC_EUR",
+                       "L223.GlobalIntTechOMfixed_elec" = "L1233.globaltech_OMfixed_JRC_EUR",
+                       "L223.GlobalTechOMvar_elec" = "L1233.globaltech_OMvar_JRC_EUR",
+                       "L223.GlobalIntTechOMvar_elec" = "L1233.globaltech_OMvar_JRC_EUR")
   MODULE_INPUTS <- c(FILE = "gcam-europe/mappings/grid_regions",
                      FILE = "common/GCAM_region_names",
                      FILE = "energy/A23.sector",
@@ -47,7 +54,8 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
                      FILE = "gcam-europe/elecS_time_fraction",
                      FILE = "gcam-europe/A23.elecS_globaltech_non_energy_inputs",
                      "L1239.R_elec_supply",
-                     "L1233.globaltech_capital_ATB_battery",
+                     "L1233.globaltech_capital_JRC_battery_EUR",
+                     unname(unique(JRC_COST_TABLES)),
                      "L223.StubTechEff_elec_EUR",
                      "L223.StubTechCalInput_elec_EUR",
                      "L223.StubTechProd_elec_EUR",
@@ -130,6 +138,44 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
                              YEAR_RECODE[shrwt_year_cols],
                              suppressWarnings(as.numeric(shrwt_year_cols)))
     A23.globaltech_shrwt <- A23.globaltech_shrwt[, c(shrwt_id_cols, shrwt_year_cols[order(shrwt_year_num)])]
+
+    # European electricity costs: the capital, fixed O&M and variable O&M costs of the technologies covered by the
+    # JRC data (zgcameurope_L1233.elec_cost_data) replace the core (ATB) costs in the global technology tables before
+    # they are expanded to the load segments. The segment technologies are only used by the grid region countries;
+    # the countries outside the grid regions (Iceland, Turkey) keep the core costs of the non-segmented electricity
+    # sector. Only rows of the electricity sector are replaced: rooftop_pv (sector elect_td_bld) is a global technology
+    # shared with all GCAM regions and keeps the core (ATB) cost in all regions, including the European countries.
+    # Offshore wind keeps the ATB fixed/floating costs. The technologies that
+    # are not in the JRC tables keep the core cost.
+    replace_costs_JRC_EUR <- function(core_table, jrc_table, costvar, digits) {
+      tech_col <- intersect(c("technology", "intermittent.technology"), names(core_table))
+      assert_that(length(tech_col) == 1, costvar %in% names(core_table), costvar %in% names(jrc_table),
+                  msg = paste0("replace_costs_JRC_EUR: technology or cost column (", costvar, ") not found"))
+      jrc <- jrc_table %>%
+        filter(supplysector == "electricity", technology != EUR_CORE_OFFSHORE_TECH, year %in% MODEL_YEARS) %>%
+        select(sector.name = supplysector, subsector.name = subsector, technology, year,
+               jrc_value = dplyr::all_of(costvar))
+      key_cols <- c("sector.name", "subsector.name", "technology", "year")
+      assert_that(!any(duplicated(jrc[key_cols])),
+                  msg = paste0("replace_costs_JRC_EUR: duplicated rows in the JRC table (", costvar, ")"))
+      # every JRC technology must have a non-missing value in all MODEL_YEARS
+      jrc_years <- split(jrc$year[!is.na(jrc$jrc_value)], jrc$technology[!is.na(jrc$jrc_value)])
+      assert_that(setequal(names(jrc_years), unique(jrc$technology)),
+                  all(vapply(jrc_years, function(y) all(MODEL_YEARS %in% y), logical(1))),
+                  msg = paste0("replace_costs_JRC_EUR: JRC technology with missing MODEL_YEARS (", costvar, ")"))
+      names(jrc)[names(jrc) == "technology"] <- tech_col
+      out <- left_join(core_table, jrc, by = c("sector.name", "subsector.name", tech_col, "year"))
+      out[[costvar]] <- if_else(is.na(out$jrc_value), out[[costvar]], round(out$jrc_value, digits))
+      out <- out[names(core_table)]
+      for(a in setdiff(names(attributes(core_table)), c("names", "row.names", "class"))) attr(out, a) <- attr(core_table, a)
+      out
+    }
+    for(core_nm in names(JRC_COST_TABLES)) {
+      costvar <- intersect(c("capital.overnight", "OM.fixed", "OM.var"), names(get(core_nm)))
+      assert_that(length(costvar) == 1, msg = paste0("No cost column found in ", core_nm))
+      digits <- if(costvar == "capital.overnight") energy.DIGITS_CAPITAL else energy.DIGITS_OM
+      assign(core_nm, replace_costs_JRC_EUR(get(core_nm), get(JRC_COST_TABLES[[core_nm]]), costvar, digits))
+    }
 
     L2234.load_segments <- unique(A23.elecS_naming$supplysector)
     L2234.R_elec_supply <- L1239.R_elec_supply %>% left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
@@ -252,7 +298,8 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
                add_title(paste0(attributes(get(input_nm))$title, " - european grid regions"), overwrite = T) %>%
                add_units(attributes(get(input_nm))$unit) %>%
                add_precursors(c(input_nm, "gcam-europe/A23.elecS_naming",
-                                if(input_nm %in% OFFSHORE_TABLES) sub("_elec$", "_offshore_EUR", input_nm))),
+                                if(input_nm %in% OFFSHORE_TABLES) sub("_elec$", "_offshore_EUR", input_nm),
+                                if(input_nm %in% names(JRC_COST_TABLES)) JRC_COST_TABLES[[input_nm]])),
              envir = globalenv() )})
 
     # 4. Calibration Year Outputs ---------------------------------
@@ -376,9 +423,9 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
 
     # Battery: same approach as the former L113.elecS_globaltech_capital_battery_ATB of GCAM-core/GCAM-USA.
     # The cost structure (lifetime, S-curve, FCR, capacity factor) is read from A23.elecS_globaltech_non_energy_inputs
-    # (the same file as in GCAM-USA), while the costs (capital, fixed OM and variable OM) come from the 2024 ATB / ReEDS
-    # battery costs (L1233.globaltech_capital_ATB_battery, Moderate case)
-    L2234.battery_ATB_costs <- L1233.globaltech_capital_ATB_battery %>%
+    # (the same file as in GCAM-USA), while the costs (capital, fixed OM and variable OM) come from the European (JRC)
+    # battery costs (L1233.globaltech_capital_JRC_battery_EUR, Moderate case)
+    L2234.battery_ATB_costs <- L1233.globaltech_capital_JRC_battery_EUR %>%
       filter(case == "Moderate") %>%
       select(technology, period = year, capital.cost, fixed.om, variable.om) %>%
       mutate(capital.cost = round(capital.cost, energy.DIGITS_CAPITAL),
@@ -703,7 +750,7 @@ module_gcameurope_L2234.elec_segments <- function(command, ...) {
       add_comments("Global capacity factors for electricity load segments generation technologies") %>%
       add_precursors("gcam-europe/elecS_time_fraction",
                      "gcam-europe/A23.elecS_globaltech_non_energy_inputs",
-                     "L1233.globaltech_capital_ATB_battery",
+                     "L1233.globaltech_capital_JRC_battery_EUR",
                      "L223.GlobalTechCapFac_elec") ->
       L2234.GlobalTechCapFac_elecS_EUR
 
