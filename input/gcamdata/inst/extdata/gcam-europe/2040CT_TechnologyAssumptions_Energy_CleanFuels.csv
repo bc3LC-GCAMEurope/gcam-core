@@ -3,13 +3,12 @@
 # Source: https://climate.ec.europa.eu/areas-action/climate-strategies-targets/2040-climate-target_en - 2040CT_TechnologyAssumptions_Energy file - Clean_Fuels Tab)"
 # Note: "Ultimate" is set to 2050
 # Date: 02/11/2026; however the data was last updated in 2024)"
-# Units: Various
+# Units: Various; lifetime in years
 # Column types: cnnnnnnnnnnnnc
 # ----------
 # Columns index: 1) capital = 'Investment cost per unit of capacity (EUR/kW-output)'; 2) OMfixed = 'Fixed O&M costs (EUR/kW-output)';
 # 3) OMvar = Variable, fuel and emissions cost per unit of stored energy (EUR/MWh)';  4) efficiency = Efficiency (%); 5) lifetime = 'Technical lifetime)'
-Storage technologies,capital,capital,capital,OMfixed,OMfixed,OMfixed,OMvar,OMvar,OMvar,efficiency,efficiency,efficiency,lifetime
-Period,2020,2030,2050,2020,2030,2050,2020,2030,2050,2020,2030,2050,Years
+Storage technologies,capital_2020,capital_2030,capital_2050,OMfixed_2020,OMfixed_2030,OMfixed_2050,OMvar_2020,OMvar_2030,OMvar_2050,efficiency_2020,efficiency_2030,efficiency_2050,lifetime
 "Compressed Air Energy Storage  (per 1 kW)",129550,123344,110931,20.9,20.9,20.9,0.0,0.0,0.0,65,68,70,15
 "Flywheel  (per1 MWh electricity)",1607100,1515400,1332000,52.5,47.3,46.6,0.0,0.0,0.0,85,85,85,15
 "Utility scale batteries - C-rate: C/2 (per 1 MWh electricity)",450000,285000,225000,26.4,15.0,13.1,0.0,0.0,0.0,85,85,86,15

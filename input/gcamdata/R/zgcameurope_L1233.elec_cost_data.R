@@ -193,16 +193,6 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
 
     # 1. Reshape the JRC datasets
     L1233.globaltech_JRC_storage <- JRC_storage %>%
-      # set the "period" value to the column name
-      setNames(
-        ifelse(
-          !is.na(as.character(.[1, ])) & names(.) != "Storage technologies" & names(.) != "lifetime",
-          paste0(stringr::str_remove(names(.), "\\.\\.\\.\\d+$"), "_", as.character(.[1, ])),
-          names(.)
-        )
-      ) %>%
-      # first row no longer required --> remove
-      filter(`Storage technologies` != "Period") %>%
       # reshape data
       mutate(across(everything(), as.character)) %>%
       pivot_longer(
@@ -236,24 +226,26 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
              input == 'capital',
              year == 2020) %>%
       pull(value)
+    assert_that(length(ratio_ATB) == 1, length(ratio_JRC) == 1,
+                msg = "Battery ATB-JRC ratio: expected one ATB value (2Hr, Moderate, 2022) and one JRC value (C/2, capital, 2020)")
+    # only the C/2 battery is converted below; any other JRC storage technology in the mapping would stay in EUR
+    assert_that(all(intersect(jrc_gcam_mapping$tech_detail, unique(L1233.globaltech_JRC_storage$Technology)) ==
+                      'Utility scale batteries - C-rate: C/2 (per 1 MWh electricity)'),
+                msg = "jrc_gcam_elec_tech_mapping uses a JRC storage technology other than the C/2 battery, which has no unit conversion")
     ratio_JRC_ATB <- ratio_ATB / ratio_JRC
-    # step 2-3
+    # step 2-3: the ratio (ATB 2022$/kW over JRC EUR/kW) converts EUR to 2022$; the costs are then deflated to 1975$
+    # (ATB_DOLLAR_YEAR, same dollar year as the core battery costs). Capital and fixed O&M (per kW) are scaled from
+    # 2Hr to 4Hr (x2); variable O&M (per MWh) is not
     L1233.globaltech_JRC_storage <- L1233.globaltech_JRC_storage %>%
-      mutate(value = if_else(Technology == 'Utility scale batteries - C-rate: C/2 (per 1 MWh electricity)' & input == 'capital',
-                             2*ratio_JRC_ATB*value, value))
+      mutate(value = case_when(
+        Technology == 'Utility scale batteries - C-rate: C/2 (per 1 MWh electricity)' & input %in% c('capital', 'OMfixed') ~
+          2 * ratio_JRC_ATB * value * gdp_deflator(1975, ATB_DOLLAR_YEAR),
+        Technology == 'Utility scale batteries - C-rate: C/2 (per 1 MWh electricity)' & input == 'OMvar' ~
+          ratio_JRC_ATB * value * gdp_deflator(1975, ATB_DOLLAR_YEAR),
+        TRUE ~ value))
 
 
     L1233.globaltech_JRC_powerheat <- JRC_powerheat %>%
-      # set the "period" value to the column name
-      setNames(
-        ifelse(
-          !is.na(as.character(.[1, ])) & names(.) != "Technology" & names(.) != "lifetime-years",
-          paste0(stringr::str_remove(names(.), "\\.\\.\\.\\d+$"), "_", as.character(.[1, ])),
-          names(.)
-        )
-      ) %>%
-      # first row no longer required --> remove
-      filter(Technology != "Period") %>%
       # reshape data
       mutate(across(everything(), as.character)) %>%
       pivot_longer(
@@ -267,12 +259,12 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
       select(Technology, input, year, value)
 
     L1233.globaltech_JRC <- rbind(L1233.globaltech_JRC_powerheat %>%
+                                    mutate(value = as.numeric(value)) %>%
                                     # unit conversion: EUR to US-DOLLAR and deflect to 1975 (same unit as GCAM core)
                                     mutate(value = if_else(input %in% c("capital", "OMfixed", "OMvar"),
                                                            value * EURO_to_DOLLAR * gdp_deflator(1975, 2020),
                                                            value)),
-                                    # unit conversion not applied to storage
-                                    # since ATB-JRC ratio already accounts for it
+                                    # storage (battery) already converted to 1975$ in step 2-3
                                   L1233.globaltech_JRC_storage) %>%
       # add columns, reorder and clean data
       mutate(

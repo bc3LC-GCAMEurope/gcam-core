@@ -7,8 +7,7 @@
 # Units: Various
 # Column types: cccccnnnnnnnnnnnnnnnnn
 # ----------
-Technology,capital-EUR/kW,capital-EUR/kW,capital-EUR/kW,capital-EUR/kW,OMfixed-EUR/kW,OMfixed-EUR/kW,OMfixed-EUR/kW,OMfixed-EUR/kW,OMvar-EUR/MWh,OMvar-EUR/MWh,OMvar-EUR/MWh,OMvar-EUR/MWh,efficiency-ratio,efficiency-ratio,efficiency-ratio,efficiency-ratio,consumption-percentage,consumption-percentage,consumption-percentage,consumption-percentage,lifetime-years
-Period,2020,2030,2040,2050,2020,2030,2040,2050,2020,2030,2040,2050,2020,2030,2040,2050,2020,2030,2040,2050,
+Technology,capital-EUR/kW_2020,capital-EUR/kW_2030,capital-EUR/kW_2040,capital-EUR/kW_2050,OMfixed-EUR/kW_2020,OMfixed-EUR/kW_2030,OMfixed-EUR/kW_2040,OMfixed-EUR/kW_2050,OMvar-EUR/MWh_2020,OMvar-EUR/MWh_2030,OMvar-EUR/MWh_2040,OMvar-EUR/MWh_2050,efficiency-ratio_2020,efficiency-ratio_2030,efficiency-ratio_2040,efficiency-ratio_2050,consumption-percentage_2020,consumption-percentage_2030,consumption-percentage_2040,consumption-percentage_2050,lifetime-years
 "Steam turbine coal conventional",1450,1450,1450,1450,26,26,26,26,2.4,2.4,2.4,2.4,0.38,0.42,0.43,0.43,0.09,0.09,0.09,0.09,40
 "Steam turbine lignite conventional",1700,1700,1700,1700,33,33,33,33,3,3,3,3,0.37,0.38,0.38,0.38,0.12,0.12,0.12,0.12,40
 "Steam turbine coal supercritical",1650,1650,1650,1650,41,36,32,31,3.63,3.51,3.38,3.35,0.45,0.46,0.47,0.47,0.07,0.07,0.07,0.07,40
