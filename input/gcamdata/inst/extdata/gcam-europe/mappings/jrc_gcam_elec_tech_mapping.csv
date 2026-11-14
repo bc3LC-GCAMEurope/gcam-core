@@ -8,8 +8,8 @@ technology,tech_type,tech_detail
 battery,Utility-Scale Battery Storage,Utility scale batteries - C-rate: C/2 (per 1 MWh electricity)
 biomass (conv CCS),Biomass_FE,Steam turbine biomass solid conventional w. CCS
 biomass (conv),Biomass_FE,Steam turbine biomass solid conventional
-biomass (IGCC CCS),Biomass_FE,Biomass gasification CC
-biomass (IGCC),Biomass_FE,
+biomass (IGCC CCS),Biomass_FE,
+biomass (IGCC),Biomass_FE,Biomass gasification CC
 coal (conv pul CCS),Coal_FE,Pulverised coal supercritical CCS oxyfuel
 coal (conv pul),Coal_FE,Steam turbine coal conventional
 coal (IGCC CCS),Coal_FE,Integrated gasification coal CCS pre combustion
