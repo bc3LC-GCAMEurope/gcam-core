@@ -416,6 +416,11 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
     # Function to infer the 'desired_tech' from the 'base_tech' from the ATB data
     infer_tech_costs <- function(desired_tech, base_tech) {
 
+      # the base technology must already have JRC costs; otherwise no rows would be returned and the desired
+      # technology would silently keep the ATB costs
+      assert_that(base_tech %in% L1233.gcam_costs_from_JRC_wcase$technology,
+                  msg = paste0("infer_tech_costs: base technology ", base_tech, " has no JRC costs"))
+
       # STEP A: Calculate the percentage difference from the reference ATB data
       template_data <- L1233.gcam_costs_alltechs %>%
         filter(technology %in% c(desired_tech, base_tech)) %>%
@@ -445,10 +450,15 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
     }
 
 
-    # TECHNOLOGY: biomass (IGCC)
+    # TECHNOLOGY: biomass (IGCC CCS)
+    # The JRC row "Biomass gasification CC" is a plant without CCS (self-consumption 0.09, the same as coal IGCC
+    # without CCS, versus 0.32-0.34 for the JRC CCS rows), so it is mapped to biomass (IGCC) in
+    # jrc_gcam_elec_tech_mapping. biomass (IGCC CCS) has no JRC row: its costs are the JRC biomass (IGCC) costs
+    # multiplied by the core ratio biomass (IGCC CCS) / biomass (IGCC), by year and input. The core only has
+    # the Moderate case for these two technologies, so only Moderate rows are created.
     L1233.gcam_costs_from_JRC_wcase <- rbind(
       L1233.gcam_costs_from_JRC_wcase,
-      infer_tech_costs('biomass (IGCC)','biomass (IGCC CCS)')
+      infer_tech_costs('biomass (IGCC CCS)','biomass (IGCC)')
     )
 
     # TECHNOLOGY: refined liquids (CC)
