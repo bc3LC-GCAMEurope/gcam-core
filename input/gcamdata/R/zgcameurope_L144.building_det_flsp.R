@@ -89,16 +89,16 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
     # L100.Pop_thous_ctry_Yh provides country-level population data and will be used to switch between total floorspace and per capita data
 
     # Eurostat data
-    # EUR_avDwelling provides residential floorspace (m2) for 2012 for EUR countries
+    # EUR_avDwelling provides residential floorspace (m2) for 2023 for EUR countries
     # Divide floorspace by EUR_avHousehold, i.e., average number of people by household,
     # to get per capita floorspace, and extrapolate to all historical years
     EUR_avDwelling %>%
       filter(freq == 'A', # annual frequency
-             unit == 'AVG', # average values
-             deg_urb == 'TOTAL', # all urbanization types by country
-             hhtyp == 'TOTAL') %>%  # all household types by country)
+             unit == 'M2', # average values
+             quant_inc == 'TOTAL', # all quintiles
+             tenure == 'TOTAL') %>%  # all tenures
       select(geo, year = TIME_PERIOD, value_flsp = OBS_VALUE) %>%
-      filter(year %in% HISTORICAL_YEARS) %>% # Ensure within historical time period
+      mutate (year = 2021) %>% # Manually set the year to the last historical value (from 2023 to 2021)
       left_join_error_no_match(EUR_avHousehold %>%
                                  filter(freq == 'A', # annual frequency
                                         unit == 'AVG') %>% # average values
@@ -114,7 +114,7 @@ module_gcameurope_L144.building_det_flsp <- function(command, ...) {
       complete(year = HISTORICAL_YEARS) %>%
       # Extrapolate to fill out values for all years
       # Since there is only one filled year, 2012, copy the value to all HISTORICAL_YEARS
-      mutate(value_pcflsp = ifelse(is.na(value_pcflsp), value_pcflsp[year == 2012], value_pcflsp)) %>%
+      mutate(value_pcflsp = ifelse(is.na(value_pcflsp), value_pcflsp[year == 2021], value_pcflsp)) %>%
       ungroup() %>%
       # Remove NAs from group regions and missing dweling / household size values
       filter(complete.cases(.)) ->
