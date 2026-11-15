@@ -38,7 +38,13 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
 
     # Load required inputs ----------------
     GCAM32_to_EU <- get_data(all_data, "common/GCAM32_to_EU")
-    nrg_bal_c <- get_data(all_data, "gcam-europe/nrg_bal_c")
+    # 2026 Eurostat update: year columns come as X1990...X2024. Strip the X so they match
+    # YEAR_PATTERN and nrg_bal_c_corrSE, and keep only HISTORICAL_YEARS (drops years after the final base year)
+    nrg_bal_c <- get_data(all_data, "gcam-europe/nrg_bal_c") %>%
+      dplyr::rename_with(~ gsub("^X", "", .x), matches("^X[0-9]{4}$"))
+    nrg_bal_c <- nrg_bal_c %>%
+      select(-dplyr::all_of(setdiff(grep(YEAR_PATTERN, names(nrg_bal_c), value = TRUE),
+                                    as.character(HISTORICAL_YEARS))))
     nrg_bal_c_corrSE <- get_data(all_data, "gcam-europe/nrg_bal_c_corrSE")
     geo_to_iso_map <- get_data(all_data, "gcam-europe/mappings/geo_to_iso_map")
     nrgbal_to_sector_map <- get_data(all_data, "gcam-europe/mappings/nrgbal_to_sector_map")
@@ -92,7 +98,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       filter(sector %in% c("out_chp_elec", "in_industry_chp"),
              product %in% c("Bioenergy", "Fossil energy")) %>%
       pivot_longer(
-        cols = `2021`:`1990`,
+        cols = matches(YEAR_PATTERN),
         names_to = "year",
         values_to = "value"
       ) %>%
@@ -121,7 +127,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       group_by(iso) %>%
       summarise(across(matches(YEAR_PATTERN), ~all(is.na(.x)))) %>%
       pivot_longer(
-        cols = `2021`:`1990`,
+        cols = matches(YEAR_PATTERN),
         names_to = "year",
         values_to = "value"
       ) %>%
@@ -152,7 +158,7 @@ module_gcameurope_L101.en_bal_Eurostat <- function(command, ...) {
       ungroup %>%
       # at this point dataset is much smaller; go to long form
       pivot_longer(
-        cols = `2021`:`1990`,
+        cols = matches(YEAR_PATTERN),
         names_to = "year",
         values_to = "value"
       ) %>%
