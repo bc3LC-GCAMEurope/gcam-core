@@ -1,0 +1,23 @@
+# File: 2040CT_TechnologyAssumptions_Energy_CleanFuels.csv
+# Title: technology assumptions costs for Storage technologies
+# Source: https://climate.ec.europa.eu/areas-action/climate-strategies-targets/2040-climate-target_en - 2040CT_TechnologyAssumptions_Energy file - Clean_Fuels Tab)"
+# Note: "Ultimate" is set to 2050
+# Date: 02/11/2026; however the data was last updated in 2024)"
+# Units: Various; lifetime in years
+# Column types: cnnnnnnnnnnnnc
+# ----------
+# Columns index: 1) capital = 'Investment cost per unit of capacity (EUR/kW-output)'; 2) OMfixed = 'Fixed O&M costs (EUR/kW-output)';
+# 3) OMvar = Variable, fuel and emissions cost per unit of stored energy (EUR/MWh)';  4) efficiency = Efficiency (%); 5) lifetime = 'Technical lifetime)'
+Storage technologies,capital_2020,capital_2030,capital_2050,OMfixed_2020,OMfixed_2030,OMfixed_2050,OMvar_2020,OMvar_2030,OMvar_2050,efficiency_2020,efficiency_2030,efficiency_2050,lifetime
+"Compressed Air Energy Storage  (per 1 kW)",129550,123344,110931,20.9,20.9,20.9,0.0,0.0,0.0,65,68,70,15
+"Flywheel  (per1 MWh electricity)",1607100,1515400,1332000,52.5,47.3,46.6,0.0,0.0,0.0,85,85,85,15
+"Utility scale batteries - C-rate: C/2 (per 1 MWh electricity)",450000,285000,225000,26.4,15.0,13.1,0.0,0.0,0.0,85,85,86,15
+"Utility scale batteries - C-rate: C/8 (per 1 MWh electricity)",325000,170000,120000,26.4,15.0,13.1,0.0,0.0,0.0,85,85,86,15
+"Pumping  (per 1 kW)",1000,900,880,22.5,20.3,20.0,0.0,0.0,0.0,83,83,83,60
+"Underground Hydrogen Storage  (per 1 kW or 1 MWh H2)",5340,3936,3821,0.0,0.0,0.0,0.6,0.7,0.8,90,90,90,20
+"Pressurised tanks -  Hydrogen storage  (per 1 kW or 1 MWh H2)",6000,4800,4659,0.0,0.0,0.0,0.6,0.7,0.8,88,88,88,20
+"Liquid Hydrogen Storage - Cryogenic Storage  (per 1 kW or 1 MWh H2)",8455,6800,4000,0.0,0.0,0.0,0.7,0.9,1.0,75,75,75,20
+"Metal Hydrides - Hydrogen Storage  (per 1 kW or 1 MWh H2)",12700,11430,11271,0.0,0.0,0.0,0.5,0.7,0.8,95,95,95,20
+"Thermal Storage Technology - Sensible heat  (per 1 kW or 1 MWh Heat)",80000,72000,70996,80.0,77.8,76.6,0.0,0.0,0.0,80,80,80,20
+"LNG Storage Gas  (per 1 kW or 1 MWh Gas)",135,135,135,0.0,0.0,0.0,0.6,0.7,0.8,90,90,90,40
+"Underground NGS Storage  (per 1 kW or 1 MWh Gas)",33,33,33,0.0,0.0,0.0,0.6,0.7,0.8,88,88,88,40

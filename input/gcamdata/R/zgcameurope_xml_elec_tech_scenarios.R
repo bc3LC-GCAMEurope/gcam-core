@@ -15,8 +15,12 @@
 #' \code{wind_low_EUR.xml}.
 #' @details The reference-case cost tables of the load segment technologies (with cooling technologies) are
 #' used as the starting point; the capital and O&M costs of the technologies which differ across
-#' technology scenarios are replaced with the Advanced and Conservative (low) cases of the 2024 ATB / ReEDS
-#' cost data (\code{L1233.globaltech_*_ATB_adv} and \code{L1233.globaltech_*_ATB_low}) for future years.
+#' technology scenarios are replaced with the Advanced and Conservative (low) cases for future years: the European
+#' (JRC) cost data (\code{L1233.globaltech_*_JRC_adv_EUR} and \code{L1233.globaltech_*_JRC_low_EUR}) for the
+#' technologies of the electricity sector covered by them, and the 2024 ATB / ReEDS cost data of the core
+#' (\code{L1233.globaltech_*_ATB_adv} and \code{L1233.globaltech_*_ATB_low}) for the other technologies, for offshore
+#' wind, and for rooftop_pv (sector elect_td_bld), which uses ATB in all regions, both in the global technology and
+#' in the stub technology cost of the European countries.
 #' The technology of the load segments is mapped to the global (core) technology by removing the segment suffix
 #' (see \code{A23.elecS_naming}).
 #' @importFrom assertthat assert_that
@@ -25,6 +29,12 @@ module_gcameurope_elec_tech_scenarios_xml <- function(command, ...) {
 
   MODULE_INPUTS <-
     c(FILE = "gcam-europe/A23.elecS_naming",
+      "L1233.globaltech_capital_JRC_adv_EUR",
+      "L1233.globaltech_capital_JRC_low_EUR",
+      "L1233.globaltech_OMfixed_JRC_adv_EUR",
+      "L1233.globaltech_OMfixed_JRC_low_EUR",
+      "L1233.globaltech_OMvar_JRC_adv_EUR",
+      "L1233.globaltech_OMvar_JRC_low_EUR",
       "L1233.globaltech_capital_ATB_adv",
       "L1233.globaltech_capital_ATB_low",
       "L1233.globaltech_OMfixed_ATB_adv",
@@ -70,6 +80,31 @@ module_gcameurope_elec_tech_scenarios_xml <- function(command, ...) {
     # Rooftop PV is not in a load segment and so has no suffix
     segment_suffix <- paste0("_(", paste(A23.elecS_naming$name_adder, collapse = "|"), ")$")
 
+    # Replacement data of each scenario: JRC values for the technologies of the electricity sector covered by the JRC
+    # data (except offshore wind, which keeps the ATB values); ATB values for the remaining technologies and for the
+    # global rooftop_pv technology (sector elect_td_bld, shared with all GCAM regions)
+    combine_JRC_ATB <- function(jrc_table, atb_table, costvar) {
+      assert_that(costvar %in% names(jrc_table), costvar %in% names(atb_table),
+                  msg = paste0("combine_JRC_ATB: cost column (", costvar, ") not found"))
+      jrc <- jrc_table %>%
+        filter(supplysector == "electricity", technology != EUR_CORE_OFFSHORE_TECH, year %in% MODEL_YEARS)
+      assert_that(!any(duplicated(jrc[c("technology", "year")])),
+                  msg = paste0("combine_JRC_ATB: duplicated rows in the JRC table (", costvar, ")"))
+      # every JRC technology must have a non-missing value in all MODEL_YEARS
+      jrc_years <- split(jrc$year[!is.na(jrc[[costvar]])], jrc$technology[!is.na(jrc[[costvar]])])
+      assert_that(setequal(names(jrc_years), unique(jrc$technology)),
+                  all(vapply(jrc_years, function(y) all(MODEL_YEARS %in% y), logical(1))),
+                  msg = paste0("combine_JRC_ATB: JRC technology with missing MODEL_YEARS (", costvar, ")"))
+      atb <- atb_table[!(atb_table$supplysector == "electricity" & atb_table$technology %in% jrc$technology), ]
+      bind_rows(jrc[names(atb_table)], atb)
+    }
+    L1233.globaltech_capital_adv <- combine_JRC_ATB(L1233.globaltech_capital_JRC_adv_EUR, L1233.globaltech_capital_ATB_adv, "capital.overnight")
+    L1233.globaltech_capital_low <- combine_JRC_ATB(L1233.globaltech_capital_JRC_low_EUR, L1233.globaltech_capital_ATB_low, "capital.overnight")
+    L1233.globaltech_OMfixed_adv <- combine_JRC_ATB(L1233.globaltech_OMfixed_JRC_adv_EUR, L1233.globaltech_OMfixed_ATB_adv, "OM.fixed")
+    L1233.globaltech_OMfixed_low <- combine_JRC_ATB(L1233.globaltech_OMfixed_JRC_low_EUR, L1233.globaltech_OMfixed_ATB_low, "OM.fixed")
+    L1233.globaltech_OMvar_adv <- combine_JRC_ATB(L1233.globaltech_OMvar_JRC_adv_EUR, L1233.globaltech_OMvar_ATB_adv, "OM.var")
+    L1233.globaltech_OMvar_low <- combine_JRC_ATB(L1233.globaltech_OMvar_JRC_low_EUR, L1233.globaltech_OMvar_ATB_low, "OM.var")
+
     # Process data to final formats
     # Start with ref scenario assumptions (refdata), filter to future years, join in alt-scenario assumptions (replacement_data)
     # Note that the capital tables also include the capital costs of the cooling systems ("cooling system" input),
@@ -95,30 +130,30 @@ module_gcameurope_elec_tech_scenarios_xml <- function(command, ...) {
     # - Standard technologies
     L2235.GlobalTechCapital_elecS_cool_EUR_adv <-
       assign_gcameurope_tech_cost(refdata = L2235.GlobalTechCapital_elecS_cool_EUR,
-                                  replacement_data = L1233.globaltech_capital_ATB_adv,
+                                  replacement_data = L1233.globaltech_capital_adv,
                                   costvar = "capital.overnight") %>%
       mutate(capital.overnight = round(capital.overnight, energy.DIGITS_CAPITAL))
     L2235.GlobalTechCapital_elecS_cool_EUR_low <-
       assign_gcameurope_tech_cost(refdata = L2235.GlobalTechCapital_elecS_cool_EUR,
-                                  replacement_data = L1233.globaltech_capital_ATB_low,
+                                  replacement_data = L1233.globaltech_capital_low,
                                   costvar = "capital.overnight") %>%
       mutate(capital.overnight = round(capital.overnight, energy.DIGITS_CAPITAL))
 
     # - Intermittent technologies
     L2235.GlobalIntTechCapital_elecS_cool_EUR_adv <-
       assign_gcameurope_tech_cost(refdata = L2235.GlobalIntTechCapital_elecS_cool_EUR,
-                                  replacement_data = L1233.globaltech_capital_ATB_adv,
+                                  replacement_data = L1233.globaltech_capital_adv,
                                   costvar = "capital.overnight") %>%
       mutate(capital.overnight = round(capital.overnight, energy.DIGITS_CAPITAL))
     L2235.GlobalIntTechCapital_elecS_cool_EUR_low <-
       assign_gcameurope_tech_cost(refdata = L2235.GlobalIntTechCapital_elecS_cool_EUR,
-                                  replacement_data = L1233.globaltech_capital_ATB_low,
+                                  replacement_data = L1233.globaltech_capital_low,
                                   costvar = "capital.overnight") %>%
       mutate(capital.overnight = round(capital.overnight, energy.DIGITS_CAPITAL))
 
     # - Rooftop PV: capital costs of rooftop PV are tracked in the GCAM-Europe regions as a standard non-energy
     #   input of the stub technology (see L2233.StubTechTrackCapital_elec_EUR), and so the cost is
-    #   pre-levelized in the same way as in the reference case
+    #   pre-levelized in the same way as in the reference case. rooftop_pv uses the ATB capital cost in all regions
     make_roofpv_cost <- function(replacement_data){
       L223.StubTechCapFactor_elec_EUR %>%
         filter(stub.technology == "rooftop_pv",
@@ -147,24 +182,24 @@ module_gcameurope_elec_tech_scenarios_xml <- function(command, ...) {
     # - Standard technologies
     L2235.GlobalTechOMfixed_elecS_cool_EUR_adv <-
       assign_gcameurope_tech_cost(refdata = L2235.GlobalTechOMfixed_elecS_cool_EUR,
-                                  replacement_data = L1233.globaltech_OMfixed_ATB_adv,
+                                  replacement_data = L1233.globaltech_OMfixed_adv,
                                   costvar = "OM.fixed") %>%
       mutate(OM.fixed = round(OM.fixed, energy.DIGITS_OM))
     L2235.GlobalTechOMfixed_elecS_cool_EUR_low <-
       assign_gcameurope_tech_cost(refdata = L2235.GlobalTechOMfixed_elecS_cool_EUR,
-                                  replacement_data = L1233.globaltech_OMfixed_ATB_low,
+                                  replacement_data = L1233.globaltech_OMfixed_low,
                                   costvar = "OM.fixed") %>%
       mutate(OM.fixed = round(OM.fixed, energy.DIGITS_OM))
 
     # - Intermittent technologies
     L2235.GlobalIntTechOMfixed_elecS_cool_EUR_adv <-
       assign_gcameurope_tech_cost(refdata = L2235.GlobalIntTechOMfixed_elecS_cool_EUR,
-                                  replacement_data = L1233.globaltech_OMfixed_ATB_adv,
+                                  replacement_data = L1233.globaltech_OMfixed_adv,
                                   costvar = "OM.fixed") %>%
       mutate(OM.fixed = round(OM.fixed, energy.DIGITS_OM))
     L2235.GlobalIntTechOMfixed_elecS_cool_EUR_low <-
       assign_gcameurope_tech_cost(refdata = L2235.GlobalIntTechOMfixed_elecS_cool_EUR,
-                                  replacement_data = L1233.globaltech_OMfixed_ATB_low,
+                                  replacement_data = L1233.globaltech_OMfixed_low,
                                   costvar = "OM.fixed") %>%
       mutate(OM.fixed = round(OM.fixed, energy.DIGITS_OM))
 
@@ -172,24 +207,24 @@ module_gcameurope_elec_tech_scenarios_xml <- function(command, ...) {
     # - Standard technologies
     L2235.GlobalTechOMvar_elecS_cool_EUR_adv <-
       assign_gcameurope_tech_cost(refdata = L2235.GlobalTechOMvar_elecS_cool_EUR,
-                                  replacement_data = L1233.globaltech_OMvar_ATB_adv,
+                                  replacement_data = L1233.globaltech_OMvar_adv,
                                   costvar = "OM.var") %>%
       mutate(OM.var = round(OM.var, energy.DIGITS_OM))
     L2235.GlobalTechOMvar_elecS_cool_EUR_low <-
       assign_gcameurope_tech_cost(refdata = L2235.GlobalTechOMvar_elecS_cool_EUR,
-                                  replacement_data = L1233.globaltech_OMvar_ATB_low,
+                                  replacement_data = L1233.globaltech_OMvar_low,
                                   costvar = "OM.var") %>%
       mutate(OM.var = round(OM.var, energy.DIGITS_OM))
 
     # - Intermittent technologies
     L2235.GlobalIntTechOMvar_elecS_cool_EUR_adv <-
       assign_gcameurope_tech_cost(refdata = L2235.GlobalIntTechOMvar_elecS_cool_EUR,
-                                  replacement_data = L1233.globaltech_OMvar_ATB_adv,
+                                  replacement_data = L1233.globaltech_OMvar_adv,
                                   costvar = "OM.var") %>%
       mutate(OM.var = round(OM.var, energy.DIGITS_OM))
     L2235.GlobalIntTechOMvar_elecS_cool_EUR_low <-
       assign_gcameurope_tech_cost(refdata = L2235.GlobalIntTechOMvar_elecS_cool_EUR,
-                                  replacement_data = L1233.globaltech_OMvar_ATB_low,
+                                  replacement_data = L1233.globaltech_OMvar_low,
                                   costvar = "OM.var") %>%
       mutate(OM.var = round(OM.var, energy.DIGITS_OM))
 
@@ -202,6 +237,9 @@ module_gcameurope_elec_tech_scenarios_xml <- function(command, ...) {
       add_xml_data(partition_tech(L2235.GlobalTechOMfixed_elecS_cool_EUR_adv, "geothermal"), "GlobalTechOMfixed") %>%
       add_xml_data(partition_tech(L2235.GlobalTechOMvar_elecS_cool_EUR_adv, "geothermal"), "GlobalTechOMvar") %>%
       add_precursors("gcam-europe/A23.elecS_naming",
+                     "L1233.globaltech_capital_JRC_adv_EUR",
+                     "L1233.globaltech_OMfixed_JRC_adv_EUR",
+                     "L1233.globaltech_OMvar_JRC_adv_EUR",
                      "L1233.globaltech_capital_ATB_adv",
                      "L1233.globaltech_OMfixed_ATB_adv",
                      "L1233.globaltech_OMvar_ATB_adv",
@@ -248,6 +286,9 @@ module_gcameurope_elec_tech_scenarios_xml <- function(command, ...) {
       add_xml_data(partition_tech(L2235.GlobalTechOMfixed_elecS_cool_EUR_low, "geothermal"), "GlobalTechOMfixed") %>%
       add_xml_data(partition_tech(L2235.GlobalTechOMvar_elecS_cool_EUR_low, "geothermal"), "GlobalTechOMvar") %>%
       add_precursors("gcam-europe/A23.elecS_naming",
+                     "L1233.globaltech_capital_JRC_low_EUR",
+                     "L1233.globaltech_OMfixed_JRC_low_EUR",
+                     "L1233.globaltech_OMvar_JRC_low_EUR",
                      "L1233.globaltech_capital_ATB_low",
                      "L1233.globaltech_OMfixed_ATB_low",
                      "L1233.globaltech_OMvar_ATB_low",

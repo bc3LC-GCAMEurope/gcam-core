@@ -1,0 +1,40 @@
+# File: jrc_gcam_elec_tech_mapping.csv
+# Title: JRC to GCAM technology mapping
+# Units: unitless scaling factor
+# Source: NA
+# Column types: ccc
+# ----------
+technology,tech_type,tech_detail
+battery,Utility-Scale Battery Storage,Utility scale batteries - C-rate: C/2 (per 1 MWh electricity)
+biomass (conv CCS),Biomass_FE,Steam turbine biomass solid conventional w. CCS
+biomass (conv),Biomass_FE,Steam turbine biomass solid conventional
+biomass (IGCC CCS),Biomass_FE,
+biomass (IGCC),Biomass_FE,Biomass gasification CC
+coal (conv pul CCS),Coal_FE,Pulverised coal supercritical CCS oxyfuel
+coal (conv pul),Coal_FE,Steam turbine coal conventional
+coal (IGCC CCS),Coal_FE,Integrated gasification coal CCS pre combustion
+coal (IGCC),Coal_FE,Integrated gasification combined cycle coal
+CSP,Solar - CSP,
+CSP_storage,Solar - CSP,Solar thermal with 8 hours storage
+gas (CC CCS),Natural Gas_FE,Gas combined cycle CCS post combustion
+gas (CC),Natural Gas_FE,Gas turbine combined cycle gas conventional
+gas (steam/CT),Natural Gas_FE,Gas turbine with heat recovery
+Gen_II_LWR,Nuclear,Nuclear III gen. (incl. economies of scale)
+Gen_II_LWR,Nuclear,Nuclear III gen. (no economies of scale)
+large reactor,Nuclear,Nuclear III gen. (incl. economies of scale)
+large reactor,Nuclear,Nuclear III gen. (no economies of scale)
+SMR,Nuclear,Small scale nuclear with co-generation
+geothermal,Geothermal,Geothermal high enthalpy
+PV,Solar - Utility PV,"Solar PV, Utility, Medium"
+PV_storage,Solar - Utility PV,"Solar PV, Utility, Medium"
+PV_storage,Utility-Scale Battery Storage,Utility scale batteries - C-rate: C/2 (per 1 MWh electricity)
+refined liquids (CC CCS),Natural Gas_FE,
+refined liquids (CC),Natural Gas_FE,
+refined liquids (steam/CT),Natural Gas_FE,
+rooftop_pv,Solar - PV Dist. Comm,"Solar PV, Commercial, Medium"
+rooftop_pv,Solar - PV Dist. Res,"Solar PV, Residential, Medium"
+wind,Land-Based Wind,"Wind onshore, Medium"
+wind_offshore,Fixed-Bottom Offshore Wind,"Wind-offshore Power, Shallow, Near-shore, Low"
+wind_offshore,Fixed-Bottom Offshore Wind,"Wind-offshore Power, Shallow, Near-shore, High"
+wind_storage,Land-Based Wind,"Wind onshore, Medium"
+wind_storage,Utility-Scale Battery Storage,Utility scale batteries - C-rate: C/2 (per 1 MWh electricity)
