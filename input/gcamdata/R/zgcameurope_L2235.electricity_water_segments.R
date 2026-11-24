@@ -234,6 +234,17 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       rename(intermittent.technology = technology) %>%
       bind_rows(L2235.GlobalIntTechCapital_elecS_cool_EUR)
 
+    # rooftop_pv has no vintaging: its capital is a stub technology non-energy input with capital tracking
+    # (L2233.StubTechTrackCapital_elec_EUR in the European countries, core L2233.StubTechTrackCapital_elec elsewhere).
+    # As in the core (zwater_L2233.electricity_water), it is removed from the global capital table: otherwise this
+    # table (via L223.GlobalIntTechCapital_elec, expanded in L2234) re-adds an input-capital named "capital" to the
+    # global rooftop_pv technology, the stub inputs with the same name are parsed into it and their input-cost is
+    # ignored. This also removes the global rooftop_pv capital from solar_adv_EUR.xml and solar_low_EUR.xml.
+    L2235.GlobalIntTechCapital_elecS_cool_EUR <- L2235.GlobalIntTechCapital_elecS_cool_EUR %>%
+      filter(intermittent.technology != "rooftop_pv")
+    assert_that(!"rooftop_pv" %in% L2235.GlobalTechCapital_elecS_cool_EUR$technology,
+                msg = "rooftop_pv found in L2235.GlobalTechCapital_elecS_cool_EUR: its capital must only be a stub input")
+
     # efficiency
     L2235.GlobalIntTechEff_elecS_cool_EUR <- add_segments_to_cooling(L2233.GlobalIntTechEff_elec_cool) %>%
       rename(intermittent.technology = technology) %>%
@@ -626,6 +637,7 @@ module_gcameurope_L2235.elec_segments_water <- function(command, ...) {
       add_title("Electricity Load Segments Intermittent Technology Capital Costs") %>%
       add_units("none") %>%
       add_comments("Electricity Load Segments Intermittent Technology Capital Costs") %>%
+      add_comments("rooftop_pv removed: its capital is a stub technology input (L2233.StubTechTrackCapital_elec_EUR)") %>%
       add_precursors("L2234.GlobalIntTechCapital_elecS_EUR",
                      "L2233.GlobalIntTechCapital_elec_cool", "gcam-europe/A20.offshore_wind_types_EUR") ->
       L2235.GlobalIntTechCapital_elecS_cool_EUR

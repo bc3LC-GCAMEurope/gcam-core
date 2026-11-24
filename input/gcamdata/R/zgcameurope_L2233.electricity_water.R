@@ -40,7 +40,7 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
                      "L223.StubTechCapFactor_elec_EUR",
                      "L223.StubTechFixOut_hydro_EUR",
                      "L223.Supplysector_elec_EUR",
-                     "L223.GlobalIntTechCapital_elec")
+                     "L1233.globaltech_capital_JRC_EUR")
 
   MODULE_OUTPUTS <- c("L2233.StubTech_elecPassthru_EUR",
                       "L2233.StubTechProd_elecPassthru_EUR",
@@ -193,13 +193,23 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
 
     # some adjustments for rooftop_pv because it does not have vintaging we need to switch
     # from a input.capital to a standard non-energy input and add assumptions about
-    # depreciation to be able to properly calculate capital demands
+    # depreciation to be able to properly calculate capital demands.
+    # GCAM-Europe: the capital cost is the European (JRC 2040CT) cost of zgcameurope_L1233.elec_cost_data (mean of
+    # "Solar PV, Residential, Medium" and "Solar PV, Commercial, Medium", see jrc_gcam_elec_tech_mapping), not the
+    # core (ATB) cost of the global technology. It is set here, in the stub technology of the European countries,
+    # because the global rooftop_pv technology (sector elect_td_bld) is shared with all GCAM regions, which keep the
+    # core cost. Fixed O&M stays in the global technology (ATB): there is no stub technology fixed O&M table.
+    L2233.roofPV_capital_JRC <- L1233.globaltech_capital_JRC_EUR %>%
+      filter(technology == "rooftop_pv") %>%
+      select(supplysector, subsector, stub.technology = technology, year,
+             input.capital, capital.overnight, fixed.charge.rate)
+    assert_that(nrow(L2233.roofPV_capital_JRC) > 0, !any(is.na(L2233.roofPV_capital_JRC$capital.overnight)),
+                msg = "L1233.globaltech_capital_JRC_EUR has no (or incomplete) rooftop_pv capital cost")
+
     L223.StubTechCapFactor_elec_EUR %>%
       filter(stub.technology == "rooftop_pv") %>%
-      left_join_error_no_match(L223.GlobalIntTechCapital_elec, by=c("supplysector" = "sector.name",
-                                                                    "subsector" = "subsector.name",
-                                                                    "stub.technology" = "intermittent.technology",
-                                                                    "year")) %>%
+      left_join_error_no_match(L2233.roofPV_capital_JRC,
+                               by = c("supplysector", "subsector", "stub.technology", "year")) %>%
       mutate(input.cost = round(capital.overnight * fixed.charge.rate / (capacity.factor * CONV_YEAR_HOURS * CONV_KWH_GJ), energy.DIGITS_COST),
              capital.coef = round(1 / fixed.charge.rate, energy.DIGITS_COST),
              tracking.market = socioeconomics.EN_CAPITAL_MARKET_NAME,
@@ -377,7 +387,8 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
       add_units("1975$/GJ") %>%
       add_comments("Since rooftop_pv does not have vintaging we need to track its capital") %>%
       add_comments("with explicit assumptions about depreciation.") %>%
-      add_precursors("L223.StubTechCapFactor_elec_EUR", "L223.GlobalIntTechCapital_elec") ->
+      add_comments("Capital cost from the JRC 2040CT data (L1233.globaltech_capital_JRC_EUR)") %>%
+      add_precursors("L223.StubTechCapFactor_elec_EUR", "L1233.globaltech_capital_JRC_EUR") ->
       L2233.StubTechTrackCapital_elec_EUR
 
     L2233.StubTech_elec_cool_EUR %>%

@@ -19,8 +19,9 @@
 #' (JRC) cost data (\code{L1233.globaltech_*_JRC_adv_EUR} and \code{L1233.globaltech_*_JRC_low_EUR}) for the
 #' technologies of the electricity sector covered by them, and the 2024 ATB / ReEDS cost data of the core
 #' (\code{L1233.globaltech_*_ATB_adv} and \code{L1233.globaltech_*_ATB_low}) for the other technologies, for offshore
-#' wind, and for rooftop_pv (sector elect_td_bld), which uses ATB in all regions, both in the global technology and
-#' in the stub technology cost of the European countries.
+#' wind. rooftop_pv (sector elect_td_bld) has no global capital cost (it is removed in L2235, as in the core): its
+#' capital is the stub technology cost of the European countries, from the JRC Advanced and Conservative cases;
+#' its fixed O&M keeps the ATB values of the global technology.
 #' The technology of the load segments is mapped to the global (core) technology by removing the segment suffix
 #' (see \code{A23.elecS_naming}).
 #' @importFrom assertthat assert_that
@@ -153,7 +154,8 @@ module_gcameurope_elec_tech_scenarios_xml <- function(command, ...) {
 
     # - Rooftop PV: capital costs of rooftop PV are tracked in the GCAM-Europe regions as a standard non-energy
     #   input of the stub technology (see L2233.StubTechTrackCapital_elec_EUR), and so the cost is
-    #   pre-levelized in the same way as in the reference case. rooftop_pv uses the ATB capital cost in all regions
+    #   pre-levelized in the same way as in the reference case. The stub cost of the European countries uses the
+    #   JRC capital cost; rooftop_pv has no global capital cost (removed in L2235)
     make_roofpv_cost <- function(replacement_data){
       L223.StubTechCapFactor_elec_EUR %>%
         filter(stub.technology == "rooftop_pv",
@@ -170,8 +172,8 @@ module_gcameurope_elec_tech_scenarios_xml <- function(command, ...) {
         select(-capacity.factor, -capital.overnight, -fixed.charge.rate) %>%
         rename(minicam.non.energy.input = input.capital)
     }
-    L223.StubTechCost_roofpv_EUR_adv <- make_roofpv_cost(L1233.globaltech_capital_ATB_adv)
-    L223.StubTechCost_roofpv_EUR_low <- make_roofpv_cost(L1233.globaltech_capital_ATB_low)
+    L223.StubTechCost_roofpv_EUR_adv <- make_roofpv_cost(L1233.globaltech_capital_JRC_adv_EUR)
+    L223.StubTechCost_roofpv_EUR_low <- make_roofpv_cost(L1233.globaltech_capital_JRC_low_EUR)
 
     # - Partition by technology
     partition_tech <- function(data, subsectors){
