@@ -430,6 +430,67 @@ module_gcameurope_L210.resources <- function(command, ...) {
       mutate(lifetime = if_else(!is.na(lifetime.adj), lifetime.adj, lifetime)) %>%
       select(-lifetime.adj)
 
+    # 4b. Capacity of the historical vintages in the first future period -------------
+    # The C++ keeps the vintages for 100 years (A10.ResReserveTechLifetime), while the back-calculation
+    # assumes that they retire. fixedScaleFactor hides the excess capacity only in calibration years.
+    # Keep scaling the historical vintages after calibration, without changing reserves or supply curves.
+    # The helper follows ReserveSubResource::annualsupply and ResourceReserveTechnology::setProductionState.
+    reserve_capacity_next_period_EUR <- function(year, reserve, production, lifetime, decline) {
+      n <- length(year)
+      timesteps <- c(modeltime.PERIOD0_TIMESTEP, diff(year))
+      annual <- reserve / lifetime
+      output <- cumul <- rep(0, n)
+      max_avail <- function(i, dt) pmax((reserve[i] - cumul[i] - dt * output[i]) * 2 / dt + output[i], 0)
+      for(t in seq_len(n)) {
+        old <- seq_len(t - 1)
+        dt <- timesteps[t]
+        capacity <- pmin(annual[old], max_avail(old, dt))
+        total_capacity <- sum(capacity) + annual[t]
+        scale <- if(production[t] == 0 || total_capacity == 0) 0 else production[t] / total_capacity
+        new_output <- capacity * scale
+        cumul[old] <- cumul[old] + output[old] * dt + 0.5 * (new_output - output[old]) * dt
+        output[old] <- new_output
+        output[t] <- annual[t] * scale
+        cumul[t] <- output[t] * dt
+      }
+      dt <- MODEL_FUTURE_YEARS[1] - year[n]
+      remaining <- reserve - cumul
+      phase <- if_else(reserve > 0 & remaining <= reserve * decline, pmax(remaining / (reserve * decline), 0), 1)
+      sum(pmin(annual * phase, max_avail(seq_len(n), dt)))
+    }
+
+    L210.ReserveCapacityScaler_EUR <- L210.RsrcCalProd_EUR %>%
+      rename(reserve.subresource = subresource) %>%
+      left_join_error_no_match(L210.ReserveCalReserve_EUR, by = c("region", "resource", "reserve.subresource", "year")) %>%
+      left_join_error_no_match(L210.ResSubresourceProdLifetime_EUR, by = c("region", "resource", "reserve.subresource")) %>%
+      left_join_error_no_match(L210.ResReserveTechDeclinePhase_EUR %>%
+                                 filter(year == MODEL_FINAL_BASE_YEAR) %>%
+                                 select(region, resource, reserve.subresource, decline.phase.percent),
+                               by = c("region", "resource", "reserve.subresource")) %>%
+      arrange(region, resource, reserve.subresource, year) %>%
+      group_by(region, resource, reserve.subresource) %>%
+      summarise(capacity = reserve_capacity_next_period_EUR(year, cal.reserve, cal.production,
+                                                            avg.prod.lifetime[1], decline.phase.percent[1]),
+                production = cal.production[year == MODEL_FINAL_BASE_YEAR]) %>%
+      ungroup() %>%
+      filter(production > 0, capacity > production) %>%
+      mutate(output.scalar.future = production / capacity)
+
+    L210.ReserveCapacityScaler_EUR %>%
+      left_join(L210.ReserveCalReserve_EUR %>%
+                  filter(cal.reserve > 0) %>%
+                  select(region, resource, reserve.subresource, period = year),
+                by = c("region", "resource", "reserve.subresource")) %>%
+      repeat_add_columns(tibble(year = MODEL_YEARS)) %>%
+      filter(period <= year) %>%
+      mutate(subresource = reserve.subresource,
+             technology = reserve.subresource,
+             exogenous.shutdown.decider = "exogenous.shutdown",
+             output.scalar = if_else(year %in% MODEL_BASE_YEARS, 1, output.scalar.future)) %>%
+      select(LEVEL2_DATA_NAMES[["RsrcExoShutdown"]]) %>%
+      bind_rows(L210.RsrcExoShutdown_EUR, .) ->
+      L210.RsrcExoShutdown_EUR
+
 
     # 5. Offshore wind: fixed and floating resources -----------------------------------
     # GCAM-Europe splits the generic "offshore wind resource" into "fixed offshore wind resource" and
