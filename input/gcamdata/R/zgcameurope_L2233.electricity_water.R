@@ -12,10 +12,15 @@
 #'  \code{L2233.PassThroughSector_elec_cool_EUR},
 #' \code{L2233.Supplysector_elec_cool_EUR}, \code{L2233.ElecReserve_elec_cool_EUR},
 #' \code{L2233.SubsectorShrwtFllt_elec_cool_EUR}, \code{L2233.SubsectorLogit_elec_cool_EUR},
+#' \code{L2233.StubTechTrackCapital_elec_EUR}, \code{L2233.StubTechOMfixed_roofPV_EUR},
 #'  \code{L2233.StubTech_elec_cool_EUR}, \code{L2233.StubTechEff_elec_cool_EUR},
 #' \code{L2233.StubTechProd_elec_cool_EUR}, \code{L2233.StubTechCapFactor_elec_cool_EUR}, \code{L2233.StubTechFixOut_hydro_EUR},
 #'   \code{L2233.StubTechShrwt_elec_cool_EUR}
 #' @details Disaggregates electricity sector for all cooling system types.
+#' GCAM-Europe: the capital cost (\code{L2233.StubTechTrackCapital_elec_EUR}) and the fixed O&M cost
+#' (\code{L2233.StubTechOMfixed_roofPV_EUR}) of rooftop_pv in the European countries are the JRC 2040CT costs
+#' (\code{L1233.globaltech_capital_JRC_EUR}, \code{L1233.globaltech_OMfixed_JRC_EUR}), set in the stub technology;
+#' the global rooftop_pv technology, shared with all GCAM regions, keeps the core (ATB) costs.
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr bind_rows filter first if_else group_by left_join mutate right_join select summarise first
 #' @importFrom tidyr complete gather nesting
@@ -40,7 +45,8 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
                      "L223.StubTechCapFactor_elec_EUR",
                      "L223.StubTechFixOut_hydro_EUR",
                      "L223.Supplysector_elec_EUR",
-                     "L1233.globaltech_capital_JRC_EUR")
+                     "L1233.globaltech_capital_JRC_EUR",
+                     "L1233.globaltech_OMfixed_JRC_EUR")
 
   MODULE_OUTPUTS <- c("L2233.StubTech_elecPassthru_EUR",
                       "L2233.StubTechProd_elecPassthru_EUR",
@@ -50,6 +56,7 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
                       "L2233.SubsectorShrwtFllt_elec_cool_EUR",
                       "L2233.SubsectorLogit_elec_cool_EUR",
                       "L2233.StubTechTrackCapital_elec_EUR",
+                      "L2233.StubTechOMfixed_roofPV_EUR",
                       "L2233.StubTech_elec_cool_EUR",
                       "L2233.StubTechEff_elec_cool_EUR",
                       "L2233.StubTechProd_elec_cool_EUR",
@@ -72,7 +79,7 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
       cooling_system <- water_type <- fuel <- sector.name <- subsector.name <-
       input.capital <- capital.overnight_USD2005 <- capital.overnight <-
       water_withdrawals <- water_consumption <- coefficient <- water_sector <-
-      share.weight.year <- emiss.coef <- efficiency <- emiss.coeff <- NULL  # silence package check notes
+      share.weight.year <- emiss.coef <- efficiency <- emiss.coeff <- input.OM.fixed <- OM.fixed <- NULL  # silence package check notes
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
@@ -198,7 +205,7 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
     # "Solar PV, Residential, Medium" and "Solar PV, Commercial, Medium", see jrc_gcam_elec_tech_mapping), not the
     # core (ATB) cost of the global technology. It is set here, in the stub technology of the European countries,
     # because the global rooftop_pv technology (sector elect_td_bld) is shared with all GCAM regions, which keep the
-    # core cost. Fixed O&M stays in the global technology (ATB): there is no stub technology fixed O&M table.
+    # core cost. The fixed O&M cost is set in the same way (L2233.StubTechOMfixed_roofPV_EUR, below).
     L2233.roofPV_capital_JRC <- L1233.globaltech_capital_JRC_EUR %>%
       filter(technology == "rooftop_pv") %>%
       select(supplysector, subsector, stub.technology = technology, year,
@@ -217,6 +224,31 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
       select(-capacity.factor, -capital.overnight, -fixed.charge.rate) %>%
       rename(minicam.non.energy.input = input.capital) ->
       L2233.StubTechTrackCapital_elec_EUR
+
+    # GCAM-Europe: fixed O&M cost of rooftop_pv in the European countries from the JRC 2040CT data (Moderate case),
+    # same technologies and units (1975$/kW/yr) as the OM-fixed input of the global technology. The stub technology
+    # input has the name of the global input ("OM-fixed"), so its OM-fixed value replaces the global (ATB) value in
+    # these regions only (StubTechnologyContainer::completeInit parses the stub XML into a copy of the global
+    # technology). Variable O&M is not set: the JRC and the core variable O&M of rooftop_pv are both 0.
+    # Same region / year keys as the capital table (L223.StubTechCapFactor_elec_EUR). Columns in the order of the
+    # StubTechOMfixed header (LEVEL2_DATA_NAMES[["StubTechOMfixed"]]).
+    L2233.roofPV_OMfixed_JRC <- L1233.globaltech_OMfixed_JRC_EUR %>%
+      filter(technology == "rooftop_pv") %>%
+      select(supplysector, subsector, stub.technology = technology, year, input.OM.fixed, OM.fixed)
+    assert_that(nrow(L2233.roofPV_OMfixed_JRC) > 0, !any(is.na(L2233.roofPV_OMfixed_JRC$OM.fixed)),
+                msg = "L1233.globaltech_OMfixed_JRC_EUR has no (or incomplete) rooftop_pv fixed O&M cost")
+
+    L223.StubTechCapFactor_elec_EUR %>%
+      filter(stub.technology == "rooftop_pv") %>%
+      select(region, supplysector, subsector, stub.technology, year) %>%
+      left_join_error_no_match(L2233.roofPV_OMfixed_JRC,
+                               by = c("supplysector", "subsector", "stub.technology", "year")) %>%
+      mutate(OM.fixed = round(OM.fixed, energy.DIGITS_OM)) %>%
+      select(region, supplysector, subsector, stub.technology, year, input.OM.fixed, OM.fixed) ->
+      L2233.StubTechOMfixed_roofPV_EUR
+    assert_that(nrow(L2233.StubTechOMfixed_roofPV_EUR) > 0, !any(is.na(L2233.StubTechOMfixed_roofPV_EUR)),
+                setequal(L2233.StubTechOMfixed_roofPV_EUR$region, L2233.StubTechTrackCapital_elec_EUR$region),
+                msg = "L2233.StubTechOMfixed_roofPV_EUR is empty, has NA or covers other regions than the rooftop_pv capital")
 
     ## PART 3: STUB TECHNOLOGY INFORMATION IN THE NEW SECTOR STRUCTURE -------------
 
@@ -390,6 +422,14 @@ module_gcameurope_L2233.electricity_water <- function(command, ...) {
       add_comments("Capital cost from the JRC 2040CT data (L1233.globaltech_capital_JRC_EUR)") %>%
       add_precursors("L223.StubTechCapFactor_elec_EUR", "L1233.globaltech_capital_JRC_EUR") ->
       L2233.StubTechTrackCapital_elec_EUR
+
+    L2233.StubTechOMfixed_roofPV_EUR %>%
+      add_title("Fixed O&M cost of rooftop_pv in the stub technology of the European countries") %>%
+      add_units("1975$/kW/yr") %>%
+      add_comments("JRC 2040CT fixed O&M cost (Moderate case, L1233.globaltech_OMfixed_JRC_EUR)") %>%
+      add_comments("Replaces the core (ATB) value of the global rooftop_pv technology in the European countries only") %>%
+      add_precursors("L223.StubTechCapFactor_elec_EUR", "L1233.globaltech_OMfixed_JRC_EUR") ->
+      L2233.StubTechOMfixed_roofPV_EUR
 
     L2233.StubTech_elec_cool_EUR %>%
       add_title("Stub technologies for cooling system options") %>%

@@ -6,11 +6,16 @@
 #'
 #' @param command API command to execute
 #' @param ... other optional parameters, depending on command
-#' @importFrom dplyr filter mutate select rename
+#' @importFrom dplyr filter mutate select rename distinct
+#' @importFrom assertthat assert_that
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{electricity_water.xml}. The corresponding file in the
 #' original data system was \code{batch_electricity_water.xml.R} (water XML).
+#' @details The rooftop_pv stub technology costs of the European countries (JRC capital,
+#' \code{L2233.StubTechTrackCapital_elec_EUR}, and JRC fixed O&M, \code{L2233.StubTechOMfixed_roofPV_EUR}) are written
+#' for all the countries: with the nesting-subsector level in the countries with load segments, and with the flat
+#' structure in the countries without segments.
 module_gcameurope_elec_segments_water_xml <- function(command, ...) {
   # Iceland and Turkey are in eurostat but not in segments, so we write them here
   WATER_NO_SEGMENTS <- c("L223.Supplysector_elec_EUR",
@@ -32,7 +37,6 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
                          "L2233.ElecReserve_elec_cool_EUR",
                          "L2233.SubsectorShrwtFllt_elec_cool_EUR",
                          "L2233.SubsectorLogit_elec_cool_EUR",
-                         "L2233.StubTechTrackCapital_elec_EUR",
                          "L2233.StubTech_elec_cool_EUR",
                          "L2233.StubTechEff_elec_cool_EUR",
                          "L2233.StubTechProd_elec_cool_EUR",
@@ -129,6 +133,9 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
                      "L2232.Production_imports_EUR_trade",
                      "L2232.Production_elec_gen_EUR_trade",
                      "L2232.StubTechElecMarket_backup_EUR",
+                     # rooftop_pv stub technology costs of all the European countries (not filtered, see below)
+                     "L2233.StubTechTrackCapital_elec_EUR",
+                     "L2233.StubTechOMfixed_roofPV_EUR",
                      WATER_NO_SEGMENTS)
   if(command == driver.DECLARE_INPUTS) {
     return(MODULE_INPUTS)
@@ -146,6 +153,26 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
              get(fname) %>%
                filter(!region %in% L2235.Supplysector_elecS_cool_EUR$region))
     }
+
+    # rooftop_pv stub technology costs (JRC capital and fixed O&M) of the European countries. In the countries with
+    # load segments rooftop_pv (sector elect_td_bld) is inside a nesting-subsector, so the stub technology is written
+    # with the nesting-subsector level (subsector0 of L2235.StubTech_elecS_cool_EUR); a stub technology written
+    # directly under the subsector of the same name would be read into the nesting-subsector, which aborts
+    # (NestingSubsector::completeInit). The countries without segments (Iceland, Turkey) keep the flat structure.
+    roofpv_nesting <- L2235.StubTech_elecS_cool_EUR %>%
+      filter(stub.technology == "rooftop_pv") %>%
+      distinct(region, supplysector, subsector0, subsector, stub.technology)
+    split_roofpv <- function(data, nested) {
+      if(nested) {
+        filter(data, region %in% L2235.Supplysector_elecS_cool_EUR$region) %>%
+          left_join_error_no_match(roofpv_nesting, by = c("region", "supplysector", "subsector", "stub.technology"))
+      } else {
+        filter(data, !region %in% L2235.Supplysector_elecS_cool_EUR$region)
+      }
+    }
+    assert_that(setequal(intersect(L2233.StubTechTrackCapital_elec_EUR$region, L2235.Supplysector_elecS_cool_EUR$region),
+                         roofpv_nesting$region),
+                msg = "rooftop_pv: the segmented countries with stub costs differ from the ones with a rooftop_pv stub technology")
 
     # ===================================================
 
@@ -235,6 +262,13 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
                                    "StubTechInterp", "subsector","nesting-subsector",1,FALSE) %>%
       add_xml_data_generate_levels(L2235.StubTechCapFactor_elecS_cool_EUR,
                                    "StubTechCapFactor", "subsector","nesting-subsector",1,FALSE) %>%
+      # rooftop_pv JRC capital and fixed O&M in the countries with segments (nesting-subsector)
+      add_xml_data_generate_levels(split_roofpv(L2233.StubTechTrackCapital_elec_EUR, nested = TRUE),
+                                   "StubTechTrackCapital", "subsector","nesting-subsector",1,FALSE) %>%
+      add_xml_data_generate_levels(split_roofpv(L2233.StubTechTrackCapital_elec_EUR, nested = TRUE),
+                                   "StubTechCost", "subsector","nesting-subsector",1,FALSE) %>%
+      add_xml_data_generate_levels(split_roofpv(L2233.StubTechOMfixed_roofPV_EUR, nested = TRUE),
+                                   "StubTechOMfixed", "subsector","nesting-subsector",1,FALSE) %>%
       add_node_equiv_xml("subsector") %>%
       add_logit_tables_xml(rename(L2235.SubsectorLogit_elecS_EUR, subsector = subsector0), "SubsectorLogit") %>%
       add_xml_data(rename(L2235.SubsectorShrwt_elecS_EUR, subsector = subsector0), "SubsectorShrwt") %>%
@@ -296,8 +330,10 @@ module_gcameurope_elec_segments_water_xml <- function(command, ...) {
       add_xml_data(L2233.SubsectorShrwtFllt_elec_cool_EUR, "SubsectorShrwtFllt") %>%
       add_logit_tables_xml(L2233.SubsectorLogit_elec_cool_EUR, "SubsectorLogit") %>%
       add_xml_data(L2233.StubTech_elec_cool_EUR, "StubTech") %>%
-      add_xml_data(L2233.StubTechTrackCapital_elec_EUR, "StubTechTrackCapital") %>%
-      add_xml_data(L2233.StubTechTrackCapital_elec_EUR, "StubTechCost") %>%
+      # rooftop_pv JRC capital and fixed O&M in the countries without segments
+      add_xml_data(split_roofpv(L2233.StubTechTrackCapital_elec_EUR, nested = FALSE), "StubTechTrackCapital") %>%
+      add_xml_data(split_roofpv(L2233.StubTechTrackCapital_elec_EUR, nested = FALSE), "StubTechCost") %>%
+      add_xml_data(split_roofpv(L2233.StubTechOMfixed_roofPV_EUR, nested = FALSE), "StubTechOMfixed") %>%
       add_xml_data(L2233.StubTechEff_elec_cool_EUR, "StubTechEff") %>%
       add_xml_data(L2233.StubTechProd_elec_cool_EUR, "StubTechProd") %>%
       add_xml_data(L2233.StubTechCapFactor_elec_cool_EUR, "StubTechCapFactor") %>%

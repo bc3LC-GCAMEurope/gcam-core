@@ -20,8 +20,9 @@
 #' technologies of the electricity sector covered by them, and the 2024 ATB / ReEDS cost data of the core
 #' (\code{L1233.globaltech_*_ATB_adv} and \code{L1233.globaltech_*_ATB_low}) for the other technologies, for offshore
 #' wind. rooftop_pv (sector elect_td_bld) has no global capital cost (it is removed in L2235, as in the core): its
-#' capital is the stub technology cost of the European countries, from the JRC Advanced and Conservative cases;
-#' its fixed O&M keeps the ATB values of the global technology.
+#' capital and its fixed O&M in the European countries are stub technology costs from the JRC Advanced and
+#' Conservative cases (written with the nesting-subsector level in the countries with load segments); the global
+#' rooftop_pv technology keeps the ATB fixed O&M, which applies to the non-European regions.
 #' The technology of the load segments is mapped to the global (core) technology by removing the segment suffix
 #' (see \code{A23.elecS_naming}).
 #' @importFrom assertthat assert_that
@@ -44,6 +45,8 @@ module_gcameurope_elec_tech_scenarios_xml <- function(command, ...) {
       "L1233.globaltech_OMvar_ATB_low",
       # for adjusting rooftop_pv for capital tracking purposes
       "L223.StubTechCapFactor_elec_EUR",
+      # rooftop_pv stub technology structure (nesting-subsector) of the countries with load segments
+      "L2235.StubTech_elecS_cool_EUR",
       "L2235.GlobalTechCapital_elecS_cool_EUR",
       "L2235.GlobalIntTechCapital_elecS_cool_EUR",
       "L2235.GlobalTechOMfixed_elecS_cool_EUR",
@@ -72,7 +75,8 @@ module_gcameurope_elec_tech_scenarios_xml <- function(command, ...) {
     # Silence global package checks
     value <- year <- subsector.name <- subsector.name0 <- from.technology <- technology <- input.capital <-
       stub.technology <- supplysector <- subsector <- capacity.factor <- capital.overnight <-
-      fixed.charge.rate <- input.cost <- minicam.non.energy.input <- NULL
+      fixed.charge.rate <- input.cost <- minicam.non.energy.input <- region <- subsector0 <-
+      input.OM.fixed <- OM.fixed <- NULL
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS, strip_attributes = TRUE)
@@ -175,6 +179,45 @@ module_gcameurope_elec_tech_scenarios_xml <- function(command, ...) {
     L223.StubTechCost_roofpv_EUR_adv <- make_roofpv_cost(L1233.globaltech_capital_JRC_adv_EUR)
     L223.StubTechCost_roofpv_EUR_low <- make_roofpv_cost(L1233.globaltech_capital_JRC_low_EUR)
 
+    # - Rooftop PV fixed O&M: JRC fixed O&M in the stub technology of the GCAM-Europe regions (as in the reference
+    #   case, L2233.StubTechOMfixed_roofPV_EUR); it replaces the ATB fixed O&M of the global technology, which is
+    #   still written below (GlobalIntTechOMfixed) and applies to the non-European regions. Columns in the order of
+    #   the StubTechOMfixed header (LEVEL2_DATA_NAMES[["StubTechOMfixed"]])
+    make_roofpv_OMfixed <- function(replacement_data){
+      L223.StubTechCapFactor_elec_EUR %>%
+        filter(stub.technology == "rooftop_pv",
+               year %in% MODEL_FUTURE_YEARS) %>%
+        select(region, supplysector, subsector, stub.technology, year) %>%
+        left_join_error_no_match(
+          replacement_data %>%
+            filter(technology == "rooftop_pv") %>%
+            select(supplysector, subsector, stub.technology = technology, year, input.OM.fixed, OM.fixed),
+          by = c("supplysector", "subsector", "stub.technology", "year")) %>%
+        mutate(OM.fixed = round(OM.fixed, energy.DIGITS_OM)) %>%
+        select(region, supplysector, subsector, stub.technology, year, input.OM.fixed, OM.fixed)
+    }
+    L223.StubTechOMfixed_roofpv_EUR_adv <- make_roofpv_OMfixed(L1233.globaltech_OMfixed_JRC_adv_EUR)
+    L223.StubTechOMfixed_roofpv_EUR_low <- make_roofpv_OMfixed(L1233.globaltech_OMfixed_JRC_low_EUR)
+    assert_that(nrow(L223.StubTechOMfixed_roofpv_EUR_adv) > 0, !any(is.na(L223.StubTechOMfixed_roofpv_EUR_adv)),
+                nrow(L223.StubTechOMfixed_roofpv_EUR_low) > 0, !any(is.na(L223.StubTechOMfixed_roofpv_EUR_low)),
+                msg = "rooftop_pv JRC fixed O&M (adv / low): empty table or NA values")
+
+    # - Rooftop PV stub technology costs: in the countries with load segments rooftop_pv is inside a
+    #   nesting-subsector (subsector0 of L2235.StubTech_elecS_cool_EUR) and the stub technology must be written with
+    #   that level (a stub technology read directly into the nesting-subsector aborts the model); the countries
+    #   without segments keep the flat structure
+    roofpv_nesting <- L2235.StubTech_elecS_cool_EUR %>%
+      filter(stub.technology == "rooftop_pv") %>%
+      distinct(region, supplysector, subsector0, subsector, stub.technology)
+    segment_regions <- unique(L2235.StubTech_elecS_cool_EUR$region)
+    add_roofpv_xml <- function(dot, data, header){
+      data_nested <- filter(data, region %in% segment_regions) %>%
+        left_join_error_no_match(roofpv_nesting, by = c("region", "supplysector", "subsector", "stub.technology"))
+      dot %>%
+        add_xml_data(filter(data, !region %in% segment_regions), header) %>%
+        add_xml_data_generate_levels(data_nested, header, "subsector", "nesting-subsector", 1, FALSE)
+    }
+
     # - Partition by technology
     partition_tech <- function(data, subsectors){
       filter(data, subsector.name0 %in% subsectors)
@@ -264,12 +307,14 @@ module_gcameurope_elec_tech_scenarios_xml <- function(command, ...) {
       add_xml_data(partition_tech(L2235.GlobalIntTechCapital_elecS_cool_EUR_adv, c("solar", "rooftop_pv")), "GlobalIntTechCapital") %>%
       add_xml_data(partition_tech(L2235.GlobalIntTechOMfixed_elecS_cool_EUR_adv, c("solar", "rooftop_pv")), "GlobalIntTechOMfixed") %>%
       add_xml_data(partition_tech(L2235.GlobalIntTechOMvar_elecS_cool_EUR_adv, c("solar", "rooftop_pv")), "GlobalIntTechOMvar") %>%
-      add_xml_data(L223.StubTechCost_roofpv_EUR_adv, "StubTechCost") %>%
+      add_roofpv_xml(L223.StubTechCost_roofpv_EUR_adv, "StubTechCost") %>%
+      add_roofpv_xml(L223.StubTechOMfixed_roofpv_EUR_adv, "StubTechOMfixed") %>%
       same_precursors_as(geothermal_adv_EUR.xml) %>%
       add_precursors("L2235.GlobalIntTechCapital_elecS_cool_EUR",
                      "L2235.GlobalIntTechOMfixed_elecS_cool_EUR",
                      "L2235.GlobalIntTechOMvar_elecS_cool_EUR",
-                     "L223.StubTechCapFactor_elec_EUR") ->
+                     "L223.StubTechCapFactor_elec_EUR",
+                     "L2235.StubTech_elecS_cool_EUR") ->
       solar_adv_EUR.xml
 
     create_xml("wind_adv_EUR.xml") %>%
@@ -313,12 +358,14 @@ module_gcameurope_elec_tech_scenarios_xml <- function(command, ...) {
       add_xml_data(partition_tech(L2235.GlobalIntTechCapital_elecS_cool_EUR_low, c("solar", "rooftop_pv")), "GlobalIntTechCapital") %>%
       add_xml_data(partition_tech(L2235.GlobalIntTechOMfixed_elecS_cool_EUR_low, c("solar", "rooftop_pv")), "GlobalIntTechOMfixed") %>%
       add_xml_data(partition_tech(L2235.GlobalIntTechOMvar_elecS_cool_EUR_low, c("solar", "rooftop_pv")), "GlobalIntTechOMvar") %>%
-      add_xml_data(L223.StubTechCost_roofpv_EUR_low, "StubTechCost") %>%
+      add_roofpv_xml(L223.StubTechCost_roofpv_EUR_low, "StubTechCost") %>%
+      add_roofpv_xml(L223.StubTechOMfixed_roofpv_EUR_low, "StubTechOMfixed") %>%
       same_precursors_as(geothermal_low_EUR.xml) %>%
       add_precursors("L2235.GlobalIntTechCapital_elecS_cool_EUR",
                      "L2235.GlobalIntTechOMfixed_elecS_cool_EUR",
                      "L2235.GlobalIntTechOMvar_elecS_cool_EUR",
-                     "L223.StubTechCapFactor_elec_EUR") ->
+                     "L223.StubTechCapFactor_elec_EUR",
+                     "L2235.StubTech_elecS_cool_EUR") ->
       solar_low_EUR.xml
 
     create_xml("wind_low_EUR.xml") %>%
