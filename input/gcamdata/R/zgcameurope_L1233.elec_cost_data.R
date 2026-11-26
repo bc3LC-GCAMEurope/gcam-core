@@ -12,7 +12,8 @@
 #' @return Depends on \code{command}: either a vector of required inputs,
 #' a vector of output names, or (if \code{command} is "MAKE") all
 #' the generated outputs: \code{L1233.globaltech_capital_ATB_offshore_EUR},
-#' \code{L1233.globaltech_OMfixed_ATB_offshore_EUR}.
+#' \code{L1233.globaltech_OMfixed_ATB_offshore_EUR}, \code{L1233.globaltech_capital_JRC_offshore_EUR},
+#' \code{L1233.globaltech_OMfixed_JRC_offshore_EUR}, \code{L1233.globaltech_OMvar_JRC_offshore_EUR}.
 #' @details The cost trajectories of each technology are taken directly from the NREL ATB 2024 data of the core
 #' (energy/NREL_ATB_capital_2024 and energy/NREL_ATB_OMfixed_2024, case Moderate): fixed-bottom offshore wind
 #' (Class 3) for wind_offshore_fixed and floating offshore wind (Class 11) for wind_offshore_floating. The ATB
@@ -24,8 +25,17 @@
 #' first year of the table, although the floating capital cost starts in 2030: when the first year of the O&M
 #' series differs from the one of the capital series (and the number of years is the same) the O&M series is
 #' shifted to start in the same year as the capital series.
-#' This chunk is the only place where the offshore wind costs by type enter the data system: the chunks that
-#' use them (zgcameurope_L120.offshore_wind and zgcameurope_L223.offshore_wind_tech) read the two output tables.
+#' This chunk is the only place where the offshore wind costs by type enter the data system. The ATB offshore
+#' tables (L1233.globaltech_*_ATB_offshore_EUR) are kept as outputs for diagnostics, but the chunks that use the
+#' offshore costs (zgcameurope_L120.offshore_wind and zgcameurope_L223.offshore_wind_tech) read the JRC (2040CT)
+#' offshore tables L1233.globaltech_capital_JRC_offshore_EUR, L1233.globaltech_OMfixed_JRC_offshore_EUR and
+#' L1233.globaltech_OMvar_JRC_offshore_EUR (reference case only). Their JRC rows are selected by name in this chunk
+#' (JRC_OFFSHORE_MAP: mean of the Low and High rows; fixed-bottom = "Shallow, Near-shore", floating = "Floating";
+#' Far-shore is not used), so wind_offshore_fixed and wind_offshore_floating are not in jrc_gcam_elec_tech_mapping
+#' nor in the generic L1233.globaltech_*_JRC_EUR tables. They follow the same steps as the other JRC technologies:
+#' EUR2020 to 1975$, 2021 = 2020 value, linear interpolation between 2020/2030/2040/2050 and, after 2050, the JRC
+#' 2050 value times the cumulative trend of the core wind_offshore technology (Moderate case). Sector, subsector
+#' and fixed charge rate are those of the core wind_offshore technology.
 #' Planned structure: (1) update of the electricity technology costs with European data (all technologies),
 #' (2) offshore wind adjustments (this block, which will take the table of block 1 as its starting point),
 #' (3) other European electricity data (e.g. capacity factors).
@@ -56,7 +66,10 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
       "L1233.globaltech_OMvar_JRC_low_EUR",
       "L1233.globaltech_capital_JRC_battery_EUR",
       "L1233.globaltech_capital_ATB_offshore_EUR",
-      "L1233.globaltech_OMfixed_ATB_offshore_EUR")
+      "L1233.globaltech_OMfixed_ATB_offshore_EUR",
+      "L1233.globaltech_capital_JRC_offshore_EUR",
+      "L1233.globaltech_OMfixed_JRC_offshore_EUR",
+      "L1233.globaltech_OMvar_JRC_offshore_EUR")
 
 
   if(command == driver.DECLARE_INPUTS) {
@@ -66,7 +79,8 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
   } else if(command == driver.MAKE) {
 
     # Silence package checks
-    technology <- year <- value <- input <- case <- capital.overnight <- OM.fixed <- NULL
+    technology <- year <- value <- input <- case <- capital.overnight <- OM.fixed <- OM.var <- tech_detail <-
+      trend <- anchor_val <- step_mult <- cum_mult <- fixed.charge.rate <- supplysector <- subsector <- NULL
 
     all_data <- list(...)[[1]]
 
@@ -95,6 +109,13 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
       technology = c("wind_offshore_fixed", "wind_offshore_floating"),
       tech_type = c("Fixed-Bottom Offshore Wind", "Floating Offshore Wind"),
       tech_detail = c("Offshore Wind - Class 3", "Offshore Wind - Class 11"))
+    # JRC (2040CT, Power&Heat) rows of each offshore wind technology: mean of the Low and High rows (same rule as the
+    # wind_offshore row of jrc_gcam_elec_tech_mapping). Far-shore rows are not used. Selected here by name, not in the
+    # mapping file, so that the two technologies do not enter the generic L1233.globaltech_*_JRC_EUR tables
+    JRC_OFFSHORE_MAP <- tibble::tibble(
+      technology = c("wind_offshore_fixed", "wind_offshore_fixed", "wind_offshore_floating", "wind_offshore_floating"),
+      tech_detail = c("Wind-offshore Power, Shallow, Near-shore, Low", "Wind-offshore Power, Shallow, Near-shore, High",
+                      "Wind-offshore Power, Floating, Low", "Wind-offshore Power, Floating, High"))
     # Number of last annual changes of the series used to estimate the decay rate of the extrapolation
     N_DECAY_CHANGES <- 4
     # EURO - DOLLAR conversion (based on 2020-2022 values)
@@ -106,6 +127,12 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
     offshore_techs <- unique(A20.offshore_wind_types_EUR$technology)
     assert_that(setequal(offshore_techs, ATB_OFFSHORE_MAP$technology),
                 msg = "A20.offshore_wind_types_EUR technologies differ from the ones of ATB_OFFSHORE_MAP")
+    assert_that(setequal(offshore_techs, JRC_OFFSHORE_MAP$technology),
+                msg = "A20.offshore_wind_types_EUR technologies differ from the ones of JRC_OFFSHORE_MAP")
+    assert_that(all(JRC_OFFSHORE_MAP$tech_detail %in% JRC_powerheat$Technology),
+                msg = "JRC_OFFSHORE_MAP: JRC offshore wind rows not found in 2040CT_TechnologyAssumptions_Energy_PowerHeat")
+    assert_that(!any(offshore_techs %in% jrc_gcam_mapping$technology),
+                msg = "jrc_gcam_elec_tech_mapping must not contain the offshore wind technologies of GCAM-Europe (their JRC rows are selected in JRC_OFFSHORE_MAP)")
 
     # Function: ATB series (Moderate case) of the offshore technologies for one input (capital or OM-fixed)
     atb_offshore_series <- function(atb_data, input_name) {
@@ -529,6 +556,108 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
       select(case, technology, year, capital.cost = capital, fixed.om = `OM-fixed`, variable.om = `OM-var`)
 
 
+    # ================================================
+    # WIND OFFSHORE (JRC 2040CT, reference case)
+    # The JRC rows of JRC_OFFSHORE_MAP go through the same steps as the JRC technologies above, but outside the
+    # generic tables (wind_offshore_fixed and wind_offshore_floating are not core technologies, and
+    # replace_costs_JRC_EUR of L2234 only excludes wind_offshore by name):
+    #  a) L1233.globaltech_JRC (step 1): EUR2020 -> 1975$, 2021 = 2020 value, interpolation between the JRC years
+    #  b) mean of the Low and High rows and interpolation to MODEL_FUTURE_YEARS (as L1233.gcam_costs_from_JRC)
+    #  c) after 2050: JRC 2050 value x cumulative core trend (as step 2, STEPS B-C). The core has a single offshore
+    #     technology, so both technologies follow the trend of the core wind_offshore technology (Moderate case)
+    #  d) years before 2021 take the 2021 value (as step 2)
+    # Only the reference case (Moderate) is built: offshore wind has no Advanced / Conservative JRC tables.
+    offshore_core_trend <- L1233.gcam_costs_alltechs_trend %>%
+      filter(case == "Moderate", technology == CORE_OFFSHORE_TECH) %>%
+      select(input, year, trend)
+    assert_that(setequal(unique(offshore_core_trend$input), c("capital", "OM-fixed", "OM-var")),
+                all(MODEL_FUTURE_YEARS %in% offshore_core_trend$year),
+                msg = paste0("No core trend (Moderate) of ", CORE_OFFSHORE_TECH, " for all inputs and future years"))
+
+    L1233.offshore_JRC <- L1233.globaltech_JRC %>%
+      inner_join(JRC_OFFSHORE_MAP, by = "tech_detail")
+    assert_that(setequal(unique(L1233.offshore_JRC$tech_detail), JRC_OFFSHORE_MAP$tech_detail),
+                !any(is.na(L1233.offshore_JRC[c("capital", "OMfixed", "OMvar")])),
+                all(table(L1233.offshore_JRC$technology, L1233.offshore_JRC$year) == 2),
+                msg = "JRC offshore wind rows: missing rows, missing values or missing Low / High row")
+
+    L1233.offshore_JRC <- L1233.offshore_JRC %>%
+      group_by(technology, year) %>%
+      summarise(capital = mean(capital), `OM-fixed` = mean(OMfixed), `OM-var` = mean(OMvar), .groups = "drop") %>%
+      complete(nesting(technology), year = MODEL_FUTURE_YEARS) %>%
+      group_by(technology) %>%
+      mutate(capital = approx_fun(year, capital, rule = 2),
+             `OM-fixed` = approx_fun(year, `OM-fixed`, rule = 2),
+             `OM-var` = approx_fun(year, `OM-var`, rule = 2)) %>%
+      ungroup() %>%
+      pivot_longer(cols = c(capital, `OM-fixed`, `OM-var`), names_to = "input", values_to = "value") %>%
+      left_join(offshore_core_trend, by = c("input", "year")) %>%
+      arrange(technology, input, year) %>%
+      group_by(technology, input) %>%
+      mutate(anchor_val = value[match(2050, year)],
+             step_mult = if_else(year <= 2050, 1, 1 + replace_na(trend, 0)),
+             cum_mult = cumprod(step_mult),
+             value = if_else(year > 2050, anchor_val * cum_mult, value)) %>%
+      ungroup() %>%
+      select(technology, year, input, value) %>%
+      complete(nesting(technology, input), year = unique(c(MODEL_BASE_YEARS, year))) %>%
+      group_by(technology, input) %>%
+      mutate(value = if_else(year < max(HISTORICAL_YEARS) & is.na(value), value[match(max(HISTORICAL_YEARS), year)], value)) %>%
+      ungroup() %>%
+      filter(year %in% MODEL_YEARS)
+
+    # sector, subsector and fixed charge rate of the core wind_offshore technology (as in the ATB offshore tables)
+    offshore_core_cols <- L1233.gcam_costs_alltechs %>%
+      filter(technology == CORE_OFFSHORE_TECH, case == "Moderate") %>%
+      distinct(supplysector, subsector, fixed.charge.rate)
+    assert_that(nrow(offshore_core_cols) == 1,
+                msg = paste0("The core ", CORE_OFFSHORE_TECH, " technology must have a single sector, subsector and fixed charge rate"))
+    L1233.offshore_JRC <- L1233.offshore_JRC %>%
+      repeat_add_columns(offshore_core_cols) %>%
+      select(supplysector, subsector, technology, year, input, fixed.charge.rate, value) %>%
+      arrange(supplysector, subsector, technology, year, input)
+
+    # Output tables. Capital: columns of L1233.globaltech_capital_ATB_offshore_EUR (with fixed.charge.rate, read by
+    # L120 at MODEL_FINAL_BASE_YEAR). Fixed O&M: columns of L1233.globaltech_OMfixed_ATB_offshore_EUR plus
+    # fixed.charge.rate. Variable O&M: columns of the core L1233.globaltech_OMvar_ATB plus fixed.charge.rate
+    L1233.globaltech_capital_JRC_offshore_EUR <- filter(L1233.offshore_JRC, input == "capital") %>%
+      rename(input.capital = input, capital.overnight = value) %>%
+      mutate(capital.overnight = round(capital.overnight, energy.DIGITS_CAPITAL))
+    L1233.globaltech_capital_JRC_offshore_EUR <- L1233.globaltech_capital_JRC_offshore_EUR[names(L1233.globaltech_capital_ATB_offshore_EUR)]
+    L1233.globaltech_OMfixed_JRC_offshore_EUR <- filter(L1233.offshore_JRC, input == "OM-fixed") %>%
+      rename(input.OM.fixed = input, OM.fixed = value) %>%
+      mutate(OM.fixed = round(OM.fixed, energy.DIGITS_OM))
+    L1233.globaltech_OMfixed_JRC_offshore_EUR <- L1233.globaltech_OMfixed_JRC_offshore_EUR[c(names(L1233.globaltech_OMfixed_ATB_offshore_EUR), "fixed.charge.rate")]
+    L1233.globaltech_OMvar_JRC_offshore_EUR <- filter(L1233.offshore_JRC, input == "OM-var") %>%
+      rename(input.OM.var = input, OM.var = value) %>%
+      mutate(OM.var = round(OM.var, energy.DIGITS_OM)) %>%
+      select(supplysector, subsector, technology, year, input.OM.var, OM.var, fixed.charge.rate)
+
+    # Checks of the JRC offshore tables: no NA, positive values, the same technologies and years as the ATB offshore
+    # tables, all MODEL_YEARS, and a MODEL_FINAL_BASE_YEAR row with fixed charge rate (read by L120)
+    check_offshore_JRC <- function(jrc, value_col, name) {
+      keys_jrc <- paste(jrc$technology, jrc$year)
+      keys_atb <- paste(L1233.globaltech_capital_ATB_offshore_EUR$technology, L1233.globaltech_capital_ATB_offshore_EUR$year)
+      assert_that(nrow(jrc) > 0, !any(is.na(jrc)), msg = paste0(name, ": empty table or NA values"))
+      assert_that(all(jrc[[value_col]] > 0), all(jrc$fixed.charge.rate > 0), msg = paste0(name, ": non-positive values"))
+      assert_that(!anyDuplicated(keys_jrc), setequal(keys_jrc, keys_atb),
+                  msg = paste0(name, ": technologies / years differ from the ones of the ATB offshore tables"))
+      assert_that(setequal(unique(jrc$technology), offshore_techs),
+                  all(vapply(split(jrc$year, jrc$technology), function(y) all(MODEL_YEARS %in% y), logical(1))),
+                  setequal(jrc$technology[jrc$year == MODEL_FINAL_BASE_YEAR], offshore_techs),
+                  msg = paste0(name, ": missing technologies, MODEL_YEARS or MODEL_FINAL_BASE_YEAR row"))
+    }
+    check_offshore_JRC(L1233.globaltech_capital_JRC_offshore_EUR, "capital.overnight", "L1233.globaltech_capital_JRC_offshore_EUR")
+    check_offshore_JRC(L1233.globaltech_OMfixed_JRC_offshore_EUR, "OM.fixed", "L1233.globaltech_OMfixed_JRC_offshore_EUR")
+    check_offshore_JRC(L1233.globaltech_OMvar_JRC_offshore_EUR, "OM.var", "L1233.globaltech_OMvar_JRC_offshore_EUR")
+    # the offshore technologies of GCAM-Europe must not be in the generic JRC tables (read by L2234 and the scenarios)
+    generic_JRC_techs <- unique(c(L1233.globaltech_capital_JRC_EUR$technology, L1233.globaltech_OMfixed_JRC_EUR$technology,
+                                  L1233.globaltech_OMvar_JRC_EUR$technology, L1233.globaltech_capital_JRC_adv_EUR$technology,
+                                  L1233.globaltech_capital_JRC_low_EUR$technology))
+    assert_that(!any(offshore_techs %in% generic_JRC_techs),
+                msg = "The offshore wind technologies of GCAM-Europe must not be in the generic L1233.globaltech_*_JRC_EUR tables")
+
+
     # ===================================================
     # Produce outputs
 
@@ -547,6 +676,33 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
       add_precursors("gcam-europe/A20.offshore_wind_types_EUR", "energy/NREL_ATB_OMfixed_2024",
                      "L1233.globaltech_OMfixed_ATB") ->
       L1233.globaltech_OMfixed_ATB_offshore_EUR
+
+    L1233.globaltech_capital_JRC_offshore_EUR %>%
+      add_title("JRC (2040CT) capital cost of the offshore wind technologies of GCAM-Europe (fixed-bottom and floating)") %>%
+      add_units("1975$/kW") %>%
+      add_comments("Same format as L1233.globaltech_capital_ATB_offshore_EUR; mean of the JRC Low and High rows (fixed: Shallow, Near-shore; floating: Floating), EUR2020 to 1975$, 2021 = 2020, interpolated between JRC years") %>%
+      add_comments("After 2050: JRC 2050 value times the cumulative trend of the core wind_offshore technology (Moderate); fixed charge rate of the core wind_offshore technology") %>%
+      add_precursors("gcam-europe/A20.offshore_wind_types_EUR", "gcam-europe/2040CT_TechnologyAssumptions_Energy_PowerHeat",
+                     "gcam-europe/mappings/jrc_gcam_elec_tech_mapping", "L1233.gcam_costs_alltechs",
+                     "L1233.globaltech_capital_ATB") ->
+      L1233.globaltech_capital_JRC_offshore_EUR
+
+    L1233.globaltech_OMfixed_JRC_offshore_EUR %>%
+      add_title("JRC (2040CT) fixed O&M cost of the offshore wind technologies of GCAM-Europe (fixed-bottom and floating)") %>%
+      add_units("1975$/kW/yr") %>%
+      add_comments("Columns of L1233.globaltech_OMfixed_ATB_offshore_EUR plus fixed.charge.rate; same JRC rows and steps as L1233.globaltech_capital_JRC_offshore_EUR") %>%
+      add_precursors("gcam-europe/A20.offshore_wind_types_EUR", "gcam-europe/2040CT_TechnologyAssumptions_Energy_PowerHeat",
+                     "gcam-europe/mappings/jrc_gcam_elec_tech_mapping", "L1233.gcam_costs_alltechs",
+                     "L1233.globaltech_OMfixed_ATB") ->
+      L1233.globaltech_OMfixed_JRC_offshore_EUR
+
+    L1233.globaltech_OMvar_JRC_offshore_EUR %>%
+      add_title("JRC (2040CT) variable O&M cost of the offshore wind technologies of GCAM-Europe (fixed-bottom and floating)") %>%
+      add_units("1975$/MWh") %>%
+      add_comments("Columns of L1233.globaltech_OMvar_ATB plus fixed.charge.rate; same JRC rows and steps as L1233.globaltech_capital_JRC_offshore_EUR (JRC value 0.39 EUR/MWh in all JRC years)") %>%
+      add_precursors("gcam-europe/A20.offshore_wind_types_EUR", "gcam-europe/2040CT_TechnologyAssumptions_Energy_PowerHeat",
+                     "gcam-europe/mappings/jrc_gcam_elec_tech_mapping", "L1233.gcam_costs_alltechs") ->
+      L1233.globaltech_OMvar_JRC_offshore_EUR
 
 
     L1233.globaltech_capital_JRC_EUR %>%

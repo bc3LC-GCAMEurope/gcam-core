@@ -35,8 +35,8 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
                      FILE = "energy/NREL_offshore_energy",
                      FILE = "energy/offshore_wind_grid_cost",
                      FILE = "gcam-europe/A20.offshore_wind_types_EUR",
-                     "L1233.globaltech_capital_ATB_offshore_EUR",
-                     "L1233.globaltech_OMfixed_ATB_offshore_EUR")
+                     "L1233.globaltech_capital_JRC_offshore_EUR",
+                     "L1233.globaltech_OMfixed_JRC_offshore_EUR")
 
   MODULE_OUTPUTS <- c("L120.RsrcCurves_EJ_R_offshore_wind_EUR",
                       "L120.TechChange_offshore_wind_EUR",
@@ -71,8 +71,8 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
     NREL_offshore_energy <- get_data(all_data, "energy/NREL_offshore_energy")
     offshore_wind_grid_cost <- get_data(all_data, "energy/offshore_wind_grid_cost")
     A20.offshore_wind_types_EUR <- get_data(all_data, "gcam-europe/A20.offshore_wind_types_EUR")
-    L1233.globaltech_capital_ATB_offshore_EUR <- get_data(all_data, "L1233.globaltech_capital_ATB_offshore_EUR", strip_attributes = TRUE)
-    L1233.globaltech_OMfixed_ATB_offshore_EUR <- get_data(all_data, "L1233.globaltech_OMfixed_ATB_offshore_EUR", strip_attributes = TRUE)
+    L1233.globaltech_capital_JRC_offshore_EUR <- get_data(all_data, "L1233.globaltech_capital_JRC_offshore_EUR", strip_attributes = TRUE)
+    L1233.globaltech_OMfixed_JRC_offshore_EUR <- get_data(all_data, "L1233.globaltech_OMfixed_JRC_offshore_EUR", strip_attributes = TRUE)
 
     # Exponent search interval for the smooth renewable resource curve (same as the core chunk)
     OFFSHORE_EXPONENT_INTERVAL <- c(1.0, 15.0)
@@ -97,11 +97,11 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
 
     # FCR and fixed O&M of the technology that consumes each resource (final base year values, as in the core chunk)
     L120.offshore_wind_params <- L120.offshore_wind_params %>%
-      left_join_error_no_match(L1233.globaltech_capital_ATB_offshore_EUR %>%
+      left_join_error_no_match(L1233.globaltech_capital_JRC_offshore_EUR %>%
                                  filter(year == MODEL_FINAL_BASE_YEAR) %>%
                                  select(technology, fcr = fixed.charge.rate),
                                by = "technology") %>%
-      left_join_error_no_match(L1233.globaltech_OMfixed_ATB_offshore_EUR %>%
+      left_join_error_no_match(L1233.globaltech_OMfixed_JRC_offshore_EUR %>%
                                  filter(year == MODEL_FINAL_BASE_YEAR) %>%
                                  select(technology, OM.fixed),
                                by = "technology")
@@ -224,7 +224,7 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
     # and techChange (the yearly reduction) is 1 - a'^(1/years). Capital trajectory of each resource = that of the offshore wind technology that consumes it.
     # (one resource at a time: several resources may share the same technology)
     offshore_tech_change <- function(offshore_tech, fcr, OM_fixed) {
-      L1233.globaltech_capital_ATB_offshore_EUR %>%
+      L1233.globaltech_capital_JRC_offshore_EUR %>%
         filter(technology == offshore_tech) %>%
         select(year, capital.overnight) %>%
         arrange(year) %>%
@@ -284,15 +284,15 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
       add_precursors("common/iso_GCAM_regID", "common/GCAM_region_names", "energy/mappings/NREL_wind_ctry",
                      "energy/NREL_offshore_energy", "energy/A20.wind_class_CFs",
                      "energy/A20.offshore_wind_depth_cap_cost", "gcam-europe/A20.offshore_wind_types_EUR",
-                     "L1233.globaltech_capital_ATB_offshore_EUR", "L1233.globaltech_OMfixed_ATB_offshore_EUR") ->
+                     "L1233.globaltech_capital_JRC_offshore_EUR", "L1233.globaltech_OMfixed_JRC_offshore_EUR") ->
       L120.RsrcCurves_EJ_R_offshore_wind_EUR
 
     L120.TechChange_offshore_wind_EUR %>%
       add_title("Technological change of the offshore wind resources by type") %>%
       add_units("Unitless") %>%
       add_comments("Technological change from the capital cost trajectory of the technology that consumes each resource type") %>%
-      add_precursors("gcam-europe/A20.offshore_wind_types_EUR", "L1233.globaltech_capital_ATB_offshore_EUR",
-                     "L1233.globaltech_OMfixed_ATB_offshore_EUR") ->
+      add_precursors("gcam-europe/A20.offshore_wind_types_EUR", "L1233.globaltech_capital_JRC_offshore_EUR",
+                     "L1233.globaltech_OMfixed_JRC_offshore_EUR") ->
       L120.TechChange_offshore_wind_EUR
 
     L120.GridCost_offshore_wind_EUR %>%
@@ -302,8 +302,8 @@ module_gcameurope_L120.offshore_wind <- function(command, ...) {
       add_precursors("common/iso_GCAM_regID", "common/GCAM_region_names", "energy/mappings/NREL_wind_ctry",
                      "energy/NREL_offshore_energy", "energy/A20.wind_class_CFs",
                      "energy/A20.offshore_wind_depth_cap_cost", "energy/offshore_wind_grid_cost",
-                     "gcam-europe/A20.offshore_wind_types_EUR", "L1233.globaltech_capital_ATB_offshore_EUR",
-                     "L1233.globaltech_OMfixed_ATB_offshore_EUR") ->
+                     "gcam-europe/A20.offshore_wind_types_EUR", "L1233.globaltech_capital_JRC_offshore_EUR",
+                     "L1233.globaltech_OMfixed_JRC_offshore_EUR") ->
       L120.GridCost_offshore_wind_EUR
 
     L120.RegCapFactor_offshore_wind_EUR %>%

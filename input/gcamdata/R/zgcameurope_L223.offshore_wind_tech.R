@@ -235,8 +235,8 @@ split_water_map_EUR <- function(elec_tech_water_map, types) {
 #' \code{L223.elec_tech_water_map_EUR}.
 #' @details Each output is the core table (same name with the suffix _elec) restricted to the offshore wind
 #' technology and repeated for each of the two Europe technologies. The technologies consume different
-#' resources (fixed / floating offshore wind resource) and share the trial market of the core offshore wind technology. The capital cost and the
-#' fixed O&M come from zgcameurope_L1233.elec_cost_data. The tables only contain the offshore wind rows:
+#' resources (fixed / floating offshore wind resource) and share the trial market of the core offshore wind technology. The capital cost, the
+#' fixed O&M and the variable O&M come from the JRC offshore tables of zgcameurope_L1233.elec_cost_data (reference case). The tables only contain the offshore wind rows:
 #' the chunks that use the core tables replace the core offshore wind rows by these ones.
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr filter mutate select left_join bind_rows arrange group_by ungroup
@@ -254,8 +254,9 @@ module_gcameurope_L223.offshore_wind_tech <- function(command, ...) {
   MODULE_INPUTS <- c(FILE = "gcam-europe/A20.offshore_wind_types_EUR",
                      FILE = "gcam-europe/A20.offshore_wind_shrwt_EUR",
                      FILE = "water/elec_tech_water_map",
-                     "L1233.globaltech_capital_ATB_offshore_EUR",
-                     "L1233.globaltech_OMfixed_ATB_offshore_EUR",
+                     "L1233.globaltech_capital_JRC_offshore_EUR",
+                     "L1233.globaltech_OMfixed_JRC_offshore_EUR",
+                     "L1233.globaltech_OMvar_JRC_offshore_EUR",
                      CORE_TABLES)
 
   MODULE_OUTPUTS <- c(sub("_elec$", "_offshore_EUR", CORE_TABLES), "L223.GlobalIntTechShrwt_offshore_EUR",
@@ -268,18 +269,20 @@ module_gcameurope_L223.offshore_wind_tech <- function(command, ...) {
   } else if(command == driver.MAKE) {
 
     # Silence package checks
-    year <- intermittent.technology <- technology <- capital.overnight <- OM.fixed <- NULL
+    year <- intermittent.technology <- technology <- capital.overnight <- OM.fixed <- OM.var <- NULL
 
     all_data <- list(...)[[1]]
 
     # Load required inputs
     get_data_list(all_data, MODULE_INPUTS)
 
-    # Cost trajectories of the offshore wind technologies (same format as the core tables)
-    capital_new <- L1233.globaltech_capital_ATB_offshore_EUR %>%
+    # Cost trajectories of the offshore wind technologies (JRC 2040CT, reference case; same format as the core tables)
+    capital_new <- L1233.globaltech_capital_JRC_offshore_EUR %>%
       select(intermittent.technology = technology, year, capital.new = capital.overnight)
-    OMfixed_new <- L1233.globaltech_OMfixed_ATB_offshore_EUR %>%
+    OMfixed_new <- L1233.globaltech_OMfixed_JRC_offshore_EUR %>%
       select(intermittent.technology = technology, year, OM.fixed.new = OM.fixed)
+    OMvar_new <- L1233.globaltech_OMvar_JRC_offshore_EUR %>%
+      select(intermittent.technology = technology, year, OM.var.new = OM.var)
 
     # Core tables -> offshore wind rows, repeated for each Europe technology
     offshore_only <- function(df_name) {
@@ -293,12 +296,11 @@ module_gcameurope_L223.offshore_wind_tech <- function(command, ...) {
 
     L223.PrimaryRenewKeywordInt_offshore_EUR <- offshore_only("L223.PrimaryRenewKeywordInt_elec")
     L223.GlobalIntTechEff_offshore_EUR <- offshore_only("L223.GlobalIntTechEff_elec")
-    L223.GlobalIntTechOMvar_offshore_EUR <- offshore_only("L223.GlobalIntTechOMvar_elec")
     L223.GlobalIntTechLifetime_offshore_EUR <- offshore_only("L223.GlobalIntTechLifetime_elec")
     L223.GlobalIntTechBackup_offshore_EUR <- offshore_only("L223.GlobalIntTechBackup_elec")
     L223.GlobalIntTechValueFactor_offshore_EUR <- offshore_only("L223.GlobalIntTechValueFactor_elec")
 
-    # Capital cost and fixed O&M: technology-specific trajectories
+    # Capital cost, fixed O&M and variable O&M: technology-specific trajectories (JRC)
     capital_cols <- names(L223.GlobalIntTechCapital_elec)
     L223.GlobalIntTechCapital_offshore_EUR <- offshore_only("L223.GlobalIntTechCapital_elec") %>%
       left_join_error_no_match(capital_new, by = c("intermittent.technology", "year")) %>%
@@ -310,6 +312,12 @@ module_gcameurope_L223.offshore_wind_tech <- function(command, ...) {
       left_join_error_no_match(OMfixed_new, by = c("intermittent.technology", "year")) %>%
       mutate(OM.fixed = OM.fixed.new) %>%
       .[, OMfixed_cols]
+
+    OMvar_cols <- names(L223.GlobalIntTechOMvar_elec)
+    L223.GlobalIntTechOMvar_offshore_EUR <- offshore_only("L223.GlobalIntTechOMvar_elec") %>%
+      left_join_error_no_match(OMvar_new, by = c("intermittent.technology", "year")) %>%
+      mutate(OM.var = OM.var.new) %>%
+      .[, OMvar_cols]
 
     # Share-weights of the global technologies (same interpolation as the share-weights of the load segments in L2234)
     L223.GlobalIntTechShrwt_offshore_EUR <- A20.offshore_wind_shrwt_EUR %>%
@@ -342,24 +350,25 @@ module_gcameurope_L223.offshore_wind_tech <- function(command, ...) {
     L223.GlobalIntTechCapital_offshore_EUR %>%
       add_title("Capital cost of the offshore wind technologies of GCAM-Europe") %>%
       add_units("1975$/kW") %>%
-      add_comments("Core table restricted to wind_offshore and repeated for each technology; capital cost from L1233.globaltech_capital_ATB_offshore_EUR") %>%
+      add_comments("Core table restricted to wind_offshore and repeated for each technology; capital cost from L1233.globaltech_capital_JRC_offshore_EUR") %>%
       add_precursors("L223.GlobalIntTechCapital_elec", "gcam-europe/A20.offshore_wind_types_EUR",
-                     "L1233.globaltech_capital_ATB_offshore_EUR") ->
+                     "L1233.globaltech_capital_JRC_offshore_EUR") ->
       L223.GlobalIntTechCapital_offshore_EUR
 
     L223.GlobalIntTechOMfixed_offshore_EUR %>%
       add_title("Fixed O&M of the offshore wind technologies of GCAM-Europe") %>%
       add_units("1975$/kW/yr") %>%
-      add_comments("Core table restricted to wind_offshore and repeated for each technology; fixed O&M from L1233.globaltech_OMfixed_ATB_offshore_EUR") %>%
+      add_comments("Core table restricted to wind_offshore and repeated for each technology; fixed O&M from L1233.globaltech_OMfixed_JRC_offshore_EUR") %>%
       add_precursors("L223.GlobalIntTechOMfixed_elec", "gcam-europe/A20.offshore_wind_types_EUR",
-                     "L1233.globaltech_OMfixed_ATB_offshore_EUR") ->
+                     "L1233.globaltech_OMfixed_JRC_offshore_EUR") ->
       L223.GlobalIntTechOMfixed_offshore_EUR
 
     L223.GlobalIntTechOMvar_offshore_EUR %>%
       add_title("Variable O&M of the offshore wind technologies of GCAM-Europe") %>%
-      add_units("1975$/GJ") %>%
-      add_comments("Core table restricted to wind_offshore and repeated for each technology") %>%
-      add_precursors("L223.GlobalIntTechOMvar_elec", "gcam-europe/A20.offshore_wind_types_EUR") ->
+      add_units("1975$/MWh") %>%
+      add_comments("Core table restricted to wind_offshore and repeated for each technology; variable O&M from L1233.globaltech_OMvar_JRC_offshore_EUR") %>%
+      add_precursors("L223.GlobalIntTechOMvar_elec", "gcam-europe/A20.offshore_wind_types_EUR",
+                     "L1233.globaltech_OMvar_JRC_offshore_EUR") ->
       L223.GlobalIntTechOMvar_offshore_EUR
 
     L223.GlobalIntTechEff_offshore_EUR %>%
