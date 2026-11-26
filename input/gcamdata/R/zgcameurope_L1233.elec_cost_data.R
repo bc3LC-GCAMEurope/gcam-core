@@ -335,7 +335,10 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
 
 
     # 2. Add case
-    # estimate the 5-year time step change and the percentual difference between cases
+    # estimate the 5-year time step change and the relative difference of each case with respect to Moderate
+    # (case_adv = (Advanced - Moderate) / Moderate, case_con = (Conservative - Moderate) / Moderate), so that the
+    # multiplier 1 + case applied to the JRC Moderate values is exactly the ATB ratio Advanced / Moderate or
+    # Conservative / Moderate
     L1233.gcam_costs_alltechs_trend <-
       bind_rows(
         L1233.gcam_costs_alltechs,
@@ -357,8 +360,8 @@ module_gcameurope_L1233.elec_cost_data <- function(command, ...) {
       # take the fist non-hist year (all hist years have the same value, regardless the case)
       filter(year == min(year[!(year %in% HISTORICAL_YEARS)])) %>%
       group_by(technology, input) %>%
-      summarise(case_adv = (value[match('Advanced', case)] - value[match('Moderate', case)]) / value[match('Advanced', case)],
-                case_con = (value[match('Conservative', case)] - value[match('Moderate', case)]) / value[match('Conservative', case)]) %>%
+      summarise(case_adv = (value[match('Advanced', case)] - value[match('Moderate', case)]) / value[match('Moderate', case)],
+                case_con = (value[match('Conservative', case)] - value[match('Moderate', case)]) / value[match('Moderate', case)]) %>%
       ungroup()
 
     # apply the difference to the "Default" case
