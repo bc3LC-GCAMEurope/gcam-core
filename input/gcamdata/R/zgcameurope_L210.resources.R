@@ -27,7 +27,6 @@ module_gcameurope_L210.resources <- function(command, ...) {
                                "L210.RsrcTechChange",
                                "L210.SmthRenewRsrcTechChange",
                                "L210.RsrcCurves_U",
-                               "L210.SmthRenewRsrcCurves_MSW",
                                "L210.SmthRenewRsrcCurves_wind",
                                "L210.SmthRenewRsrcCurvesGdpElast_roofPV",
                                "L210.GrdRenewRsrcCurves_geo",
@@ -63,7 +62,7 @@ module_gcameurope_L210.resources <- function(command, ...) {
                     "L111.RsrcCurves_EJ_R_Ffos_EUR",
                     "L111.Prod_EJ_R_F_Yh_EUR",
                     "L112.RsrcCurves_Mt_R_U",
-                    "L113.RsrcCurves_EJ_R_MSW",
+                    "L113.RsrcCurves_EJ_R_MSW_EUR",
                     "L114.RsrcCurves_EJ_R_wind",
                     "L115.RsrcCurves_EJ_R_roofPV",
                     "L116.RsrcCurves_EJ_R_geo",
@@ -86,6 +85,7 @@ module_gcameurope_L210.resources <- function(command, ...) {
                       "L210.RsrcExoShutdown_EUR",
                       "L210.SmthRenewRsrcCurves_offshore_wind_EUR",
                       "L210.SmthRenewRsrcTechChange_offshore_wind_EUR",
+                      "L210.SmthRenewRsrcCurves_MSW_EUR",
                       paste0(OUTPUTS_TO_COPY_FILTER, "_EUR"))
 
   if(command == driver.DECLARE_INPUTS) {
@@ -534,6 +534,20 @@ module_gcameurope_L210.resources <- function(command, ...) {
     L210.RenewRsrcPrice_EUR <- expand_offshore_EUR(L210.RenewRsrcPrice_EUR, "renewresource")
     L210.ResTechShrwt_EUR <- expand_offshore_EUR(L210.ResTechShrwt_EUR, c("resource", "subresource", "technology"))
 
+    # 5b. MSW: country-level supply curves (zgcameurope_L113.MSW) -----------------------------
+    # Same as L210.SmthRenewRsrcCurves_MSW in zenergy_L210.resources, but built from the Europe table.
+    # Belarus and Switzerland are not Eurostat regions and keep the core curves (resources.xml).
+    L210.SmthRenewRsrcCurves_MSW_EUR <- L113.RsrcCurves_EJ_R_MSW_EUR %>%
+      # Add region name
+      left_join_error_no_match(GCAM_region_names, by = "GCAM_region_ID") %>%
+      mutate(maxSubResource = round(maxSubResource, energy.DIGITS_MAX_SUB_RESOURCE),
+             mid.price = round(mid.price, energy.DIGITS_MID_PRICE),
+             curve.exponent = round(curve.exponent, energy.DIGITS_CURVE_EXPONENT),
+             gdpSupplyElast = round(gdpSupplyElast, energy.DIGITS_GDP_SUPPLY_ELAST),
+             year.fillout = min(MODEL_BASE_YEARS)) %>%
+      select(region, renewresource = resource, smooth.renewable.subresource = subresource, year.fillout, maxSubResource, mid.price, curve.exponent, gdpSupplyElast) %>%
+      filter_regions_europe()
+
     # 6. GCAM-core 8.11: zero calibrated production for the unconventional oil subresources ------
     # The 8.11 C++ (ReserveSubResource::initCalc) aborts if a subresource has calibrated reserve but
     # no calibrated production. L210.ReserveCalReserve_EUR already has zero reserves for
@@ -609,6 +623,12 @@ module_gcameurope_L210.resources <- function(command, ...) {
                      "common/GCAM_region_names") ->
       L210.SmthRenewRsrcTechChange_offshore_wind_EUR
 
+    L210.SmthRenewRsrcCurves_MSW_EUR %>%
+      add_title("Supply curves of waste biomass resources") %>%
+      add_units("maxSubResource: EJ; mid.price: 1975$/GJ") %>%
+      add_comments("Data from L113.RsrcCurves_EJ_R_MSW_EUR (country-level MSW curves for the Eurostat regions)") %>%
+      add_precursors("L113.RsrcCurves_EJ_R_MSW_EUR", "common/GCAM_region_names") ->
+      L210.SmthRenewRsrcCurves_MSW_EUR
 
     return_data(MODULE_OUTPUTS)
   } else {

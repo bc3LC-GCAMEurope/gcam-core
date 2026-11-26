@@ -1,0 +1,45 @@
+# File: A13.MSW_curves_EUR.csv
+# Title: Country-level supply curves of municipal solid waste (MSW) for the GCAM-Europe Eurostat countries
+# Units: maxSubResource: EJ/yr; mid-price: 1975$/GJ; curve-exponent and gdpSupplyElast: unitless
+# Description: One row per region in gcameurope.EUROSTAT_COUNTRIES (37 regions). Column region_GCAM3 holds the GCAM-Europe region name (GCAM_region_names region), not a GCAM 3.0 region. maxSubResource: maximum amount of MSW production in the base year; mid-price: price at which half of maxSubResource is produced; curve-exponent: shape parameter of the S-curve supply function; gdpSupplyElast: elasticity of maxSubResource to GDP. Curve-shape parameters are the GCAM 3.0 values and are the same in all rows. Belarus and Switzerland are not in this table and keep the core GCAM 3.0 values (energy/A13.MSW_curves downscaled by GDP).
+# Source: EUROSTAT
+# Column types: cccnnin
+# ----------
+region_GCAM3,resource,subresource,maxSubResource,mid-price,curve-exponent,gdpSupplyElast
+Belgium,biomass,generic waste biomass,0.021663546,0.9,15,0.588
+Bulgaria,biomass,generic waste biomass,0.00045652,0.9,15,0.588
+Czech Republic,biomass,generic waste biomass,0.001718146,0.9,15,0.588
+Denmark,biomass,generic waste biomass,0.026762856,0.9,15,0.588
+Germany,biomass,generic waste biomass,0.175388278,0.9,15,0.588
+Estonia,biomass,generic waste biomass,0.000625492,0.9,15,0.588
+Ireland,biomass,generic waste biomass,0.007982534,0.9,15,0.588
+Greece,biomass,generic waste biomass,0.0001,0.9,15,0.588
+Spain,biomass,generic waste biomass,0.01448357,0.9,15,0.588
+France,biomass,generic waste biomass,0.069146251,0.9,15,0.588
+Croatia,biomass,generic waste biomass,0.0001,0.9,15,0.588
+Italy,biomass,generic waste biomass,0.047297239,0.9,15,0.588
+Cyprus,biomass,generic waste biomass,0.000746336,0.9,15,0.588
+Latvia,biomass,generic waste biomass,0.00083114,0.9,15,0.588
+Lithuania,biomass,generic waste biomass,0.001225119,0.9,15,0.588
+Luxembourg,biomass,generic waste biomass,0.000939088,0.9,15,0.588
+Hungary,biomass,generic waste biomass,0.001653256,0.9,15,0.588
+Malta,biomass,generic waste biomass,0.0001,0.9,15,0.588
+Netherlands,biomass,generic waste biomass,0.050304009,0.9,15,0.588
+Austria,biomass,generic waste biomass,0.014322948,0.9,15,0.588
+Poland,biomass,generic waste biomass,0.005377562,0.9,15,0.588
+Portugal,biomass,generic waste biomass,0.00589521,0.9,15,0.588
+Romania,biomass,generic waste biomass,4.94932E-05,0.9,15,0.588
+Slovenia,biomass,generic waste biomass,0.0001,0.9,15,0.588
+Slovakia,biomass,generic waste biomass,0.000770801,0.9,15,0.588
+Finland,biomass,generic waste biomass,0.017702247,0.9,15,0.588
+Sweden,biomass,generic waste biomass,0.051055686,0.9,15,0.588
+Iceland,biomass,generic waste biomass,0.0001,0.9,15,0.588
+Norway,biomass,generic waste biomass,0.010575349,0.9,15,0.588
+UK,biomass,generic waste biomass,0.067017361,0.9,15,0.588
+Bosnia and Herzegovina,biomass,generic waste biomass,0.0001,0.9,15,0.588
+Moldova,biomass,generic waste biomass,0.0001,0.9,15,0.588
+Macedonia,biomass,generic waste biomass,0.0001,0.9,15,0.588
+Albania,biomass,generic waste biomass,0.0001,0.9,15,0.588
+Serbia and Montenegro,biomass,generic waste biomass,0.000734072,0.9,15,0.588
+Turkey,biomass,generic waste biomass,0.000120266,0.9,15,0.588
+Ukraine,biomass,generic waste biomass,0.0001,0.9,15,0.588
